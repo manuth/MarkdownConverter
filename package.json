@@ -1,0 +1,101 @@
+{
+  "name": "markdown-converter",
+  "displayName": "MarkdownConverter",
+  "description": "Provides the functionallity to convert MarkDown-files to html, docx or pdf.",
+  "version": "0.0.1",
+  "publisher": "manuth",
+  "author": {
+    "name": "Manuel Thalmann",
+    "email": "m@nuth.ch",
+    "url": "http://nuth.ch"
+  },
+  "license": "MIT",
+  "keywords": [
+    "MarkDown",
+    "Convert",
+    "PDF",
+    "DocX",
+    "HTML"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manuth/MarkdownConverter.git"
+  },
+  "engines": {
+    "vscode": "^1.10.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onCommand:markdownConverter.convert"
+  ],
+  "main": "./out/src/extension",
+  "bin": {
+    "markdown-converter": "./out/src/index.js"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "markdownConverter.convert",
+        "title": "%command.convert%"
+      }
+    ],
+    "configuration": {
+      "title": "%markdownConverter.config.title%",
+      "properties": {
+        "markdownConverter.encoding": {
+          "type": "string",
+          "default": "utf-8",
+          "required": true
+        },
+        "markdownConverter.document": {
+          "type": "object",
+          "default": { },
+          "properties": {
+            "localization": {
+              "type": "object",
+              "properties": {
+                "locale": {
+                  "type": "string",
+                  "default": ""
+                },
+                "dateFormat": {
+                  "type": "string",
+                  "default": "default"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32"
+  },
+  "dependencies": {
+    "dateformat": "^2.0.0",
+    "front-matter": "^2.1.2",
+    "i18n": "^0.8.3",
+    "markdown-it": "^8.3.1",
+    "markdown-it-emoji": "^1.3.0",
+    "mustache": "^2.3.0",
+    "os-locale": "^2.0.0",
+    "phantomjs-prebuilt": "^2.1.14",
+    "rc": "^1.1.7",
+    "shelljs": "^0.7.7",
+    "vscode-nls": "^2.0.2"
+  }
+}
