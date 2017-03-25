@@ -1,7 +1,7 @@
 /**
  * Represents a conversion-type.
  */
-enum ConversionType
+export enum ConversionType
 {
     /**
      * DocX-conversion.
