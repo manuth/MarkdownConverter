@@ -2,9 +2,12 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as Path from 'path';
 import { DateTimeFormatter } from './Core/DateTimeFormatter';
 import { Document } from './Document';
 import { Footer, Header } from './Section';
+import { Converter } from "./Converter";
+import { ConversionType } from "./ConversionType";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -49,6 +52,8 @@ export function activate(context: vscode.ExtensionContext)
         doc.StyleSheets.push('../../styles.css');
         doc.Content = '# Hello World\n{{ PageNumber }}\n{{ CreationDate }}';
 
+        var x = new Converter(doc);
+        x.Start(ConversionType.DocX, Path.join(__dirname, '..', '..', 'test.pdf'));
         console.log(doc.toJSON());
     });
 
