@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as Path from 'path';
+import * as url from 'url';
 import * as VSCode from 'vscode';
 import { DateTimeFormatter } from './Core/DateTimeFormatter';
 import * as FrontMatter from 'front-matter';
@@ -16,6 +17,11 @@ import { Layout } from "./Layout";
  */
 export class Document extends Base
 {
+    /**
+     * The name of the document.
+     */
+    private name : string = null;
+
     /**
      * The encoding of the document to load and save.
      */
@@ -92,6 +98,11 @@ export class Document extends Base
     private lastFooter : Footer = null;
 
     /**
+     * The template to use for the RenderBody-process.
+     */
+    private template : string = Path.join(__dirname, '..', '..', 'Resources', 'Template.html');
+
+    /**
      * The stylesheets of the document.
      */
     private styleSheets : string[] = [ ];
@@ -100,6 +111,11 @@ export class Document extends Base
      * The styles of the document.
      */
     private styles : string = null;
+
+    /**
+     * The wrapper of the content of the document.
+     */
+    private wrapper : string = null;
 
     /**
      * The content of the document.
@@ -118,12 +134,13 @@ export class Document extends Base
     constructor(filePath : string = null, config : VSCode.WorkspaceConfiguration = VSCode.workspace.getConfiguration())
     {
         super();
+        this.Attributes.FileName = this.Name;
         this.Attributes.Author = Fullname.FullName;
         this.Attributes.CreationDate = new Date();
         this.Attributes.PageNumber = '{{ PageNumber }}'; // {{ PageNumber }} will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
         this.Attributes.PageCount = '{{ PageCount }}';   // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
-        this.Header = new Header('15mm', '<table style="width: 100%">{{ Author }}<td></td><td></td></table>');
-        this.Footer = new Footer('25mm', '<table style="width: 100%"><td></td><td></td></table>');
+        this.Header = new Header('15mm', '<table style="width: 100%"><td>{{ Author }}</td><td>{{ PageNumber }}/{{ PageCount }}</td><td></td></table>');
+        this.Footer = new Footer('10mm', '<table style="width: 100%"><td></td><td></td></table>');
         
         this.LoadConfig(config);
 
@@ -131,6 +148,19 @@ export class Document extends Base
         {
             this.Content = fs.readFileSync(filePath, this.encoding);
         }
+    }
+
+    /**
+     * Gets or sets the name of the document.
+     */
+    @enumerable(true)
+    public get Name() : string
+    {
+        return this.name;
+    }
+    public set Name(value : string)
+    {
+        this.name = value;
     }
 
     /**
@@ -371,6 +401,19 @@ export class Document extends Base
     }
 
     /**
+     * Gets or sets the template to use for the RenderBody-process.
+     */
+    @enumerable(true)
+    public get Template() : string
+    {
+        return this.template;
+    }
+    public set Template(value : string)
+    {
+        this.template = value;
+    }
+
+    /**
      * Gets or sets the stylesheets of the document.
      */
     @enumerable(true)
@@ -394,6 +437,19 @@ export class Document extends Base
     public set Styles(value : string)
     {
         this.styles = value;
+    }
+
+    /**
+     * Gets or sets the wrapper of the content of the document.
+     */
+    @enumerable(true)
+    public get Wrapper() : string
+    {
+        return this.wrapper;
+    }
+    public set Wrapper(value : string)
+    {
+        this.wrapper = value;
     }
 
     /**
@@ -468,7 +524,7 @@ export class Document extends Base
         {
             let clone = (section.CloneTo(new Section()) as Section);
             clone.Content = (this.Render(section.Content) as string);
-            return JSON.parse(clone.toJSON());
+            return clone.toObject();
         }
         else
         {
@@ -538,9 +594,12 @@ export class Document extends Base
         }
     }
 
+    /**
+     * Renders the body of the document.
+     */
     private RenderBody() : string
     {
-        let template = fs.readFileSync(Path.join(__dirname, '..', '..', 'Resources', 'Template.html')).toString();
+        let template = fs.readFileSync(this.Template).toString();
         // Preparing the styles
         let styles = '<style>\n';
         if (this.Styles)
@@ -548,16 +607,30 @@ export class Document extends Base
             styles += this.Styles + '\n';
         }
         this.StyleSheets.forEach(styleSheet => {
-            if (fs.existsSync(Path.join(styleSheet)))
+            if (/file/g.test(url.parse(styleSheet).protocol))
             {
-                styles += fs.readFileSync(Path.join(styleSheet)).toString() + '\n';
+                if (fs.existsSync(Path.join(styleSheet)))
+                {
+                    styles += fs.readFileSync(Path.join(styleSheet)).toString() + '\n';
+                }
+            }
+            else
+            {
+                styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
             }
         });
         styles += '</style>';
 
+        let content = this.Content;
+
+        if (this.Wrapper)
+        {
+            content = Mustache.render(this.Wrapper, { content: content });
+        }
+
         let view = {
             styles: styles,
-            content: this.Render(this.Content)
+            content: this.Render(content)
         }
 
         return Mustache.render(template, view);
