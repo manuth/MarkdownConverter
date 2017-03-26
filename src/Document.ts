@@ -9,6 +9,7 @@ import * as Mustache from 'mustache';
 import * as Emoji from 'markdown-it-emoji';
 import { Header, Footer, Section } from './Section';
 import { Base } from "./Core/Base";
+import { Layout } from "./Layout";
 
 /**
  * Represents a document.
@@ -34,6 +35,11 @@ export class Document extends Base
      * The language to print values.
      */
     private locale : string = VSCode.env.language;
+
+    /**
+     * The layout of the document.
+     */
+    private layout : Layout = new Layout();
 
     /**
      * The header of the document.
@@ -100,16 +106,27 @@ export class Document extends Base
      */
     private content : string = null;
 
-    constructor(filePath : string = null)
+    /**
+     * Initializes a new instance of the Document class with a file-path and a configuration.
+     * 
+     * @param filePath
+     * The path to the file to load the content from.
+     * 
+     * @param config
+     * The configuration to set.
+     */
+    constructor(filePath : string = null, config : VSCode.WorkspaceConfiguration = VSCode.workspace.getConfiguration())
     {
         super();
         this.Attributes.Author = Fullname.FullName;
         this.Attributes.CreationDate = new Date();
-        this.Attributes.PageNumber = '{{ PageNumber }}'; // {{ PageNumber }} will be replaced in the Phantom-Script (see "PDFGenerator.ts")
-        this.Attributes.PageCount = '{{ PageCount }}';   // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts")
-        this.Header = new Header('46mm', '<table style="width: 100%"><td></td><td></td></table>');
-        this.Footer = new Footer('28mm', '<table style="width: 100%"><td></td><td></td></table>');
-        this.LoadConfig();
+        this.Attributes.PageNumber = '{{ PageNumber }}'; // {{ PageNumber }} will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
+        this.Attributes.PageCount = '{{ PageCount }}';   // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
+        this.Header = new Header('15mm', '<table style="width: 100%">{{ Author }}<td></td><td></td></table>');
+        this.Footer = new Footer('25mm', '<table style="width: 100%"><td></td><td></td></table>');
+        
+        this.LoadConfig(config);
+
         if (filePath)
         {
             this.Content = fs.readFileSync(filePath, this.encoding);
@@ -166,6 +183,19 @@ export class Document extends Base
     public set Loacle(value : string)
     {
         this.locale = value;
+    }
+
+    /**
+     * Gets or sets the layout of the document.
+     */
+    @enumerable(true)
+    public get Layout() : Layout
+    {
+        return this.layout;
+    }
+    public set Layout(value : Layout)
+    {
+        this.layout = value;
     }
 
     /**
@@ -391,10 +421,18 @@ export class Document extends Base
     {
         let document : any = {
             Locale: this.Locale,
+            Layout: this.Layout.toObject(),
             Header: this.RenderSection(this.Header),
             SpecialHeaders: { },
+            EvenHeader: this.RenderSection(this.evenHeader),
+            OddHeader: this.RenderSection(this.oddHeader),
+            LastHeader: this.RenderSection(this.lastHeader),
             Content: this.RenderBody(),
-            Footer: this.RenderSection(this.Footer)
+            Footer: this.RenderSection(this.Footer),
+            SpecialFooters: { },
+            EvenFooter: this.RenderSection(this.evenFooter),
+            OddFooter: this.RenderSection(this.oddFooter),
+            LastFooter: this.RenderSection(this.lastFooter)
         }
 
         for (var key in this.SpecialHeaders)
@@ -402,39 +440,9 @@ export class Document extends Base
             document.SpecialHeaders[key] = this.RenderSection(this.SpecialHeaders[key]);
         }
 
-        if (this.evenHeader)
-        {
-            document.EvenHeader = this.RenderSection(this.evenHeader);
-        }
-
-        if (this.oddHeader)
-        {
-            document.OddHeader = this.RenderSection(this.OddHeader);
-        }
-
-        if (this.lastHeader)
-        {
-            document.LastHeader = this.RenderSection(this.LastHeader);
-        }
-
         for (var key in this.SpecialFooters)
         {
             document.SpecialFooters[key] = this.RenderSection(this.SpecialFooters[key]);
-        }
-
-        if (this.evenFooter)
-        {
-            document.EvenFooter = this.RenderSection(this.EvenFooter);
-        }
-
-        if (this.oddFooter)
-        {
-            document.OddFooter = this.RenderSection(this.OddFooter);
-        }
-
-        if (this.lastFooter)
-        {
-            document.LastFooter = this.RenderSection(this.LastFooter);
         }
 
         return JSON.stringify(document);
@@ -446,7 +454,6 @@ export class Document extends Base
     public get HTML() : string
     {
         return this.RenderBody();
-        //return this.Render(this.Content);
     }
 
     /**
@@ -457,9 +464,16 @@ export class Document extends Base
      */
     private RenderSection(section : Section) : object
     {
-        let clone = (section.CloneTo(new Section()) as Section);
-        clone.Content = (this.Render(section.Content) as string);
-        return JSON.parse(clone.toJSON());
+        if (section)
+        {
+            let clone = (section.CloneTo(new Section()) as Section);
+            clone.Content = (this.Render(section.Content) as string);
+            return JSON.parse(clone.toJSON());
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
@@ -493,23 +507,33 @@ export class Document extends Base
     /**
      * Loads the vs-config
      */
-    private LoadConfig() : void
+    private LoadConfig(config : VSCode.WorkspaceConfiguration) : void
     {
         let prefix = 'markdownConverter';
-        let config : any = VSCode.workspace.getConfiguration();
         if (config.has(prefix))
         {
-            if (config.has(prefix + '.encoding'))
+            let docPrefix = prefix + '.document';
+
+            if (config.has(docPrefix))
             {
-                this.Encoding = config.get(prefix + '.encoding');
-            }
-            if (config.has(prefix + '.locale'))
-            {
-                this.locale = config.get(prefix + '.locale');
-            }
-            if (config.has(prefix + '.dateFormat'))
-            {
-                this.DateFormat = config.get(prefix + '.dateFormat');
+                if (config.has(docPrefix + '.encoding'))
+                {
+                    this.Encoding = config.get(docPrefix + '.encoding').toString();
+                }
+
+                let localizationPrefix = docPrefix + '.localization';
+
+                if (config.has(localizationPrefix))
+                {
+                    if (config.has(localizationPrefix + '.locale'))
+                    {
+                        this.locale = config.get(localizationPrefix + '.locale').toString();
+                    }
+                    if (config.has(localizationPrefix + '.dateFormat'))
+                    {
+                        this.DateFormat = config.get(localizationPrefix + '.dateFormat').toString();
+                    }
+                }
             }
         }
     }
@@ -524,9 +548,9 @@ export class Document extends Base
             styles += this.Styles + '\n';
         }
         this.StyleSheets.forEach(styleSheet => {
-            if (fs.existsSync(Path.join(__dirname, styleSheet)))
+            if (fs.existsSync(Path.join(styleSheet)))
             {
-                styles += fs.readFileSync(Path.join(__dirname, styleSheet)).toString() + '\n';
+                styles += fs.readFileSync(Path.join(styleSheet)).toString() + '\n';
             }
         });
         styles += '</style>';
