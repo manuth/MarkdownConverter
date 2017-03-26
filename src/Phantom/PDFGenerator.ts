@@ -73,13 +73,13 @@ catch (e)
          */
         function ReplacePageNumbers(subject : string, pageNumber : number, pageCount : number) : string
         {
-            subject = subject.replace(/{{[\s]*(pageNumber|pageCount)[\s]*}}/g, function (match : string) : string
+            subject = subject.replace(/{{[\s]*(PageNumber|PageCount)[\s]*}}/g, function (match : string) : string
             {
-                if (/pageNumber/g)
+                if (/PageNumber/g)
                 {
                     return pageNumber.toString();
                 }
-                else if (/pageCount/g)
+                else if (/PageCount/g)
                 {
                     return pageCount.toString();
                 }
