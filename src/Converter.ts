@@ -40,7 +40,7 @@ export class Converter
     {
         if (conversionType != ConversionType.HTML)
         {
-            let type = this.getValueName(ConversionType, conversionType);
+            let type = ConversionType[conversionType];
             let args = [
                 Path.join(__dirname, 'Phantom', 'PDFGenerator.js'),
                 type,
@@ -59,21 +59,5 @@ export class Converter
         {
             FS.writeFileSync(path, this.document.HTML);
         }
-    }
-
-    private getValueName(enumObject : any, value : any)
-    {
-        let enumArray = [ ];
-        let enumValues = { };
-        for (var key in enumObject)
-        {
-            enumArray.push(key);
-        }
-        for (var i = (enumArray.length / 2) - 1; i >= 0; i--)
-        {
-            let key = enumArray[i];
-            enumValues[key] = enumArray[(enumArray.length / 2) + i];
-        }
-        return enumValues[value];
     }
 }
