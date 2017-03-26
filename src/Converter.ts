@@ -27,18 +27,38 @@ export class Converter
         this.document = document;
     }
 
+    /**
+     * Starts the conversion.
+     * 
+     * @param conversionType
+     * The type to convert the document to.
+     * 
+     * @param path
+     * The path to save the converted file to.
+     */
     public Start(conversionType : ConversionType, path : string) : void
     {
-        let type = this.getValueName(ConversionType, conversionType);
-        let args = [
-            Path.join(__dirname, 'Phantom', 'PDFGenerator.js'),
-            type,
-            this.document.toJSON(),
-            Path.resolve(path)
-        ];
-        var result = childprocess.spawnSync(phantomjs.path, args);
-        console.log(result.stderr.toString());
-        console.log(result.stdout.toString());
+        if (conversionType != ConversionType.HTML)
+        {
+            let type = this.getValueName(ConversionType, conversionType);
+            let args = [
+                Path.join(__dirname, 'Phantom', 'PDFGenerator.js'),
+                type,
+                this.document.toJSON(),
+                Path.resolve(path)
+            ];
+            let result = childprocess.spawnSync(phantomjs.path, args);
+            let error = result.stderr.toString();
+            
+            if (error)
+            {
+                throw new Error(error);
+            }
+        }
+        else
+        {
+            FS.writeFileSync(path, this.document.HTML);
+        }
     }
 
     private getValueName(enumObject : any, value : any)
