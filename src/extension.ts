@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext)
         doc.Content = '# Hello World\n{{ PageNumber }}\n{{ CreationDate }}';
 
         var x = new Converter(doc);
-        x.Start(ConversionType.DocX, Path.join(__dirname, '..', '..', 'test.pdf'));
+        x.Start(ConversionType.PDF, Path.join(__dirname, '..', '..', 'test.pdf'));
         console.log(doc.toJSON());
     });
 
