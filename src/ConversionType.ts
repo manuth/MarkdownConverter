@@ -4,13 +4,13 @@
 export enum ConversionType
 {
     /**
-     * DocX-conversion.
-     */
-    DocX,
-    /**
      * HTML-conversion.
      */
     HTML,
+    /**
+     * DocX-conversion.
+     */
+    PNG,
     /**
      * PDF-conversion.
      */
