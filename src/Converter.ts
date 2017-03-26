@@ -14,7 +14,7 @@ export class Converter extends Base
     /**
      * The document which is to be converted.
      */
-    private document : Document;
+    private document : Document = null;
 
     /**
      * Initializes a new instance of the Constructor class with a filepath.

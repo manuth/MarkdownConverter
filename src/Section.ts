@@ -8,12 +8,12 @@ export class Section extends Base
     /**
      * The height of the section.
      */
-    private height : string;
+    private height : string = null;
 
     /**
      * The content of the section.
      */
-    private content : string;
+    private content : string = null;
 
     constructor(height : string = '', content : string = '')
     {
