@@ -2,7 +2,7 @@
 import * as shell from 'shelljs';
 import { Base } from "./Base";
 
-export class Fullname extends Base
+export class Fullname
 {
     /**
      * The environment-variables which may contain the username.

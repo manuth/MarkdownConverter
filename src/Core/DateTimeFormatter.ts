@@ -8,7 +8,7 @@ let tokens : { [id : string] : string };
 /**
  * Provides the functionallity to format a date.
  */
-export class DateTimeFormatter extends Base
+export class DateTimeFormatter
 {
     /**
      * The locale to format the date.
@@ -57,7 +57,6 @@ export class DateTimeFormatter extends Base
      */
     constructor(locale : string = vscode.env.language, resourcePath : string = path.join(__dirname, '..', '..', '..', 'localization', 'data'))
     {
-        super();
         if (locale)
         {
             this.Locale = locale;
