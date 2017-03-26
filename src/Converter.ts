@@ -38,6 +38,7 @@ export class Converter extends Base
             Path.resolve(path)
         ];
         var result = childprocess.spawnSync(phantomjs.path, args);
+        console.log(result.stderr.toString());
         console.log(result.stdout.toString());
     }
 
