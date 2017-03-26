@@ -9,7 +9,7 @@ import { ConversionType } from "./ConversionType";
 /**
  * Provides a markdown-converter.
  */
-export class Converter extends Base
+export class Converter
 {
     /**
      * The document which is to be converted.
@@ -24,7 +24,6 @@ export class Converter extends Base
      */
     constructor(document : Document)
     {
-        super();
         this.document = document;
     }
 
