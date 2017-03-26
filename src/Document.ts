@@ -18,7 +18,7 @@ export class Document extends Base
     /**
      * The encoding of the document to load and save.
      */
-    private encoding : string;
+    private encoding : string = null;
 
     /**
      * The attributes of the document.
@@ -38,7 +38,7 @@ export class Document extends Base
     /**
      * The header of the document.
      */
-    private header : Header;
+    private header : Header = null;
 
     /**
      * A set of special headers.
@@ -48,22 +48,22 @@ export class Document extends Base
     /**
      * The header for even pages.
      */
-    private evenHeader : Header;
+    private evenHeader : Header = null;
 
     /**
      * The header for odd pages.
      */
-    private oddHeader : Header;
+    private oddHeader : Header = null;
 
     /**
      * The header for the last page.
      */
-    private lastHeader : Header;
+    private lastHeader : Header = null;
 
     /**
      * The footer of the document.
      */
-    private footer : Footer;
+    private footer : Footer = null;
 
     /**
      * A set of special footers.
@@ -73,17 +73,17 @@ export class Document extends Base
     /**
      * The footer for even pages.
      */
-    private evenFooter : Footer;
+    private evenFooter : Footer = null;
 
     /**
      * The footer for odd pages.
      */
-    private oddFooter : Footer;
+    private oddFooter : Footer = null;
 
     /**
      * The footer for the last page.
      */
-    private lastFooter : Footer;
+    private lastFooter : Footer = null;
 
     /**
      * The stylesheets of the document.
@@ -98,7 +98,7 @@ export class Document extends Base
     /**
      * The content of the document.
      */
-    private content : string;
+    private content : string = null;
 
     constructor(filePath : string = null)
     {

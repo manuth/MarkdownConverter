@@ -13,17 +13,17 @@ export class DateTimeFormatter extends Base
     /**
      * The locale to format the date.
      */
-    private locale : string;
+    private locale : string = null;
 
     /**
      * The localizer to localize values.
      */
-    private localize : any;
+    private localize : any = null;
 
     /**
      * The path to load the localized values from.
      */
-    private resourcePath : string;
+    private resourcePath : string = null;
     
     /**
      * The regular expression to replace the tokens.
