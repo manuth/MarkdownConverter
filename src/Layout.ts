@@ -37,15 +37,15 @@ export class Layout extends Base
     private paperSizes = {
         A3: {
             Width: '297mm',
-            Height: '420mm'
+            Height: '42cm'
         },
         A4: {
-            Width: '210mm',
+            Width: '21cm',
             Height: '297mm'
         },
         A5: {
             Width: '148mm',
-            Height: '210mm'
+            Height: '21cm'
         },
         Legal: {
             Width: '8.5in',
