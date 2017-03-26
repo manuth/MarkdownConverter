@@ -471,7 +471,7 @@ export class Document extends Base
     private Render(content : string) : string
     {
         // Preparing markdown-it
-        let md = new MarkdownIt();
+        let md = new MarkdownIt({ html: true });
         md.use(Emoji);
 
         // Preparing the attributes
