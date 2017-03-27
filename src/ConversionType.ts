@@ -35,9 +35,7 @@ export enum ConversionType
 /**
  * The extensions of the conversion-types
  */
-export let Extensions : { [id : number] : string } = BuildExtensions();
-
-function BuildExtensions() : { [id : number] : string }
+export function GetExtensions() : { [id : number] : string }
 {
     let extensions : { [id : number] : string } = { };
     extensions[ConversionType.BMP] = '.bmp';
