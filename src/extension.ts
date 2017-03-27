@@ -8,7 +8,7 @@ import { DateTimeFormatter } from './Core/DateTimeFormatter';
 import { Document } from './Document';
 import { Footer, Header } from './Section';
 import { Converter } from "./Converter";
-import { ConversionType, Extensions } from "./ConversionType";
+import { ConversionType, GetExtensions } from "./ConversionType";
 import { configKey } from "./Core/Constants";
 
 // this method is called when your extension is activated
@@ -67,6 +67,10 @@ export function activate(context: vscode.ExtensionContext)
             {
                 types = (type as string[]);
             }
+            for (var key in types)
+            {
+                types[key] = ConversionType[types[key]];
+            }
 
             if (!markdownDoc.isUntitled)
             {
@@ -91,10 +95,13 @@ export function activate(context: vscode.ExtensionContext)
             }
             
             let converter = new Converter(doc);
+            let Extensions = GetExtensions();
 
             types.forEach(type => {
                 let destination = Path.join(outDir, name + Extensions[type]);
                 converter.Start(ConversionType[type], destination);
+                vscode.window.showInformationMessage('File successfully converted: [' + destination + ']', {
+                });
             });
         }
         else
