@@ -55,7 +55,7 @@ export class DateTimeFormatter
      * @param resourcePath
      * The path to load the localized values from.
      */
-    constructor(locale : string = vscode.env.language, resourcePath : string = path.join(__dirname, '..', '..', '..', 'localization', 'data'))
+    constructor(locale : string = vscode.env.language, resourcePath : string = path.join(__dirname, '..', '..', '..', 'Localization', 'DateTimeFormatter'))
     {
         if (locale)
         {
