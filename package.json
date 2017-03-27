@@ -12,9 +12,12 @@
     "keywords": [
         "MarkDown",
         "Convert",
+        "BMP",
+        "HTML",
+        "JPEG",
         "PDF",
         "PNG",
-        "HTML"
+        "PPM"
     ],
     "repository": {
         "type": "git",
@@ -49,11 +52,11 @@
                     "type": "string",
                     "default": "."
                 },
-                "markdownConverter.encoding": {
-                    "title": "%config.encoding%",
-                    "description": "%config.encoding.description%",
-                    "type": "string",
-                    "default": "utf-8"
+                "markdownConverter.document.quality": {
+                    "title": "%config.document.quality%",
+                    "description": "%config.document.quality.description%",
+                    "type": "integer",
+                    "default": 75
                 },
                 "markdownConverter.conversionType": {
                     "title": "%config.conversionType%",
@@ -63,9 +66,12 @@
                         {
                             "type": "string",
                             "enum": [
+                                "BMP",
                                 "HTML",
+                                "JPEG",
+                                "PDF",
                                 "PNG",
-                                "PDF"
+                                "PPM"
                             ]
                         },
                         {
@@ -74,9 +80,12 @@
                             "items": {
                                 "type": "string",
                                 "enum": [
+                                    "BMP",
                                     "HTML",
+                                    "JPEG",
+                                    "PDF",
                                     "PNG",
-                                    "PDF"
+                                    "PPM"
                                 ]
                             }
                         }
