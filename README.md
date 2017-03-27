@@ -14,7 +14,9 @@ Frontmatter > Config > Default Config
 ```
 
 # Credits
+ - [ShiyumiChan](https://shiyumichan.deviantart.com/) - thanks for borrowing your English-skills
  - Regexr.com
  - fullname
  - node-html-pdf
  - vscode-markdown-pdf
+ - Samuel - without his help you wouldn't have those awesome Github-Emojis :tada: :tada:
