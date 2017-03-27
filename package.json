@@ -1,658 +1,659 @@
 {
-    "name": "markdown-converter",
-    "displayName": "MarkdownConverter",
-    "description": "Provides the functionallity to convert MarkDown-files to html, docx or pdf.",
-    "version": "0.0.1",
-    "publisher": "manuth",
-    "author": {
-        "name": "Manuel Thalmann",
-        "email": "m@nuth.ch",
-        "url": "http://nuth.ch"
-    },
-    "license": "MIT",
-    "keywords": [
-        "MarkDown",
-        "Convert",
-        "BMP",
-        "HTML",
-        "JPEG",
-        "PDF",
-        "PNG",
-        "PPM"
+  "name": "markdown-converter",
+  "displayName": "MarkdownConverter",
+  "description": "Provides the functionallity to convert MarkDown-files to html, docx or pdf.",
+  "version": "0.0.1",
+  "publisher": "manuth",
+  "author": {
+    "name": "Manuel Thalmann",
+    "email": "m@nuth.ch",
+    "url": "http://nuth.ch"
+  },
+  "license": "MIT",
+  "keywords": [
+    "MarkDown",
+    "Convert",
+    "BMP",
+    "HTML",
+    "JPEG",
+    "PDF",
+    "PNG",
+    "PPM"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manuth/MarkdownConverter.git"
+  },
+  "engines": {
+    "vscode": "^1.10.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:markdownConverter.convert"
+  ],
+  "main": "./out/src/extension",
+  "bin": {
+    "markdown-converter": "./out/src/index.js"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "markdownConverter.convert",
+        "title": "%command.convert%"
+      }
     ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/manuth/MarkdownConverter.git"
-    },
-    "engines": {
-        "vscode": "^1.10.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "onCommand:markdownConverter.convert"
-    ],
-    "main": "./out/src/extension",
-    "bin": {
-        "markdown-converter": "./out/src/index.js"
-    },
-    "contributes": {
-        "commands": [
+    "configuration": {
+      "title": "%config%",
+      "properties": {
+        "markdownConverter.outDir": {
+          "title": "%config.outDir%",
+          "description": "%config.outDir.description%",
+          "type": "string",
+          "default": "."
+        },
+        "markdownConverter.ignoreLanguage": {
+          "title": "%config.ignoreLanguage%",
+          "description": "%config.ignoreLanguage.description%",
+          "type": "boolean",
+          "default": false
+        },
+        "markdownConverter.autoSave": {
+          "title": "%config.autoSave%",
+          "description": "%config.autoSave.description%",
+          "type": "boolean",
+          "default": true
+        },
+        "markdownConverter.document.quality": {
+          "title": "%config.document.quality%",
+          "description": "%config.document.quality.description%",
+          "type": "integer",
+          "default": 90
+        },
+        "markdownConverter.conversionType": {
+          "title": "%config.conversionType%",
+          "description": "%config.conversionType.description%",
+          "default": "PDF",
+          "oneOf": [
             {
-                "command": "markdownConverter.convert",
-                "title": "%command.convert%"
+              "type": "string",
+              "enum": [
+                "BMP",
+                "HTML",
+                "JPEG",
+                "PDF",
+                "PNG",
+                "PPM"
+              ]
+            },
+            {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "BMP",
+                  "HTML",
+                  "JPEG",
+                  "PDF",
+                  "PNG",
+                  "PPM"
+                ]
+              }
             }
-        ],
-        "configuration": {
-            "title": "%config%",
-            "properties": {
-                "markdownConverter.outDir": {
-                    "title": "%config.outDir%",
-                    "description": "%config.outDir.description%",
-                    "type": "string",
-                    "default": "."
+          ]
+        },
+        "markdownConverter.document": {
+          "title": "%config.document%",
+          "description": "%config.document.description%",
+          "default": {
+            "layout": {
+              "margin": {
+                "top": "%config.document.layout.margin.top.default%",
+                "right": "%config.document.layout.margin.right.default%",
+                "bottom": "%config.document.layout.margin.bottom.default%",
+                "left": "%config.document.layout.margin.left.default%"
+              },
+              "format": "%config.document.layout.format.default%",
+              "orientation": "%config.document.layout.orientation.default%"
+            },
+            "header": {
+              "height": "%config.document.header.height.default%",
+              "content": "%config.document.header.content.default%"
+            },
+            "footer": {
+              "height": "%config.document.footer.height.default%",
+              "content": "%config.document.footer.content.default%"
+            }
+          },
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "title": "%config.document.name%",
+              "description": "%config.document.name.description%",
+              "type": "string"
+            },
+            "attributes": {
+              "title": "%config.document.attributes%",
+              "description": "%config.document.attributes.description%",
+              "type": "object"
+            },
+            "localization": {
+              "title": "%config.document.localization%",
+              "description": "%config.document.localization.description%",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "locale": {
+                  "title": "%config.document.localization.locale%",
+                  "description": "%config.document.localization.locale.description%",
+                  "type": "string"
                 },
-                "markdownConverter.document.quality": {
-                    "title": "%config.document.quality%",
-                    "description": "%config.document.quality.description%",
-                    "type": "integer",
-                    "default": 75
-                },
-                "markdownConverter.conversionType": {
-                    "title": "%config.conversionType%",
-                    "description": "%config.conversionType.description%",
-                    "default": "PDF",
-                    "oneOf": [
-                        {
-                            "type": "string",
-                            "enum": [
-                                "BMP",
-                                "HTML",
-                                "JPEG",
-                                "PDF",
-                                "PNG",
-                                "PPM"
-                            ]
-                        },
-                        {
-                            "type": "array",
-                            "uniqueItems": true,
-                            "items": {
-                                "type": "string",
-                                "enum": [
-                                    "BMP",
-                                    "HTML",
-                                    "JPEG",
-                                    "PDF",
-                                    "PNG",
-                                    "PPM"
-                                ]
-                            }
-                        }
-                    ]
-                },
-                "markdownConverter.ignoreLanguage": {
-                    "title": "%config.ignoreLanguage%",
-                    "description": "%config.ignoreLanguage.description%",
-                    "type": "boolean",
-                    "default": false
-                },
-                "markdownConverter.autoSave": {
-                    "title": "%config.autoSave%",
-                    "description": "%config.autoSave.description%",
-                    "type": "boolean",
-                    "default": true
-                },
-                "markdownConverter.document": {
-                    "title": "%config.document%",
-                    "description": "%config.document.description%",
-                    "default": {
-                        "layout": {
-                            "margin": {
-                                "top": "%config.document.layout.margin.top.default",
-                                "right": "%config.document.layout.margin.right.default",
-                                "bottom": "%config.document.layout.margin.bottom.default",
-                                "left": "%config.document.layout.margin.left.default"
-                            },
-                            "format": "%config.document.layout.format.default%",
-                            "orientation": "%config.document.layout.orientation.default%"
-                        },
-                        "header": {
-                            "height": "%config.document.header.height.default%",
-                            "content": "%config.document.header.content.default%"
-                        },
-                        "footer": {
-                            "height": "%config.document.footer.height.default%",
-                            "content": "%config.document.footer.content.default%"
-                        }
+                "dateFormat": {
+                  "title": "%config.document.localization.dateFormat%",
+                  "description": "%config.document.localization.dateFormat.description%",
+                  "default": "default",
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "default",
+                        "fullDate"
+                      ]
                     },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            },
+            "layout": {
+              "title": "%config.document.layout%",
+              "description": "%config.document.layout.description%",
+              "type": "object",
+              "oneOf": [
+                {
+                  "additionalProperties": false,
+                  "required": [
+                    "margin",
+                    "format",
+                    "orientation"
+                  ],
+                  "properties": {
+                    "margin": {
+                      "title": "%config.document.layout.margin%",
+                      "description": "%config.document.layout.margin.description%",
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "top",
+                        "right",
+                        "bottom",
+                        "left"
+                      ],
+                      "properties": {
+                        "top": {
+                          "title": "%config.document.layout.margin.top%",
+                          "description": "%config.document.layout.margin.top.description%",
+                          "type": "string",
+                          "default": "%config.document.layout.margin.top.default%"
+                        },
+                        "right": {
+                          "title": "%config.document.layout.margin.right%",
+                          "description": "%config.document.layout.margin.right.description%",
+                          "type": "string",
+                          "default": "%config.document.layout.margin.right.default%"
+                        },
+                        "bottom": {
+                          "title": "%config.document.layout.margin.bottom%",
+                          "description": "%config.document.layout.margin.bottom.description%",
+                          "type": "string",
+                          "default": "%config.document.layout.margin.bottom.default%"
+                        },
+                        "left": {
+                          "title": "%config.document.layout.margin.left%",
+                          "description": "%config.document.layout.margin.left.description%",
+                          "type": "string",
+                          "default": "%config.document.layout.margin.left.default%"
+                        }
+                      }
+                    },
+                    "format": {
+                      "title": "%config.document.layout.format%",
+                      "description": "%config.document.layout.format.description%",
+                      "type": "string",
+                      "default": "%config.document.layout.format.default%",
+                      "enum": [
+                        "A3",
+                        "A4",
+                        "A5",
+                        "Legal",
+                        "Letter",
+                        "Tabloid"
+                      ]
+                    },
+                    "orientation": {
+                      "title": "%config.document.layout.orientation%",
+                      "description": "%config.document.layout.orientation.description%",
+                      "type": "string",
+                      "default": "%config.document.layout.orientation.default%",
+                      "enum": [
+                        "portrait",
+                        "landspace"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "additionalProperties": false,
+                  "required": [
+                    "margin",
+                    "width",
+                    "height"
+                  ],
+                  "properties": {
+                    "margin": {
+                      "title": "%config.document.layout.margin%",
+                      "description": "%config.document.layout.margin.description%",
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "top",
+                        "right",
+                        "bottom",
+                        "left"
+                      ],
+                      "properties": {
+                        "top": {
+                          "title": "%config.document.layout.margin.top%",
+                          "description": "%config.document.layout.margin.top.description%",
+                          "type": "string",
+                          "default": "%config.document.layout.margin.top.default%"
+                        },
+                        "right": {
+                          "title": "%config.document.layout.margin.right%",
+                          "description": "%config.document.layout.margin.right.description%",
+                          "type": "string",
+                          "default": "%config.document.layout.margin.right.default%"
+                        },
+                        "bottom": {
+                          "title": "%config.document.layout.margin.bottom%",
+                          "description": "%config.document.layout.margin.bottom.description%",
+                          "type": "string",
+                          "default": "%config.document.layout.margin.bottom.default%"
+                        },
+                        "left": {
+                          "title": "%config.document.layout.margin.left%",
+                          "description": "%config.document.layout.margin.left.description%",
+                          "type": "string",
+                          "default": "%config.document.layout.margin.left.default%"
+                        }
+                      }
+                    },
+                    "width": {
+                      "title": "%config.document.layout.width%",
+                      "description": "%config.document.layout.width.description%",
+                      "default": "21cm"
+                    },
+                    "height": {
+                      "title": "%config.document.layout.height%",
+                      "description": "%config.document.layout.height.description%",
+                      "default": "297mm"
+                    }
+                  }
+                }
+              ]
+            },
+            "header": {
+              "title": "%config.document.header%",
+              "description": "%config.document.header.description%",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "height",
+                "content"
+              ],
+              "properties": {
+                "height": {
+                  "title": "%config.document.header.height%",
+                  "description": "%config.document.header.height.description%",
+                  "type": "string",
+                  "default": "%config.document.header.height.default%"
+                },
+                "content": {
+                  "title": "%config.document.header.content%",
+                  "description": "%config.document.header.content.description%",
+                  "type": "string",
+                  "default": "%config.document.header.content.default%"
+                }
+              }
+            },
+            "specialHeaders": {
+              "title": "%config.document.specialHeaders%",
+              "description": "%config.document.specialHeaders.description%",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "pageNumber",
+                  "header"
+                ],
+                "properties": {
+                  "pageNumber": {
+                    "title": "%config.document.specialHeaders.pageNumber%",
+                    "description": "%config.document.specialHeaders.pageNumber.description%",
+                    "type": "integer"
+                  },
+                  "header": {
+                    "title": "%config.document.header%",
+                    "description": "%config.document.header.description%",
                     "type": "object",
                     "additionalProperties": false,
+                    "required": [
+                      "height",
+                      "content"
+                    ],
                     "properties": {
-                        "name": {
-                            "title": "%config.document.name%",
-                            "description": "%config.document.name.description%",
-                            "type": "string"
-                        },
-                        "attributes": {
-                            "title": "%config.document.attributes%",
-                            "description": "%config.document.attributes.description%",
-                            "type": "object"
-                        },
-                        "localization": {
-                            "title": "%config.document.localization%",
-                            "description": "%config.document.localization.description%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "properties": {
-                                "locale": {
-                                    "title": "%config.document.localization.locale%",
-                                    "description": "%config.document.localization.locale.description%",
-                                    "type": "string"
-                                },
-                                "dateFormat": {
-                                    "title": "%config.document.localization.dateFormat%",
-                                    "description": "%config.document.localization.dateFormat.description%",
-                                    "default": "default",
-                                    "anyOf": [
-                                        {
-                                            "type": "string",
-                                            "enum": [
-                                                "default",
-                                                "fullDate"
-                                            ]
-                                        },
-                                        {
-                                            "type": "string"
-                                        }
-                                    ]
-                                }
-                            }
-                        },
-                        "layout": {
-                            "title": "%config.document.layout%",
-                            "description": "%config.document.layout.description%",
-                            "type": "object",
-                            "oneOf": [
-                                {
-                                    "additionalProperties": false,
-                                    "required": [
-                                        "margin",
-                                        "format",
-                                        "orientation"
-                                    ],
-                                    "properties": {
-                                        "margin": {
-                                            "title": "%config.document.layout.margin%",
-                                            "description": "%config.document.layout.margin.description%",
-                                            "type": "object",
-                                            "additionalProperties": false,
-                                            "required": [
-                                                "top",
-                                                "right",
-                                                "bottom",
-                                                "left"
-                                            ],
-                                            "properties": {
-                                                "top": {
-                                                    "title": "%config.document.layout.margin.top%",
-                                                    "description": "%config.document.layout.margin.top.description%",
-                                                    "type": "string",
-                                                    "default": "%config.document.layout.margin.top.default%"
-                                                },
-                                                "right": {
-                                                    "title": "%config.document.layout.margin.right%",
-                                                    "description": "%config.document.layout.margin.right.description%",
-                                                    "type": "string",
-                                                    "default": "%config.document.layout.margin.right.default%"
-                                                },
-                                                "bottom": {
-                                                    "title": "%config.document.layout.margin.bottom%",
-                                                    "description": "%config.document.layout.margin.bottom.description%",
-                                                    "type": "string",
-                                                    "default": "%config.document.layout.margin.bottom.default%"
-                                                },
-                                                "left": {
-                                                    "title": "%config.document.layout.margin.left%",
-                                                    "description": "%config.document.layout.margin.left.description%",
-                                                    "type": "string",
-                                                    "default": "%config.document.layout.margin.left.default%"
-                                                }
-                                            }
-                                        },
-                                        "format": {
-                                            "title": "%config.document.layout.format%",
-                                            "description": "%config.document.layout.format.description%",
-                                            "type": "string",
-                                            "default": "%config.document.layout.format.default%",
-                                            "enum": [
-                                                "A3",
-                                                "A4",
-                                                "A5",
-                                                "Legal",
-                                                "Letter",
-                                                "Tabloid"
-                                            ]
-                                        },
-                                        "orientation": {
-                                            "title": "%config.document.layout.orientation%",
-                                            "description": "%config.document.layout.orientation.description%",
-                                            "type": "string",
-                                            "default": "%config.document.layout.orientation.default%",
-                                            "enum": [
-                                                "portrait",
-                                                "landspace"
-                                            ]
-                                        }
-                                    }
-                                },
-                                {
-                                    "additionalProperties": false,
-                                    "required": [
-                                        "margin",
-                                        "width",
-                                        "height"
-                                    ],
-                                    "properties": {
-                                        "margin": {
-                                            "title": "%config.document.layout.margin%",
-                                            "description": "%config.document.layout.margin.description%",
-                                            "type": "object",
-                                            "additionalProperties": false,
-                                            "required": [
-                                                "top",
-                                                "right",
-                                                "bottom",
-                                                "left"
-                                            ],
-                                            "properties": {
-                                                "top": {
-                                                    "title": "%config.document.layout.margin.top%",
-                                                    "description": "%config.document.layout.margin.top.description%",
-                                                    "type": "string",
-                                                    "default": "%config.document.layout.margin.top.default%"
-                                                },
-                                                "right": {
-                                                    "title": "%config.document.layout.margin.right%",
-                                                    "description": "%config.document.layout.margin.right.description%",
-                                                    "type": "string",
-                                                    "default": "%config.document.layout.margin.right.default%"
-                                                },
-                                                "bottom": {
-                                                    "title": "%config.document.layout.margin.bottom%",
-                                                    "description": "%config.document.layout.margin.bottom.description%",
-                                                    "type": "string",
-                                                    "default": "%config.document.layout.margin.bottom.default%"
-                                                },
-                                                "left": {
-                                                    "title": "%config.document.layout.margin.left%",
-                                                    "description": "%config.document.layout.margin.left.description%",
-                                                    "type": "string",
-                                                    "default": "%config.document.layout.margin.left.default%"
-                                                }
-                                            }
-                                        },
-                                        "width": {
-                                            "title": "%config.document.layout.width%",
-                                            "description": "%config.document.layout.width.description%",
-                                            "default": "21cm"
-                                        },
-                                        "height": {
-                                            "title": "%config.document.layout.height%",
-                                            "description": "%config.document.layout.height.description%",
-                                            "default": "297mm"
-                                        }
-                                    }
-                                }
-                            ]
-                        },
-                        "header": {
-                            "title": "%config.document.header%",
-                            "description": "%config.document.header.description%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "height",
-                                "content"
-                            ],
-                            "properties": {
-                                "height": {
-                                    "title": "%config.document.header.height%",
-                                    "description": "%config.document.header.height.description%",
-                                    "type": "string",
-                                    "default": "%config.document.header.height.default%"
-                                },
-                                "content": {
-                                    "title": "%config.document.header.content%",
-                                    "description": "%config.document.header.content.description%",
-                                    "type": "string",
-                                    "default": "%config.document.header.content.default%"
-                                }
-                            }
-                        },
-                        "specialHeaders": {
-                            "title": "%config.document.specialHeaders%",
-                            "description": "%config.document.specialHeaders.description%",
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": false,
-                                "required": [
-                                    "pageNumber",
-                                    "header"
-                                ],
-                                "properties": {
-                                    "pageNumber": {
-                                        "title": "%config.document.specialHeaders.pageNumber%",
-                                        "description": "%config.document.specialHeaders.pageNumber.description%",
-                                        "type": "integer"
-                                    },
-                                    "header": {
-                                        "title": "%config.document.header%",
-                                        "description": "%config.document.header.description%",
-                                        "type": "object",
-                                        "additionalProperties": false,
-                                        "required": [
-                                            "height",
-                                            "content"
-                                        ],
-                                        "properties": {
-                                            "height": {
-                                                "title": "%config.document.header.height%",
-                                                "description": "%config.document.header.height.description%",
-                                                "type": "string",
-                                                "default": "%config.document.header.height.default%"
-                                            },
-                                            "content": {
-                                                "title": "%config.document.header.content%",
-                                                "description": "%config.document.header.content.description%",
-                                                "type": "string",
-                                                "default": "%config.document.header.content.default%"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "evenHeader": {
-                            "title": "%config.document.evenHeader%",
-                            "description": "%config.document.evenHeader%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "height",
-                                "content"
-                            ],
-                            "properties": {
-                                "height": {
-                                    "title": "%config.document.header.height%",
-                                    "description": "%config.document.header.height.description%",
-                                    "type": "string",
-                                    "default": "%config.document.header.height.default%"
-                                },
-                                "content": {
-                                    "title": "%config.document.header.content%",
-                                    "description": "%config.document.header.content.description%",
-                                    "type": "string",
-                                    "default": "%config.document.header.content.default%"
-                                }
-                            }
-                        },
-                        "oddHeader": {
-                            "title": "%config.document.oddHeader%",
-                            "description": "%config.document.oddHeader%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "height",
-                                "content"
-                            ],
-                            "properties": {
-                                "height": {
-                                    "title": "%config.document.header.height%",
-                                    "description": "%config.document.header.height.description%",
-                                    "type": "string",
-                                    "default": "%config.document.header.height.default%"
-                                },
-                                "content": {
-                                    "title": "%config.document.header.content%",
-                                    "description": "%config.document.header.content.description%",
-                                    "type": "string",
-                                    "default": "%config.document.header.content.default%"
-                                }
-                            }
-                        },
-                        "lastHeader": {
-                            "title": "%config.document.lastHeader%",
-                            "description": "%config.document.lastHeader%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "height",
-                                "content"
-                            ],
-                            "properties": {
-                                "height": {
-                                    "title": "%config.document.header.height%",
-                                    "description": "%config.document.header.height.description%",
-                                    "type": "string",
-                                    "default": "%config.document.header.height.default%"
-                                },
-                                "content": {
-                                    "title": "%config.document.header.content%",
-                                    "description": "%config.document.header.content.description%",
-                                    "type": "string",
-                                    "default": "%config.document.header.content.default%"
-                                }
-                            }
-                        },
-                        "footer": {
-                            "title": "%config.document.footer%",
-                            "description": "%config.document.footer.description%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "height",
-                                "content"
-                            ],
-                            "properties": {
-                                "height": {
-                                    "title": "%config.document.footer.height%",
-                                    "description": "%config.document.footer.height.description%",
-                                    "type": "string",
-                                    "default": "%config.document.footer.height.default%"
-                                },
-                                "content": {
-                                    "title": "%config.document.footer.content%",
-                                    "description": "%config.document.footer.content.description%",
-                                    "type": "string",
-                                    "default": "%config.document.footer.content.default%"
-                                }
-                            }
-                        },
-                        "specialFooters": {
-                            "title": "%config.document.specialFooters%",
-                            "description": "%config.document.specialFooters.description%",
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": false,
-                                "required": [
-                                    "pageNumber",
-                                    "footer"
-                                ],
-                                "properties": {
-                                    "pageNumber": {
-                                        "title": "%config.document.specialFooters.pageNumber%",
-                                        "description": "%config.document.specialFooters.pageNumber.description%",
-                                        "type": "integer"
-                                    },
-                                    "footer": {
-                                        "title": "%config.document.footer%",
-                                        "description": "%config.document.footer.description%",
-                                        "type": "object",
-                                        "additionalProperties": false,
-                                        "required": [
-                                            "height",
-                                            "content"
-                                        ],
-                                        "properties": {
-                                            "height": {
-                                                "title": "%config.document.footer.height%",
-                                                "description": "%config.document.footer.height.description%",
-                                                "type": "string",
-                                                "default": "%config.document.footer.height.default%"
-                                            },
-                                            "content": {
-                                                "title": "%config.document.footer.content%",
-                                                "description": "%config.document.footer.content.description%",
-                                                "type": "string",
-                                                "default": "%config.document.footer.content.default%"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "evenFooter": {
-                            "title": "%config.document.evenFooter%",
-                            "description": "%config.document.evenFooter%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "height",
-                                "content"
-                            ],
-                            "properties": {
-                                "height": {
-                                    "title": "%config.document.footer.height%",
-                                    "description": "%config.document.footer.height.description%",
-                                    "type": "string",
-                                    "default": "%config.document.footer.height.default%"
-                                },
-                                "content": {
-                                    "title": "%config.document.footer.content%",
-                                    "description": "%config.document.footer.content.description%",
-                                    "type": "string",
-                                    "default": "%config.document.footer.content.default%"
-                                }
-                            }
-                        },
-                        "oddFooter": {
-                            "title": "%config.document.oddFooter%",
-                            "description": "%config.document.oddFooter%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "height",
-                                "content"
-                            ],
-                            "properties": {
-                                "height": {
-                                    "title": "%config.document.footer.height%",
-                                    "description": "%config.document.footer.height.description%",
-                                    "type": "string",
-                                    "default": "%config.document.footer.height.default%"
-                                },
-                                "content": {
-                                    "title": "%config.document.footer.content%",
-                                    "description": "%config.document.footer.content.description%",
-                                    "type": "string",
-                                    "default": "%config.document.footer.content.default%"
-                                }
-                            }
-                        },
-                        "lastFooter": {
-                            "title": "%config.document.lastFooter%",
-                            "description": "%config.document.lastFooter%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "height",
-                                "content"
-                            ],
-                            "properties": {
-                                "height": {
-                                    "title": "%config.document.footer.height%",
-                                    "description": "%config.document.footer.height.description%",
-                                    "type": "string",
-                                    "default": "%config.document.footer.height.default%"
-                                },
-                                "content": {
-                                    "title": "%config.document.footer.content%",
-                                    "description": "%config.document.footer.content.description%",
-                                    "type": "string",
-                                    "default": "%config.document.footer.content.default%"
-                                }
-                            }
-                        },
-                        "style": {
-                            "title": "%config.document.style%",
-                            "description": "%config.document.style.description%",
-                            "type": "object",
-                            "additionalProperties": false,
-                            "properties": {
-                                "template": {
-                                    "title": "%config.document.style.template%",
-                                    "description": "%config.document.style.template.description%",
-                                    "type": "string"
-                                },
-                                "wrapper": {
-                                    "title": "%config.document.style.wrapper%",
-                                    "description": "%config.document.style.wrapper.description%",
-                                    "type": "string"
-                                },
-                                "enableSystemStyles": {
-                                    "title": "%config.document.style.enableSystemStyles%",
-                                    "description": "%config.document.style.enableSystemStyles.description%",
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "styles": {
-                                    "title": "%config.document.style.styles%",
-                                    "description": "%config.document.style.styles.description%",
-                                    "type": "string"
-                                },
-                                "styleSheets": {
-                                    "title": "%config.document.style.styleSheets%",
-                                    "description": "%config.document.style.styleSheets.description%",
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
+                      "height": {
+                        "title": "%config.document.header.height%",
+                        "description": "%config.document.header.height.description%",
+                        "type": "string",
+                        "default": "%config.document.header.height.default%"
+                      },
+                      "content": {
+                        "title": "%config.document.header.content%",
+                        "description": "%config.document.header.content.description%",
+                        "type": "string",
+                        "default": "%config.document.header.content.default%"
+                      }
                     }
+                  }
                 }
+              }
+            },
+            "evenHeader": {
+              "title": "%config.document.evenHeader%",
+              "description": "%config.document.evenHeader%",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "height",
+                "content"
+              ],
+              "properties": {
+                "height": {
+                  "title": "%config.document.header.height%",
+                  "description": "%config.document.header.height.description%",
+                  "type": "string",
+                  "default": "%config.document.header.height.default%"
+                },
+                "content": {
+                  "title": "%config.document.header.content%",
+                  "description": "%config.document.header.content.description%",
+                  "type": "string",
+                  "default": "%config.document.header.content.default%"
+                }
+              }
+            },
+            "oddHeader": {
+              "title": "%config.document.oddHeader%",
+              "description": "%config.document.oddHeader%",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "height",
+                "content"
+              ],
+              "properties": {
+                "height": {
+                  "title": "%config.document.header.height%",
+                  "description": "%config.document.header.height.description%",
+                  "type": "string",
+                  "default": "%config.document.header.height.default%"
+                },
+                "content": {
+                  "title": "%config.document.header.content%",
+                  "description": "%config.document.header.content.description%",
+                  "type": "string",
+                  "default": "%config.document.header.content.default%"
+                }
+              }
+            },
+            "lastHeader": {
+              "title": "%config.document.lastHeader%",
+              "description": "%config.document.lastHeader%",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "height",
+                "content"
+              ],
+              "properties": {
+                "height": {
+                  "title": "%config.document.header.height%",
+                  "description": "%config.document.header.height.description%",
+                  "type": "string",
+                  "default": "%config.document.header.height.default%"
+                },
+                "content": {
+                  "title": "%config.document.header.content%",
+                  "description": "%config.document.header.content.description%",
+                  "type": "string",
+                  "default": "%config.document.header.content.default%"
+                }
+              }
+            },
+            "footer": {
+              "title": "%config.document.footer%",
+              "description": "%config.document.footer.description%",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "height",
+                "content"
+              ],
+              "properties": {
+                "height": {
+                  "title": "%config.document.footer.height%",
+                  "description": "%config.document.footer.height.description%",
+                  "type": "string",
+                  "default": "%config.document.footer.height.default%"
+                },
+                "content": {
+                  "title": "%config.document.footer.content%",
+                  "description": "%config.document.footer.content.description%",
+                  "type": "string",
+                  "default": "%config.document.footer.content.default%"
+                }
+              }
+            },
+            "specialFooters": {
+              "title": "%config.document.specialFooters%",
+              "description": "%config.document.specialFooters.description%",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "pageNumber",
+                  "footer"
+                ],
+                "properties": {
+                  "pageNumber": {
+                    "title": "%config.document.specialFooters.pageNumber%",
+                    "description": "%config.document.specialFooters.pageNumber.description%",
+                    "type": "integer"
+                  },
+                  "footer": {
+                    "title": "%config.document.footer%",
+                    "description": "%config.document.footer.description%",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "height",
+                      "content"
+                    ],
+                    "properties": {
+                      "height": {
+                        "title": "%config.document.footer.height%",
+                        "description": "%config.document.footer.height.description%",
+                        "type": "string",
+                        "default": "%config.document.footer.height.default%"
+                      },
+                      "content": {
+                        "title": "%config.document.footer.content%",
+                        "description": "%config.document.footer.content.description%",
+                        "type": "string",
+                        "default": "%config.document.footer.content.default%"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "evenFooter": {
+              "title": "%config.document.evenFooter%",
+              "description": "%config.document.evenFooter%",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "height",
+                "content"
+              ],
+              "properties": {
+                "height": {
+                  "title": "%config.document.footer.height%",
+                  "description": "%config.document.footer.height.description%",
+                  "type": "string",
+                  "default": "%config.document.footer.height.default%"
+                },
+                "content": {
+                  "title": "%config.document.footer.content%",
+                  "description": "%config.document.footer.content.description%",
+                  "type": "string",
+                  "default": "%config.document.footer.content.default%"
+                }
+              }
+            },
+            "oddFooter": {
+              "title": "%config.document.oddFooter%",
+              "description": "%config.document.oddFooter%",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "height",
+                "content"
+              ],
+              "properties": {
+                "height": {
+                  "title": "%config.document.footer.height%",
+                  "description": "%config.document.footer.height.description%",
+                  "type": "string",
+                  "default": "%config.document.footer.height.default%"
+                },
+                "content": {
+                  "title": "%config.document.footer.content%",
+                  "description": "%config.document.footer.content.description%",
+                  "type": "string",
+                  "default": "%config.document.footer.content.default%"
+                }
+              }
+            },
+            "lastFooter": {
+              "title": "%config.document.lastFooter%",
+              "description": "%config.document.lastFooter%",
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "height",
+                "content"
+              ],
+              "properties": {
+                "height": {
+                  "title": "%config.document.footer.height%",
+                  "description": "%config.document.footer.height.description%",
+                  "type": "string",
+                  "default": "%config.document.footer.height.default%"
+                },
+                "content": {
+                  "title": "%config.document.footer.content%",
+                  "description": "%config.document.footer.content.description%",
+                  "type": "string",
+                  "default": "%config.document.footer.content.default%"
+                }
+              }
+            },
+            "style": {
+              "title": "%config.document.style%",
+              "description": "%config.document.style.description%",
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "template": {
+                  "title": "%config.document.style.template%",
+                  "description": "%config.document.style.template.description%",
+                  "type": "string"
+                },
+                "wrapper": {
+                  "title": "%config.document.style.wrapper%",
+                  "description": "%config.document.style.wrapper.description%",
+                  "type": "string"
+                },
+                "enableSystemStyles": {
+                  "title": "%config.document.style.enableSystemStyles%",
+                  "description": "%config.document.style.enableSystemStyles.description%",
+                  "type": "boolean",
+                  "default": true
+                },
+                "styles": {
+                  "title": "%config.document.style.styles%",
+                  "description": "%config.document.style.styles.description%",
+                  "type": "string"
+                },
+                "styleSheets": {
+                  "title": "%config.document.style.styleSheets%",
+                  "description": "%config.document.style.styleSheets.description%",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
             }
+          }
         }
-    },
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
-    },
-    "dependencies": {
-        "dateformat": "^2.0.0",
-        "front-matter": "^2.1.2",
-        "i18n": "^0.8.3",
-        "markdown-it": "^8.3.1",
-        "markdown-it-emoji": "^1.3.0",
-        "mustache": "^2.3.0",
-        "os-locale": "^2.0.0",
-        "phantomjs-prebuilt": "^2.1.14",
-        "rc": "^1.1.7",
-        "shelljs": "^0.7.7",
-        "vscode-nls": "^2.0.2"
+      }
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32"
+  },
+  "dependencies": {
+    "dateformat": "^2.0.0",
+    "front-matter": "^2.1.2",
+    "i18n": "^0.8.3",
+    "markdown-it": "^8.3.1",
+    "markdown-it-anchor": "^4.0.0",
+    "markdown-it-emoji": "^1.3.0",
+    "mustache": "^2.3.0",
+    "os-locale": "^2.0.0",
+    "phantomjs-prebuilt": "^2.1.14",
+    "rc": "^1.1.7",
+    "shelljs": "^0.7.7",
+    "vscode-nls": "^2.0.2"
+  }
 }
