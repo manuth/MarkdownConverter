@@ -11,6 +11,7 @@ import * as Emoji from 'markdown-it-emoji';
 import { Header, Footer, Section } from './Section';
 import { Base } from "./Core/Base";
 import { Layout } from "./Layout";
+import { configKey } from "./Core/Constants";
 
 /**
  * Represents a document.
@@ -18,14 +19,9 @@ import { Layout } from "./Layout";
 export class Document extends Base
 {
     /**
-     * The name of the document.
+     * The quality of the document.
      */
-    private name : string = null;
-
-    /**
-     * The encoding of the document to load and save.
-     */
-    private encoding : string = null;
+    private quality : number = 75;
 
     /**
      * The attributes of the document.
@@ -131,49 +127,35 @@ export class Document extends Base
      * @param config
      * The configuration to set.
      */
-    constructor(filePath : string = null, config : VSCode.WorkspaceConfiguration = VSCode.workspace.getConfiguration())
+    constructor(filePath : string = null)
     {
         super();
-        this.Attributes.FileName = this.Name;
+        let config = VSCode.workspace.getConfiguration(configKey + '.document');
         this.Attributes.Author = Fullname.FullName;
         this.Attributes.CreationDate = new Date();
         this.Attributes.PageNumber = '{{ PageNumber }}'; // {{ PageNumber }} will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
         this.Attributes.PageCount = '{{ PageCount }}';   // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
         this.Header = new Header('15mm', '<table style="width: 100%"><td>{{ Author }}</td><td>{{ PageNumber }}/{{ PageCount }}</td><td></td></table>');
         this.Footer = new Footer('10mm', '<table style="width: 100%"><td></td><td></td></table>');
-        
         this.LoadConfig(config);
 
         if (filePath)
         {
-            this.Content = fs.readFileSync(filePath, this.encoding);
+            this.Content = fs.readFileSync(filePath, 'utf-8');
         }
     }
 
     /**
-     * Gets or sets the name of the document.
+     * Gets or sets the quality of the document.
      */
     @enumerable(true)
-    public get Name() : string
+    public get Quality() : number
     {
-        return this.name;
+        return this.quality;
     }
-    public set Name(value : string)
+    public set Quality(value : number)
     {
-        this.name = value;
-    }
-
-    /**
-     * Gets or sets the encoding of the document to load and save.
-     */
-    @enumerable(true)
-    public get Encoding() : string
-    {
-        return this.encoding;
-    }
-    public set Encoding(value : string)
-    {
-        this.encoding = value;
+        this.quality = value;
     }
 
     /**
@@ -476,6 +458,7 @@ export class Document extends Base
     public toJSON() : string
     {
         let document : any = {
+            Quality: this.Quality,
             Locale: this.Locale,
             Layout: this.Layout.toObject(),
             Header: this.RenderSection(this.Header),
@@ -565,31 +548,25 @@ export class Document extends Base
      */
     private LoadConfig(config : VSCode.WorkspaceConfiguration) : void
     {
-        let prefix = 'markdownConverter';
-        if (config.has(prefix))
+        if (config.has('attributes'))
         {
-            let docPrefix = prefix + '.document';
-
-            if (config.has(docPrefix))
+            let attributes = config.get('attributes');
+            for (var key in attributes)
             {
-                if (config.has(docPrefix + '.encoding'))
-                {
-                    this.Encoding = config.get(docPrefix + '.encoding').toString();
-                }
+                this.Attributes[key] = attributes[key];
+            }
+        }
+        if (config.has('localization'))
+        {
+            let localization = config.get('localization');
 
-                let localizationPrefix = docPrefix + '.localization';
-
-                if (config.has(localizationPrefix))
-                {
-                    if (config.has(localizationPrefix + '.locale'))
-                    {
-                        this.locale = config.get(localizationPrefix + '.locale').toString();
-                    }
-                    if (config.has(localizationPrefix + '.dateFormat'))
-                    {
-                        this.DateFormat = config.get(localizationPrefix + '.dateFormat').toString();
-                    }
-                }
+            if ('locale' in localization)
+            {
+                this.locale = localization['locale'];
+            }
+            if ('dateFormat' in localization)
+            {
+                this.DateFormat = localization['dateFormat'];
             }
         }
     }
