@@ -96,8 +96,30 @@ catch (e)
          */
         function RenderPage(page)
         {
+            var renderType;
             page.paperSize = CalculatePaperSize(page);
-            page.render(destination, { type: 'pdf', quality: 75 });
+
+            switch(type)
+            {
+                case "BMP":
+                    renderType = "bmp";
+                    break;
+                case  "JPEG":
+                    renderType = "jpeg";
+                    break;
+                case "PNG":
+                    renderType = "png";
+                    break;
+                case "PPM":
+                    renderType = "ppm";
+                    break;
+                case "PDF":
+                default:
+                    renderType = "pdf";
+                    break;
+            }
+
+            page.render(destination, { type: renderType, quality: doc.Quality });
             OnFinished();
         }
 
