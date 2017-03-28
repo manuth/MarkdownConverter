@@ -3,6 +3,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as ChildProcess from 'child_process';
+import * as FS from 'fs';
 import * as Path from 'path';
 import * as url from 'url';
 import { DateTimeFormatter } from './Core/DateTimeFormatter';
@@ -11,6 +12,7 @@ import { Footer, Header } from './Section';
 import { Converter } from "./Converter";
 import { ConversionType, GetExtensions } from "./ConversionType";
 import { ConfigKey } from "./Core/Constants";
+import * as MKDirP from 'mkdirp';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -109,9 +111,15 @@ export function activate(context: vscode.ExtensionContext)
                 process.chdir(workDir);
 
                 types.forEach(type => {
+
+                    if (!FS.existsSync(outDir))
+                    {
+                        MKDirP.sync(outDir);
+                    }
+
                     let destination = Path.join(outDir, name + Extensions[type]);
                     converter.Start(type, destination);
-                    vscode.window.showInformationMessage('File successfully converted: [' + destination + ']');
+                    vscode.window.showInformationMessage('Finished' + destination);
                 });
             }
             else

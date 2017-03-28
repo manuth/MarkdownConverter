@@ -680,6 +680,7 @@
     "markdown-it": "^8.3.1",
     "markdown-it-anchor": "^4.0.0",
     "markdown-it-emoji": "^1.3.0",
+    "mkdirp": "^0.5.1",
     "mustache": "^2.3.0",
     "os-locale": "^2.0.0",
     "phantomjs-prebuilt": "^2.1.14",
