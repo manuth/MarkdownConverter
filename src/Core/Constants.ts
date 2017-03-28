@@ -1,1 +1,1 @@
-export const configKey = 'markdownConverter';
+export const ConfigKey = 'markdownConverter';
