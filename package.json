@@ -53,6 +53,12 @@
           "type": "string",
           "default": "."
         },
+        "markdownConverter.workDir": {
+          "title": "%config.workDir%",
+          "description": "%config.workDir.description%",
+          "type": "string",
+          "default": "."
+        },
         "markdownConverter.ignoreLanguage": {
           "title": "%config.ignoreLanguage%",
           "description": "%config.ignoreLanguage.description%",
@@ -629,9 +635,9 @@
                   "description": "%config.document.style.wrapper.description%",
                   "type": "string"
                 },
-                "enableSystemStyles": {
-                  "title": "%config.document.style.enableSystemStyles%",
-                  "description": "%config.document.style.enableSystemStyles.description%",
+                "useSystemStyles": {
+                  "title": "%config.document.style.useSystemStyles%",
+                  "description": "%config.document.style.useSystemStyles.description%",
                   "type": "boolean",
                   "default": true
                 },
