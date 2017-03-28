@@ -2,6 +2,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as ChildProcess from 'child_process';
 import * as Path from 'path';
 import * as url from 'url';
 import { DateTimeFormatter } from './Core/DateTimeFormatter';
@@ -26,87 +27,93 @@ export function activate(context: vscode.ExtensionContext)
     let disposable = vscode.commands.registerCommand('markdownConverter.convert', () =>
     {
         // The code you place here will be executed every time your command is executed
-
-        let markdownDoc = getMarkdownDoc();
-        let config = vscode.workspace.getConfiguration(configKey);
-        let outDir = config.get<string>('outDir');
-
-        if (vscode.workspace.rootPath)
+        try
         {
-            process.chdir(vscode.workspace.rootPath);
-        }
-        else if (outDir)
-        {
-            process.chdir(outDir);
-        }
 
-        if (markdownDoc)
-        {
+            let markdownDoc = getMarkdownDoc();
+            let config = vscode.workspace.getConfiguration(configKey);
+            let outDir = config.get<string>('outDir');
             let type = config.get('conversionType');
-            let name = config.get<string>('document.name');
-            let types : string[] = [ ];
-            let doc : Document;
 
-            if (!name)
+            // ToDo: Validation
+            if (vscode.workspace.rootPath)
             {
+                process.chdir(vscode.workspace.rootPath);
+            }
+            else if (outDir)
+            {
+                process.chdir(outDir);
+            }
+
+            if (markdownDoc)
+            {
+                let name = config.get<string>('document.name');
+                let types : ConversionType[] = [ ];
+                let doc : Document;
+
+                if (!name)
+                {
+                    if (!markdownDoc.isUntitled)
+                    {
+                        name = Path.parse(markdownDoc.fileName).name;
+                    }
+                    else
+                    {
+                        name = 'temp';
+                    }
+                }
+
+                if ((typeof type == 'string'))
+                {
+                    type = [ type ];
+                }
+                for (var key in type)
+                {
+                    types.push(ConversionType[type[key] as string]);
+                }
+
                 if (!markdownDoc.isUntitled)
                 {
-                    name = Path.parse(markdownDoc.fileName).name;
+                    if (!Path.isAbsolute(outDir))
+                    {
+                        outDir = Path.join(Path.dirname(markdownDoc.fileName), outDir);
+                    }
+                }
+
+                if (markdownDoc.isUntitled || (markdownDoc.isDirty && !config.autoSave))
+                {
+                    doc = new Document();
+                    doc.Content = markdownDoc.getText();
                 }
                 else
                 {
-                    name = 'temp';
+                    if (markdownDoc.isDirty)
+                    {
+                        markdownDoc.save();
+                    }
+                    doc = new Document(markdownDoc.fileName);
                 }
-            }
 
-            if ((typeof type == 'string'))
-            {
-                types.push(type);
-            }
-            else
-            {
-                types = (type as string[]);
-            }
-            for (var key in types)
-            {
-                types[key] = ConversionType[types[key]];
-            }
+                let converter = new Converter(doc);
+                let Extensions = GetExtensions();
 
-            if (!markdownDoc.isUntitled)
-            {
-                if (!Path.isAbsolute(outDir))
-                {
-                    outDir = Path.join(Path.dirname(markdownDoc.fileName), outDir);
-                }
-            }
-
-            if (markdownDoc.isUntitled || (markdownDoc.isDirty && !config.autoSave))
-            {
-                doc = new Document();
-                doc.Content = markdownDoc.getText();
-            }
-            else
-            {
-                if (markdownDoc.isDirty)
-                {
-                    markdownDoc.save();
-                }
-                doc = new Document(markdownDoc.fileName);
-            }
-            
-            let converter = new Converter(doc);
-            let Extensions = GetExtensions();
-
-            types.forEach(type => {
-                let destination = Path.join(outDir, name + Extensions[type]);
-                converter.Start(ConversionType[type], destination);
-                vscode.window.showInformationMessage('File successfully converted: [' + destination + ']', {
+                types.forEach(type => {
+                    let destination = Path.join(outDir, name + Extensions[type]);
+                    converter.Start(type, destination);
+                    vscode.window.showInformationMessage('File successfully converted: [' + destination + ']');
                 });
-            });
+            }
+            else
+            {
+                throw Error('No markdown-file found.');
+            }
         }
-        else
+        catch(e)
         {
-            throw Error('No markdown-file found.');
+            if (e instanceof Error)
+            {
+                vscode.window.showErrorMessage(e.name + ": " + e.message);
+            }
         }
     });
 
