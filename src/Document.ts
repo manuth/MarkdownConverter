@@ -1,17 +1,20 @@
-import * as fs from 'fs';
+import * as FS from 'fs';
 import * as Path from 'path';
-import * as url from 'url';
+import * as URL from 'url';
 import * as VSCode from 'vscode';
+import * as Anchor from 'markdown-it-anchor';
+import { Base } from "./Core/Base";
+import { configKey } from "./Core/Constants";
 import { DateTimeFormatter } from './Core/DateTimeFormatter';
+import * as Emoji from 'markdown-it-emoji';
 import * as FrontMatter from 'front-matter';
 import { Fullname } from './Core/Fullname';
+import { Header, Footer, Section } from './Section';
+import { Layout } from "./Layout";
 import * as MarkdownIt from 'markdown-it';
 import * as Mustache from 'mustache';
-import * as Emoji from 'markdown-it-emoji';
-import { Header, Footer, Section } from './Section';
-import { Base } from "./Core/Base";
-import { Layout } from "./Layout";
-import { configKey } from "./Core/Constants";
+import * as TwEmoji from 'twemoji';
+import { Utilities } from "./Core/Utilities";
 
 /**
  * Represents a document.
@@ -19,9 +22,24 @@ import { configKey } from "./Core/Constants";
 export class Document extends Base
 {
     /**
+     * The configuration of the document.
+     */
+    private config = VSCode.workspace.getConfiguration(configKey + '.document');
+
+    /**
      * The quality of the document.
      */
-    private quality : number = 75;
+    private quality : number = 90;
+
+    /**
+     * The name of the document.
+     */
+    private name : string = null;
+
+    /**
+     * A value indicating whether emojis should be used.
+     */
+    private emoji : string | boolean = true;
 
     /**
      * The attributes of the document.
@@ -130,18 +148,15 @@ export class Document extends Base
     constructor(filePath : string = null)
     {
         super();
-        let config = VSCode.workspace.getConfiguration(configKey + '.document');
         this.Attributes.Author = Fullname.FullName;
         this.Attributes.CreationDate = new Date();
         this.Attributes.PageNumber = '{{ PageNumber }}'; // {{ PageNumber }} will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
         this.Attributes.PageCount = '{{ PageCount }}';   // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
-        this.Header = new Header('15mm', '<table style="width: 100%"><td>{{ Author }}</td><td>{{ PageNumber }}/{{ PageCount }}</td><td></td></table>');
-        this.Footer = new Footer('10mm', '<table style="width: 100%"><td></td><td></td></table>');
-        this.LoadConfig(config);
+        this.LoadConfig(this.config);
 
         if (filePath)
         {
-            this.Content = fs.readFileSync(filePath, 'utf-8');
+            this.Content = FS.readFileSync(filePath, 'utf-8');
         }
     }
 
@@ -156,6 +171,19 @@ export class Document extends Base
     public set Quality(value : number)
     {
         this.quality = value;
+    }
+
+    /**
+     * Gets or sets the name of the document.
+     */
+    @enumerable(true)
+    public get Name() : string
+    {
+        return this.name;
+    }
+    public set Name(value : string)
+    {
+        this.name = value;
     }
 
     /**
@@ -525,7 +553,32 @@ export class Document extends Base
     {
         // Preparing markdown-it
         let md = new MarkdownIt({ html: true });
-        md.use(Emoji);
+        md.use(Anchor);
+
+        if (this.emoji)
+        {
+            var emoji = this.emoji;
+            md.use(Emoji);
+            md.renderer.rules.emoji = function(token, id) {
+                switch (emoji)
+                {
+                    case 'twitter':
+                        return TwEmoji.parse(token[id].content);
+                    case 'native':
+                        return token[id].content;
+                    case 'github':
+                    case true:
+                    default:
+                        return '<img class="emoji" title=":' +
+                            token[id].markup +
+                            ':" alt=":' +
+                            token[id].markup +
+                            ':" src="https://assets-cdn.github.com/images/icons/emoji/unicode/' +
+                            Utilities.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase() +
+                            '.png" allign="absmiddle" />';
+                }
+            };
+        }
 
         // Preparing the attributes
         let view = { };
@@ -556,6 +609,12 @@ export class Document extends Base
                 this.Attributes[key] = attributes[key];
             }
         }
+
+        if (config.has('emoji'))
+        {
+            this.emoji = config.get<string | boolean>('emoji');
+        }
+
         if (config.has('localization'))
         {
             let localization = config.get('localization');
@@ -564,9 +623,39 @@ export class Document extends Base
             {
                 this.locale = localization['locale'];
             }
+
             if ('dateFormat' in localization)
             {
                 this.DateFormat = localization['dateFormat'];
+            }
+        }
+
+        if (config.has('layout'))
+        {
+            let layout = config.get('layout');
+
+            if ('margin' in layout)
+            {
+                let margin = layout['margin'];
+
+                if ('top' in margin && 'right' in margin && 'bottom' in margin && 'bottom' in margin)
+                {
+                    this.Layout.Margin.Top = margin['top'];
+                    this.Layout.Margin.Right = margin['right'];
+                    this.Layout.Margin.Bottom = margin['bottom'];
+                    this.Layout.Margin.Left = margin['left'];
+                }
+            }
+
+            if ('format' in layout && 'orientation' in layout)
+            {
+                this.Layout.Format = layout['format'];
+                this.Layout.Orientation = layout['orientation'];
+            }
+            else if ('width' in layout && 'height' in layout)
+            {
+                this.Layout.Width = layout['width'];
+                this.Layout.Height = layout['height'];
             }
         }
     }
@@ -576,7 +665,7 @@ export class Document extends Base
      */
     private RenderBody() : string
     {
-        let template = fs.readFileSync(this.Template).toString();
+        let template = FS.readFileSync(this.Template).toString();
         // Preparing the styles
         let styles = '<style>\n';
         if (this.Styles)
@@ -584,16 +673,21 @@ export class Document extends Base
             styles += this.Styles + '\n';
         }
         this.StyleSheets.forEach(styleSheet => {
-            if (/file/g.test(url.parse(styleSheet).protocol))
+            if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
             {
-                if (fs.existsSync(Path.join(styleSheet)))
-                {
-                    styles += fs.readFileSync(Path.join(styleSheet)).toString() + '\n';
-                }
+                styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
             }
             else
             {
-                styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
+                // Removing leading 'file://' from the local path.
+                styleSheet.replace(/^file:\/\//, function (match : string) : string
+                {
+                    return '';
+                });
+                if (FS.existsSync(Path.join(styleSheet)))
+                {
+                    styles += FS.readFileSync(styleSheet).toString() + '\n';
+                }
             }
         });
         styles += '</style>';
