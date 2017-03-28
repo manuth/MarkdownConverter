@@ -19,4 +19,4 @@ Frontmatter > Config > Default Config
  - fullname
  - node-html-pdf
  - vscode-markdown-pdf
- - Thanks to him I could hack get started with implementing GitHub-emoji-support :tada: :tada:
+ - Samuel - Thanks to him I could get started with implementing GitHub-emoji-support :tada: :tada:
