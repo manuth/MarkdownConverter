@@ -10,7 +10,7 @@ import { Document } from './Document';
 import { Footer, Header } from './Section';
 import { Converter } from "./Converter";
 import { ConversionType, GetExtensions } from "./ConversionType";
-import { configKey } from "./Core/Constants";
+import { ConfigKey } from "./Core/Constants";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -31,22 +31,19 @@ export function activate(context: vscode.ExtensionContext)
         {
 
             let markdownDoc = getMarkdownDoc();
-            let config = vscode.workspace.getConfiguration(configKey);
-            let outDir = config.get<string>('outDir');
-            let type = config.get('conversionType');
 
             // ToDo: Validation
             if (vscode.workspace.rootPath)
             {
                 process.chdir(vscode.workspace.rootPath);
             }
-            else if (outDir)
-            {
-                process.chdir(outDir);
-            }
 
             if (markdownDoc)
             {
+                let config = vscode.workspace.getConfiguration(ConfigKey);
+                let outDir = config.get<string>('outDir');
+                let workDir = config.get<string>('workDir');
+                let type = config.get('conversionType');
                 let name = config.get<string>('document.name');
                 let types : ConversionType[] = [ ];
                 let doc : Document;
@@ -72,11 +69,18 @@ export function activate(context: vscode.ExtensionContext)
                     types.push(ConversionType[type[key] as string]);
                 }
 
-                if (!markdownDoc.isUntitled)
+                if (markdownDoc.isUntitled)
                 {
                     if (!Path.isAbsolute(outDir))
                     {
-                        outDir = Path.join(Path.dirname(markdownDoc.fileName), outDir);
+                        outDir = Path.resolve(process.cwd(), outDir);
+                    }
+                }
+                else
+                {
+                    if (!Path.isAbsolute(outDir))
+                    {
+                        outDir = Path.resolve(Path.dirname(markdownDoc.fileName), outDir);
                     }
                 }
 
@@ -96,6 +100,13 @@ export function activate(context: vscode.ExtensionContext)
 
                 let converter = new Converter(doc);
                 let Extensions = GetExtensions();
+
+                if (!Path.isAbsolute(workDir))
+                {
+                    workDir = Path.resolve(process.cwd(), workDir);
+                }
+
+                process.chdir(workDir);
 
                 types.forEach(type => {
                     let destination = Path.join(outDir, name + Extensions[type]);
@@ -124,7 +135,7 @@ export function activate(context: vscode.ExtensionContext)
      */
     function getMarkdownDoc() : vscode.TextDocument
     {
-        let config = vscode.workspace.getConfiguration(configKey);
+        let config = vscode.workspace.getConfiguration(ConfigKey);
         if (config.has('ignoreLanguage') && config.get<boolean>('ignoreLanguage') && vscode.window.activeTextEditor || vscode.window.activeTextEditor.document.languageId == 'markdown')
         {
             return vscode.window.activeTextEditor.document;
