@@ -6,10 +6,11 @@ import * as Anchor from 'markdown-it-anchor';
 import { Base } from "./Core/Base";
 import { ConfigKey } from "./Core/Constants";
 import { DateTimeFormatter } from './Core/DateTimeFormatter';
-import * as Emoji from 'markdown-it-emoji';
+import * as MarkdownItEmoji from 'markdown-it-emoji';
 import * as FrontMatter from 'front-matter';
 import { Fullname } from './Core/Fullname';
 import { Header, Footer, Section } from './Section';
+import * as HighlightJs from 'highlightjs';
 import { Layout } from "./Layout";
 import { Margin } from "./Margin";
 import * as MarkdownIt from 'markdown-it';
@@ -128,6 +129,11 @@ export class Document extends Base
     private wrapper : string = null;
 
     /**
+     * The highlight-style of the document.
+     */
+    private highlightStyle : boolean = true;
+
+    /**
      * A value indicating whether system-provided stylesheets are enabled. 
      */
     private systemStylesEnabled : boolean = true;
@@ -194,6 +200,19 @@ export class Document extends Base
     public set Name(value : string)
     {
         this.name = value;
+    }
+
+    /**
+     * Gets or sets a value indicating whether emojis should be used.
+     */
+    @enumerable(true)
+    public get Emoji() : string | boolean
+    {
+        return this.emoji;
+    }
+    public set Emoji(value : string | boolean)
+    {
+        this.emoji = value;
     }
 
     /**
@@ -447,6 +466,19 @@ export class Document extends Base
     }
 
     /**
+     * Gets or sets the highlight-style of the document.
+     */
+    @enumerable(true)
+    public get HighlightStyle() : boolean
+    {
+        return this.highlightStyle;
+    }
+    public set HighlightStyle(value : boolean)
+    {
+        this.highlightStyle = value;
+    }
+
+    /**
      * Gets or sets a value indicating whether system-provided stylesheets are enabled.
      */
     @enumerable(true)
@@ -574,19 +606,39 @@ export class Document extends Base
      */
     private Render(content : string) : string
     {
+        // Making the hightlight-variable visible for the callback (by declaring a new 'var'-variable)
+        // See: http://stackoverflow.com/questions/762011/whats-the-difference-between-using-let-and-var-to-declare-a-variable
+        var highlightStyle = this.HighlightStyle;
+
         // Preparing markdown-it
-        let md = new MarkdownIt({ html: true });
+        let md = new MarkdownIt({
+            html: true,
+            highlight: function(subject, language)
+            {
+                    if (highlightStyle && language && HighlightJs.getLanguage(language))
+                    {
+                        subject = HighlightJs.highlight(language, subject, true).value;
+                    }
+                    else
+                    {
+                        subject = md.utils.escapeHtml(subject);
+                    }
+
+                    return '<pre class="hljs"><code><div>' + subject + '</div></code></pre>';
+            }
+        });
         md.use(Anchor);
 
         if (this.emoji)
         {
-            // Making the emoji-variable visible for the callback (by declaring a new 'var'-variable)
-            // See: http://stackoverflow.com/questions/762011/whats-the-difference-between-using-let-and-var-to-declare-a-variable
+            // Making the emoji-variable visible for the callback
             var emoji = this.emoji;
-            md.use(Emoji);
+            md.use(MarkdownItEmoji);
             md.renderer.rules.emoji = function(token, id) {
                 switch (emoji)
                 {
+                    case false:
+                        return token[id].markup;
                     case 'twitter':
                         return TwEmoji.parse(token[id].content);
                     case 'native':
@@ -737,6 +789,11 @@ export class Document extends Base
             if ('wrapper' in style)
             {
                 this.Wrapper = style['wrapper'];
+            }
+
+            if ('highlightStyle' in style)
+            {
+                this.HighlightStyle = style['highlightStyle'];
             }
 
             if ('useSystemStyles' in style && style['useSystemStyles'])
@@ -948,13 +1005,38 @@ export class Document extends Base
     private RenderBody() : string
     {
         let template = FS.readFileSync(this.Template).toString();
+
         // Preparing the styles
+        let styleSheets = this.StyleSheets;
+        let markdownExt = VSCode.extensions.getExtension('Microsoft.vscode-markdown');
+
+        if (this.HighlightStyle)
+        {
+            if (this.HighlightStyle != true)
+            {
+                styleSheets = [ Path.join(__dirname, '..', '..', 'node_modules', 'highlightjs', 'styles', this.HighlightStyle + '.css') ].concat(styleSheets);
+            }
+        }
+
+        if (this.SystemStylesEnabled)
+        {
+            let systemStyles : string[] = [ ];
+            if (markdownExt)
+            {
+                systemStyles.push(Path.join(markdownExt.extensionPath, 'media', 'markdown.css'));
+                systemStyles.push(Path.join(markdownExt.extensionPath, 'media', 'tomorrow.css'));
+            }
+            // ToDo: Add some more styles
+            systemStyles.push(Path.join(__dirname, '..', '..', 'Resources', 'css', 'styles.css'));
+            styleSheets = systemStyles.concat(styleSheets);
+        }
+
         let styles = '<style>\n';
         if (this.Styles)
         {
             styles += this.Styles + '\n';
         }
-        this.StyleSheets.forEach(styleSheet => {
+        styleSheets.forEach(styleSheet => {
             if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
             {
                 styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
@@ -962,10 +1044,7 @@ export class Document extends Base
             else
             {
                 // Removing leading 'file://' from the local path.
-                styleSheet.replace(/^file:\/\//, function (match : string) : string
-                {
-                    return '';
-                });
+                styleSheet.replace(/^file:\/\//, '');
                 if (FS.existsSync(styleSheet))
                 {
                     styles += FS.readFileSync(styleSheet).toString() + '\n';
