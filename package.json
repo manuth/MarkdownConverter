@@ -107,6 +107,7 @@
           "title": "%config.document%",
           "description": "%config.document.description%",
           "default": {
+            "emoji": "%config.document.emoji.default%",
             "layout": {
               "margin": {
                 "top": "%config.document.layout.margin.top.default%",
@@ -134,10 +135,35 @@
               "description": "%config.document.name.description%",
               "type": "string"
             },
+            "emoji": {
+              "title": "%config.document.emoji%",
+              "description": "%config.document.emoji.description%",
+              "oneOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string",
+                  "default": "%config.document.emoji.default%",
+                  "enum": [
+                    "github",
+                    "twitter",
+                    "native"
+                  ]
+                }
+              ]
+            },
             "attributes": {
               "title": "%config.document.attributes%",
               "description": "%config.document.attributes.description%",
-              "type": "object"
+              "type": "object",
+              "properties": {
+                "Author": {
+                  "title": "%config.document.attributes.author%",
+                  "description": "%config.document.attributes.author.description%",
+                  "type": "string"
+                }
+              }
             },
             "localization": {
               "title": "%config.document.localization%",
@@ -653,6 +679,7 @@
     "phantomjs-prebuilt": "^2.1.14",
     "rc": "^1.1.7",
     "shelljs": "^0.7.7",
+    "twemoji": "^2.2.5",
     "vscode-nls": "^2.0.2"
   }
 }
