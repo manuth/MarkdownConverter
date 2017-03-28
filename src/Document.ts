@@ -4,13 +4,14 @@ import * as URL from 'url';
 import * as VSCode from 'vscode';
 import * as Anchor from 'markdown-it-anchor';
 import { Base } from "./Core/Base";
-import { configKey } from "./Core/Constants";
+import { ConfigKey } from "./Core/Constants";
 import { DateTimeFormatter } from './Core/DateTimeFormatter';
 import * as Emoji from 'markdown-it-emoji';
 import * as FrontMatter from 'front-matter';
 import { Fullname } from './Core/Fullname';
 import { Header, Footer, Section } from './Section';
 import { Layout } from "./Layout";
+import { Margin } from "./Margin";
 import * as MarkdownIt from 'markdown-it';
 import * as Mustache from 'mustache';
 import * as TwEmoji from 'twemoji';
@@ -24,7 +25,7 @@ export class Document extends Base
     /**
      * The configuration of the document.
      */
-    private config = VSCode.workspace.getConfiguration(configKey + '.document');
+    private config = VSCode.workspace.getConfiguration(ConfigKey + '.document');
 
     /**
      * The quality of the document.
@@ -39,12 +40,17 @@ export class Document extends Base
     /**
      * A value indicating whether emojis should be used.
      */
-    private emoji : string | boolean = true;
+    private emoji : string | boolean = "github";
 
     /**
      * The attributes of the document.
      */
-    private attributes : any = { };
+    private attributes : any = {
+        Author: Fullname.FullName,
+        CreationDate: new Date(),
+        PageNumber: '{{ PageNumber }}', // {{ PageNumber }} will be replaced in the Phantom-Script (see "Phantom/PDFGenerator.ts": ReplacePageNumbers)
+        PageCount: '{{ PageCount }}'    // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
+     };
 
     /**
      * The format to print the date.
@@ -64,7 +70,7 @@ export class Document extends Base
     /**
      * The header of the document.
      */
-    private header : Header = null;
+    private header : Header = new Header('15mm', '<table style="width: 100%; table-layout: fixed; "><td style="text-align: left; ">{{ Author }}</td><td style="text-align: center">{{ PageNumber }}/{{ PageCount }}</td><td style="text-align: right">{{ Company.Name }}</td></table>');
 
     /**
      * A set of special headers.
@@ -89,7 +95,7 @@ export class Document extends Base
     /**
      * The footer of the document.
      */
-    private footer : Footer = null;
+    private footer : Footer = new Footer('1cm', '<table style="width: 100%; table-layout: fixed; "><td style="text-align: left; "></td><td style="text-align: center">{{ CreationDate }}</td><td style="text-align: right"></td></table>');
 
     /**
      * A set of special footers.
@@ -117,24 +123,29 @@ export class Document extends Base
     private template : string = Path.join(__dirname, '..', '..', 'Resources', 'Template.html');
 
     /**
-     * The stylesheets of the document.
-     */
-    private styleSheets : string[] = [ ];
-
-    /**
-     * The styles of the document.
-     */
-    private styles : string = null;
-
-    /**
      * The wrapper of the content of the document.
      */
     private wrapper : string = null;
 
     /**
+     * A value indicating whether system-provided stylesheets are enabled. 
+     */
+    private systemStylesEnabled : boolean = true;
+
+    /**
+     * The styles of the document.
+     */
+    private styles : string = '';
+
+    /**
+     * The stylesheets of the document.
+     */
+    private styleSheets : string[] = [ ];
+
+    /**
      * The content of the document.
      */
-    private content : string = null;
+    private content : string = '';
 
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
@@ -148,10 +159,9 @@ export class Document extends Base
     constructor(filePath : string = null)
     {
         super();
-        this.Attributes.Author = Fullname.FullName;
-        this.Attributes.CreationDate = new Date();
-        this.Attributes.PageNumber = '{{ PageNumber }}'; // {{ PageNumber }} will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
-        this.Attributes.PageCount = '{{ PageCount }}';   // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
+        this.Layout.Margin = new Margin('1cm', '1cm', '1cm', '1cm');
+        this.Layout.Format = 'A4';
+        this.Layout.Orientation = 'portrait';
         this.LoadConfig(this.config);
 
         if (filePath)
@@ -424,16 +434,29 @@ export class Document extends Base
     }
 
     /**
-     * Gets or sets the stylesheets of the document.
+     * Gets or sets the wrapper of the content of the document.
      */
     @enumerable(true)
-    public get StyleSheets() : string[]
+    public get Wrapper() : string
     {
-        return this.styleSheets;
+        return this.wrapper;
     }
-    public set StyleSheets(value : string[])
+    public set Wrapper(value : string)
     {
-        this.styleSheets = value;
+        this.wrapper = value;
+    }
+
+    /**
+     * Gets or sets a value indicating whether system-provided stylesheets are enabled.
+     */
+    @enumerable(true)
+    public get SystemStylesEnabled() : boolean
+    {
+        return this.systemStylesEnabled;
+    }
+    public set SystemStylesEnabled(value : boolean)
+    {
+        this.systemStylesEnabled = value;
     }
 
     /**
@@ -450,16 +473,16 @@ export class Document extends Base
     }
 
     /**
-     * Gets or sets the wrapper of the content of the document.
+     * Gets or sets the stylesheets of the document.
      */
     @enumerable(true)
-    public get Wrapper() : string
+    public get StyleSheets() : string[]
     {
-        return this.wrapper;
+        return this.styleSheets;
     }
-    public set Wrapper(value : string)
+    public set StyleSheets(value : string[])
     {
-        this.wrapper = value;
+        this.styleSheets = value;
     }
 
     /**
@@ -557,6 +580,8 @@ export class Document extends Base
 
         if (this.emoji)
         {
+            // Making the emoji-variable visible for the callback (by declaring a new 'var'-variable)
+            // See: http://stackoverflow.com/questions/762011/whats-the-difference-between-using-let-and-var-to-declare-a-variable
             var emoji = this.emoji;
             md.use(Emoji);
             md.renderer.rules.emoji = function(token, id) {
@@ -658,6 +683,263 @@ export class Document extends Base
                 this.Layout.Height = layout['height'];
             }
         }
+
+        this.CreateHeader(config, 'header', 'Header');
+
+        if (config.has('specialHeaders'))
+        {
+            let specialHeaders = config.get('specialHeaders');
+
+            for (let key in specialHeaders)
+            {
+                let specialHeader = specialHeaders[key];
+
+                if ('pageNumber' in specialHeader && 'header' in specialHeader)
+                {
+                    this.CreateHeader(specialHeader['header'], specialHeader['pageNumber'], this.SpecialHeaders);
+                }
+            }
+        }
+
+        this.CreateHeader(config, 'evenHeader', 'EvenHeader');
+        this.CreateHeader(config, 'oddHeader', 'OddHeader');
+        this.CreateHeader(config, 'lastHeader', 'LastHeader');
+        this.CreateFooter(config, 'footer', 'Footer');
+
+        if (config.has('specialFooters'))
+        {
+            let specialFooters = config.get('specialFooters');
+
+            for (let key in specialFooters)
+            {
+                let specialFooter = specialFooters[key];
+
+                if ('pageNumber' in specialFooter && 'footer' in specialFooter)
+                {
+                    this.CreateFooter(specialFooter['footer'], specialFooter['pageNumber'], this.SpecialFooters);
+                }
+            }
+        }
+
+        this.CreateFooter(config, 'evenFooter', 'EvenFooter');
+        this.CreateFooter(config, 'oddFooter', 'OddFooter');
+        this.CreateFooter(config, 'lastFooter', 'LastFooter');
+
+        if (config.has('style'))
+        {
+            let style = config.get('style');
+
+            if ('template' in style)
+            {
+                this.Template = style['template'];
+            }
+
+            if ('wrapper' in style)
+            {
+                this.Wrapper = style['wrapper'];
+            }
+
+            if ('useSystemStyles' in style && style['useSystemStyles'])
+            {
+                this.SystemStylesEnabled = style['useSystemStyles'];
+            }
+
+            if ('styles' in style)
+            {
+                this.styles += style['styles'];
+            }
+
+            if ('styleSheets' in style)
+            {
+                for (let key in style['styleSheets'])
+                {
+                    this.StyleSheets.push(style['styleSheets'][key]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates a new header based on the values of the header-object.
+     * 
+     * @param source
+     * The source to load the value to set from.
+     * 
+     * @param propertyKey
+     * The key of the property to write the header to.
+     * 
+     * @param target
+     * The target-object to write the property to.
+     */
+    private CreateHeader(source, propertyKey : string, target?) : Header;
+    
+    /**
+     * Creates a new header based on the values of the header-configuration.
+     * 
+     * @param config
+     * The Workspace-Configuration of Visual Studio Code.
+     * 
+     * @param configKey
+     * The configuration-key to load the values to set from.
+     * 
+     * @param propertyKey
+     * The key of the property to write the header to.
+     * 
+     * @param target
+     * The target-object to write the property to.
+     */
+    private CreateHeader(config : VSCode.WorkspaceConfiguration, configKey : string, propertyKey : string, target?) : Header;
+
+    private CreateHeader(source : VSCode.WorkspaceConfiguration | any, configKey : string, propertyKey : string | any = this, target = this) : Header
+    {
+        let prototype = new Header();
+
+        if (typeof propertyKey == 'object')
+        {
+            // First implementation has been called (object, string, object?)
+            return this.CreateSection(prototype, source, configKey, propertyKey);
+        }
+        else
+        {
+            // Second implementation has been called (VSCode.WorkspaceConfiguration, string, string, object?)
+            return this.CreateSection(prototype, source as VSCode.WorkspaceConfiguration, configKey, propertyKey, target);
+        }
+    }
+
+    /**
+     * Creates a new footer based on the values of the footer-object.
+     * 
+     * @param source
+     * The source to load the value to set from.
+     * 
+     * @param propertyKey
+     * The key of the property to write the footer to.
+     * 
+     * @param target
+     * The target-object to write the property to.
+     */
+    private CreateFooter(source, propertyKey : string, target?) : Footer;
+
+    /**
+     * Creates a new footer based on the values of the footer-configuration.
+     * 
+     * @param config
+     * The Workspace-Configuration of Visual Studio Code.
+     * 
+     * @param configKey
+     * The configuration-key to load the values to set from.
+     * 
+     * @param propertyKey
+     * The key of the property to write the footer to.
+     * 
+     * @param target
+     * The target-object to write the property to.
+     */
+    private CreateFooter(config : VSCode.WorkspaceConfiguration, configKey : string, propertyKey : string, target?) : Footer;
+
+    private CreateFooter(source : VSCode.WorkspaceConfiguration | any, configKey : string, propertyKey : string | any = this, target = this) : Footer
+    {
+        let prototype = new Footer();
+
+        if (typeof propertyKey == 'string')
+        {
+            // First implementation has been called (object, string, object?)
+            return this.CreateSection(prototype, source, configKey, propertyKey);
+        }
+        else
+        {
+            // Second implementation has been called (VSCode.WorkspaceConfiguration, string, string, object?)
+            return this.CreateSection(prototype, source as VSCode.WorkspaceConfiguration, configKey, propertyKey, target);
+        }
+    }
+
+    /**
+     * Creates a new section based on the values of the section-object.
+     * 
+     * @param prototype
+     * The prototype of the section to create.
+     * 
+     * @param source
+     * The source to load the value to set from.
+     * 
+     * @param propertyKey
+     * The key of the property to write the header to.
+     * 
+     * @param target
+     * The target-object to write the property to.
+     */
+    private CreateSection(prototype : Section, source, propertyKey : string, target?) : Section;
+
+    /**
+     * Creates a new section based on the values of the section-object.
+     * 
+     * @param prototype
+     * The prototype of the section to create.
+     * 
+     * @param config
+     * The Workspace-Configuration of Visual Studio Code.
+     * 
+     * @param configKey
+     * The configuration-key to load the values to set from.
+     * 
+     * @param propertyKey
+     * The key of the property to write the header to.
+     * 
+     * @param target
+     * The target-object to write the property to.
+     */
+    private CreateSection(prototype : Section, config : VSCode.WorkspaceConfiguration, configKey : string, propertyKey : string, target?) : Section;
+
+    private CreateSection(prototype : Section, source : VSCode.WorkspaceConfiguration | any, configKey : string, propertyKey : string | any = this, target = this) : Section
+    {
+        let result = prototype;
+        let section;
+
+        if (typeof propertyKey == 'object')
+        {
+            // First implementation has been called (Section, object, string, object?)
+            target = propertyKey;
+            propertyKey = configKey;
+            section = source;
+        }
+        else
+        {
+            // Second implementation has been called (Section, VSCode.WorkspaceConfiguration, string, string, object?)
+            let config = source as VSCode.WorkspaceConfiguration;
+
+            if (config.has(configKey))
+            {
+                section = config.get(configKey);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        if (this.ValidateSection(section))
+        {
+            prototype.Height = section['height'];
+            prototype.Content = section['content'];
+
+            Reflect.set(target, propertyKey, prototype);
+            return Reflect.get(target, propertyKey);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Validates whether the section contains all required values.
+     * 
+     * @param section
+     * The section to validate.
+     */
+    private ValidateSection(section) : boolean
+    {
+        return ('height' in section) && ('content' in section);
     }
 
     /**
@@ -684,7 +966,7 @@ export class Document extends Base
                 {
                     return '';
                 });
-                if (FS.existsSync(Path.join(styleSheet)))
+                if (FS.existsSync(styleSheet))
                 {
                     styles += FS.readFileSync(styleSheet).toString() + '\n';
                 }
