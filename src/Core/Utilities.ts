@@ -64,7 +64,7 @@ export class Utilities
                 // Removing the mask.
                 buffer[i] = buffer[i] & 0x3F;
                 // Moving the byte to the propper position.
-                result += buffer[i] << ((length - i) * 8) >> ((length - i) * 2);
+                result += ((buffer[i] << ((length - i) * 8)) >> ((length - i) * 2));
             }
             else
             {
