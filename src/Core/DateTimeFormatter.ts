@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import * as nls from 'vscode-nls';
 import * as path from 'path';
-import { Base } from "./Base";
+import { Base } from './Base';
+import { Utilities } from './Utilities';
 
 let tokens : { [id : string] : string };
 
@@ -97,14 +98,14 @@ export class DateTimeFormatter
             // Replacing 'fffffff'
             if (/^f+$/g.test(match))
             {
-                return padLeft(date.getMilliseconds().toString(), match.length, '0');
+                return Utilities.PadLeft(date.getMilliseconds().toString(), match.length, '0');
             }
             // Replacing 'FFFFFFF'
             else if (/^F+$/g.test(match))
             {
                 if (date.getMilliseconds() > 0)
                 {
-                    return padLeft(date.getMilliseconds().toString(), match.length, '0');
+                    return Utilities.PadLeft(date.getMilliseconds().toString(), match.length, '0');
                 }
                 else
                 {
@@ -114,42 +115,42 @@ export class DateTimeFormatter
             // Replacing 'd' and 'dd'
             else if (/^d{1,2}$/g.test(match))
             {
-                return padLeft(date.getDate().toString(), match.length, '0');
+                return Utilities.PadLeft(date.getDate().toString(), match.length, '0');
             }
             // Replacing 'h' and 'hh'
             else if (/^h+$/g.test(match))
             {
                 let hours = (date.getHours() % 12 || 12);
-                return padLeft(hours.toString(), match.length, '0');
+                return Utilities.PadLeft(hours.toString(), match.length, '0');
             }
             // Replacing 'H' and 'HH'
             else if (/^H+$/g.test(match))
             {
-                return padLeft(date.getHours().toString(), match.length, '0');
+                return Utilities.PadLeft(date.getHours().toString(), match.length, '0');
             }
             // Replacing 'm' and 'mm'
             else if (/^m+$/g.test(match))
             {
-                return padLeft(date.getMinutes().toString(), match.length, '0');
+                return Utilities.PadLeft(date.getMinutes().toString(), match.length, '0');
             }
             else if (/^M{1,2}$/g.test(match))
             {
-                return padLeft((date.getMonth() + 1).toString(), match.length, '0');
+                return Utilities.PadLeft((date.getMonth() + 1).toString(), match.length, '0');
             }
             // Replacing 's' and 'ss'
             else if (/^s+$/g.test(match))
             {
-                return padLeft(date.getSeconds().toString(), match.length, '0');
+                return Utilities.PadLeft(date.getSeconds().toString(), match.length, '0');
             }
             // Replacing 'y' and 'yy'
             else if (/^y{1,2}$/g.test(match))
             {
-                return padLeft(date.getFullYear().toString().slice(-2), match.length, '0');
+                return Utilities.PadLeft(date.getFullYear().toString().slice(-2), match.length, '0');
             }
             // Replacing 'yyyyy'
             else if (/^y+$/g.test(match))
             {
-                return padLeft(date.getFullYear().toString(), match.length, '0');
+                return Utilities.PadLeft(date.getFullYear().toString(), match.length, '0');
             }
             // Replacing subjects listed in the 'tokens'-list
             else if (match in tokens)
@@ -184,22 +185,4 @@ export class DateTimeFormatter
     {
         this.resourcePath = value;
     }
-}
-
-/**
- * Returns a new string that right-aligns the characters in this instance by padding them on the left with a specified Unicode character, for a specified total length.
- * 
- * @param totalWidth
- * The number of characters in the resulting string, equal to the number of original characters plus any additional padding characters.
- * 
- * @param paddingChar
- * A Unicode padding character.
- */
-function padLeft(subject : string, totalWidth : number, paddingChar : string) : string
-{
-    for (let i : number = subject.length; i < totalWidth; i++)
-    {
-        subject = paddingChar + subject;
-    }
-    return subject;
 }
