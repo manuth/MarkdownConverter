@@ -6,6 +6,8 @@ import * as Temp from 'temp';
 import { Base } from "./Core/Base";
 import { Document } from "./Document";
 import { ConversionType, GetExtensions } from "./ConversionType";
+import { PhantomJSTimeoutException } from "./Core/PhantomJSTimeoutException";
+import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
 
 /**
  * Provides a markdown-converter.
@@ -50,9 +52,20 @@ export class Converter
                 this.document.toJSON(),
                 tempPath
             ];
-            let result = ChildProcess.spawnSync(PhantomJS.path, args);
+            let result = ChildProcess.spawnSync(PhantomJS.path, args, { timeout: 2 /* 60*/ * 1000 });
+            if (result.error)
+            {
+                if ('code' in result.error)
+                {
+                    if (result.error['code'] == 'ETIMEDOUT')
+                    {
+                        throw new PhantomJSTimeoutException();
+                    }
+                }
+                throw result.error;
+            }
+            
             let error = result.stderr.toString();
-            console.log(result.stdout.toString());
             
             if (error)
             {
@@ -64,12 +77,13 @@ export class Converter
                 let buffer = FS.readFileSync(tempPath);
                 FS.writeFileSync(destinationPath, buffer);
             }
-            catch (error)
+            catch (e)
             {
-                if (error instanceof Error)
+                if ('path' in e)
                 {
-                    throw(error);
+                    throw new UnauthorizedAccessException(e['path']);
                 }
+                throw e;
             }
             finally
             {

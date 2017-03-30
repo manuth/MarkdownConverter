@@ -5,6 +5,8 @@ import * as vscode from 'vscode';
 import * as Path from 'path';
 import { ConversionType } from "./ConversionType";
 import { ConfigKey } from "./Core/Constants";
+import { MarkdownFileNotFoundException } from "./Core/MarkdownFileNotFoundException";
+import * as nls from 'vscode-nls';
 import { Program } from "./Program";
 
 // this method is called when your extension is activated
@@ -36,10 +38,20 @@ export function activate(context: vscode.ExtensionContext)
                 let name = config.get<string>('document.name');
                 let autoSave = config.get<boolean>('autoSave');
                 let types : ConversionType[] = [ ];
+                let base : string;
+
+                if (vscode.workspace.rootPath)
+                {
+                    base = vscode.workspace.rootPath;
+                }
+                else
+                {
+                    base = process.cwd();
+                }
 
                 if (!Path.isAbsolute(workDir))
                 {
-                    workDir = Path.resolve(process.cwd(), workDir);
+                    workDir = Path.resolve(base, workDir);
                 }
                 
                 process.chdir(workDir);
@@ -86,14 +98,19 @@ export function activate(context: vscode.ExtensionContext)
             }
             else
             {
-                throw new Error('No markdown-file found.');
+                throw new MarkdownFileNotFoundException();
             }
         }
         catch(e)
         {
-            //ToDo: Localization
-            // UnauthorizedAccessError
-            vscode.window.showErrorMessage(e.message);
+            let localize : any = nls.config({ locale: vscode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
+            let message;
+            
+            if (e instanceof Error)
+            {
+                message = localize(2 /* "UnknownException" */, null, e.name, e.message);
+            }
+            vscode.window.showErrorMessage(message);
         }
     });
 

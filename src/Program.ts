@@ -2,11 +2,14 @@ import * as ChildProcess from 'child_process';
 import * as Format from 'string-format';
 import * as FS from 'fs';
 import * as MKDirP from 'mkdirp';
+import * as NLS from 'vscode-nls';
 import * as Path from 'path';
-import { TextDocument, window } from 'vscode';
+import { env, TextDocument, window } from 'vscode';
+import { ConversionType, GetExtensions } from './ConversionType';
 import { Converter } from "./Converter";
 import { Document } from './Document';
-import { ConversionType, GetExtensions } from './ConversionType';
+import { PhantomJSTimeoutException } from "./Core/PhantomJSTimeoutException";
+import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
 
 /**
  * Provides the main logic of the extension
@@ -18,7 +21,9 @@ export class Program
      */
     public static Main(textDocument : TextDocument, types : ConversionType[], outDir : string, fileName : string, autoSave : boolean) : void
     {
+        let localize : any = NLS.config({ locale: env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
         let doc : Document;
+
         if (textDocument.isUntitled || (textDocument.isDirty && autoSave))
         {
             doc = new Document();
@@ -34,7 +39,7 @@ export class Program
         }
 
         let converter = new Converter(doc);
-        let Extensions = GetExtensions();
+        let extensions = GetExtensions();
 
         types.forEach(type =>
         {
@@ -45,22 +50,35 @@ export class Program
 
             try
             {
-                let destination = Path.join(outDir, fileName + Extensions[type]);
+                let destination = Path.join(outDir, fileName + extensions[type]);
                 converter.Start(type, destination);
-                window.showInformationMessage(Format('Successfully wrote the {0}-file to "{1}".', ConversionType[type], destination), 'Open File').then((label) =>
+                window.showInformationMessage(localize(0 /* "SuccessMesage" */, null, ConversionType[type], destination), localize(1 /* "OpenFileLabel" */, null)).then((label) =>
                 {
-                    if (label == 'Open File')
+                    if (label == localize(1, null))
                     {
                         ChildProcess.exec(Format('"{0}"', destination));
                     }
                 });
             }
-            catch (error)
+            catch (e)
             {
-                if (error instanceof Error)
+                let message = e.toString();
+                if (e instanceof Error)
                 {
-                    window.showErrorMessage(error.message);
+                    if (e instanceof UnauthorizedAccessException)
+                    {
+                        message = localize(3 /* "UnauthorizedAccessException" */)
+                    }
+                    else if (e instanceof PhantomJSTimeoutException)
+                    {
+                        message = localize(4 /* "PhantomJSTimeoutException" */)
+                    }
+                    else
+                    {
+                        message = localize(2 /* "UnknownException" */, null, e.name, e.message);
+                    }
                 }
+                window.showErrorMessage(message);
             }
         });
     }
