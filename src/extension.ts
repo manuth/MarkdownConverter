@@ -3,6 +3,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as ChildProcess from 'child_process';
+import * as Format from 'string-format';
 import * as FS from 'fs';
 import * as Path from 'path';
 import * as url from 'url';
@@ -121,7 +122,13 @@ export function activate(context: vscode.ExtensionContext)
                     {
                         let destination = Path.join(outDir, name + Extensions[type]);
                         converter.Start(type, destination);
-                        vscode.window.showInformationMessage('Finished' + destination);
+                        vscode.window.showInformationMessage(Format('Successfully wrote the {0}-file to "{1}".', ConversionType[type], destination), 'Open File').then((label) =>
+                        {
+                            if (label == 'Open File')
+                            {
+                                ChildProcess.exec(Format('"{0}"', destination));
+                            }
+                        });
                     }
                     catch (error)
                     {
