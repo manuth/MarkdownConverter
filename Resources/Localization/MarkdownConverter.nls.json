@@ -1,0 +1,16 @@
+{
+    "messages": [
+        "Successfully wrote the {0}-file to \"{1}\".",
+        "Open File",
+        "{0}: {1}",
+        "Couldn't access the \"{0}\".",
+        "Error: PhantomJS timed out."
+    ],
+    "keys": [
+        "SuccessMesage",
+        "OpenFileLabel",
+        "UnknownException",
+        "UnauthorizedAccessException",
+        "PhantomJSTimeoutException"
+    ]
+}

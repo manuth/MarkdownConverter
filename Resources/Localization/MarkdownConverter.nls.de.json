@@ -1,0 +1,16 @@
+{
+    "messages": [
+        "Die konvertierte {0}-Datei wurde erfolgreich nach \"{1}\" geschrieben.",
+        "Datei öffnen",
+        "{0}: {1}",
+        "Der Zugriff auf \"{0}\" ist fehlgeschlagen.",
+        "Fehler: PhantomJS konnte nicht richtig ausgeführt werden."
+    ],
+    "keys": [
+        "SuccessMesage",
+        "OpenFileLabel",
+        "UnknownException",
+        "UnauthorizedAccessException",
+        "PhantomJSTimeoutException"
+    ]
+}
