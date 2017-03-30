@@ -16,6 +16,7 @@ import { Margin } from "./Margin";
 import * as MarkdownIt from 'markdown-it';
 import * as Mustache from 'mustache';
 import * as TwEmoji from 'twemoji';
+import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
 import { Utilities } from "./Core/Utilities";
 
 /**
@@ -172,7 +173,14 @@ export class Document extends Base
 
         if (filePath)
         {
-            this.Content = FS.readFileSync(filePath, 'utf-8');
+            try
+            {
+                this.Content = FS.readFileSync(filePath, 'utf-8');
+            }
+            catch (error)
+            {
+                throw new UnauthorizedAccessException(filePath);
+            }
         }
     }
 
@@ -1004,68 +1012,80 @@ export class Document extends Base
      */
     private RenderBody() : string
     {
-        let template = FS.readFileSync(this.Template).toString();
-
-        // Preparing the styles
-        let styleSheets = this.StyleSheets;
-        let markdownExt = VSCode.extensions.getExtension('Microsoft.vscode-markdown');
-
-        if (this.HighlightStyle)
+        try
         {
-            if (this.HighlightStyle != true)
-            {
-                styleSheets = [ Path.join(__dirname, '..', '..', 'node_modules', 'highlightjs', 'styles', this.HighlightStyle + '.css') ].concat(styleSheets);
-            }
-        }
+            let template = FS.readFileSync(this.Template).toString();
 
-        if (this.SystemStylesEnabled)
-        {
-            let systemStyles : string[] = [ ];
-            if (markdownExt)
-            {
-                systemStyles.push(Path.join(markdownExt.extensionPath, 'media', 'markdown.css'));
-                systemStyles.push(Path.join(markdownExt.extensionPath, 'media', 'tomorrow.css'));
-            }
-            // ToDo: Add some more styles
-            systemStyles.push(Path.join(__dirname, '..', '..', 'Resources', 'css', 'styles.css'));
-            styleSheets = systemStyles.concat(styleSheets);
-        }
+            // Preparing the styles
+            let styleSheets = this.StyleSheets;
+            let markdownExt = VSCode.extensions.getExtension('Microsoft.vscode-markdown');
 
-        let styles = '<style>\n';
-        if (this.Styles)
-        {
-            styles += this.Styles + '\n';
-        }
-        styleSheets.forEach(styleSheet => {
-            if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
+            if (this.HighlightStyle)
             {
-                styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
-            }
-            else
-            {
-                // Removing leading 'file://' from the local path.
-                styleSheet.replace(/^file:\/\//, '');
-                if (FS.existsSync(styleSheet))
+                if (this.HighlightStyle != true)
                 {
-                    styles += FS.readFileSync(styleSheet).toString() + '\n';
+                    styleSheets = [ Path.join(__dirname, '..', '..', 'node_modules', 'highlightjs', 'styles', this.HighlightStyle + '.css') ].concat(styleSheets);
                 }
             }
-        });
-        styles += '</style>';
 
-        let content = this.Content;
+            if (this.SystemStylesEnabled)
+            {
+                let systemStyles : string[] = [ ];
+                if (markdownExt)
+                {
+                    systemStyles.push(Path.join(markdownExt.extensionPath, 'media', 'markdown.css'));
+                    systemStyles.push(Path.join(markdownExt.extensionPath, 'media', 'tomorrow.css'));
+                }
+                // ToDo: Add some more styles
+                systemStyles.push(Path.join(__dirname, '..', '..', 'Resources', 'css', 'styles.css'));
+                styleSheets = systemStyles.concat(styleSheets);
+            }
 
-        if (this.Wrapper)
+            let styles = '<style>\n';
+            if (this.Styles)
+            {
+                styles += this.Styles + '\n';
+            }
+            styleSheets.forEach(styleSheet => {
+                if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
+                {
+                    styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
+                }
+                else
+                {
+                    // Removing leading 'file://' from the local path.
+                    styleSheet.replace(/^file:\/\//, '');
+                    if (FS.existsSync(styleSheet))
+                    {
+                        styles += FS.readFileSync(styleSheet).toString() + '\n';
+                    }
+                }
+            });
+            styles += '</style>';
+
+            let content = this.Content;
+
+            if (this.Wrapper)
+            {
+                content = Mustache.render(this.Wrapper, { content: content });
+            }
+
+            let view = {
+                styles: styles,
+                content: this.Render(content)
+            }
+
+            return Mustache.render(template, view);
+        }
+        catch (e)
         {
-            content = Mustache.render(this.Wrapper, { content: content });
-        }
+            if ('path' in e)
+            {
+                throw new UnauthorizedAccessException(e['path']);
+            }
 
-        let view = {
-            styles: styles,
-            content: this.Render(content)
+            throw e;
         }
-
-        return Mustache.render(template, view);
     }
 }
 

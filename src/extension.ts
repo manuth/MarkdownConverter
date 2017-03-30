@@ -139,10 +139,9 @@ export function activate(context: vscode.ExtensionContext)
         }
         catch(e)
         {
-            if (e instanceof Error)
-            {
-                vscode.window.showErrorMessage(e.name + ": " + e.message);
-            }
+            //ToDo: Localization
+            // UnauthorizedAccessError
+            vscode.window.showErrorMessage(e.message);
         }
     });
 
