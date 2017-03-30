@@ -2,18 +2,10 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import * as ChildProcess from 'child_process';
-import * as Format from 'string-format';
-import * as FS from 'fs';
 import * as Path from 'path';
-import * as url from 'url';
-import { DateTimeFormatter } from './Core/DateTimeFormatter';
-import { Document } from './Document';
-import { Footer, Header } from './Section';
-import { Converter } from "./Converter";
-import { ConversionType, GetExtensions } from "./ConversionType";
+import { ConversionType } from "./ConversionType";
 import { ConfigKey } from "./Core/Constants";
-import * as MKDirP from 'mkdirp';
+import { Program } from "./Program";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -32,23 +24,25 @@ export function activate(context: vscode.ExtensionContext)
         // The code you place here will be executed every time your command is executed
         try
         {
-
             let markdownDoc = getMarkdownDoc();
-
-            if (vscode.workspace.rootPath)
-            {
-                process.chdir(vscode.workspace.rootPath);
-            }
 
             if (markdownDoc)
             {
+                /* Preparing the arguments */
                 let config = vscode.workspace.getConfiguration(ConfigKey);
                 let outDir = config.get<string>('outDir');
                 let workDir = config.get<string>('workDir');
                 let type = config.get('conversionType');
                 let name = config.get<string>('document.name');
+                let autoSave = config.get<boolean>('autoSave');
                 let types : ConversionType[] = [ ];
-                let doc : Document;
+
+                if (!Path.isAbsolute(workDir))
+                {
+                    workDir = Path.resolve(process.cwd(), workDir);
+                }
+                
+                process.chdir(workDir);
 
                 if (!name)
                 {
@@ -87,61 +81,12 @@ export function activate(context: vscode.ExtensionContext)
                     }
                 }
 
-                if (markdownDoc.isUntitled || (markdownDoc.isDirty && !config.autoSave))
-                {
-                    doc = new Document();
-                    doc.Content = markdownDoc.getText();
-                }
-                else
-                {
-                    if (markdownDoc.isDirty)
-                    {
-                        markdownDoc.save();
-                    }
-                    doc = new Document(markdownDoc.fileName);
-                }
-
-                let converter = new Converter(doc);
-                let Extensions = GetExtensions();
-
-                if (!Path.isAbsolute(workDir))
-                {
-                    workDir = Path.resolve(process.cwd(), workDir);
-                }
-
-                process.chdir(workDir);
-
-                types.forEach(type =>
-                {
-                    if (!FS.existsSync(outDir))
-                    {
-                        MKDirP.sync(outDir);
-                    }
-
-                    try
-                    {
-                        let destination = Path.join(outDir, name + Extensions[type]);
-                        converter.Start(type, destination);
-                        vscode.window.showInformationMessage(Format('Successfully wrote the {0}-file to "{1}".', ConversionType[type], destination), 'Open File').then((label) =>
-                        {
-                            if (label == 'Open File')
-                            {
-                                ChildProcess.exec(Format('"{0}"', destination));
-                            }
-                        });
-                    }
-                    catch (error)
-                    {
-                        if (error instanceof Error)
-                        {
-                            vscode.window.showErrorMessage(error.message);
-                        }
-                    }
-                });
+                /* Executing the main logic */
+                Program.Main(markdownDoc, types, outDir, name, autoSave);
             }
             else
             {
-                throw Error('No markdown-file found.');
+                throw new Error('No markdown-file found.');
             }
         }
         catch(e)
