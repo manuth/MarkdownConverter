@@ -1,13 +1,11 @@
 {
-    "messages":
-    [
+    "messages": [
         {
             "default": "yyyy-MM-dd",
             "fullDate": "dd. MMMM yyyy"
         },
         {
-            "shortNames":
-            [
+            "shortNames": [
                 "Mon",
                 "Tue",
                 "Wed",
@@ -16,8 +14,7 @@
                 "Sat",
                 "Sun"
             ],
-            "fullNames":
-            [
+            "fullNames": [
                 "Monday",
                 "Tuesday",
                 "Wednesday",
@@ -28,8 +25,7 @@
             ]
         },
         {
-            "shortNames":
-            [
+            "shortNames": [
                 "Jan",
                 "Feb",
                 "Mar",
@@ -43,8 +39,7 @@
                 "Nov",
                 "Dec"
             ],
-            "fullNames":
-            [
+            "fullNames": [
                 "January",
                 "February",
                 "March",
@@ -60,20 +55,17 @@
             ]
         },
         {
-            "shortNames":
-            [
+            "shortNames": [
                 "A",
                 "P"
             ],
-            "fullNames":
-            [
+            "fullNames": [
                 "AM",
                 "PM"
             ]
         }
     ],
-    "keys":
-    [
+    "keys": [
         "DateTime.Format",
         "DaysOfWeek",
         "Months",
