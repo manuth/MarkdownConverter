@@ -34,7 +34,6 @@ export function activate(context: vscode.ExtensionContext)
 
             let markdownDoc = getMarkdownDoc();
 
-            // ToDo: Validation
             if (vscode.workspace.rootPath)
             {
                 process.chdir(vscode.workspace.rootPath);
@@ -66,6 +65,7 @@ export function activate(context: vscode.ExtensionContext)
                 {
                     type = [ type ];
                 }
+
                 for (var key in type)
                 {
                     types.push(ConversionType[type[key] as string]);
@@ -110,16 +110,26 @@ export function activate(context: vscode.ExtensionContext)
 
                 process.chdir(workDir);
 
-                types.forEach(type => {
-
+                types.forEach(type =>
+                {
                     if (!FS.existsSync(outDir))
                     {
                         MKDirP.sync(outDir);
                     }
 
-                    let destination = Path.join(outDir, name + Extensions[type]);
-                    converter.Start(type, destination);
-                    vscode.window.showInformationMessage('Finished' + destination);
+                    try
+                    {
+                        let destination = Path.join(outDir, name + Extensions[type]);
+                        converter.Start(type, destination);
+                        vscode.window.showInformationMessage('Finished' + destination);
+                    }
+                    catch (error)
+                    {
+                        if (error instanceof Error)
+                        {
+                            vscode.window.showErrorMessage(error.message);
+                        }
+                    }
                 });
             }
             else

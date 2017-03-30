@@ -780,6 +780,7 @@
     "phantomjs-prebuilt": "^2.1.14",
     "rc": "^1.1.7",
     "shelljs": "^0.7.7",
+    "temp": "^0.8.3",
     "twemoji": "^2.2.5",
     "vscode-nls": "^2.0.2"
   }

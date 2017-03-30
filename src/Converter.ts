@@ -1,10 +1,11 @@
+import * as ChildProcess from 'child_process';
 import * as FS from 'fs';
 import * as Path from 'path';
-import * as phantomjs from 'phantomjs-prebuilt';
-import * as childprocess from 'child_process';
+import * as PhantomJS from 'phantomjs-prebuilt';
+import * as Temp from 'temp';
 import { Base } from "./Core/Base";
 import { Document } from "./Document";
-import { ConversionType } from "./ConversionType";
+import { ConversionType, GetExtensions } from "./ConversionType";
 
 /**
  * Provides a markdown-converter.
@@ -40,19 +41,42 @@ export class Converter
     {
         if (conversionType != ConversionType.HTML)
         {
+            let destinationPath = Path.resolve(path);
+            let tempPath = Temp.path({ suffix: GetExtensions()[conversionType] });
             let type = ConversionType[conversionType];
             let args = [
                 Path.join(__dirname, 'Phantom', 'PDFGenerator.js'),
                 type,
                 this.document.toJSON(),
-                Path.resolve(path)
+                tempPath
             ];
-            let result = childprocess.spawnSync(phantomjs.path, args);
+            let result = ChildProcess.spawnSync(PhantomJS.path, args);
             let error = result.stderr.toString();
+            console.log(result.stdout.toString());
             
             if (error)
             {
                 throw new Error(error);
+            }
+
+            try
+            {
+                let buffer = FS.readFileSync(tempPath);
+                FS.writeFileSync(destinationPath, buffer);
+            }
+            catch (error)
+            {
+                if (error instanceof Error)
+                {
+                    throw(error);
+                }
+            }
+            finally
+            {
+                if (FS.existsSync(tempPath))
+                {
+                    FS.unlinkSync(tempPath);
+                }
             }
         }
         else
