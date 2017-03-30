@@ -1,10 +1,10 @@
 {
-    "command.convert": "Hello World",
+    "command.convert": "Convert",
     "config": "MarkdownConverter-Options",
     "config.outDir": "Output-Directory",
     "config.outDir.description": "The path to save the converted files to.\n\nNote: The path may be relative to the markdown-file that is to be converted.",
     "config.workDir": "Working-Directory",
-    "config.workDir.description": "The path relative to the workspace-directory.\n\nNote:\nEach file-path, like, for example, the template, stylesheets etc. are relative to this path.\nThis path may be relative to the workspace-directory.",
+    "config.workDir.description": "The path to the working-directory.\n\nNote:\nEach file-path, like, for example, the template, stylesheets etc. are relative to this path.\nThis path may be relative to the workspace-directory.",
     "config.document.quality": "Quality",
     "config.document.quality.description": "The quality of the rendered file.",
     "config.conversionType": "Conversion-Type",
