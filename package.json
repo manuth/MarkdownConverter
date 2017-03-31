@@ -1,8 +1,8 @@
 {
     "name": "markdown-converter",
     "displayName": "MarkdownConverter",
-    "description": "Provides the functionallity to convert MarkDown-files to html, docx or pdf.",
-    "version": "0.0.1",
+    "description": "Provides the functionallity to convert MarkDown-files to html, pdf or png.",
+    "version": "0.0.2",
     "publisher": "manuth",
     "author": {
         "name": "Manuel Thalmann",
