@@ -8,11 +8,10 @@ MarkdownConverter is a Visual Studio Code-extension which allows you to export y
 It provides many features, such as DateTime-Formatting, configuring your own CSS-styles, setting Headers and Footers, FrontMatter and much more.
 
 ## Credits
- - [ShiyumiChan](https://shiyumichan.deviantart.com/) - thanks for borrowing your English-skills
- - Regexr.com
- - fullname
- - node-html-pdf
- - vscode-markdown-pdf
+ - [ShiyumiChan][Shiyu] - thanks for borrowing your English-skills
+ - [Regexr.com][RegexR]
+ - [fullname]
+ - [node-html-pdf] and [vscode-markdown-pdf] these two projects were my inspiration
  - Samuel - Thanks to him I could get started with implementing GitHub-emoji-support :tada: :tada:
 
 ## Usage
@@ -47,4 +46,9 @@ If you have any further questions or want to know more about the features of Mar
     I'm sorry...
 
 <!--- References -->
+[Shiyu]: https://shiyumichan.deviantart.com/
+[RegexR]: http://regexr.com/
+[fullname]: https://www.npmjs.com/package/fullname
+[node-html-pdf]: https://github.com/marcbachmann/node-html-pdf
+[vscode-markdown-pdf]: https://github.com/yzane/vscode-markdown-pdf
 [MarkdownConverterWiki]: https://github.com/manuth/MarkdownConverter/wiki
