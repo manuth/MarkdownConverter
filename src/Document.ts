@@ -1,3 +1,4 @@
+import * as Checkbox from 'markdown-it-checkbox';
 import * as FS from 'fs';
 import * as Path from 'path';
 import * as URL from 'url';
@@ -636,6 +637,7 @@ export class Document extends Base
             }
         });
         md.use(Anchor);
+        md.use(Checkbox);
 
         if (this.emoji)
         {
