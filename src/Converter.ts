@@ -52,7 +52,7 @@ export class Converter
                 this.document.toJSON(),
                 tempPath
             ];
-            let result = ChildProcess.spawnSync(PhantomJS.path, args, { timeout: 2 /* 60*/ * 1000 });
+            let result = ChildProcess.spawnSync(PhantomJS.path, args, { timeout: 2 * 60 * 1000 });
             if (result.error)
             {
                 if ('code' in result.error)
