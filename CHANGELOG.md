@@ -9,22 +9,25 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.0.2
   - First release
 
-## 0.0.4
+## 0.0.3
   - Added a new Icon
   - Reworked the README
   - Added [Checkbox-Support][MarkdownItCheckbox]
 
-## 0.0.5
+## 0.0.4
   - Removed text-code
 
-## 0.0.6
+## 0.0.5
   - Reworked the error-messages
 
-## 0.0.7
+## 0.0.6
   - Added malformated FrontMatter-Recognition
   - Improved the MarkDown-document-detection
   - Added JavaScript-logic-variables
   - Fixed the broken PageNumber and PageCount-variables
+
+## 0.0.7
+  - Adjusted the version-numbers
 
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox
