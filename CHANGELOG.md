@@ -14,5 +14,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - Reworked the README
   - Added [Checkbox-Support][MarkdownItCheckbox]
 
+## 0.0.5
+  - Removed text-code
+
+## 0.0.6
+  - Reworked the error-messages
+
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox

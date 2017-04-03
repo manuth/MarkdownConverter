@@ -54,7 +54,7 @@ export class Program
                 converter.Start(type, destination);
                 window.showInformationMessage(localize(0 /* "SuccessMesage" */, null, ConversionType[type], destination), localize(1 /* "OpenFileLabel" */, null)).then((label) =>
                 {
-                    if (label == localize(1, null))
+                    if (label == localize(1 /* "OpenFileLabel" */, null))
                     {
                         ChildProcess.exec(Format('"{0}"', destination));
                     }
@@ -67,11 +67,11 @@ export class Program
                 {
                     if (e instanceof UnauthorizedAccessException)
                     {
-                        message = localize(3 /* "UnauthorizedAccessException" */)
+                        message = localize(3 /* "UnauthorizedAccessException" */, null, e.Path);
                     }
                     else if (e instanceof PhantomJSTimeoutException)
                     {
-                        message = localize(4 /* "PhantomJSTimeoutException" */)
+                        message = localize(4 /* "PhantomJSTimeoutException" */, null);
                     }
                     else
                     {

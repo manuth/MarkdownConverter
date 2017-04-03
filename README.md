@@ -9,6 +9,7 @@ It provides many features, such as DateTime-Formatting, configuring your own CSS
 
 ## Credits
  - [ShiyumiChan][Shiyu] - thanks for borrowing your English-skills
+ - Yume for helping me a lot to create the [MarkdownConverter-Wiki][MarkdownConverterWiki]
  - [Regexr.com][RegexR]
  - [fullname]
  - [node-html-pdf] and [vscode-markdown-pdf] these two projects were my inspiration
@@ -32,7 +33,7 @@ It provides many features, such as DateTime-Formatting, configuring your own CSS
           ]
         }
         ```
- 2. Open up the command pallet (<kbd>Ctrl</kbd>, <kbd>Shift</kbd> + <kbd>P</kbd>) and search for `Markdown: Convert` (`Markdown: Konvertieren` in German) or `m conv` (`m k` in German) for short
+ 2. Open up the command pallet (<kbd>Ctrl</kbd> + <kbd>P</kbd>) and search for `Markdown: Convert` (`Markdown: Konvertieren` in German) or `mco` (`mk` in German) for short
  3. Press enter and wait for the process to finish
 
 ## Features and more

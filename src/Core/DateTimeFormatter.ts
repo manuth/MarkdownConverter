@@ -37,12 +37,12 @@ export class DateTimeFormatter
     private initializeTokens(date : Date, utc : boolean) : { [id : string] : string }
     {
         let tokens : { [id : string] : string } = {
-            ddd: this.localize(1).shortNames[date.getDay() + 1],
-            dddd: this.localize(1).fullNames[date.getDay() + 1],
-            MMM: this.localize(2).shortNames[date.getMonth()],
-            MMMM: this.localize(2).fullNames[date.getMonth()],
-            t: this.localize(3).shortNames[(date.getHours() < 12 ? 0 : 1)],
-            tt: this.localize(3).fullNames[(date.getHours() < 12 ? 0 : 1)]
+            ddd: this.localize(1, null).shortNames[date.getDay() + 1],
+            dddd: this.localize(1, null).fullNames[date.getDay() + 1],
+            MMM: this.localize(2, null).shortNames[date.getMonth()],
+            MMMM: this.localize(2, null).fullNames[date.getMonth()],
+            t: this.localize(3, null).shortNames[(date.getHours() < 12 ? 0 : 1)],
+            tt: this.localize(3, null).fullNames[(date.getHours() < 12 ? 0 : 1)]
         }
         return tokens;
     }
@@ -89,7 +89,7 @@ export class DateTimeFormatter
         {
             case 'default':
             case 'fullDate':
-                formatString = this.localize(0)[formatString];
+                formatString = this.localize(0, null)[formatString];
                 break;
         }
 
