@@ -687,7 +687,18 @@ export class Document extends Base
             {
                 value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, value);
             }
-            view[key] =value;
+            else if (/function[\s]*\(\)[\s]*{([\s\S]*)}/gm.test(value))
+            {
+                value = value.replace(/function[\s]*\(\)[\s]*{([\s\S]*)}/gm, '$1');
+                value = new Function(value);
+
+                if (eval('value()') instanceof Date)
+                {
+                    value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, value());
+                }
+            }
+
+            view[key] = value;
         }
         
         let html = md.render(content);
