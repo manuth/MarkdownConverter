@@ -4,13 +4,15 @@
         "Open File",
         "{0}: {1}",
         "Couldn't access the \"{0}\".",
-        "Error: PhantomJS timed out."
+        "Error: PhantomJS timed out.",
+        "Error: The YAML-block is malformatted. Line {0}, column {1}."
     ],
     "keys": [
         "SuccessMesage",
         "OpenFileLabel",
         "UnknownException",
         "UnauthorizedAccessException",
-        "PhantomJSTimeoutException"
+        "PhantomJSTimeoutException",
+        "YAMLException"
     ]
 }

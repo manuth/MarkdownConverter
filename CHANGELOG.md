@@ -20,5 +20,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.0.6
   - Reworked the error-messages
 
+## 0.0.7
+  - Added malformated FrontMatter-Recognition
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox
