@@ -75,11 +75,11 @@ catch (e)
         {
             subject = subject.replace(/{{[\s]*(PageNumber|PageCount)[\s]*}}/g, function (match : string) : string
             {
-                if (/PageNumber/g)
+                if (/PageNumber/g.test(match))
                 {
                     return pageNumber.toString();
                 }
-                else if (/PageCount/g)
+                else if (/PageCount/g.test(match))
                 {
                     return pageCount.toString();
                 }

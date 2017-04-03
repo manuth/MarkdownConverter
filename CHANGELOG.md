@@ -24,6 +24,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - Added malformated FrontMatter-Recognition
   - Improved the MarkDown-document-detection
   - Added JavaScript-logic-variables
+  - Fixed the broken PageNumber and PageCount-variables
 
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox
