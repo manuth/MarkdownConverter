@@ -132,7 +132,7 @@ export function activate(context: vscode.ExtensionContext)
     function getMarkdownDoc() : vscode.TextDocument
     {
         let config = vscode.workspace.getConfiguration(ConfigKey);
-        if (config.has('ignoreLanguage') && config.get<boolean>('ignoreLanguage') && vscode.window.activeTextEditor || vscode.window.activeTextEditor.document.languageId == 'markdown')
+        if (vscode.window.activeTextEditor && (vscode.window.activeTextEditor.document.languageId == 'markdown' || (config.has('ignoreLanguage') && config.get<boolean>('ignoreLanguage'))))
         {
             return vscode.window.activeTextEditor.document;
         }
