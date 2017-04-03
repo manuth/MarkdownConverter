@@ -8,6 +8,8 @@ import { ConfigKey } from "./Core/Constants";
 import { MarkdownFileNotFoundException } from "./Core/MarkdownFileNotFoundException";
 import * as nls from 'vscode-nls';
 import { Program } from "./Program";
+import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
+import { YAMLException } from "./Core/YAMLException";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -106,7 +108,15 @@ export function activate(context: vscode.ExtensionContext)
             let localize : any = nls.config({ locale: vscode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
             let message;
             
-            if (e instanceof Error)
+            if (e instanceof UnauthorizedAccessException)
+            {
+                message = localize(3 /* "UnauthorizedAccessException" */, null, e.Path);
+            }
+            else if (e instanceof YAMLException)
+            {
+                message = localize(5 /* "YAMLException" */, null, e.mark.line + 1, e.mark.column);
+            }
+            else if (e instanceof Error)
             {
                 message = localize(2 /* "UnknownException" */, null, e.name, e.message);
             }

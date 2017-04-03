@@ -19,6 +19,7 @@ import * as Mustache from 'mustache';
 import * as TwEmoji from 'twemoji';
 import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
 import { Utilities } from "./Core/Utilities";
+import { YAMLException } from "./Core/YAMLException";
 
 /**
  * Represents a document.
@@ -178,9 +179,19 @@ export class Document extends Base
             {
                 this.Content = FS.readFileSync(filePath, 'utf-8');
             }
-            catch (error)
+            catch (e)
             {
-                throw new UnauthorizedAccessException(filePath);
+                if (e instanceof Error)
+                {
+                    if (e.name == 'YAMLException')
+                    {
+                        throw new YAMLException(e);
+                    }
+                    else if ('path' in e)
+                    {
+                        throw new UnauthorizedAccessException(e['path']);
+                    }
+                }
             }
         }
     }

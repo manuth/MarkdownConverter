@@ -4,13 +4,15 @@
         "Datei öffnen",
         "{0}: {1}",
         "Der Zugriff auf \"{0}\" ist fehlgeschlagen.",
-        "Fehler: PhantomJS konnte nicht richtig ausgeführt werden."
+        "Fehler: PhantomJS konnte nicht richtig ausgeführt werden.",
+        "Fehler: Der YAML-Block ist nicht richtig formatiert. Zeile {0}, Spalte {1}."
     ],
     "keys": [
         "SuccessMesage",
         "OpenFileLabel",
         "UnknownException",
         "UnauthorizedAccessException",
-        "PhantomJSTimeoutException"
+        "PhantomJSTimeoutException",
+        "YAMLException"
     ]
 }
