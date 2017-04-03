@@ -691,11 +691,21 @@ export class Document extends Base
             {
                 value = value.replace(/function[\s]*\(\)[\s]*{([\s\S]*)}/gm, '$1');
                 value = new Function(value);
-
-                if (eval('value()') instanceof Date)
+                
+                try
                 {
-                    value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, value());
+                    let dateTest = function(value)
+                    {
+                        return eval('value()');
+                    }
+                    
+                    if (dateTest(value) instanceof Date)
+                    {
+                        value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, dateTest(value));
+                    }
                 }
+                catch (e)
+                { }
             }
 
             view[key] = value;
