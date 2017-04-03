@@ -23,6 +23,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.0.7
   - Added malformated FrontMatter-Recognition
   - Improved the MarkDown-document-detection
+  - Added JavaScript-logic-variables
 
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox
