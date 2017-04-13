@@ -6,7 +6,8 @@ import * as Path from 'path';
 import { ConversionType } from "./ConversionType";
 import { ConfigKey } from "./Core/Constants";
 import { MarkdownFileNotFoundException } from "./Core/MarkdownFileNotFoundException";
-import * as nls from 'vscode-nls';
+import * as NLS from 'vscode-nls';
+import * as PhantomJS from 'phantomjs-prebuilt';
 import { Program } from "./Program";
 import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
 import { YAMLException } from "./Core/YAMLException";
@@ -15,10 +16,23 @@ import { YAMLException } from "./Core/YAMLException";
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext)
 {
-
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     // console.log('Congratulations, your extension "markdown-converter" is now active!');
+
+    // Rebuilding PhantomJS if required.
+    if (PhantomJS.platform != process.platform)
+    {
+        try
+        {
+            require(Path.join(__dirname, '..', '..', 'node_modules', 'phantomjs-prebuilt', 'install.js'));
+        }
+        catch (e)
+        {
+            let localize : any = NLS.config({ locale: vscode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
+            vscode.window.showErrorMessage(localize(6 /* PhantomRebuildException */, null))
+        }
+    }
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
@@ -105,7 +119,7 @@ export function activate(context: vscode.ExtensionContext)
         }
         catch(e)
         {
-            let localize : any = nls.config({ locale: vscode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
+            let localize : any = NLS.config({ locale: vscode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
             let message;
             
             if (e instanceof UnauthorizedAccessException)

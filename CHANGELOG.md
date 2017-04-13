@@ -29,6 +29,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## 0.0.7
   - Adjusted the version-numbers
   - Improved the date-test for security-reasons
+  - Added TypeScript-definitions
+  - Added PhantomJS-rebuild functionallity in order to build PhantomJS for the propper os. [#2](https://github.com/manuth/MarkdownConverter/issues/2)
 
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox
