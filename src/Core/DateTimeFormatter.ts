@@ -4,6 +4,9 @@ import * as path from 'path';
 import { Base } from './Base';
 import { Utilities } from './Utilities';
 
+/**
+ * Gets a set of DateTime-string-tokens.
+ */
 let tokens : { [id : string] : string };
 
 /**
