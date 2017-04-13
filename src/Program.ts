@@ -67,15 +67,15 @@ export class Program
                 {
                     if (e instanceof UnauthorizedAccessException)
                     {
-                        message = localize(3 /* "UnauthorizedAccessException" */, null, e.Path);
+                        message = localize(4 /* "UnauthorizedAccessException" */, null, e.Path);
                     }
                     else if (e instanceof PhantomJSTimeoutException)
                     {
-                        message = localize(4 /* "PhantomJSTimeoutException" */, null);
+                        message = localize(5 /* "PhantomJSTimeoutException" */, null);
                     }
                     else
                     {
-                        message = localize(2 /* "UnknownException" */, null, e.name, e.message);
+                        message = localize(3 /* "UnknownException" */, null, e.name, e.message);
                     }
                 }
                 window.showErrorMessage(message);

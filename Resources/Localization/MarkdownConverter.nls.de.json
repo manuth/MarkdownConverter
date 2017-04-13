@@ -2,15 +2,17 @@
     "messages": [
         "Die konvertierte {0}-Datei wurde erfolgreich nach \"{1}\" geschrieben.",
         "Datei öffnen",
+        "MarkdownConverter wurde aktualisiert. Bitten starten Sie VSCode neu, um MarkdownConverter nutzen zu können.",
         "{0}: {1}",
         "Der Zugriff auf \"{0}\" ist fehlgeschlagen.",
         "Fehler: PhantomJS konnte nicht richtig ausgeführt werden.",
         "Fehler: Der YAML-Block ist nicht richtig formatiert. Zeile {0}, Spalte {1}.",
-        "Fehler: PhantomJS konnte nicht re-kompiliert werden."
+        "MarkdownConverter konnte nicht die passende PhantomJS-Version kompilieren. Starten Sie VSCode neu, um es erneut zu probieren."
     ],
     "keys": [
         "SuccessMesage",
         "OpenFileLabel",
+        "PhantomRebuildMessage",
         "UnknownException",
         "UnauthorizedAccessException",
         "PhantomJSTimeoutException",
