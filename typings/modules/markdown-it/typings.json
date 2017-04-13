@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/b3d0adf9561a83e1998524f23ea530c20965ae16/markdown-it/index.d.ts",
+    "raw": "registry:dt/markdown-it#0.0.0+20161221020919",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/b3d0adf9561a83e1998524f23ea530c20965ae16/markdown-it/index.d.ts"
+  }
+}
