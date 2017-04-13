@@ -1,7 +1,9 @@
-'use strict'
 import * as shell from 'shelljs';
 import { Base } from "./Base";
 
+/**
+ * Provides the functionallity to determine the full name of the current user.
+ */
 export class Fullname
 {
     /**

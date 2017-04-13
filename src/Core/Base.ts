@@ -1,3 +1,6 @@
+/**
+ * Provides basic functionallities such as cloning or converting to JSON.
+ */
 export abstract class Base
 {
     /**

@@ -1,8 +1,8 @@
+import { Base } from "./Core/Base";
+
 /**
  * Represents a margin.
  */
-import { Base } from "./Core/Base";
-
 export class Margin extends Base
 {
     /**
@@ -112,6 +112,9 @@ export class Margin extends Base
         this.left = value;
     }
 
+    /**
+     * Returns a JSON-string which represents the object.
+     */
     public toJSON() : string
     {
         return JSON.stringify({

@@ -1,8 +1,8 @@
+import { Base } from "./Core/Base";
+
 /**
  * Represents a section of a document.
  */
-import { Base } from "./Core/Base";
-
 export class Section extends Base
 {
     /**
@@ -15,6 +15,15 @@ export class Section extends Base
      */
     private content : string = null;
 
+    /**
+     * Initializes a new instance of the Section class.
+     * 
+     * @param height
+     * The height of the section.
+     * 
+     * @param content 
+     * The content of the section.
+     */
     constructor(height : string = '', content : string = '')
     {
         super();
