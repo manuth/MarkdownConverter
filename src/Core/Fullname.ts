@@ -51,7 +51,7 @@ export class Fullname
      */
     private static CheckGit() : string
     {
-        return shell.exec('git config --global user.name');
+        return shell.exec('git config --global user.name').stdout;
     }
 
     /**
@@ -59,7 +59,7 @@ export class Fullname
      */
     private static CheckOsaScript() : string
     {
-        return shell.exec('osascript -e long user name of (system info)');
+        return shell.exec('osascript -e long user name of (system info)').stdout;
     }
 
     /**
