@@ -7,6 +7,7 @@ import * as Anchor from 'markdown-it-anchor';
 import { Base } from "./Core/Base";
 import { ConfigKey } from "./Core/Constants";
 import { DateTimeFormatter } from './Core/DateTimeFormatter';
+import { EmbeddingOption } from './Core/EmbeddingOption';
 import * as MarkdownItEmoji from 'markdown-it-emoji';
 import * as FrontMatter from 'front-matter';
 import { Fullname } from './Core/Fullname';
@@ -16,6 +17,7 @@ import { Layout } from "./Layout";
 import { Margin } from "./Margin";
 import * as MarkdownIt from 'markdown-it';
 import * as Mustache from 'mustache';
+import * as Request from 'request-sync';
 import * as TwEmoji from 'twemoji';
 import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
 import { Utilities } from "./Core/Utilities";
@@ -135,6 +137,11 @@ export class Document extends Base
      * The highlight-style of the document.
      */
     private highlightStyle : boolean = true;
+
+    /**
+     * The embedding-options of the document.
+     */
+    private embeddingStyle : EmbeddingOption | boolean = EmbeddingOption.Local;
 
     /**
      * A value indicating whether system-provided stylesheets are enabled. 
@@ -499,6 +506,19 @@ export class Document extends Base
     }
 
     /**
+     * Gets or sets the embedding-options of the document.
+     */
+    @enumerable(true)
+    public get EmbeddingStyle() : EmbeddingOption | boolean
+    {
+        return this.embeddingStyle;
+    }
+    public set EmbeddingStyle(value : EmbeddingOption | boolean)
+    {
+        this.embeddingStyle = value;
+    }
+
+    /**
      * Gets or sets a value indicating whether system-provided stylesheets are enabled.
      */
     @enumerable(true)
@@ -837,6 +857,18 @@ export class Document extends Base
                 this.Wrapper = style['wrapper'];
             }
 
+            if ('embeddingStyle' in style)
+            {
+                if (typeof(style['embeddingStyle']) == "boolean")
+                {
+                    this.EmbeddingStyle = style['embeddingStyle'];
+                }
+                else if (typeof(style['embeddingStyle']) == "string")
+                {
+                    this.EmbeddingStyle = EmbeddingOption[style['embeddingStyle'] as string];
+                }
+            }
+
             if ('highlightStyle' in style)
             {
                 this.HighlightStyle = style['highlightStyle'];
@@ -1055,6 +1087,7 @@ export class Document extends Base
             let template = FS.readFileSync(this.Template).toString();
 
             // Preparing the styles
+            let systemStyleSheets : string[] = [];
             let styleSheets = this.StyleSheets;
             let markdownExt = VSCode.extensions.getExtension('Microsoft.vscode-markdown');
 
@@ -1068,34 +1101,63 @@ export class Document extends Base
 
             if (this.SystemStylesEnabled)
             {
-                let systemStyles : string[] = [ ];
+                let styles : string[] = [ ];
                 if (markdownExt)
                 {
-                    systemStyles.push(Path.join(markdownExt.extensionPath, 'media', 'markdown.css'));
-                    systemStyles.push(Path.join(markdownExt.extensionPath, 'media', 'tomorrow.css'));
+                    styles.push(Path.join(markdownExt.extensionPath, 'media', 'markdown.css'));
+                    styles.push(Path.join(markdownExt.extensionPath, 'media', 'tomorrow.css'));
                 }
-                // ToDo: Add some more styles
-                systemStyles.push(Path.join(__dirname, '..', '..', 'Resources', 'css', 'styles.css'));
-                styleSheets = systemStyles.concat(styleSheets);
+                styles.push(Path.join(__dirname, '..', '..', 'Resources', 'css', 'styles.css'));
+
+                systemStyleSheets = styles.concat(systemStyleSheets);
             }
 
             let styles = '<style>\n';
+
             if (this.Styles)
             {
                 styles += this.Styles + '\n';
             }
+
+            systemStyleSheets.forEach(styleSheet => {
+                if (FS.existsSync(styleSheet))
+                {
+                    styles += FS.readFileSync(styleSheet).toString() + '\n';
+                }
+            });
+
             styleSheets.forEach(styleSheet => {
                 if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
                 {
-                    styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
+                    if (this.EmbeddingStyle === true || this.EmbeddingStyle == EmbeddingOption.All || this.EmbeddingStyle == EmbeddingOption.Web)
+                    {
+                        let result = Request(styleSheet);
+
+                        if (result.statusCode == 200)
+                        {
+                            styles += result.body;
+                        }
+                    }
+                    else
+                    {
+                        styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
+                    }
                 }
                 else
                 {
                     // Removing leading 'file://' from the local path.
                     styleSheet.replace(/^file:\/\//, '');
-                    if (FS.existsSync(styleSheet))
+
+                    if (this.EmbeddingStyle === true || this.EmbeddingStyle == EmbeddingOption.All || this.EmbeddingStyle == EmbeddingOption.Local)
                     {
-                        styles += FS.readFileSync(styleSheet).toString() + '\n';
+                        if (FS.existsSync(styleSheet))
+                        {
+                            styles += FS.readFileSync(styleSheet).toString() + '\n';
+                        }
+                    }
+                    else
+                    {
+                        styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
                     }
                 }
             });
