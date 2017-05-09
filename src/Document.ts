@@ -124,7 +124,7 @@ export class Document extends Base
     /**
      * The template to use for the RenderBody-process.
      */
-    private template : string = Path.join(__dirname, '..', '..', 'Resources', 'Template.html');
+    private template : string = Path.join(__dirname, '..', '..', 'Resources', 'SystemTemplate.html');
 
     /**
      * The wrapper of the content of the document.
@@ -826,6 +826,10 @@ export class Document extends Base
             if ('template' in style)
             {
                 this.Template = style['template'];
+            }
+            else if ('useSystemStyles' in style && !style['useSystemStyles'])
+            {
+                this.Template = Path.join(__dirname, '..', '..', 'Resources', 'Template.html');
             }
 
             if ('wrapper' in style)
