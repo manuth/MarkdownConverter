@@ -43,13 +43,19 @@ export class Converter
     {
         if (conversionType != ConversionType.HTML)
         {
+            // Saving the JSON that represents the document to a temporary JSON-file.
+            let jsonPath = Temp.path({ suffix: '.json'});
+            {
+                FS.writeFileSync(jsonPath, this.document.toJSON());
+            }
+
             let destinationPath = Path.resolve(path);
             let tempPath = Temp.path({ suffix: GetExtensions()[conversionType] });
             let type = ConversionType[conversionType];
             let args = [
                 Path.join(__dirname, 'Phantom', 'PDFGenerator.js'),
                 type,
-                this.document.toJSON(),
+                jsonPath,
                 tempPath
             ];
             let result = ChildProcess.spawnSync(PhantomJS.path, args, { timeout: 2 * 60 * 1000 });
@@ -90,6 +96,11 @@ export class Converter
                 if (FS.existsSync(tempPath))
                 {
                     FS.unlinkSync(tempPath);
+                }
+                
+                if (FS.existsSync(jsonPath))
+                {
+                    FS.unlinkSync(jsonPath);
                 }
             }
         }

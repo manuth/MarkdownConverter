@@ -3,18 +3,19 @@ var document = document;
 var phantom = phantom;
 
 /* Importing phantom's modules */
-var system = require('system');
-var webpage = require('webpage');
+var FS = require('fs');
+var System = require('system');
+var WebPage = require('webpage');
 
 try
 {
-    Main(system.args.slice(1));
+    Main(System.args.slice(1));
 }
 catch (e)
 {
     if (e instanceof Error)
     {
-        system.stderr.writeLine(e);
+        System.stderr.writeLine(e);
         phantom.exit(1);
     }
 }
@@ -43,9 +44,9 @@ catch (e)
 
         if (args.length >= 3)
         {
-            var page = webpage.create();
+            var page = WebPage.create();
             type = args[0];
-            doc = JSON.parse(args[1]);
+            doc = JSON.parse(FS.read(args[1]));
             destination = args[2];
             
             page.onLoadFinished = function(status)
@@ -61,7 +62,7 @@ catch (e)
 
         function OnFinished()
         {
-            system.stdout.writeLine(destination);
+            System.stdout.writeLine(destination);
             phantom.exit();
         }
 
