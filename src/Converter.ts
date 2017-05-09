@@ -5,7 +5,7 @@ import * as PhantomJS from 'phantomjs-prebuilt';
 import * as Temp from 'temp';
 import { Base } from "./Core/Base";
 import { Document } from "./Document";
-import { ConversionType, GetExtensions } from "./ConversionType";
+import { ConversionType, GetExtensions } from "./Core/ConversionType";
 import { PhantomJSTimeoutException } from "./Core/PhantomJSTimeoutException";
 import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
 

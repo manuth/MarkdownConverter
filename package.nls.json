@@ -100,6 +100,8 @@
     "config.document.style.wrapper.description": "The wrapper of the codument.\nNote: {{ content }}'s replaced by the body of the document.\n\nExample:\n<div class=\"container\">{{ content }}<div>",
     "config.document.style.highlightStyle": "highlight.js-Style",
     "config.document.style.highlightStyle.description": "The highlight.js-style to use.\n\nNote:\nYou could also set this to true to use VS Code's default theme, or set this to false to disable hightlighting.",
+    "config.document.style.embeddingStyle": "The embedding-options of the document",
+    "config.document.style.embeddingStyle.description": "Defines what css-files should be loaded directly into the resulting HTML-file.\nYou can either embed all css-files, locally stored css-files, web stored css-files or none of them.\nNote:\nYou could also set this to true to embed all css-files, or set this to false to disable css-file-embedding.",
     "config.document.style.useSystemStyles": "Use System-Styles",
     "config.document.style.useSystemStyles.description": "true to use system-provided styles; otherwise false.",
     "config.document.style.styles": "Styles",

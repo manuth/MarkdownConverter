@@ -3,7 +3,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as Path from 'path';
-import { ConversionType } from "./ConversionType";
+import { ConversionType } from "./Core/ConversionType";
 import { ConfigKey } from "./Core/Constants";
 import { MarkdownFileNotFoundException } from "./Core/MarkdownFileNotFoundException";
 import * as NLS from 'vscode-nls';

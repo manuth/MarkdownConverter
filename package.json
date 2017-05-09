@@ -726,6 +726,25 @@
                     }
                   ]
                 },
+                "embeddingStyle": {
+                  "title": "%config.document.style.embeddingStyle%",
+                  "description": "%config.document.style.embeddingStyle.description%",
+                  "default": "Local",
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "All",
+                        "Local",
+                        "Web",
+                        "None"
+                      ]
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ]
+                },
                 "useSystemStyles": {
                   "title": "%config.document.style.useSystemStyles%",
                   "description": "%config.document.style.useSystemStyles.description%",
@@ -776,6 +795,7 @@
     "mustache": "^2.3.0",
     "phantomjs-prebuilt": "^2.1.14",
     "rc": "^1.2.1",
+    "request-sync": "^1.0.0",
     "shelljs": "^0.7.7",
     "string-format": "^0.5.0",
     "temp": "^0.8.3",

@@ -5,7 +5,7 @@ import * as MKDirP from 'mkdirp';
 import * as NLS from 'vscode-nls';
 import * as Path from 'path';
 import { env, TextDocument, window } from 'vscode';
-import { ConversionType, GetExtensions } from './ConversionType';
+import { ConversionType, GetExtensions } from './Core/ConversionType';
 import { Converter } from "./Converter";
 import { Document } from './Document';
 import { PhantomJSTimeoutException } from "./Core/PhantomJSTimeoutException";

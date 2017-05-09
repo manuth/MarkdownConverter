@@ -4,7 +4,7 @@
 export enum ConversionType
 {
     /**
-     * BMP-conversion
+     * BMP-conversion.
      */
     BMP,
     /**
@@ -27,13 +27,13 @@ export enum ConversionType
     PNG,
     
     /**
-     * PPM-conversion
+     * PPM-conversion.
      */
     PPM
 }
 
 /**
- * The extensions of the conversion-types
+ * The extensions of the conversion-types.
  */
 export function GetExtensions() : { [id : number] : string }
 {

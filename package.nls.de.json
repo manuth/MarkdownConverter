@@ -100,6 +100,8 @@
     "config.document.style.wrapper.description": "Der Wrapper des Dokuments.\nNote: {{ content }} Wird durch den Inhalt des Dokuments ersetzt.\n\nBeispiel:\n<div class=\"container\">{{ content }}<div>",
     "config.document.style.highlightStyle": "highlight.js-Style",
     "config.document.style.highlightStyle.description": "Der zu nutzende highligh.js-style.\n\nNote:\nDer Wert kann auch true sein, um den Style von VS Code zu nutzen, oder false, um highlight.js zu deaktivieren.",
+    "config.document.style.embeddingStyle": "Die Einbettungs-Optionen des Dokuments.",
+    "config.document.style.embeddingStyle.description": "Legt fest, welche CSS-Dateien direkt in die resultierende HTML-Datei geladen werden sollen.\nEs können entweder alle, lokal gespeicherte, im Web gespeicherte oder gar keine CSS-Dateien eingebettet werden.\nNote:\nDer Wert kann auch true sein, um alle CSS-Dateien einzubetten, oder false, um die CSS-Datei-Einbettung zu deaktivieren.",
     "config.document.style.useSystemStyles": "Use System-Styles",
     "config.document.style.useSystemStyles.description": "true, um die von Visual Studio Code bereitgestellten Styles zu verwenden; sonst false.",
     "config.document.style.styles": "Styles",
