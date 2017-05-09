@@ -15,7 +15,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - Added [Checkbox-Support][MarkdownItCheckbox]
 
 ## 0.0.4
-  - Removed text-code
+  - Removed test-code
 
 ## 0.0.5
   - Reworked the error-messages
@@ -31,6 +31,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - Improved the date-test for security-reasons
   - Added TypeScript-definitions
   - Added PhantomJS-rebuild functionallity in order to build PhantomJS for the propper os. [#2](https://github.com/manuth/MarkdownConverter/issues/2)
+
+## 0.0.8
+  - Reworked the PhantomJS-process [#1](https://github.com/manuth/MarkdownConverter/issues/1)
 
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox
