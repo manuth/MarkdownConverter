@@ -34,6 +34,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## 0.0.8
   - Reworked the PhantomJS-process [#1](https://github.com/manuth/MarkdownConverter/issues/1)
+  - Adjusted the way to handle templates [#6](https://github.com/manuth/MarkdownConverter/issues/6)
+  - Provided the functionallity to choose whether to embed or link certain css-files [#4](https://github.com/manuth/MarkdownConverter/issues/4)
+  - Patched missleading error-messages [#7](https://github.com/manuth/MarkdownConverter/issues/7)
 
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox

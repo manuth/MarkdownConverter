@@ -56,7 +56,31 @@ export class Program
                 {
                     if (label == localize(1 /* "OpenFileLabel" */, null))
                     {
-                        ChildProcess.exec(Format('"{0}"', destination));
+                        try
+                        {
+                            /**
+                             * Opening a file...
+                             * ...the windows-way...
+                             */
+                            ChildProcess.execSync(Format('"{0}"', destination));
+                        }
+                        catch (e)
+                        {
+                            try
+                            {
+                                /**
+                                 * ...the linux-way...
+                                 */
+                                ChildProcess.execSync(Format('bash -c \'xdg-open "{0}"\'', destination))
+                            }
+                            catch (e)
+                            {
+                                /**
+                                 * ...and the macOS-way
+                                 */
+                                ChildProcess.execSync(Format('bash -c \'open "{0}"\'', destination))
+                            }
+                        }
                     }
                 });
             }
