@@ -41,7 +41,7 @@ export function activate(context: vscode.ExtensionContext)
         }
         catch (e)
         {
-            vscode.window.showErrorMessage(localize(6 /* PhantomRebuildException */, null));
+            vscode.window.showErrorMessage(localize(7 /* PhantomRebuildException */, null));
             phantomJSBuilt = false;
         }
     }
@@ -60,7 +60,7 @@ export function activate(context: vscode.ExtensionContext)
             }
             else
             {
-                vscode.window.showWarningMessage(localize(6 /* PhantomRebuildException */, null));
+                vscode.window.showWarningMessage(localize(7 /* PhantomRebuildException */, null));
             }
         }
         else
