@@ -2,6 +2,7 @@
     "messages": [
         "Die konvertierte {0}-Datei wurde erfolgreich nach \"{1}\" geschrieben.",
         "Datei öffnen",
+        "MarkdownConverter muss für Ihr Betriebssystem neu erstellt werden. Bitte warten Sie, bis die Installation beendet ist…",
         "MarkdownConverter wurde aktualisiert. Bitten starten Sie VSCode neu, um MarkdownConverter nutzen zu können.",
         "{0}: {1}",
         "Der Zugriff auf \"{0}\" ist fehlgeschlagen.",
@@ -10,13 +11,14 @@
         "MarkdownConverter konnte nicht die passende PhantomJS-Version kompilieren. Starten Sie VSCode neu, um es erneut zu probieren."
     ],
     "keys": [
-        "SuccessMesage",
+        "SuccessMessage",
         "OpenFileLabel",
-        "PhantomRebuildMessage",
+        "UpdateMessage",
+        "PhantomJSRebuildMessage",
         "UnknownException",
         "UnauthorizedAccessException",
         "PhantomJSTimeoutException",
         "YAMLException",
-        "PhantomRebuildException"
+        "PhantomJSRebuildException"
     ]
 }

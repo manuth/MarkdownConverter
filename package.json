@@ -793,6 +793,7 @@
     "markdown-it-emoji": "^1.3.0",
     "mkdirp": "^0.5.1",
     "mustache": "^2.3.0",
+    "npm": "^4.6.1",
     "phantomjs-prebuilt": "^2.1.14",
     "rc": "^1.2.1",
     "request-sync": "^1.0.0",

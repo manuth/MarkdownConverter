@@ -1,7 +1,9 @@
+import { Exception } from "./Exception";
+
 /**
  * Represents a YAML-exception.
  */
-export class YAMLException
+export class YAMLException extends Exception
 {
     /**
      * The name of the exception.
@@ -48,6 +50,7 @@ export class YAMLException
     public constructor(name : string, reason : string, mark : any, message : string);
     public constructor(name : string | any, reason? : string, mark? : any, message? : string)
     {
+        super();
         if (arguments.length == 1)
         {
             let exception : { name : string, reason : string, mark : any, message : string } = name;
