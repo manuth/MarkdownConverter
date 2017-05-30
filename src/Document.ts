@@ -17,7 +17,7 @@ import { Layout } from "./Layout";
 import { Margin } from "./Margin";
 import * as MarkdownIt from 'markdown-it';
 import * as Mustache from 'mustache';
-import * as Request from 'request-sync';
+import * as Request from 'sync-request';
 import * as TwEmoji from 'twemoji';
 import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
 import { Utilities } from "./Core/Utilities";
