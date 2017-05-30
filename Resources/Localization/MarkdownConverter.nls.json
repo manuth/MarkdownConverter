@@ -2,6 +2,7 @@
     "messages": [
         "Successfully wrote the {0}-file to \"{1}\".",
         "Open File",
+        "MarkdownConverter needs to be rebuilt for your current platform. Please wait for the installation to finish…",
         "MarkdownConverter's been updated. Please restart VSCode in order to continue using MarkdownConverter.",
         "{0}: {1}",
         "Couldn't access the \"{0}\".",
@@ -10,13 +11,14 @@
         "MarkdownConverter couldn't build the propper version of PhantomJS. Restart VSCode in order to try it again."
     ],
     "keys": [
-        "SuccessMesage",
+        "SuccessMessage",
         "OpenFileLabel",
-        "PhantomRebuildMessage",
+        "UpdateMessage",
+        "PhantomJSRebuildMessage",
         "UnknownException",
         "UnauthorizedAccessException",
         "PhantomJSTimeoutException",
         "YAMLException",
-        "PhantomRebuildException"
+        "PhantomJSRebuildException"
     ]
 }

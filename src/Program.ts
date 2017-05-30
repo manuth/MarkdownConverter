@@ -52,9 +52,9 @@ export class Program
             {
                 let destination = Path.join(outDir, fileName + extensions[type]);
                 converter.Start(type, destination);
-                window.showInformationMessage(localize(0 /* "SuccessMesage" */, null, ConversionType[type], destination), localize(1 /* "OpenFileLabel" */, null)).then((label) =>
+                window.showInformationMessage(localize(0 /* SuccessMessage */, null, ConversionType[type], destination), localize(1 /* OpenFileLabel */, null)).then((label) =>
                 {
-                    if (label == localize(1 /* "OpenFileLabel" */, null))
+                    if (label == localize(1 /* OpenFileLabel */, null))
                     {
                         try
                         {
@@ -91,15 +91,15 @@ export class Program
                 {
                     if (e instanceof UnauthorizedAccessException)
                     {
-                        message = localize(4 /* "UnauthorizedAccessException" */, null, e.Path);
+                        message = localize(5 /* UnauthorizedAccessException */, null, e.Path);
                     }
                     else if (e instanceof PhantomJSTimeoutException)
                     {
-                        message = localize(5 /* "PhantomJSTimeoutException" */, null);
+                        message = localize(6 /* PhantomJSTimeoutException */, null);
                     }
                     else
                     {
-                        message = localize(3 /* "UnknownException" */, null, e.name, e.message);
+                        message = localize(4 /* UnknownException */, null, e.name, e.message);
                     }
                 }
                 window.showErrorMessage(message);

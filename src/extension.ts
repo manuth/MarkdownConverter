@@ -1,13 +1,16 @@
 'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as VSCode from 'vscode';
 import * as Path from 'path';
+import * as ChildProcess from 'child_process';
 import { ConversionType } from "./Core/ConversionType";
 import { ConfigKey } from "./Core/Constants";
 import { MarkdownFileNotFoundException } from "./Core/MarkdownFileNotFoundException";
 import * as NLS from 'vscode-nls';
+import * as NPM from 'npm';
 import * as PhantomJS from 'phantomjs-prebuilt';
+import { ProcessException } from './Core/ProcessException';
 import { Program } from "./Program";
 import * as Shell from 'shelljs';
 import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
@@ -15,11 +18,11 @@ import { YAMLException } from "./Core/YAMLException";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext)
+export function activate(context: VSCode.ExtensionContext)
 {
     // Gets a value indicating whether phantomjs could be built.
-    let phantomJSBuilt = true;
-    let localize : any = NLS.config({ locale: vscode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
+    let phantomJSBuilt = null;
+    let localize : any = NLS.config({ locale: VSCode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -30,18 +33,32 @@ export function activate(context: vscode.ExtensionContext)
     {
         try
         {
-            let result = Shell.exec('npm rebuild phantomjs-prebuilt', { cwd: Path.join(__dirname, '..', '..') });
-
-            if (result.stderr)
-            {
-                throw new Error(result.stderr.toString());
-            }
-
-            vscode.window.showInformationMessage(localize(2 /* PhantomRebuildMessage */, null));
+            let env = process.env;
+            env['PHANTOMJS_PLATFORM'] = process.platform;
+            env['PHANTOMJS_ARCH'] = process.arch;
+            VSCode.window.showInformationMessage(localize(2 /* UpdateMessage */, null));
+            process.chdir(Path.join(__dirname, '..', '..'));
+            
+            ChildProcess.exec(
+                'npm --strict-ssl false rebuild phantomjs-prebuilt',
+                {
+                    env: env
+                }, function (error, stdout, stderr)
+                {
+                    if (!error && !stderr)
+                    {
+                        phantomJSBuilt = true;
+                        VSCode.window.showInformationMessage(localize(3 /* PhantomJSRebuildMessage */, null));
+                    }
+                    else
+                    {
+                        throw new ProcessException('', stdout, stderr, error);
+                    }
+                });
         }
         catch (e)
         {
-            vscode.window.showErrorMessage(localize(7 /* PhantomRebuildException */, null));
+            VSCode.window.showErrorMessage(localize(8 /* PhantomJSRebuildException */, null));
             phantomJSBuilt = false;
         }
     }
@@ -49,18 +66,18 @@ export function activate(context: vscode.ExtensionContext)
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('markdownConverter.convert', () =>
+    let disposable = VSCode.commands.registerCommand('markdownConverter.convert', () =>
     {
         // The code you place here will be executed every time your command is executed
-        if (PhantomJS.platform != process.platform)
+        if (PhantomJS.platform != process.platform && phantomJSBuilt !== null)
         {
             if (phantomJSBuilt)
             {
-                vscode.window.showInformationMessage(localize(2 /* PhantomRebuildMessage */, null));
+                VSCode.window.showInformationMessage(localize(3 /* PhantomJSRebuildMessage */, null));
             }
             else
             {
-                vscode.window.showWarningMessage(localize(7 /* PhantomRebuildException */, null));
+                VSCode.window.showWarningMessage(localize(8 /* PhantomJSRebuildException */, null));
             }
         }
         else
@@ -72,7 +89,7 @@ export function activate(context: vscode.ExtensionContext)
                 if (markdownDoc)
                 {
                     /* Preparing the arguments */
-                    let config = vscode.workspace.getConfiguration(ConfigKey);
+                    let config = VSCode.workspace.getConfiguration(ConfigKey);
                     let outDir = config.get<string>('outDir');
                     let workDir = config.get<string>('workDir');
                     let type = config.get('conversionType');
@@ -81,9 +98,9 @@ export function activate(context: vscode.ExtensionContext)
                     let types : ConversionType[] = [ ];
                     let base : string;
 
-                    if (vscode.workspace.rootPath)
+                    if (VSCode.workspace.rootPath)
                     {
-                        base = vscode.workspace.rootPath;
+                        base = VSCode.workspace.rootPath;
                     }
                     else
                     {
@@ -148,17 +165,17 @@ export function activate(context: vscode.ExtensionContext)
                 
                 if (e instanceof UnauthorizedAccessException)
                 {
-                    message = localize(4 /* "UnauthorizedAccessException" */, null, e.Path);
+                    message = localize(5 /* UnauthorizedAccessException */, null, e.Path);
                 }
                 else if (e instanceof YAMLException)
                 {
-                    message = localize(6 /* "YAMLException" */, null, e.mark.line + 1, e.mark.column);
+                    message = localize(7 /* YAMLException */, null, e.mark.line + 1, e.mark.column);
                 }
                 else if (e instanceof Error)
                 {
-                    message = localize(3 /* "UnknownException" */, null, e.name, e.message);
+                    message = localize(4 /* UnknownException */, null, e.name, e.message);
                 }
-                vscode.window.showErrorMessage(message);
+                VSCode.window.showErrorMessage(message);
             }
         }
     });
@@ -168,18 +185,18 @@ export function activate(context: vscode.ExtensionContext)
     /**
      * Tries to find a markdown-file
      */
-    function getMarkdownDoc() : vscode.TextDocument
+    function getMarkdownDoc() : VSCode.TextDocument
     {
-        let config = vscode.workspace.getConfiguration(ConfigKey);
-        if (vscode.window.activeTextEditor && (vscode.window.activeTextEditor.document.languageId == 'markdown' || (config.has('ignoreLanguage') && config.get<boolean>('ignoreLanguage'))))
+        let config = VSCode.workspace.getConfiguration(ConfigKey);
+        if (VSCode.window.activeTextEditor && (VSCode.window.activeTextEditor.document.languageId == 'markdown' || (config.has('ignoreLanguage') && config.get<boolean>('ignoreLanguage'))))
         {
-            return vscode.window.activeTextEditor.document;
+            return VSCode.window.activeTextEditor.document;
         }
-        for (let i = 0; i < vscode.window.visibleTextEditors.length; i++)
+        for (let i = 0; i < VSCode.window.visibleTextEditors.length; i++)
         {
-            if (vscode.window.visibleTextEditors[i].document.languageId == 'markdown')
+            if (VSCode.window.visibleTextEditors[i].document.languageId == 'markdown')
             {
-                return vscode.window.visibleTextEditors[i].document;
+                return VSCode.window.visibleTextEditors[i].document;
             }
         }
         return null;
