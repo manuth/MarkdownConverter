@@ -56,30 +56,20 @@ export class Program
                 {
                     if (label == localize(1 /* OpenFileLabel */, null))
                     {
-                        try
+                        switch (process.platform)
                         {
-                            /**
-                             * Opening a file...
-                             * ...the windows-way...
-                             */
-                            ChildProcess.execSync(Format('"{0}"', destination));
-                        }
-                        catch (e)
-                        {
-                            try
-                            {
-                                /**
-                                 * ...the linux-way...
-                                 */
-                                ChildProcess.execSync(Format('bash -c \'xdg-open "{0}"\'', destination))
-                            }
-                            catch (e)
-                            {
-                                /**
-                                 * ...and the macOS-way
-                                 */
-                                ChildProcess.execSync(Format('bash -c \'open "{0}"\'', destination))
-                            }
+                            case 'win32':
+                                ChildProcess.exec(Format('"{0}"', destination));
+                                break;
+                            case 'darwin':
+                                ChildProcess.exec(Format('bash -c \'open "{0}"\'', destination));
+                                break;
+                            case 'linux':
+                                ChildProcess.exec(Format('bash -c \'xdg-open "{0}"\'', destination));
+                                break;
+                            default:
+                                window.showWarningMessage(localize(10 /* NotSupportedException */));
+                                break;
                         }
                     }
                 });
