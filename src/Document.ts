@@ -8,7 +8,6 @@ import { Base } from "./Core/Base";
 import { ConfigKey } from "./Core/Constants";
 import { DateTimeFormatter } from './Core/DateTimeFormatter';
 import { EmbeddingOption } from './Core/EmbeddingOption';
-import * as MarkdownItEmoji from 'markdown-it-emoji';
 import * as FrontMatter from 'front-matter';
 import { Fullname } from './Core/Fullname';
 import { Header, Footer, Section } from './Section';
@@ -16,6 +15,7 @@ import * as HighlightJs from 'highlightjs';
 import { Layout } from "./Layout";
 import { Margin } from "./Margin";
 import * as MarkdownIt from 'markdown-it';
+import * as MarkdownItEmoji from 'markdown-it-emoji';
 import * as Mustache from 'mustache';
 import * as Request from 'sync-request';
 import * as TwEmoji from 'twemoji';
@@ -175,9 +175,6 @@ export class Document extends Base
     constructor(filePath : string = null)
     {
         super();
-        this.Layout.Margin = new Margin('1cm', '1cm', '1cm', '1cm');
-        this.Layout.Format = 'A4';
-        this.Layout.Orientation = 'portrait';
         this.LoadConfig(this.config);
 
         if (filePath)
