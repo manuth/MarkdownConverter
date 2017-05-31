@@ -45,6 +45,7 @@ If you have any further questions or want to know more about the features of Mar
   - Dynamic Footer/Header-heights aren't supported by PhantomJS.  
     For that reason all Headers/Footers will have the height of the default Header/Footer.  
     I'm sorry...
+  - Anchor-links inside a PDF-document are not working due to an issue of PhantomJS.
 
 <!--- References -->
 [Shiyu]: https://shiyumichan.deviantart.com/
