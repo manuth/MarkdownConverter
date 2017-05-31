@@ -34,7 +34,7 @@ export class Layout extends Base
     /**
      * Paper-sizes
      */
-    private paperSizes = {
+    private static paperSizes = {
         A3: {
             Width: '297mm',
             Height: '42cm'
@@ -92,7 +92,7 @@ export class Layout extends Base
         }
         else
         {
-            return this.paperSizes[this.format][(this.orientation == 'landspace' ? 'Height' : 'Width')];
+            return Layout.paperSizes[this.format][(this.orientation == 'landspace' ? 'Height' : 'Width')];
         }
     }
     public set Width(value : string)
@@ -111,7 +111,7 @@ export class Layout extends Base
         }
         else
         {
-            return this.paperSizes[this.format][(this.orientation == 'landspace' ? 'Width' : 'Height')];
+            return Layout.paperSizes[this.format][(this.orientation == 'landspace' ? 'Width' : 'Height')];
         }
     }
     public set Height(value : string)
@@ -135,7 +135,7 @@ export class Layout extends Base
     }
     public set Format(value : string)
     {
-        if (!value || (value in this.paperSizes))
+        if (!value || (value in Layout.paperSizes))
         {
             this.format = value;
         }
