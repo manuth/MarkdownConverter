@@ -13,11 +13,15 @@ import { Fullname } from './Core/Fullname';
 import { Header, Footer, Section } from './Section';
 import * as HighlightJs from 'highlightjs';
 import { Layout } from "./Layout";
+import { ListType } from "./Core/ListType";
 import { Margin } from "./Margin";
 import * as MarkdownIt from 'markdown-it';
 import * as MarkdownItEmoji from 'markdown-it-emoji';
+import * as MarkdownItToc from 'markdown-it-table-of-contents';
+import { MultiRange } from 'multi-integer-range';
 import * as Mustache from 'mustache';
 import * as Request from 'sync-request';
+import { TocSettings } from "./TocSettings";
 import * as TwEmoji from 'twemoji';
 import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
 import { Utilities } from "./Core/Utilities";
@@ -122,6 +126,11 @@ export class Document extends Base
      * The footer for the last page.
      */
     private lastFooter : Footer = null;
+
+    /**
+     * The definitions of the table of contents.
+     */
+    private tocSettings : TocSettings = new TocSettings();
 
     /**
      * The template to use for the RenderBody-process.
@@ -464,6 +473,19 @@ export class Document extends Base
     }
 
     /**
+     * Gets or sets the definitions of the table of contents.
+     */
+    @enumerable(true)
+    public get TocSettings() : TocSettings
+    {
+        return this.tocSettings;
+    }
+    public set TocSettings(value : TocSettings)
+    {
+        this.tocSettings = value;
+    }
+
+    /**
      * Gets or sets the template to use for the RenderBody-process.
      */
     @enumerable(true)
@@ -666,6 +688,12 @@ export class Document extends Base
         });
         md.use(Anchor);
         md.use(Checkbox);
+        md.use(MarkdownItToc, {
+            includeLevel: new MultiRange(this.TocSettings.Levels).toArray(),
+            containerClass: this.TocSettings.Class,
+            markerPattern: this.TocSettings.Indicator,
+            listType: ListType[this.TocSettings.ListType]
+        });
 
         if (this.emoji)
         {
@@ -835,6 +863,39 @@ export class Document extends Base
         this.CreateFooter(config, 'evenFooter', 'EvenFooter');
         this.CreateFooter(config, 'oddFooter', 'OddFooter');
         this.CreateFooter(config, 'lastFooter', 'LastFooter');
+
+        if (config.has('toc'))
+        {
+            let toc = config.get('toc');
+
+            if ('class' in toc)
+            {
+                this.TocSettings.Class = toc['class'];
+            }
+
+            if ('levels' in toc)
+            {
+                this.TocSettings.Levels = toc['levels'];
+            }
+
+            if ('indicator' in toc)
+            {
+                if (/^\/(.*)\/([gimy]*$)?/.test(toc['indicator']))
+                {
+                    let result = toc['indicator'].match(/^\/(.*)\/([gimy]*$)?/);
+                    this.TocSettings.Indicator = new RegExp(result[1], result[2]);
+                }
+                else
+                {
+                    this.TocSettings.Indicator = new RegExp(toc['indicator']);
+                }
+            }
+
+            if ('listType' in toc)
+            {
+                this.TocSettings.ListType = ListType[toc['listType'] as string];
+            }
+        }
 
         if (config.has('style'))
         {

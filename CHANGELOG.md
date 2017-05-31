@@ -42,6 +42,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - Made the rebuild-process platform-independent
   - Adjusted the way to open up files
   - Updated the sync-request-module
+  - Added "table of content"-feature
 
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox
