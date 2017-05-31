@@ -8,22 +8,22 @@ export class Margin extends Base
     /**
      * The top margin.
      */
-    private top : string = null;
+    private top : string = '1cm';
 
     /**
      * The right margin.
      */
-    private right : string = null;
+    private right : string = '1cm';
 
     /**
      * The bottom margin.
      */
-    private bottom : string = null;
+    private bottom : string = '1cm';
 
     /**
      * The left margin.
      */
-    private left : string = null;
+    private left : string = '1cm';
 
     /**
      * Initializes a new instance of the Margin class.
