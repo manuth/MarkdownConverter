@@ -188,14 +188,14 @@ export class Layout extends Base
     /**
      * Returns an object which represents the 
      */
-    public toJSON() : string
+    public toJSON() : object
     {
-        return JSON.stringify({
-            Margin: this.Margin.toObject(),
+        return {
+            Margin: this.Margin.toJSON(),
             Width: this.Width,
             Height: this.Height,
             Format: this.Format,
             Orientation: this.Orientation
-        });
+        };
     }
 }

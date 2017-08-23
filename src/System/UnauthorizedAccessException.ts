@@ -1,4 +1,4 @@
-import { FileException } from './FileException';
+import { FileException } from './IO/FileException';
 import * as Format from 'string-format';
 
 /**

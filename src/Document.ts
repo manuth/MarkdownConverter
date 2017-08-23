@@ -4,16 +4,15 @@ import * as Path from 'path';
 import * as URL from 'url';
 import * as VSCode from 'vscode';
 import * as Anchor from 'markdown-it-anchor';
-import { Base } from "./Core/Base";
-import { ConfigKey } from "./Core/Constants";
-import { DateTimeFormatter } from './Core/DateTimeFormatter';
-import { EmbeddingOption } from './Core/EmbeddingOption';
+import { ConfigKey } from "./System/Constants";
+import { DateTimeFormatter } from './System/Globalization/DateTimeFormatter';
+import { EmbeddingOption } from './System/Drawing/EmbeddingOption';
 import * as FrontMatter from 'front-matter';
-import { Fullname } from './Core/Fullname';
+import { Fullname } from './System/Fullname';
 import { Header, Footer, Section } from './Section';
 import * as HighlightJs from 'highlightjs';
 import { Layout } from "./Layout";
-import { ListType } from "./Core/ListType";
+import { ListType } from "./System/Drawing/ListType";
 import { Margin } from "./Margin";
 import * as MarkdownIt from 'markdown-it';
 import * as MarkdownItEmoji from 'markdown-it-emoji';
@@ -23,14 +22,14 @@ import * as Mustache from 'mustache';
 import * as Request from 'sync-request';
 import { TocSettings } from "./TocSettings";
 import * as TwEmoji from 'twemoji';
-import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
-import { Utilities } from "./Core/Utilities";
-import { YAMLException } from "./Core/YAMLException";
+import { UnauthorizedAccessException } from "./System/UnauthorizedAccessException";
+import { Encoding } from "./System/Text/Encoding";
+import { YAMLException } from "./System/YAML/YAMLException";
 
 /**
  * Represents a document.
  */
-export class Document extends Base
+export class Document
 {
     /**
      * The configuration of the document.
@@ -183,7 +182,6 @@ export class Document extends Base
      */
     constructor(filePath : string = null)
     {
-        super();
         this.LoadConfig(this.config);
 
         if (filePath)
@@ -602,7 +600,7 @@ export class Document extends Base
         let document : any = {
             Quality: this.Quality,
             Locale: this.Locale,
-            Layout: this.Layout.toObject(),
+            Layout: this.Layout.toJSON(),
             Header: this.RenderSection(this.Header),
             SpecialHeaders: { },
             EvenHeader: this.RenderSection(this.evenHeader),
@@ -647,9 +645,9 @@ export class Document extends Base
     {
         if (section)
         {
-            let clone = (section.CloneTo(new Section()) as Section);
-            clone.Content = (this.Render(section.Content) as string);
-            return clone.toObject();
+            let result: any = section.toJSON();
+            result.Content = this.Render(result.Content);
+            return result;
         }
         else
         {
@@ -674,16 +672,16 @@ export class Document extends Base
             html: true,
             highlight: function(subject, language)
             {
-                    if (highlightStyle && language && HighlightJs.getLanguage(language))
-                    {
-                        subject = HighlightJs.highlight(language, subject, true).value;
-                    }
-                    else
-                    {
-                        subject = md.utils.escapeHtml(subject);
-                    }
+                if (highlightStyle && language && HighlightJs.getLanguage(language))
+                {
+                    subject = HighlightJs.highlight(language, subject, true).value;
+                }
+                else
+                {
+                    subject = md.utils.escapeHtml(subject);
+                }
 
-                    return '<pre class="hljs"><code><div>' + subject + '</div></code></pre>';
+                return '<pre class="hljs"><code><div>' + subject + '</div></code></pre>';
             }
         });
         md.use(Anchor);
@@ -717,7 +715,7 @@ export class Document extends Base
                             ':" alt=":' +
                             token[id].markup +
                             ':" src="https://assets-cdn.github.com/images/icons/emoji/unicode/' +
-                            Utilities.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase() +
+                            Encoding.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase() +
                             '.png" allign="absmiddle" />';
                 }
             };

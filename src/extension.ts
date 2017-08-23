@@ -4,17 +4,17 @@
 import * as VSCode from 'vscode';
 import * as Path from 'path';
 import * as ChildProcess from 'child_process';
-import { ConversionType } from "./Core/ConversionType";
-import { ConfigKey } from "./Core/Constants";
-import { MarkdownFileNotFoundException } from "./Core/MarkdownFileNotFoundException";
+import { ConversionType } from "./ConversionType";
+import { ConfigKey } from "./System/Constants";
+import { MarkdownFileNotFoundException } from "./System/MarkdownFileNotFoundException";
 import * as NLS from 'vscode-nls';
 import * as NPM from 'npm';
 import * as PhantomJS from 'phantomjs-prebuilt';
-import { ProcessException } from './Core/ProcessException';
+import { ProcessException } from './System/Tasks/ProcessException';
 import { Program } from "./Program";
 import * as Shell from 'shelljs';
-import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
-import { YAMLException } from "./Core/YAMLException";
+import { UnauthorizedAccessException } from "./System/UnauthorizedAccessException";
+import { YAMLException } from "./System/YAML/YAMLException";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -40,13 +40,14 @@ export function activate(context: VSCode.ExtensionContext)
             process.chdir(Path.join(__dirname, '..', '..'));
             
             ChildProcess.exec(
-                'npm --strict-ssl false rebuild phantomjs-prebuilt',
+                Path.join('node_modules', '.bin', 'npm') + ' rebuild phantomjs-prebuilt',
                 {
                     env: env
                 }, function (error, stdout, stderr)
                 {
                     if (!error && !stderr)
                     {
+                        console.log(stdout);
                         phantomJSBuilt = true;
                         VSCode.window.showInformationMessage(localize(3 /* PhantomJSRebuildMessage */, null));
                     }
@@ -66,121 +67,129 @@ export function activate(context: VSCode.ExtensionContext)
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposable = VSCode.commands.registerCommand('markdownConverter.convert', () =>
-    {
-        // The code you place here will be executed every time your command is executed
-        if (PhantomJS.platform != process.platform && phantomJSBuilt !== null)
+    let disposables = [
+        VSCode.commands.registerCommand('markdownConverter.convert', async () =>
         {
-            if (phantomJSBuilt)
+            // The code you place here will be executed every time your command is executed
+            if (PhantomJS.platform != process.platform)
             {
-                VSCode.window.showInformationMessage(localize(3 /* PhantomJSRebuildMessage */, null));
-            }
-            else
-            {
-                VSCode.window.showWarningMessage(localize(8 /* PhantomJSRebuildException */, null));
-            }
-        }
-        else
-        {
-            try
-            {
-                let markdownDoc = getMarkdownDoc();
-
-                if (markdownDoc)
+                if (phantomJSBuilt)
                 {
-                    /* Preparing the arguments */
-                    let config = VSCode.workspace.getConfiguration(ConfigKey);
-                    let outDir = config.get<string>('outDir');
-                    let workDir = config.get<string>('workDir');
-                    let type = config.get('conversionType');
-                    let name = config.get<string>('document.name');
-                    let autoSave = config.get<boolean>('autoSave');
-                    let types : ConversionType[] = [ ];
-                    let base : string;
-
-                    if (VSCode.workspace.rootPath)
-                    {
-                        base = VSCode.workspace.rootPath;
-                    }
-                    else
-                    {
-                        base = process.cwd();
-                    }
-
-                    if (!Path.isAbsolute(workDir))
-                    {
-                        workDir = Path.resolve(base, workDir);
-                    }
-                    
-                    process.chdir(workDir);
-
-                    if (!name)
-                    {
-                        if (!markdownDoc.isUntitled)
-                        {
-                            name = Path.parse(markdownDoc.fileName).name;
-                        }
-                        else
-                        {
-                            name = 'temp';
-                        }
-                    }
-
-                    if ((typeof type == 'string'))
-                    {
-                        type = [ type ];
-                    }
-
-                    for (var key in type)
-                    {
-                        types.push(ConversionType[type[key] as string]);
-                    }
-
-                    if (markdownDoc.isUntitled)
-                    {
-                        if (!Path.isAbsolute(outDir))
-                        {
-                            outDir = Path.resolve(process.cwd(), outDir);
-                        }
-                    }
-                    else
-                    {
-                        if (!Path.isAbsolute(outDir))
-                        {
-                            outDir = Path.resolve(Path.dirname(markdownDoc.fileName), outDir);
-                        }
-                    }
-
-                    /* Executing the main logic */
-                    Program.Main(markdownDoc, types, outDir, name, autoSave);
+                    VSCode.window.showInformationMessage(localize(3 /* PhantomJSRebuildMessage */, null));
                 }
                 else
                 {
-                    throw new MarkdownFileNotFoundException();
+                    VSCode.window.showWarningMessage(localize(8 /* PhantomJSRebuildException */, null));
                 }
             }
-            catch(e)
+            else
             {
-                let message;
-                
-                if (e instanceof UnauthorizedAccessException)
+                try
                 {
-                    message = localize(5 /* UnauthorizedAccessException */, null, e.Path);
-                }
-                else if (e instanceof YAMLException)
-                {
-                    message = localize(7 /* YAMLException */, null, e.mark.line + 1, e.mark.column);
-                }
-                else if (e instanceof Error)
-                {
-                    message = localize(4 /* UnknownException */, null, e.name, e.message);
-                }
-                VSCode.window.showErrorMessage(message);
-            }
-        }
-    });
+                    let markdownDoc = getMarkdownDoc();
 
-    context.subscriptions.push(disposable);
+                    if (markdownDoc)
+                    {
+                        /* Preparing the arguments */
+                        let config = VSCode.workspace.getConfiguration(ConfigKey);
+                        let outDir = config.get<string>('outDir');
+                        let workDir = config.get<string>('workDir');
+                        let type = config.get('conversionType');
+                        let name = config.get<string>('document.name');
+                        let autoSave = config.get<boolean>('autoSave');
+                        let types : ConversionType[] = [ ];
+                        let base : string;
+
+                        if (VSCode.workspace.rootPath)
+                        {
+                            base = VSCode.workspace.rootPath;
+                        }
+                        else
+                        {
+                            base = process.cwd();
+                        }
+
+                        if (!Path.isAbsolute(workDir))
+                        {
+                            workDir = Path.resolve(base, workDir);
+                        }
+                        
+                        process.chdir(workDir);
+
+                        if (!name)
+                        {
+                            if (!markdownDoc.isUntitled)
+                            {
+                                name = Path.parse(markdownDoc.fileName).name;
+                            }
+                            else
+                            {
+                                name = 'temp';
+                            }
+                        }
+
+                        if ((typeof type == 'string'))
+                        {
+                            type = [ type ];
+                        }
+
+                        for (var key in type)
+                        {
+                            types.push(ConversionType[type[key] as string]);
+                        }
+
+                        if (markdownDoc.isUntitled)
+                        {
+                            if (!Path.isAbsolute(outDir))
+                            {
+                                outDir = Path.resolve(process.cwd(), outDir);
+                            }
+                        }
+                        else
+                        {
+                            if (!Path.isAbsolute(outDir))
+                            {
+                                outDir = Path.resolve(Path.dirname(markdownDoc.fileName), outDir);
+                            }
+                        }
+
+                        /* Executing the main logic */
+                        Program.Main(markdownDoc, types, outDir, name, autoSave);
+                    }
+                    else
+                    {
+                        throw new MarkdownFileNotFoundException();
+                    }
+                }
+                catch(e)
+                {
+                    let message;
+                    
+                    if (e instanceof UnauthorizedAccessException)
+                    {
+                        message = localize(5 /* UnauthorizedAccessException */, null, e.Path);
+                    }
+                    else if (e instanceof YAMLException)
+                    {
+                        message = localize(7 /* YAMLException */, null, e.mark.line + 1, e.mark.column);
+                    }
+                    else if (e instanceof Error)
+                    {
+                        message = localize(4 /* UnknownException */, null, e.name, e.message);
+                    }
+                    VSCode.window.showErrorMessage(message);
+                }
+            }
+        }),
+        VSCode.commands.registerCommand('markdownConverter.convertAll', async () =>
+        {
+            
+        })
+    ];
+    
+    disposables.forEach(disposable => {
+        context.subscriptions.push(disposable);
+    });
 
     /**
      * Tries to find a markdown-file

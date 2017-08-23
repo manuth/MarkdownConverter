@@ -1,9 +1,7 @@
-import { Base } from "./Core/Base";
-
 /**
  * Represents a section of a document.
  */
-export class Section extends Base
+export class Section
 {
     /**
      * The height of the section.
@@ -26,7 +24,6 @@ export class Section extends Base
      */
     constructor(height : string = '', content : string = '')
     {
-        super();
         if (height)
         {
             this.Height = height;
@@ -65,12 +62,12 @@ export class Section extends Base
     /**
      * Returns a JSON-string which represents the section.
      */
-    public toJSON() : string
+    public toJSON() : object
     {
-        return JSON.stringify({
+        return {
             Height: this.Height,
             Content: this.Content
-        });
+        };
     }
 }
 

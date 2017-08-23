@@ -3,11 +3,10 @@ import * as FS from 'fs';
 import * as Path from 'path';
 import * as PhantomJS from 'phantomjs-prebuilt';
 import * as Temp from 'temp';
-import { Base } from "./Core/Base";
 import { Document } from "./Document";
-import { ConversionType, GetExtensions } from "./Core/ConversionType";
-import { PhantomJSTimeoutException } from "./Core/PhantomJSTimeoutException";
-import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
+import { ConversionType, GetExtensions } from "./ConversionType";
+import { PhantomJSTimeoutException } from "./System/Web/PhantomJS/PhantomJSTimeoutException";
+import { UnauthorizedAccessException } from "./System/UnauthorizedAccessException";
 
 /**
  * Provides a markdown-converter.
