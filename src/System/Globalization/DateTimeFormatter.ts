@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import * as nls from 'vscode-nls';
 import * as path from 'path';
-import { Base } from './Base';
-import { Utilities } from './Utilities';
+import { Encoding } from '../Text/Encoding';
 
 /**
  * Gets a set of DateTime-string-tokens.
@@ -101,14 +100,14 @@ export class DateTimeFormatter
             // Replacing 'fffffff'
             if (/^f+$/g.test(match))
             {
-                return Utilities.PadLeft(date.getMilliseconds().toString(), match.length, '0');
+                return Encoding.PadLeft(date.getMilliseconds().toString(), match.length, '0');
             }
             // Replacing 'FFFFFFF'
             else if (/^F+$/g.test(match))
             {
                 if (date.getMilliseconds() > 0)
                 {
-                    return Utilities.PadLeft(date.getMilliseconds().toString(), match.length, '0');
+                    return Encoding.PadLeft(date.getMilliseconds().toString(), match.length, '0');
                 }
                 else
                 {
@@ -118,42 +117,42 @@ export class DateTimeFormatter
             // Replacing 'd' and 'dd'
             else if (/^d{1,2}$/g.test(match))
             {
-                return Utilities.PadLeft(date.getDate().toString(), match.length, '0');
+                return Encoding.PadLeft(date.getDate().toString(), match.length, '0');
             }
             // Replacing 'h' and 'hh'
             else if (/^h+$/g.test(match))
             {
                 let hours = (date.getHours() % 12 || 12);
-                return Utilities.PadLeft(hours.toString(), match.length, '0');
+                return Encoding.PadLeft(hours.toString(), match.length, '0');
             }
             // Replacing 'H' and 'HH'
             else if (/^H+$/g.test(match))
             {
-                return Utilities.PadLeft(date.getHours().toString(), match.length, '0');
+                return Encoding.PadLeft(date.getHours().toString(), match.length, '0');
             }
             // Replacing 'm' and 'mm'
             else if (/^m+$/g.test(match))
             {
-                return Utilities.PadLeft(date.getMinutes().toString(), match.length, '0');
+                return Encoding.PadLeft(date.getMinutes().toString(), match.length, '0');
             }
             else if (/^M{1,2}$/g.test(match))
             {
-                return Utilities.PadLeft((date.getMonth() + 1).toString(), match.length, '0');
+                return Encoding.PadLeft((date.getMonth() + 1).toString(), match.length, '0');
             }
             // Replacing 's' and 'ss'
             else if (/^s+$/g.test(match))
             {
-                return Utilities.PadLeft(date.getSeconds().toString(), match.length, '0');
+                return Encoding.PadLeft(date.getSeconds().toString(), match.length, '0');
             }
             // Replacing 'y' and 'yy'
             else if (/^y{1,2}$/g.test(match))
             {
-                return Utilities.PadLeft(date.getFullYear().toString().slice(-2), match.length, '0');
+                return Encoding.PadLeft(date.getFullYear().toString().slice(-2), match.length, '0');
             }
             // Replacing 'yyyyy'
             else if (/^y+$/g.test(match))
             {
-                return Utilities.PadLeft(date.getFullYear().toString(), match.length, '0');
+                return Encoding.PadLeft(date.getFullYear().toString(), match.length, '0');
             }
             // Replacing subjects listed in the 'tokens'-list
             else if (match in tokens)

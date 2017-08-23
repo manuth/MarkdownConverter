@@ -1,4 +1,4 @@
-import { FileNotFoundException } from "./FileNotFoundException";
+import { FileNotFoundException } from "./IO/FileNotFoundException";
 
 /**
  * Occurs when a markdown-file couldn't be found.
