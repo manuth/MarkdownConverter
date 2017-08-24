@@ -1,10 +1,9 @@
 import { Margin } from "./Margin";
-import { Base } from "./Core/Base";
 
 /**
  * Represents a document-layout.
  */
-export class Layout extends Base
+export class Layout
 {
     /**
      * The margin.
@@ -66,7 +65,6 @@ export class Layout extends Base
      */
     constructor()
     {
-        super();
     }
 
     /**

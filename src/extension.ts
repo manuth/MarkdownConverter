@@ -5,13 +5,13 @@ import * as VSCode from 'vscode';
 import * as Path from 'path';
 import * as ChildProcess from 'child_process';
 import { ConversionType } from "./ConversionType";
-import { ConfigKey } from "./System/Constants";
 import { MarkdownFileNotFoundException } from "./System/MarkdownFileNotFoundException";
 import * as NLS from 'vscode-nls';
 import * as NPM from 'npm';
 import * as PhantomJS from 'phantomjs-prebuilt';
 import { ProcessException } from './System/Tasks/ProcessException';
 import { Program } from "./Program";
+import { Settings } from "./Properties/Settings";
 import * as Shell from 'shelljs';
 import { UnauthorizedAccessException } from "./System/UnauthorizedAccessException";
 import { YAMLException } from "./System/YAML/YAMLException";
@@ -22,7 +22,7 @@ export function activate(context: VSCode.ExtensionContext)
 {
     // Gets a value indicating whether phantomjs could be built.
     let phantomJSBuilt = null;
-    let localize : any = NLS.config({ locale: VSCode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
+    let localize: any = NLS.config({ locale: VSCode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -38,7 +38,7 @@ export function activate(context: VSCode.ExtensionContext)
             env['PHANTOMJS_ARCH'] = process.arch;
             VSCode.window.showInformationMessage(localize(2 /* UpdateMessage */, null));
             process.chdir(Path.join(__dirname, '..', '..'));
-            
+
             ChildProcess.exec(
                 Path.join('node_modules', '.bin', 'npm') + ' rebuild phantomjs-prebuilt',
                 {
@@ -91,80 +91,51 @@ export function activate(context: VSCode.ExtensionContext)
                     if (markdownDoc)
                     {
                         /* Preparing the arguments */
-                        let config = VSCode.workspace.getConfiguration(ConfigKey);
-                        let outDir = config.get<string>('outDir');
-                        let workDir = config.get<string>('workDir');
-                        let type = config.get('conversionType');
-                        let name = config.get<string>('document.name');
-                        let autoSave = config.get<boolean>('autoSave');
-                        let types : ConversionType[] = [ ];
-                        let base : string;
+                        let name: string;
+                        let base: string;
+                        let outDir = Settings.Default.OutputDirectory;
 
-                        if (VSCode.workspace.rootPath)
+                        if (VSCode.workspace.workspaceFolders.length == 1)
                         {
-                            base = VSCode.workspace.rootPath;
+                            base = VSCode.workspace.workspaceFolders[0].uri.fsPath;
                         }
                         else
                         {
-                            base = process.cwd();
+                            base = Path.dirname(markdownDoc.fileName);
                         }
 
-                        if (!Path.isAbsolute(workDir))
+                        if (!Path.isAbsolute(outDir))
                         {
-                            workDir = Path.resolve(base, workDir);
-                        }
-                        
-                        process.chdir(workDir);
-
-                        if (!name)
-                        {
-                            if (!markdownDoc.isUntitled)
-                            {
-                                name = Path.parse(markdownDoc.fileName).name;
-                            }
-                            else
-                            {
-                                name = 'temp';
-                            }
+                            outDir = Path.resolve(base, outDir);
                         }
 
-                        if ((typeof type == 'string'))
+                        if (!markdownDoc.isUntitled)
                         {
-                            type = [ type ];
-                        }
-
-                        for (var key in type)
-                        {
-                            types.push(ConversionType[type[key] as string]);
-                        }
-
-                        if (markdownDoc.isUntitled)
-                        {
-                            if (!Path.isAbsolute(outDir))
-                            {
-                                outDir = Path.resolve(process.cwd(), outDir);
-                            }
+                            name = Path.parse(markdownDoc.fileName).name;
                         }
                         else
                         {
-                            if (!Path.isAbsolute(outDir))
-                            {
-                                outDir = Path.resolve(Path.dirname(markdownDoc.fileName), outDir);
-                            }
+                            name = 'temp';
                         }
 
-                        /* Executing the main logic */
-                        Program.Main(markdownDoc, types, outDir, name, autoSave);
+                        let path = process.cwd();
+                        {
+                            process.chdir(base);
+
+                            /* Executing the main logic */
+                            await Program.Main(markdownDoc, Settings.Default.ConversionTypes, outDir, name, Settings.Default.AutoSave);
+                        }
+                        process.chdir(path);
                     }
                     else
                     {
                         throw new MarkdownFileNotFoundException();
                     }
                 }
-                catch(e)
+                catch (e)
                 {
                     let message;
-                    
+
                     if (e instanceof UnauthorizedAccessException)
                     {
                         message = localize(5 /* UnauthorizedAccessException */, null, e.Path);
@@ -175,29 +146,25 @@ export function activate(context: VSCode.ExtensionContext)
                     }
                     else if (e instanceof Error)
                     {
-                        message = localize(4 /* UnknownException */, null, e.name, e.message);
+                        throw e;
                     }
                     VSCode.window.showErrorMessage(message);
                 }
             }
-        }),
-        VSCode.commands.registerCommand('markdownConverter.convertAll', async () =>
-        {
-            
         })
     ];
-    
-    disposables.forEach(disposable => {
+
+    disposables.forEach(disposable =>
+    {
         context.subscriptions.push(disposable);
     });
 
     /**
      * Tries to find a markdown-file
      */
-    function getMarkdownDoc() : VSCode.TextDocument
+    function getMarkdownDoc(): VSCode.TextDocument
     {
-        let config = VSCode.workspace.getConfiguration(ConfigKey);
-        if (VSCode.window.activeTextEditor && (VSCode.window.activeTextEditor.document.languageId == 'markdown' || (config.has('ignoreLanguage') && config.get<boolean>('ignoreLanguage'))))
+        if (VSCode.window.activeTextEditor && (VSCode.window.activeTextEditor.document.languageId == 'markdown' || Settings.Default.IgnoreLanguage))
         {
             return VSCode.window.activeTextEditor.document;
         }

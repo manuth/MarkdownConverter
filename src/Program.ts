@@ -5,11 +5,11 @@ import * as MKDirP from 'mkdirp';
 import * as NLS from 'vscode-nls';
 import * as Path from 'path';
 import { env, TextDocument, window } from 'vscode';
-import { ConversionType, GetExtensions } from './Core/ConversionType';
+import { ConversionType, GetExtensions } from './ConversionType';
 import { Converter } from "./Converter";
-import { Document } from './Document';
-import { PhantomJSTimeoutException } from "./Core/PhantomJSTimeoutException";
-import { UnauthorizedAccessException } from "./Core/UnauthorizedAccessException";
+import { Document } from './System/Drawing/Document';
+import { PhantomJSTimeoutException } from "./System/Web/PhantomJS/PhantomJSTimeoutException";
+import { UnauthorizedAccessException } from "./System/UnauthorizedAccessException";
 
 /**
  * Provides the main logic of the extension
@@ -77,20 +77,17 @@ export class Program
             catch (e)
             {
                 let message = e.toString();
-                if (e instanceof Error)
+                if (e instanceof UnauthorizedAccessException)
                 {
-                    if (e instanceof UnauthorizedAccessException)
-                    {
-                        message = localize(5 /* UnauthorizedAccessException */, null, e.Path);
-                    }
-                    else if (e instanceof PhantomJSTimeoutException)
-                    {
-                        message = localize(6 /* PhantomJSTimeoutException */, null);
-                    }
-                    else
-                    {
-                        message = localize(4 /* UnknownException */, null, e.name, e.message);
-                    }
+                    message = localize(5 /* UnauthorizedAccessException */, null, e.Path);
+                }
+                else if (e instanceof PhantomJSTimeoutException)
+                {
+                    message = localize(6 /* PhantomJSTimeoutException */, null);
+                }
+                else if (e instanceof Error)
+                {
+                    throw e;
                 }
                 window.showErrorMessage(message);
             }

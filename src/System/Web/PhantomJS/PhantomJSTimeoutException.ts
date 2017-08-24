@@ -1,4 +1,4 @@
-import { TimeoutException } from "./TimeoutException";
+import { TimeoutException } from "../../TimeoutException";
 
 /**
  * Represents a Timeout-exception triggered by PhantomJS
