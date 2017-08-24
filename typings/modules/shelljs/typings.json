@@ -1,8 +1,0 @@
-{
-  "resolution": "main",
-  "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/70654e04826ae75c49985368b389c6cdbb91c7e5/shelljs/index.d.ts",
-    "raw": "registry:dt/shelljs#0.7.6+20170215090504",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/70654e04826ae75c49985368b389c6cdbb91c7e5/shelljs/index.d.ts"
-  }
-}
