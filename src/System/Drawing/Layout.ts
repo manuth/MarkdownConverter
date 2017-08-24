@@ -8,27 +8,27 @@ export class Layout
     /**
      * The margin.
      */
-    private margin : Margin = new Margin();
+    private margin: Margin = new Margin();
 
     /**
      * The width.
      */
-    private width : string = null;
+    private width: string = null;
 
     /**
      * The height.
      */
-    private height : string = null;
+    private height: string = null;
 
     /**
      * The paper-format.
      */
-    private format : string = 'A4';
+    private format: string = 'A4';
 
     /**
      * The paper-orientation.
      */
-    private orientation : string = 'portrait';
+    private orientation: string = 'portrait';
 
     /**
      * Paper-sizes
@@ -70,11 +70,11 @@ export class Layout
     /**
      * Gets or sets the margin.
      */
-    public get Margin() : Margin
+    public get Margin(): Margin
     {
         return this.margin;
     }
-    public set Margin(value : Margin)
+    public set Margin(value: Margin)
     {
         this.margin = value;
     }
@@ -82,7 +82,7 @@ export class Layout
     /**
      * Gets or sets the width.
      */
-    public get Width() : string
+    public get Width(): string
     {
         if (this.width)
         {
@@ -93,7 +93,7 @@ export class Layout
             return Layout.paperSizes[this.format][(this.orientation == 'landspace' ? 'Height' : 'Width')];
         }
     }
-    public set Width(value : string)
+    public set Width(value: string)
     {
         this.width = value;
     }
@@ -101,7 +101,7 @@ export class Layout
     /**
      * Gets or sets the height.
      */
-    public get Height() : string
+    public get Height(): string
     {
         if (this.height)
         {
@@ -112,7 +112,7 @@ export class Layout
             return Layout.paperSizes[this.format][(this.orientation == 'landspace' ? 'Width' : 'Height')];
         }
     }
-    public set Height(value : string)
+    public set Height(value: string)
     {
         this.height = value;
     }
@@ -120,7 +120,7 @@ export class Layout
     /**
      * Gets or sets the paper-format.
      */
-    public get Format() : string
+    public get Format(): string
     {
         if (!this.width && !this.height)
         {
@@ -131,7 +131,7 @@ export class Layout
             return null;
         }
     }
-    public set Format(value : string)
+    public set Format(value: string)
     {
         if (!value || (value in Layout.paperSizes))
         {
@@ -146,7 +146,7 @@ export class Layout
     /**
      * Gets or sets the paper-orientation.
      */
-    public get Orientation() : string
+    public get Orientation(): string
     {
         if (this.Width > this.Height)
         {
@@ -157,7 +157,7 @@ export class Layout
             return 'portrait';
         }
     }
-    public set Orientation(value : string)
+    public set Orientation(value: string)
     {
         if (value == 'landspace' || value == 'portrait')
         {
@@ -186,7 +186,7 @@ export class Layout
     /**
      * Returns an object which represents the 
      */
-    public toJSON() : object
+    public toJSON(): object
     {
         return {
             Margin: this.Margin.toJSON(),

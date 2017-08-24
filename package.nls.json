@@ -23,7 +23,7 @@
     "config.document.localization": "Localization",
     "config.document.localization.description": "The localization-settings.",
     "config.document.localization.locale": "Locale",
-    "config.document.localization.locale.description":  "The locale to print the date.\n\nNote:\nOverrides VSCode's locale.",
+    "config.document.localization.locale.description": "The locale to print the date.\n\nNote:\nOverrides VSCode's locale.",
     "config.document.localization.dateFormat": "Date-Format",
     "config.document.localization.dateFormat.description": "A format-string to print the date\nSee: https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx",
     "config.document.layout": "Layout",

@@ -6,22 +6,22 @@ export class Margin
     /**
      * The top margin.
      */
-    private top : string = '1cm';
+    private top: string = '1cm';
 
     /**
      * The right margin.
      */
-    private right : string = '1cm';
+    private right: string = '1cm';
 
     /**
      * The bottom margin.
      */
-    private bottom : string = '1cm';
+    private bottom: string = '1cm';
 
     /**
      * The left margin.
      */
-    private left : string = '1cm';
+    private left: string = '1cm';
 
     /**
      * Initializes a new instance of the Margin class.
@@ -38,7 +38,7 @@ export class Margin
      * @param left
      * The left margin.
      */
-    constructor(top? : string, right? : string, bottom? : string, left? : string)
+    constructor(top?: string, right?: string, bottom?: string, left?: string)
     {
         if (top)
         {
@@ -64,11 +64,11 @@ export class Margin
     /**
      * Gets or sets the top margin.
      */
-    public get Top() : string
+    public get Top(): string
     {
         return this.top;
     }
-    public set Top(value : string)
+    public set Top(value: string)
     {
         this.top = value;
     }
@@ -76,11 +76,11 @@ export class Margin
     /**
      * Gets or sets the right margin.
      */
-    public get Right() : string
+    public get Right(): string
     {
         return this.right;
     }
-    public set Right(value : string)
+    public set Right(value: string)
     {
         this.right = value;
     }
@@ -88,11 +88,11 @@ export class Margin
     /**
      * Gets or sets the bottom margin.
      */
-    public get Bottom() : string
+    public get Bottom(): string
     {
         return this.bottom;
     }
-    public set Bottom(value : string)
+    public set Bottom(value: string)
     {
         this.bottom = value;
     }
@@ -100,11 +100,11 @@ export class Margin
     /**
      * Gets or sets the left margin.
      */
-    public get Left() : string
+    public get Left(): string
     {
         return this.left;
     }
-    public set Left(value : string)
+    public set Left(value: string)
     {
         this.left = value;
     }
@@ -112,7 +112,7 @@ export class Margin
     /**
      * Returns a JSON-object which represents the object.
      */
-    public toJSON() : object
+    public toJSON(): object
     {
         return {
             Top: this.Top,

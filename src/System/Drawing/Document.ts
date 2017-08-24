@@ -21,7 +21,7 @@ import { MultiRange } from 'multi-integer-range';
 import * as Mustache from 'mustache';
 import * as Request from 'sync-request';
 import { Settings } from "../../Properties/Settings";
-import { TocSettings } from "./TocSettings";
+import { TOCSettings } from "./TOCSettings";
 import * as TwEmoji from 'twemoji';
 import { UnauthorizedAccessException } from "../UnauthorizedAccessException";
 import { YAMLException } from "../YAML/YAMLException";
@@ -124,7 +124,7 @@ export class Document
     /**
      * The definitions of the table of contents.
      */
-    private tocSettings: TocSettings = new TocSettings();
+    private tocSettings: TOCSettings = new TOCSettings();
 
     /**
      * The template to use for the RenderBody-process.
@@ -469,11 +469,11 @@ export class Document
      * Gets or sets the definitions of the table of contents.
      */
     @enumerable(true)
-    public get TOCSettings(): TocSettings
+    public get TOCSettings(): TOCSettings
     {
         return this.tocSettings;
     }
-    public set TOCSettings(value: TocSettings)
+    public set TOCSettings(value: TOCSettings)
     {
         this.tocSettings = value;
     }

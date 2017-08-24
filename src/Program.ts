@@ -19,10 +19,10 @@ export class Program
     /**
      * Converts a markdown-file to other file-types
      */
-    public static Main(textDocument : TextDocument, types : ConversionType[], outDir : string, fileName : string, autoSave : boolean) : void
+    public static Main(textDocument: TextDocument, types: ConversionType[], outDir: string, fileName: string, autoSave: boolean): void
     {
-        let localize : any = NLS.config({ locale: env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
-        let doc : Document;
+        let localize: any = NLS.config({ locale: env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
+        let doc: Document;
 
         if (textDocument.isUntitled || (textDocument.isDirty && autoSave))
         {

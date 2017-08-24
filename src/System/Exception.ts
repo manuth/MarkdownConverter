@@ -36,7 +36,7 @@ export class Exception extends Error
      * The exception that is the cause of the current exception, or a null reference if no inner exception is specified.
      */
     public constructor(message: string, innerException: Exception);
-    
+
     public constructor(message?: string, innerException?: Exception)
     {
         super(message);

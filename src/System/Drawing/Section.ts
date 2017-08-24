@@ -6,12 +6,12 @@ export class Section
     /**
      * The height of the section.
      */
-    private height : string = null;
+    private height: string = null;
 
     /**
      * The content of the section.
      */
-    private content : string = null;
+    private content: string = null;
 
     /**
      * Initializes a new instance of the Section class.
@@ -22,7 +22,7 @@ export class Section
      * @param content 
      * The content of the section.
      */
-    constructor(height : string = '', content : string = '')
+    constructor(height: string = '', content: string = '')
     {
         if (height)
         {
@@ -38,23 +38,23 @@ export class Section
     /**
      * Gets or sets the height of the section.
      */
-    public get Height() : string
+    public get Height(): string
     {
         return this.height;
     }
-    public set Height(value : string)
+    public set Height(value: string)
     {
         this.height = value;
     }
-    
+
     /**
      * Gets or sets the content of the section.
      */
-    public get Content() : string
+    public get Content(): string
     {
         return this.content;
     }
-    public set Content(value : string)
+    public set Content(value: string)
     {
         this.content = value;
     }
@@ -62,7 +62,7 @@ export class Section
     /**
      * Returns a JSON-string which represents the section.
      */
-    public toJSON() : object
+    public toJSON(): object
     {
         return {
             Height: this.Height,

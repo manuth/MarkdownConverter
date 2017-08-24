@@ -9,12 +9,12 @@ export class Encoding
      * @param subject
      * The string to convert.
      */
-    public static UTF8CharToCodePoints(subject : string) : number
+    public static UTF8CharToCodePoints(subject: string): number
     {
-        let bytes : number[] = [ ];
-        let byte : number;
+        let bytes: number[] = [];
+        let byte: number;
         let buffer = Buffer.from(subject);
-        let result : number = 0;
+        let result: number = 0;
 
         // Determining the mask-type of the UTF-8 char.
         //
@@ -57,7 +57,7 @@ export class Encoding
 
         length--;
 
-        for (let i : number = 0; i <= length; i++)
+        for (let i: number = 0; i <= length; i++)
         {
             if ((buffer[i] & 0xC0) == 0x80 || i == 0)
             {
@@ -86,9 +86,9 @@ export class Encoding
      * @param paddingChar
      * A Unicode padding character.
      */
-    public static PadLeft(subject : string, totalWidth : number, paddingChar : string)
+    public static PadLeft(subject: string, totalWidth: number, paddingChar: string)
     {
-        for (let i : number = subject.length; i < totalWidth; i++)
+        for (let i: number = subject.length; i < totalWidth; i++)
         {
             subject = paddingChar + subject;
         }
@@ -104,7 +104,7 @@ export class Encoding
      * @param size
      * The length of the string to return.
      */
-    public static DecToHexString(subject : number, length : number = 2) : string
+    public static DecToHexString(subject: number, length: number = 2): string
     {
         return this.PadLeft(subject.toString(16), length, '0');
     }

@@ -15,7 +15,7 @@ export class FileNotFoundException extends FileException
      * @param path
      * The path to the file which caused the exception.
      */
-    constructor(message : string, path : string)
+    constructor(message: string, path: string)
     {
         if (arguments.length == 1)
         {
