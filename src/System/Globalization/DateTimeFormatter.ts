@@ -6,7 +6,7 @@ import { Encoding } from '../Text/Encoding';
 /**
  * Gets a set of DateTime-string-tokens.
  */
-let tokens : { [id : string] : string };
+let tokens: { [id: string]: string };
 
 /**
  * Provides the functionallity to format a date.
@@ -16,29 +16,29 @@ export class DateTimeFormatter
     /**
      * The locale to format the date.
      */
-    private locale : string = null;
+    private locale: string = null;
 
     /**
      * The localizer to localize values.
      */
-    private localize : any = null;
+    private localize: any = null;
 
     /**
      * The path to load the localized values from.
      */
-    private resourcePath : string = null;
-    
+    private resourcePath: string = null;
+
     /**
      * The regular expression to replace the tokens.
      */
-    private regex : RegExp = /d{1,4}|f{1,7}|F{1,7}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y{1,5}|\\.|'[^']*'/g;
+    private regex: RegExp = /d{1,4}|f{1,7}|F{1,7}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y{1,5}|\\.|'[^']*'/g;
 
     /**
      * Returns the tokens to replace.
      */
-    private initializeTokens(date : Date, utc : boolean) : { [id : string] : string }
+    private initializeTokens(date: Date, utc: boolean): { [id: string]: string }
     {
-        let tokens : { [id : string] : string } = {
+        let tokens: { [id: string]: string } = {
             ddd: this.localize(1, null).shortNames[date.getDay() + 1],
             dddd: this.localize(1, null).fullNames[date.getDay() + 1],
             MMM: this.localize(2, null).shortNames[date.getMonth()],
@@ -58,19 +58,19 @@ export class DateTimeFormatter
      * @param resourcePath
      * The path to load the localized values from.
      */
-    constructor(locale : string = vscode.env.language, resourcePath : string = path.join(__dirname, '..', '..', '..', '..', 'Resources', 'Localization', 'DateTimeFormatter'))
+    constructor(locale: string = vscode.env.language, resourcePath: string = path.join(__dirname, '..', '..', '..', '..', 'Resources', 'Localization', 'DateTimeFormatter'))
     {
         if (locale)
         {
             this.Locale = locale;
         }
-        
+
         if (resourcePath)
         {
             this.ResourcePath = resourcePath;
         }
 
-		let localize : any = nls.config({ locale: locale })(path.join(resourcePath));
+        let localize: any = nls.config({ locale: locale })(path.join(resourcePath));
         this.localize = localize;
     }
 
@@ -83,7 +83,7 @@ export class DateTimeFormatter
      * @param formatString
      * The format-string to format the date-value.
      */
-    public Format(formatString : string, date : Date = new Date(), utc : boolean = false) : string
+    public Format(formatString: string, date: Date = new Date(), utc: boolean = false): string
     {
         tokens = this.initializeTokens(date, utc);
 
@@ -95,7 +95,7 @@ export class DateTimeFormatter
                 break;
         }
 
-        formatString = formatString.replace(this.regex, function(match)
+        formatString = formatString.replace(this.regex, function (match)
         {
             // Replacing 'fffffff'
             if (/^f+$/g.test(match))
@@ -163,15 +163,15 @@ export class DateTimeFormatter
         });
         return formatString;
     }
-    
+
     /**
      * Gets or sets the locale to format the date.
      */
-    public get Locale() : string
+    public get Locale(): string
     {
         return this.locale;
     }
-    public set Locale(value : string)
+    public set Locale(value: string)
     {
         this.locale = value;
     }
@@ -179,11 +179,11 @@ export class DateTimeFormatter
     /**
      * Gets or sets the path to load the localized values from.
      */
-    public get ResourcePath() : string
+    public get ResourcePath(): string
     {
         return this.resourcePath;
     }
-    public set ResourcePath(value : string)
+    public set ResourcePath(value: string)
     {
         this.resourcePath = value;
     }

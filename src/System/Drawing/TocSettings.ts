@@ -4,7 +4,7 @@ import { MultiRange } from 'multi-integer-range';
 /**
  * Provides basic definitions of a table of contents.
  */
-export class TocSettings
+export class TOCSettings
 {
     /**
      * The class for the div containing the table of contents.

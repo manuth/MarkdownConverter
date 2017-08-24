@@ -9,7 +9,7 @@ export class UnauthorizedAccessException extends FileException
     /**
      * Gets or sets the path to the file which caused the exception.
      */
-    public Path : string;
+    public Path: string;
 
     /**
      * Initializes a new instance of the UnauthorizedAccessException class with a message and a path.
@@ -17,7 +17,7 @@ export class UnauthorizedAccessException extends FileException
      * @param path
      * The path to the file which caused the exception.
      */
-    constructor(path : string);
+    constructor(path: string);
 
     /**
      * Initializes a new instance of the UnauthorizedAccessException class with a message and a path.
@@ -28,9 +28,9 @@ export class UnauthorizedAccessException extends FileException
      * @param path
      * The path to the file which caused the exception.
      */
-    constructor(message : string, path : string);
+    constructor(message: string, path: string);
 
-    constructor(message : string, path? : string)
+    constructor(message: string, path?: string)
     {
         if (arguments.length == 1)
         {

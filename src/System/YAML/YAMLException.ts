@@ -8,29 +8,29 @@ export class YAMLException extends Exception
     /**
      * The name of the exception.
      */
-    name : string;
+    name: string;
 
     /**
      * The reason of the exception.
      */
-    reason : string;
+    reason: string;
 
     /**
      * The mark of the exception.
      */
-    mark : { name : string, buffer : string, position : number, line : number, column : number };
+    mark: { name: string, buffer: string, position: number, line: number, column: number };
 
     /**
      * The message of the exception.
      */
-    message : string;
+    message: string;
 
     /**
      * Initializes a new instance of the YAMLException class.
      * @param exception
      * The exception to copy the values from.
      */
-    public constructor(exception : any);
+    public constructor(exception: any);
 
     /**
      * Initializes a new instance of the YAMLException class with a name, a reason, a mark and a message.
@@ -47,13 +47,13 @@ export class YAMLException extends Exception
      * @param message
      * The message of the exception.
      */
-    public constructor(name : string, reason : string, mark : any, message : string);
-    public constructor(name : string | any, reason? : string, mark? : any, message? : string)
+    public constructor(name: string, reason: string, mark: any, message: string);
+    public constructor(name: string | any, reason?: string, mark?: any, message?: string)
     {
         super();
         if (arguments.length == 1)
         {
-            let exception : { name : string, reason : string, mark : any, message : string } = name;
+            let exception: { name: string, reason: string, mark: any, message: string } = name;
             this.name = exception.name;
             this.reason = exception.reason;
             this.mark = exception.mark;

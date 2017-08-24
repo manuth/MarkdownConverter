@@ -7,7 +7,7 @@ import { KeyNotFoundException } from "../System/KeyNotFoundException";
 import { Layout } from "../System/Drawing/Layout";
 import { ListType } from "../System/Drawing/ListType";
 import { Margin } from "../System/Drawing/Margin";
-import { TocSettings } from "../System/Drawing/TocSettings";
+import { TOCSettings } from "../System/Drawing/TOCSettings";
 
 export class Settings
 {
@@ -244,9 +244,9 @@ export class Settings
     /**
      * Gets the settings for the table of contents of the document.
      */
-    public get TOCSettings(): TocSettings
+    public get TOCSettings(): TOCSettings
     {
-        let tocSettings = new TocSettings();
+        let tocSettings = new TOCSettings();
         tocSettings.Class = this.getConfigEntry<string>('document.toc.class', 'toc');
         tocSettings.LevelRange = this.getConfigEntry<string>('document.toc.levels', '4-6');
         tocSettings.Indicator = this.getConfigEntry<RegExp>('document.toc.indicator', /^\[\[\s*toc\s*\]\]/im);

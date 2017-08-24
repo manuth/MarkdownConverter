@@ -23,7 +23,7 @@
     "config.document.localization": "Sprache",
     "config.document.localization.description": "Die Sprach-Einstellungen.",
     "config.document.localization.locale": "Sprache",
-    "config.document.localization.locale.description":  "Die Sprache, in der das Datum ausgegeben wird.\n\nNote:\nLassen Sie diesen Einstellung weg, um die Sprache von Visual Studio Code zu verwenden.",
+    "config.document.localization.locale.description": "Die Sprache, in der das Datum ausgegeben wird.\n\nNote:\nLassen Sie diesen Einstellung weg, um die Sprache von Visual Studio Code zu verwenden.",
     "config.document.localization.dateFormat": "Datums-Format",
     "config.document.localization.dateFormat.description": "Ein Datums-Format-string, in der das Datum ausgegeben werden soll.\nSiehe: https://msdn.microsoft.com/de-de/library/8kb3ddd4(v=vs.110).aspx",
     "config.document.layout": "Layout",

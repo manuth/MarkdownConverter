@@ -25,7 +25,7 @@ export enum ConversionType
      * PNG-conversion.
      */
     PNG,
-    
+
     /**
      * PPM-conversion.
      */
@@ -35,9 +35,9 @@ export enum ConversionType
 /**
  * The extensions of the conversion-types.
  */
-export function GetExtensions() : { [id : number] : string }
+export function GetExtensions(): { [id: number]: string }
 {
-    let extensions : { [id : number] : string } = { };
+    let extensions: { [id: number]: string } = {};
     extensions[ConversionType.BMP] = '.bmp';
     extensions[ConversionType.HTML] = '.html';
     extensions[ConversionType.JPEG] = '.jpg';

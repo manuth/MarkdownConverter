@@ -16,7 +16,7 @@ export class Converter
     /**
      * The document which is to be converted.
      */
-    private document : Document = null;
+    private document: Document = null;
 
     /**
      * Initializes a new instance of the Constructor class with a filepath.
@@ -24,7 +24,7 @@ export class Converter
      * @param document
      * The document which is to be converted.
      */
-    constructor(document : Document)
+    constructor(document: Document)
     {
         this.document = document;
     }
@@ -38,12 +38,12 @@ export class Converter
      * @param path
      * The path to save the converted file to.
      */
-    public Start(conversionType : ConversionType, path : string) : void
+    public Start(conversionType: ConversionType, path: string): void
     {
         if (conversionType != ConversionType.HTML)
         {
             // Saving the JSON that represents the document to a temporary JSON-file.
-            let jsonPath = Temp.path({ suffix: '.json'});
+            let jsonPath = Temp.path({ suffix: '.json' });
             {
                 FS.writeFileSync(jsonPath, this.document.toJSON());
             }
@@ -69,9 +69,9 @@ export class Converter
                 }
                 throw result.error;
             }
-            
+
             let error = result.stderr.toString();
-            
+
             if (error)
             {
                 throw new Error(error);
@@ -96,7 +96,7 @@ export class Converter
                 {
                     FS.unlinkSync(tempPath);
                 }
-                
+
                 if (FS.existsSync(jsonPath))
                 {
                     FS.unlinkSync(jsonPath);

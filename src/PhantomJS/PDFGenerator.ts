@@ -25,12 +25,12 @@ catch (e)
      * Starts the rendering-process.
      * @param args 
      */
-    function Main(args) : void
+    function Main(args): void
     {
         /**
          * The file-type of the resulting file.
          */
-        var type : string;
+        var type: string;
 
         /**
          * The document to render.
@@ -40,7 +40,7 @@ catch (e)
         /**
          * The path to save the rendered file to.
          */
-        var destination : string;
+        var destination: string;
 
         if (args.length >= 3)
         {
@@ -48,8 +48,8 @@ catch (e)
             type = args[0];
             doc = JSON.parse(FS.read(args[1]));
             destination = args[2];
-            
-            page.onLoadFinished = function(status)
+
+            page.onLoadFinished = function (status)
             {
                 RenderPage(page);
             }
@@ -72,9 +72,9 @@ catch (e)
          * @param subject
          * The subject to check for pagenumber-variables.
          */
-        function ReplacePageNumbers(subject : string, pageNumber : number, pageCount : number) : string
+        function ReplacePageNumbers(subject: string, pageNumber: number, pageCount: number): string
         {
-            subject = subject.replace(/{{[\s]*(PageNumber|PageCount)[\s]*}}/g, function (match : string) : string
+            subject = subject.replace(/{{[\s]*(PageNumber|PageCount)[\s]*}}/g, function (match: string): string
             {
                 if (/PageNumber/g.test(match))
                 {
@@ -100,12 +100,12 @@ catch (e)
             var renderType;
             page.paperSize = CalculatePaperSize(page);
 
-            switch(type)
+            switch (type)
             {
                 case "BMP":
                     renderType = "bmp";
                     break;
-                case  "JPEG":
+                case "JPEG":
                     renderType = "jpeg";
                     break;
                 case "PNG":
@@ -148,9 +148,9 @@ catch (e)
          */
         function CreatePaper()
         {
-            var paper : any = { };
+            var paper: any = {};
             var layout = doc.Layout;
-            
+
             if (layout.Margin.Top || layout.Margin.Right || layout.Margin.Bottom || layout.Margin.Left)
             {
                 paper.margin = {
@@ -185,7 +185,8 @@ catch (e)
         function GetStyles()
         {
             var styles = document.querySelectorAll('link,style');
-            styles = Array.prototype.reduce.call(styles, function (string, node) {
+            styles = Array.prototype.reduce.call(styles, function (string, node)
+            {
                 return string + (node.outerHTML || '')
             }, '');
             return styles;
@@ -197,11 +198,11 @@ catch (e)
          * @param styles
          * The css-styles of the header.
          */
-        function CreateHeader(styles : string)
+        function CreateHeader(styles: string)
         {
             return {
                 height: doc.Header.Height,
-                contents: phantom.callback(function(pageNumber, pageCount)
+                contents: phantom.callback(function (pageNumber, pageCount)
                 {
                     var header = GetHeader(pageNumber, pageCount);
                     return styles + ReplacePageNumbers(header.Content, pageNumber, pageCount);
@@ -248,11 +249,11 @@ catch (e)
          * @param styles
          * The css-styles of the header.
          */
-        function CreateFooter(styles : string)
+        function CreateFooter(styles: string)
         {
             return {
                 height: doc.Footer.Height,
-                contents: phantom.callback(function(pageNumber, pageCount)
+                contents: phantom.callback(function (pageNumber, pageCount)
                 {
                     var footer = GetFooter(pageNumber, pageCount);
                     return styles + ReplacePageNumbers(footer.Content, pageNumber, pageCount);
