@@ -23,7 +23,7 @@
     "url": "https://github.com/manuth/MarkdownConverter.git"
   },
   "engines": {
-    "vscode": "^1.10.0"
+    "vscode": "^1.15.0"
   },
   "categories": [
     "Other"
@@ -49,12 +49,6 @@
         "markdownConverter.outDir": {
           "title": "%config.outDir%",
           "description": "%config.outDir.description%",
-          "type": "string",
-          "default": "."
-        },
-        "markdownConverter.workDir": {
-          "title": "%config.workDir%",
-          "description": "%config.workDir.description%",
           "type": "string",
           "default": "."
         },
@@ -136,11 +130,6 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "name": {
-              "title": "%config.document.name%",
-              "description": "%config.document.name.description%",
-              "type": "string"
-            },
             "emoji": {
               "title": "%config.document.emoji%",
               "description": "%config.document.emoji.description%",
@@ -210,8 +199,7 @@
                   "additionalProperties": false,
                   "required": [
                     "margin",
-                    "format",
-                    "orientation"
+                    "format"
                   ],
                   "properties": {
                     "margin": {
@@ -788,9 +776,9 @@
                     }
                   ]
                 },
-                "useSystemStyles": {
-                  "title": "%config.document.style.useSystemStyles%",
-                  "description": "%config.document.style.useSystemStyles.description%",
+                "systemStyles": {
+                  "title": "%config.document.style.systemStyles%",
+                  "description": "%config.document.style.systemStyles.description%",
                   "type": "boolean",
                   "default": true
                 },

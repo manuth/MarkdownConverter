@@ -1,9 +1,7 @@
-import { Base } from "./Core/Base";
-
 /**
  * Represents a margin.
  */
-export class Margin extends Base
+export class Margin
 {
     /**
      * The top margin.
@@ -42,7 +40,6 @@ export class Margin extends Base
      */
     constructor(top? : string, right? : string, bottom? : string, left? : string)
     {
-        super();
         if (top)
         {
             this.Top = top;
@@ -113,15 +110,15 @@ export class Margin extends Base
     }
 
     /**
-     * Returns a JSON-string which represents the object.
+     * Returns a JSON-object which represents the object.
      */
-    public toJSON() : string
+    public toJSON() : object
     {
-        return JSON.stringify({
+        return {
             Top: this.Top,
             Right: this.Right,
             Bottom: this.Bottom,
             Left: this.Left
-        });
+        };
     }
 }

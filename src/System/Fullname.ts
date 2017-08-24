@@ -1,5 +1,4 @@
 import * as shell from 'shelljs';
-import { Base } from "./Base";
 
 /**
  * Provides the functionallity to determine the full name of the current user.
@@ -9,7 +8,7 @@ export class Fullname
     /**
      * The environment-variables which may contain the username.
      */
-    private static envVars : string[] = [
+    private static envVars: string[] = [
         'GIT_AUTHOR_NAME',
         'GIT_COMMITTER_NAME',
         'HGUSER', // Mercurial
@@ -19,7 +18,7 @@ export class Fullname
     /**
      * Tries to figure out the username using wmic.
      */
-    private static CheckWmic() : string
+    private static CheckWmic(): string
     {
         let fullname = shell.exec('wmic useraccount where name="%username%" get fullname').stdout.replace('FullName', '');
         return fullname;
@@ -28,19 +27,19 @@ export class Fullname
     /**
      * Tries to figure out the username using environment-variables.
      */
-    private static CheckEnv() : string
+    private static CheckEnv(): string
     {
-		let env = process.env;
-		let varName = this.envVars.find(x => env[x]);
-		let fullname = varName && env[varName];
+        let env = process.env;
+        let varName = this.envVars.find(x => env[x]);
+        let fullname = varName && env[varName];
 
-		return fullname;
+        return fullname;
     }
 
     /**
      * Tries to figure out the username using the npm-configuration
      */
-    private static CheckAuthorName() : string
+    private static CheckAuthorName(): string
     {
         let fullname = require('rc')('npm')['init-author-name'];
         return fullname;
@@ -49,7 +48,7 @@ export class Fullname
     /**
      * Tries to figure out the username using git's global settings
      */
-    private static CheckGit() : string
+    private static CheckGit(): string
     {
         return shell.exec('git config --global user.name').stdout;
     }
@@ -57,7 +56,7 @@ export class Fullname
     /**
      * Tries to figure out the username using osascript.
      */
-    private static CheckOsaScript() : string
+    private static CheckOsaScript(): string
     {
         return shell.exec('osascript -e long user name of (system info)').stdout;
     }
@@ -65,14 +64,14 @@ export class Fullname
     /**
      * A set of functions to figure out the user-name.
      */
-    public static* functions()
+    public static * functions()
     {
         yield this.CheckEnv();
         yield this.CheckAuthorName();
-    	if (process.platform === 'win32')
+        if (process.platform === 'win32')
         {
-		    yield this.CheckWmic();
-	    }
+            yield this.CheckWmic();
+        }
 
         if (process.platform === 'darwin')
         {
@@ -84,7 +83,7 @@ export class Fullname
     /**
      * Gets the full name of the current user.
      */
-    public static get FullName() : string
+    public static get FullName(): string
     {
         let functionArray = this.functions();
         do
@@ -96,8 +95,9 @@ export class Fullname
             }
             catch (e) { }
         }
-        while(!(current.done || current.value));
+        while (!(current.done || current.value));
+
         return current.value;
     }
-    
+
 }
