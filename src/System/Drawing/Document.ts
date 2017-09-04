@@ -679,6 +679,10 @@ export class Document
                 return '<pre class="hljs"><code><div>' + subject + '</div></code></pre>';
             }
         });
+        md.validateLink = function()
+        {
+            return true;
+        }
         md.use(Anchor);
         md.use(Checkbox);
         md.use(MarkdownItToc, {
