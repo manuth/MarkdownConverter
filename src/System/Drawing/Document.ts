@@ -22,6 +22,7 @@ import * as Mustache from 'mustache';
 import * as Request from 'sync-request';
 import { Settings } from "../../Properties/Settings";
 import { TOCSettings } from "./TOCSettings";
+import * as Transliteration from 'transliteration';
 import * as TwEmoji from 'twemoji';
 import { UnauthorizedAccessException } from "../UnauthorizedAccessException";
 import { YAMLException } from "../YAML/YAMLException";
@@ -31,6 +32,11 @@ import { YAMLException } from "../YAML/YAMLException";
  */
 export class Document
 {
+    /**
+     * Contains all processed slugs and the count of them.
+     */
+    private slugs: { [key: string]: number } = {};
+
     /**
      * The quality of the document.
      */
@@ -679,11 +685,27 @@ export class Document
                 return '<pre class="hljs"><code><div>' + subject + '</div></code></pre>';
             }
         });
-        md.validateLink = function()
+        md.validateLink = function ()
         {
             return true;
         }
-        md.use(Anchor);
+        md.use(Anchor, {
+            slugify: (heading) =>
+            {
+                let slug = Transliteration.slugify(heading, {lowercase: true, separator: '-', ignore: []});
+                if (this.slugs[slug])
+                {
+                    slug += '-' + (this.slugs[slug] + 1);
+                    this.slugs[slug]++;
+                }
+                else
+                {
+                    this.slugs[slug] = 0;
+                }
+
+                return slug;
+            }
+        });
         md.use(Checkbox);
         md.use(MarkdownItToc, {
             includeLevel: new MultiRange(this.TOCSettings.Levels).toArray(),
