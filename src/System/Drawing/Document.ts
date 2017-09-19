@@ -135,7 +135,7 @@ export class Document
     /**
      * The template to use for the RenderBody-process.
      */
-    private template: string = Path.join(__dirname, '..', '..', 'Resources', 'SystemTemplate.html');
+    private template: string = Path.join(__dirname, '..', '..', 'Resources', 'Template.html');
 
     /**
      * The wrapper of the content of the document.
@@ -817,7 +817,7 @@ export class Document
         }
         else if (Settings.Default.SystemStyles)
         {
-            this.Template = Path.join(__dirname, '..', '..', '..', '..', 'Resources', 'Template.html');
+            this.Template = Path.join(__dirname, '..', '..', '..', '..', 'Resources', 'SystemTemplate.html');
         }
 
         this.Wrapper = Settings.Default.Wrapper;
