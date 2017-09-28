@@ -44,5 +44,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
   - Updated the sync-request-module
   - Added "table of content"-feature
 
+## 0.0.10
+  - Added support for Chinese headings
+  - Disabled `markdown-it`'s link policy
+
 <!--- References -->
 [MarkdownItCheckbox]: https://www.npmjs.com/package/markdown-it-checkbox
