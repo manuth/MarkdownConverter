@@ -95,7 +95,7 @@ export function activate(context: VSCode.ExtensionContext)
                         let base: string;
                         let outDir = Settings.Default.OutputDirectory;
 
-                        if (VSCode.workspace.workspaceFolders.length == 1)
+                        if (VSCode.workspace.workspaceFolders && (VSCode.workspace.workspaceFolders.length == 1))
                         {
                             base = VSCode.workspace.workspaceFolders[0].uri.fsPath;
                         }
