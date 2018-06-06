@@ -817,6 +817,7 @@
     "@types/shelljs": "^0.7.4",
     "@types/temp": "^0.8.29",
     "mocha": "^5.2.0",
+    "tslint": "^5.10.0",
     "typescript": "^2.3.2",
     "vscode": "^1.1.18"
   },
