@@ -213,7 +213,6 @@ export default class Document
     /**
      * Gets or sets the quality of the document.
      */
-    @enumerable(true)
     public get Quality(): number
     {
         return this.quality;
@@ -226,7 +225,6 @@ export default class Document
     /**
      * Gets or sets the name of the document.
      */
-    @enumerable(true)
     public get Name(): string
     {
         return this.name;
@@ -239,7 +237,6 @@ export default class Document
     /**
      * Gets or sets a value indicating whether emojis should be used.
      */
-    @enumerable(true)
     public get Emoji(): string | boolean
     {
         return this.emoji;
@@ -252,7 +249,6 @@ export default class Document
     /**
      * Gets or sets the attributes of the document.
      */
-    @enumerable(true)
     public get Attributes(): { [id: string]: any }
     {
         return this.attributes;
@@ -265,7 +261,7 @@ export default class Document
     /**
      * Gets or sets the format to print the date.
      */
-    @enumerable(true)
+
     public get DateFormat(): string
     {
         return this.dateFormat;
@@ -278,7 +274,6 @@ export default class Document
     /**
      * Gets or sets the locale to print values.
      */
-    @enumerable(true)
     public get Locale(): string
     {
         return this.locale;
@@ -291,7 +286,6 @@ export default class Document
     /**
      * Gets or sets the layout of the document.
      */
-    @enumerable(true)
     public get Layout(): Layout
     {
         return this.layout;
@@ -304,7 +298,6 @@ export default class Document
     /**
      * Gets or sets the header of the document.
      */
-    @enumerable(true)
     public get Header(): Header
     {
         return this.header;
@@ -317,7 +310,6 @@ export default class Document
     /**
      * Gets or sets a set of special headers.
      */
-    @enumerable(true)
     public get SpecialHeaders(): { [id: number]: Header }
     {
         return this.specialHeaders;
@@ -330,7 +322,6 @@ export default class Document
     /**
      * Gets or sets the header for even pages.
      */
-    @enumerable(true)
     public get EvenHeader(): Header
     {
         if (this.evenHeader)
@@ -350,7 +341,6 @@ export default class Document
     /**
      * Gets or sets the header for even pages.
      */
-    @enumerable(true)
     public get OddHeader(): Header
     {
         if (this.oddHeader)
@@ -370,7 +360,6 @@ export default class Document
     /**
      * Gets or sets the header for the last page.
      */
-    @enumerable(true)
     public get LastHeader(): Header
     {
         if (this.lastHeader)
@@ -390,7 +379,6 @@ export default class Document
     /**
      * Gets or sets the footer of the document.
      */
-    @enumerable(true)
     public get Footer(): Footer
     {
         return this.footer;
@@ -403,7 +391,7 @@ export default class Document
     /**
      * Gets or sets a set of special footers.
      */
-    @enumerable(true)
+
     public get SpecialFooters(): { [id: number]: Footer }
     {
         return this.specialFooters;
@@ -416,7 +404,6 @@ export default class Document
     /**
      * Gets or sets the footer for even pages.
      */
-    @enumerable(true)
     public get EvenFooter(): Footer
     {
         if (this.evenFooter)
@@ -436,7 +423,6 @@ export default class Document
     /**
      * Gets or sets the footer for odd pages.
      */
-    @enumerable(true)
     public get OddFooter(): Footer
     {
         if (this.evenFooter)
@@ -456,7 +442,6 @@ export default class Document
     /**
      * Gets or sets the footer for the last page.
      */
-    @enumerable(true)
     public get LastFooter(): Footer
     {
         if (this.lastFooter)
@@ -476,7 +461,6 @@ export default class Document
     /**
      * Gets or sets the definitions of the table of contents.
      */
-    @enumerable(true)
     public get TOCSettings(): TOCSettings
     {
         return this.tocSettings;
@@ -489,7 +473,6 @@ export default class Document
     /**
      * Gets or sets the template to use for the RenderBody-process.
      */
-    @enumerable(true)
     public get Template(): string
     {
         return this.template;
@@ -502,7 +485,6 @@ export default class Document
     /**
      * Gets or sets the wrapper of the content of the document.
      */
-    @enumerable(true)
     public get Wrapper(): string
     {
         return this.wrapper;
@@ -515,7 +497,6 @@ export default class Document
     /**
      * Gets or sets the highlight-style of the document.
      */
-    @enumerable(true)
     public get HighlightStyle(): boolean | string
     {
         return this.highlightStyle;
@@ -528,7 +509,6 @@ export default class Document
     /**
      * Gets or sets the embedding-options of the document.
      */
-    @enumerable(true)
     public get EmbeddingStyle(): EmbeddingOption | boolean
     {
         return this.embeddingStyle;
@@ -541,7 +521,6 @@ export default class Document
     /**
      * Gets or sets a value indicating whether system-provided stylesheets are enabled.
      */
-    @enumerable(true)
     public get SystemStylesEnabled(): boolean
     {
         return this.systemStylesEnabled;
@@ -554,7 +533,6 @@ export default class Document
     /**
      * Gets or sets the styles of the document.
      */
-    @enumerable(true)
     public get Styles(): string
     {
         return this.styles;
@@ -567,7 +545,6 @@ export default class Document
     /**
      * Gets or sets the stylesheets of the document.
      */
-    @enumerable(true)
     public get StyleSheets(): string[]
     {
         return this.styleSheets;
@@ -580,7 +557,6 @@ export default class Document
     /**
      * Gets or sets the content of the document.
      */
-    @enumerable(true)
     public get Content(): string
     {
         return this.content;
