@@ -1,7 +1,7 @@
 /**
  * Represents a way to embed stylesheets.
  */
-export enum EmbeddingOption
+enum EmbeddingOption
 {
     /**
      * Embedding all stylesheets.
@@ -20,3 +20,5 @@ export enum EmbeddingOption
      */
     None
 }
+
+export default EmbeddingOption;

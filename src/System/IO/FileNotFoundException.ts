@@ -1,10 +1,10 @@
-import { FileException } from "./FileException";
+import FileException from "./FileException";
 import * as Format from 'string-format';
 
 /**
  * Represents a 'File not found'-Exception.
  */
-export class FileNotFoundException extends FileException
+export default class FileNotFoundException extends FileException
 {
     /**
      * Initializes a new instance of the FileNotFoundException class with a message and a path.

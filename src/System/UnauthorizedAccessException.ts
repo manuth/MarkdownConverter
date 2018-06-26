@@ -1,10 +1,10 @@
-import { FileException } from './IO/FileException';
+import FileException from './IO/FileException';
 import * as Format from 'string-format';
 
 /**
  * Represents a 'File not found'-Exception.
  */
-export class UnauthorizedAccessException extends FileException
+export default class UnauthorizedAccessException extends FileException
 {
     /**
      * Gets or sets the path to the file which caused the exception.

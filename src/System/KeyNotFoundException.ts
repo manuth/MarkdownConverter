@@ -1,9 +1,9 @@
-import { Exception } from "./Exception";
+import Exception from "./Exception";
 
 /**
  * The exception that is thrown when the key specified for accessing an element in a collection does not match any key in the collection.
  */
-export class KeyNotFoundException extends Exception
+export default class KeyNotFoundException extends Exception
 {
     /**
      * Initializes a new instance of the KeyNotFoundException class.

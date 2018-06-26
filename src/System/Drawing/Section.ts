@@ -1,7 +1,7 @@
 /**
  * Represents a section of a document.
  */
-export class Section
+export default class Section
 {
     /**
      * The height of the section.
@@ -69,18 +69,4 @@ export class Section
             Content: this.Content
         };
     }
-}
-
-/**
- * Represents a header.
- */
-export class Header extends Section
-{
-}
-
-/**
- * Represents a footer.
- */
-export class Footer extends Section
-{
 }
