@@ -3,9 +3,19 @@ declare var phantom;
 declare var document;
 
 /* Importing phantom's modules */
-var FS = require('fs');
-var System = require('system');
-var WebPage = require('webpage');
+let FS;
+let System;
+let WebPage;
+
+function initialize()
+{
+    FS = require("fs");
+    System = require("system");
+    WebPage = require("webpage");
+}
+
+initialize();
+
 console.log(FS.workingDirectory);
 try
 {
@@ -30,29 +40,29 @@ catch (e)
         /**
          * The file-type of the resulting file.
          */
-        var type: string;
+        let type: string;
 
         /**
          * The document to render.
          */
-        var doc;
+        let doc;
 
         /**
          * The path to save the rendered file to.
          */
-        var destination: string;
+        let destination: string;
 
         if (args.length >= 3)
         {
-            var page = WebPage.create();
+            let page = WebPage.create();
             type = args[0];
             doc = JSON.parse(FS.read(args[1]));
             destination = args[2];
 
-            page.onLoadFinished = function (status)
+            page.onLoadFinished = (status) =>
             {
                 RenderPage(page);
-            }
+            };
             page.setContent(doc.Content, null);
         }
         else
@@ -74,7 +84,7 @@ catch (e)
          */
         function ReplacePageNumbers(subject: string, pageNumber: number, pageCount: number): string
         {
-            subject = subject.replace(/{{[\s]*(PageNumber|PageCount)[\s]*}}/g, function (match: string): string
+            subject = subject.replace(/{{[\s]*(PageNumber|PageCount)[\s]*}}/g, (match: string): string =>
             {
                 if (/PageNumber/g.test(match))
                 {
@@ -97,7 +107,7 @@ catch (e)
          */
         function RenderPage(page)
         {
-            var renderType;
+            let renderType;
             page.paperSize = CalculatePaperSize(page);
 
             switch (type)
@@ -129,8 +139,8 @@ catch (e)
          */
         function CalculatePaperSize(page)
         {
-            var paper = CreatePaper();
-            var styles = page.evaluate(GetStyles);
+            let paper = CreatePaper();
+            let styles = page.evaluate(GetStyles);
 
             if (doc.Header || doc.SpecialHeaders.length > 0 || doc.EvenHeader || doc.OddHeader || doc.LastHeader)
             {
@@ -148,8 +158,8 @@ catch (e)
          */
         function CreatePaper()
         {
-            var paper: any = {};
-            var layout = doc.Layout;
+            let paper: any = {};
+            let layout = doc.Layout;
 
             if (layout.Margin.Top || layout.Margin.Right || layout.Margin.Bottom || layout.Margin.Left)
             {
@@ -158,7 +168,7 @@ catch (e)
                     right: layout.Margin.Right,
                     bottom: layout.Margin.Bottom,
                     left: layout.Margin.Left
-                }
+                };
             }
             else
             {
@@ -184,11 +194,11 @@ catch (e)
          */
         function GetStyles()
         {
-            var styles = document.querySelectorAll('link,style');
-            styles = Array.prototype.reduce.call(styles, function (string, node)
+            let styles = document.querySelectorAll("link,style");
+            styles = Array.prototype.reduce.call(styles, (style, node) =>
             {
-                return string + (node.outerHTML || '')
-            }, '');
+                return style + (node.outerHTML || "");
+            }, "");
             return styles;
         }
 
@@ -202,12 +212,12 @@ catch (e)
         {
             return {
                 height: doc.Header.Height,
-                contents: phantom.callback(function (pageNumber, pageCount)
+                contents: phantom.callback((pageNumber, pageCount) =>
                 {
-                    var header = GetHeader(pageNumber, pageCount);
+                    let header = GetHeader(pageNumber, pageCount);
                     return styles + ReplacePageNumbers(header.Content, pageNumber, pageCount);
                 })
-            }
+            };
         }
 
         /**
@@ -221,7 +231,7 @@ catch (e)
          */
         function GetHeader(pageNumber, pageCount)
         {
-            if (pageNumber == pageCount && doc.LastHeader)
+            if (pageNumber === pageCount && doc.LastHeader)
             {
                 return doc.LastHeader;
             }
@@ -229,7 +239,7 @@ catch (e)
             {
                 return doc.SpecialHeaders[pageNumber];
             }
-            else if (pageNumber % 2 == 0 && doc.EvenHeader)
+            else if (pageNumber % 2 === 0 && doc.EvenHeader)
             {
                 return doc.EvenHeader;
             }
@@ -253,12 +263,12 @@ catch (e)
         {
             return {
                 height: doc.Footer.Height,
-                contents: phantom.callback(function (pageNumber, pageCount)
+                contents: phantom.callback((pageNumber, pageCount) =>
                 {
-                    var footer = GetFooter(pageNumber, pageCount);
+                    let footer = GetFooter(pageNumber, pageCount);
                     return styles + ReplacePageNumbers(footer.Content, pageNumber, pageCount);
                 })
-            }
+            };
         }
 
         /**
@@ -272,7 +282,7 @@ catch (e)
          */
         function GetFooter(pageNumber, pageCount)
         {
-            if (pageNumber == pageCount && doc.LastFooter)
+            if (pageNumber === pageCount && doc.LastFooter)
             {
                 return doc.LastFooter;
             }
@@ -280,7 +290,7 @@ catch (e)
             {
                 return doc.SpecialFooters[pageNumber];
             }
-            else if (pageNumber % 2 == 0 && doc.EvenFooter)
+            else if (pageNumber % 2 === 0 && doc.EvenFooter)
             {
                 return doc.EvenFooter;
             }
