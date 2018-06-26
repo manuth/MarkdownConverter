@@ -810,6 +810,7 @@
   },
   "devDependencies": {
     "@types/markdown-it": "0.0.3",
+    "@types/markdown-it-anchor": "^4.0.1",
     "@types/mkdirp": "^0.5.1",
     "@types/mocha": "^2.2.32",
     "@types/mustache": "^0.8.30",
@@ -817,6 +818,7 @@
     "@types/npm": "^2.0.29",
     "@types/shelljs": "^0.7.4",
     "@types/temp": "^0.8.29",
+    "@types/transliteration": "^1.6.0",
     "mocha": "^5.2.0",
     "tslint": "^5.10.0",
     "typescript": "^2.3.2",
