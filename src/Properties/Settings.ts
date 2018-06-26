@@ -1,4 +1,3 @@
-'use strict';
 import * as VSCode from 'vscode';
 import { ConversionType } from "../ConversionType";
 import { EmbeddingOption } from "../System/Drawing/EmbeddingOption";

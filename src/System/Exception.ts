@@ -1,4 +1,3 @@
-'use strict';
 /**
  * Represents an Exception
  */
