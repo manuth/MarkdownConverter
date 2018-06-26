@@ -9,8 +9,5 @@
         "lib": [
             "es7"
         ]
-    },
-    "exclude": [
-        "node_modules"
-    ]
+    }
 }
