@@ -1,6 +1,6 @@
 /* Preventing TypeScript's "name not found"-errors */
-var document = document;
-var phantom = phantom;
+declare var phantom;
+declare var document;
 
 /* Importing phantom's modules */
 var FS = require('fs');
