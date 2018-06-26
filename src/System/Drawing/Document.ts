@@ -1,31 +1,31 @@
-import * as Checkbox from 'markdown-it-checkbox';
-import * as FS from 'fs';
-import * as Path from 'path';
-import * as URL from 'url';
-import * as VSCode from 'vscode';
-import * as Anchor from 'markdown-it-anchor';
-import DateTimeFormatter from '../Globalization/DateTimeFormatter';
-import EmbeddingOption from './EmbeddingOption';
+import * as Checkbox from "markdown-it-checkbox";
+import * as FS from "fs";
+import * as Path from "path";
+import * as URL from "url";
+import * as VSCode from "vscode";
+import * as Anchor from "markdown-it-anchor";
+import DateTimeFormatter from "../Globalization/DateTimeFormatter";
+import EmbeddingOption from "./EmbeddingOption";
 import Encoding from "../Text/Encoding";
-import * as FrontMatter from 'front-matter';
-import Fullname from '../Fullname';
-import Section from './Section';
+import * as FrontMatter from "front-matter";
+import Fullname from "../Fullname";
+import Section from "./Section";
 import Header from "./Header";
 import Footer from "./Footer";
-import * as HighlightJs from 'highlightjs';
+import * as HighlightJs from "highlightjs";
 import Layout from "./Layout";
 import ListType from "./ListType";
 import Margin from "./Margin";
-import * as MarkdownIt from 'markdown-it';
-import * as MarkdownItEmoji from 'markdown-it-emoji';
-import * as MarkdownItToc from 'markdown-it-table-of-contents';
-import { MultiRange } from 'multi-integer-range';
-import * as Mustache from 'mustache';
-import * as Request from 'sync-request';
+import * as MarkdownIt from "markdown-it";
+import * as MarkdownItEmoji from "markdown-it-emoji";
+import * as MarkdownItToc from "markdown-it-table-of-contents";
+import { MultiRange } from "multi-integer-range";
+import * as Mustache from "mustache";
+import * as Request from "sync-request";
 import Settings from "../../Properties/Settings";
 import TOCSettings from "./TOCSettings";
-import * as Transliteration from 'transliteration';
-import * as TwEmoji from 'twemoji';
+import * as Transliteration from "transliteration";
+import * as TwEmoji from "twemoji";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";
 import YAMLException from "../YAML/YAMLException";
 
@@ -60,14 +60,14 @@ export default class Document
     private attributes: any = {
         Author: Fullname.FullName,
         CreationDate: new Date(),
-        PageNumber: '{{ PageNumber }}', // {{ PageNumber }} will be replaced in the Phantom-Script (see "Phantom/PDFGenerator.ts": ReplacePageNumbers)
-        PageCount: '{{ PageCount }}'    // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
+        PageNumber: "{{ PageNumber }}", // {{ PageNumber }} will be replaced in the Phantom-Script (see "Phantom/PDFGenerator.ts": ReplacePageNumbers)
+        PageCount: "{{ PageCount }}"    // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
     };
 
     /**
      * The format to print the date.
      */
-    private dateFormat: string = 'default';
+    private dateFormat: string = "default";
 
     /**
      * The language to print values.
@@ -82,7 +82,7 @@ export default class Document
     /**
      * The header of the document.
      */
-    private header: Header = new Header('15mm', '<table style="width: 100%; table-layout: fixed; "><td style="text-align: left; ">{{ Author }}</td><td style="text-align: center">{{ PageNumber }}/{{ PageCount }}</td><td style="text-align: right">{{ Company.Name }}</td></table>');
+    private header: Header = new Header("15mm", '<table style="width: 100%; table-layout: fixed; "><td style="text-align: left; ">{{ Author }}</td><td style="text-align: center">{{ PageNumber }}/{{ PageCount }}</td><td style="text-align: right">{{ Company.Name }}</td></table>');
 
     /**
      * A set of special headers.
@@ -107,7 +107,7 @@ export default class Document
     /**
      * The footer of the document.
      */
-    private footer: Footer = new Footer('1cm', '<table style="width: 100%; table-layout: fixed; "><td style="text-align: left; "></td><td style="text-align: center">{{ CreationDate }}</td><td style="text-align: right"></td></table>');
+    private footer: Footer = new Footer("1cm", '<table style="width: 100%; table-layout: fixed; "><td style="text-align: left; "></td><td style="text-align: center">{{ CreationDate }}</td><td style="text-align: right"></td></table>');
 
     /**
      * A set of special footers.
@@ -137,7 +137,7 @@ export default class Document
     /**
      * The template to use for the RenderBody-process.
      */
-    private template: string = Path.join(__dirname, '..', '..', 'Resources', 'Template.html');
+    private template: string = Path.join(__dirname, "..", "..", "Resources", "Template.html");
 
     /**
      * The wrapper of the content of the document.
@@ -162,7 +162,7 @@ export default class Document
     /**
      * The styles of the document.
      */
-    private styles: string = '';
+    private styles: string = "";
 
     /**
      * The stylesheets of the document.
@@ -172,7 +172,7 @@ export default class Document
     /**
      * The content of the document.
      */
-    private content: string = '';
+    private content: string = "";
 
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
@@ -191,19 +191,19 @@ export default class Document
         {
             try
             {
-                this.Content = FS.readFileSync(filePath, 'utf-8');
+                this.Content = FS.readFileSync(filePath, "utf-8");
             }
             catch (e)
             {
                 if (e instanceof Error)
                 {
-                    if (e.name == 'YAMLException')
+                    if (e.name === "YAMLException")
                     {
                         throw new YAMLException(e);
                     }
-                    else if ('path' in e)
+                    else if ("path" in e)
                     {
-                        throw new UnauthorizedAccessException(e['path']);
+                        throw new UnauthorizedAccessException((e as any).path as string);
                     }
                 }
             }
@@ -564,7 +564,7 @@ export default class Document
     public set Content(value: string)
     {
         let content = FrontMatter(value);
-        for (var key in content.attributes)
+        for (let key in content.attributes)
         {
             this.Attributes[key] = content.attributes[key];
         }
@@ -591,14 +591,14 @@ export default class Document
             EvenFooter: this.RenderSection(this.evenFooter),
             OddFooter: this.RenderSection(this.oddFooter),
             LastFooter: this.RenderSection(this.lastFooter)
-        }
+        };
 
-        for (var key in this.SpecialHeaders)
+        for (let key in this.SpecialHeaders)
         {
             document.SpecialHeaders[key] = this.RenderSection(this.SpecialHeaders[key]);
         }
 
-        for (var key in this.SpecialFooters)
+        for (let key in this.SpecialFooters)
         {
             document.SpecialFooters[key] = this.RenderSection(this.SpecialFooters[key]);
         }
@@ -644,12 +644,12 @@ export default class Document
     {
         // Making the hightlight-variable visible for the callback (by declaring a new 'var'-variable)
         // See: http://stackoverflow.com/questions/762011/whats-the-difference-between-using-let-and-var-to-declare-a-variable
-        var highlightStyle = this.HighlightStyle;
+        let highlightStyle = this.HighlightStyle;
 
         // Preparing markdown-it
         let md = new MarkdownIt({
             html: true,
-            highlight: function (subject, language)
+            highlight(subject, language)
             {
                 if (highlightStyle && language && HighlightJs.getLanguage(language))
                 {
@@ -660,20 +660,20 @@ export default class Document
                     subject = md.utils.escapeHtml(subject);
                 }
 
-                return '<pre class="hljs"><code><div>' + subject + '</div></code></pre>';
+                return '<pre class="hljs"><code><div>' + subject + "</div></code></pre>";
             }
         });
-        md.validateLink = function ()
+        md.validateLink = () =>
         {
             return true;
-        }
+        };
         md.use(Anchor, {
             slugify: (heading) =>
             {
-                let slug = Transliteration.slugify(heading, {lowercase: true, separator: '-', ignore: []});
+                let slug = Transliteration.slugify(heading, {lowercase: true, separator: "-", ignore: []});
                 if (this.slugs[slug])
                 {
-                    slug += '-' + (this.slugs[slug] + 1);
+                    slug += "-" + (this.slugs[slug] + 1);
                     this.slugs[slug]++;
                 }
                 else
@@ -695,19 +695,19 @@ export default class Document
         if (this.emoji)
         {
             // Making the emoji-variable visible for the callback
-            var emoji = this.emoji;
+            let emoji = this.emoji;
             md.use(MarkdownItEmoji);
-            md.renderer.rules.emoji = function (token, id)
+            md.renderer.rules.emoji = (token, id) =>
             {
                 switch (emoji)
                 {
                     case false:
                         return token[id].markup;
-                    case 'twitter':
+                    case "twitter":
                         return TwEmoji.parse(token[id].content);
-                    case 'native':
+                    case "native":
                         return token[id].content;
-                    case 'github':
+                    case "github":
                     case true:
                     default:
                         return '<img class="emoji" title=":' +
@@ -723,7 +723,7 @@ export default class Document
 
         // Preparing the attributes
         let view = {};
-        for (var key in this.Attributes)
+        for (let key in this.Attributes)
         {
             let value = this.Attributes[key];
             if (value instanceof Date)
@@ -732,15 +732,15 @@ export default class Document
             }
             else if (/function[\s]*\(\)[\s]*{([\s\S]*)}/gm.test(value))
             {
-                value = value.replace(/function[\s]*\(\)[\s]*{([\s\S]*)}/gm, '$1');
+                value = value.replace(/function[\s]*\(\)[\s]*{([\s\S]*)}/gm, "$1");
                 value = new Function(value);
 
                 try
                 {
-                    let dateTest = function (value)
+                    let dateTest = (attribute: () => any) =>
                     {
-                        return eval('value()');
-                    }
+                        return attribute();
+                    };
 
                     if (dateTest(value) instanceof Date)
                     {
@@ -795,19 +795,19 @@ export default class Document
         }
         else if (Settings.Default.SystemStyles)
         {
-            this.Template = Path.join(__dirname, '..', '..', '..', '..', 'Resources', 'SystemTemplate.html');
+            this.Template = Path.join(__dirname, "..", "..", "..", "..", "Resources", "SystemTemplate.html");
         }
 
         this.Wrapper = Settings.Default.Wrapper;
 
         this.HighlightStyle = Settings.Default.HighlightStyle;
 
-        if (typeof (this.HighlightStyle) != 'boolean')
+        if (typeof (this.HighlightStyle) !== "boolean")
         {
-            this.StyleSheets.push(Path.join(__dirname, '..', '..', '..', '..', 'node_modules', 'highlightjs', this.HighlightStyle + '.css'));
+            this.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "..", "node_modules", "highlightjs", this.HighlightStyle + ".css"));
         }
 
-        if (typeof (Settings.Default.EmbeddingStyle) == "boolean")
+        if (typeof (Settings.Default.EmbeddingStyle) === "boolean")
         {
             this.EmbeddingStyle = Settings.Default.EmbeddingStyle;
         }
@@ -864,7 +864,7 @@ export default class Document
     {
         let prototype = new Header();
 
-        if (typeof propertyKey == 'object')
+        if (typeof propertyKey === "object")
         {
             // First implementation has been called (object, string, object?)
             return this.CreateSection(prototype, source, configKey, propertyKey);
@@ -911,7 +911,7 @@ export default class Document
     {
         let prototype = new Footer();
 
-        if (typeof propertyKey == 'string')
+        if (typeof propertyKey === "string")
         {
             // First implementation has been called (object, string, object?)
             return this.CreateSection(prototype, source, configKey, propertyKey);
@@ -965,7 +965,7 @@ export default class Document
         let result = prototype;
         let section;
 
-        if (typeof propertyKey == 'object')
+        if (typeof propertyKey === "object")
         {
             // First implementation has been called (Section, object, string, object?)
             target = propertyKey;
@@ -989,8 +989,8 @@ export default class Document
 
         if (this.ValidateSection(section))
         {
-            prototype.Height = section['height'];
-            prototype.Content = section['content'];
+            prototype.Height = section.height;
+            prototype.Content = section.content;
 
             Reflect.set(target, propertyKey, prototype);
             return Reflect.get(target, propertyKey);
@@ -1009,7 +1009,7 @@ export default class Document
      */
     private ValidateSection(section): boolean
     {
-        return ('height' in section) && ('content' in section);
+        return ("height" in section) && ("content" in section);
     }
 
     /**
@@ -1024,33 +1024,33 @@ export default class Document
             // Preparing the styles
             let systemStyleSheets: string[] = [];
             let styleSheets = this.StyleSheets;
-            let markdownExt = VSCode.extensions.getExtension('Microsoft.vscode-markdown');
+            let markdownExt = VSCode.extensions.getExtension("Microsoft.vscode-markdown");
 
             if (this.SystemStylesEnabled)
             {
                 let styles: string[] = [];
                 if (markdownExt)
                 {
-                    styles.push(Path.join(markdownExt.extensionPath, 'media', 'markdown.css'));
-                    styles.push(Path.join(markdownExt.extensionPath, 'media', 'tomorrow.css'));
+                    styles.push(Path.join(markdownExt.extensionPath, "media", "markdown.css"));
+                    styles.push(Path.join(markdownExt.extensionPath, "media", "tomorrow.css"));
                 }
-                styles.push(Path.join(__dirname, '..', '..', 'Resources', 'css', 'styles.css'));
+                styles.push(Path.join(__dirname, "..", "..", "Resources", "css", "styles.css"));
 
                 systemStyleSheets = styles.concat(systemStyleSheets);
             }
 
-            let styles = '<style>\n';
+            let styleCode = "<style>\n";
 
             if (this.Styles)
             {
-                styles += this.Styles + '\n';
+                styleCode += this.Styles + "\n";
             }
 
             systemStyleSheets.forEach(styleSheet =>
             {
                 if (FS.existsSync(styleSheet))
                 {
-                    styles += FS.readFileSync(styleSheet).toString() + '\n';
+                    styleCode += FS.readFileSync(styleSheet).toString() + "\n";
                 }
             });
 
@@ -1058,59 +1058,59 @@ export default class Document
             {
                 if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
                 {
-                    if (this.EmbeddingStyle === true || this.EmbeddingStyle == EmbeddingOption.All || this.EmbeddingStyle == EmbeddingOption.Web)
+                    if (this.EmbeddingStyle === true || this.EmbeddingStyle === EmbeddingOption.All || this.EmbeddingStyle === EmbeddingOption.Web)
                     {
                         let result = Request(styleSheet);
 
-                        if (result.statusCode == 200)
+                        if (result.statusCode === 200)
                         {
-                            styles += result.body;
+                            styleCode += result.body;
                         }
                     }
                     else
                     {
-                        styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
+                        styleCode += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
                     }
                 }
                 else
                 {
                     // Removing leading 'file://' from the local path.
-                    styleSheet.replace(/^file:\/\//, '');
+                    styleSheet.replace(/^file:\/\//, "");
 
-                    if (this.EmbeddingStyle === true || this.EmbeddingStyle == EmbeddingOption.All || this.EmbeddingStyle == EmbeddingOption.Local)
+                    if (this.EmbeddingStyle === true || this.EmbeddingStyle === EmbeddingOption.All || this.EmbeddingStyle === EmbeddingOption.Local)
                     {
                         if (FS.existsSync(styleSheet))
                         {
-                            styles += FS.readFileSync(styleSheet).toString() + '\n';
+                            styleCode += FS.readFileSync(styleSheet).toString() + "\n";
                         }
                     }
                     else
                     {
-                        styles += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
+                        styleCode += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
                     }
                 }
             });
-            styles += '</style>';
+            styleCode += "</style>";
 
             let content = this.Content;
 
             if (this.Wrapper)
             {
-                content = Mustache.render(this.Wrapper, { content: content });
+                content = Mustache.render(this.Wrapper, { content });
             }
 
             let view = {
-                styles: styles,
+                styleCode,
                 content: this.Render(content)
-            }
+            };
 
             return Mustache.render(template, view);
         }
         catch (e)
         {
-            if ('path' in e)
+            if ("path" in e)
             {
-                throw new UnauthorizedAccessException(e['path']);
+                throw new UnauthorizedAccessException(e.path);
             }
 
             throw e;
@@ -1120,7 +1120,7 @@ export default class Document
 
 function enumerable(value)
 {
-    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor)
+    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) =>
     {
         descriptor.enumerable = value;
     };
