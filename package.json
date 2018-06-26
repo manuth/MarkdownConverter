@@ -821,7 +821,7 @@
     "@types/transliteration": "^1.6.0",
     "mocha": "^5.2.0",
     "tslint": "^5.10.0",
-    "typescript": "^2.3.2",
+    "typescript": "^2.9.2",
     "vscode": "^1.1.18"
   },
   "dependencies": {
