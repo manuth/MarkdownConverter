@@ -251,5 +251,5 @@ paket-files/
 .idea/
 *.sln.iml
 
-# VSCode Extension-Dev Environment
-out/
+# Compiled TypeScript-Files
+[Ll]ib/
