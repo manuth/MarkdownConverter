@@ -1,9 +1,9 @@
-import { IOException } from "./IOException";
+import IOException from "./IOException";
 
 /**
  * Represents an Input-/Output-Exception.
  */
-export class FileException extends IOException
+export default class FileException extends IOException
 {
     /**
      * Gets or sets the path to the file which caused the exception.

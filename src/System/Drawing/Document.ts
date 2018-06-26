@@ -4,33 +4,35 @@ import * as Path from 'path';
 import * as URL from 'url';
 import * as VSCode from 'vscode';
 import * as Anchor from 'markdown-it-anchor';
-import { DateTimeFormatter } from '../Globalization/DateTimeFormatter';
-import { EmbeddingOption } from './EmbeddingOption';
-import { Encoding } from "../Text/Encoding";
+import DateTimeFormatter from '../Globalization/DateTimeFormatter';
+import EmbeddingOption from './EmbeddingOption';
+import Encoding from "../Text/Encoding";
 import * as FrontMatter from 'front-matter';
-import { Fullname } from '../Fullname';
-import { Header, Footer, Section } from './Section';
+import Fullname from '../Fullname';
+import Section from './Section';
+import Header from "./Header";
+import Footer from "./Footer";
 import * as HighlightJs from 'highlightjs';
-import { Layout } from "./Layout";
-import { ListType } from "./ListType";
-import { Margin } from "./Margin";
+import Layout from "./Layout";
+import ListType from "./ListType";
+import Margin from "./Margin";
 import * as MarkdownIt from 'markdown-it';
 import * as MarkdownItEmoji from 'markdown-it-emoji';
 import * as MarkdownItToc from 'markdown-it-table-of-contents';
 import { MultiRange } from 'multi-integer-range';
 import * as Mustache from 'mustache';
 import * as Request from 'sync-request';
-import { Settings } from "../../Properties/Settings";
-import { TOCSettings } from "./TOCSettings";
+import Settings from "../../Properties/Settings";
+import TOCSettings from "./TOCSettings";
 import * as Transliteration from 'transliteration';
 import * as TwEmoji from 'twemoji';
-import { UnauthorizedAccessException } from "../UnauthorizedAccessException";
-import { YAMLException } from "../YAML/YAMLException";
+import UnauthorizedAccessException from "../UnauthorizedAccessException";
+import YAMLException from "../YAML/YAMLException";
 
 /**
  * Represents a document.
  */
-export class Document
+export default class Document
 {
     /**
      * Contains all processed slugs and the count of them.

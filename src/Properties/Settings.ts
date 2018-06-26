@@ -1,14 +1,16 @@
 import * as VSCode from 'vscode';
-import { ConversionType } from "../ConversionType";
-import { EmbeddingOption } from "../System/Drawing/EmbeddingOption";
-import { Footer, Header, Section } from "../System/Drawing/Section";
-import { KeyNotFoundException } from "../System/KeyNotFoundException";
-import { Layout } from "../System/Drawing/Layout";
-import { ListType } from "../System/Drawing/ListType";
-import { Margin } from "../System/Drawing/Margin";
-import { TOCSettings } from "../System/Drawing/TOCSettings";
+import ConversionType from "../ConversionType";
+import EmbeddingOption from "../System/Drawing/EmbeddingOption";
+import Section from "../System/Drawing/Section";
+import Header from "../System/Drawing/Header";
+import Footer from "../System/Drawing/Footer";
+import KeyNotFoundException from "../System/KeyNotFoundException";
+import Layout from "../System/Drawing/Layout";
+import ListType from "../System/Drawing/ListType";
+import Margin from "../System/Drawing/Margin";
+import TOCSettings from "../System/Drawing/TOCSettings";
 
-export class Settings
+export default class Settings
 {
     /**
      * Gets the key of the configuration of the extension.

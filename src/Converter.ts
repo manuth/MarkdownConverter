@@ -3,15 +3,15 @@ import * as FS from 'fs';
 import * as Path from 'path';
 import * as PhantomJS from 'phantomjs-prebuilt';
 import * as Temp from 'temp';
-import { Document } from "./System/Drawing/Document";
-import { ConversionType, GetExtensions } from "./ConversionType";
-import { PhantomJSTimeoutException } from "./System/Web/PhantomJS/PhantomJSTimeoutException";
-import { UnauthorizedAccessException } from "./System/UnauthorizedAccessException";
+import Document from "./System/Drawing/Document";
+import ConversionType from "./ConversionType";
+import PhantomJSTimeoutException from "./System/Web/PhantomJS/PhantomJSTimeoutException";
+import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
 
 /**
  * Provides a markdown-converter.
  */
-export class Converter
+export default class Converter
 {
     /**
      * The document which is to be converted.
@@ -49,7 +49,7 @@ export class Converter
             }
 
             let destinationPath = Path.resolve(path);
-            let tempPath = Temp.path({ suffix: GetExtensions()[conversionType] });
+            let tempPath = Temp.path({ suffix: Path.extname(path) });
             let type = ConversionType[conversionType];
             let args = [
                 Path.join(__dirname, 'PhantomJS', 'PDFGenerator.js'),

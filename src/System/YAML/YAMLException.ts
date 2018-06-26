@@ -1,9 +1,9 @@
-import { Exception } from "../Exception";
+import Exception from "../Exception";
 
 /**
  * Represents a YAML-exception.
  */
-export class YAMLException extends Exception
+export default class YAMLException extends Exception
 {
     /**
      * The name of the exception.

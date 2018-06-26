@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as nls from 'vscode-nls';
 import * as path from 'path';
-import { Encoding } from '../Text/Encoding';
+import Encoding from '../Text/Encoding';
 
 /**
  * Gets a set of DateTime-string-tokens.
@@ -11,7 +11,7 @@ let tokens: { [id: string]: string };
 /**
  * Provides the functionallity to format a date.
  */
-export class DateTimeFormatter
+export default class DateTimeFormatter
 {
     /**
      * The locale to format the date.

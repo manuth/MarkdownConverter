@@ -5,16 +5,16 @@ import * as MKDirP from 'mkdirp';
 import * as NLS from 'vscode-nls';
 import * as Path from 'path';
 import { env, TextDocument, window } from 'vscode';
-import { ConversionType, GetExtensions } from './ConversionType';
-import { Converter } from "./Converter";
-import { Document } from './System/Drawing/Document';
-import { PhantomJSTimeoutException } from "./System/Web/PhantomJS/PhantomJSTimeoutException";
-import { UnauthorizedAccessException } from "./System/UnauthorizedAccessException";
+import ConversionType from './ConversionType';
+import Converter from "./Converter";
+import Document from './System/Drawing/Document';
+import PhantomJSTimeoutException from "./System/Web/PhantomJS/PhantomJSTimeoutException";
+import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
 
 /**
  * Provides the main logic of the extension
  */
-export class Program
+export default class Program
 {
     /**
      * Converts a markdown-file to other file-types
@@ -39,7 +39,6 @@ export class Program
         }
 
         let converter = new Converter(doc);
-        let extensions = GetExtensions();
 
         types.forEach(type =>
         {
@@ -50,7 +49,32 @@ export class Program
 
             try
             {
-                let destination = Path.join(outDir, fileName + extensions[type]);
+                let extension: string;
+
+                switch (type)
+                {
+                    case ConversionType.BMP:
+                        extension = "bmp";
+                        break;
+                    case ConversionType.HTML:
+                        extension = "html";
+                        break;
+                    case ConversionType.JPEG:
+                        extension = "jpg";
+                        break;
+                    case ConversionType.PPM:
+                        extension = "ppm";
+                        break;
+                    case ConversionType.PNG:
+                        extension = "png";
+                        break;
+                    case ConversionType.PDF:
+                    default:
+                        extension = "pdf";
+                        break;
+                }
+
+                let destination = Path.join(outDir, fileName + "." + extension);
                 converter.Start(type, destination);
                 window.showInformationMessage(localize(0 /* SuccessMessage */, null, ConversionType[type], destination), localize(1 /* OpenFileLabel */, null)).then((label) =>
                 {

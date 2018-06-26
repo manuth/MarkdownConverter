@@ -3,17 +3,17 @@
 import * as VSCode from 'vscode';
 import * as Path from 'path';
 import * as ChildProcess from 'child_process';
-import { ConversionType } from "./ConversionType";
-import { MarkdownFileNotFoundException } from "./System/MarkdownFileNotFoundException";
+import ConversionType from "./ConversionType";
+import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
 import * as NLS from 'vscode-nls';
 import * as NPM from 'npm';
 import * as PhantomJS from 'phantomjs-prebuilt';
-import { ProcessException } from './System/Tasks/ProcessException';
-import { Program } from "./Program";
-import { Settings } from "./Properties/Settings";
+import ProcessException from './System/Tasks/ProcessException';
+import Program from "./Program";
+import Settings from "./Properties/Settings";
 import * as Shell from 'shelljs';
-import { UnauthorizedAccessException } from "./System/UnauthorizedAccessException";
-import { YAMLException } from "./System/YAML/YAMLException";
+import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
+import YAMLException from "./System/YAML/YAMLException";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

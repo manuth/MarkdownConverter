@@ -3,7 +3,7 @@ import * as shell from 'shelljs';
 /**
  * Provides the functionallity to determine the full name of the current user.
  */
-export class Fullname
+export default class Fullname
 {
     /**
      * The environment-variables which may contain the username.

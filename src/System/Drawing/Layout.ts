@@ -1,9 +1,9 @@
-import { Margin } from "./Margin";
+import Margin from "./Margin";
 
 /**
  * Represents a document-layout.
  */
-export class Layout
+export default class Layout
 {
     /**
      * The margin.

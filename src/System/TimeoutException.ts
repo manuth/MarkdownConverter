@@ -1,8 +1,8 @@
-import { Exception } from "./Exception";
+import Exception from "./Exception";
 
 /**
  * Represents a Timeout-Exception
  */
-export class TimeoutException extends Exception
+export default class TimeoutException extends Exception
 {
 }

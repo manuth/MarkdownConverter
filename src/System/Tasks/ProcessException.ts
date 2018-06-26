@@ -1,9 +1,9 @@
-import { Exception } from "../Exception";
+import Exception from "../Exception";
 
 /**
  * Represents an Input-/Output-Exception.
  */
-export class ProcessException extends Exception
+export default class ProcessException extends Exception
 {
     /**
      * Gets or sets the standard-output of the process that caused the exception.

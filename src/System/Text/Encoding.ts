@@ -1,7 +1,7 @@
 /**
  * Provides some usefule functionallities.
  */
-export class Encoding
+export default class Encoding
 {
     /**
      * Converts a string to code its code-points-value.

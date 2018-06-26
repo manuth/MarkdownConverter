@@ -1,8 +1,8 @@
-import { TimeoutException } from "../../TimeoutException";
+import TimeoutException from "../../TimeoutException";
 
 /**
  * Represents a Timeout-exception triggered by PhantomJS
  */
-export class PhantomJSTimeoutException extends TimeoutException
+export default class PhantomJSTimeoutException extends TimeoutException
 {
 }
