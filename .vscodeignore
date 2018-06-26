@@ -1,8 +1,6 @@
 .vscode/**
 .vscode-test/**
-out/test/**
-typings/**
-test/**
+lib/tests/**
 src/**
 **/*.map
 .gitignore

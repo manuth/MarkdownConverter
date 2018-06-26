@@ -30,10 +30,7 @@
   "activationEvents": [
     "onCommand:markdownConverter.convert"
   ],
-  "main": "./out/src/extension",
-  "bin": {
-    "markdown-converter": "./out/src/index.js"
-  },
+  "main": "./lib/extension",
   "contributes": {
     "commands": [
       {
