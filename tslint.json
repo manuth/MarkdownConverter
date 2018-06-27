@@ -18,6 +18,7 @@
         "arrow-parens": false,
         "array-type": false,
         "member-ordering": false,
+        "no-bitwise": false,
         "no-console": false,
         "no-unused-variable": {
             "severity": "warn"
@@ -38,6 +39,7 @@
         "arrow-parens": false,
         "array-type": false,
         "member-ordering": false,
+        "no-bitwise": false,
         "no-console": false,
         "no-unused-variable": {
             "severity": "warning"
