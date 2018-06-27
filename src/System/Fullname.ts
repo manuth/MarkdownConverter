@@ -1,4 +1,4 @@
-import * as shell from 'shelljs';
+import * as shell from "shelljs";
 
 /**
  * Provides the functionallity to determine the full name of the current user.
@@ -9,10 +9,10 @@ export default class Fullname
      * The environment-variables which may contain the username.
      */
     private static envVars: string[] = [
-        'GIT_AUTHOR_NAME',
-        'GIT_COMMITTER_NAME',
-        'HGUSER', // Mercurial
-        'C9_USER' // Cloud9
+        "GIT_AUTHOR_NAME",
+        "GIT_COMMITTER_NAME",
+        "HGUSER", // Mercurial
+        "C9_USER" // Cloud9
     ];
 
     /**
@@ -20,7 +20,7 @@ export default class Fullname
      */
     private static CheckWmic(): string
     {
-        let fullname = shell.exec('wmic useraccount where name="%username%" get fullname').stdout.replace('FullName', '');
+        let fullname = shell.exec('wmic useraccount where name="%username%" get fullname').stdout.replace("FullName", "");
         return fullname;
     }
 
@@ -41,7 +41,7 @@ export default class Fullname
      */
     private static CheckAuthorName(): string
     {
-        let fullname = require('rc')('npm')['init-author-name'];
+        let fullname = require("rc")("npm")["init-author-name"];
         return fullname;
     }
 
@@ -50,7 +50,7 @@ export default class Fullname
      */
     private static CheckGit(): string
     {
-        return shell.exec('git config --global user.name').stdout;
+        return shell.exec("git config --global user.name").stdout;
     }
 
     /**
@@ -58,7 +58,7 @@ export default class Fullname
      */
     private static CheckOsaScript(): string
     {
-        return shell.exec('osascript -e long user name of (system info)').stdout;
+        return shell.exec("osascript -e long user name of (system info)").stdout;
     }
 
     /**
@@ -68,12 +68,12 @@ export default class Fullname
     {
         yield this.CheckEnv();
         yield this.CheckAuthorName();
-        if (process.platform === 'win32')
+        if (process.platform === "win32")
         {
             yield this.CheckWmic();
         }
 
-        if (process.platform === 'darwin')
+        if (process.platform === "darwin")
         {
             yield this.CheckOsaScript();
         }
@@ -85,19 +85,21 @@ export default class Fullname
      */
     public static get FullName(): string
     {
+        let result: string;
+        let current: IteratorResult<string>;
         let functionArray = this.functions();
         do
         {
             try
             {
-                var current = functionArray.next();
-                current.value = current.value.trim();
+                current = functionArray.next();
+                result = current.value.trim();
             }
             catch (e) { }
         }
-        while (!(current.done || current.value));
+        while (!(current.done || result));
 
-        return current.value;
+        return result;
     }
 
 }

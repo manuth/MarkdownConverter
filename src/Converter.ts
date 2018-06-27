@@ -1,8 +1,8 @@
-import * as ChildProcess from 'child_process';
-import * as FS from 'fs';
-import * as Path from 'path';
-import * as PhantomJS from 'phantomjs-prebuilt';
-import * as Temp from 'temp';
+import * as ChildProcess from "child_process";
+import * as FS from "fs";
+import * as Path from "path";
+import * as PhantomJS from "phantomjs-prebuilt";
+import * as Temp from "temp";
 import Document from "./System/Drawing/Document";
 import ConversionType from "./ConversionType";
 import PhantomJSTimeoutException from "./System/Web/PhantomJS/PhantomJSTimeoutException";
@@ -40,10 +40,10 @@ export default class Converter
      */
     public Start(conversionType: ConversionType, path: string): void
     {
-        if (conversionType != ConversionType.HTML)
+        if (conversionType !== ConversionType.HTML)
         {
             // Saving the JSON that represents the document to a temporary JSON-file.
-            let jsonPath = Temp.path({ suffix: '.json' });
+            let jsonPath = Temp.path({ suffix: ".json" });
             {
                 FS.writeFileSync(jsonPath, this.document.toJSON());
             }
@@ -52,7 +52,7 @@ export default class Converter
             let tempPath = Temp.path({ suffix: Path.extname(path) });
             let type = ConversionType[conversionType];
             let args = [
-                Path.join(__dirname, 'PhantomJS', 'PDFGenerator.js'),
+                Path.join(__dirname, "PhantomJS", "PDFGenerator.js"),
                 type,
                 jsonPath,
                 tempPath
@@ -60,9 +60,9 @@ export default class Converter
             let result = ChildProcess.spawnSync(PhantomJS.path, args, { timeout: 2 * 60 * 1000 });
             if (result.error)
             {
-                if ('code' in result.error)
+                if ("code" in result.error)
                 {
-                    if (result.error['code'] == 'ETIMEDOUT')
+                    if (result.error["code"] === "ETIMEDOUT")
                     {
                         throw new PhantomJSTimeoutException();
                     }
@@ -84,9 +84,9 @@ export default class Converter
             }
             catch (e)
             {
-                if ('path' in e)
+                if ("path" in e)
                 {
-                    throw new UnauthorizedAccessException(e['path']);
+                    throw new UnauthorizedAccessException(e["path"]);
                 }
                 throw e;
             }

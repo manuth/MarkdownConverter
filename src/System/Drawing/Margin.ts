@@ -6,22 +6,22 @@ export default class Margin
     /**
      * The top margin.
      */
-    private top: string = '1cm';
+    private top: string = "1cm";
 
     /**
      * The right margin.
      */
-    private right: string = '1cm';
+    private right: string = "1cm";
 
     /**
      * The bottom margin.
      */
-    private bottom: string = '1cm';
+    private bottom: string = "1cm";
 
     /**
      * The left margin.
      */
-    private left: string = '1cm';
+    private left: string = "1cm";
 
     /**
      * Initializes a new instance of the Margin class.

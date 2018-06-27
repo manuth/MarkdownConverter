@@ -1,17 +1,17 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as VSCode from 'vscode';
-import * as Path from 'path';
-import * as ChildProcess from 'child_process';
+import * as VSCode from "vscode";
+import * as Path from "path";
+import * as ChildProcess from "child_process";
 import ConversionType from "./ConversionType";
 import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
-import * as NLS from 'vscode-nls';
-import * as NPM from 'npm';
-import * as PhantomJS from 'phantomjs-prebuilt';
-import ProcessException from './System/Tasks/ProcessException';
+import * as NLS from "vscode-nls";
+import * as NPM from "npm";
+import * as PhantomJS from "phantomjs-prebuilt";
+import ProcessException from "./System/Tasks/ProcessException";
 import Program from "./Program";
 import Settings from "./Properties/Settings";
-import * as Shell from 'shelljs';
+import * as Shell from "shelljs";
 import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
 import YAMLException from "./System/YAML/YAMLException";
 
@@ -21,19 +21,19 @@ export function activate(context: VSCode.ExtensionContext)
 {
     // Gets a value indicating whether phantomjs could be built.
     let phantomJSBuilt = null;
-    let localize: any = NLS.config({ locale: VSCode.env.language })(Path.join(__dirname, '..', '..', 'Resources', 'Localization', 'MarkdownConverter'));
+    let localize: any = NLS.config({ locale: VSCode.env.language })(Path.join(__dirname, "..", "..", "Resources", "Localization", "MarkdownConverter"));
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     // console.log('Congratulations, your extension "markdown-converter" is now active!');
 
     // Rebuilding PhantomJS if required.
-    if (PhantomJS.platform != process.platform)
+    if (PhantomJS.platform !== process.platform)
     {
         try
         {
             let env = process.env;
-            env['PHANTOMJS_PLATFORM'] = process.platform;
+            env["PHANTOMJS_PLATFORM"] = process.platform;
             env["PHANTOMJS_ARCH"] = process.arch;
             VSCode.window.showInformationMessage(localize(2 /* UpdateMessage */, null));
             process.chdir(Path.join(__dirname, "..", ".."));
@@ -41,8 +41,9 @@ export function activate(context: VSCode.ExtensionContext)
             ChildProcess.exec(
                 Path.join("node_modules", ".bin", "npm") + " rebuild phantomjs-prebuilt",
                 {
-                    env: env
-                }, function (error, stdout, stderr)
+                    env
+                },
+                (error, stdout, stderr) =>
                 {
                     if (!error && !stderr)
                     {
@@ -70,7 +71,7 @@ export function activate(context: VSCode.ExtensionContext)
         VSCode.commands.registerCommand("markdownConverter.convert", async () =>
         {
             // The code you place here will be executed every time your command is executed
-            if (PhantomJS.platform != process.platform)
+            if (PhantomJS.platform !== process.platform)
             {
                 if (phantomJSBuilt)
                 {
@@ -94,7 +95,7 @@ export function activate(context: VSCode.ExtensionContext)
                         let base: string;
                         let outDir = Settings.Default.OutputDirectory;
 
-                        if (VSCode.workspace.workspaceFolders && (VSCode.workspace.workspaceFolders.length == 1))
+                        if (VSCode.workspace.workspaceFolders && (VSCode.workspace.workspaceFolders.length === 1))
                         {
                             base = VSCode.workspace.workspaceFolders[0].uri.fsPath;
                         }
@@ -141,7 +142,7 @@ export function activate(context: VSCode.ExtensionContext)
                     }
                     else if (e instanceof YAMLException)
                     {
-                        message = localize(7 /* YAMLException */, null, e.mark.line + 1, e.mark.column);
+                        message = localize(7 /* YAMLException */, null, e.Mark.line + 1, e.Mark.column);
                     }
                     else if (e instanceof Error)
                     {
@@ -163,15 +164,15 @@ export function activate(context: VSCode.ExtensionContext)
      */
     function getMarkdownDoc(): VSCode.TextDocument
     {
-        if (VSCode.window.activeTextEditor && (VSCode.window.activeTextEditor.document.languageId == "markdown" || Settings.Default.IgnoreLanguage))
+        if (VSCode.window.activeTextEditor && (VSCode.window.activeTextEditor.document.languageId === "markdown" || Settings.Default.IgnoreLanguage))
         {
             return VSCode.window.activeTextEditor.document;
         }
-        for (let i = 0; i < VSCode.window.visibleTextEditors.length; i++)
+        for (let textEditor of VSCode.window.visibleTextEditors)
         {
-            if (VSCode.window.visibleTextEditors[i].document.languageId == "markdown")
+            if (textEditor.document.languageId === "markdown")
             {
-                return VSCode.window.visibleTextEditors[i].document;
+                return textEditor.document;
             }
         }
         return null;
