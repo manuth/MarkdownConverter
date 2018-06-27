@@ -253,3 +253,6 @@ paket-files/
 
 # Compiled TypeScript-Files
 [Ll]ib/
+
+# Visual Studio Code Test cache/options directory
+.vscode-test

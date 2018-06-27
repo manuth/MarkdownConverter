@@ -23,7 +23,7 @@
     "url": "https://github.com/manuth/MarkdownConverter.git"
   },
   "engines": {
-    "vscode": "^1.15.0"
+    "vscode": "^1.23.0"
   },
   "categories": [
     "Other"
@@ -800,23 +800,23 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test"
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
     "@types/markdown-it": "0.0.3",
     "@types/markdown-it-anchor": "^4.0.1",
     "@types/mkdirp": "^0.5.1",
-    "@types/mocha": "^2.2.32",
+    "@types/mocha": "^2.2.42",
     "@types/mustache": "^0.8.30",
-    "@types/node": "^6.0.88",
+    "@types/node": "^7.0.43",
     "@types/npm": "^2.0.29",
     "@types/shelljs": "^0.7.4",
     "@types/temp": "^0.8.29",
     "@types/transliteration": "^1.6.0",
-    "mocha": "^5.2.0",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2",
     "vscode": "^1.1.18"
