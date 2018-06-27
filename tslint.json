@@ -41,11 +41,13 @@
         "member-ordering": false,
         "no-bitwise": false,
         "no-console": false,
+        "no-string-literal": false,
         "no-unused-variable": {
             "severity": "warning"
         },
         "no-unused-expression": {
             "severity": "warning"
-        }
+        },
+        "unified-signatures": false
     }
 }
