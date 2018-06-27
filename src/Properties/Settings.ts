@@ -1,4 +1,4 @@
-import * as VSCode from 'vscode';
+import * as VSCode from "vscode";
 import ConversionType from "../ConversionType";
 import EmbeddingOption from "../System/Drawing/EmbeddingOption";
 import Section from "../System/Drawing/Section";
@@ -15,7 +15,7 @@ export default class Settings
     /**
      * Gets the key of the configuration of the extension.
      */
-    private static readonly configKey: string = 'markdownConverter';
+    private static readonly configKey: string = "markdownConverter";
 
     private static defaultInstance: Settings = new Settings();
 
@@ -29,7 +29,7 @@ export default class Settings
      */
     public get OutputDirectory(): string
     {
-        return this.getConfigEntry<string>('outDir', '');
+        return this.getConfigEntry<string>("outDir", "");
     }
 
     /**
@@ -37,7 +37,7 @@ export default class Settings
      */
     public get IgnoreLanguage(): boolean
     {
-        return this.getConfigEntry<boolean>('ignoreLanguage', false);
+        return this.getConfigEntry<boolean>("ignoreLanguage", false);
     }
 
     /**
@@ -45,7 +45,7 @@ export default class Settings
      */
     public get AutoSave(): boolean
     {
-        return this.getConfigEntry<boolean>('autoSave', true);
+        return this.getConfigEntry<boolean>("autoSave", true);
     }
 
     /**
@@ -53,7 +53,7 @@ export default class Settings
      */
     public get Quality(): number
     {
-        return this.getConfigEntry<number>('document.quality', 90);
+        return this.getConfigEntry<number>("document.quality", 90);
     }
 
     /**
@@ -64,9 +64,9 @@ export default class Settings
         try
         {
             let types: ConversionType[] = [];
-            let value = this.getConfigEntry('conversionType');
+            let value = this.getConfigEntry("conversionType");
 
-            if (typeof value == 'string')
+            if (typeof value === "string")
             {
                 value = [value];
             }
@@ -89,7 +89,7 @@ export default class Settings
      */
     public get Emoji(): boolean | string
     {
-        return this.getConfigEntry('document.emoji', 'github');
+        return this.getConfigEntry("document.emoji", "github");
     }
 
     /**
@@ -97,7 +97,7 @@ export default class Settings
      */
     public get Attributes(): { [Key: string]: any }
     {
-        return this.getConfigEntry<{ [Key: string]: any }>('document.attributes', {});
+        return this.getConfigEntry<{ [Key: string]: any }>("document.attributes", {});
     }
 
     /**
@@ -105,7 +105,7 @@ export default class Settings
      */
     public get Locale(): string
     {
-        return this.getConfigEntry<string>('document.localization.locale', VSCode.env.language);
+        return this.getConfigEntry<string>("document.localization.locale", VSCode.env.language);
     }
 
     /**
@@ -113,7 +113,7 @@ export default class Settings
      */
     public get DateFormat(): string
     {
-        return this.getConfigEntry<string>('document.localization.dateFormat', 'default');
+        return this.getConfigEntry<string>("document.localization.dateFormat", "default");
     }
 
     /**
@@ -123,22 +123,22 @@ export default class Settings
     {
         let layout = new Layout();
         layout.Margin = new Margin(
-            this.getConfigEntry<string>('document.layout.margin.top', '1cm'),
-            this.getConfigEntry<string>('document.layout.margin.right', '1cm'),
-            this.getConfigEntry<string>('document.layout.margin.bottom', '1cm'),
-            this.getConfigEntry<string>('document.layout.margin.left', '1cm'));
+            this.getConfigEntry<string>("document.layout.margin.top", "1cm"),
+            this.getConfigEntry<string>("document.layout.margin.right", "1cm"),
+            this.getConfigEntry<string>("document.layout.margin.bottom", "1cm"),
+            this.getConfigEntry<string>("document.layout.margin.left", "1cm"));
 
         try
         {
-            let width = this.getConfigEntry<string>('document.layout.width');
-            let height = this.getConfigEntry<string>('document.layout.height');
+            let width = this.getConfigEntry<string>("document.layout.width");
+            let height = this.getConfigEntry<string>("document.layout.height");
             layout.Width = width;
             layout.Height = height;
         }
         catch (exception)
         {
-            layout.Format = this.getConfigEntry<string>('document.layout.format', 'A4');
-            layout.Orientation = this.getConfigEntry<string>('document.layout.orientation', 'portrait');
+            layout.Format = this.getConfigEntry<string>("document.layout.format", "A4");
+            layout.Orientation = this.getConfigEntry<string>("document.layout.orientation", "portrait");
         }
 
         return layout;
@@ -149,7 +149,7 @@ export default class Settings
      */
     public get Header(): Header
     {
-        return this.getHeader('document.header');
+        return this.getHeader("document.header");
     }
 
     /**
@@ -157,14 +157,14 @@ export default class Settings
      */
     public get SpecialHeaders(): { [Key: number]: Header }
     {
-        let configKey = 'document.specialHeaders';
+        let configKey = "document.specialHeaders";
         let result: { [Key: number]: Header } = {};
         let specialHeaders = this.getConfigEntry<{ pageNumber: number, header: Header }[]>(configKey, []);
 
         for (let key in specialHeaders)
         {
             let specialHeader = specialHeaders[key];
-            result[specialHeader.pageNumber] = this.getHeader(configKey + '.' + key + '.header');
+            result[specialHeader.pageNumber] = this.getHeader(configKey + "." + key + ".header");
         }
         return result;
     }
@@ -174,7 +174,7 @@ export default class Settings
      */
     public get EvenHeader(): Header
     {
-        return this.getHeader('document.evenHeader', null);
+        return this.getHeader("document.evenHeader", null);
     }
 
     /**
@@ -182,7 +182,7 @@ export default class Settings
      */
     public get OddHeader(): Header
     {
-        return this.getHeader('document.oddHeader', null);
+        return this.getHeader("document.oddHeader", null);
     }
 
     /**
@@ -190,7 +190,7 @@ export default class Settings
      */
     public get LastHeader(): Header
     {
-        return this.getHeader('document.lastHeader', null);
+        return this.getHeader("document.lastHeader", null);
     }
 
     /**
@@ -198,7 +198,7 @@ export default class Settings
      */
     public get Footer(): Footer
     {
-        return this.getFooter('document.footer');
+        return this.getFooter("document.footer");
     }
 
     /**
@@ -206,14 +206,14 @@ export default class Settings
      */
     public get SpecialFooters(): { [Key: number]: Footer }
     {
-        let configKey = 'document.specialFooters';
+        let configKey = "document.specialFooters";
         let result: { [Key: number]: Footer } = {};
         let specialFooters = this.getConfigEntry<{ pageNumber: number, footer: Footer }[]>(configKey, []);
 
         for (let key in specialFooters)
         {
             let specialFooter = specialFooters[key];
-            result[specialFooter.pageNumber] = this.getFooter(configKey + '.' + key + '.footer');
+            result[specialFooter.pageNumber] = this.getFooter(configKey + "." + key + ".footer");
         }
         return result;
     }
@@ -223,7 +223,7 @@ export default class Settings
      */
     public get EvenFooter(): Footer
     {
-        return this.getFooter('document.evenFooter', null);
+        return this.getFooter("document.evenFooter", null);
     }
 
     /**
@@ -231,7 +231,7 @@ export default class Settings
      */
     public get OddFooter(): Footer
     {
-        return this.getFooter('document.oddFooter', null);
+        return this.getFooter("document.oddFooter", null);
     }
 
     /**
@@ -239,7 +239,7 @@ export default class Settings
      */
     public get LastFooter(): Footer
     {
-        return this.getFooter('document.lastFooter', null);
+        return this.getFooter("document.lastFooter", null);
     }
 
     /**
@@ -248,10 +248,10 @@ export default class Settings
     public get TOCSettings(): TOCSettings
     {
         let tocSettings = new TOCSettings();
-        tocSettings.Class = this.getConfigEntry<string>('document.toc.class', 'toc');
-        tocSettings.LevelRange = this.getConfigEntry<string>('document.toc.levels', '4-6');
-        tocSettings.Indicator = this.getConfigEntry<RegExp>('document.toc.indicator', /^\[\[\s*toc\s*\]\]/im);
-        tocSettings.ListType = ListType[this.getConfigEntry<string>('document.toc.listType', ListType[ListType.ul])];
+        tocSettings.Class = this.getConfigEntry<string>("document.toc.class", "toc");
+        tocSettings.LevelRange = this.getConfigEntry<string>("document.toc.levels", "4-6");
+        tocSettings.Indicator = this.getConfigEntry<RegExp>("document.toc.indicator", /^\[\[\s*toc\s*\]\]/im);
+        tocSettings.ListType = ListType[this.getConfigEntry<string>("document.toc.listType", ListType[ListType.ul])];
         return tocSettings;
     }
 
@@ -260,7 +260,7 @@ export default class Settings
      */
     public get Template(): string
     {
-        return this.getConfigEntry<string>('document.style.template', null);
+        return this.getConfigEntry<string>("document.style.template", null);
     }
 
     /**
@@ -268,7 +268,7 @@ export default class Settings
      */
     public get Wrapper(): string
     {
-        return this.getConfigEntry<string>('document.style.wrapper', null);
+        return this.getConfigEntry<string>("document.style.wrapper", null);
     }
 
     /**
@@ -276,7 +276,7 @@ export default class Settings
      */
     public get HighlightStyle(): boolean | string
     {
-        return this.getConfigEntry('document.style.highlightStyle', true);
+        return this.getConfigEntry("document.style.highlightStyle", true);
     }
 
     /**
@@ -284,7 +284,7 @@ export default class Settings
      */
     public get EmbeddingStyle(): boolean | string
     {
-        return this.getConfigEntry('document.style.embeddingStyle', EmbeddingOption[EmbeddingOption.All]);
+        return this.getConfigEntry("document.style.embeddingStyle", EmbeddingOption[EmbeddingOption.All]);
     }
 
     /**
@@ -292,7 +292,7 @@ export default class Settings
      */
     public get SystemStyles(): boolean
     {
-        return this.getConfigEntry<boolean>('document.style.systemStyles', true);
+        return this.getConfigEntry<boolean>("document.style.systemStyles", true);
     }
 
     /**
@@ -300,7 +300,7 @@ export default class Settings
      */
     public get Styles(): string
     {
-        return this.getConfigEntry<string>('document.style.styles', null);
+        return this.getConfigEntry<string>("document.style.styles", null);
     }
 
     /**
@@ -308,7 +308,7 @@ export default class Settings
      */
     public get StyleSheets(): string[]
     {
-        return this.getConfigEntry<string[]>('document.style.styleSheets', []);
+        return this.getConfigEntry<string[]>("document.style.styleSheets", []);
     }
 
     private get config(): VSCode.WorkspaceConfiguration
@@ -358,8 +358,8 @@ export default class Settings
         if (this.config.has(key))
         {
             let fragment = prototype;
-            fragment.Content = this.getConfigEntry<string>(key + '.content', defaultValue.Content);
-            fragment.Height = this.getConfigEntry<string>(key + '.height', defaultValue.Height);
+            fragment.Content = this.getConfigEntry<string>(key + ".content", defaultValue.Content);
+            fragment.Height = this.getConfigEntry<string>(key + ".height", defaultValue.Height);
             return fragment;
         }
         else
@@ -389,7 +389,7 @@ export default class Settings
         if (arguments.length <= 1)
         {
             defaultValue = new Header(
-                '15mm',
+                "15mm",
                 '<table style=\"width: 100%; table-layout: fixed; \">' +
                 '<td style=\"text-align: left; \">{{ Author }}</td>' +
                 '<td style=\"text-align: center\">{{ PageNumber }}/{{ PageCount }}</td>' +
@@ -413,7 +413,7 @@ export default class Settings
         if (arguments.length <= 1)
         {
             defaultValue = new Footer(
-                '1cm',
+                "1cm",
                 '<table style=\"width: 100%; table-layout: fixed; \">' +
                 '<td style=\"text-align: left; \"></td>' +
                 '<td style=\"text-align: center\">{{ CreationDate }}</td>' +

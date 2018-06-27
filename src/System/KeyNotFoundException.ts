@@ -6,21 +6,7 @@ import Exception from "./Exception";
 export default class KeyNotFoundException extends Exception
 {
     /**
-     * Initializes a new instance of the KeyNotFoundException class.
-     */
-    public constructor();
-
-    /**
-     * Initializes a new instance of the KeyNotFoundException class.
-     * 
-     * @param message
-     * The message of the exception.
-     */
-    public constructor(message: string);
-
-
-    /**
-     * Initializes a new instance of the KeyNotFoundException class.
+     * Initializes a new instance of the `KeyNotFoundException` class.
      * 
      * @param message
      * The message of the exception.
@@ -28,8 +14,6 @@ export default class KeyNotFoundException extends Exception
      * @param innerException
      * The exception that is the cause of the current exception. If the innerException parameter is not null, the current exception is raised in a catch block that handles the inner exception.
      */
-    public constructor(message: string, innerException: Exception);
-
     public constructor(message?: string, innerException?: Exception)
     {
         super(message, innerException);

@@ -10,6 +10,6 @@ export default class MarkdownFileNotFoundException extends FileNotFoundException
      */
     constructor()
     {
-        super('Couldn\'t find a markdown-file.', null);
+        super("Couldn't find a markdown-file.", null);
     }
 }

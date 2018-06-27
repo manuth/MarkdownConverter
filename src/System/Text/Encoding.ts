@@ -30,25 +30,25 @@ export default class Encoding
         //
         let length;
 
-        if ((buffer[0] & 0x80) == 0x0)
+        if ((buffer[0] & 0x80) === 0x0)
         {
             return buffer[0];
         }
 
-        if ((buffer[0] & 0xE0) == 0xC0)
+        if ((buffer[0] & 0xE0) === 0xC0)
         {
             length = 2;
             // Removing the mask of the first byte.
             buffer[0] = buffer[0] & 0x1F;
         }
-        if ((buffer[0] & 0xF0) == 0xE0)
+        if ((buffer[0] & 0xF0) === 0xE0)
         {
             length = 3;
             // Removing the mask of the first byte.
             buffer[0] = buffer[0] & 0xF;
         }
 
-        if ((buffer[0] & 0xF8) == 0xF0)
+        if ((buffer[0] & 0xF8) === 0xF0)
         {
             length = 4;
             // Removing the mask of the first byte.
@@ -59,7 +59,7 @@ export default class Encoding
 
         for (let i: number = 0; i <= length; i++)
         {
-            if ((buffer[i] & 0xC0) == 0x80 || i == 0)
+            if ((buffer[i] & 0xC0) === 0x80 || i === 0)
             {
                 // Removing the mask.
                 buffer[i] = buffer[i] & 0x3F;
@@ -68,7 +68,7 @@ export default class Encoding
             }
             else
             {
-                throw new SyntaxError('The given character isn\'t a valid UTF-8-character.');
+                throw new SyntaxError("The given character isn't a valid UTF-8-character.");
             }
         }
         return result;
@@ -106,6 +106,6 @@ export default class Encoding
      */
     public static DecToHexString(subject: number, length: number = 2): string
     {
-        return this.PadLeft(subject.toString(16), length, '0');
+        return this.PadLeft(subject.toString(16), length, "0");
     }
 }

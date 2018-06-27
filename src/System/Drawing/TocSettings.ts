@@ -1,5 +1,5 @@
 import ListType from "./ListType";
-import { MultiRange } from 'multi-integer-range';
+import { MultiRange } from "multi-integer-range";
 
 /**
  * Provides basic definitions of a table of contents.

@@ -23,42 +23,42 @@ export default class Layout
     /**
      * The paper-format.
      */
-    private format: string = 'A4';
+    private format: string = "A4";
 
     /**
      * The paper-orientation.
      */
-    private orientation: string = 'portrait';
+    private orientation: string = "portrait";
 
     /**
      * Paper-sizes
      */
     private static paperSizes = {
         A3: {
-            Width: '297mm',
-            Height: '42cm'
+            Width: "297mm",
+            Height: "42cm"
         },
         A4: {
-            Width: '21cm',
-            Height: '297mm'
+            Width: "21cm",
+            Height: "297mm"
         },
         A5: {
-            Width: '148mm',
-            Height: '21cm'
+            Width: "148mm",
+            Height: "21cm"
         },
         Legal: {
-            Width: '8.5in',
-            Height: '14.0in'
+            Width: "8.5in",
+            Height: "14.0in"
         },
         Letter: {
-            Width: '8.5in',
-            Height: '11.0in'
+            Width: "8.5in",
+            Height: "11.0in"
         },
         Tabloid: {
-            Width: '11.0in',
-            Height: '17.0in'
+            Width: "11.0in",
+            Height: "17.0in"
         }
-    }
+    };
 
     /**
      * Initializes a new instance of the Layout class.
@@ -90,7 +90,7 @@ export default class Layout
         }
         else
         {
-            return Layout.paperSizes[this.format][(this.orientation == 'landspace' ? 'Height' : 'Width')];
+            return Layout.paperSizes[this.format][(this.orientation === "landspace" ? "Height" : "Width")];
         }
     }
     public set Width(value: string)
@@ -109,7 +109,7 @@ export default class Layout
         }
         else
         {
-            return Layout.paperSizes[this.format][(this.orientation == 'landspace' ? 'Width' : 'Height')];
+            return Layout.paperSizes[this.format][(this.orientation === "landspace" ? "Width" : "Height")];
         }
     }
     public set Height(value: string)
@@ -150,18 +150,18 @@ export default class Layout
     {
         if (this.Width > this.Height)
         {
-            return 'landspace';
+            return "landspace";
         }
         else
         {
-            return 'portrait';
+            return "portrait";
         }
     }
     public set Orientation(value: string)
     {
-        if (value == 'landspace' || value == 'portrait')
+        if (value === "landspace" || value === "portrait")
         {
-            if (value != this.Orientation)
+            if (value !== this.Orientation)
             {
                 if (!this.Format)
                 {

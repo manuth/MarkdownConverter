@@ -1,5 +1,5 @@
-import FileException from './IO/FileException';
-import * as Format from 'string-format';
+import FileException from "./IO/FileException";
+import * as Format from "string-format";
 
 /**
  * Represents a 'File not found'-Exception.
@@ -32,10 +32,10 @@ export default class UnauthorizedAccessException extends FileException
 
     constructor(message: string, path?: string)
     {
-        if (arguments.length == 1)
+        if (arguments.length === 1)
         {
             path = message;
-            message = Format('Couldn\'t access the file {0}.', path);
+            message = Format("Couldn't access the file {0}.", path);
         }
         super(message, path);
     }

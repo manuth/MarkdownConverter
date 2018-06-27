@@ -22,7 +22,7 @@ export default class Section
      * @param content 
      * The content of the section.
      */
-    constructor(height: string = '', content: string = '')
+    constructor(height: string = "", content: string = "")
     {
         if (height)
         {
