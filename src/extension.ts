@@ -34,12 +34,12 @@ export function activate(context: VSCode.ExtensionContext)
         {
             let env = process.env;
             env['PHANTOMJS_PLATFORM'] = process.platform;
-            env['PHANTOMJS_ARCH'] = process.arch;
+            env["PHANTOMJS_ARCH"] = process.arch;
             VSCode.window.showInformationMessage(localize(2 /* UpdateMessage */, null));
-            process.chdir(Path.join(__dirname, '..', '..'));
+            process.chdir(Path.join(__dirname, "..", ".."));
 
             ChildProcess.exec(
-                Path.join('node_modules', '.bin', 'npm') + ' rebuild phantomjs-prebuilt',
+                Path.join("node_modules", ".bin", "npm") + " rebuild phantomjs-prebuilt",
                 {
                     env: env
                 }, function (error, stdout, stderr)
@@ -52,7 +52,7 @@ export function activate(context: VSCode.ExtensionContext)
                     }
                     else
                     {
-                        throw new ProcessException('', stdout, stderr, error);
+                        throw new ProcessException("", stdout, stderr, error);
                     }
                 });
         }
@@ -67,7 +67,7 @@ export function activate(context: VSCode.ExtensionContext)
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     let disposables = [
-        VSCode.commands.registerCommand('markdownConverter.convert', async () =>
+        VSCode.commands.registerCommand("markdownConverter.convert", async () =>
         {
             // The code you place here will be executed every time your command is executed
             if (PhantomJS.platform != process.platform)
@@ -114,7 +114,7 @@ export function activate(context: VSCode.ExtensionContext)
                         }
                         else
                         {
-                            name = 'temp';
+                            name = "temp";
                         }
 
                         let path = process.cwd();
@@ -163,13 +163,13 @@ export function activate(context: VSCode.ExtensionContext)
      */
     function getMarkdownDoc(): VSCode.TextDocument
     {
-        if (VSCode.window.activeTextEditor && (VSCode.window.activeTextEditor.document.languageId == 'markdown' || Settings.Default.IgnoreLanguage))
+        if (VSCode.window.activeTextEditor && (VSCode.window.activeTextEditor.document.languageId == "markdown" || Settings.Default.IgnoreLanguage))
         {
             return VSCode.window.activeTextEditor.document;
         }
         for (let i = 0; i < VSCode.window.visibleTextEditors.length; i++)
         {
-            if (VSCode.window.visibleTextEditors[i].document.languageId == 'markdown')
+            if (VSCode.window.visibleTextEditors[i].document.languageId == "markdown")
             {
                 return VSCode.window.visibleTextEditors[i].document;
             }
