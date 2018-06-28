@@ -109,7 +109,14 @@ export function activate(context: VSCode.ExtensionContext)
                         else
                         {
                             base = await VSCode.window.showInputBox({
-                                prompt: Resources.Get("OutDirPrompt")
+                                prompt: Resources.Get("OutDirPrompt"),
+                                validateInput: (value: string): any =>
+                                {
+                                    if (!Path.isAbsolute(value))
+                                    {
+                                        return Resources.Get("OutDirNotAllowed");
+                                    }
+                                }
                             });
                         }
 
