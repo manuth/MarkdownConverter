@@ -1,4 +1,5 @@
 {
+    "OutDirPrompt": "Bitte geben Sie einen Pfad an, an dem die Datei abgelegt werden soll.",
     "SuccessMessage": "Die konvertierte {0}-Datei wurde erfolgreich nach \"{1}\" geschrieben.",
     "OpenFileLabel": "Datei Öffnen",
     "UpdateMessage": "MarkdownConverter muss PhantomJS für Ihr Betriebssystem neu erstellen. Bitte warten Sie, bis die Installation beendet ist…",

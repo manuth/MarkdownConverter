@@ -102,9 +102,15 @@ export function activate(context: VSCode.ExtensionContext)
                         {
                             base = VSCode.workspace.workspaceFolders[0].uri.fsPath;
                         }
-                        else
+                        else if (!markdownDoc.isUntitled)
                         {
                             base = Path.dirname(markdownDoc.fileName);
+                        }
+                        else
+                        {
+                            base = await VSCode.window.showInputBox({
+                                prompt: Resources.Get("OutDirPrompt")
+                            });
                         }
 
                         if (!Path.isAbsolute(outDir))
