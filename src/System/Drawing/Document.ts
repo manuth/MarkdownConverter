@@ -28,6 +28,7 @@ import * as Transliteration from "transliteration";
 import * as TwEmoji from "twemoji";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";
 import YAMLException from "../YAML/YAMLException";
+import CultureInfo from "culture-info";
 
 /**
  * Represents a document.
@@ -72,7 +73,7 @@ export default class Document
     /**
      * The language to print values.
      */
-    private locale: string = VSCode.env.language;
+    private locale: CultureInfo;
 
     /**
      * The layout of the document.
@@ -274,11 +275,11 @@ export default class Document
     /**
      * Gets or sets the locale to print values.
      */
-    public get Locale(): string
+    public get Locale(): CultureInfo
     {
         return this.locale;
     }
-    public set Locale(value: string)
+    public set Locale(value: CultureInfo)
     {
         this.locale = value;
     }
@@ -771,7 +772,7 @@ export default class Document
             this.Attributes[key] = Settings.Default.Attributes[key];
         }
 
-        this.Locale = Settings.Default.Locale;
+        this.Locale = new CultureInfo(Settings.Default.Locale);
         this.DateFormat = Settings.Default.DateFormat;
 
         this.Layout = Settings.Default.Layout;

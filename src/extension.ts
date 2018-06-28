@@ -14,6 +14,9 @@ import Settings from "./Properties/Settings";
 import * as Shell from "shelljs";
 import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
 import YAMLException from "./System/YAML/YAMLException";
+import Resources from "./System/ResourceManager";
+import CultureInfo from "culture-info";
+import * as Format from "string-template";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -21,7 +24,7 @@ export function activate(context: VSCode.ExtensionContext)
 {
     // Gets a value indicating whether phantomjs could be built.
     let phantomJSBuilt = null;
-    let localize: any = NLS.config({ locale: VSCode.env.language })(Path.join(__dirname, "..", "..", "Resources", "Localization", "MarkdownConverter"));
+    Resources.Culture = new CultureInfo(Settings.Default.Locale);
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -35,7 +38,7 @@ export function activate(context: VSCode.ExtensionContext)
             let env = process.env;
             env["PHANTOMJS_PLATFORM"] = process.platform;
             env["PHANTOMJS_ARCH"] = process.arch;
-            VSCode.window.showInformationMessage(localize(2 /* UpdateMessage */, null));
+            VSCode.window.showInformationMessage(Resources.Get("UpdateMessage"));
             process.chdir(Path.join(__dirname, "..", ".."));
 
             ChildProcess.exec(
@@ -49,7 +52,7 @@ export function activate(context: VSCode.ExtensionContext)
                     {
                         console.log(stdout);
                         phantomJSBuilt = true;
-                        VSCode.window.showInformationMessage(localize(3 /* PhantomJSRebuildMessage */, null));
+                        VSCode.window.showInformationMessage(Resources.Get("UpdateFinishedMessage"));
                     }
                     else
                     {
@@ -59,7 +62,7 @@ export function activate(context: VSCode.ExtensionContext)
         }
         catch (e)
         {
-            VSCode.window.showErrorMessage(localize(8 /* PhantomJSRebuildException */, null));
+            VSCode.window.showErrorMessage(Resources.Get("UpdateFinishedMessage"));
             phantomJSBuilt = false;
         }
     }
@@ -75,11 +78,11 @@ export function activate(context: VSCode.ExtensionContext)
             {
                 if (phantomJSBuilt)
                 {
-                    VSCode.window.showInformationMessage(localize(3 /* PhantomJSRebuildMessage */, null));
+                    VSCode.window.showInformationMessage(Resources.Get("UpdateFinishedMessage"));
                 }
                 else
                 {
-                    VSCode.window.showWarningMessage(localize(8 /* PhantomJSRebuildException */, null));
+                    VSCode.window.showWarningMessage(Resources.Get("UpdateFailedMessage"));
                 }
             }
             else
@@ -138,11 +141,11 @@ export function activate(context: VSCode.ExtensionContext)
 
                     if (e instanceof UnauthorizedAccessException)
                     {
-                        message = localize(5 /* UnauthorizedAccessException */, null, e.Path);
+                        message = Resources.Get("UnauthorizedAccessException");
                     }
                     else if (e instanceof YAMLException)
                     {
-                        message = localize(7 /* YAMLException */, null, e.Mark.line + 1, e.Mark.column);
+                        message = Format(Resources.Get("YAMLException"), e.Mark.line + 1, e.Mark.column);
                     }
                     else if (e instanceof Error)
                     {

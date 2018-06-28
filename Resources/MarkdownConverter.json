@@ -1,11 +1,21 @@
 {
-    "messages": [
-        {
+    "SuccessMessage": "Successfully wrote the {0}-file to \"{1}\".",
+    "OpenFileLabel": "Open File",
+    "UpdateMessage": "MarkdownConverter needs to be rebuilt for your current platform. Please wait for the installation to finish…",
+    "UpdateFailedMessage": "MarkdownConverter couldn't build the propper version of PhantomJS. Restart VSCode in order to try it again.",
+    "UpdateFinishedMessage": "PhantomJS's been updated. Please restart VSCode in order to continue using MarkdownConverter.",
+    "UnknownException": "{0}: {1}",
+    "UnauthorizedAccessException": "Couldn't access the \"{0}\".",
+    "PhantomJSTimeoutException": "PhantomJS timed out.",
+    "YAMLException": "The YAML-block is malformatted. Line {0}, column {1}.",
+    "UnsupportetPlatformException": "This feature is not supported by your platform.",
+    "DateTime": {
+        "Formats": {
             "default": "yyyy-MM-dd",
             "fullDate": "dd. MMMM yyyy"
         },
-        {
-            "shortNames": [
+        "DaysOfWeek": {
+            "ShortNames": [
                 "Mon",
                 "Tue",
                 "Wed",
@@ -14,7 +24,7 @@
                 "Sat",
                 "Sun"
             ],
-            "fullNames": [
+            "FullNames": [
                 "Monday",
                 "Tuesday",
                 "Wednesday",
@@ -24,8 +34,8 @@
                 "Sunday"
             ]
         },
-        {
-            "shortNames": [
+        "Months": {
+            "ShortNames": [
                 "Jan",
                 "Feb",
                 "Mar",
@@ -39,7 +49,7 @@
                 "Nov",
                 "Dec"
             ],
-            "fullNames": [
+            "FullNames": [
                 "January",
                 "February",
                 "March",
@@ -54,21 +64,15 @@
                 "December"
             ]
         },
-        {
-            "shortNames": [
+        "TimeDesignator": {
+            "ShortNames": [
                 "A",
                 "P"
             ],
-            "fullNames": [
+            "FullNames": [
                 "AM",
                 "PM"
             ]
         }
-    ],
-    "keys": [
-        "DateTime.Format",
-        "DaysOfWeek",
-        "Months",
-        "TimeDesignator"
-    ]
+    }
 }
