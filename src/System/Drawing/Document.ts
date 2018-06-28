@@ -795,7 +795,7 @@ export default class Document
         }
         else if (Settings.Default.SystemStyles)
         {
-            this.Template = Path.join(__dirname, "..", "..", "..", "..", "Resources", "SystemTemplate.html");
+            this.Template = Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html");
         }
 
         this.Wrapper = Settings.Default.Wrapper;
