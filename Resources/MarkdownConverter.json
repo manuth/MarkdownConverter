@@ -1,4 +1,5 @@
 {
+    "OutDirPrompt": "Please provide a directory-path to save the file to.",
     "SuccessMessage": "Successfully wrote the {0}-file to \"{1}\".",
     "OpenFileLabel": "Open File",
     "UpdateMessage": "MarkdownConverter needs to be rebuilt for your current platform. Please wait for the installation to finish…",
