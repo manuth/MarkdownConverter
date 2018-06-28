@@ -1,5 +1,5 @@
 import FileException from "./IO/FileException";
-import * as Format from "string-format";
+import * as Format from "string-template";
 
 /**
  * Represents a 'File not found'-Exception.

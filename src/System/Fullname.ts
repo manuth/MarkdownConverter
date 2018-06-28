@@ -30,7 +30,7 @@ export default class Fullname
     private static CheckEnv(): string
     {
         let env = process.env;
-        let varName = this.envVars.find(x => env[x]);
+        let varName = this.envVars.find(x => x in env);
         let fullname = varName && env[varName];
 
         return fullname;

@@ -2,6 +2,8 @@ import * as vscode from "vscode";
 import * as nls from "vscode-nls";
 import * as path from "path";
 import Encoding from "../Text/Encoding";
+import CultureInfo from "culture-info";
+import Resources from "../ResourceManager";
 
 /**
  * Gets a set of DateTime-string-tokens.
@@ -16,22 +18,12 @@ export default class DateTimeFormatter
     /**
      * The locale to format the date.
      */
-    private locale: string = null;
+    private locale: CultureInfo = null;
 
     /**
-     * The localizer to localize values.
+     * The pattern for replacing the tokens.
      */
-    private localize: any = null;
-
-    /**
-     * The path to load the localized values from.
-     */
-    private resourcePath: string = null;
-
-    /**
-     * The regular expression to replace the tokens.
-     */
-    private regex: RegExp = /d{1,4}|f{1,7}|F{1,7}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y{1,5}|\\.|'[^']*'/g;
+    private pattern: RegExp = /d{1,4}|f{1,7}|F{1,7}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y{1,5}|\\.|'[^']*'/g;
 
     /**
      * Returns the tokens to replace.
@@ -39,12 +31,12 @@ export default class DateTimeFormatter
     private initializeTokens(date: Date, utc: boolean): { [id: string]: string }
     {
         let dateTimeTokens: { [id: string]: string } = {
-            ddd: this.localize(1, null).shortNames[date.getDay() + 1],
-            dddd: this.localize(1, null).fullNames[date.getDay() + 1],
-            MMM: this.localize(2, null).shortNames[date.getMonth()],
-            MMMM: this.localize(2, null).fullNames[date.getMonth()],
-            t: this.localize(3, null).shortNames[(date.getHours() < 12 ? 0 : 1)],
-            tt: this.localize(3, null).fullNames[(date.getHours() < 12 ? 0 : 1)]
+            ddd: Resources.Get("DateTime.DaysOfWeek.ShortNames", this.locale)[date.getDay() + 1],
+            dddd: Resources.Get("DateTime.DaysOfWeek.FullNames", this.locale)[date.getDay() + 1],
+            MMM: Resources.Get("DateTime.Months.ShortNames")[date.getMonth()],
+            MMMM: Resources.Get("DateTime.Months.FullNames")[date.getMonth()],
+            t: Resources.Get("DateTime.TimeDesignator.ShortNames")[(date.getHours() < 12 ? 0 : 1)],
+            tt: Resources.Get("DateTime.TimeDesignator.FullNames")[(date.getHours() < 12 ? 0 : 1)]
         };
         return dateTimeTokens;
     }
@@ -58,20 +50,12 @@ export default class DateTimeFormatter
      * @param resourcePath
      * The path to load the localized values from.
      */
-    constructor(locale: string = vscode.env.language, resourcePath: string = path.join(__dirname, "..", "..", "..", "..", "Resources", "Localization", "DateTimeFormatter"))
+    constructor(locale?: CultureInfo)
     {
         if (locale)
         {
             this.Locale = locale;
         }
-
-        if (resourcePath)
-        {
-            this.ResourcePath = resourcePath;
-        }
-
-        let localize: any = nls.config({ locale })(path.join(resourcePath));
-        this.localize = localize;
     }
 
     /**
@@ -91,11 +75,11 @@ export default class DateTimeFormatter
         {
             case "default":
             case "fullDate":
-                formatString = this.localize(0, null)[formatString];
+                formatString = Resources.Get("DateTime.Formats." + formatString);
                 break;
         }
 
-        formatString = formatString.replace(this.regex, (match) =>
+        formatString = formatString.replace(this.pattern, (match) =>
         {
             // Replacing 'fffffff'
             if (/^f+$/g.test(match))
@@ -167,24 +151,12 @@ export default class DateTimeFormatter
     /**
      * Gets or sets the locale to format the date.
      */
-    public get Locale(): string
+    public get Locale(): CultureInfo
     {
         return this.locale;
     }
-    public set Locale(value: string)
+    public set Locale(value: CultureInfo)
     {
         this.locale = value;
-    }
-
-    /**
-     * Gets or sets the path to load the localized values from.
-     */
-    public get ResourcePath(): string
-    {
-        return this.resourcePath;
-    }
-    public set ResourcePath(value: string)
-    {
-        this.resourcePath = value;
     }
 }
