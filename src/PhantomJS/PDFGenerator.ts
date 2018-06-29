@@ -1,8 +1,8 @@
 
 // tslint:disable
 /* Preventing TypeScript's "name not found"-errors */
-var document = document;
-var phantom = phantom;
+declare var document;
+declare var phantom;
 
 /* Importing phantom's modules */
 var FS = require('fs');
