@@ -69,7 +69,7 @@ export default class Converter
                 }
                 throw result.error;
             }
-            console.log(result.output);
+            
             let error = result.stderr.toString();
 
             if (error)

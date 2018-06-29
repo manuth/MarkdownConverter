@@ -8,7 +8,7 @@ declare var phantom;
 var FS = require('fs');
 var System = require('system');
 var WebPage = require('webpage');
-console.log(FS.workingDirectory);
+
 try
 {
     Main(System.args.slice(1));
