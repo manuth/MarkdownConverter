@@ -50,7 +50,6 @@ export function activate(context: VSCode.ExtensionContext)
                 {
                     if (!error && !stderr)
                     {
-                        console.log(stdout);
                         phantomJSBuilt = true;
                         VSCode.window.showInformationMessage(Resources.Get("UpdateFinishedMessage"));
                     }
