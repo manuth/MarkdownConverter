@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
  body {
 	background-color: #fffffe;
-	color: #333333;
 	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
 	font-size: 14px;
 	line-height: 1.6;
@@ -37,13 +36,9 @@ textarea:focus {
 	outline-offset: -1px;
 }
 
-code {
-	color: #A31515;
-}
-
 blockquote {
-	background: #7f7f7f1a;
-	border-color:  #007acc80;
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
 }
 
 hr {
@@ -71,6 +66,10 @@ h5 code,
 h6 code {
 	font-size: inherit;
 	line-height: auto;
+}
+
+code {
+	color: #A31515;
 }
 
 table {
@@ -125,7 +124,7 @@ pre.hljs code > div {
 /** Theming */
 
 pre code {
-	color: var(--vscode-editor-foreground);
+	color: #333333;
 }
 
 
