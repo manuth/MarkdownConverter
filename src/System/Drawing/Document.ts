@@ -1023,21 +1023,19 @@ export default class Document
             let template = FS.readFileSync(this.Template).toString();
 
             // Preparing the styles
-            let systemStyleSheets: string[] = [];
+            let styleSheetFiles: string[] = [];
             let styleSheets = this.StyleSheets;
             let markdownExt = VSCode.extensions.getExtension("Microsoft.vscode-markdown");
 
             if (this.SystemStylesEnabled)
             {
-                let styles: string[] = [];
-                if (markdownExt)
-                {
-                    styles.push(Path.join(markdownExt.extensionPath, "media", "markdown.css"));
-                    styles.push(Path.join(markdownExt.extensionPath, "media", "tomorrow.css"));
-                }
-                styles.push(Path.join(__dirname, "..", "..", "Resources", "css", "styles.css"));
+                let systemStyles: string[] = [];
+                let stylesRoot = Path.join(__dirname, "..", "..", "..", "Resources", "css");
+                systemStyles.push(Path.join(stylesRoot, "styles.css"));
+                systemStyles.push(Path.join(stylesRoot, "markdown.css"));
+                systemStyles.push(Path.join(stylesRoot, "highlight.css"));
 
-                systemStyleSheets = styles.concat(systemStyleSheets);
+                styleSheetFiles = systemStyles.concat(styleSheetFiles);
             }
 
             let styleCode = "<style>\n";
@@ -1047,7 +1045,7 @@ export default class Document
                 styleCode += this.Styles + "\n";
             }
 
-            systemStyleSheets.forEach(styleSheet =>
+            styleSheetFiles.forEach(styleSheet =>
             {
                 if (FS.existsSync(styleSheet))
                 {
@@ -1055,7 +1053,7 @@ export default class Document
                 }
             });
 
-            styleSheets.forEach(styleSheet =>
+            styleSheetFiles.forEach(styleSheet =>
             {
                 if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
                 {
@@ -1101,7 +1099,7 @@ export default class Document
             }
 
             let view = {
-                styleCode,
+                styles: styleCode,
                 content: this.Render(content)
             };
 
