@@ -1,9 +1,13 @@
 # Change Log
-## MarkdownConverter v0.1.0
+## MarkdownConverter v0.0.12
   - Cleaned up all settings
   - Fixed extension-provides styles
   - Improved path-handling for untitled files
   - Implemented localization using [`localizable-resources`](https://npmjs.org/package/localizable-resources)
+
+## MarkdownConverter v0.0.11
+  - Renamed `MarkdownConverter` to `Markdown Converter`
+  - Fixed Multi-Workspacefolder support
 
 ## MarkdownConverter v0.0.10
   - Added support for Chinese headings
