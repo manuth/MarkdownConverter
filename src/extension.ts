@@ -24,7 +24,7 @@ export function activate(context: VSCode.ExtensionContext)
 {
     // Gets a value indicating whether phantomjs could be built.
     let phantomJSBuilt = null;
-    Resources.Culture = new CultureInfo(Settings.Default.Locale);
+    Resources.Culture = new CultureInfo(VSCode.env.language);
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -70,7 +70,7 @@ export function activate(context: VSCode.ExtensionContext)
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     let disposables = [
-        VSCode.commands.registerCommand("markdownConverter.convert", async () =>
+        VSCode.commands.registerCommand("markdownConverter.Convert", async () =>
         {
             // The code you place here will be executed every time your command is executed
             if (PhantomJS.platform !== process.platform)
@@ -138,7 +138,7 @@ export function activate(context: VSCode.ExtensionContext)
                             process.chdir(base);
 
                             /* Executing the main logic */
-                            await Program.Main(markdownDoc, Settings.Default.ConversionTypes, outDir, name, Settings.Default.AutoSave);
+                            await Program.Main(markdownDoc, Settings.Default.ConversionType, outDir, name);
                         }
                         process.chdir(path);
                     }
@@ -179,7 +179,7 @@ export function activate(context: VSCode.ExtensionContext)
      */
     function getMarkdownDoc(): VSCode.TextDocument
     {
-        if (VSCode.window.activeTextEditor && (VSCode.window.activeTextEditor.document.languageId === "markdown" || Settings.Default.IgnoreLanguage))
+        if (VSCode.window.activeTextEditor && (VSCode.window.activeTextEditor.document.languageId === "markdown" || Settings.Default.IgnoreLanguageMode))
         {
             return VSCode.window.activeTextEditor.document;
         }

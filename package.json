@@ -7,7 +7,7 @@
   "author": {
     "name": "Manuel Thalmann",
     "email": "m@nuth.ch",
-    "url": "http://nuth.ch"
+    "url": "https://nuth.ch"
   },
   "icon": "Resources/Icon.png",
   "keywords": [
@@ -28,771 +28,298 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:markdownConverter.convert"
+    "onCommand:markdownConverter.Convert"
   ],
   "main": "./lib/extension",
   "contributes": {
     "commands": [
       {
-        "command": "markdownConverter.convert",
+        "command": "markdownConverter.Convert",
         "category": "Markdown",
-        "title": "%command.convert%"
+        "title": "%Command.Convert%"
       }
     ],
     "configuration": {
-      "title": "%config%",
+      "title": "%Config%",
       "properties": {
-        "markdownConverter.outDir": {
-          "title": "%config.outDir%",
-          "description": "%config.outDir.description%",
+        "markdownConverter.OutDir": {
+          "title": "%Config.OutDir%",
+          "description": "%Config.OutDir.Description%",
           "type": "string",
           "default": "."
         },
-        "markdownConverter.ignoreLanguage": {
-          "title": "%config.ignoreLanguage%",
-          "description": "%config.ignoreLanguage.description%",
+        "markdownConverter.IgnoreLanguageMode": {
+          "title": "%Config.IgnoreLanguageMode%",
+          "description": "%Config.IgnoreLanguageMode.Description%",
           "type": "boolean",
           "default": false
         },
-        "markdownConverter.autoSave": {
-          "title": "%config.autoSave%",
-          "description": "%config.autoSave.description%",
-          "type": "boolean",
-          "default": true
-        },
-        "markdownConverter.document.quality": {
-          "title": "%config.document.quality%",
-          "description": "%config.document.quality.description%",
+        "markdownConverter.ConversionQuality": {
+          "title": "%Config.ConversionQuality%",
+          "description": "%Config.ConversionQuality.Description%",
           "type": "integer",
-          "default": 90
+          "default": 100
         },
-        "markdownConverter.conversionType": {
-          "title": "%config.conversionType%",
-          "description": "%config.conversionType.description%",
-          "default": "PDF",
-          "oneOf": [
+        "markdownConverter.ConversionType": {
+          "title": "%Config.ConversionType%",
+          "description": "%Config.ConversionType.Description%",
+          "default": [
+            "PDF"
+          ],
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "BMP",
+              "HTML",
+              "JPEG",
+              "PDF",
+              "PNG",
+              "PPM"
+            ]
+          }
+        },
+        "markdownConverter.Locale": {
+          "title": "%Config.Locale%",
+          "description": "%Config.Locale.Description%",
+          "default": null,
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "markdownConverter.DateFormat": {
+          "title": "%Config.DateFormat%",
+          "description": "%Config.DateFormat.Description%",
+          "default": "Default",
+          "anyOf": [
             {
               "type": "string",
               "enum": [
-                "BMP",
-                "HTML",
-                "JPEG",
-                "PDF",
-                "PNG",
-                "PPM"
+                "Default",
+                "FullDate"
               ]
             },
             {
-              "type": "array",
-              "uniqueItems": true,
-              "items": {
-                "type": "string",
-                "enum": [
-                  "BMP",
-                  "HTML",
-                  "JPEG",
-                  "PDF",
-                  "PNG",
-                  "PPM"
-                ]
+              "type": "string"
+            }
+          ]
+        },
+        "markdownConverter.Document.EmojiType": {
+          "title": "%Config.Document.EmojiType%",
+          "description": "%Config.Document.EmojiType.Description%",
+          "type": "string",
+          "default": "GitHub",
+          "enum": [
+            "None",
+            "Native",
+            "GitHub",
+            "Twitter"
+          ]
+        },
+        "markdownConverter.Document.Attributes": {
+          "title": "%Config.Document.Attributes%",
+          "description": "%Config.Document.Attributes.Description%",
+          "type": "object",
+          "default": null,
+          "additionalProperties": true,
+          "properties": {
+            "Author": {
+              "title": "%Config.Document.Attributes.Author%",
+              "description": "%Config.Document.Attributes.Author.Description%",
+              "type": "string"
+            }
+          }
+        },
+        "markdownConverter.Document.Paper.PaperFormat": {
+          "title": "%Config.Document.Paper.PaperFormat%",
+          "description": "%Config.Document.Paper.PaperFormat.Description%",
+          "type": "object",
+          "default": {
+            "Format": "A4"
+          },
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "required": [
+                "Format"
+              ],
+              "properties": {
+                "Format": {
+                  "title": "%Config.Document.Paper.PaperFormat.Format%",
+                  "description": "%Config.Document.Paper.PaperFormat.Format.Description%",
+                  "type": "string",
+                  "enum": [
+                    "A3",
+                    "A4",
+                    "A5",
+                    "Legal",
+                    "Letter",
+                    "Tabloid"
+                  ]
+                },
+                "Orientation": {
+                  "title": "%Config.Document.Paper.PaperFormat.Orientation%",
+                  "description": "%Config.Document.Paper.PaperFormat.Orientation.Description%",
+                  "type": "string",
+                  "enum": [
+                    "Portrait",
+                    "Landscape"
+                  ]
+                }
+              }
+            },
+            {
+              "additionalProperties": false,
+              "required": [
+                "Width",
+                "Height"
+              ],
+              "properties": {
+                "Width": {
+                  "title": "%Config.Document.Paper.PaperFormat.Width%",
+                  "description": "%Config.Document.Paper.PaperFormat.Width.Description%"
+                },
+                "Height": {
+                  "title": "%Config.Document.Paper.PaperFormat.Height%",
+                  "description": "%Config.Document.Paper.PaperFormat.Height.Description%"
+                }
               }
             }
           ]
         },
-        "markdownConverter.document": {
-          "title": "%config.document%",
-          "description": "%config.document.description%",
-          "default": {
-            "emoji": "%config.document.emoji.default%",
-            "layout": {
-              "margin": {
-                "top": "%config.document.layout.margin.top.default%",
-                "right": "%config.document.layout.margin.right.default%",
-                "bottom": "%config.document.layout.margin.bottom.default%",
-                "left": "%config.document.layout.margin.left.default%"
-              },
-              "format": "%config.document.layout.format.default%",
-              "orientation": "%config.document.layout.orientation.default%"
-            },
-            "header": {
-              "height": "%config.document.header.height.default%",
-              "content": "%config.document.header.content.default%"
-            },
-            "footer": {
-              "height": "%config.document.footer.height.default%",
-              "content": "%config.document.footer.content.default%"
-            }
-          },
+        "markdownConverter.Document.Paper.Margin": {
+          "title": "%Config.Document.Paper.Margin%",
+          "description": "%Config.Document.Paper.Margin.Description%",
           "type": "object",
           "additionalProperties": false,
+          "required": [
+            "Top",
+            "Right",
+            "Bottom",
+            "Left"
+          ],
           "properties": {
-            "emoji": {
-              "title": "%config.document.emoji%",
-              "description": "%config.document.emoji.description%",
-              "oneOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "string",
-                  "default": "%config.document.emoji.default%",
-                  "enum": [
-                    "github",
-                    "twitter",
-                    "native"
-                  ]
-                }
-              ]
+            "Top": {
+              "title": "%Config.Document.Paper.Margin.Top%",
+              "description": "%Config.Document.Paper.Margin.Top.Description%",
+              "type": "string",
+              "default": "1cm"
             },
-            "attributes": {
-              "title": "%config.document.attributes%",
-              "description": "%config.document.attributes.description%",
-              "type": "object",
-              "properties": {
-                "Author": {
-                  "title": "%config.document.attributes.author%",
-                  "description": "%config.document.attributes.author.description%",
-                  "type": "string"
-                }
-              }
+            "Right": {
+              "title": "%Config.Document.Paper.Margin.Right%",
+              "description": "%Config.Document.Paper.Margin.Right.Description%",
+              "type": "string",
+              "default": "1cm"
             },
-            "localization": {
-              "title": "%config.document.localization%",
-              "description": "%config.document.localization.description%",
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "locale": {
-                  "title": "%config.document.localization.locale%",
-                  "description": "%config.document.localization.locale.description%",
-                  "type": "string"
-                },
-                "dateFormat": {
-                  "title": "%config.document.localization.dateFormat%",
-                  "description": "%config.document.localization.dateFormat.description%",
-                  "default": "default",
-                  "anyOf": [
-                    {
-                      "type": "string",
-                      "enum": [
-                        "default",
-                        "fullDate"
-                      ]
-                    },
-                    {
-                      "type": "string"
-                    }
-                  ]
-                }
-              }
+            "Bottom": {
+              "title": "%Config.Document.Paper.Margin.Bottom%",
+              "description": "%Config.Document.Paper.Margin.Bottom.Description%",
+              "type": "string",
+              "default": "1cm"
             },
-            "layout": {
-              "title": "%config.document.layout%",
-              "description": "%config.document.layout.description%",
-              "type": "object",
-              "oneOf": [
-                {
-                  "additionalProperties": false,
-                  "required": [
-                    "margin",
-                    "format"
-                  ],
-                  "properties": {
-                    "margin": {
-                      "title": "%config.document.layout.margin%",
-                      "description": "%config.document.layout.margin.description%",
-                      "type": "object",
-                      "additionalProperties": false,
-                      "required": [
-                        "top",
-                        "right",
-                        "bottom",
-                        "left"
-                      ],
-                      "properties": {
-                        "top": {
-                          "title": "%config.document.layout.margin.top%",
-                          "description": "%config.document.layout.margin.top.description%",
-                          "type": "string",
-                          "default": "%config.document.layout.margin.top.default%"
-                        },
-                        "right": {
-                          "title": "%config.document.layout.margin.right%",
-                          "description": "%config.document.layout.margin.right.description%",
-                          "type": "string",
-                          "default": "%config.document.layout.margin.right.default%"
-                        },
-                        "bottom": {
-                          "title": "%config.document.layout.margin.bottom%",
-                          "description": "%config.document.layout.margin.bottom.description%",
-                          "type": "string",
-                          "default": "%config.document.layout.margin.bottom.default%"
-                        },
-                        "left": {
-                          "title": "%config.document.layout.margin.left%",
-                          "description": "%config.document.layout.margin.left.description%",
-                          "type": "string",
-                          "default": "%config.document.layout.margin.left.default%"
-                        }
-                      }
-                    },
-                    "format": {
-                      "title": "%config.document.layout.format%",
-                      "description": "%config.document.layout.format.description%",
-                      "type": "string",
-                      "default": "%config.document.layout.format.default%",
-                      "enum": [
-                        "A3",
-                        "A4",
-                        "A5",
-                        "Legal",
-                        "Letter",
-                        "Tabloid"
-                      ]
-                    },
-                    "orientation": {
-                      "title": "%config.document.layout.orientation%",
-                      "description": "%config.document.layout.orientation.description%",
-                      "type": "string",
-                      "default": "%config.document.layout.orientation.default%",
-                      "enum": [
-                        "portrait",
-                        "landspace"
-                      ]
-                    }
-                  }
-                },
-                {
-                  "additionalProperties": false,
-                  "required": [
-                    "margin",
-                    "width",
-                    "height"
-                  ],
-                  "properties": {
-                    "margin": {
-                      "title": "%config.document.layout.margin%",
-                      "description": "%config.document.layout.margin.description%",
-                      "type": "object",
-                      "additionalProperties": false,
-                      "required": [
-                        "top",
-                        "right",
-                        "bottom",
-                        "left"
-                      ],
-                      "properties": {
-                        "top": {
-                          "title": "%config.document.layout.margin.top%",
-                          "description": "%config.document.layout.margin.top.description%",
-                          "type": "string",
-                          "default": "%config.document.layout.margin.top.default%"
-                        },
-                        "right": {
-                          "title": "%config.document.layout.margin.right%",
-                          "description": "%config.document.layout.margin.right.description%",
-                          "type": "string",
-                          "default": "%config.document.layout.margin.right.default%"
-                        },
-                        "bottom": {
-                          "title": "%config.document.layout.margin.bottom%",
-                          "description": "%config.document.layout.margin.bottom.description%",
-                          "type": "string",
-                          "default": "%config.document.layout.margin.bottom.default%"
-                        },
-                        "left": {
-                          "title": "%config.document.layout.margin.left%",
-                          "description": "%config.document.layout.margin.left.description%",
-                          "type": "string",
-                          "default": "%config.document.layout.margin.left.default%"
-                        }
-                      }
-                    },
-                    "width": {
-                      "title": "%config.document.layout.width%",
-                      "description": "%config.document.layout.width.description%",
-                      "default": "21cm"
-                    },
-                    "height": {
-                      "title": "%config.document.layout.height%",
-                      "description": "%config.document.layout.height.description%",
-                      "default": "297mm"
-                    }
-                  }
-                }
-              ]
-            },
-            "header": {
-              "title": "%config.document.header%",
-              "description": "%config.document.header.description%",
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "height",
-                "content"
-              ],
-              "properties": {
-                "height": {
-                  "title": "%config.document.header.height%",
-                  "description": "%config.document.header.height.description%",
-                  "type": "string",
-                  "default": "%config.document.header.height.default%"
-                },
-                "content": {
-                  "title": "%config.document.header.content%",
-                  "description": "%config.document.header.content.description%",
-                  "type": "string",
-                  "default": "%config.document.header.content.default%"
-                }
-              }
-            },
-            "specialHeaders": {
-              "title": "%config.document.specialHeaders%",
-              "description": "%config.document.specialHeaders.description%",
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "pageNumber",
-                  "header"
-                ],
-                "properties": {
-                  "pageNumber": {
-                    "title": "%config.document.specialHeaders.pageNumber%",
-                    "description": "%config.document.specialHeaders.pageNumber.description%",
-                    "type": "integer"
-                  },
-                  "header": {
-                    "title": "%config.document.header%",
-                    "description": "%config.document.header.description%",
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                      "height",
-                      "content"
-                    ],
-                    "properties": {
-                      "height": {
-                        "title": "%config.document.header.height%",
-                        "description": "%config.document.header.height.description%",
-                        "type": "string",
-                        "default": "%config.document.header.height.default%"
-                      },
-                      "content": {
-                        "title": "%config.document.header.content%",
-                        "description": "%config.document.header.content.description%",
-                        "type": "string",
-                        "default": "%config.document.header.content.default%"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "evenHeader": {
-              "title": "%config.document.evenHeader%",
-              "description": "%config.document.evenHeader%",
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "height",
-                "content"
-              ],
-              "properties": {
-                "height": {
-                  "title": "%config.document.header.height%",
-                  "description": "%config.document.header.height.description%",
-                  "type": "string",
-                  "default": "%config.document.header.height.default%"
-                },
-                "content": {
-                  "title": "%config.document.header.content%",
-                  "description": "%config.document.header.content.description%",
-                  "type": "string",
-                  "default": "%config.document.header.content.default%"
-                }
-              }
-            },
-            "oddHeader": {
-              "title": "%config.document.oddHeader%",
-              "description": "%config.document.oddHeader%",
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "height",
-                "content"
-              ],
-              "properties": {
-                "height": {
-                  "title": "%config.document.header.height%",
-                  "description": "%config.document.header.height.description%",
-                  "type": "string",
-                  "default": "%config.document.header.height.default%"
-                },
-                "content": {
-                  "title": "%config.document.header.content%",
-                  "description": "%config.document.header.content.description%",
-                  "type": "string",
-                  "default": "%config.document.header.content.default%"
-                }
-              }
-            },
-            "lastHeader": {
-              "title": "%config.document.lastHeader%",
-              "description": "%config.document.lastHeader%",
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "height",
-                "content"
-              ],
-              "properties": {
-                "height": {
-                  "title": "%config.document.header.height%",
-                  "description": "%config.document.header.height.description%",
-                  "type": "string",
-                  "default": "%config.document.header.height.default%"
-                },
-                "content": {
-                  "title": "%config.document.header.content%",
-                  "description": "%config.document.header.content.description%",
-                  "type": "string",
-                  "default": "%config.document.header.content.default%"
-                }
-              }
-            },
-            "footer": {
-              "title": "%config.document.footer%",
-              "description": "%config.document.footer.description%",
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "height",
-                "content"
-              ],
-              "properties": {
-                "height": {
-                  "title": "%config.document.footer.height%",
-                  "description": "%config.document.footer.height.description%",
-                  "type": "string",
-                  "default": "%config.document.footer.height.default%"
-                },
-                "content": {
-                  "title": "%config.document.footer.content%",
-                  "description": "%config.document.footer.content.description%",
-                  "type": "string",
-                  "default": "%config.document.footer.content.default%"
-                }
-              }
-            },
-            "specialFooters": {
-              "title": "%config.document.specialFooters%",
-              "description": "%config.document.specialFooters.description%",
-              "type": "array",
-              "items": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "pageNumber",
-                  "footer"
-                ],
-                "properties": {
-                  "pageNumber": {
-                    "title": "%config.document.specialFooters.pageNumber%",
-                    "description": "%config.document.specialFooters.pageNumber.description%",
-                    "type": "integer"
-                  },
-                  "footer": {
-                    "title": "%config.document.footer%",
-                    "description": "%config.document.footer.description%",
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                      "height",
-                      "content"
-                    ],
-                    "properties": {
-                      "height": {
-                        "title": "%config.document.footer.height%",
-                        "description": "%config.document.footer.height.description%",
-                        "type": "string",
-                        "default": "%config.document.footer.height.default%"
-                      },
-                      "content": {
-                        "title": "%config.document.footer.content%",
-                        "description": "%config.document.footer.content.description%",
-                        "type": "string",
-                        "default": "%config.document.footer.content.default%"
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "evenFooter": {
-              "title": "%config.document.evenFooter%",
-              "description": "%config.document.evenFooter%",
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "height",
-                "content"
-              ],
-              "properties": {
-                "height": {
-                  "title": "%config.document.footer.height%",
-                  "description": "%config.document.footer.height.description%",
-                  "type": "string",
-                  "default": "%config.document.footer.height.default%"
-                },
-                "content": {
-                  "title": "%config.document.footer.content%",
-                  "description": "%config.document.footer.content.description%",
-                  "type": "string",
-                  "default": "%config.document.footer.content.default%"
-                }
-              }
-            },
-            "oddFooter": {
-              "title": "%config.document.oddFooter%",
-              "description": "%config.document.oddFooter%",
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "height",
-                "content"
-              ],
-              "properties": {
-                "height": {
-                  "title": "%config.document.footer.height%",
-                  "description": "%config.document.footer.height.description%",
-                  "type": "string",
-                  "default": "%config.document.footer.height.default%"
-                },
-                "content": {
-                  "title": "%config.document.footer.content%",
-                  "description": "%config.document.footer.content.description%",
-                  "type": "string",
-                  "default": "%config.document.footer.content.default%"
-                }
-              }
-            },
-            "lastFooter": {
-              "title": "%config.document.lastFooter%",
-              "description": "%config.document.lastFooter%",
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "height",
-                "content"
-              ],
-              "properties": {
-                "height": {
-                  "title": "%config.document.footer.height%",
-                  "description": "%config.document.footer.height.description%",
-                  "type": "string",
-                  "default": "%config.document.footer.height.default%"
-                },
-                "content": {
-                  "title": "%config.document.footer.content%",
-                  "description": "%config.document.footer.content.description%",
-                  "type": "string",
-                  "default": "%config.document.footer.content.default%"
-                }
-              }
-            },
-            "toc": {
-              "title": "%config.document.toc%",
-              "description": "%config.document.toc.description%",
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "class": {
-                  "title": "%config.document.toc.class%",
-                  "description": "%config.document.toc.class.description%",
-                  "type": "string",
-                  "default": "toc"
-                },
-                "levels": {
-                  "title": "%config.document.toc.levels%",
-                  "description": "%config.document.toc.levels.description%",
-                  "type": "string",
-                  "pattern": "^\\d+\\s*(-\\s*\\d+\\s*)?(,\\s*\\d+\\s*(-\\s*\\d+\\s*)?)*$",
-                  "default": "2-6"
-                },
-                "indicator": {
-                  "title": "%config.document.toc.indicator%",
-                  "description": "%config.document.toc.indicator.description%",
-                  "type": "string",
-                  "default": "/^\\[\\[\\s*toc\\s*\\]\\]/im"
-                },
-                "listType": {
-                  "title": "%config.document.toc.listType%",
-                  "description": "%config.document.toc.listType.description%",
-                  "type": "string",
-                  "enum": [
-                    "ol",
-                    "ul"
-                  ],
-                  "default": "ul"
-                }
-              },
-              "default": {
-                "class": "toc",
-                "levels": "2-6",
-                "listType": "ul"
-              }
-            },
-            "style": {
-              "title": "%config.document.style%",
-              "description": "%config.document.style.description%",
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "template": {
-                  "title": "%config.document.style.template%",
-                  "description": "%config.document.style.template.description%",
-                  "type": "string"
-                },
-                "wrapper": {
-                  "title": "%config.document.style.wrapper%",
-                  "description": "%config.document.style.wrapper.description%",
-                  "type": "string"
-                },
-                "highlightStyle": {
-                  "title": "%config.document.style.highlightStyle%",
-                  "description": "%config.document.style.highlightStyle.description%",
-                  "default": true,
-                  "oneOf": [
-                    {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    {
-                      "type": "string",
-                      "enum": [
-                        "agate",
-                        "androidstudio",
-                        "arduino-light",
-                        "arta",
-                        "ascetic",
-                        "atelier-cave-dark",
-                        "atelier-cave-light",
-                        "atelier-dune-dark",
-                        "atelier-dune-light",
-                        "atelier-estuary-dark",
-                        "atelier-estuary-light",
-                        "atelier-forest-dark",
-                        "atelier-forest-light",
-                        "atelier-heath-dark",
-                        "atelier-heath-light",
-                        "atelier-lakeside-dark",
-                        "atelier-lakeside-light",
-                        "atelier-plateau-dark",
-                        "atelier-plateau-light",
-                        "atelier-savanna-dark",
-                        "atelier-savanna-light",
-                        "atelier-seaside-dark",
-                        "atelier-seaside-light",
-                        "atelier-sulphurpool-dark",
-                        "atelier-sulphurpool-light",
-                        "atom-one-dark",
-                        "atom-one-light",
-                        "brown-paper",
-                        "brown-papersq",
-                        "codepen-embed",
-                        "color-brewer",
-                        "darcula",
-                        "dark",
-                        "darkula",
-                        "default",
-                        "docco",
-                        "dracula",
-                        "far",
-                        "foundation",
-                        "github-gist",
-                        "github",
-                        "googlecode",
-                        "grayscale",
-                        "gruvbox-dark",
-                        "gruvbox-light",
-                        "hopscotch",
-                        "hybrid",
-                        "idea",
-                        "ir-black",
-                        "kimbie.dark",
-                        "kimbie.light",
-                        "magula",
-                        "mono-blue",
-                        "monokai-sublime",
-                        "monokai",
-                        "obsidian",
-                        "ocean",
-                        "paraiso-dark",
-                        "paraiso-light",
-                        "pojoaque",
-                        "purebasic",
-                        "qtcreator_dark",
-                        "qtcreator_light",
-                        "railscasts",
-                        "rainbow",
-                        "school-book",
-                        "solarized-dark",
-                        "solarized-light",
-                        "sunburst",
-                        "tomorrow-night-blue",
-                        "tomorrow-night-bright",
-                        "tomorrow-night-eighties",
-                        "tomorrow",
-                        "vs",
-                        "xcode",
-                        "xt256",
-                        "zenburn"
-                      ]
-                    }
-                  ]
-                },
-                "embeddingStyle": {
-                  "title": "%config.document.style.embeddingStyle%",
-                  "description": "%config.document.style.embeddingStyle.description%",
-                  "default": "Local",
-                  "oneOf": [
-                    {
-                      "type": "string",
-                      "enum": [
-                        "All",
-                        "Local",
-                        "Web",
-                        "None"
-                      ]
-                    },
-                    {
-                      "type": "boolean"
-                    }
-                  ]
-                },
-                "systemStyles": {
-                  "title": "%config.document.style.systemStyles%",
-                  "description": "%config.document.style.systemStyles.description%",
-                  "type": "boolean",
-                  "default": true
-                },
-                "styles": {
-                  "title": "%config.document.style.styles%",
-                  "description": "%config.document.style.styles.description%",
-                  "type": "string"
-                },
-                "styleSheets": {
-                  "title": "%config.document.style.styleSheets%",
-                  "description": "%config.document.style.styleSheets.description%",
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
+            "Left": {
+              "title": "%Config.Document.Paper.Margin.Left%",
+              "description": "%Config.Document.Paper.Margin.Left.Description%",
+              "type": "string",
+              "default": "1cm"
             }
+          }
+        },
+        "markdownConverter.Document.HeaderFooterEnabled": {
+          "title": "%Config.Document.HeaderFooterEnabled%",
+          "description": "%Config.Document.HeaderFooterEnabled.Description%",
+          "type": "boolean",
+          "default": true
+        },
+        "markdownConverter.Document.HeaderTemplate": {
+          "title": "%Config.Document.HeaderTemplate%",
+          "description": "%Config.Document.HeaderTemplate.Description%",
+          "type": "string",
+          "default": "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ Author }}</td><td style=\"text-align: right\"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></td></table>"
+        },
+        "markdownConverter.Document.FooterTemplate": {
+          "title": "%Config.Document.FooterTemplate%",
+          "description": "%Config.Document.FooterTemplate.Description%",
+          "type": "string",
+          "default": "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ CreationDate }}</td><td style=\"text-align: right\"></td></table>"
+        },
+        "markdownConverter.Document.Toc.Enabled": {
+          "title": "%Config.Document.Toc.Enabled%",
+          "description": "%Config.Document.Toc.Enabled.Description%",
+          "type": "boolean",
+          "default": true
+        },
+        "markdownConverter.Document.Toc.Class": {
+          "title": "%Config.Document.Toc.Class%",
+          "description": "%Config.Document.Toc.Class.Description%",
+          "type": "string",
+          "default": "markdown-converter-toc"
+        },
+        "markdownConverter.Document.Toc.Levels": {
+          "title": "%Config.Document.Toc.Levels%",
+          "description": "%Config.Document.Toc.Levels.Description%",
+          "type": "string",
+          "pattern": "^\\d+\\s*(-\\s*\\d+\\s*)?(,\\s*\\d+\\s*(-\\s*\\d+\\s*)?)*$",
+          "default": "1-6"
+        },
+        "markdownConverter.Document.Toc.Indicator": {
+          "title": "%Config.Document.Toc.Indicator%",
+          "description": "%Config.Document.Toc.Indicator.Description%",
+          "type": "string",
+          "default": "^\\[\\[\\s*toc\\s*\\]\\]"
+        },
+        "markdownConverter.Document.Toc.ListType": {
+          "title": "%Config.Document.Toc.ListType%",
+          "description": "%Config.Document.Toc.ListType.Description%",
+          "type": "string",
+          "default": "ul",
+          "enum": [
+            "ol",
+            "ul"
+          ]
+        },
+        "markdownConverter.Document.Design.Template": {
+          "title": "%Config.Document.Design.Template%",
+          "description": "%Config.Document.Design.Template.Description%",
+          "type": "string",
+          "default": null
+        },
+        "markdownConverter.Document.Design.HighlightStyle": {
+          "title": "%Config.Document.Design.HighlightStyle%",
+          "description": "%Config.Document.Design.HighlightStyle.Description%",
+          "default": "Default",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string",
+              "enum": [
+                "None",
+                "Default"
+              ]
+            }
+          ]
+        },
+        "markdownConverter.Document.Design.SystemStylesEnabled": {
+          "title": "%Config.Document.Design.SystemStylesEnabled%",
+          "description": "%Config.Document.Design.SystemStylesEnabled.Description%",
+          "type": "boolean",
+          "default": true
+        },
+        "markdownConverter.Document.Design.StyleSheets": {
+          "title": "%Config.Document.Design.StyleSheets%",
+          "description": "%Config.Document.Design.StyleSheets.Description%",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
           }
         }
       }
@@ -810,7 +337,7 @@
     "@types/markdown-it-anchor": "^4.0.1",
     "@types/mkdirp": "^0.5.1",
     "@types/mocha": "^2.2.42",
-    "@types/mustache": "^0.8.30",
+    "@types/mustache": "^0.8.31",
     "@types/node": "^7.0.43",
     "@types/npm": "^2.0.29",
     "@types/shelljs": "^0.7.4",

@@ -12,7 +12,7 @@
     "UnsupportetPlatformExceptioN": "Diese Funktion wird von Ihrem Betriebssystem nicht unterstützt.",
     "DateTime": {
         "Formats": {
-            "default": "dd.MM.yyyy"
+            "Default": "dd.MM.yyyy"
         },
         "DaysOfWeek": {
             "ShortNames": [

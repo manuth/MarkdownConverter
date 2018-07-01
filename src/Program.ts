@@ -20,23 +20,12 @@ export default class Program
     /**
      * Converts a markdown-file to other file-types
      */
-    public static Main(textDocument: TextDocument, types: ConversionType[], outDir: string, fileName: string, autoSave: boolean): void
+    public static Main(textDocument: TextDocument, types: ConversionType[], outDir: string, fileName: string): void
     {
         let doc: Document;
 
-        if (textDocument.isUntitled || (textDocument.isDirty && autoSave))
-        {
-            doc = new Document();
-            doc.Content = textDocument.getText();
-        }
-        else
-        {
-            if (textDocument.isDirty)
-            {
-                textDocument.save();
-            }
-            doc = new Document(textDocument.fileName);
-        }
+        doc = new Document();
+        doc.Content = textDocument.getText();
 
         let converter = new Converter(doc);
 

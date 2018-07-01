@@ -4,8 +4,13 @@ import { MultiRange } from "multi-integer-range";
 /**
  * Provides basic definitions of a table of contents.
  */
-export default class TOCSettings
+export default class TocSettings
 {
+    /**
+     * A value indicating whether toc-generation is enabled.
+     */
+    private enabled: boolean = true;
+
     /**
      * The class for the div containing the table of contents.
      */
@@ -31,6 +36,18 @@ export default class TOCSettings
      */
     constructor()
     {
+    }
+
+    /**
+     * Gets or sets a value indicating whether toc-generation is enabled.
+     */
+    public get Enabled(): boolean
+    {
+        return this.enabled;
+    }
+    public set Enabled(value: boolean)
+    {
+        this.enabled = value;
     }
 
     /**

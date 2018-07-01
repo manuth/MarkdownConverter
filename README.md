@@ -7,16 +7,16 @@ Provides the functionallity to convert MarkDown-files to html, png, or pdf using
 
 ## Usages
  1. Set your desired conversion-types or skip this step to convert your markdown-file to `PDF`:
-      - Open up your Visual Studio Code-Settings and set `markdownConverter.conversionType` to either your desired type or an array of types:  
+      - Open up your Visual Studio Code-Settings and set `markdownConverter.ConversionType` to either your desired type or an array of types:  
         ```json
         {
-          "markdownConverter.conversionType": "PNG"
+          "markdownConverter.ConversionType": "PNG"
         }
         ```
         or
         ```json
         {
-          "markdownConverter.conversionType": [
+          "markdownConverter.ConversionType": [
             "HTML",
             "PDF"
           ]
