@@ -1,4 +1,10 @@
 # Change Log
+## MarkdownConverter v0.1.0
+  - Cleaned up all settings
+  - Fixed extension-provides styles
+  - Improved path-handling for untitled files
+  - Implemented localization using [`localizable-resources`](https://npmjs.org/package/localizable-resources)
+
 ## MarkdownConverter v0.0.10
   - Added support for Chinese headings
   - Disabled `markdown-it`'s link policy
