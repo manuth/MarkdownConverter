@@ -3,7 +3,7 @@ import Margin from "./Margin";
 /**
  * Represents a document-layout.
  */
-export default class Layout
+export default class Paper
 {
     /**
      * The margin.
@@ -28,7 +28,7 @@ export default class Layout
     /**
      * The paper-orientation.
      */
-    private orientation: string = "portrait";
+    private orientation: string = "Portrait";
 
     /**
      * Paper-sizes
@@ -90,7 +90,7 @@ export default class Layout
         }
         else
         {
-            return Layout.paperSizes[this.format][(this.orientation === "landspace" ? "Height" : "Width")];
+            return Paper.paperSizes[this.format][(this.orientation === "Landscape" ? "Height" : "Width")];
         }
     }
     public set Width(value: string)
@@ -109,7 +109,7 @@ export default class Layout
         }
         else
         {
-            return Layout.paperSizes[this.format][(this.orientation === "landspace" ? "Width" : "Height")];
+            return Paper.paperSizes[this.format][(this.orientation === "Landscape" ? "Width" : "Height")];
         }
     }
     public set Height(value: string)
@@ -133,7 +133,7 @@ export default class Layout
     }
     public set Format(value: string)
     {
-        if (!value || (value in Layout.paperSizes))
+        if (!value || (value in Paper.paperSizes))
         {
             this.format = value;
         }
@@ -150,16 +150,16 @@ export default class Layout
     {
         if (this.Width > this.Height)
         {
-            return "landspace";
+            return "Landscape";
         }
         else
         {
-            return "portrait";
+            return "Portrait";
         }
     }
     public set Orientation(value: string)
     {
-        if (value === "landspace" || value === "portrait")
+        if (value === "Landscape" || value === "Portrait")
         {
             if (value !== this.Orientation)
             {

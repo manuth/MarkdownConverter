@@ -30,13 +30,20 @@ export default class DateTimeFormatter
      */
     private initializeTokens(date: Date, utc: boolean): { [id: string]: string }
     {
+        let day = date.getDay() - 1;
+
+        if (day < 0)
+        {
+            day = 6;
+        }
+
         let dateTimeTokens: { [id: string]: string } = {
-            ddd: Resources.Get("DateTime.DaysOfWeek.ShortNames", this.locale)[date.getDay() + 1],
-            dddd: Resources.Get("DateTime.DaysOfWeek.FullNames", this.locale)[date.getDay() + 1],
-            MMM: Resources.Get("DateTime.Months.ShortNames")[date.getMonth()],
-            MMMM: Resources.Get("DateTime.Months.FullNames")[date.getMonth()],
-            t: Resources.Get("DateTime.TimeDesignator.ShortNames")[(date.getHours() < 12 ? 0 : 1)],
-            tt: Resources.Get("DateTime.TimeDesignator.FullNames")[(date.getHours() < 12 ? 0 : 1)]
+            ddd: Resources.Get("DateTime.DaysOfWeek.ShortNames", this.locale)[day],
+            dddd: Resources.Get("DateTime.DaysOfWeek.FullNames", this.locale)[day],
+            MMM: Resources.Get("DateTime.Months.ShortNames", this.locale)[date.getMonth()],
+            MMMM: Resources.Get("DateTime.Months.FullNames", this.locale)[date.getMonth()],
+            t: Resources.Get("DateTime.TimeDesignator.ShortNames", this.locale)[(date.getHours() < 12 ? 0 : 1)],
+            tt: Resources.Get("DateTime.TimeDesignator.FullNames", this.locale)[(date.getHours() < 12 ? 0 : 1)]
         };
         return dateTimeTokens;
     }
@@ -73,9 +80,9 @@ export default class DateTimeFormatter
 
         switch (formatString)
         {
-            case "default":
-            case "fullDate":
-                formatString = Resources.Get("DateTime.Formats." + formatString);
+            case "Default":
+            case "FullDate":
+                formatString = Resources.Get("DateTime.Formats." + formatString, this.locale);
                 break;
         }
 

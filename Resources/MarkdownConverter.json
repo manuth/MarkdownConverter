@@ -13,8 +13,8 @@
     "UnsupportetPlatformException": "This feature is not supported by your platform.",
     "DateTime": {
         "Formats": {
-            "default": "yyyy-MM-dd",
-            "fullDate": "dd. MMMM yyyy"
+            "Default": "yyyy-MM-dd",
+            "FullDate": "dd. MMMM yyyy"
         },
         "DaysOfWeek": {
             "ShortNames": [

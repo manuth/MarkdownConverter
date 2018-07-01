@@ -5,15 +5,11 @@ import * as URL from "url";
 import * as VSCode from "vscode";
 import * as Anchor from "markdown-it-anchor";
 import DateTimeFormatter from "../Globalization/DateTimeFormatter";
-import EmbeddingOption from "./EmbeddingOption";
 import Encoding from "../Text/Encoding";
 import * as FrontMatter from "front-matter";
 import Fullname from "../Fullname";
-import Section from "./Section";
-import Header from "./Header";
-import Footer from "./Footer";
 import * as HighlightJs from "highlightjs";
-import Layout from "./Layout";
+import Paper from "./Paper";
 import ListType from "./ListType";
 import Margin from "./Margin";
 import * as MarkdownIt from "markdown-it";
@@ -23,7 +19,7 @@ import { MultiRange } from "multi-integer-range";
 import * as Mustache from "mustache";
 import * as Request from "sync-request";
 import Settings from "../../Properties/Settings";
-import TOCSettings from "./TOCSettings";
+import TocSettings from "./TOCSettings";
 import * as Transliteration from "transliteration";
 import * as TwEmoji from "twemoji";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";
@@ -78,92 +74,37 @@ export default class Document
     /**
      * The layout of the document.
      */
-    private layout: Layout = new Layout();
+    private paper: Paper = new Paper();
 
     /**
      * The header of the document.
      */
-    private header: Header = new Header("15mm", '<table style="width: 100%; table-layout: fixed; "><td style="text-align: left; ">{{ Author }}</td><td style="text-align: center">{{ PageNumber }}/{{ PageCount }}</td><td style="text-align: right">{{ Company.Name }}</td></table>');
-
-    /**
-     * A set of special headers.
-     */
-    private specialHeaders: { [id: number]: Header } = {};
-
-    /**
-     * The header for even pages.
-     */
-    private evenHeader: Header = null;
-
-    /**
-     * The header for odd pages.
-     */
-    private oddHeader: Header = null;
-
-    /**
-     * The header for the last page.
-     */
-    private lastHeader: Header = null;
+    private header: string = "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \">{{ Author }}</td><td style=\"text-align: center\">{{ PageNumber }}/{{ PageCount }}</td><td style=\"text-align: right\">{{ Company.Name }}</td></table>";
 
     /**
      * The footer of the document.
      */
-    private footer: Footer = new Footer("1cm", '<table style="width: 100%; table-layout: fixed; "><td style="text-align: left; "></td><td style="text-align: center">{{ CreationDate }}</td><td style="text-align: right"></td></table>');
-
-    /**
-     * A set of special footers.
-     */
-    private specialFooters: { [id: number]: Footer } = {};
-
-    /**
-     * The footer for even pages.
-     */
-    private evenFooter: Footer = null;
-
-    /**
-     * The footer for odd pages.
-     */
-    private oddFooter: Footer = null;
-
-    /**
-     * The footer for the last page.
-     */
-    private lastFooter: Footer = null;
+    private footer: string = "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ CreationDate }}</td><td style=\"text-align: right\"></td></table>";
 
     /**
      * The definitions of the table of contents.
      */
-    private tocSettings: TOCSettings = new TOCSettings();
+    private tocSettings: TocSettings = new TocSettings();
 
     /**
      * The template to use for the RenderBody-process.
      */
-    private template: string = Path.join(__dirname, "..", "..", "Resources", "Template.html");
-
-    /**
-     * The wrapper of the content of the document.
-     */
-    private wrapper: string = null;
+    private template: string = Path.join(__dirname, "..", "..", "..", "Resources", "Template.html");
 
     /**
      * The highlight-style of the document.
      */
-    private highlightStyle: boolean | string = true;
-
-    /**
-     * The embedding-options of the document.
-     */
-    private embeddingStyle: EmbeddingOption | boolean = EmbeddingOption.Local;
+    private highlightStyle: string = "Default";
 
     /**
      * A value indicating whether system-provided stylesheets are enabled. 
      */
     private systemStylesEnabled: boolean = true;
-
-    /**
-     * The styles of the document.
-     */
-    private styles: string = "";
 
     /**
      * The stylesheets of the document.
@@ -287,186 +228,47 @@ export default class Document
     /**
      * Gets or sets the layout of the document.
      */
-    public get Layout(): Layout
+    public get Paper(): Paper
     {
-        return this.layout;
+        return this.paper;
     }
-    public set Layout(value: Layout)
+    public set Paper(value: Paper)
     {
-        this.layout = value;
+        this.paper = value;
     }
 
     /**
      * Gets or sets the header of the document.
      */
-    public get Header(): Header
+    public get HeaderTemplate(): string
     {
         return this.header;
     }
-    public set Header(value: Header)
+    public set HeaderTemplate(value: string)
     {
         this.header = value;
     }
 
     /**
-     * Gets or sets a set of special headers.
-     */
-    public get SpecialHeaders(): { [id: number]: Header }
-    {
-        return this.specialHeaders;
-    }
-    public set SpecialHeaders(value: { [id: number]: Header })
-    {
-        this.specialHeaders = value;
-    }
-
-    /**
-     * Gets or sets the header for even pages.
-     */
-    public get EvenHeader(): Header
-    {
-        if (this.evenHeader)
-        {
-            return this.evenHeader;
-        }
-        else
-        {
-            return this.header;
-        }
-    }
-    public set EvenHeader(value: Header)
-    {
-        this.evenHeader = value;
-    }
-
-    /**
-     * Gets or sets the header for even pages.
-     */
-    public get OddHeader(): Header
-    {
-        if (this.oddHeader)
-        {
-            return this.oddHeader;
-        }
-        else
-        {
-            return this.header;
-        }
-    }
-    public set OddHeader(value: Header)
-    {
-        this.oddHeader = value;
-    }
-
-    /**
-     * Gets or sets the header for the last page.
-     */
-    public get LastHeader(): Header
-    {
-        if (this.lastHeader)
-        {
-            return this.lastHeader;
-        }
-        else
-        {
-            return this.header;
-        }
-    }
-    public set LastHeader(value: Header)
-    {
-        this.lastHeader = value;
-    }
-
-    /**
      * Gets or sets the footer of the document.
      */
-    public get Footer(): Footer
+    public get FooterTemplate(): string
     {
         return this.footer;
     }
-    public set Footer(value: Footer)
+    public set FooterTemplate(value: string)
     {
         this.footer = value;
     }
 
     /**
-     * Gets or sets a set of special footers.
-     */
-
-    public get SpecialFooters(): { [id: number]: Footer }
-    {
-        return this.specialFooters;
-    }
-    public set SpecialFooters(value: { [id: number]: Footer })
-    {
-        this.specialFooters = value;
-    }
-
-    /**
-     * Gets or sets the footer for even pages.
-     */
-    public get EvenFooter(): Footer
-    {
-        if (this.evenFooter)
-        {
-            return this.evenFooter;
-        }
-        else
-        {
-            return this.footer;
-        }
-    }
-    public set EvenFooter(value: Footer)
-    {
-        this.evenFooter = value;
-    }
-
-    /**
-     * Gets or sets the footer for odd pages.
-     */
-    public get OddFooter(): Footer
-    {
-        if (this.evenFooter)
-        {
-            return this.evenFooter;
-        }
-        else
-        {
-            return this.footer;
-        }
-    }
-    public set OddFooter(value: Footer)
-    {
-        this.oddFooter = value;
-    }
-
-    /**
-     * Gets or sets the footer for the last page.
-     */
-    public get LastFooter(): Footer
-    {
-        if (this.lastFooter)
-        {
-            return this.lastFooter;
-        }
-        else
-        {
-            return this.footer;
-        }
-    }
-    public set LastFooter(value: Footer)
-    {
-        this.lastFooter = value;
-    }
-
-    /**
      * Gets or sets the definitions of the table of contents.
      */
-    public get TOCSettings(): TOCSettings
+    public get TocSettings(): TocSettings
     {
         return this.tocSettings;
     }
-    public set TOCSettings(value: TOCSettings)
+    public set TocSettings(value: TocSettings)
     {
         this.tocSettings = value;
     }
@@ -484,39 +286,15 @@ export default class Document
     }
 
     /**
-     * Gets or sets the wrapper of the content of the document.
-     */
-    public get Wrapper(): string
-    {
-        return this.wrapper;
-    }
-    public set Wrapper(value: string)
-    {
-        this.wrapper = value;
-    }
-
-    /**
      * Gets or sets the highlight-style of the document.
      */
-    public get HighlightStyle(): boolean | string
+    public get HighlightStyle(): string
     {
         return this.highlightStyle;
     }
-    public set HighlightStyle(value: boolean | string)
+    public set HighlightStyle(value: string)
     {
         this.highlightStyle = value;
-    }
-
-    /**
-     * Gets or sets the embedding-options of the document.
-     */
-    public get EmbeddingStyle(): EmbeddingOption | boolean
-    {
-        return this.embeddingStyle;
-    }
-    public set EmbeddingStyle(value: EmbeddingOption | boolean)
-    {
-        this.embeddingStyle = value;
     }
 
     /**
@@ -529,18 +307,6 @@ export default class Document
     public set SystemStylesEnabled(value: boolean)
     {
         this.systemStylesEnabled = value;
-    }
-
-    /**
-     * Gets or sets the styles of the document.
-     */
-    public get Styles(): string
-    {
-        return this.styles;
-    }
-    public set Styles(value: string)
-    {
-        this.styles = value;
     }
 
     /**
@@ -580,29 +346,12 @@ export default class Document
         let document: any = {
             Quality: this.Quality,
             Locale: this.Locale,
-            Layout: this.Layout.toJSON(),
-            Header: this.RenderSection(this.Header),
-            SpecialHeaders: {},
-            EvenHeader: this.RenderSection(this.evenHeader),
-            OddHeader: this.RenderSection(this.oddHeader),
-            LastHeader: this.RenderSection(this.lastHeader),
+            Layout: this.Paper.toJSON(),
+            HeaderFooterEnabled: Settings.Default.HeaderFooterEnabled,
+            Header: this.Render(this.HeaderTemplate),
             Content: this.RenderBody(),
-            Footer: this.RenderSection(this.Footer),
-            SpecialFooters: {},
-            EvenFooter: this.RenderSection(this.evenFooter),
-            OddFooter: this.RenderSection(this.oddFooter),
-            LastFooter: this.RenderSection(this.lastFooter)
+            Footer: this.Render(this.FooterTemplate)
         };
-
-        for (let key in this.SpecialHeaders)
-        {
-            document.SpecialHeaders[key] = this.RenderSection(this.SpecialHeaders[key]);
-        }
-
-        for (let key in this.SpecialFooters)
-        {
-            document.SpecialFooters[key] = this.RenderSection(this.SpecialFooters[key]);
-        }
 
         return JSON.stringify(document);
     }
@@ -616,26 +365,6 @@ export default class Document
     }
 
     /**
-     * Renders a section of the document.
-     * 
-     * @param section
-     * The section which is to be rendered.
-     */
-    private RenderSection(section: Section): object
-    {
-        if (section)
-        {
-            let result: any = section.toJSON();
-            result.Content = this.Render(result.Content);
-            return result;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    /**
      * Renders content of the document.
      * 
      * @param content
@@ -643,8 +372,6 @@ export default class Document
      */
     private Render(content: string): string
     {
-        // Making the hightlight-variable visible for the callback (by declaring a new 'var'-variable)
-        // See: http://stackoverflow.com/questions/762011/whats-the-difference-between-using-let-and-var-to-declare-a-variable
         let highlightStyle = this.HighlightStyle;
 
         // Preparing markdown-it
@@ -652,7 +379,7 @@ export default class Document
             html: true,
             highlight(subject, language)
             {
-                if (highlightStyle && language && HighlightJs.getLanguage(language))
+                if ((highlightStyle !== "None") && language && HighlightJs.getLanguage(language))
                 {
                     subject = HighlightJs.highlight(language, subject, true).value;
                 }
@@ -686,12 +413,16 @@ export default class Document
             }
         });
         md.use(Checkbox);
-        md.use(MarkdownItToc, {
-            includeLevel: new MultiRange(this.TOCSettings.Levels).toArray(),
-            containerClass: this.TOCSettings.Class,
-            markerPattern: this.TOCSettings.Indicator,
-            listType: ListType[this.TOCSettings.ListType]
-        });
+
+        if (this.TocSettings.Enabled)
+        {
+            md.use(MarkdownItToc, {
+                includeLevel: new MultiRange(this.TocSettings.Levels).toArray(),
+                containerClass: this.TocSettings.Class,
+                markerPattern: this.TocSettings.Indicator,
+                listType: ListType[this.TocSettings.ListType]
+            });
+        }
 
         if (this.emoji)
         {
@@ -702,14 +433,13 @@ export default class Document
             {
                 switch (emoji)
                 {
-                    case false:
+                    case "None":
                         return token[id].markup;
-                    case "twitter":
+                    case "Twitter":
                         return TwEmoji.parse(token[id].content);
-                    case "native":
+                    case "Native":
                         return token[id].content;
-                    case "github":
-                    case true:
+                    case "GitHub":
                     default:
                         return '<img class="emoji" title=":' +
                             token[id].markup +
@@ -727,9 +457,10 @@ export default class Document
         for (let key in this.Attributes)
         {
             let value = this.Attributes[key];
-            if (value instanceof Date)
+
+            if (value instanceof Date || Date.parse(value))
             {
-                value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, value);
+                value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
             }
             else if (/function[\s]*\(\)[\s]*{([\s\S]*)}/gm.test(value))
             {
@@ -764,8 +495,8 @@ export default class Document
      */
     private LoadSettings(): void
     {
-        this.Quality = Settings.Default.Quality;
-        this.Emoji = Settings.Default.Emoji;
+        this.Quality = Settings.Default.ConversionQuality;
+        this.Emoji = Settings.Default.EmojiType;
 
         for (let key in Settings.Default.Attributes)
         {
@@ -775,242 +506,35 @@ export default class Document
         this.Locale = new CultureInfo(Settings.Default.Locale);
         this.DateFormat = Settings.Default.DateFormat;
 
-        this.Layout = Settings.Default.Layout;
+        this.Paper = Settings.Default.PaperFormat;
 
-        this.Header = Settings.Default.Header;
-        this.SpecialHeaders = Settings.Default.SpecialHeaders;
-        this.EvenHeader = Settings.Default.EvenHeader;
-        this.OddHeader = Settings.Default.OddHeader;
-        this.LastHeader = Settings.Default.LastHeader;
-        this.Footer = Settings.Default.Footer;
-        this.SpecialFooters = Settings.Default.SpecialFooters;
-        this.EvenFooter = Settings.Default.EvenFooter;
-        this.OddFooter = Settings.Default.OddFooter;
-        this.LastFooter = Settings.Default.LastFooter;
+        this.HeaderTemplate = Settings.Default.HeaderTemplate;
+        this.FooterTemplate = Settings.Default.FooterTemplate;
 
-        this.TOCSettings = Settings.Default.TOCSettings;
+        this.TocSettings = Settings.Default.TocSettings;
 
         if (Settings.Default.Template)
         {
             this.Template = Settings.Default.Template;
         }
-        else if (Settings.Default.SystemStyles)
+        else if (Settings.Default.SystemStylesEnabled)
         {
             this.Template = Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html");
         }
 
-        this.Wrapper = Settings.Default.Wrapper;
-
         this.HighlightStyle = Settings.Default.HighlightStyle;
 
-        if (typeof (this.HighlightStyle) !== "boolean")
+        if (this.HighlightStyle !== "Default" && this.HighlightStyle !== "None")
         {
-            this.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "..", "node_modules", "highlightjs", this.HighlightStyle + ".css"));
+            this.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "node_modules", "highlightjs", "styles", this.HighlightStyle + ".css"));
         }
 
-        if (typeof (Settings.Default.EmbeddingStyle) === "boolean")
-        {
-            this.EmbeddingStyle = Settings.Default.EmbeddingStyle;
-        }
-        else
-        {
-            this.EmbeddingStyle = EmbeddingOption[Settings.Default.EmbeddingStyle as string];
-        }
-
-        this.SystemStylesEnabled = Settings.Default.SystemStyles;
-
-        if (Settings.Default.Styles)
-        {
-            this.Styles += Settings.Default.Styles;
-        }
+        this.SystemStylesEnabled = Settings.Default.SystemStylesEnabled;
 
         for (let key in Settings.Default.StyleSheets)
         {
             this.StyleSheets.push(Settings.Default.StyleSheets[key]);
         }
-    }
-
-    /**
-     * Creates a new header based on the values of the header-object.
-     * 
-     * @param source
-     * The source to load the value to set from.
-     * 
-     * @param propertyKey
-     * The key of the property to write the header to.
-     * 
-     * @param target
-     * The target-object to write the property to.
-     */
-    private CreateHeader(source, propertyKey: string, target?): Header;
-
-    /**
-     * Creates a new header based on the values of the header-configuration.
-     * 
-     * @param config
-     * The Workspace-Configuration of Visual Studio Code.
-     * 
-     * @param configKey
-     * The configuration-key to load the values to set from.
-     * 
-     * @param propertyKey
-     * The key of the property to write the header to.
-     * 
-     * @param target
-     * The target-object to write the property to.
-     */
-    private CreateHeader(config: VSCode.WorkspaceConfiguration, configKey: string, propertyKey: string, target?): Header;
-
-    private CreateHeader(source: VSCode.WorkspaceConfiguration | any, configKey: string, propertyKey: string | any = this, target = this): Header
-    {
-        let prototype = new Header();
-
-        if (typeof propertyKey === "object")
-        {
-            // First implementation has been called (object, string, object?)
-            return this.CreateSection(prototype, source, configKey, propertyKey);
-        }
-        else
-        {
-            // Second implementation has been called (VSCode.WorkspaceConfiguration, string, string, object?)
-            return this.CreateSection(prototype, source as VSCode.WorkspaceConfiguration, configKey, propertyKey, target);
-        }
-    }
-
-    /**
-     * Creates a new footer based on the values of the footer-object.
-     * 
-     * @param source
-     * The source to load the value to set from.
-     * 
-     * @param propertyKey
-     * The key of the property to write the footer to.
-     * 
-     * @param target
-     * The target-object to write the property to.
-     */
-    private CreateFooter(source, propertyKey: string, target?): Footer;
-
-    /**
-     * Creates a new footer based on the values of the footer-configuration.
-     * 
-     * @param config
-     * The Workspace-Configuration of Visual Studio Code.
-     * 
-     * @param configKey
-     * The configuration-key to load the values to set from.
-     * 
-     * @param propertyKey
-     * The key of the property to write the footer to.
-     * 
-     * @param target
-     * The target-object to write the property to.
-     */
-    private CreateFooter(config: VSCode.WorkspaceConfiguration, configKey: string, propertyKey: string, target?): Footer;
-
-    private CreateFooter(source: VSCode.WorkspaceConfiguration | any, configKey: string, propertyKey: string | any = this, target = this): Footer
-    {
-        let prototype = new Footer();
-
-        if (typeof propertyKey === "string")
-        {
-            // First implementation has been called (object, string, object?)
-            return this.CreateSection(prototype, source, configKey, propertyKey);
-        }
-        else
-        {
-            // Second implementation has been called (VSCode.WorkspaceConfiguration, string, string, object?)
-            return this.CreateSection(prototype, source as VSCode.WorkspaceConfiguration, configKey, propertyKey, target);
-        }
-    }
-
-    /**
-     * Creates a new section based on the values of the section-object.
-     * 
-     * @param prototype
-     * The prototype of the section to create.
-     * 
-     * @param source
-     * The source to load the value to set from.
-     * 
-     * @param propertyKey
-     * The key of the property to write the header to.
-     * 
-     * @param target
-     * The target-object to write the property to.
-     */
-    private CreateSection(prototype: Section, source, propertyKey: string, target?): Section;
-
-    /**
-     * Creates a new section based on the values of the section-object.
-     * 
-     * @param prototype
-     * The prototype of the section to create.
-     * 
-     * @param config
-     * The Workspace-Configuration of Visual Studio Code.
-     * 
-     * @param configKey
-     * The configuration-key to load the values to set from.
-     * 
-     * @param propertyKey
-     * The key of the property to write the header to.
-     * 
-     * @param target
-     * The target-object to write the property to.
-     */
-    private CreateSection(prototype: Section, config: VSCode.WorkspaceConfiguration, configKey: string, propertyKey: string, target?): Section;
-
-    private CreateSection(prototype: Section, source: VSCode.WorkspaceConfiguration | any, configKey: string, propertyKey: string | any = this, target = this): Section
-    {
-        let result = prototype;
-        let section;
-
-        if (typeof propertyKey === "object")
-        {
-            // First implementation has been called (Section, object, string, object?)
-            target = propertyKey;
-            propertyKey = configKey;
-            section = source;
-        }
-        else
-        {
-            // Second implementation has been called (Section, VSCode.WorkspaceConfiguration, string, string, object?)
-            let config = source as VSCode.WorkspaceConfiguration;
-
-            if (config.has(configKey))
-            {
-                section = config.get(configKey);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        if (this.ValidateSection(section))
-        {
-            prototype.Height = section.height;
-            prototype.Content = section.content;
-
-            Reflect.set(target, propertyKey, prototype);
-            return Reflect.get(target, propertyKey);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    /**
-     * Validates whether the section contains all required values.
-     * 
-     * @param section
-     * The section to validate.
-     */
-    private ValidateSection(section): boolean
-    {
-        return ("height" in section) && ("content" in section);
     }
 
     /**
@@ -1023,9 +547,7 @@ export default class Document
             let template = FS.readFileSync(this.Template).toString();
 
             // Preparing the styles
-            let styleSheetFiles: string[] = [];
             let styleSheets = this.StyleSheets;
-            let markdownExt = VSCode.extensions.getExtension("Microsoft.vscode-markdown");
 
             if (this.SystemStylesEnabled)
             {
@@ -1033,19 +555,18 @@ export default class Document
                 let stylesRoot = Path.join(__dirname, "..", "..", "..", "Resources", "css");
                 systemStyles.push(Path.join(stylesRoot, "styles.css"));
                 systemStyles.push(Path.join(stylesRoot, "markdown.css"));
-                systemStyles.push(Path.join(stylesRoot, "highlight.css"));
 
-                styleSheetFiles = systemStyles.concat(styleSheetFiles);
+                if (this.HighlightStyle === "Default")
+                {
+                    systemStyles.push(Path.join(stylesRoot, "highlight.css"));
+                }
+
+                styleSheets = systemStyles.concat(styleSheets);
             }
 
             let styleCode = "<style>\n";
 
-            if (this.Styles)
-            {
-                styleCode += this.Styles + "\n";
-            }
-
-            styleSheetFiles.forEach(styleSheet =>
+            styleSheets.forEach(styleSheet =>
             {
                 if (FS.existsSync(styleSheet))
                 {
@@ -1053,11 +574,10 @@ export default class Document
                 }
             });
 
-            styleSheetFiles.forEach(styleSheet =>
+            styleSheets.forEach(styleSheet =>
             {
                 if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
                 {
-                    if (this.EmbeddingStyle === true || this.EmbeddingStyle === EmbeddingOption.All || this.EmbeddingStyle === EmbeddingOption.Web)
                     {
                         let result = Request(styleSheet);
 
@@ -1066,37 +586,23 @@ export default class Document
                             styleCode += result.body;
                         }
                     }
-                    else
-                    {
-                        styleCode += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
-                    }
                 }
                 else
                 {
                     // Removing leading 'file://' from the local path.
                     styleSheet.replace(/^file:\/\//, "");
 
-                    if (this.EmbeddingStyle === true || this.EmbeddingStyle === EmbeddingOption.All || this.EmbeddingStyle === EmbeddingOption.Local)
                     {
                         if (FS.existsSync(styleSheet))
                         {
                             styleCode += FS.readFileSync(styleSheet).toString() + "\n";
                         }
                     }
-                    else
-                    {
-                        styleCode += '</style>\n<link rel="stylesheet" href="' + styleSheet + '" type="text/css">\n<style>';
-                    }
                 }
             });
             styleCode += "</style>";
 
             let content = this.Content;
-
-            if (this.Wrapper)
-            {
-                content = Mustache.render(this.Wrapper, { content });
-            }
 
             let view = {
                 styles: styleCode,
@@ -1115,12 +621,4 @@ export default class Document
             throw e;
         }
     }
-}
-
-function enumerable(value)
-{
-    return (target: any, propertyKey: string, descriptor: PropertyDescriptor) =>
-    {
-        descriptor.enumerable = value;
-    };
 }

@@ -76,13 +76,13 @@ catch (e)
          */
         function ReplacePageNumbers(subject: string, pageNumber: number, pageCount: number): string
         {
-            subject = subject.replace(/{{[\s]*(PageNumber|PageCount)[\s]*}}/g, function (match: string): string
+            subject = subject.replace(/<span class=\"(pageNumber|totalPages)\"><\/span>/g, function (match: string): string
             {
-                if (/PageNumber/g.test(match))
+                if (/pageNumber/g.test(match))
                 {
                     return pageNumber.toString();
                 }
-                else if (/PageCount/g.test(match))
+                else if (/totalPages/g.test(match))
                 {
                     return pageCount.toString();
                 }
@@ -134,14 +134,25 @@ catch (e)
             var paper = CreatePaper();
             var styles = page.evaluate(GetStyles);
 
-            if (doc.Header || doc.SpecialHeaders.length > 0 || doc.EvenHeader || doc.OddHeader || doc.LastHeader)
+            if (doc.HeaderFooterEnabled)
             {
-                paper.header = CreateHeader(styles);
+                paper.header = {
+                    height: "15mm",
+                    contents: phantom.callback(function (pageNumber, pageCount)
+                    {
+                        return styles + ReplacePageNumbers(doc.Header, pageNumber, pageCount);
+                    })
+                };
+
+                paper.footer = {
+                    height: "1cm",
+                    contents: phantom.callback(function (pageNumber, pageCount)
+                    {
+                        return styles + ReplacePageNumbers(doc.Footer, pageNumber, pageCount);
+                    })
+                };
             }
-            if (doc.Footer || doc.SpecialFooters.length > 0 || doc.EvenFooter || doc.OddFooter || doc.LastFooter)
-            {
-                paper.footer = CreateFooter(styles);
-            }
+            
             return paper;
         }
 
@@ -170,7 +181,7 @@ catch (e)
             if (layout.Format)
             {
                 paper.format = layout.Format;
-                paper.orientation = layout.Orientation;
+                paper.orientation = layout.Orientation.toLowerCase();
             }
             else if (layout.Width && layout.Height)
             {
@@ -192,108 +203,6 @@ catch (e)
                 return string + (node.outerHTML || '')
             }, '');
             return styles;
-        }
-
-        /**
-         * Creates a header-section.
-         * 
-         * @param styles
-         * The css-styles of the header.
-         */
-        function CreateHeader(styles: string)
-        {
-            return {
-                height: doc.Header.Height,
-                contents: phantom.callback(function (pageNumber, pageCount)
-                {
-                    var header = GetHeader(pageNumber, pageCount);
-                    return styles + ReplacePageNumbers(header.Content, pageNumber, pageCount);
-                })
-            }
-        }
-
-        /**
-         * Determines the propper header according to the page-number and the number of pages.
-         * 
-         * @param pageNumber
-         * The page-number.
-         * 
-         * @param pageCount
-         * The number of pages.
-         */
-        function GetHeader(pageNumber, pageCount)
-        {
-            if (pageNumber == pageCount && doc.LastHeader)
-            {
-                return doc.LastHeader;
-            }
-            if (pageNumber in doc.SpecialHeaders)
-            {
-                return doc.SpecialHeaders[pageNumber];
-            }
-            else if (pageNumber % 2 == 0 && doc.EvenHeader)
-            {
-                return doc.EvenHeader;
-            }
-            else if (doc.OddHeader)
-            {
-                return doc.OddHeader;
-            }
-            else
-            {
-                return doc.Header;
-            }
-        }
-
-        /**
-         * Creates a footer-section.
-         * 
-         * @param styles
-         * The css-styles of the header.
-         */
-        function CreateFooter(styles: string)
-        {
-            return {
-                height: doc.Footer.Height,
-                contents: phantom.callback(function (pageNumber, pageCount)
-                {
-                    var footer = GetFooter(pageNumber, pageCount);
-                    return styles + ReplacePageNumbers(footer.Content, pageNumber, pageCount);
-                })
-            }
-        }
-
-        /**
-         * Determines the propper footer according to the page-number and the number of pages.
-         * 
-         * @param pageNumber
-         * The page-number.
-         * 
-         * @param pageCount
-         * The number of pages.
-         */
-        function GetFooter(pageNumber, pageCount)
-        {
-            if (pageNumber == pageCount && doc.LastFooter)
-            {
-                return doc.LastFooter;
-            }
-            if (pageNumber in doc.SpecialFooters)
-            {
-                return doc.SpecialFooters[pageNumber];
-            }
-            else if (pageNumber % 2 == 0 && doc.EvenFooter)
-            {
-                return doc.EvenFooter;
-            }
-            else if (doc.OddFooter)
-            {
-                return doc.OddFooter;
-            }
-            else
-            {
-                return doc.Footer;
-            }
         }
     }
 }
