@@ -2,7 +2,6 @@ import * as Checkbox from "markdown-it-checkbox";
 import * as FS from "fs";
 import * as Path from "path";
 import * as URL from "url";
-import * as VSCode from "vscode";
 import * as Anchor from "markdown-it-anchor";
 import DateTimeFormatter from "../Globalization/DateTimeFormatter";
 import Encoding from "../Text/Encoding";
@@ -11,7 +10,6 @@ import Fullname from "../Fullname";
 import * as HighlightJs from "highlightjs";
 import Paper from "./Paper";
 import ListType from "./ListType";
-import Margin from "./Margin";
 import * as MarkdownIt from "markdown-it";
 import * as MarkdownItEmoji from "markdown-it-emoji";
 import * as MarkdownItToc from "markdown-it-table-of-contents";
@@ -393,7 +391,8 @@ export default class Document
         {
             return true;
         };
-        md.use(Anchor, {
+        
+        Anchor(md, {
             slugify: (heading) =>
             {
                 let slug = Transliteration.slugify(heading, {lowercase: true, separator: "-", ignore: []});
@@ -410,6 +409,7 @@ export default class Document
                 return slug;
             }
         });
+
         md.use(Checkbox);
 
         if (this.TocSettings.Enabled)

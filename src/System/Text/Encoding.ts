@@ -11,8 +11,6 @@ export default class Encoding
      */
     public static UTF8CharToCodePoints(subject: string): number
     {
-        let bytes: number[] = [];
-        let byte: number;
         let buffer = Buffer.from(subject);
         let result: number = 0;
 
