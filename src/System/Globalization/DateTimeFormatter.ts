@@ -1,6 +1,3 @@
-import * as vscode from "vscode";
-import * as nls from "vscode-nls";
-import * as path from "path";
 import Encoding from "../Text/Encoding";
 import CultureInfo from "culture-info";
 import Resources from "../ResourceManager";

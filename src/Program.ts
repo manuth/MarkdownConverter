@@ -1,14 +1,12 @@
 import * as ChildProcess from "child_process";
 import * as Format from "string-template";
-import * as FS from "fs";
-import * as MKDirP from "mkdirp";
+import * as FS from "fs-extra";
 import * as NLS from "vscode-nls";
 import * as Path from "path";
 import { env, TextDocument, window } from "vscode";
 import ConversionType from "./ConversionType";
 import Converter from "./Converter";
 import Document from "./System/Drawing/Document";
-import PhantomJSTimeoutException from "./System/Web/PhantomJS/PhantomJSTimeoutException";
 import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
 import Resources from "./System/ResourceManager";
 
@@ -33,7 +31,7 @@ export default class Program
         {
             if (!FS.existsSync(outDir))
             {
-                MKDirP.sync(outDir);
+                FS.mkdirpSync(outDir);
             }
 
             try
@@ -91,14 +89,11 @@ export default class Program
                 {
                     message = Format(Resources.Get("UnauthorizedAccessException"), e.Path);
                 }
-                else if (e instanceof PhantomJSTimeoutException)
-                {
-                    message = Resources.Get("PhantomJSTimeoutException");
-                }
-                else if (e instanceof Error)
+                else
                 {
                     throw e;
                 }
+
                 window.showErrorMessage(message);
             }
         }
