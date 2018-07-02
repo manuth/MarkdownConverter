@@ -561,6 +561,11 @@ export default class Document
                     systemStyles.push(Path.join(stylesRoot, "highlight.css"));
                 }
 
+                if (this.Emoji === "GitHub")
+                {
+                    systemStyles.push(Path.join(stylesRoot, "emoji.css"));
+                }
+
                 styleSheets = systemStyles.concat(styleSheets);
             }
 
