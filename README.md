@@ -10,7 +10,9 @@ Provides the functionallity to convert MarkDown-files to html, png, or pdf using
       - Open up your Visual Studio Code-Settings and set `markdownConverter.ConversionType` to either your desired type or an array of types:  
         ```json
         {
-          "markdownConverter.ConversionType": "PNG"
+          "markdownConverter.ConversionType": [
+            "PNG"
+          ]
         }
         ```
         or
@@ -26,9 +28,6 @@ Provides the functionallity to convert MarkDown-files to html, png, or pdf using
  3. Press enter and wait for the process to finish
 
 # Known Issues
-  - Dynamic Footer/Header-heights aren't supported by PhantomJS.  
-    For that reason all Headers/Footers will have the height of the default Header/Footer.  
-    I'm sorry...
   - Anchor-links are not working inside a PDF-document due to an issue of [Skia][AnchorIssue] (a graphics-engine maintained by google)
 
 <!--- References -->

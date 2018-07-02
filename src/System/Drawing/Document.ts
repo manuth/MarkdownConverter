@@ -341,9 +341,9 @@ export default class Document
     /**
      * Returns a JSON-string which represents the document.
      */
-    public toJSON(): string
+    public toJSON()
     {
-        let document: any = {
+        return {
             Quality: this.Quality,
             Locale: this.Locale,
             Layout: this.Paper.toJSON(),
@@ -352,8 +352,6 @@ export default class Document
             Content: this.RenderBody(),
             Footer: this.Render(this.FooterTemplate)
         };
-
-        return JSON.stringify(document);
     }
 
     /**
