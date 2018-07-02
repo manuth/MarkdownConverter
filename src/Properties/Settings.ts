@@ -6,6 +6,9 @@ import ListType from "../System/Drawing/ListType";
 import Margin from "../System/Drawing/Margin";
 import TocSettings from "../System/Drawing/TOCSettings";
 
+/**
+ * Provides access to settings.
+ */
 export default class Settings
 {
     /**
@@ -13,8 +16,14 @@ export default class Settings
      */
     private static readonly configKey: string = "markdownConverter";
 
+    /**
+     * A default instance of the `Settings` class.
+     */
     private static defaultInstance: Settings = new Settings();
 
+    /**
+     * Gets a default instance of the `Settings` class.
+     */
     public static get Default(): Settings
     {
         return Settings.defaultInstance;
@@ -25,7 +34,7 @@ export default class Settings
      */
     public get OutputDirectory(): string
     {
-        return this.getConfigEntry("OutDir", ".");
+        return this.getConfigEntry("OutDir");
     }
 
     /**
@@ -33,7 +42,7 @@ export default class Settings
      */
     public get IgnoreLanguageMode(): boolean
     {
-        return this.getConfigEntry("IgnoreLanguageMode", false);
+        return this.getConfigEntry("IgnoreLanguageMode");
     }
 
     /**
@@ -41,7 +50,7 @@ export default class Settings
      */
     public get ConversionQuality(): number
     {
-        return this.getConfigEntry("ConversionQuality", 100);
+        return this.getConfigEntry("ConversionQuality");
     }
 
     /**
