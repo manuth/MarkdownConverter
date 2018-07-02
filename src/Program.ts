@@ -1,7 +1,6 @@
 import * as ChildProcess from "child_process";
 import * as Format from "string-template";
 import * as FS from "fs-extra";
-import * as NLS from "vscode-nls";
 import * as Path from "path";
 import { env, TextDocument, window } from "vscode";
 import ConversionType from "./ConversionType";
