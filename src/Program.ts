@@ -20,7 +20,7 @@ export default class Program
     /**
      * Converts a markdown-file to other file-types
      */
-    public static Main(textDocument: TextDocument, types: ConversionType[], outDir: string, fileName: string): void
+    public static async Main(textDocument: TextDocument, types: ConversionType[], outDir: string, fileName: string): Promise<void>
     {
         let doc: Document;
 
@@ -29,7 +29,7 @@ export default class Program
 
         let converter = new Converter(doc);
 
-        types.forEach(type =>
+        for (let type of types)
         {
             if (!FS.existsSync(outDir))
             {
@@ -42,17 +42,11 @@ export default class Program
 
                 switch (type)
                 {
-                    case ConversionType.BMP:
-                        extension = "bmp";
-                        break;
                     case ConversionType.HTML:
                         extension = "html";
                         break;
                     case ConversionType.JPEG:
                         extension = "jpg";
-                        break;
-                    case ConversionType.PPM:
-                        extension = "ppm";
                         break;
                     case ConversionType.PNG:
                         extension = "png";
@@ -64,7 +58,7 @@ export default class Program
                 }
 
                 let destination = Path.join(outDir, fileName + "." + extension);
-                converter.Start(type, destination);
+                await converter.Start(type, destination);
                 window.showInformationMessage(
                     Format(Resources.Get("SuccessMessage"), ConversionType[type], destination),
                     Resources.Get("OpenFileLabel")).then(
@@ -107,6 +101,6 @@ export default class Program
                 }
                 window.showErrorMessage(message);
             }
-        });
+        }
     }
 }

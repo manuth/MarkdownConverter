@@ -4,10 +4,6 @@
 enum ConversionType
 {
     /**
-     * BMP-conversion.
-     */
-    BMP,
-    /**
      * HTML-conversion.
      */
     HTML,
@@ -24,12 +20,7 @@ enum ConversionType
     /**
      * PNG-conversion.
      */
-    PNG,
-
-    /**
-     * PPM-conversion.
-     */
-    PPM
+    PNG
 }
 
 export default ConversionType;

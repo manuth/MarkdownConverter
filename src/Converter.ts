@@ -1,12 +1,7 @@
-import * as ChildProcess from "child_process";
 import * as FS from "fs";
-import * as Path from "path";
-import * as PhantomJS from "phantomjs-prebuilt";
-import * as Temp from "temp";
 import Document from "./System/Drawing/Document";
 import ConversionType from "./ConversionType";
-import PhantomJSTimeoutException from "./System/Web/PhantomJS/PhantomJSTimeoutException";
-import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
+import Puppeteer = require("puppeteer");
 
 /**
  * Provides a markdown-converter.
@@ -38,71 +33,64 @@ export default class Converter
      * @param path
      * The path to save the converted file to.
      */
-    public Start(conversionType: ConversionType, path: string): void
+    public async Start(conversionType: ConversionType, path: string): Promise<void>
     {
         if (conversionType !== ConversionType.HTML)
         {
-            // Saving the JSON that represents the document to a temporary JSON-file.
-            let jsonPath = Temp.path({ suffix: ".json" });
-            {
-                FS.writeFileSync(jsonPath, this.document.toJSON());
-            }
+            let browser = await Puppeteer.launch();
+            let page = await browser.newPage();
+            await page.setContent(this.document.HTML);
 
-            let destinationPath = Path.resolve(path);
-            let tempPath = Temp.path({ suffix: Path.extname(path) });
-            let type = ConversionType[conversionType];
-            let args = [
-                Path.join(__dirname, "PhantomJS", "PDFGenerator.js"),
-                type,
-                jsonPath,
-                tempPath
-            ];
-            
-            let result = ChildProcess.spawnSync(PhantomJS.path, args, { timeout: 2 * 60 * 1000 });
-            
-            if (result.error)
+            switch (conversionType)
             {
-                if ("code" in result.error)
-                {
-                    if (result.error["code"] === "ETIMEDOUT")
+                case ConversionType.PDF:
+                    let jsonDocument = this.document.toJSON();
+                    let styles = `
+                    <style>
+                        :root
+                        {
+                            font-size: 11px;
+                        }
+                    </style>`;
+                    let pdfOptions: Partial<Puppeteer.PDFOptions> = {
+                        margin: {
+                            top: this.document.Paper.Margin.Top,
+                            right: this.document.Paper.Margin.Right,
+                            bottom: this.document.Paper.Margin.Bottom,
+                            left: this.document.Paper.Margin.Left
+                        },
+                        printBackground: true,
+                        path
+                    };
+                    
+                    if (this.document.Paper.Format)
                     {
-                        throw new PhantomJSTimeoutException();
+                        pdfOptions.format = this.document.Paper.Format as Puppeteer.PDFFormat;
+                        pdfOptions.landscape = this.document.Paper.Orientation === "Landscape";
                     }
-                }
-                throw result.error;
-            }
-            
-            let error = result.stderr.toString();
 
-            if (error)
-            {
-                throw new Error(error);
-            }
+                    if (jsonDocument.HeaderFooterEnabled)
+                    {
+                        pdfOptions.displayHeaderFooter = true;
+                        pdfOptions.headerTemplate = styles + jsonDocument.Header;
+                        pdfOptions.footerTemplate = styles + jsonDocument.Footer;
+                    }
 
-            try
-            {
-                let buffer = FS.readFileSync(tempPath);
-                FS.writeFileSync(destinationPath, buffer);
-            }
-            catch (e)
-            {
-                if ("path" in e)
-                {
-                    throw new UnauthorizedAccessException(e["path"]);
-                }
-                throw e;
-            }
-            finally
-            {
-                if (FS.existsSync(tempPath))
-                {
-                    FS.unlinkSync(tempPath);
-                }
+                    await page.pdf(pdfOptions);
+                    break;
+                default:
+                    let screenshotOptions: Partial<Puppeteer.ScreenshotOptions> = {
+                        fullPage: true,
+                        path
+                    };
 
-                if (FS.existsSync(jsonPath))
-                {
-                    FS.unlinkSync(jsonPath);
-                }
+                    if (conversionType !== ConversionType.PNG)
+                    {
+                        screenshotOptions.quality = this.document.Quality;
+                    }
+
+                    await page.screenshot(screenshotOptions);
+                    break;
             }
         }
         else

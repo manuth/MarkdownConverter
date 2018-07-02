@@ -241,13 +241,13 @@
           "title": "%Config.Document.HeaderTemplate%",
           "description": "%Config.Document.HeaderTemplate.Description%",
           "type": "string",
-          "default": "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ Author }}</td><td style=\"text-align: right\"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></td></table>"
+          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">{{ Author }}</div><div style=\"text-align: center; \"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right\">BlarghHacks</div>"
         },
         "markdownConverter.Document.FooterTemplate": {
           "title": "%Config.Document.FooterTemplate%",
           "description": "%Config.Document.FooterTemplate.Description%",
           "type": "string",
-          "default": "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ CreationDate }}</td><td style=\"text-align: right\"></td></table>"
+          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \"></div><div stlyle=\"text-align: center; \">{{ CreationDate }}</div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right; \"></div>"
         },
         "markdownConverter.Document.Toc.Enabled": {
           "title": "%Config.Document.Toc.Enabled%",
@@ -340,6 +340,7 @@
     "@types/mustache": "^0.8.31",
     "@types/node": "^7.0.43",
     "@types/npm": "^2.0.29",
+    "@types/puppeteer": "^1.5.0",
     "@types/shelljs": "^0.7.4",
     "@types/string-template": "^1.0.2",
     "@types/temp": "^0.8.29",
@@ -363,6 +364,7 @@
     "mustache": "^2.3.0",
     "npm": "^6.1.0",
     "phantomjs-prebuilt": "^2.1.16",
+    "puppeteer": "^1.5.0",
     "rc": "^1.2.8",
     "shelljs": "^0.7.7",
     "string-template": "^1.0.0",
