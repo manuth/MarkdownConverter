@@ -17,7 +17,7 @@ import { MultiRange } from "multi-integer-range";
 import * as Mustache from "mustache";
 import * as Request from "sync-request";
 import Settings from "../../Properties/Settings";
-import TocSettings from "./TOCSettings";
+import TocSettings from "./TocSettings";
 import * as Transliteration from "transliteration";
 import * as TwEmoji from "twemoji";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";

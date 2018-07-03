@@ -4,7 +4,7 @@ import KeyNotFoundException from "../System/KeyNotFoundException";
 import Paper from "../System/Drawing/Paper";
 import ListType from "../System/Drawing/ListType";
 import Margin from "../System/Drawing/Margin";
-import TocSettings from "../System/Drawing/TOCSettings";
+import TocSettings from "../System/Drawing/TocSettings";
 import EmojiType from "../System/Drawing/EmojiType";
 import CustomPaperFormat from "../System/Drawing/CustomPaperFormat";
 import StandardizedPaperFormat from "../System/Drawing/StandardizedPaperFormat";
