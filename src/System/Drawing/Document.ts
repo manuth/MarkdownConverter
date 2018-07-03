@@ -23,6 +23,7 @@ import * as TwEmoji from "twemoji";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";
 import YAMLException from "../YAML/YAMLException";
 import CultureInfo from "culture-info";
+import EmojiType from "./EmojiType";
 
 /**
  * Represents a document.
@@ -45,9 +46,9 @@ export default class Document
     private name: string = null;
 
     /**
-     * A value indicating whether emojis should be used.
+     * The type of emojis to use.
      */
-    private emoji: string | boolean = "github";
+    private emojiType: EmojiType = EmojiType.GitHub;
 
     /**
      * The attributes of the document.
@@ -175,15 +176,15 @@ export default class Document
     }
 
     /**
-     * Gets or sets a value indicating whether emojis should be used.
+     * Gets or sets the type of emojis to use.
      */
-    public get Emoji(): string | boolean
+    public get EmojiType(): EmojiType
     {
-        return this.emoji;
+        return this.emojiType;
     }
-    public set Emoji(value: string | boolean)
+    public set EmojiType(value: EmojiType)
     {
-        this.emoji = value;
+        this.emojiType = value;
     }
 
     /**
@@ -422,23 +423,22 @@ export default class Document
             });
         }
 
-        if (this.emoji)
+        if (this.emojiType)
         {
             // Making the emoji-variable visible for the callback
-            let emoji = this.emoji;
+            let emoji = this.emojiType;
             md.use(MarkdownItEmoji);
             md.renderer.rules.emoji = (token, id) =>
             {
                 switch (emoji)
                 {
-                    case "None":
+                    case EmojiType.None:
                         return token[id].markup;
-                    case "Twitter":
-                        return TwEmoji.parse(token[id].content);
-                    case "Native":
+                    case EmojiType.Native:
                         return token[id].content;
-                    case "GitHub":
-                    default:
+                    case EmojiType.Twitter:
+                        return TwEmoji.parse(token[id].content);
+                    case EmojiType.GitHub:
                         return '<img class="emoji" title=":' +
                             token[id].markup +
                             ':" alt=":' +
@@ -494,7 +494,7 @@ export default class Document
     private LoadSettings(): void
     {
         this.Quality = Settings.Default.ConversionQuality;
-        this.Emoji = Settings.Default.EmojiType;
+        this.EmojiType = Settings.Default.EmojiType;
 
         for (let key in Settings.Default.Attributes)
         {
@@ -559,7 +559,7 @@ export default class Document
                     systemStyles.push(Path.join(stylesRoot, "highlight.css"));
                 }
 
-                if (this.Emoji === "GitHub")
+                if (this.EmojiType === EmojiType.GitHub)
                 {
                     systemStyles.push(Path.join(stylesRoot, "emoji.css"));
                 }
