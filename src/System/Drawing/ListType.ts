@@ -4,13 +4,14 @@
 enum ListType
 {
     /**
-     * An unordered list.
+     * Indicates an unordered list.
      */
-    ul,
+    Unordered,
+
     /**
-     * An ordered list.
+     * Indicates an ordered list.
      */
-    ol
+    Ordered
 }
 
 export default ListType;
