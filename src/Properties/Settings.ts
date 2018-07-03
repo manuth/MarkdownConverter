@@ -8,6 +8,8 @@ import TocSettings from "../System/Drawing/TOCSettings";
 import EmojiType from "../System/Drawing/EmojiType";
 import CustomPaperFormat from "../System/Drawing/CustomPaperFormat";
 import StandardizedPaperFormat from "../System/Drawing/StandardizedPaperFormat";
+import StandardizedFormatType from "../System/Drawing/StandardizedFormatType";
+import PaperOrientation from "../System/Drawing/PaperOrientation";
 
 /**
  * Provides access to settings.
@@ -124,8 +126,8 @@ export default class Settings
         catch (exception)
         {
             let format = new StandardizedPaperFormat();
-            format.Format = this.getConfigEntry("Document.Paper.PaperFormat.Format", "A4");
-            format.Orientation = this.getConfigEntry("Document.Paper.PaperFormat.Orientation", "Portrait");
+            format.Format = StandardizedFormatType[this.getConfigEntry("Document.Paper.PaperFormat.Format", StandardizedFormatType[StandardizedFormatType.A4])];
+            format.Orientation = PaperOrientation[this.getConfigEntry("Document.Paper.PaperFormat.Orientation", PaperOrientation[PaperOrientation.Portrait])];
             paper.Format = format;
         }
         
