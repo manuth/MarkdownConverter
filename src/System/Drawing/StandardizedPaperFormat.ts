@@ -1,5 +1,7 @@
 import PaperFormat from "./PaperFormat";
 import { PDFOptions, PDFFormat } from "puppeteer";
+import StandardizedFormatType from "./StandardizedFormatType";
+import PaperOrientation from "./PaperOrientation";
 
 /**
  * Represents a standardized format of a paper.
@@ -7,37 +9,37 @@ import { PDFOptions, PDFFormat } from "puppeteer";
 export default class StandardizedPaperFormat extends PaperFormat
 {
     /**
-     * The paper-format.
+     * The format of the paper.
      */
-    private format: string = "A4";
+    private format: StandardizedFormatType = StandardizedFormatType.A4;
 
     /**
-     * The paper-orientation.
+     * The orientation of the paper.
      */
-    private orientation: string = "Portrait";
+    private orientation: PaperOrientation = PaperOrientation.Portrait;
 
     /**
-     * Gets or sets the paper-format.
+     * Gets or sets the format of the paper.
      */
-    public get Format(): string
+    public get Format(): StandardizedFormatType
     {
         return this.format;
     }
 
-    public set Format(value: string)
+    public set Format(value: StandardizedFormatType)
     {
         this.format = value;
     }
 
     /**
-     * Gets or sets the paper-orientation.
+     * Gets or sets the orientation of the paper.
      */
-    public get Orientation(): string
+    public get Orientation(): PaperOrientation
     {
         return this.orientation;
     }
 
-    public set Orientation(value: string)
+    public set Orientation(value: PaperOrientation)
     {
         this.orientation = value;
     }
@@ -45,8 +47,8 @@ export default class StandardizedPaperFormat extends PaperFormat
     public get PDFOptions(): Partial<PDFOptions>
     {
         return {
-            format: this.Format as PDFFormat,
-            landscape: this.Orientation === "Landspace"
+            format: StandardizedFormatType[this.Format] as PDFFormat,
+            landscape: this.Orientation === PaperOrientation.Landscape
         };
     }
 }

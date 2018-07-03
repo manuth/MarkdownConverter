@@ -65,16 +65,7 @@ export default class Converter
                         path
                     };
                     
-                    if (this.document.Paper.Format instanceof StandardizedPaperFormat)
-                    {
-                        pdfOptions.format = this.document.Paper.Format.Format as Puppeteer.PDFFormat;
-                        pdfOptions.landscape = this.document.Paper.Format.Orientation === "Landscape";
-                    }
-                    else if (this.document.Paper.Format instanceof CustomPaperFormat)
-                    {
-                        pdfOptions.width = this.document.Paper.Format.Width;
-                        pdfOptions.height = this.document.Paper.Format.Height;
-                    }
+                    Object.assign(pdfOptions, this.document.Paper.Format.PDFOptions);
 
                     if (jsonDocument.HeaderFooterEnabled)
                     {
