@@ -75,12 +75,12 @@ export default class DateTimeFormatter
     {
         tokens = this.initializeTokens(date, utc);
 
-        switch (formatString)
+        try
         {
-            case "Default":
-            case "FullDate":
-                formatString = Resources.Get("DateTime.Formats." + formatString, this.locale);
-                break;
+            formatString = Resources.Get("DateTime.Formats." + formatString, this.locale);
+        }
+        catch
+        {
         }
 
         formatString = formatString.replace(this.pattern, (match) =>
