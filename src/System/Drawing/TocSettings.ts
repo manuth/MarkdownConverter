@@ -29,7 +29,7 @@ export default class TocSettings
     /**
      * The list-type of the table of contents.
      */
-    private listType: ListType = ListType.ul;
+    private listType: ListType = ListType.Unordered;
 
     /**
      * Initializes a new instance of the TocSettings class.

@@ -279,10 +279,10 @@
           "title": "%Config.Document.Toc.ListType%",
           "description": "%Config.Document.Toc.ListType.Description%",
           "type": "string",
-          "default": "ul",
+          "default": "Unordered",
           "enum": [
-            "ol",
-            "ul"
+            "Ordered",
+            "Unordered"
           ]
         },
         "markdownConverter.Document.Design.Template": {

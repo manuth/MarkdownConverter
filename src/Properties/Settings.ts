@@ -174,7 +174,7 @@ export default class Settings
         tocSettings.Class = this.getConfigEntry("Document.Toc.Class", "markdown-converter-toc");
         tocSettings.LevelRange = this.getConfigEntry("Document.Toc.Levels", "1-6");
         tocSettings.Indicator = new RegExp(this.getConfigEntry("Document.Toc.Indicator", /^\[\[\s*toc\s*\]\]/im));
-        tocSettings.ListType = ListType[this.getConfigEntry<string>("Document.Toc.ListType", ListType[ListType.ul])];
+        tocSettings.ListType = ListType[this.getConfigEntry<string>("Document.Toc.ListType", ListType[ListType.Unordered])];
         return tocSettings;
     }
 
