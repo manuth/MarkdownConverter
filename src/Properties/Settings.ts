@@ -5,6 +5,7 @@ import Paper from "../System/Drawing/Paper";
 import ListType from "../System/Drawing/ListType";
 import Margin from "../System/Drawing/Margin";
 import TocSettings from "../System/Drawing/TOCSettings";
+import EmojiType from "../System/Drawing/EmojiType";
 
 /**
  * Provides access to settings.
@@ -88,9 +89,9 @@ export default class Settings
     /**
      * Gets the emojis to render into the document.
      */
-    public get EmojiType(): string
+    public get EmojiType(): EmojiType
     {
-        return this.getConfigEntry("Document.EmojiType", "GitHub");
+        return this.EmojiType[this.getConfigEntry<string>("Document.EmojiType", "GitHub")];
     }
 
     /**
