@@ -7,7 +7,7 @@ import DateTimeFormatter from "../Globalization/DateTimeFormatter";
 import Encoding from "../Text/Encoding";
 import * as FrontMatter from "front-matter";
 import Fullname from "../Fullname";
-import * as HighlightJs from "highlightjs";
+import * as HighlightJs from "highlight.js";
 import Paper from "./Paper";
 import ListType from "./ListType";
 import * as MarkdownIt from "markdown-it";
@@ -522,7 +522,7 @@ export default class Document
 
         this.HighlightStyle = Settings.Default.HighlightStyle;
 
-        if (this.HighlightStyle !== "Default" && this.HighlightStyle !== "None")
+        if (this.HighlightStyle !== "Default" && this.HighlightStyle !== "None" && this.HighlightStyle)
         {
             this.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "node_modules", "highlightjs", "styles", this.HighlightStyle + ".css"));
         }
