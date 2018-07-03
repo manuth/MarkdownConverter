@@ -1,4 +1,5 @@
 import Margin from "./Margin";
+import PaperFormat from "./PaperFormat";
 
 /**
  * Represents a document-layout.
@@ -11,54 +12,9 @@ export default class Paper
     private margin: Margin = new Margin();
 
     /**
-     * The width.
+     * The format of the paper.
      */
-    private width: string = null;
-
-    /**
-     * The height.
-     */
-    private height: string = null;
-
-    /**
-     * The paper-format.
-     */
-    private format: string = "A4";
-
-    /**
-     * The paper-orientation.
-     */
-    private orientation: string = "Portrait";
-
-    /**
-     * Paper-sizes
-     */
-    private static paperSizes = {
-        A3: {
-            Width: "297mm",
-            Height: "42cm"
-        },
-        A4: {
-            Width: "21cm",
-            Height: "297mm"
-        },
-        A5: {
-            Width: "148mm",
-            Height: "21cm"
-        },
-        Legal: {
-            Width: "8.5in",
-            Height: "14.0in"
-        },
-        Letter: {
-            Width: "8.5in",
-            Height: "11.0in"
-        },
-        Tabloid: {
-            Width: "11.0in",
-            Height: "17.0in"
-        }
-    };
+    private format: PaperFormat;
 
     /**
      * Initializes a new instance of the Layout class.
@@ -80,107 +36,16 @@ export default class Paper
     }
 
     /**
-     * Gets or sets the width.
+     * Gets or sets the format of the paper.
      */
-    public get Width(): string
+    public get Format(): PaperFormat
     {
-        if (this.width)
-        {
-            return this.width;
-        }
-        else
-        {
-            return Paper.paperSizes[this.format][(this.orientation === "Landscape" ? "Height" : "Width")];
-        }
-    }
-    public set Width(value: string)
-    {
-        this.width = value;
+        return this.format;
     }
 
-    /**
-     * Gets or sets the height.
-     */
-    public get Height(): string
+    public set Format(value: PaperFormat)
     {
-        if (this.height)
-        {
-            return this.height;
-        }
-        else
-        {
-            return Paper.paperSizes[this.format][(this.orientation === "Landscape" ? "Width" : "Height")];
-        }
-    }
-    public set Height(value: string)
-    {
-        this.height = value;
-    }
-
-    /**
-     * Gets or sets the paper-format.
-     */
-    public get Format(): string
-    {
-        if (!this.width && !this.height)
-        {
-            return this.format;
-        }
-        else
-        {
-            return null;
-        }
-    }
-    public set Format(value: string)
-    {
-        if (!value || (value in Paper.paperSizes))
-        {
-            this.format = value;
-        }
-        else
-        {
-            throw new SyntaxError('The paper-format "' + value + '" isn\'t supported.');
-        }
-    }
-
-    /**
-     * Gets or sets the paper-orientation.
-     */
-    public get Orientation(): string
-    {
-        if (this.Width > this.Height)
-        {
-            return "Landscape";
-        }
-        else
-        {
-            return "Portrait";
-        }
-    }
-    public set Orientation(value: string)
-    {
-        if (value === "Landscape" || value === "Portrait")
-        {
-            if (value !== this.Orientation)
-            {
-                if (!this.Format)
-                {
-                    let width = this.Width;
-                    let height = this.Height;
-
-                    this.Width = height;
-                    this.Height = width;
-                }
-                else
-                {
-                    this.orientation = value;
-                }
-            }
-        }
-        else
-        {
-            throw new SyntaxError('The paper-orientation "' + value + '" isn\'t supported.');
-        }
+        this.format = value;
     }
 
     /**
@@ -188,12 +53,14 @@ export default class Paper
      */
     public toJSON(): object
     {
+        let pdfOptions = this.format.PDFOptions;
+
         return {
             Margin: this.Margin.toJSON(),
-            Width: this.Width,
-            Height: this.Height,
-            Format: this.Format,
-            Orientation: this.Orientation
+            Width: pdfOptions.width,
+            Height: pdfOptions.height,
+            Format: pdfOptions.format,
+            Orientation: pdfOptions.landscape ? "Landspace" : "Portrait"
         };
     }
 }

@@ -2,6 +2,8 @@ import * as FS from "fs";
 import Document from "./System/Drawing/Document";
 import ConversionType from "./ConversionType";
 import Puppeteer = require("puppeteer");
+import StandardizedPaperFormat from "./System/Drawing/StandardizedPaperFormat";
+import CustomPaperFormat from "./System/Drawing/CustomPaperFormat";
 
 /**
  * Provides a markdown-converter.
@@ -63,10 +65,15 @@ export default class Converter
                         path
                     };
                     
-                    if (this.document.Paper.Format)
+                    if (this.document.Paper.Format instanceof StandardizedPaperFormat)
                     {
-                        pdfOptions.format = this.document.Paper.Format as Puppeteer.PDFFormat;
-                        pdfOptions.landscape = this.document.Paper.Orientation === "Landscape";
+                        pdfOptions.format = this.document.Paper.Format.Format as Puppeteer.PDFFormat;
+                        pdfOptions.landscape = this.document.Paper.Format.Orientation === "Landscape";
+                    }
+                    else if (this.document.Paper.Format instanceof CustomPaperFormat)
+                    {
+                        pdfOptions.width = this.document.Paper.Format.Width;
+                        pdfOptions.height = this.document.Paper.Format.Height;
                     }
 
                     if (jsonDocument.HeaderFooterEnabled)
