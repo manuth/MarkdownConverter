@@ -6,6 +6,8 @@ import ListType from "../System/Drawing/ListType";
 import Margin from "../System/Drawing/Margin";
 import TocSettings from "../System/Drawing/TOCSettings";
 import EmojiType from "../System/Drawing/EmojiType";
+import CustomPaperFormat from "../System/Drawing/CustomPaperFormat";
+import StandardizedPaperFormat from "../System/Drawing/StandardizedPaperFormat";
 
 /**
  * Provides access to settings.
@@ -113,13 +115,18 @@ export default class Settings
         {
             let width: string = this.getConfigEntry("Document.Paper.PaperFormat.Width");
             let height: string = this.getConfigEntry("Document.Paper.PaperFormat.Height");
-            paper.Width = width;
-            paper.Height = height;
+            
+            let format = new CustomPaperFormat();
+            format.Width = width;
+            format.Height = height;
+            paper.Format = format;
         }
         catch (exception)
         {
-            paper.Format = this.getConfigEntry("Document.Paper.PaperFormat.Format", "A4");
-            paper.Orientation = this.getConfigEntry("Document.Paper.PaperFormat.Orientation", "Portrait");
+            let format = new StandardizedPaperFormat();
+            format.Format = this.getConfigEntry("Document.Paper.PaperFormat.Format", "A4");
+            format.Orientation = this.getConfigEntry("Document.Paper.PaperFormat.Orientation", "Portrait");
+            paper.Format = format;
         }
         
         paper.Margin = new Margin(
