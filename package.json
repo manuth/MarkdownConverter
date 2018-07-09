@@ -133,6 +133,11 @@
               "title": "%Config.Document.Attributes.Author%",
               "description": "%Config.Document.Attributes.Author.Description%",
               "type": "string"
+            },
+            "Company": {
+              "title": "%Config.Document.Attributes.Company%",
+              "description": "%Config.Document.Attributes.Company.Description%",
+              "type": "string"
             }
           }
         },
@@ -241,7 +246,7 @@
           "title": "%Config.Document.HeaderTemplate%",
           "description": "%Config.Document.HeaderTemplate.Description%",
           "type": "string",
-          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">{{ Author }}</div><div style=\"text-align: center; \"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right\">BlarghHacks</div>"
+          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">{{ Author }}</div><div style=\"text-align: center; \"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right\">{{ Company }}</div>"
         },
         "markdownConverter.Document.FooterTemplate": {
           "title": "%Config.Document.FooterTemplate%",
