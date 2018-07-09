@@ -19,6 +19,8 @@
     "Config.Document.Attributes.Description": "The attributes of the document.\nThey can be included into the document like this: {{ AttributeName }}.",
     "Config.Document.Attributes.Author": "Author",
     "Config.Document.Attributes.Author.Description": "Overrides the fullname of the current user.",
+    "Config.Document.Attributes.Company": "Company",
+    "Config.Document.Attributes.Company.Description": "The name of the company of the document.",
     "Config.Document.Paper.PaperFormat": "Paper",
     "Config.Document.Paper.PaperFormat.Description": "The dimensions of the rendered document.\nEither the width and the height of the paper or a predefined format.",
     "Config.Document.Paper.PaperFormat.Format": "Paper-Format",
