@@ -5,7 +5,7 @@ Provides the functionallity to convert MarkDown-files to html, png, or pdf using
 > MarkdownConverter is a Visual Studio Code-extension which allows you to export your Markdown-file as PDF-, HTML or Image-files.  
 > It provides many features, such as DateTime-Formatting, configuring your own CSS-styles, setting Headers and Footers, FrontMatter and much more.
 
-## Usages
+## Usage
  1. Set your desired conversion-types or skip this step to convert your markdown-file to `PDF`:
       - Open up your Visual Studio Code-Settings and set `markdownConverter.ConversionType` to either your desired type or an array of types:  
         ```json
