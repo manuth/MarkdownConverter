@@ -95,7 +95,7 @@ export default class Settings
      */
     public get EmojiType(): EmojiType
     {
-        return this.EmojiType[this.getConfigEntry<string>("Document.EmojiType", "GitHub")];
+        return EmojiType[this.getConfigEntry<string>("Document.EmojiType", "GitHub")];
     }
 
     /**
