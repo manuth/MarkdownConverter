@@ -33,7 +33,7 @@ export default class Document
     /**
      * Contains all processed slugs and the count of them.
      */
-    private slugs: { [key: string]: number } = {};
+    private slugs: { [key: string]: number };
 
     /**
      * The quality of the document.
@@ -393,21 +393,12 @@ export default class Document
             return true;
         };
         
+        this.slugs = {};
+
         Anchor(md, {
             slugify: (heading) =>
             {
-                let slug = Transliteration.slugify(heading, {lowercase: true, separator: "-", ignore: []});
-                if (this.slugs[slug])
-                {
-                    slug += "-" + (this.slugs[slug] + 1);
-                    this.slugs[slug]++;
-                }
-                else
-                {
-                    this.slugs[slug] = 0;
-                }
-
-                return slug;
+                return this.Slugify(heading);
             }
         });
 
@@ -415,11 +406,17 @@ export default class Document
 
         if (this.TocSettings.Enabled)
         {
+            this.slugs = {};
+
             md.use(MarkdownItToc, {
                 includeLevel: new MultiRange(this.TocSettings.Levels).toArray(),
                 containerClass: this.TocSettings.Class,
                 markerPattern: this.TocSettings.Indicator,
-                listType: ListType[this.TocSettings.ListType]
+                listType: this.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
+                slugify: (heading) =>
+                {
+                    return this.Slugify(heading);
+                }
             });
         }
 
@@ -623,5 +620,21 @@ export default class Document
 
             throw e;
         }
+    }
+
+    private Slugify(value: string): string
+    {
+        let slug = Transliteration.slugify(value, {lowercase: true, separator: "-", ignore: []});
+        if (this.slugs[slug])
+        {
+            slug += "-" + (this.slugs[slug] + 1);
+            this.slugs[slug]++;
+        }
+        else
+        {
+            this.slugs[slug] = 0;
+        }
+
+        return slug;
     }
 }
