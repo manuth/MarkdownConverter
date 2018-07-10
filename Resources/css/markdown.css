@@ -2,8 +2,8 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
- body {
-	background-color: #fffffe;
+
+body {
 	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
 	font-size: 14px;
 	line-height: 1.6;
@@ -11,6 +11,21 @@
 	margin: 0;
 	line-height: 22px;
 	word-wrap: break-word;
+}
+
+body.vscode-light {
+	color: #000000;
+	background-color: #FFFFFF;
+}
+
+body.vscode-dark {
+	color: #D4D4D4;
+	background-color: #1E1E1E;
+}
+
+body.vscode-high-contrast {
+	color: #FFFFFF;
+	background-color:  #000000
 }
 
 img {
@@ -36,9 +51,14 @@ textarea:focus {
 	outline-offset: -1px;
 }
 
-blockquote {
+.vscode-light blockquote,
+.vscode-dark blockquote {
 	background: rgba(127, 127, 127, 0.1);
 	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	border-color: white;
 }
 
 hr {
@@ -68,8 +88,13 @@ h6 code {
 	line-height: auto;
 }
 
-code {
+.vscode-light code {
 	color: #A31515;
+}
+
+.vscode-dark code,
+.vscode-high-contrast code {
+	color: #D7BA7D;
 }
 
 table {
@@ -123,8 +148,16 @@ pre.hljs code > div {
 
 /** Theming */
 
-pre code {
-	color: #333333;
+.vscode-light pre code {
+	color: #000000;
+}
+
+.vscode-dark pre code {
+	color: #D4D4D4;
+}
+
+.vscode-high-contrast pre code {
+	color: #FFFFFF;
 }
 
 
