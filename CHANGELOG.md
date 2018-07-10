@@ -1,4 +1,7 @@
 # Change Log
+## MarkdownConverter v0.0.13
+  - Reworked the system-stylesheet
+
 ## MarkdownConverter v0.0.12
   - Cleaned up all settings
   - Fixed extension-provides styles
