@@ -18,23 +18,18 @@ import * as Mustache from "mustache";
 import * as Request from "sync-request";
 import Settings from "../../Properties/Settings";
 import TocSettings from "./TocSettings";
-import * as Transliteration from "transliteration";
 import * as TwEmoji from "twemoji";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";
 import YAMLException from "../YAML/YAMLException";
 import CultureInfo from "culture-info";
 import EmojiType from "./EmojiType";
+import Slugifier from "./Slugifier";
 
 /**
  * Represents a document.
  */
 export default class Document
 {
-    /**
-     * Contains all processed slugs and the count of them.
-     */
-    private slugs: { [key: string]: number };
-
     /**
      * The quality of the document.
      */
@@ -393,20 +388,22 @@ export default class Document
             return true;
         };
         
-        this.slugs = {};
+        {
+            let slugifier = new Slugifier();
 
-        Anchor(md, {
-            slugify: (heading) =>
-            {
-                return this.Slugify(heading);
-            }
-        });
+            Anchor(md, {
+                slugify: (heading) =>
+                {
+                    return slugifier.CreateSlug(heading);
+                }
+            });
+        }
 
         md.use(Checkbox);
 
         if (this.TocSettings.Enabled)
         {
-            this.slugs = {};
+            let slugifier = new Slugifier();
 
             md.use(MarkdownItToc, {
                 includeLevel: new MultiRange(this.TocSettings.Levels).toArray(),
@@ -415,7 +412,7 @@ export default class Document
                 listType: this.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
                 slugify: (heading) =>
                 {
-                    return this.Slugify(heading);
+                    return slugifier.CreateSlug(heading);
                 }
             });
         }
@@ -620,21 +617,5 @@ export default class Document
 
             throw e;
         }
-    }
-
-    private Slugify(value: string): string
-    {
-        let slug = Transliteration.slugify(value, {lowercase: true, separator: "-", ignore: []});
-        if (this.slugs[slug])
-        {
-            slug += "-" + (this.slugs[slug] + 1);
-            this.slugs[slug]++;
-        }
-        else
-        {
-            this.slugs[slug] = 0;
-        }
-
-        return slug;
     }
 }
