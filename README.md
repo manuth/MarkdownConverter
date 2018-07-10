@@ -10,7 +10,9 @@ Provides the functionallity to convert MarkDown-files to html, png, or pdf using
       - Open up your Visual Studio Code-Settings and set `markdownConverter.ConversionType` to either your desired type or an array of types:  
         ```json
         {
-          "markdownConverter.ConversionType": "PNG"
+          "markdownConverter.ConversionType": [
+            "PNG"
+          ]
         }
         ```
         or
