@@ -23,6 +23,7 @@ import YAMLException from "../YAML/YAMLException";
 import CultureInfo from "culture-info";
 import EmojiType from "./EmojiType";
 import Slugifier from "./Slugifier";
+import { TextDocument } from "vscode";
 
 /**
  * Represents a document.
@@ -117,19 +118,20 @@ export default class Document
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
      * 
-     * @param filePath
-     * The path to the file to load the content from.
+     * @param document
+     * The `TextDocument` to load the info from.
      * 
      * @param config
      * The configuration to set.
      */
-    constructor(filePath: string = null)
+    constructor(document: TextDocument = null)
     {
-        if (filePath)
+        if (document)
         {
             try
             {
-                this.Content = FS.readFileSync(filePath, "utf-8");
+                this.Content = FS.readFileSync(document.fileName, "utf-8");
+                this.Attributes.CreationDate = FS.statSync(document.fileName).ctime;
             }
             catch (e)
             {
