@@ -16,7 +16,6 @@ import * as MarkdownItToc from "markdown-it-table-of-contents";
 import { MultiRange } from "multi-integer-range";
 import * as Mustache from "mustache";
 import * as Request from "sync-request";
-import Settings from "../../Properties/Settings";
 import TocSettings from "./TocSettings";
 import * as TwEmoji from "twemoji";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";
@@ -126,8 +125,6 @@ export default class Document
      */
     constructor(filePath: string = null)
     {
-        this.LoadSettings();
-
         if (filePath)
         {
             try
@@ -497,53 +494,6 @@ export default class Document
 
         let html = md.render(content);
         return Mustache.render(html, view);
-    }
-
-    /**
-     * Loads the vs-config
-     */
-    private LoadSettings(): void
-    {
-        this.Quality = Settings.Default.ConversionQuality;
-        this.EmojiType = Settings.Default.EmojiType;
-
-        for (let key in Settings.Default.Attributes)
-        {
-            this.Attributes[key] = Settings.Default.Attributes[key];
-        }
-
-        this.Locale = new CultureInfo(Settings.Default.Locale);
-        this.DateFormat = Settings.Default.DateFormat;
-
-        this.Paper = Settings.Default.PaperFormat;
-
-        this.HeaderTemplate = Settings.Default.HeaderTemplate;
-        this.FooterTemplate = Settings.Default.FooterTemplate;
-
-        this.TocSettings = Settings.Default.TocSettings;
-
-        if (Settings.Default.Template)
-        {
-            this.Template = Settings.Default.Template;
-        }
-        else if (Settings.Default.SystemStylesEnabled)
-        {
-            this.Template = Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html");
-        }
-
-        this.HighlightStyle = Settings.Default.HighlightStyle;
-
-        if (this.HighlightStyle !== "Default" && this.HighlightStyle !== "None" && this.HighlightStyle)
-        {
-            this.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "node_modules", "highlightjs", "styles", this.HighlightStyle + ".css"));
-        }
-
-        this.SystemStylesEnabled = Settings.Default.SystemStylesEnabled;
-
-        for (let key in Settings.Default.StyleSheets)
-        {
-            this.StyleSheets.push(Settings.Default.StyleSheets[key]);
-        }
     }
 
     /**
