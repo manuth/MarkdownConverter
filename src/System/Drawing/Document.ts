@@ -71,6 +71,11 @@ export default class Document
     private paper: Paper = new Paper();
 
     /**
+     * A value indicating whether headers and footers are enabled.
+     */
+    private headerFooterEnabled: boolean = false;
+
+    /**
      * The header of the document.
      */
     private header: string = "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \">{{ Author }}</td><td style=\"text-align: center\">{{ PageNumber }}/{{ PageCount }}</td><td style=\"text-align: right\">{{ Company.Name }}</td></table>";
@@ -232,6 +237,18 @@ export default class Document
     }
 
     /**
+     * Gets or sets a value indicating whether headers and footers are enabled.
+     */
+    public get HeaderFooterEnabled(): boolean
+    {
+        return this.headerFooterEnabled;
+    }
+    public set HeaderFooterEnabled(value: boolean)
+    {
+        this.headerFooterEnabled = value;
+    }
+
+    /**
      * Gets or sets the header of the document.
      */
     public get HeaderTemplate(): string
@@ -341,7 +358,7 @@ export default class Document
             Quality: this.Quality,
             Locale: this.Locale,
             Layout: this.Paper.toJSON(),
-            HeaderFooterEnabled: Settings.Default.HeaderFooterEnabled,
+            HeaderFooterEnabled: this.HeaderFooterEnabled,
             Header: this.Render(this.HeaderTemplate),
             Content: this.RenderBody(),
             Footer: this.Render(this.FooterTemplate)
