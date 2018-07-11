@@ -1,4 +1,5 @@
 import * as ChildProcess from "child_process";
+import CultureInfo from "culture-info";
 import * as Format from "string-template";
 import * as FS from "fs-extra";
 import * as Path from "path";
@@ -8,6 +9,7 @@ import Converter from "./Converter";
 import Document from "./System/Drawing/Document";
 import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
 import Resources from "./System/ResourceManager";
+import Settings from "./Properties/Settings";
 
 /**
  * Provides the main logic of the extension
@@ -15,16 +17,24 @@ import Resources from "./System/ResourceManager";
 export default class Program
 {
     /**
+     * The document to convert.
+     */
+    private static document: Document;
+
+    /**
+     * The converter to convert the document.
+     */
+    private static converter: Converter;
+
+    /**
      * Converts a markdown-file to other file-types
      */
     public static async Main(textDocument: TextDocument, types: ConversionType[], outDir: string, fileName: string): Promise<void>
     {
-        let doc: Document;
-
-        doc = new Document();
-        doc.Content = textDocument.getText();
-
-        let converter = new Converter(doc);
+        this.document = new Document();
+        this.document.Content = textDocument.getText();
+        this.converter = new Converter(this.document);
+        this.Initialize();
 
         for (let type of types)
         {
@@ -55,7 +65,7 @@ export default class Program
                 }
 
                 let destination = Path.join(outDir, fileName + "." + extension);
-                await converter.Start(type, destination);
+                await this.converter.Start(type, destination);
                 window.showInformationMessage(
                     Format(Resources.Get("SuccessMessage"), ConversionType[type], destination),
                     Resources.Get("OpenFileLabel")).then(
@@ -95,6 +105,53 @@ export default class Program
 
                 window.showErrorMessage(message);
             }
+        }
+    }
+
+    /**
+     * Initializes the program according to the settings.
+     */
+    private static Initialize(): void
+    {
+        this.document.Quality = Settings.Default.ConversionQuality;
+        this.document.EmojiType = Settings.Default.EmojiType;
+
+        for (let key in Settings.Default.Attributes)
+        {
+            this.document.Attributes[key] = Settings.Default.Attributes[key];
+        }
+
+        this.document.Locale = new CultureInfo(Settings.Default.Locale);
+        this.document.DateFormat = Settings.Default.DateFormat;
+
+        this.document.Paper = Settings.Default.PaperFormat;
+
+        this.document.HeaderTemplate = Settings.Default.HeaderTemplate;
+        this.document.FooterTemplate = Settings.Default.FooterTemplate;
+
+        this.document.TocSettings = Settings.Default.TocSettings;
+
+        if (Settings.Default.Template)
+        {
+            this.document.Template = Settings.Default.Template;
+        }
+        else if (Settings.Default.SystemStylesEnabled)
+        {
+            this.document.Template = Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html");
+        }
+
+        this.document.HighlightStyle = Settings.Default.HighlightStyle;
+
+        if (this.document.HighlightStyle !== "Default" && this.document.HighlightStyle !== "None" && this.document.HighlightStyle)
+        {
+            this.document.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "node_modules", "highlightjs", "styles", this.document.HighlightStyle + ".css"));
+        }
+
+        this.document.SystemStylesEnabled = Settings.Default.SystemStylesEnabled;
+
+        for (let key in Settings.Default.StyleSheets)
+        {
+            this.document.StyleSheets.push(Settings.Default.StyleSheets[key]);
         }
     }
 }
