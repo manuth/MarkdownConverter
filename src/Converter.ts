@@ -1,9 +1,9 @@
-import * as FS from "fs";
-import Document from "./System/Drawing/Document";
 import ConversionType from "./ConversionType";
+import Document from "./System/Drawing/Document";
+import * as FS from "fs";
+import * as HighlightJS from "highlight.js";
+import * as MarkdownIt from "markdown-it";
 import Puppeteer = require("puppeteer");
-import StandardizedPaperFormat from "./System/Drawing/StandardizedPaperFormat";
-import CustomPaperFormat from "./System/Drawing/CustomPaperFormat";
 
 /**
  * Provides a markdown-converter.
@@ -13,7 +13,7 @@ export default class Converter
     /**
      * The document which is to be converted.
      */
-    private document: Document = null;
+    private document: Document;
 
     /**
      * Initializes a new instance of the Constructor class with a filepath.
@@ -24,6 +24,14 @@ export default class Converter
     constructor(document: Document)
     {
         this.document = document;
+    }
+
+    /**
+     * Gets the document which is converted by this `Converter`.
+     */
+    public get Document(): Document
+    {
+        return this.document;
     }
 
     /**
@@ -64,7 +72,7 @@ export default class Converter
                         printBackground: true,
                         path
                     };
-                    
+
                     Object.assign(pdfOptions, this.document.Paper.Format.PDFOptions);
 
                     if (jsonDocument.HeaderFooterEnabled)
