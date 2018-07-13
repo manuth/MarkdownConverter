@@ -42,9 +42,9 @@ export default class Slugifier
         let counter = 0;
         let slug = baseName;
 
-        while (slug in this.Slugs)
+        while (this.Slugs.includes(slug))
         {
-            slug = slug + "-" + (counter++).toString();
+            slug = slug + "-" + (++counter).toString();
         }
 
         this.Slugs.push(slug);
