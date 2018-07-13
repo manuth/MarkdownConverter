@@ -48,14 +48,14 @@ export default class Program
         }
         else if (Settings.Default.SystemStylesEnabled)
         {
-            converter.Document.Template = (await FS.readFile(Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html"))).toString();
+            converter.Document.Template = (await FS.readFile(Path.join(__dirname, "..", "Resources", "SystemTemplate.html"))).toString();
         }
 
         converter.Document.HighlightStyle = Settings.Default.HighlightStyle;
 
         if (converter.Document.HighlightStyle !== "Default" && converter.Document.HighlightStyle !== "None" && converter.Document.HighlightStyle)
         {
-            converter.Document.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "node_modules", "highlightjs", "styles", converter.Document.HighlightStyle + ".css"));
+            converter.Document.StyleSheets.push(Path.join(__dirname, "..", "node_modules", "highlightjs", "styles", converter.Document.HighlightStyle + ".css"));
         }
 
         converter.Document.SystemStylesEnabled = Settings.Default.SystemStylesEnabled;
