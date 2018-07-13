@@ -48,7 +48,7 @@ export default class Program
         }
         else if (Settings.Default.SystemStylesEnabled)
         {
-            converter.Document.Template = Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html");
+            converter.Document.Template = (await FS.readFile(Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html"))).toString();
         }
 
         converter.Document.HighlightStyle = Settings.Default.HighlightStyle;

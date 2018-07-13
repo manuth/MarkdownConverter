@@ -4,6 +4,7 @@ import * as Path from "path";
 import * as URL from "url";
 import * as Anchor from "markdown-it-anchor";
 import DateTimeFormatter from "../Globalization/DateTimeFormatter";
+import * as Dedent from "dedent";
 import Encoding from "../Text/Encoding";
 import * as FrontMatter from "front-matter";
 import Fullname from "../Fullname";
@@ -93,7 +94,19 @@ export default class Document
     /**
      * The template to use for the RenderBody-process.
      */
-    private template: string = Path.join(__dirname, "..", "..", "..", "Resources", "Template.html");
+    private template: string = Dedent(`
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+                {{{styles}}}
+            </head>
+            <body>
+                <article class="markdown-body">
+                    {{{content}}}
+                </article>
+            </body>
+        </html>`);
 
     /**
      * The highlight-style of the document.
@@ -505,7 +518,7 @@ export default class Document
     {
         try
         {
-            let template = FS.readFileSync(this.Template).toString();
+            let template = this.Template;
 
             // Preparing the styles
             let styleSheets = this.StyleSheets;
