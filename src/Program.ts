@@ -37,6 +37,7 @@ export default class Program
 
         converter.Document.Paper = Settings.Default.PaperFormat;
 
+        converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
         converter.Document.HeaderTemplate = Settings.Default.HeaderTemplate;
         converter.Document.FooterTemplate = Settings.Default.FooterTemplate;
 
