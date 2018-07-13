@@ -17,24 +17,53 @@ import Settings from "./Properties/Settings";
 export default class Program
 {
     /**
-     * The document to convert.
-     */
-    private static document: Document;
-
-    /**
-     * The converter to convert the document.
-     */
-    private static converter: Converter;
-
-    /**
      * Converts a markdown-file to other file-types
      */
     public static async Main(textDocument: TextDocument, types: ConversionType[], outDir: string, fileName: string): Promise<void>
     {
-        this.document = new Document();
-        this.document.Content = textDocument.getText();
-        this.converter = new Converter(this.document);
-        this.Initialize();
+        let converter = new Converter(new Document());
+        converter.Document.Content = textDocument.getText();
+        
+        converter.Document.Quality = Settings.Default.ConversionQuality;
+        converter.Document.EmojiType = Settings.Default.EmojiType;
+
+        for (let key in Settings.Default.Attributes)
+        {
+            converter.Document.Attributes[key] = Settings.Default.Attributes[key];
+        }
+
+        converter.Document.Locale = new CultureInfo(Settings.Default.Locale);
+        converter.Document.DateFormat = Settings.Default.DateFormat;
+
+        converter.Document.Paper = Settings.Default.PaperFormat;
+
+        converter.Document.HeaderTemplate = Settings.Default.HeaderTemplate;
+        converter.Document.FooterTemplate = Settings.Default.FooterTemplate;
+
+        converter.Document.TocSettings = Settings.Default.TocSettings;
+
+        if (Settings.Default.Template)
+        {
+            converter.Document.Template = Settings.Default.Template;
+        }
+        else if (Settings.Default.SystemStylesEnabled)
+        {
+            converter.Document.Template = Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html");
+        }
+
+        converter.Document.HighlightStyle = Settings.Default.HighlightStyle;
+
+        if (converter.Document.HighlightStyle !== "Default" && converter.Document.HighlightStyle !== "None" && converter.Document.HighlightStyle)
+        {
+            converter.Document.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "node_modules", "highlightjs", "styles", converter.Document.HighlightStyle + ".css"));
+        }
+
+        converter.Document.SystemStylesEnabled = Settings.Default.SystemStylesEnabled;
+
+        for (let key in Settings.Default.StyleSheets)
+        {
+            converter.Document.StyleSheets.push(Settings.Default.StyleSheets[key]);
+        }
 
         for (let type of types)
         {
@@ -65,7 +94,7 @@ export default class Program
                 }
 
                 let destination = Path.join(outDir, fileName + "." + extension);
-                await this.converter.Start(type, destination);
+                await converter.Start(type, destination);
                 window.showInformationMessage(
                     Format(Resources.Get("SuccessMessage"), ConversionType[type], destination),
                     Resources.Get("OpenFileLabel")).then(
@@ -105,53 +134,6 @@ export default class Program
 
                 window.showErrorMessage(message);
             }
-        }
-    }
-
-    /**
-     * Initializes the program according to the settings.
-     */
-    private static Initialize(): void
-    {
-        this.document.Quality = Settings.Default.ConversionQuality;
-        this.document.EmojiType = Settings.Default.EmojiType;
-
-        for (let key in Settings.Default.Attributes)
-        {
-            this.document.Attributes[key] = Settings.Default.Attributes[key];
-        }
-
-        this.document.Locale = new CultureInfo(Settings.Default.Locale);
-        this.document.DateFormat = Settings.Default.DateFormat;
-
-        this.document.Paper = Settings.Default.PaperFormat;
-
-        this.document.HeaderTemplate = Settings.Default.HeaderTemplate;
-        this.document.FooterTemplate = Settings.Default.FooterTemplate;
-
-        this.document.TocSettings = Settings.Default.TocSettings;
-
-        if (Settings.Default.Template)
-        {
-            this.document.Template = Settings.Default.Template;
-        }
-        else if (Settings.Default.SystemStylesEnabled)
-        {
-            this.document.Template = Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html");
-        }
-
-        this.document.HighlightStyle = Settings.Default.HighlightStyle;
-
-        if (this.document.HighlightStyle !== "Default" && this.document.HighlightStyle !== "None" && this.document.HighlightStyle)
-        {
-            this.document.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "node_modules", "highlightjs", "styles", this.document.HighlightStyle + ".css"));
-        }
-
-        this.document.SystemStylesEnabled = Settings.Default.SystemStylesEnabled;
-
-        for (let key in Settings.Default.StyleSheets)
-        {
-            this.document.StyleSheets.push(Settings.Default.StyleSheets[key]);
         }
     }
 }
