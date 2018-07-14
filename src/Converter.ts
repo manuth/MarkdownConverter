@@ -49,12 +49,12 @@ export default class Converter
         {
             let browser = await Puppeteer.launch();
             let page = await browser.newPage();
-            await page.setContent(this.document.HTML);
+            await page.setContent(await this.document.Render());
 
             switch (conversionType)
             {
                 case ConversionType.PDF:
-                    let jsonDocument = this.document.toJSON();
+                    let jsonDocument = await this.document.toJSON();
                     let styles = `
                     <style>
                         :root
@@ -101,7 +101,7 @@ export default class Converter
         }
         else
         {
-            FS.writeFileSync(path, this.document.HTML);
+            FS.writeFileSync(path, await this.document.Render());
         }
     }
 }
