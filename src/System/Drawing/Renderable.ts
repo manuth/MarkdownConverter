@@ -30,6 +30,20 @@ export default abstract class Renderable
     }
 
     /**
+     * Renders a text using a custom renderer.
+     * 
+     * @param renderer
+     * The renderer to render the text.
+     * 
+     * @param text
+     * The text to render.
+     */
+    protected async RenderTextBy(renderer: Renderable, text: string): Promise<string>
+    {
+        return await renderer.RenderText(text);
+    }
+
+    /**
      * Renders a text.
      * 
      * @param text

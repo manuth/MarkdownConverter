@@ -38,8 +38,8 @@ export default class Program
         converter.Document.Paper = Settings.Default.PaperFormat;
 
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
-        converter.Document.HeaderTemplate = Settings.Default.HeaderTemplate;
-        converter.Document.FooterTemplate = Settings.Default.FooterTemplate;
+        converter.Document.Header.Content = Settings.Default.HeaderTemplate;
+        converter.Document.Footer.Content = Settings.Default.FooterTemplate;
 
         converter.Document.TocSettings = Settings.Default.TocSettings;
 
