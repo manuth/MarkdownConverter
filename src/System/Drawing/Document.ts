@@ -26,6 +26,7 @@ import EmojiType from "./EmojiType";
 import Renderable from "./Renderable";
 import Slugifier from "./Slugifier";
 import { TextDocument } from "vscode";
+import DocumentFragment from "./DocumentFragment";
 
 /**
  * Represents a document.
@@ -80,12 +81,12 @@ export default class Document extends Renderable
     /**
      * The header of the document.
      */
-    private header: string = "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \">{{ Author }}</td><td style=\"text-align: center\">{{ PageNumber }}/{{ PageCount }}</td><td style=\"text-align: right\">{{ Company.Name }}</td></table>";
+    private header: DocumentFragment = new DocumentFragment(this);
 
     /**
      * The footer of the document.
      */
-    private footer: string = "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ CreationDate }}</td><td style=\"text-align: right\"></td></table>";
+    private footer: DocumentFragment = new DocumentFragment(this);
 
     /**
      * The definitions of the table of contents.
@@ -261,11 +262,11 @@ export default class Document extends Renderable
     /**
      * Gets or sets the header of the document.
      */
-    public get HeaderTemplate(): string
+    public get Header(): DocumentFragment
     {
         return this.header;
     }
-    public set HeaderTemplate(value: string)
+    public set Header(value: DocumentFragment)
     {
         this.header = value;
     }
@@ -273,11 +274,11 @@ export default class Document extends Renderable
     /**
      * Gets or sets the footer of the document.
      */
-    public get FooterTemplate(): string
+    public get Footer(): DocumentFragment
     {
         return this.footer;
     }
-    public set FooterTemplate(value: string)
+    public set Footer(value: DocumentFragment)
     {
         this.footer = value;
     }
@@ -352,9 +353,9 @@ export default class Document extends Renderable
             Locale: this.Locale,
             Layout: this.Paper.toJSON(),
             HeaderFooterEnabled: this.HeaderFooterEnabled,
-            Header: await this.RenderText(this.HeaderTemplate),
+            Header: await this.Header.Render(),
             Content: await this.Render(),
-            Footer: await this.RenderText(this.FooterTemplate)
+            Footer: await this.Footer.Render()
         };
     }
 
