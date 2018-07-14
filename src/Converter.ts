@@ -1,9 +1,11 @@
 import ConversionType from "./ConversionType";
 import Document from "./System/Drawing/Document";
 import * as FS from "fs";
-import * as HighlightJS from "highlight.js";
-import * as MarkdownIt from "markdown-it";
+import * as http from "http";
+import * as Server from "http-server";
+import * as Path from "path";
 import Puppeteer = require("puppeteer");
+import * as URL from "url";
 
 /**
  * Provides a markdown-converter.
@@ -45,63 +47,94 @@ export default class Converter
      */
     public async Start(conversionType: ConversionType, path: string): Promise<void>
     {
+        let htmlCode = await this.document.Render();
+
         if (conversionType !== ConversionType.HTML)
         {
-            let browser = await Puppeteer.launch();
-            let page = await browser.newPage();
-            await page.setContent(await this.document.Render());
+            let server = (Server.createServer({
+                root: "."
+            }) as any).server as http.Server;
 
-            switch (conversionType)
+            server.listen(8980, "localhost");
+
+            try
             {
-                case ConversionType.PDF:
-                    let jsonDocument = await this.document.toJSON();
-                    let styles = `
-                    <style>
-                        :root
+                let browser = await Puppeteer.launch();
+                let page = await browser.newPage();
+                page.setRequestInterception(true);
+                page.once(
+                    "request",
+                    request =>
+                    {
+                        request.respond({
+                            body: htmlCode
+                        });
+
+                        page.on("request", nextRequest => nextRequest.continue());
+                    });
+
+                await page.goto(URL.resolve("http://localhost:8980/", Path.relative(process.cwd(), this.document.FileName)));
+
+                switch (conversionType)
+                {
+                    case ConversionType.PDF:
+                        let jsonDocument = await this.document.toJSON();
+                        let styles = `
+                        <style>
+                            :root
+                            {
+                                font-size: 11px;
+                            }
+                        </style>`;
+                        let pdfOptions: Partial<Puppeteer.PDFOptions> = {
+                            margin: {
+                                top: this.document.Paper.Margin.Top,
+                                right: this.document.Paper.Margin.Right,
+                                bottom: this.document.Paper.Margin.Bottom,
+                                left: this.document.Paper.Margin.Left
+                            },
+                            printBackground: true,
+                            path
+                        };
+
+                        Object.assign(pdfOptions, this.document.Paper.Format.PDFOptions);
+
+                        if (jsonDocument.HeaderFooterEnabled)
                         {
-                            font-size: 11px;
+                            pdfOptions.displayHeaderFooter = true;
+                            pdfOptions.headerTemplate = styles + jsonDocument.Header;
+                            pdfOptions.footerTemplate = styles + jsonDocument.Footer;
                         }
-                    </style>`;
-                    let pdfOptions: Partial<Puppeteer.PDFOptions> = {
-                        margin: {
-                            top: this.document.Paper.Margin.Top,
-                            right: this.document.Paper.Margin.Right,
-                            bottom: this.document.Paper.Margin.Bottom,
-                            left: this.document.Paper.Margin.Left
-                        },
-                        printBackground: true,
-                        path
-                    };
 
-                    Object.assign(pdfOptions, this.document.Paper.Format.PDFOptions);
+                        await page.pdf(pdfOptions);
+                        break;
+                    default:
+                        let screenshotOptions: Partial<Puppeteer.ScreenshotOptions> = {
+                            fullPage: true,
+                            path
+                        };
 
-                    if (jsonDocument.HeaderFooterEnabled)
-                    {
-                        pdfOptions.displayHeaderFooter = true;
-                        pdfOptions.headerTemplate = styles + jsonDocument.Header;
-                        pdfOptions.footerTemplate = styles + jsonDocument.Footer;
-                    }
+                        if (conversionType !== ConversionType.PNG)
+                        {
+                            screenshotOptions.quality = this.document.Quality;
+                        }
 
-                    await page.pdf(pdfOptions);
-                    break;
-                default:
-                    let screenshotOptions: Partial<Puppeteer.ScreenshotOptions> = {
-                        fullPage: true,
-                        path
-                    };
-
-                    if (conversionType !== ConversionType.PNG)
-                    {
-                        screenshotOptions.quality = this.document.Quality;
-                    }
-
-                    await page.screenshot(screenshotOptions);
-                    break;
+                        await page.screenshot(screenshotOptions);
+                        break;
+                }
+            }
+            catch (exception)
+            {
+                throw exception;
+            }
+            finally
+            {
+                server.close();
             }
         }
         else
         {
-            FS.writeFileSync(path, await this.document.Render());
+            FS.writeFileSync(path, htmlCode);
         }
     }
 }

@@ -40,6 +40,11 @@ export default class Document extends Renderable
     private quality: number = 90;
 
     /**
+     * The name of the file represented by this document.
+     */
+    public FileName: string;
+
+    /**
      * The name of the document.
      */
     private name: string = null;
@@ -143,6 +148,7 @@ export default class Document extends Renderable
         {
             try
             {
+                this.FileName = document.fileName;
                 this.Content = FS.readFileSync(document.fileName, "utf-8");
                 this.Attributes.CreationDate = FS.statSync(document.fileName).ctime;
             }

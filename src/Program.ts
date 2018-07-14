@@ -23,6 +23,7 @@ export default class Program
     {
         let converter = new Converter(new Document());
         converter.Document.Content = textDocument.getText();
+        converter.Document.FileName = textDocument.fileName;
         
         converter.Document.Quality = Settings.Default.ConversionQuality;
         converter.Document.EmojiType = Settings.Default.EmojiType;
