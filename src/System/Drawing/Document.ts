@@ -386,6 +386,7 @@ export default class Document extends Renderable
                 return '<pre class="hljs"><code><div>' + subject + "</div></code></pre>";
             }
         });
+
         md.validateLink = () =>
         {
             return true;
@@ -449,6 +450,7 @@ export default class Document extends Renderable
 
         // Preparing the attributes
         let view = {};
+
         for (let key in this.Attributes)
         {
             let value = this.Attributes[key];
@@ -456,26 +458,6 @@ export default class Document extends Renderable
             if (value instanceof Date || Date.parse(value))
             {
                 value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
-            }
-            else if (/function[\s]*\(\)[\s]*{([\s\S]*)}/gm.test(value))
-            {
-                value = value.replace(/function[\s]*\(\)[\s]*{([\s\S]*)}/gm, "$1");
-                value = new Function(value);
-
-                try
-                {
-                    let dateTest = (attribute: () => any) =>
-                    {
-                        return attribute();
-                    };
-
-                    if (dateTest(value) instanceof Date)
-                    {
-                        value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, dateTest(value));
-                    }
-                }
-                catch (e)
-                { }
             }
 
             view[key] = value;
