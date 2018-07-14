@@ -347,6 +347,7 @@
     "@types/mustache": "^0.8.31",
     "@types/node": "^10.5.1",
     "@types/puppeteer": "^1.5.0",
+    "@types/request-promise-native": "^1.0.15",
     "@types/shelljs": "^0.7.4",
     "@types/string-template": "^1.0.2",
     "@types/transliteration": "^1.6.0",
@@ -371,9 +372,10 @@
     "mustache": "^2.3.0",
     "puppeteer": "^1.5.0",
     "rc": "^1.2.8",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5",
     "shelljs": "^0.8.2",
     "string-template": "^1.0.0",
-    "sync-request": "^4.0.3",
     "transliteration": "^1.6.2",
     "twemoji": "^2.2.5"
   }
