@@ -7,15 +7,15 @@ import Program from "./Program";
 import Settings from "./Properties/Settings";
 import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
 import YAMLException from "./System/YAML/YAMLException";
-import Resources from "./System/ResourceManager";
 import CultureInfo from "culture-info";
 import * as Format from "string-template";
+import ResourceManager from "./Properties/ResourceManager";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: VSCode.ExtensionContext)
 {
-    Resources.Culture = new CultureInfo(VSCode.env.language);
+    ResourceManager.Culture = new CultureInfo(VSCode.env.language);
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -49,12 +49,12 @@ export function activate(context: VSCode.ExtensionContext)
                     else
                     {
                         base = await VSCode.window.showInputBox({
-                            prompt: Resources.Get("OutDirPrompt"),
+                            prompt: ResourceManager.Resources.Get("OutDirPrompt"),
                             validateInput: (value: string): any =>
                             {
                                 if (!Path.isAbsolute(value))
                                 {
-                                    return Resources.Get("OutDirNotAllowed");
+                                    return ResourceManager.Resources.Get("OutDirNotAllowed");
                                 }
                             }
                         });
@@ -94,11 +94,11 @@ export function activate(context: VSCode.ExtensionContext)
 
                 if (e instanceof UnauthorizedAccessException)
                 {
-                    message = Resources.Get("UnauthorizedAccessException");
+                    message = ResourceManager.Resources.Get("UnauthorizedAccessException");
                 }
                 else if (e instanceof YAMLException)
                 {
-                    message = Format(Resources.Get("YAMLException"), e.Mark.line + 1, e.Mark.column);
+                    message = Format(ResourceManager.Resources.Get("YAMLException"), e.Mark.line + 1, e.Mark.column);
                 }
                 else if (e instanceof Error)
                 {

@@ -355,6 +355,7 @@
     "vscode": "^1.1.18"
   },
   "dependencies": {
+    "culture-info": "0.0.4",
     "dedent": "^0.7.0",
     "front-matter": "^2.1.2",
     "fs-extra": "^6.0.1",
