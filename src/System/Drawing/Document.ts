@@ -16,7 +16,7 @@ import * as MarkdownItEmoji from "markdown-it-emoji";
 import * as MarkdownItToc from "markdown-it-table-of-contents";
 import { MultiRange } from "multi-integer-range";
 import * as Mustache from "mustache";
-import * as Request from "sync-request";
+import * as Request from "request-promise-native";
 import TocSettings from "./TocSettings";
 import * as TwEmoji from "twemoji";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";
@@ -509,12 +509,12 @@ export default class Document extends Renderable
                 }
             });
 
-            styleSheets.forEach(styleSheet =>
+            for (let styleSheet of styleSheets)
             {
                 if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
                 {
                     {
-                        let result = Request(styleSheet);
+                        let result = await Request(styleSheet);
 
                         if (result.statusCode === 200)
                         {
@@ -534,7 +534,8 @@ export default class Document extends Renderable
                         }
                     }
                 }
-            });
+            }
+            
             styleCode += "</style>";
 
             let content = this.Content;
