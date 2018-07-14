@@ -23,13 +23,14 @@ import UnauthorizedAccessException from "../UnauthorizedAccessException";
 import YAMLException from "../YAML/YAMLException";
 import CultureInfo from "culture-info";
 import EmojiType from "./EmojiType";
+import Renderable from "./Renderable";
 import Slugifier from "./Slugifier";
 import { TextDocument } from "vscode";
 
 /**
  * Represents a document.
  */
-export default class Document
+export default class Document extends Renderable
 {
     /**
      * The quality of the document.
@@ -124,11 +125,6 @@ export default class Document
     private styleSheets: string[] = [];
 
     /**
-     * The content of the document.
-     */
-    private content: string = "";
-
-    /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
      * 
      * @param document
@@ -139,6 +135,8 @@ export default class Document
      */
     constructor(document: TextDocument = null)
     {
+        super();
+
         if (document)
         {
             try
@@ -345,44 +343,19 @@ export default class Document
     }
 
     /**
-     * Gets or sets the content of the document.
-     */
-    public get Content(): string
-    {
-        return this.content;
-    }
-    public set Content(value: string)
-    {
-        let content = FrontMatter(value);
-        for (let key in content.attributes)
-        {
-            this.Attributes[key] = content.attributes[key];
-        }
-        this.content = content.body;
-    }
-
-    /**
      * Returns a JSON-string which represents the document.
      */
-    public toJSON()
+    public async toJSON()
     {
         return {
             Quality: this.Quality,
             Locale: this.Locale,
             Layout: this.Paper.toJSON(),
             HeaderFooterEnabled: this.HeaderFooterEnabled,
-            Header: this.Render(this.HeaderTemplate),
-            Content: this.RenderBody(),
-            Footer: this.Render(this.FooterTemplate)
+            Header: await this.RenderText(this.HeaderTemplate),
+            Content: await this.Render(),
+            Footer: await this.RenderText(this.FooterTemplate)
         };
-    }
-
-    /**
-     * Gets the HTML-code which represents the content of the document.
-     */
-    public get HTML(): string
-    {
-        return this.RenderBody();
     }
 
     /**
@@ -391,7 +364,7 @@ export default class Document
      * @param content
      * The content which is to be rendered.
      */
-    private Render(content: string): string
+    protected async RenderText(content: string): Promise<string>
     {
         let highlightStyle = this.HighlightStyle;
 
@@ -514,7 +487,7 @@ export default class Document
     /**
      * Renders the body of the document.
      */
-    private RenderBody(): string
+    public async Render(): Promise<string>
     {
         try
         {
@@ -585,7 +558,7 @@ export default class Document
 
             let view = {
                 styles: styleCode,
-                content: this.Render(content)
+                content: await this.RenderText(content)
             };
 
             return Mustache.render(template, view);
