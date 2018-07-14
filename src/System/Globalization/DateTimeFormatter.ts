@@ -1,6 +1,6 @@
 import Encoding from "../Text/Encoding";
 import CultureInfo from "culture-info";
-import Resources from "../ResourceManager";
+import ResourceManager from "../../Properties/ResourceManager";
 
 /**
  * Gets a set of DateTime-string-tokens.
@@ -35,12 +35,12 @@ export default class DateTimeFormatter
         }
 
         let dateTimeTokens: { [id: string]: string } = {
-            ddd: Resources.Get("DateTime.DaysOfWeek.ShortNames", this.locale)[day],
-            dddd: Resources.Get("DateTime.DaysOfWeek.FullNames", this.locale)[day],
-            MMM: Resources.Get("DateTime.Months.ShortNames", this.locale)[date.getMonth()],
-            MMMM: Resources.Get("DateTime.Months.FullNames", this.locale)[date.getMonth()],
-            t: Resources.Get("DateTime.TimeDesignator.ShortNames", this.locale)[(date.getHours() < 12 ? 0 : 1)],
-            tt: Resources.Get("DateTime.TimeDesignator.FullNames", this.locale)[(date.getHours() < 12 ? 0 : 1)]
+            ddd: ResourceManager.Resources.Get("DateTime.DaysOfWeek.ShortNames", this.locale)[day],
+            dddd: ResourceManager.Resources.Get("DateTime.DaysOfWeek.FullNames", this.locale)[day],
+            MMM: ResourceManager.Resources.Get("DateTime.Months.ShortNames", this.locale)[date.getMonth()],
+            MMMM: ResourceManager.Resources.Get("DateTime.Months.FullNames", this.locale)[date.getMonth()],
+            t: ResourceManager.Resources.Get("DateTime.TimeDesignator.ShortNames", this.locale)[(date.getHours() < 12 ? 0 : 1)],
+            tt: ResourceManager.Resources.Get("DateTime.TimeDesignator.FullNames", this.locale)[(date.getHours() < 12 ? 0 : 1)]
         };
         return dateTimeTokens;
     }
@@ -77,7 +77,7 @@ export default class DateTimeFormatter
 
         try
         {
-            formatString = Resources.Get("DateTime.Formats." + formatString, this.locale);
+            formatString = ResourceManager.Resources.Get("DateTime.Formats." + formatString, this.locale);
         }
         catch
         {

@@ -8,8 +8,8 @@ import ConversionType from "./ConversionType";
 import Converter from "./Converter";
 import Document from "./System/Drawing/Document";
 import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
-import Resources from "./System/ResourceManager";
 import Settings from "./Properties/Settings";
+import ResourceManager from "./Properties/ResourceManager";
 
 /**
  * Provides the main logic of the extension
@@ -49,14 +49,14 @@ export default class Program
         }
         else if (Settings.Default.SystemStylesEnabled)
         {
-            converter.Document.Template = (await FS.readFile(Path.join(__dirname, "..", "Resources", "SystemTemplate.html"))).toString();
+            converter.Document.Template = (await FS.readFile(ResourceManager.Files.Get("SystemTemplate"))).toString();
         }
 
         converter.Document.HighlightStyle = Settings.Default.HighlightStyle;
 
         if (converter.Document.HighlightStyle !== "Default" && converter.Document.HighlightStyle !== "None" && converter.Document.HighlightStyle)
         {
-            converter.Document.StyleSheets.push(Path.join(__dirname, "..", "node_modules", "highlightjs", "styles", converter.Document.HighlightStyle + ".css"));
+            converter.Document.StyleSheets.push(Path.join(ResourceManager.Files.Get("HighlightJSStylesDir"), converter.Document.HighlightStyle + ".css"));
         }
 
         converter.Document.SystemStylesEnabled = Settings.Default.SystemStylesEnabled;
@@ -97,11 +97,11 @@ export default class Program
                 let destination = Path.join(outDir, fileName + "." + extension);
                 await converter.Start(type, destination);
                 window.showInformationMessage(
-                    Format(Resources.Get("SuccessMessage"), ConversionType[type], destination),
-                    Resources.Get("OpenFileLabel")).then(
+                    Format(ResourceManager.Resources.Get("SuccessMessage"), ConversionType[type], destination),
+                    ResourceManager.Resources.Get("OpenFileLabel")).then(
                         (label) =>
                         {
-                            if (label === Resources.Get("OpenFileLabel"))
+                            if (label === ResourceManager.Resources.Get("OpenFileLabel"))
                             {
                                 switch (process.platform)
                                 {
@@ -115,7 +115,7 @@ export default class Program
                                         ChildProcess.exec(Format('bash -c \'xdg-open "{0}"\'', destination));
                                         break;
                                     default:
-                                        window.showWarningMessage(Resources.Get("UnsupportetPlatformException"));
+                                        window.showWarningMessage(ResourceManager.Resources.Get("UnsupportetPlatformException"));
                                         break;
                                 }
                             }
@@ -126,7 +126,7 @@ export default class Program
                 let message = e.toString();
                 if (e instanceof UnauthorizedAccessException)
                 {
-                    message = Format(Resources.Get("UnauthorizedAccessException"), e.Path);
+                    message = Format(ResourceManager.Resources.Get("UnauthorizedAccessException"), e.Path);
                 }
                 else
                 {

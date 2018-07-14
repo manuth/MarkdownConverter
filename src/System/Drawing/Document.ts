@@ -27,6 +27,7 @@ import Renderable from "./Renderable";
 import Slugifier from "./Slugifier";
 import { TextDocument } from "vscode";
 import DocumentFragment from "./DocumentFragment";
+import ResourceManager from "../../Properties/ResourceManager";
 
 /**
  * Represents a document.
@@ -478,22 +479,21 @@ export default class Document extends Renderable
 
             // Preparing the styles
             let styleSheets = this.StyleSheets;
+            styleSheets.push(ResourceManager.Files.Get("SystemStyle"));
 
             if (this.SystemStylesEnabled)
             {
                 let systemStyles: string[] = [];
-                let stylesRoot = Path.join(__dirname, "..", "..", "..", "Resources", "css");
-                systemStyles.push(Path.join(stylesRoot, "styles.css"));
-                systemStyles.push(Path.join(stylesRoot, "markdown.css"));
+                systemStyles.push(ResourceManager.Files.Get("DefaultStyle"));
 
                 if (this.HighlightStyle === "Default")
                 {
-                    systemStyles.push(Path.join(stylesRoot, "highlight.css"));
+                    systemStyles.push(ResourceManager.Files.Get("DefaultHighlight"));
                 }
 
                 if (this.EmojiType === EmojiType.GitHub)
                 {
-                    systemStyles.push(Path.join(stylesRoot, "emoji.css"));
+                    systemStyles.push(ResourceManager.Files.Get("EmojiStyle"));
                 }
 
                 styleSheets = systemStyles.concat(styleSheets);
