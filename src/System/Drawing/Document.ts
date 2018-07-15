@@ -1,6 +1,5 @@
 import * as Checkbox from "markdown-it-checkbox";
 import * as FS from "fs";
-import * as Path from "path";
 import * as URL from "url";
 import * as Anchor from "markdown-it-anchor";
 import DateTimeFormatter from "../Globalization/DateTimeFormatter";
@@ -37,14 +36,14 @@ import * as YAML from "yamljs";
 export default class Document extends Renderable
 {
     /**
+     * The name of the file represented by this document.
+     */
+    public fileName: string = null;
+
+    /**
      * The quality of the document.
      */
     private quality: number = 90;
-
-    /**
-     * The name of the file represented by this document.
-     */
-    public FileName: string;
 
     /**
      * The type of emojis to use.
@@ -159,6 +158,19 @@ export default class Document extends Renderable
                 }
             }
         }
+    }
+
+    /**
+     * Gets or sets the name of the file represented by this document.
+     */
+    public get FileName(): string
+    {
+        return this.fileName;
+    }
+
+    public set FileName(value: string)
+    {
+        this.fileName = value;
     }
 
     /**
