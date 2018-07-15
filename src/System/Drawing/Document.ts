@@ -9,6 +9,7 @@ import Encoding from "../Text/Encoding";
 import * as FrontMatter from "front-matter";
 import Fullname from "../Fullname";
 import * as HighlightJs from "highlight.js";
+import * as OS from "os";
 import Paper from "./Paper";
 import ListType from "./ListType";
 import * as MarkdownIt from "markdown-it";
@@ -28,6 +29,7 @@ import Slugifier from "./Slugifier";
 import { TextDocument } from "vscode";
 import DocumentFragment from "./DocumentFragment";
 import ResourceManager from "../../Properties/ResourceManager";
+import * as YAML from "yamljs";
 
 /**
  * Represents a document.
@@ -59,9 +61,7 @@ export default class Document extends Renderable
      */
     private attributes: any = {
         Author: Fullname.FullName,
-        CreationDate: new Date(),
-        PageNumber: "{{ PageNumber }}", // {{ PageNumber }} will be replaced in the Phantom-Script (see "Phantom/PDFGenerator.ts": ReplacePageNumbers)
-        PageCount: "{{ PageCount }}"    // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
+        CreationDate: new Date()
     };
 
     /**
@@ -149,7 +149,7 @@ export default class Document extends Renderable
             try
             {
                 this.FileName = document.fileName;
-                this.Content = FS.readFileSync(document.fileName, "utf-8");
+                this.RawContent = FS.readFileSync(document.fileName, "utf-8");
                 this.Attributes.CreationDate = FS.statSync(document.fileName).ctime;
             }
             catch (e)
@@ -167,6 +167,25 @@ export default class Document extends Renderable
                 }
             }
         }
+    }
+
+    /**
+     * Gets or sets the raw version of the content.
+     */
+    public get RawContent(): string
+    {
+        return (
+            "---" + OS.EOL +
+            YAML.stringify(this.Attributes).trim() + OS.EOL +
+            "---" + OS.EOL +
+            this.Content);
+    }
+
+    public set RawContent(value: string)
+    {
+        let result = FrontMatter(value);
+        Object.assign(this.Attributes, result.attributes);
+        this.Content = result.body;
     }
 
     /**

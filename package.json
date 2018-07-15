@@ -353,6 +353,7 @@
     "@types/shelljs": "^0.7.4",
     "@types/string-template": "^1.0.2",
     "@types/transliteration": "^1.6.0",
+    "@types/yamljs": "^0.2.30",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2",
     "vscode": "^1.1.18"
@@ -380,6 +381,7 @@
     "shelljs": "^0.8.2",
     "string-template": "^1.0.0",
     "transliteration": "^1.6.2",
-    "twemoji": "^2.2.5"
+    "twemoji": "^2.2.5",
+    "yamljs": "^0.3.0"
   }
 }
