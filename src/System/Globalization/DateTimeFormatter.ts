@@ -85,12 +85,10 @@ export default class DateTimeFormatter
 
         formatString = formatString.replace(this.pattern, (match) =>
         {
-            // Replacing 'fffffff'
             if (/^f+$/g.test(match))
             {
                 return Encoding.PadLeft(date.getMilliseconds().toString(), match.length, "0");
             }
-            // Replacing 'FFFFFFF'
             else if (/^F+$/g.test(match))
             {
                 if (date.getMilliseconds() > 0)
@@ -102,23 +100,19 @@ export default class DateTimeFormatter
                     return "";
                 }
             }
-            // Replacing 'd' and 'dd'
             else if (/^d{1,2}$/g.test(match))
             {
                 return Encoding.PadLeft(date.getDate().toString(), match.length, "0");
             }
-            // Replacing 'h' and 'hh'
             else if (/^h+$/g.test(match))
             {
                 let hours = (date.getHours() % 12 || 12);
                 return Encoding.PadLeft(hours.toString(), match.length, "0");
             }
-            // Replacing 'H' and 'HH'
             else if (/^H+$/g.test(match))
             {
                 return Encoding.PadLeft(date.getHours().toString(), match.length, "0");
             }
-            // Replacing 'm' and 'mm'
             else if (/^m+$/g.test(match))
             {
                 return Encoding.PadLeft(date.getMinutes().toString(), match.length, "0");
@@ -127,22 +121,18 @@ export default class DateTimeFormatter
             {
                 return Encoding.PadLeft((date.getMonth() + 1).toString(), match.length, "0");
             }
-            // Replacing 's' and 'ss'
             else if (/^s+$/g.test(match))
             {
                 return Encoding.PadLeft(date.getSeconds().toString(), match.length, "0");
             }
-            // Replacing 'y' and 'yy'
             else if (/^y{1,2}$/g.test(match))
             {
                 return Encoding.PadLeft(date.getFullYear().toString().slice(-2), match.length, "0");
             }
-            // Replacing 'yyyyy'
             else if (/^y+$/g.test(match))
             {
                 return Encoding.PadLeft(date.getFullYear().toString(), match.length, "0");
             }
-            // Replacing subjects listed in the 'tokens'-list
             else if (match in tokens)
             {
                 return tokens[match];
