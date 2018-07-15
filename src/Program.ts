@@ -52,15 +52,30 @@ export default class Program
         {
             converter.Document.Template = (await FS.readFile(ResourceManager.Files.Get("SystemTemplate"))).toString();
         }
-
-        converter.Document.HighlightStyle = Settings.Default.HighlightStyle;
-
-        if (converter.Document.HighlightStyle !== "Default" && converter.Document.HighlightStyle !== "None" && converter.Document.HighlightStyle)
+        
+        if (Settings.Default.HighlightStyle === "None")
         {
-            converter.Document.StyleSheets.push(Path.join(ResourceManager.Files.Get("HighlightJSStylesDir"), converter.Document.HighlightStyle + ".css"));
+            converter.Document.HighlightEnabled = false;
+        }
+        else
+        {
+            converter.Document.HighlightEnabled = true;
+
+            if (Settings.Default.HighlightStyle === "Default")
+            {
+                converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultHighlight"));
+            }
+            else
+            {
+                converter.Document.StyleSheets.push(Path.join(ResourceManager.Files.Get("HighlightJSStylesDir"), Settings.Default.HighlightStyle + ".css"));
+            }
         }
 
-        converter.Document.SystemStylesEnabled = Settings.Default.SystemStylesEnabled;
+        if (Settings.Default.SystemStylesEnabled)
+        {
+            converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultStyle"));
+            converter.Document.StyleSheets.push(ResourceManager.Files.Get("EmojiStyle"));
+        }
 
         for (let key in Settings.Default.StyleSheets)
         {
