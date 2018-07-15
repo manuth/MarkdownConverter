@@ -109,15 +109,4 @@ export default class TocSettings
     {
         this.listType = value;
     }
-
-    /**
-     * Returns a JSON-string which represents the object.
-     */
-    public toJSON(): string
-    {
-        return JSON.stringify({
-            Class: this.Class,
-            IncludeLevel: this.Levels
-        });
-    }
 }

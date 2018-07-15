@@ -47,20 +47,4 @@ export default class Paper
     {
         this.format = value;
     }
-
-    /**
-     * Returns an object which represents the 
-     */
-    public toJSON(): object
-    {
-        let pdfOptions = this.format.PDFOptions;
-
-        return {
-            Margin: this.Margin.toJSON(),
-            Width: pdfOptions.width,
-            Height: pdfOptions.height,
-            Format: pdfOptions.format,
-            Orientation: pdfOptions.landscape ? "Landspace" : "Portrait"
-        };
-    }
 }
