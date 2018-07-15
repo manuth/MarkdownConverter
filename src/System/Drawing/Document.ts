@@ -526,13 +526,13 @@ export default class Document extends Renderable
 
             let styleCode = "<style>\n";
 
-            styleSheets.forEach(styleSheet =>
+            for (let styleSheet of styleSheets)
             {
                 if (FS.existsSync(styleSheet))
                 {
                     styleCode += FS.readFileSync(styleSheet).toString() + "\n";
                 }
-            });
+            }
 
             for (let styleSheet of styleSheets)
             {
