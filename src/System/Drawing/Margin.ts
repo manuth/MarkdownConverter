@@ -108,17 +108,4 @@ export default class Margin
     {
         this.left = value;
     }
-
-    /**
-     * Returns a JSON-object which represents the object.
-     */
-    public toJSON(): object
-    {
-        return {
-            Top: this.Top,
-            Right: this.Right,
-            Bottom: this.Bottom,
-            Left: this.Left
-        };
-    }
 }
