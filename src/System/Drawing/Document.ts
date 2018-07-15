@@ -372,32 +372,20 @@ export default class Document extends Renderable
             return true;
         };
 
-        {
-            let slugifier = new Slugifier();
-
-            Anchor(md, {
-                slugify: (heading) =>
-                {
-                    return slugifier.CreateSlug(heading);
-                }
-            });
-        }
+        Anchor(md, {
+            slugify: new Slugifier().CreateSlug
+        });
 
         md.use(Checkbox);
 
         if (this.TocSettings.Enabled)
         {
-            let slugifier = new Slugifier();
-
             md.use(MarkdownItToc, {
                 includeLevel: new MultiRange(this.TocSettings.Levels).toArray(),
                 containerClass: this.TocSettings.Class,
                 markerPattern: this.TocSettings.Indicator,
                 listType: this.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
-                slugify: (heading) =>
-                {
-                    return slugifier.CreateSlug(heading);
-                }
+                slugify: new Slugifier().CreateSlug
             });
         }
 
