@@ -109,10 +109,10 @@ export function activate(context: VSCode.ExtensionContext)
         })
     ];
 
-    disposables.forEach(disposable =>
+    for (let disposable of disposables)
     {
         context.subscriptions.push(disposable);
-    });
+    }
 
     /**
      * Tries to find a markdown-file
