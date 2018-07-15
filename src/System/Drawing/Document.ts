@@ -289,10 +289,6 @@ export default class Document extends Renderable
     {
         return this.header;
     }
-    public set Header(value: DocumentFragment)
-    {
-        this.header = value;
-    }
 
     /**
      * Gets or sets the footer of the document.
@@ -300,10 +296,6 @@ export default class Document extends Renderable
     public get Footer(): DocumentFragment
     {
         return this.footer;
-    }
-    public set Footer(value: DocumentFragment)
-    {
-        this.footer = value;
     }
 
     /**
