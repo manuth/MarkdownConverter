@@ -22,7 +22,7 @@ export default class Program
     public static async Main(textDocument: TextDocument, types: ConversionType[], outDir: string, fileName: string): Promise<void>
     {
         let converter = new Converter(new Document());
-        converter.Document.Content = textDocument.getText();
+        converter.Document.RawContent = textDocument.getText();
         converter.Document.FileName = textDocument.fileName;
         
         converter.Document.Quality = Settings.Default.ConversionQuality;
