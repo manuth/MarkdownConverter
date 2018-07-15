@@ -330,22 +330,6 @@ export default class Document extends Renderable
     }
 
     /**
-     * Returns a JSON-string which represents the document.
-     */
-    public async toJSON()
-    {
-        return {
-            Quality: this.Quality,
-            Locale: this.Locale,
-            Layout: this.Paper.toJSON(),
-            HeaderFooterEnabled: this.HeaderFooterEnabled,
-            Header: await this.Header.Render(),
-            Content: await this.Render(),
-            Footer: await this.Footer.Render()
-        };
-    }
-
-    /**
      * Renders content of the document.
      * 
      * @param content

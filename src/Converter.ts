@@ -47,7 +47,7 @@ export default class Converter
      */
     public async Start(conversionType: ConversionType, path: string): Promise<void>
     {
-        let htmlCode = await this.document.Render();
+        let htmlCode = await this.Document.Render();
 
         if (conversionType !== ConversionType.HTML)
         {
@@ -73,12 +73,11 @@ export default class Converter
                         page.on("request", nextRequest => nextRequest.continue());
                     });
 
-                await page.goto(URL.resolve("http://localhost:8980/", Path.relative(process.cwd(), this.document.FileName)));
+                await page.goto(URL.resolve("http://localhost:8980/", Path.relative(process.cwd(), this.Document.FileName)));
 
                 switch (conversionType)
                 {
                     case ConversionType.PDF:
-                        let jsonDocument = await this.document.toJSON();
                         let styles = `
                         <style>
                             :root
@@ -88,22 +87,22 @@ export default class Converter
                         </style>`;
                         let pdfOptions: Partial<Puppeteer.PDFOptions> = {
                             margin: {
-                                top: this.document.Paper.Margin.Top,
-                                right: this.document.Paper.Margin.Right,
-                                bottom: this.document.Paper.Margin.Bottom,
-                                left: this.document.Paper.Margin.Left
+                                top: this.Document.Paper.Margin.Top,
+                                right: this.Document.Paper.Margin.Right,
+                                bottom: this.Document.Paper.Margin.Bottom,
+                                left: this.Document.Paper.Margin.Left
                             },
                             printBackground: true,
                             path
                         };
 
-                        Object.assign(pdfOptions, this.document.Paper.Format.PDFOptions);
+                        Object.assign(pdfOptions, this.Document.Paper.Format.PDFOptions);
 
-                        if (jsonDocument.HeaderFooterEnabled)
+                        if (this.Document.HeaderFooterEnabled)
                         {
                             pdfOptions.displayHeaderFooter = true;
-                            pdfOptions.headerTemplate = styles + jsonDocument.Header;
-                            pdfOptions.footerTemplate = styles + jsonDocument.Footer;
+                            pdfOptions.headerTemplate = styles + await this.Document.Header.Render();
+                            pdfOptions.footerTemplate = styles + await this.Document.Footer.Render();
                         }
 
                         await page.pdf(pdfOptions);
@@ -116,7 +115,7 @@ export default class Converter
 
                         if (conversionType !== ConversionType.PNG)
                         {
-                            screenshotOptions.quality = this.document.Quality;
+                            screenshotOptions.quality = this.Document.Quality;
                         }
 
                         await page.screenshot(screenshotOptions);
