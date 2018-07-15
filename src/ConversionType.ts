@@ -4,21 +4,22 @@
 enum ConversionType
 {
     /**
-     * HTML-conversion.
+     * Indicates an HTML-conversion.
      */
     HTML,
 
     /**
-     * JPG-conversion
+     * Indicates a JPG-conversion
      */
     JPEG,
+    
     /**
-     * PDF-conversion.
+     * Indicates a PDF-conversion.
      */
     PDF,
 
     /**
-     * PNG-conversion.
+     * Indicates a PNG-conversion.
      */
     PNG
 }
