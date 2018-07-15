@@ -1,4 +1,4 @@
-import Encoding from "../Text/Encoding";
+import StringUtils from "../Text/StringUtils";
 import CultureInfo from "culture-info";
 import ResourceManager from "../../Properties/ResourceManager";
 
@@ -87,13 +87,13 @@ export default class DateTimeFormatter
         {
             if (/^f+$/g.test(match))
             {
-                return Encoding.PadLeft(date.getMilliseconds().toString(), match.length, "0");
+                return StringUtils.PadLeft(date.getMilliseconds().toString(), match.length, "0");
             }
             else if (/^F+$/g.test(match))
             {
                 if (date.getMilliseconds() > 0)
                 {
-                    return Encoding.PadLeft(date.getMilliseconds().toString(), match.length, "0");
+                    return StringUtils.PadLeft(date.getMilliseconds().toString(), match.length, "0");
                 }
                 else
                 {
@@ -102,36 +102,36 @@ export default class DateTimeFormatter
             }
             else if (/^d{1,2}$/g.test(match))
             {
-                return Encoding.PadLeft(date.getDate().toString(), match.length, "0");
+                return StringUtils.PadLeft(date.getDate().toString(), match.length, "0");
             }
             else if (/^h+$/g.test(match))
             {
                 let hours = (date.getHours() % 12 || 12);
-                return Encoding.PadLeft(hours.toString(), match.length, "0");
+                return StringUtils.PadLeft(hours.toString(), match.length, "0");
             }
             else if (/^H+$/g.test(match))
             {
-                return Encoding.PadLeft(date.getHours().toString(), match.length, "0");
+                return StringUtils.PadLeft(date.getHours().toString(), match.length, "0");
             }
             else if (/^m+$/g.test(match))
             {
-                return Encoding.PadLeft(date.getMinutes().toString(), match.length, "0");
+                return StringUtils.PadLeft(date.getMinutes().toString(), match.length, "0");
             }
             else if (/^M{1,2}$/g.test(match))
             {
-                return Encoding.PadLeft((date.getMonth() + 1).toString(), match.length, "0");
+                return StringUtils.PadLeft((date.getMonth() + 1).toString(), match.length, "0");
             }
             else if (/^s+$/g.test(match))
             {
-                return Encoding.PadLeft(date.getSeconds().toString(), match.length, "0");
+                return StringUtils.PadLeft(date.getSeconds().toString(), match.length, "0");
             }
             else if (/^y{1,2}$/g.test(match))
             {
-                return Encoding.PadLeft(date.getFullYear().toString().slice(-2), match.length, "0");
+                return StringUtils.PadLeft(date.getFullYear().toString().slice(-2), match.length, "0");
             }
             else if (/^y+$/g.test(match))
             {
-                return Encoding.PadLeft(date.getFullYear().toString(), match.length, "0");
+                return StringUtils.PadLeft(date.getFullYear().toString(), match.length, "0");
             }
             else if (match in tokens)
             {
