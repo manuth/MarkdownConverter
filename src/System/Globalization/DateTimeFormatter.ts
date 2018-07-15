@@ -25,7 +25,7 @@ export default class DateTimeFormatter
     /**
      * Returns the tokens to replace.
      */
-    private initializeTokens(date: Date, utc: boolean): { [id: string]: string }
+    private GetTokens(date: Date): { [id: string]: string }
     {
         let day = date.getDay() - 1;
 
@@ -71,9 +71,9 @@ export default class DateTimeFormatter
      * @param formatString
      * The format-string to format the date-value.
      */
-    public Format(formatString: string, date: Date = new Date(), utc: boolean = false): string
+    public Format(formatString: string, date: Date = new Date()): string
     {
-        tokens = this.initializeTokens(date, utc);
+        tokens = this.GetTokens(date);
 
         try
         {
