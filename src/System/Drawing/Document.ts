@@ -117,19 +117,16 @@ export default class Document extends Renderable
         </html>`);
 
     /**
-     * The highlight-style of the document.
+     * A value indicating whether fancy code-blocks are enabled.
      */
-    private highlightStyle: string = "Default";
-
-    /**
-     * A value indicating whether system-provided stylesheets are enabled. 
-     */
-    private systemStylesEnabled: boolean = true;
+    private highlightEnabled: boolean = true;
 
     /**
      * The stylesheets of the document.
      */
-    private styleSheets: string[] = [];
+    private styleSheets: string[] = [
+        ResourceManager.Files.Get("SystemStyle")
+    ];
 
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
@@ -334,27 +331,15 @@ export default class Document extends Renderable
     }
 
     /**
-     * Gets or sets the highlight-style of the document.
+     * Gets or sets a value indicating whether fancy code-blocks are enabled.
      */
-    public get HighlightStyle(): string
+    public get HighlightEnabled(): boolean
     {
-        return this.highlightStyle;
+        return this.highlightEnabled;
     }
-    public set HighlightStyle(value: string)
+    public set HighlightEnabled(value: boolean)
     {
-        this.highlightStyle = value;
-    }
-
-    /**
-     * Gets or sets a value indicating whether system-provided stylesheets are enabled.
-     */
-    public get SystemStylesEnabled(): boolean
-    {
-        return this.systemStylesEnabled;
-    }
-    public set SystemStylesEnabled(value: boolean)
-    {
-        this.systemStylesEnabled = value;
+        this.highlightEnabled = value;
     }
 
     /**
@@ -393,14 +378,12 @@ export default class Document extends Renderable
      */
     protected async RenderText(content: string): Promise<string>
     {
-        let highlightStyle = this.HighlightStyle;
-
         // Preparing markdown-it
         let md = new MarkdownIt({
             html: true,
-            highlight(subject, language)
+            highlight: (subject, language) =>
             {
-                if ((highlightStyle !== "None") && language && HighlightJs.getLanguage(language))
+                if (this.HighlightEnabled)
                 {
                     subject = HighlightJs.highlight(language, subject, true).value;
                 }
@@ -417,7 +400,7 @@ export default class Document extends Renderable
         {
             return true;
         };
-        
+
         {
             let slugifier = new Slugifier();
 
@@ -500,51 +483,17 @@ export default class Document extends Renderable
     {
         try
         {
-            let template = this.Template;
-
-            // Preparing the styles
-            let styleSheets = this.StyleSheets;
-            styleSheets.push(ResourceManager.Files.Get("SystemStyle"));
-
-            if (this.SystemStylesEnabled)
-            {
-                let systemStyles: string[] = [];
-                systemStyles.push(ResourceManager.Files.Get("DefaultStyle"));
-
-                if (this.HighlightStyle === "Default")
-                {
-                    systemStyles.push(ResourceManager.Files.Get("DefaultHighlight"));
-                }
-
-                if (this.EmojiType === EmojiType.GitHub)
-                {
-                    systemStyles.push(ResourceManager.Files.Get("EmojiStyle"));
-                }
-
-                styleSheets = systemStyles.concat(styleSheets);
-            }
-
             let styleCode = "<style>\n";
 
-            for (let styleSheet of styleSheets)
-            {
-                if (FS.existsSync(styleSheet))
-                {
-                    styleCode += FS.readFileSync(styleSheet).toString() + "\n";
-                }
-            }
-
-            for (let styleSheet of styleSheets)
+            for (let styleSheet of this.StyleSheets)
             {
                 if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
                 {
-                    {
-                        let result = await Request(styleSheet);
+                    let result = await Request(styleSheet);
 
-                        if (result.statusCode === 200)
-                        {
-                            styleCode += result.body;
-                        }
+                    if (result.statusCode === 200)
+                    {
+                        styleCode += result.body;
                     }
                 }
                 else
@@ -560,9 +509,8 @@ export default class Document extends Renderable
                     }
                 }
             }
-            
-            styleCode += "</style>";
 
+            styleCode += "</style>";
             let content = this.Content;
 
             let view = {
@@ -570,7 +518,7 @@ export default class Document extends Renderable
                 content: await this.RenderText(content)
             };
 
-            return Mustache.render(template, view);
+            return Mustache.render(this.Template, view);
         }
         catch (e)
         {
