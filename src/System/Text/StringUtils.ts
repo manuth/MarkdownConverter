@@ -1,7 +1,7 @@
 /**
- * Provides some usefule functionallities.
+ * Provides string-functionalities.
  */
-export default class Encoding
+export default class StringUtils
 {
     /**
      * Converts a string to code its code-points-value.
@@ -13,20 +13,18 @@ export default class Encoding
     {
         let buffer = Buffer.from(subject);
         let result: number = 0;
-
-        // Determining the mask-type of the UTF-8 char.
-        //
-        // The UTF-8 Masks are as followed:
-        //
-        // 
-        //  |     Unicode-Range     |              UTF-8-Mask             | Length (in bytes) |
-        //  |-----------------------|------------------------------------:|------------------:|
-        //  | 0000 0000 – 0000 007F |                            0xxxxxxx |                 1 |
-        //  | 0000 0080 – 0000 07FF |                   110xxxxx 10xxxxxx |                 2 |
-        //  | 0000 0800 – 0000 FFFF |          1110xxxx 10xxxxxx 10xxxxxx |                 3 |
-        //  | 0001 0000 – 0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx |                 4 |
-        //
         let length;
+
+        /* 
+         * Determining the mask-type of the UTF-8 char.
+         * The UTF-8 Masks are as followed:
+         * |     Unicode-Range     |              UTF-8-Mask             | Length (in bytes) |
+         * |-----------------------|------------------------------------:|------------------:|
+         * | 0000 0000 – 0000 007F |                            0xxxxxxx |                 1 |
+         * | 0000 0080 – 0000 07FF |                   110xxxxx 10xxxxxx |                 2 |
+         * | 0000 0800 – 0000 FFFF |          1110xxxx 10xxxxxx 10xxxxxx |                 3 |
+         * | 0001 0000 – 0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx |                 4 |
+         */
 
         if ((buffer[0] & 0x80) === 0x0)
         {
@@ -36,20 +34,17 @@ export default class Encoding
         if ((buffer[0] & 0xE0) === 0xC0)
         {
             length = 2;
-            // Removing the mask of the first byte.
             buffer[0] = buffer[0] & 0x1F;
         }
         if ((buffer[0] & 0xF0) === 0xE0)
         {
             length = 3;
-            // Removing the mask of the first byte.
             buffer[0] = buffer[0] & 0xF;
         }
 
         if ((buffer[0] & 0xF8) === 0xF0)
         {
             length = 4;
-            // Removing the mask of the first byte.
             buffer[0] = buffer[0] & 0x7;
         }
 
@@ -59,9 +54,7 @@ export default class Encoding
         {
             if ((buffer[i] & 0xC0) === 0x80 || i === 0)
             {
-                // Removing the mask.
                 buffer[i] = buffer[i] & 0x3F;
-                // Moving the byte to the propper position.
                 result += ((buffer[i] << ((length - i) * 8)) >> ((length - i) * 2));
             }
             else

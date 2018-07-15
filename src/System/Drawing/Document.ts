@@ -5,7 +5,7 @@ import * as URL from "url";
 import * as Anchor from "markdown-it-anchor";
 import DateTimeFormatter from "../Globalization/DateTimeFormatter";
 import * as Dedent from "dedent";
-import Encoding from "../Text/Encoding";
+import StringUtils from "../Text/StringUtils";
 import * as FrontMatter from "front-matter";
 import Fullname from "../Fullname";
 import * as HighlightJs from "highlight.js";
@@ -468,7 +468,7 @@ export default class Document extends Renderable
                             ':" alt=":' +
                             token[id].markup +
                             ':" src="https://assets-cdn.github.com/images/icons/emoji/unicode/' +
-                            Encoding.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase() +
+                            StringUtils.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase() +
                             '.png" allign="absmiddle" />';
                 }
             };
