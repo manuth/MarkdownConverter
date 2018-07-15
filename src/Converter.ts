@@ -73,7 +73,8 @@ export default class Converter
                         page.on("request", nextRequest => nextRequest.continue());
                     });
 
-                await page.goto(URL.resolve("http://localhost:8980/", Path.relative(process.cwd(), this.Document.FileName)));
+                let url = this.Document.FileName !== null ? Path.relative(process.cwd(), this.Document.FileName) : "";
+                await page.goto(URL.resolve("http://localhost:8980/", url));
 
                 switch (conversionType)
                 {
