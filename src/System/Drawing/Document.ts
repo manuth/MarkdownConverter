@@ -47,11 +47,6 @@ export default class Document extends Renderable
     public FileName: string;
 
     /**
-     * The name of the document.
-     */
-    private name: string = null;
-
-    /**
      * The type of emojis to use.
      */
     private emojiType: EmojiType = EmojiType.GitHub;
@@ -195,18 +190,6 @@ export default class Document extends Renderable
     public set Quality(value: number)
     {
         this.quality = value;
-    }
-
-    /**
-     * Gets or sets the name of the document.
-     */
-    public get Name(): string
-    {
-        return this.name;
-    }
-    public set Name(value: string)
-    {
-        this.name = value;
     }
 
     /**
