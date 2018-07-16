@@ -10,6 +10,7 @@ import Fullname from "../Fullname";
 import * as HighlightJs from "highlight.js";
 import * as OS from "os";
 import Paper from "./Paper";
+import * as Path from "path";
 import ListType from "./ListType";
 import * as MarkdownIt from "markdown-it";
 import * as MarkdownItEmoji from "markdown-it-emoji";
@@ -61,12 +62,12 @@ export default class Document extends Renderable
     /**
      * The format to print the date.
      */
-    private dateFormat: string = "default";
+    private dateFormat: string = "Default";
 
     /**
      * The language to print values.
      */
-    private locale: CultureInfo;
+    private locale: CultureInfo = CultureInfo.InvariantCulture;
 
     /**
      * The layout of the document.
@@ -452,25 +453,18 @@ export default class Document extends Renderable
 
             for (let styleSheet of this.StyleSheets)
             {
-                if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
+                if (/.*:\/\//g.test(styleSheet) || !Path.isAbsolute(styleSheet))
                 {
-                    let result = await Request(styleSheet);
-
-                    if (result.statusCode === 200)
-                    {
-                        styleCode += result.body;
-                    }
+                    styleCode += Dedent(`
+                        </style>
+                        <link rel="stylesheet" type="text/css" href="/${styleSheet}" />
+                        <style>`);
                 }
                 else
                 {
-                    // Removing leading 'file://' from the local path.
-                    styleSheet.replace(/^file:\/\//, "");
-
+                    if (FS.existsSync(styleSheet))
                     {
-                        if (FS.existsSync(styleSheet))
-                        {
-                            styleCode += FS.readFileSync(styleSheet).toString() + "\n";
-                        }
+                        styleCode += FS.readFileSync(styleSheet).toString() + "\n";
                     }
                 }
             }
