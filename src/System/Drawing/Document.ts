@@ -15,9 +15,7 @@ import ListType from "./ListType";
 import * as MarkdownIt from "markdown-it";
 import * as MarkdownItEmoji from "markdown-it-emoji";
 import * as MarkdownItToc from "markdown-it-table-of-contents";
-import { MultiRange } from "multi-integer-range";
 import * as Mustache from "mustache";
-import * as Request from "request-promise-native";
 import TocSettings from "./TocSettings";
 import * as TwEmoji from "twemoji";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";
@@ -39,7 +37,7 @@ export default class Document extends Renderable
     /**
      * The name of the file represented by this document.
      */
-    public fileName: string = null;
+    public fileName: string;
 
     /**
      * The quality of the document.
@@ -132,32 +130,19 @@ export default class Document extends Renderable
      * @param config
      * The configuration to set.
      */
-    constructor(document: TextDocument = null)
+    constructor(document: TextDocument)
     {
         super();
+        this.FileName = document.fileName;
+        this.RawContent = document.getText();
 
-        if (document)
+        if (!document.isUntitled)
         {
-            try
-            {
-                this.FileName = document.fileName;
-                this.RawContent = FS.readFileSync(document.fileName, "utf-8");
-                this.Attributes.CreationDate = FS.statSync(document.fileName).ctime;
-            }
-            catch (e)
-            {
-                if (e instanceof Error)
-                {
-                    if (e.name === "YAMLException")
-                    {
-                        throw new YAMLException(e);
-                    }
-                    else if ("path" in e)
-                    {
-                        throw new UnauthorizedAccessException((e as any).path as string);
-                    }
-                }
-            }
+            this.Attributes.CreationDate = FS.statSync(document.fileName).ctime;
+        }
+        else
+        {
+            this.Attributes.CreationDate = new Date(Date.now());
         }
     }
 

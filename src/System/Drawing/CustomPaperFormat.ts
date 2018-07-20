@@ -9,12 +9,28 @@ export default class CustomPaperFormat extends PaperFormat
     /**
      * The width.
      */
-    private width: string = null;
+    private width: string;
 
     /**
      * The height.
      */
-    private height: string = null;
+    private height: string;
+
+    /**
+     * Initializes a new instance of the `CustomPaperFormat` class.
+     * 
+     * @param width
+     * The width.
+     * 
+     * @param height
+     * The height.
+     */
+    public constructor(width: string, height: string)
+    {
+        super();
+        this.width = width;
+        this.height = height;
+    }
 
     /**
      * Gets or sets the width.
