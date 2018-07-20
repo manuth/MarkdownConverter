@@ -1,4 +1,17 @@
 # Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
+## MarkdownConverter v1.0.0 [Unreleased]
+### Changed
+  - Replace [PhantomJS](http://phantomjs.org/) by [puppeteer](https://github.com/GoogleChrome/puppeteer)
+  - Provide the functionality to render local files
+  - Provide the functionality to 
+  - Rework the path-handling of the settings
+  - Rework the code for better readability
+
 ## MarkdownConverter v0.0.13
 ### Changed
   - Beautify the system-stylesheet
