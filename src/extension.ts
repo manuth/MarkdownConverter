@@ -29,59 +29,47 @@ export function activate(context: VSCode.ExtensionContext)
         {
             try
             {
-                let markdownDoc = getMarkdownDoc();
+                let document = getMarkdownDoc();
 
-                if (markdownDoc)
+                if (document)
                 {
                     /* Preparing the arguments */
                     let name: string;
-                    let base: string;
+                    let documentRoot: string;
                     let outDir = Settings.Default.OutputDirectory;
 
-                    if (VSCode.workspace.workspaceFolders && (VSCode.workspace.workspaceFolders.length === 1))
+                    let workspace = (VSCode.workspace.workspaceFolders || []).find(
+                        (workspaceFolder) => {
+                            let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
+                            let documentParts = document.uri.fragment.split(Path.sep);
+
+                            return workspaceParts.every(
+                                (value, index) =>
+                                {
+                                    return value === documentParts[index];
+                                });
+                        });
+                    
+                    if (workspace)
                     {
-                        base = VSCode.workspace.workspaceFolders[0].uri.fsPath;
+                        documentRoot = workspace.uri.fsPath;
                     }
-                    else if (!markdownDoc.isUntitled)
+                    else if (!document.isUntitled)
                     {
-                        base = Path.dirname(markdownDoc.fileName);
+                        documentRoot = Path.dirname(document.fileName);
                     }
                     else
                     {
-                        base = await VSCode.window.showInputBox({
-                            prompt: ResourceManager.Resources.Get("OutDirPrompt"),
-                            validateInput: (value: string): any =>
-                            {
-                                if (!Path.isAbsolute(value))
-                                {
-                                    return ResourceManager.Resources.Get("OutDirNotAllowed");
-                                }
-                            }
-                        });
+                        documentRoot = process.cwd();
                     }
 
                     if (!Path.isAbsolute(outDir))
                     {
-                        outDir = Path.resolve(base, outDir);
+                        outDir = Path.resolve(documentRoot, outDir);
                     }
-
-                    if (!markdownDoc.isUntitled)
-                    {
-                        name = Path.parse(markdownDoc.fileName).name;
-                    }
-                    else
-                    {
-                        name = "temp";
-                    }
-
-                    let path = process.cwd();
-                    {
-                        process.chdir(base);
-
-                        /* Executing the main logic */
-                        await Program.Main(markdownDoc, Settings.Default.ConversionType, outDir, name);
-                    }
-                    process.chdir(path);
+                    
+                    name = Path.parse(document.fileName).name;
+                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir, name);
                 }
                 else
                 {

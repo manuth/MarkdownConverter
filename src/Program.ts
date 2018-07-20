@@ -19,14 +19,14 @@ export default class Program
     /**
      * Converts a markdown-file to other file-types
      */
-    public static async Main(textDocument: TextDocument, types: ConversionType[], outDir: string, fileName: string): Promise<void>
+    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string, fileName: string): Promise<void>
     {
-        let converter = new Converter(new Document());
-        converter.Document.RawContent = textDocument.getText();
+        let converter = new Converter(documentRoot, new Document());
+        converter.Document.RawContent = document.getText();
 
-        if (!textDocument.isUntitled)
+        if (!document.isUntitled)
         {
-            converter.Document.FileName = textDocument.fileName;
+            converter.Document.FileName = document.fileName;
         }
         
         converter.Document.Quality = Settings.Default.ConversionQuality;
@@ -50,7 +50,7 @@ export default class Program
 
         if (Settings.Default.Template)
         {
-            converter.Document.Template = Settings.Default.Template;
+            converter.Document.Template = (await FS.readFile(Path.resolve(documentRoot, Settings.Default.Template))).toString();
         }
         else if (Settings.Default.SystemStylesEnabled)
         {
@@ -81,9 +81,14 @@ export default class Program
             converter.Document.StyleSheets.push(ResourceManager.Files.Get("EmojiStyle"));
         }
 
-        for (let key in Settings.Default.StyleSheets)
+        for (let styleSheet of Settings.Default.StyleSheets)
         {
-            converter.Document.StyleSheets.push(Settings.Default.StyleSheets[key]);
+            if (!Path.isAbsolute(styleSheet))
+            {
+                styleSheet = Path.resolve(documentRoot, styleSheet);
+            }
+
+            converter.Document.StyleSheets.push(styleSheet);
         }
 
         for (let type of types)
