@@ -79,7 +79,7 @@ export default class Settings
      */
     public get Locale(): string
     {
-        return this.getConfigEntry("Locale", null) || VSCode.env.language;
+        return this.getConfigEntry("Locale", VSCode.env.language);
     }
 
     /**
@@ -87,7 +87,7 @@ export default class Settings
      */
     public get DateFormat(): string
     {
-        return this.getConfigEntry("DateFormat", "Default");
+        return this.getConfigEntry("DateFormat");
     }
 
     /**
@@ -95,7 +95,7 @@ export default class Settings
      */
     public get EmojiType(): EmojiType
     {
-        return EmojiType[this.getConfigEntry<string>("Document.EmojiType", "GitHub")];
+        return EmojiType[this.getConfigEntry<string>("Document.EmojiType")];
     }
 
     /**
@@ -103,7 +103,7 @@ export default class Settings
      */
     public get Attributes(): { [Key: string]: any }
     {
-        return this.getConfigEntry("Document.Attributes", {});
+        return this.getConfigEntry("Document.Attributes");
     }
 
     /**
@@ -126,16 +126,20 @@ export default class Settings
         catch (exception)
         {
             let format = new StandardizedPaperFormat();
-            format.Format = StandardizedFormatType[this.getConfigEntry("Document.Paper.PaperFormat.Format", StandardizedFormatType[StandardizedFormatType.A4])];
+            format.Format = StandardizedFormatType[this.getConfigEntry<string>("Document.Paper.PaperFormat.Format")];
             format.Orientation = PaperOrientation[this.getConfigEntry("Document.Paper.PaperFormat.Orientation", PaperOrientation[PaperOrientation.Portrait])];
             paper.Format = format;
         }
-        
-        paper.Margin = new Margin(
-            this.getConfigEntry("Document.Paper.Margin.Top", "1cm"),
-            this.getConfigEntry("Document.Paper.Margin.Right", "1cm"),
-            this.getConfigEntry("Document.Paper.Margin.Bottom", "1cm"),
-            this.getConfigEntry("Document.Paper.Margin.Left", "1cm"));
+
+        for (let side of [ "Top", "Right", "Bottom", "Left" ])
+        {
+            let configKey = "Document.Paper.Margin." + side;
+
+            if (this.config.has(configKey))
+            {
+                paper.Margin[side] = this.config.get(configKey);
+            }
+        }
 
         return paper;
     }
@@ -145,7 +149,7 @@ export default class Settings
      */
     public get HeaderFooterEnabled(): boolean
     {
-        return this.getConfigEntry("Document.HeaderFooterEnabled", true);
+        return this.getConfigEntry("Document.HeaderFooterEnabled");
     }
 
     /**
@@ -153,7 +157,7 @@ export default class Settings
      */
     public get HeaderTemplate(): string
     {
-        return this.getConfigEntry("Document.HeaderTemplate", "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ Author }}</td><td style=\"text-align: right\"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></td></table>");
+        return this.getConfigEntry("Document.HeaderTemplate");
     }
 
     /**
@@ -161,7 +165,7 @@ export default class Settings
      */
     public get FooterTemplate(): string
     {
-        return this.getConfigEntry("Document.FooterTemplate", "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ CreationDate }}</td><td style=\"text-align: right\"></td></table>");
+        return this.getConfigEntry("Document.FooterTemplate");
     }
 
     /**
@@ -170,11 +174,11 @@ export default class Settings
     public get TocSettings(): TocSettings
     {
         let tocSettings = new TocSettings();
-        tocSettings.Enabled = this.getConfigEntry("Document.Toc.Enabled", true);
-        tocSettings.Class = this.getConfigEntry("Document.Toc.Class", "markdown-converter-toc");
-        tocSettings.LevelRange = this.getConfigEntry("Document.Toc.Levels", "1-6");
-        tocSettings.Indicator = new RegExp(this.getConfigEntry("Document.Toc.Indicator", "^\\[\\[\\s*toc\\s*\\]\\]"), "im");
-        tocSettings.ListType = ListType[this.getConfigEntry<string>("Document.Toc.ListType", ListType[ListType.Unordered])];
+        tocSettings.Enabled = this.getConfigEntry("Document.Toc.Enabled");
+        tocSettings.Class = this.getConfigEntry("Document.Toc.Class");
+        tocSettings.LevelRange = this.getConfigEntry("Document.Toc.Levels");
+        tocSettings.Indicator = new RegExp(this.getConfigEntry("Document.Toc.Indicator"), "im");
+        tocSettings.ListType = this.getConfigEntry<string>("Document.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
         return tocSettings;
     }
 
@@ -183,7 +187,7 @@ export default class Settings
      */
     public get Template(): string
     {
-        return this.getConfigEntry<string>("Document.Design.Template", null);
+        return this.getConfigEntry<string>("Document.Design.Template");
     }
 
     /**
@@ -191,7 +195,7 @@ export default class Settings
      */
     public get HighlightStyle(): string
     {
-        return this.getConfigEntry("Document.Design.HighlightStyle", "Default");
+        return this.getConfigEntry("Document.Design.HighlightStyle");
     }
 
     /**
@@ -199,7 +203,7 @@ export default class Settings
      */
     public get SystemStylesEnabled(): boolean
     {
-        return this.getConfigEntry<boolean>("Document.Design.SystemStylesEnabled", true);
+        return this.getConfigEntry<boolean>("Document.Design.SystemStylesEnabled");
     }
 
     /**
@@ -207,7 +211,7 @@ export default class Settings
      */
     public get StyleSheets(): string[]
     {
-        return this.getConfigEntry("Document.Design.StyleSheets", []);
+        return this.getConfigEntry("Document.Design.StyleSheets");
     }
 
     /**
