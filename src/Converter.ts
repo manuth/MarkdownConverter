@@ -13,6 +13,11 @@ import * as URL from "url";
 export default class Converter
 {
     /**
+     * The root-directory of the document.
+     */
+    private documentRoot: string;
+
+    /**
      * The document which is to be converted.
      */
     private document: Document;
@@ -23,9 +28,23 @@ export default class Converter
      * @param document
      * The document which is to be converted.
      */
-    constructor(document: Document)
+    constructor(documentRoot: string, document: Document)
     {
+        this.documentRoot = documentRoot;
         this.document = document;
+    }
+
+    /**
+     * Gets or sets the root-directory of the document.
+     */
+    public get DocumentRoot(): string
+    {
+        return this.documentRoot;
+    }
+
+    public set DocumentRoot(value: string)
+    {
+        this.documentRoot = value;
     }
 
     /**
@@ -52,7 +71,7 @@ export default class Converter
         if (conversionType !== ConversionType.HTML)
         {
             let server = (Server.createServer({
-                root: "."
+                root: this.DocumentRoot
             }) as any).server as http.Server;
 
             server.listen(8980, "localhost");
@@ -73,7 +92,7 @@ export default class Converter
                         page.on("request", nextRequest => nextRequest.continue());
                     });
 
-                let url = this.Document.FileName !== null ? Path.relative(process.cwd(), this.Document.FileName) : "";
+                let url = this.Document.FileName !== null ? Path.relative(this.DocumentRoot, this.Document.FileName) : "";
                 await page.goto(URL.resolve("http://localhost:8980/", url));
 
                 switch (conversionType)
