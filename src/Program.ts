@@ -21,8 +21,7 @@ export default class Program
      */
     public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string, fileName: string): Promise<void>
     {
-        let converter = new Converter(documentRoot, new Document());
-        converter.Document.RawContent = document.getText();
+        let converter = new Converter(documentRoot, new Document(document));
 
         if (!document.isUntitled)
         {

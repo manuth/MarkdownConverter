@@ -1,5 +1,7 @@
 import Margin from "./Margin";
 import PaperFormat from "./PaperFormat";
+import StandardizedPaperFormat from "./StandardizedPaperFormat";
+import StandardizedFormatType from "./StandardizedFormatType";
 
 /**
  * Represents a document-layout.
@@ -9,18 +11,27 @@ export default class Paper
     /**
      * The margin.
      */
-    private margin: Margin = new Margin();
+    private margin: Margin = new Margin("1cm");
 
     /**
      * The format of the paper.
      */
-    private format: PaperFormat;
+    private format: PaperFormat = new StandardizedPaperFormat();
 
     /**
      * Initializes a new instance of the Layout class.
      */
-    constructor()
+    constructor(format?: PaperFormat, margin?: Margin)
     {
+        if (format)
+        {
+            this.format = format;
+        }
+
+        if (margin)
+        {
+            this.margin = margin;
+        }
     }
 
     /**

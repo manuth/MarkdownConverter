@@ -119,9 +119,7 @@ export default class Settings
             let width: string = this.getConfigEntry("Document.Paper.PaperFormat.Width");
             let height: string = this.getConfigEntry("Document.Paper.PaperFormat.Height");
             
-            let format = new CustomPaperFormat();
-            format.Width = width;
-            format.Height = height;
+            let format = new CustomPaperFormat(width, height);
             paper.Format = format;
         }
         catch (exception)
