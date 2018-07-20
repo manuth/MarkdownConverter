@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## MarkdownConverter v1.0.0 [Unreleased]
+## [MarkdownConverter v1.0.0 Unreleased]
 ### Changed
   - Replace [PhantomJS](http://phantomjs.org/) by [puppeteer](https://github.com/GoogleChrome/puppeteer)
   - Provide the functionality to render local files
@@ -12,30 +12,30 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Rework the path-handling of the settings
   - Rework the code for better readability
 
-## MarkdownConverter v0.0.13
+## [MarkdownConverter v0.0.13]
 ### Changed
   - Beautify the system-stylesheet
 
-## MarkdownConverter v0.0.12
+## [MarkdownConverter v0.0.12]
 ### Changed
   - Rework the settings and remove unnecessary settings
   - Fix extension-provided styles
   - Improve path-handling for untitled files
   - Implement localization using [`localizable-resources`](https://npmjs.org/package/localizable-resources)
 
-## MarkdownConverter v0.0.11
+## [MarkdownConverter v0.0.11]
 ### Changed
   - Rename `MarkdownConverter` to `Markdown Converter`
   - Fix Multi-Workspacefolder support
 
-## MarkdownConverter v0.0.10
+## [MarkdownConverter v0.0.10]
 ### Added
   - Add support for Chinese headings
 
 ### Changed
   - Disable `markdown-it`'s link policy
 
-## MarkdownConverter v0.0.9
+## [MarkdownConverter v0.0.9]
 ## Added
   - Provide "table of content"-feature
 
@@ -44,7 +44,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Adjust the way to open up files
   - Update the sync-request-module
 
-## MarkdownConverter v0.0.8
+## [MarkdownConverter v0.0.8]
 ## Added
   - Provided the functionallity to choose whether to embed or link certain css-files [#4](https://github.com/manuth/MarkdownConverter/issues/4)
 
@@ -53,7 +53,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Adjust the way to handle templates [#6](https://github.com/manuth/MarkdownConverter/issues/6)
   - Change missleading error-messages [#7](https://github.com/manuth/MarkdownConverter/issues/7)
 
-## MarkdownConverter v0.0.7
+## [MarkdownConverter v0.0.7]
 ### Added
   - Add TypeScript-definitions
   - Add PhantomJS-rebuild functionallity in order to build PhantomJS for the propper os. [#2](https://github.com/manuth/MarkdownConverter/issues/2)
@@ -89,3 +89,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## MarkdownConverter v0.0.2
   - First release
+
+<!--- References -->
+[MarkdownConverter v1.0.0 Unreleased]: https://github.com/manuth/MarkdownConverter/compare/v0.0.13...dev
+[MarkdownConverter v0.0.13]: https://github.com/manuth/MarkdownConverter/compare/v0.0.12...v0.0.13
+[MarkdownConverter v0.0.12]: https://github.com/manuth/MarkdownConverter/compare/v0.0.11...v0.0.12
+[MarkdownConverter v0.0.11]: https://github.com/manuth/MarkdownConverter/compare/v0.0.10...v0.0.11
+[MarkdownConverter v0.0.10]: https://github.com/manuth/MarkdownConverter/compare/v0.0.9...v0.0.10
+[MarkdownConverter v0.0.9]: https://github.com/manuth/MarkdownConverter/compare/v0.0.8...v0.0.9
+[MarkdownConverter v0.0.8]: https://github.com/manuth/MarkdownConverter/compare/v0.0.7...v0.0.8
+[MarkdownConverter v0.0.7]: https://github.com/manuth/MarkdownConverter/compare/v0.0.4...v0.0.7
