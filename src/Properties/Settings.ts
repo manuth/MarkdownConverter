@@ -10,6 +10,7 @@ import CustomPaperFormat from "../System/Drawing/CustomPaperFormat";
 import StandardizedPaperFormat from "../System/Drawing/StandardizedPaperFormat";
 import StandardizedFormatType from "../System/Drawing/StandardizedFormatType";
 import PaperOrientation from "../System/Drawing/PaperOrientation";
+import { MultiRange } from "../../node_modules/multi-integer-range";
 
 /**
  * Provides access to settings.
@@ -173,13 +174,19 @@ export default class Settings
      */
     public get TocSettings(): TocSettings
     {
-        let tocSettings = new TocSettings();
-        tocSettings.Enabled = this.getConfigEntry("Document.Toc.Enabled");
-        tocSettings.Class = this.getConfigEntry("Document.Toc.Class");
-        tocSettings.LevelRange = this.getConfigEntry("Document.Toc.Levels");
-        tocSettings.Indicator = new RegExp(this.getConfigEntry("Document.Toc.Indicator"), "im");
-        tocSettings.ListType = this.getConfigEntry<string>("Document.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
-        return tocSettings;
+        if (this.getConfigEntry<boolean>("Document.Toc.Enabled"))
+        {
+            let $class = this.getConfigEntry<string>("Document.Toc.Class");
+            let levels = this.getConfigEntry<string>("Document.Toc.Levels");
+            let indicator = new RegExp(this.getConfigEntry("Document.Toc.Indicator"), "im");
+            let listType = this.getConfigEntry<string>("Document.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
+
+            return new TocSettings($class, new MultiRange(levels), indicator, listType);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**

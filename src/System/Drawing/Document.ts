@@ -92,7 +92,7 @@ export default class Document extends Renderable
     /**
      * The definitions of the table of contents.
      */
-    private tocSettings: TocSettings = new TocSettings();
+    private tocSettings: TocSettings = null;
 
     /**
      * The template to use for the RenderBody-process.
@@ -383,12 +383,12 @@ export default class Document extends Renderable
 
         md.use(Checkbox);
 
-        if (this.TocSettings.Enabled)
+        if (this.TocSettings)
         {
             let slugifier = new Slugifier();
 
             md.use(MarkdownItToc, {
-                includeLevel: new MultiRange(this.TocSettings.Levels).toArray(),
+                includeLevel: this.TocSettings.Levels.toArray(),
                 containerClass: this.TocSettings.Class,
                 markerPattern: this.TocSettings.Indicator,
                 listType: this.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
