@@ -1,15 +1,15 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as VSCode from "vscode";
+import CultureInfo from "culture-info";
 import * as Path from "path";
-import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
+import * as Format from "string-template";
+import * as VSCode from "vscode";
 import Program from "./Program";
+import ResourceManager from "./Properties/ResourceManager";
 import Settings from "./Properties/Settings";
+import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
 import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
 import YAMLException from "./System/YAML/YAMLException";
-import CultureInfo from "culture-info";
-import * as Format from "string-template";
-import ResourceManager from "./Properties/ResourceManager";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

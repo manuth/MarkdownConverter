@@ -1,7 +1,6 @@
 import Margin from "./Margin";
 import PaperFormat from "./PaperFormat";
 import StandardizedPaperFormat from "./StandardizedPaperFormat";
-import StandardizedFormatType from "./StandardizedFormatType";
 
 /**
  * Represents a document-layout.

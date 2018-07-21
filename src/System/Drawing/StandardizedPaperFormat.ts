@@ -1,7 +1,7 @@
+import { PDFFormat, PDFOptions } from "puppeteer";
 import PaperFormat from "./PaperFormat";
-import { PDFOptions, PDFFormat } from "puppeteer";
-import StandardizedFormatType from "./StandardizedFormatType";
 import PaperOrientation from "./PaperOrientation";
+import StandardizedFormatType from "./StandardizedFormatType";
 
 /**
  * Represents a standardized format of a paper.

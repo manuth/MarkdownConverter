@@ -1,6 +1,6 @@
-import StringUtils from "../Text/StringUtils";
 import CultureInfo from "culture-info";
 import ResourceManager from "../../Properties/ResourceManager";
+import StringUtils from "../Text/StringUtils";
 
 /**
  * Gets a set of DateTime-string-tokens.

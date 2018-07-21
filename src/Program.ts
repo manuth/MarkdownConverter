@@ -1,15 +1,15 @@
 import * as ChildProcess from "child_process";
 import CultureInfo from "culture-info";
-import * as Format from "string-template";
-import * as FS from "fs-extra";
+import * as FileSystem from "fs-extra";
 import * as Path from "path";
-import { env, TextDocument, window } from "vscode";
+import * as Format from "string-template";
+import { TextDocument, window } from "vscode";
 import ConversionType from "./ConversionType";
 import Converter from "./Converter";
+import ResourceManager from "./Properties/ResourceManager";
+import Settings from "./Properties/Settings";
 import Document from "./System/Drawing/Document";
 import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
-import Settings from "./Properties/Settings";
-import ResourceManager from "./Properties/ResourceManager";
 
 /**
  * Provides the main logic of the extension
@@ -49,11 +49,11 @@ export default class Program
 
         if (Settings.Default.Template)
         {
-            converter.Document.Template = (await FS.readFile(Path.resolve(documentRoot, Settings.Default.Template))).toString();
+            converter.Document.Template = (await FileSystem.readFile(Path.resolve(documentRoot, Settings.Default.Template))).toString();
         }
         else if (Settings.Default.SystemStylesEnabled)
         {
-            converter.Document.Template = (await FS.readFile(ResourceManager.Files.Get("SystemTemplate"))).toString();
+            converter.Document.Template = (await FileSystem.readFile(ResourceManager.Files.Get("SystemTemplate"))).toString();
         }
         
         if (Settings.Default.HighlightStyle === "None")
@@ -92,9 +92,9 @@ export default class Program
 
         for (let type of types)
         {
-            if (!FS.existsSync(outDir))
+            if (!FileSystem.existsSync(outDir))
             {
-                FS.mkdirpSync(outDir);
+                FileSystem.mkdirpSync(outDir);
             }
 
             try

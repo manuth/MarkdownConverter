@@ -1,33 +1,32 @@
-import * as Checkbox from "markdown-it-checkbox";
-import * as FS from "fs";
-import * as URL from "url";
-import * as Anchor from "markdown-it-anchor";
-import DateTimeFormatter from "../Globalization/DateTimeFormatter";
+import CultureInfo from "culture-info";
 import * as Dedent from "dedent";
-import StringUtils from "../Text/StringUtils";
 import * as FrontMatter from "front-matter";
-import Fullname from "../Fullname";
+import * as FileSystem from "fs-extra";
 import * as HighlightJs from "highlight.js";
-import * as OS from "os";
-import Paper from "./Paper";
-import * as Path from "path";
-import ListType from "./ListType";
 import * as MarkdownIt from "markdown-it";
+import * as Anchor from "markdown-it-anchor";
+import * as Checkbox from "markdown-it-checkbox";
 import * as MarkdownItEmoji from "markdown-it-emoji";
 import * as MarkdownItToc from "markdown-it-table-of-contents";
 import * as Mustache from "mustache";
-import TocSettings from "./TocSettings";
+import * as OS from "os";
+import * as Path from "path";
 import * as TwEmoji from "twemoji";
+import { TextDocument } from "vscode";
+import * as YAML from "yamljs";
+import ResourceManager from "../../Properties/ResourceManager";
+import Fullname from "../Fullname";
+import DateTimeFormatter from "../Globalization/DateTimeFormatter";
+import StringUtils from "../Text/StringUtils";
 import UnauthorizedAccessException from "../UnauthorizedAccessException";
 import YAMLException from "../YAML/YAMLException";
-import CultureInfo from "culture-info";
+import DocumentFragment from "./DocumentFragment";
 import EmojiType from "./EmojiType";
+import ListType from "./ListType";
+import Paper from "./Paper";
 import Renderable from "./Renderable";
 import Slugifier from "./Slugifier";
-import { TextDocument } from "vscode";
-import DocumentFragment from "./DocumentFragment";
-import ResourceManager from "../../Properties/ResourceManager";
-import * as YAML from "yamljs";
+import TocSettings from "./TocSettings";
 
 /**
  * Represents a document.
@@ -138,7 +137,7 @@ export default class Document extends Renderable
 
         if (!document.isUntitled)
         {
-            this.Attributes.CreationDate = FS.statSync(document.fileName).ctime;
+            this.Attributes.CreationDate = FileSystem.statSync(document.fileName).ctime;
         }
         else
         {
@@ -447,9 +446,9 @@ export default class Document extends Renderable
                 }
                 else
                 {
-                    if (FS.existsSync(styleSheet))
+                    if (FileSystem.existsSync(styleSheet))
                     {
-                        styleCode += FS.readFileSync(styleSheet).toString() + "\n";
+                        styleCode += FileSystem.readFileSync(styleSheet).toString() + "\n";
                     }
                 }
             }
