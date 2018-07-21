@@ -34,7 +34,12 @@
         "no-trailing-whitespace": false,
         "prefer-const": false,
         "object-literal-sort-keys": false,
-        "ordered-imports": true,
+        "ordered-imports": {
+            "options": {
+                "import-sources-order": "case-insensitive",
+                "named-imports-order": "case-insensitive"
+            }
+        },
         "max-line-length": false,
         "arrow-parens": false,
         "array-type": false,
