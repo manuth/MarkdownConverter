@@ -1,3 +1,5 @@
+import * as Format from "string-template";
+import ResourceManager from "../../Properties/ResourceManager";
 import IOException from "./IOException";
 
 /**
@@ -23,5 +25,10 @@ export default class FileException extends IOException
     {
         super(message);
         this.Path = path;
+    }
+
+    public get Message(): string
+    {
+        return Format(ResourceManager.Resources.Get("FileException"), this.Path);
     }
 }

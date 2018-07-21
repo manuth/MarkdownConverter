@@ -1,5 +1,5 @@
-import ListType from "./ListType";
 import { MultiRange } from "multi-integer-range";
+import ListType from "./ListType";
 
 /**
  * Provides basic definitions of a table of contents.
@@ -7,47 +7,42 @@ import { MultiRange } from "multi-integer-range";
 export default class TocSettings
 {
     /**
-     * A value indicating whether toc-generation is enabled.
-     */
-    private enabled: boolean = true;
-
-    /**
      * The class for the div containing the table of contents.
      */
-    private class: string = "toc";
+    private class: string;
 
     /**
      * Heading-levels which are to be include.
      */
-    private levels: number[] = [2, 3, 4, 5, 6];
+    private levels: MultiRange;
 
     /**
      * The RegExp that is to be replaced with the table of contents.
      */
-    private indicator: RegExp = /^\[\[\s*toc\s*\]\]/im;
+    private indicator: RegExp;
 
     /**
      * The list-type of the table of contents.
      */
-    private listType: ListType = ListType.ul;
+    private listType: ListType;
 
     /**
-     * Initializes a new instance of the TocSettings class.
+     * Initializes a new instance of the `TocSettingsClass`.
+     * 
+     * @param $class
+     * The css-class of the toc-container.
+     * 
+     * @param levels
+     * The levels to display inside the toc.
+     * 
+     * @param indicator
+     * A regexp which should be replaced by the toc inside the document.
      */
-    constructor()
+    public constructor($class: string, levels: MultiRange = new MultiRange([]), indicator: RegExp, listType: ListType = ListType.Unordered)
     {
-    }
-
-    /**
-     * Gets or sets a value indicating whether toc-generation is enabled.
-     */
-    public get Enabled(): boolean
-    {
-        return this.enabled;
-    }
-    public set Enabled(value: boolean)
-    {
-        this.enabled = value;
+        this.class = $class;
+        this.levels = levels;
+        this.indicator = indicator;
     }
 
     /**
@@ -65,25 +60,13 @@ export default class TocSettings
     /**
      * Gets or sets the heading-levels which are to be included.
      */
-    public get Levels(): number[]
+    public get Levels(): MultiRange
     {
         return this.levels;
     }
-    public set Levels(value: number[])
+    public set Levels(value: MultiRange)
     {
         this.levels = value;
-    }
-
-    /**
-     * Gets or sets the heading-levels which are to be included.
-     */
-    public get LevelRange(): string
-    {
-        return new MultiRange(this.levels).toString();
-    }
-    public set LevelRange(value: string)
-    {
-        this.levels = new MultiRange(value).toArray();
     }
 
     /**
@@ -108,16 +91,5 @@ export default class TocSettings
     public set ListType(value: ListType)
     {
         this.listType = value;
-    }
-
-    /**
-     * Returns a JSON-string which represents the object.
-     */
-    public toJSON(): string
-    {
-        return JSON.stringify({
-            Class: this.Class,
-            IncludeLevel: this.Levels
-        });
     }
 }

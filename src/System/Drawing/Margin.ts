@@ -6,22 +6,22 @@ export default class Margin
     /**
      * The top margin.
      */
-    private top: string = "1cm";
+    private top: string;
 
     /**
      * The right margin.
      */
-    private right: string = "1cm";
+    private right: string;
 
     /**
      * The bottom margin.
      */
-    private bottom: string = "1cm";
+    private bottom: string;
 
     /**
      * The left margin.
      */
-    private left: string = "1cm";
+    private left: string;
 
     /**
      * Initializes a new instance of the Margin class.
@@ -38,26 +38,29 @@ export default class Margin
      * @param left
      * The left margin.
      */
-    constructor(top?: string, right?: string, bottom?: string, left?: string)
+    constructor(all: string);
+    constructor(vertical: string, horizontal: string);
+    constructor(top: string, right: string, bottom: string, left: string);
+    constructor(top: string, right?: string, bottom?: string, left?: string)
     {
-        if (top)
-        {
-            this.Top = top;
-        }
+        this.top =
+        this.right =
+        this.bottom =
+        this.left = top;
 
         if (right)
         {
-            this.Right = right;
+            this.left = this.right = right;
         }
 
         if (bottom)
         {
-            this.Bottom = bottom;
+            this.bottom = bottom;
         }
 
         if (left)
         {
-            this.Left = left;
+            this.left = left;
         }
     }
 
@@ -107,18 +110,5 @@ export default class Margin
     public set Left(value: string)
     {
         this.left = value;
-    }
-
-    /**
-     * Returns a JSON-object which represents the object.
-     */
-    public toJSON(): object
-    {
-        return {
-            Top: this.Top,
-            Right: this.Right,
-            Bottom: this.Bottom,
-            Left: this.Left
-        };
     }
 }

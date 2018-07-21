@@ -2,7 +2,7 @@
   "name": "markdown-converter",
   "displayName": "Markdown Converter",
   "description": "Provides the functionallity to convert MarkDown-files to html, pdf or png.",
-  "version": "0.0.12",
+  "version": "1.0.0",
   "publisher": "manuth",
   "author": {
     "name": "Manuel Thalmann",
@@ -134,6 +134,11 @@
               "title": "%Config.Document.Attributes.Author%",
               "description": "%Config.Document.Attributes.Author.Description%",
               "type": "string"
+            },
+            "Company": {
+              "title": "%Config.Document.Attributes.Company%",
+              "description": "%Config.Document.Attributes.Company.Description%",
+              "type": "string"
             }
           }
         },
@@ -242,13 +247,13 @@
           "title": "%Config.Document.HeaderTemplate%",
           "description": "%Config.Document.HeaderTemplate.Description%",
           "type": "string",
-          "default": "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ Author }}</td><td style=\"text-align: right\"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></td></table>"
+          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">{{ Author }}</div><div style=\"text-align: center; \"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right\">{{ Company }}</div>"
         },
         "markdownConverter.Document.FooterTemplate": {
           "title": "%Config.Document.FooterTemplate%",
           "description": "%Config.Document.FooterTemplate.Description%",
           "type": "string",
-          "default": "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ CreationDate }}</td><td style=\"text-align: right\"></td></table>"
+          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \"></div><div stlyle=\"text-align: center; \">{{ CreationDate }}</div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right; \"></div>"
         },
         "markdownConverter.Document.Toc.Enabled": {
           "title": "%Config.Document.Toc.Enabled%",
@@ -279,10 +284,10 @@
           "title": "%Config.Document.Toc.ListType%",
           "description": "%Config.Document.Toc.ListType.Description%",
           "type": "string",
-          "default": "ul",
+          "default": "Unordered",
           "enum": [
-            "ol",
-            "ul"
+            "Ordered",
+            "Unordered"
           ]
         },
         "markdownConverter.Document.Design.Template": {
@@ -330,47 +335,54 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "lint": "tslint -p . -t verbose",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "@types/dedent": "^0.7.0",
+    "@types/fs-extra": "^5.0.3",
+    "@types/highlight.js": "^9.12.3",
+    "@types/http-server": "^0.10.0",
     "@types/markdown-it": "0.0.3",
     "@types/markdown-it-anchor": "^4.0.1",
-    "@types/mkdirp": "^0.5.1",
     "@types/mocha": "^2.2.42",
     "@types/mustache": "^0.8.31",
-    "@types/node": "^7.0.43",
-    "@types/npm": "^2.0.29",
+    "@types/node": "^10.5.1",
+    "@types/puppeteer": "^1.5.0",
+    "@types/request-promise-native": "^1.0.15",
     "@types/shelljs": "^0.7.4",
     "@types/string-template": "^1.0.2",
-    "@types/temp": "^0.8.29",
     "@types/transliteration": "^1.6.0",
+    "@types/yamljs": "^0.2.30",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2",
     "vscode": "^1.1.18"
   },
   "dependencies": {
+    "culture-info": "0.0.4",
+    "dedent": "^0.7.0",
     "front-matter": "^2.1.2",
+    "fs-extra": "^6.0.1",
+    "highlight.js": "^9.12.0",
     "highlightjs": "^9.10.0",
-    "i18n": "^0.8.3",
+    "http-server": "^0.11.1",
     "localizable-resources": "^1.0.6",
     "markdown-it": "^8.4.1",
     "markdown-it-anchor": "^5.0.2",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-emoji": "^1.3.0",
-    "markdown-it-table-of-contents": "^0.3.6",
-    "mkdirp": "^0.5.1",
+    "markdown-it-table-of-contents": "^0.4.0",
     "multi-integer-range": "^3.0.0",
     "mustache": "^2.3.0",
-    "npm": "^6.1.0",
-    "phantomjs-prebuilt": "^2.1.16",
+    "puppeteer": "^1.5.0",
     "rc": "^1.2.8",
-    "shelljs": "^0.7.7",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5",
+    "shelljs": "^0.8.2",
     "string-template": "^1.0.0",
-    "sync-request": "^4.0.3",
-    "temp": "^0.8.3",
     "transliteration": "^1.6.2",
     "twemoji": "^2.2.5",
-    "vscode-nls": "^2.0.2"
+    "yamljs": "^0.3.0"
   }
 }
