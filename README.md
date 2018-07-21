@@ -27,9 +27,5 @@ Provides the functionallity to convert MarkDown-files to html, png, or pdf using
  2. Open up the command pallet (<kbd>Ctrl</kbd>, <kbd>Shift</kbd>+<kbd>P</kbd>) and search for `Markdown: Convert` (`Markdown: Konvertieren` in German) or `mco` (`mk` in German) for short
  3. Press enter and wait for the process to finish
 
-# Known Issues
-  - Anchor-links are not working inside a PDF-document due to an issue of [Skia][AnchorIssue] (a graphics-engine maintained by google)
-
 <!--- References -->
 [VSCode]: https://code.visualstudio.com/
-[AnchorIssue]: https://bugs.chromium.org/p/skia/issues/detail?id=7532
