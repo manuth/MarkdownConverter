@@ -19,8 +19,9 @@ export default class Program
     /**
      * Converts a markdown-file to other file-types
      */
-    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string, fileName: string)
+    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string)
     {
+        let fileName = Path.parse(document.fileName).name;
         let converter = new Converter(documentRoot, new Document(document));
         converter.Document.Quality = Settings.Default.ConversionQuality;
         converter.Document.EmojiType = Settings.Default.EmojiType;
