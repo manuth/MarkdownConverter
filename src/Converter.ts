@@ -92,7 +92,7 @@ export default class Converter
                         page.on("request", nextRequest => nextRequest.continue());
                     });
 
-                let url = this.Document.FileName !== null ? Path.relative(this.DocumentRoot, this.Document.FileName) : "";
+                let url = this.Document.FileName ? Path.relative(this.DocumentRoot, this.Document.FileName) : "";
                 await page.goto(URL.resolve("http://localhost:8980/", url));
 
                 switch (conversionType)

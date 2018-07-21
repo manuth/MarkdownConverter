@@ -132,15 +132,16 @@ export default class Document extends Renderable
     constructor(document: TextDocument)
     {
         super();
-        this.FileName = document.fileName;
         this.RawContent = document.getText();
 
         if (!document.isUntitled)
         {
+            this.FileName = document.fileName;
             this.Attributes.CreationDate = FileSystem.statSync(document.fileName).ctime;
         }
         else
         {
+            this.FileName = null;
             this.Attributes.CreationDate = new Date(Date.now());
         }
     }
