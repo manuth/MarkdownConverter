@@ -4,6 +4,12 @@
     "FileException": "Auf die Datei \"{0}\" konnte nicht zugegriffen werden.",
     "MarkdownFileException": "Es konnte keine Markdown-Datei gefunden werden.",
     "YAMLException": "Fehler: Der YAML-Block ist nicht richtig formatiert. Zeile {0}, Spalte {1}.",
+    "UpdateMessage": "Bevor Sie mit MarkdownConverter durchstarten können, muss Chromium gedownloadet werden.\nWollen Sie den Download starten?",
+    "Yes": "Ja",
+    "No": "Nein",
+    "UpdateRunning": "Chromium Version {0} wird heruntergeladen… Bitte warten…",
+    "UpdateSuccess": "Download abgeschlossen!\nSie sind nun bereit, um MarkdownConverter nutzen zu können!",
+    "UpdateFailed": "Der download ist fehlgeschlagen.\nMöglicherweise hilft es, \"http.proxy\" oder \"http.proxyStrictSSL\" zu deklarieren, falls Sie eine Proxy nutzen.\nWollen Sie den Download erneut starten?",
     "DateTime": {
         "Formats": {
             "Default": "dd.MM.yyyy"
