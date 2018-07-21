@@ -1,4 +1,8 @@
+import * as OS from "os";
+import * as Format from "string-template";
+import ResourceManager from "../../Properties/ResourceManager";
 import Exception from "../Exception";
+import IMark from "./Mark";
 
 /**
  * Represents a YAML-exception.
@@ -13,7 +17,7 @@ export default class YAMLException extends Exception
     /**
      * The mark of the exception.
      */
-    private mark: { name: string, buffer: string, position: number, line: number, column: number };
+    private mark: IMark;
 
     /**
      * Initializes a new instance of the YAMLException class.
@@ -47,7 +51,6 @@ export default class YAMLException extends Exception
             this.name = exception.name;
             this.reason = exception.reason;
             this.mark = exception.mark;
-            this.message = exception.message;
         }
         else
         {
@@ -66,10 +69,15 @@ export default class YAMLException extends Exception
         return this.name;
     }
 
+    public get Message(): string
+    {
+        return Format(ResourceManager.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
+    }
+
     /**
      * Gets the mark of the exception.
      */
-    public get Mark(): { name: string, buffer: string, position: number, line: number, column: number }
+    public get Mark(): IMark
     {
         return this.mark;
     }

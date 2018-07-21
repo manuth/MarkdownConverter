@@ -17,8 +17,8 @@ import * as YAML from "yamljs";
 import ResourceManager from "../../Properties/ResourceManager";
 import Fullname from "../Fullname";
 import DateTimeFormatter from "../Globalization/DateTimeFormatter";
+import FileException from "../IO/FileException";
 import StringUtils from "../Text/StringUtils";
-import UnauthorizedAccessException from "../UnauthorizedAccessException";
 import YAMLException from "../YAML/YAMLException";
 import DocumentFragment from "./DocumentFragment";
 import EmojiType from "./EmojiType";
@@ -173,9 +173,16 @@ export default class Document extends Renderable
 
     public set RawContent(value: string)
     {
-        let result = FrontMatter(value);
-        Object.assign(this.Attributes, result.attributes);
-        this.Content = result.body;
+        try
+        {
+            let result = FrontMatter(value);
+            Object.assign(this.Attributes, result.attributes);
+            this.Content = result.body;
+        }
+        catch (exception)
+        {
+            throw new YAMLException(exception);
+        }
     }
 
     /**
@@ -432,50 +439,38 @@ export default class Document extends Renderable
      */
     public async Render(): Promise<string>
     {
-        try
-        {
-            let styleCode = "<style>\n";
+        let styleCode = "<style>\n";
 
-            for (let styleSheet of this.StyleSheets)
+        for (let styleSheet of this.StyleSheets)
+        {
+            if (/.*:\/\//g.test(styleSheet) || !Path.isAbsolute(styleSheet))
             {
-                if (/.*:\/\//g.test(styleSheet) || !Path.isAbsolute(styleSheet))
+                styleCode += Dedent(`
+                    </style>
+                    <link rel="stylesheet" type="text/css" href="/${styleSheet}" />
+                    <style>`);
+            }
+            else
+            {
+                if (await FileSystem.pathExists(styleSheet))
                 {
-                    styleCode += Dedent(`
-                        </style>
-                        <link rel="stylesheet" type="text/css" href="/${styleSheet}" />
-                        <style>`);
+                    styleCode += (await FileSystem.readFile(styleSheet)).toString() + "\n";
                 }
                 else
                 {
-                    if (await FileSystem.pathExists(styleSheet))
-                    {
-                        styleCode += (await FileSystem.readFile(styleSheet)).toString() + "\n";
-                    }
-                    else
-                    {
-                        throw new FileException(null, styleSheet);
-                    }
+                    throw new FileException(null, styleSheet);
                 }
             }
-
-            styleCode += "</style>";
-            let content = this.Content;
-
-            let view = {
-                styles: styleCode,
-                content: await this.RenderText(content)
-            };
-
-            return Mustache.render(this.Template, view);
         }
-        catch (e)
-        {
-            if ("path" in e)
-            {
-                throw new UnauthorizedAccessException(e.path);
-            }
 
-            throw e;
-        }
+        styleCode += "</style>";
+        let content = this.Content;
+
+        let view = {
+            styles: styleCode,
+            content: await this.RenderText(content)
+        };
+
+        return Mustache.render(this.Template, view);
     }
 }
