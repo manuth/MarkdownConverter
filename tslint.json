@@ -1,5 +1,5 @@
 {
-    "defaultSeverity": "error",
+    "defaultSeverity": "warning",
     "extends": [
         "tslint:recommended"
     ],
@@ -34,7 +34,7 @@
         "no-trailing-whitespace": false,
         "prefer-const": false,
         "object-literal-sort-keys": false,
-        "ordered-imports": false,
+        "ordered-imports": true,
         "max-line-length": false,
         "arrow-parens": false,
         "array-type": false,
