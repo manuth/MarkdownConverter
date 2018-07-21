@@ -449,7 +449,11 @@ export default class Document extends Renderable
                 {
                     if (await FileSystem.pathExists(styleSheet))
                     {
-                        styleCode += await FileSystem.readFile(styleSheet).toString() + "\n";
+                        styleCode += (await FileSystem.readFile(styleSheet)).toString() + "\n";
+                    }
+                    else
+                    {
+                        throw new FileException(null, styleSheet);
                     }
                 }
             }
