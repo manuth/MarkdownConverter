@@ -72,7 +72,7 @@ export default class Program
             converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultStyle"));
             converter.Document.StyleSheets.push(ResourceManager.Files.Get("EmojiStyle"));
         }
-        
+
         if (Settings.Default.HighlightStyle === "None")
         {
             converter.Document.HighlightEnabled = false;
@@ -101,12 +101,15 @@ export default class Program
             converter.Document.StyleSheets.push(styleSheet);
         }
 
+        let prompts = [];
+
+        if (!await FileSystem.pathExists(outDir))
+        {
+            await FileSystem.mkdirp(outDir);
+        }
+
         for (let type of types)
         {
-            if (!await FileSystem.pathExists(outDir))
-            {
-                await FileSystem.mkdirp(outDir);
-            }
 
             let extension: string;
 
@@ -129,30 +132,36 @@ export default class Program
 
             let destination = Path.join(outDir, fileName + "." + extension);
             await converter.Start(type, destination);
-            window.showInformationMessage(
-                Format(ResourceManager.Resources.Get("SuccessMessage"), ConversionType[type], destination),
-                ResourceManager.Resources.Get("OpenFileLabel")).then(
-                    (label) =>
-                    {
-                        if (label === ResourceManager.Resources.Get("OpenFileLabel"))
+
+            prompts.push((async () =>
+            {
+                await window.showInformationMessage(
+                    Format(ResourceManager.Resources.Get("SuccessMessage"), ConversionType[type], destination),
+                    ResourceManager.Resources.Get("OpenFileLabel")).then(
+                        (label) =>
                         {
-                            switch (process.platform)
+                            if (label === ResourceManager.Resources.Get("OpenFileLabel"))
                             {
-                                case "win32":
-                                    ChildProcess.exec(Format('"{0}"', destination));
-                                    break;
-                                case "darwin":
-                                    ChildProcess.exec(Format('bash -c \'open "{0}"\'', destination));
-                                    break;
-                                case "linux":
-                                    ChildProcess.exec(Format('bash -c \'xdg-open "{0}"\'', destination));
-                                    break;
-                                default:
-                                    window.showWarningMessage(ResourceManager.Resources.Get("UnsupportetPlatformException"));
-                                    break;
+                                switch (process.platform)
+                                {
+                                    case "win32":
+                                        ChildProcess.exec(Format('"{0}"', destination));
+                                        break;
+                                    case "darwin":
+                                        ChildProcess.exec(Format('bash -c \'open "{0}"\'', destination));
+                                        break;
+                                    case "linux":
+                                        ChildProcess.exec(Format('bash -c \'xdg-open "{0}"\'', destination));
+                                        break;
+                                    default:
+                                        window.showWarningMessage(ResourceManager.Resources.Get("UnsupportetPlatformException"));
+                                        break;
+                                }
                             }
-                        }
-                    });
+                        });
+            })());
         }
+
+        await Promise.all(prompts);
     }
 }
