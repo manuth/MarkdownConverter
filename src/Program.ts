@@ -19,15 +19,9 @@ export default class Program
     /**
      * Converts a markdown-file to other file-types
      */
-    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string, fileName: string): Promise<void>
+    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string, fileName: string)
     {
         let converter = new Converter(documentRoot, new Document(document));
-
-        if (!document.isUntitled)
-        {
-            converter.Document.FileName = document.fileName;
-        }
-        
         converter.Document.Quality = Settings.Default.ConversionQuality;
         converter.Document.EmojiType = Settings.Default.EmojiType;
 
@@ -55,6 +49,12 @@ export default class Program
         {
             converter.Document.Template = (await FileSystem.readFile(ResourceManager.Files.Get("SystemTemplate"))).toString();
         }
+
+        if (Settings.Default.SystemStylesEnabled)
+        {
+            converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultStyle"));
+            converter.Document.StyleSheets.push(ResourceManager.Files.Get("EmojiStyle"));
+        }
         
         if (Settings.Default.HighlightStyle === "None")
         {
@@ -72,12 +72,6 @@ export default class Program
             {
                 converter.Document.StyleSheets.push(Path.join(ResourceManager.Files.Get("HighlightJSStylesDir"), Settings.Default.HighlightStyle + ".css"));
             }
-        }
-
-        if (Settings.Default.SystemStylesEnabled)
-        {
-            converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultStyle"));
-            converter.Document.StyleSheets.push(ResourceManager.Files.Get("EmojiStyle"));
         }
 
         for (let styleSheet of Settings.Default.StyleSheets)
