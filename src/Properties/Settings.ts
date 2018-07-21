@@ -78,7 +78,7 @@ export default class Settings
      */
     public get Locale(): string
     {
-        return this.getConfigEntry("Locale", VSCode.env.language);
+        return this.getConfigEntry("Locale") || VSCode.env.language;
     }
 
     /**
