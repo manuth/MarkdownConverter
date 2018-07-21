@@ -41,7 +41,7 @@ export function activate(context: VSCode.ExtensionContext)
                     let workspace = (VSCode.workspace.workspaceFolders || []).find(
                         (workspaceFolder) => {
                             let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
-                            let documentParts = document.uri.fragment.split(Path.sep);
+                            let documentParts = document.uri.fsPath.split(Path.sep);
 
                             return workspaceParts.every(
                                 (value, index) =>
