@@ -446,9 +446,9 @@ export default class Document extends Renderable
                 }
                 else
                 {
-                    if (FileSystem.existsSync(styleSheet))
+                    if (await FileSystem.pathExists(styleSheet))
                     {
-                        styleCode += FileSystem.readFileSync(styleSheet).toString() + "\n";
+                        styleCode += await FileSystem.readFile(styleSheet).toString() + "\n";
                     }
                 }
             }
