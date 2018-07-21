@@ -1,7 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import CultureInfo from "culture-info";
+import * as FileSystem from "fs-extra";
 import * as Path from "path";
+import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
 import * as VSCode from "vscode";
 import Program from "./Program";
@@ -12,7 +14,7 @@ import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundExceptio
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: VSCode.ExtensionContext)
+export async function activate(context: VSCode.ExtensionContext)
 {
     ResourceManager.Culture = new CultureInfo(VSCode.env.language);
 
@@ -26,60 +28,117 @@ export function activate(context: VSCode.ExtensionContext)
     let disposables = [
         VSCode.commands.registerCommand("markdownConverter.Convert", async () =>
         {
-            try
+            if (await FileSystem.pathExists(Puppeteer.executablePath()))
             {
-                let document = getMarkdownDoc();
-
-                /* Preparing the arguments */
-                let documentRoot: string;
-                let outDir = Settings.Default.OutputDirectory;
-
-                let workspace = (VSCode.workspace.workspaceFolders || []).find(
-                    (workspaceFolder) => {
-                        let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
-                        let documentParts = document.uri.fsPath.split(Path.sep);
-
-                        return workspaceParts.every(
-                            (value, index) =>
-                            {
-                                return value === documentParts[index];
-                            });
-                    });
-                
-                if (workspace)
+                try
                 {
-                    documentRoot = workspace.uri.fsPath;
+                    let document = getMarkdownDoc();
+    
+                    /* Preparing the arguments */
+                    let documentRoot: string;
+                    let outDir = Settings.Default.OutputDirectory;
+    
+                    let workspace = (VSCode.workspace.workspaceFolders || []).find(
+                        (workspaceFolder) => {
+                            let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
+                            let documentParts = document.uri.fsPath.split(Path.sep);
+    
+                            return workspaceParts.every(
+                                (value, index) =>
+                                {
+                                    return value === documentParts[index];
+                                });
+                        });
+                    
+                    if (workspace)
+                    {
+                        documentRoot = workspace.uri.fsPath;
+                    }
+                    else if (!document.isUntitled)
+                    {
+                        documentRoot = Path.dirname(document.fileName);
+                    }
+                    else
+                    {
+                        documentRoot = process.cwd();
+                    }
+    
+                    if (!Path.isAbsolute(outDir))
+                    {
+                        outDir = Path.resolve(documentRoot, outDir);
+                    }
+                    
+                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir);
                 }
-                else if (!document.isUntitled)
+                catch (e)
                 {
-                    documentRoot = Path.dirname(document.fileName);
+                    let message;
+                    
+                    if (e instanceof Exception)
+                    {
+                        message = e.Message;
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+    
+                    VSCode.window.showErrorMessage(message);
                 }
-                else
-                {
-                    documentRoot = process.cwd();
-                }
-
-                if (!Path.isAbsolute(outDir))
-                {
-                    outDir = Path.resolve(documentRoot, outDir);
-                }
-                
-                await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir);
             }
-            catch (e)
+            else if (
+                await VSCode.window.showInformationMessage(
+                    ResourceManager.Resources.Get("UpdateMessage"),
+                    ResourceManager.Resources.Get<string>("Yes"),
+                    ResourceManager.Resources.Get<string>("No")) === ResourceManager.Resources.Get("Yes"))
             {
-                let message;
-                
-                if (e instanceof Exception)
-                {
-                    message = e.Message;
-                }
-                else
-                {
-                    throw e;
-                }
+                let revision = require(Path.join("..", "node_modules", "puppeteer", "package.json")).puppeteer.chromium_revision;
+                let promptRetry;
 
-                VSCode.window.showErrorMessage(message);
+                do
+                {
+                    promptRetry = false;
+
+                    await VSCode.window.withProgress(
+                        {
+                            location: VSCode.ProgressLocation.Notification,
+                            title: Format(ResourceManager.Resources.Get("UpdateRunning"), revision)
+                        }, async (reporter) => {
+                            try
+                            {
+                                let progress = 0;
+                                let browserFetcher = (Puppeteer as any).createBrowserFetcher();
+                                await browserFetcher.download(
+                                    revision,
+                                    (downloadedBytes, totalBytes) =>
+                                    {
+                                        let newProgress = Math.floor((downloadedBytes / totalBytes) * 100);
+            
+                                        if (newProgress > progress)
+                                        {
+                                            reporter.report({
+                                                increment: newProgress - progress
+                                            });
+            
+                                            progress = newProgress;
+                                        }
+                                    });
+
+                                VSCode.window.showInformationMessage(ResourceManager.Resources.Get("UpdateSuccess"));
+                            }
+                            catch
+                            {
+                                promptRetry = true;
+                            }
+                        });
+                }
+                while (
+                    !await FileSystem.pathExists(Puppeteer.executablePath()) &&
+                    promptRetry &&
+                    await VSCode.window.showWarningMessage(
+                        ResourceManager.Resources.Get("UpdateFailed"),
+                        ResourceManager.Resources.Get("Yes"),
+                        ResourceManager.Resources.Get("No")) === ResourceManager.Resources.Get("Yes"));
             }
         })
     ];

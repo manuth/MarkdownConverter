@@ -5,6 +5,12 @@
     "FileException": "Couldn't access \"{0}\".",
     "MarkdownFileException": "Couldn't find a markdown-file.",
     "YAMLException": "The YAML-block is malformatted. Line {0}, column {1}.",
+    "UpdateMessage": "Before you can get started with MarkdownConverter you need to download chromium.\nDo you want to do this now?",
+    "Yes": "Yes",
+    "No": "No",
+    "UpdateRunning": "Downloading Chromium revision {0}… Please wait…",
+    "UpdateSuccess": "The download was successful!\nYou are ready to use MarkdownConverter now!",
+    "UpdateFailed": "The download failed.\nYou may want to declare \"http.proxy\" or \"http.proxyStrictSSL\" if you're using a proxy.\nDo you want to retry the download?",
     "DateTime": {
         "Formats": {
             "Default": "yyyy-MM-dd",
