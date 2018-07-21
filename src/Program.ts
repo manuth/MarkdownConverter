@@ -86,9 +86,9 @@ export default class Program
 
         for (let type of types)
         {
-            if (!FileSystem.existsSync(outDir))
+            if (!await FileSystem.pathExists(outDir))
             {
-                FileSystem.mkdirpSync(outDir);
+                await FileSystem.mkdirp(outDir);
             }
 
             try

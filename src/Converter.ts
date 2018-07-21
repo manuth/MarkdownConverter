@@ -1,4 +1,4 @@
-import * as FS from "fs";
+import * as FS from "fs-extra";
 import * as http from "http";
 import * as Server from "http-server";
 import * as Path from "path";
@@ -153,7 +153,7 @@ export default class Converter
         }
         else
         {
-            FS.writeFileSync(path, htmlCode);
+            await FS.writeFile(path, htmlCode);
         }
     }
 }
