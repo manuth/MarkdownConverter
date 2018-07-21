@@ -1,16 +1,14 @@
 import * as VSCode from "vscode";
-import ConversionType from "../ConversionType";
-import KeyNotFoundException from "../System/KeyNotFoundException";
-import Paper from "../System/Drawing/Paper";
-import ListType from "../System/Drawing/ListType";
-import Margin from "../System/Drawing/Margin";
-import TocSettings from "../System/Drawing/TocSettings";
-import EmojiType from "../System/Drawing/EmojiType";
-import CustomPaperFormat from "../System/Drawing/CustomPaperFormat";
-import StandardizedPaperFormat from "../System/Drawing/StandardizedPaperFormat";
-import StandardizedFormatType from "../System/Drawing/StandardizedFormatType";
-import PaperOrientation from "../System/Drawing/PaperOrientation";
 import { MultiRange } from "../../node_modules/multi-integer-range";
+import ConversionType from "../ConversionType";
+import CustomPaperFormat from "../System/Drawing/CustomPaperFormat";
+import EmojiType from "../System/Drawing/EmojiType";
+import ListType from "../System/Drawing/ListType";
+import Paper from "../System/Drawing/Paper";
+import PaperOrientation from "../System/Drawing/PaperOrientation";
+import StandardizedFormatType from "../System/Drawing/StandardizedFormatType";
+import StandardizedPaperFormat from "../System/Drawing/StandardizedPaperFormat";
+import TocSettings from "../System/Drawing/TocSettings";
 
 /**
  * Provides access to settings.
@@ -250,7 +248,7 @@ export default class Settings
             }
             else
             {
-                throw new KeyNotFoundException();
+                throw new RangeError();
             }
         }
     }

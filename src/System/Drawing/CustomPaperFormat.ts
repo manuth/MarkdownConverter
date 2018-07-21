@@ -1,5 +1,5 @@
-import PaperFormat from "./PaperFormat";
 import { PDFOptions } from "puppeteer";
+import PaperFormat from "./PaperFormat";
 
 /**
  * Represents a custom paper-format.
