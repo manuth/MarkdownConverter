@@ -2,6 +2,7 @@
 .vscode-test/**
 lib/tests/**
 lib/**/*.map
+node_modules/puppeteer/.local-chromium/**
 src/**
 .gitignore
 tsconfig.json

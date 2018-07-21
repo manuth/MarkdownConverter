@@ -1,5 +1,5 @@
 {
-    "defaultSeverity": "error",
+    "defaultSeverity": "warning",
     "extends": [
         "tslint:recommended"
     ],
@@ -34,7 +34,12 @@
         "no-trailing-whitespace": false,
         "prefer-const": false,
         "object-literal-sort-keys": false,
-        "ordered-imports": false,
+        "ordered-imports": {
+            "options": {
+                "import-sources-order": "case-insensitive",
+                "named-imports-order": "case-insensitive"
+            }
+        },
         "max-line-length": false,
         "arrow-parens": false,
         "array-type": false,
@@ -42,9 +47,6 @@
         "no-bitwise": false,
         "no-console": false,
         "no-string-literal": false,
-        "no-unused-variable": {
-            "severity": "warning"
-        },
         "no-unused-expression": {
             "severity": "warning"
         },

@@ -1,40 +1,42 @@
-import * as Checkbox from "markdown-it-checkbox";
-import * as FS from "fs";
-import * as Path from "path";
-import * as URL from "url";
-import * as VSCode from "vscode";
-import * as Anchor from "markdown-it-anchor";
-import DateTimeFormatter from "../Globalization/DateTimeFormatter";
-import Encoding from "../Text/Encoding";
+import CultureInfo from "culture-info";
+import * as Dedent from "dedent";
 import * as FrontMatter from "front-matter";
-import Fullname from "../Fullname";
-import * as HighlightJs from "highlightjs";
-import Paper from "./Paper";
-import ListType from "./ListType";
-import Margin from "./Margin";
+import * as FileSystem from "fs-extra";
+import * as HighlightJs from "highlight.js";
 import * as MarkdownIt from "markdown-it";
+import * as Anchor from "markdown-it-anchor";
+import * as Checkbox from "markdown-it-checkbox";
 import * as MarkdownItEmoji from "markdown-it-emoji";
 import * as MarkdownItToc from "markdown-it-table-of-contents";
-import { MultiRange } from "multi-integer-range";
 import * as Mustache from "mustache";
-import * as Request from "sync-request";
-import Settings from "../../Properties/Settings";
-import TocSettings from "./TOCSettings";
-import * as Transliteration from "transliteration";
+import * as OS from "os";
+import * as Path from "path";
 import * as TwEmoji from "twemoji";
-import UnauthorizedAccessException from "../UnauthorizedAccessException";
+import { TextDocument } from "vscode";
+import * as YAML from "yamljs";
+import ResourceManager from "../../Properties/ResourceManager";
+import Fullname from "../Fullname";
+import DateTimeFormatter from "../Globalization/DateTimeFormatter";
+import FileException from "../IO/FileException";
+import StringUtils from "../Text/StringUtils";
 import YAMLException from "../YAML/YAMLException";
-import CultureInfo from "culture-info";
+import DocumentFragment from "./DocumentFragment";
+import EmojiType from "./EmojiType";
+import ListType from "./ListType";
+import Paper from "./Paper";
+import Renderable from "./Renderable";
+import Slugifier from "./Slugifier";
+import TocSettings from "./TocSettings";
 
 /**
  * Represents a document.
  */
-export default class Document
+export default class Document extends Renderable
 {
     /**
-     * Contains all processed slugs and the count of them.
+     * The name of the file represented by this document.
      */
-    private slugs: { [key: string]: number } = {};
+    public fileName: string;
 
     /**
      * The quality of the document.
@@ -42,34 +44,27 @@ export default class Document
     private quality: number = 90;
 
     /**
-     * The name of the document.
+     * The type of emojis to use.
      */
-    private name: string = null;
-
-    /**
-     * A value indicating whether emojis should be used.
-     */
-    private emoji: string | boolean = "github";
+    private emojiType: EmojiType = EmojiType.GitHub;
 
     /**
      * The attributes of the document.
      */
     private attributes: any = {
         Author: Fullname.FullName,
-        CreationDate: new Date(),
-        PageNumber: "{{ PageNumber }}", // {{ PageNumber }} will be replaced in the Phantom-Script (see "Phantom/PDFGenerator.ts": ReplacePageNumbers)
-        PageCount: "{{ PageCount }}"    // {{ PageCount }}  will be replaced in the Phantom-Script (see "PDFGenerator.ts": ReplacePageNumbers)
+        CreationDate: new Date()
     };
 
     /**
      * The format to print the date.
      */
-    private dateFormat: string = "default";
+    private dateFormat: string = "Default";
 
     /**
      * The language to print values.
      */
-    private locale: CultureInfo;
+    private locale: CultureInfo = CultureInfo.InvariantCulture;
 
     /**
      * The layout of the document.
@@ -77,78 +72,116 @@ export default class Document
     private paper: Paper = new Paper();
 
     /**
+     * A value indicating whether headers and footers are enabled.
+     */
+    private headerFooterEnabled: boolean = false;
+
+    /**
      * The header of the document.
      */
-    private header: string = "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \">{{ Author }}</td><td style=\"text-align: center\">{{ PageNumber }}/{{ PageCount }}</td><td style=\"text-align: right\">{{ Company.Name }}</td></table>";
+    private header: DocumentFragment = new DocumentFragment(this);
 
     /**
      * The footer of the document.
      */
-    private footer: string = "<table style=\"width: 100%; table-layout: fixed; \"><td style=\"text-align: left; \"></td><td style=\"text-align: center\">{{ CreationDate }}</td><td style=\"text-align: right\"></td></table>";
+    private footer: DocumentFragment = new DocumentFragment(this);
 
     /**
      * The definitions of the table of contents.
      */
-    private tocSettings: TocSettings = new TocSettings();
+    private tocSettings: TocSettings = null;
 
     /**
      * The template to use for the RenderBody-process.
      */
-    private template: string = Path.join(__dirname, "..", "..", "..", "Resources", "Template.html");
+    private template: string = Dedent(`
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+                {{{styles}}}
+            </head>
+            <body>
+                <article class="markdown-body">
+                    {{{content}}}
+                </article>
+            </body>
+        </html>`);
 
     /**
-     * The highlight-style of the document.
+     * A value indicating whether fancy code-blocks are enabled.
      */
-    private highlightStyle: string = "Default";
-
-    /**
-     * A value indicating whether system-provided stylesheets are enabled. 
-     */
-    private systemStylesEnabled: boolean = true;
+    private highlightEnabled: boolean = true;
 
     /**
      * The stylesheets of the document.
      */
-    private styleSheets: string[] = [];
-
-    /**
-     * The content of the document.
-     */
-    private content: string = "";
+    private styleSheets: string[] = [
+        ResourceManager.Files.Get("SystemStyle")
+    ];
 
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
      * 
-     * @param filePath
-     * The path to the file to load the content from.
+     * @param document
+     * The `TextDocument` to load the info from.
      * 
      * @param config
      * The configuration to set.
      */
-    constructor(filePath: string = null)
+    constructor(document: TextDocument)
     {
-        this.LoadSettings();
+        super();
+        this.RawContent = document.getText();
 
-        if (filePath)
+        if (!document.isUntitled)
         {
-            try
-            {
-                this.Content = FS.readFileSync(filePath, "utf-8");
-            }
-            catch (e)
-            {
-                if (e instanceof Error)
-                {
-                    if (e.name === "YAMLException")
-                    {
-                        throw new YAMLException(e);
-                    }
-                    else if ("path" in e)
-                    {
-                        throw new UnauthorizedAccessException((e as any).path as string);
-                    }
-                }
-            }
+            this.FileName = document.fileName;
+            this.Attributes.CreationDate = FileSystem.statSync(document.fileName).ctime;
+        }
+        else
+        {
+            this.FileName = null;
+            this.Attributes.CreationDate = new Date(Date.now());
+        }
+    }
+
+    /**
+     * Gets or sets the name of the file represented by this document.
+     */
+    public get FileName(): string
+    {
+        return this.fileName;
+    }
+
+    public set FileName(value: string)
+    {
+        this.fileName = value;
+    }
+
+    /**
+     * Gets or sets the raw version of the content.
+     */
+    public get RawContent(): string
+    {
+        return (
+            "---" + OS.EOL +
+            YAML.stringify(this.Attributes).trim() + OS.EOL +
+            "---" + OS.EOL +
+            this.Content);
+    }
+
+    public set RawContent(value: string)
+    {
+        try
+        {
+            let result = FrontMatter(value);
+            Object.assign(this.Attributes, result.attributes);
+            this.Content = result.body;
+        }
+        catch (exception)
+        {
+            throw new YAMLException(exception);
         }
     }
 
@@ -165,27 +198,15 @@ export default class Document
     }
 
     /**
-     * Gets or sets the name of the document.
+     * Gets or sets the type of emojis to use.
      */
-    public get Name(): string
+    public get EmojiType(): EmojiType
     {
-        return this.name;
+        return this.emojiType;
     }
-    public set Name(value: string)
+    public set EmojiType(value: EmojiType)
     {
-        this.name = value;
-    }
-
-    /**
-     * Gets or sets a value indicating whether emojis should be used.
-     */
-    public get Emoji(): string | boolean
-    {
-        return this.emoji;
-    }
-    public set Emoji(value: string | boolean)
-    {
-        this.emoji = value;
+        this.emojiType = value;
     }
 
     /**
@@ -238,27 +259,31 @@ export default class Document
     }
 
     /**
+     * Gets or sets a value indicating whether headers and footers are enabled.
+     */
+    public get HeaderFooterEnabled(): boolean
+    {
+        return this.headerFooterEnabled;
+    }
+    public set HeaderFooterEnabled(value: boolean)
+    {
+        this.headerFooterEnabled = value;
+    }
+
+    /**
      * Gets or sets the header of the document.
      */
-    public get HeaderTemplate(): string
+    public get Header(): DocumentFragment
     {
         return this.header;
-    }
-    public set HeaderTemplate(value: string)
-    {
-        this.header = value;
     }
 
     /**
      * Gets or sets the footer of the document.
      */
-    public get FooterTemplate(): string
+    public get Footer(): DocumentFragment
     {
         return this.footer;
-    }
-    public set FooterTemplate(value: string)
-    {
-        this.footer = value;
     }
 
     /**
@@ -286,27 +311,15 @@ export default class Document
     }
 
     /**
-     * Gets or sets the highlight-style of the document.
+     * Gets or sets a value indicating whether fancy code-blocks are enabled.
      */
-    public get HighlightStyle(): string
+    public get HighlightEnabled(): boolean
     {
-        return this.highlightStyle;
+        return this.highlightEnabled;
     }
-    public set HighlightStyle(value: string)
+    public set HighlightEnabled(value: boolean)
     {
-        this.highlightStyle = value;
-    }
-
-    /**
-     * Gets or sets a value indicating whether system-provided stylesheets are enabled.
-     */
-    public get SystemStylesEnabled(): boolean
-    {
-        return this.systemStylesEnabled;
-    }
-    public set SystemStylesEnabled(value: boolean)
-    {
-        this.systemStylesEnabled = value;
+        this.highlightEnabled = value;
     }
 
     /**
@@ -322,64 +335,19 @@ export default class Document
     }
 
     /**
-     * Gets or sets the content of the document.
-     */
-    public get Content(): string
-    {
-        return this.content;
-    }
-    public set Content(value: string)
-    {
-        let content = FrontMatter(value);
-        for (let key in content.attributes)
-        {
-            this.Attributes[key] = content.attributes[key];
-        }
-        this.content = content.body;
-    }
-
-    /**
-     * Returns a JSON-string which represents the document.
-     */
-    public toJSON(): string
-    {
-        let document: any = {
-            Quality: this.Quality,
-            Locale: this.Locale,
-            Layout: this.Paper.toJSON(),
-            HeaderFooterEnabled: Settings.Default.HeaderFooterEnabled,
-            Header: this.Render(this.HeaderTemplate),
-            Content: this.RenderBody(),
-            Footer: this.Render(this.FooterTemplate)
-        };
-
-        return JSON.stringify(document);
-    }
-
-    /**
-     * Gets the HTML-code which represents the content of the document.
-     */
-    public get HTML(): string
-    {
-        return this.RenderBody();
-    }
-
-    /**
      * Renders content of the document.
      * 
      * @param content
      * The content which is to be rendered.
      */
-    private Render(content: string): string
+    protected async RenderText(content: string): Promise<string>
     {
-        let highlightStyle = this.HighlightStyle;
-
         // Preparing markdown-it
         let md = new MarkdownIt({
             html: true,
-            highlight(subject, language)
+            highlight: (subject, language) =>
             {
-                if ((highlightStyle !== "None") && language && HighlightJs.getLanguage(language))
+                if (this.HighlightEnabled)
                 {
                     subject = HighlightJs.highlight(language, subject, true).value;
                 }
@@ -391,62 +359,57 @@ export default class Document
                 return '<pre class="hljs"><code><div>' + subject + "</div></code></pre>";
             }
         });
+
         md.validateLink = () =>
         {
             return true;
         };
-        md.use(Anchor, {
-            slugify: (heading) =>
-            {
-                let slug = Transliteration.slugify(heading, {lowercase: true, separator: "-", ignore: []});
-                if (this.slugs[slug])
-                {
-                    slug += "-" + (this.slugs[slug] + 1);
-                    this.slugs[slug]++;
-                }
-                else
-                {
-                    this.slugs[slug] = 0;
-                }
 
-                return slug;
-            }
-        });
-        md.use(Checkbox);
-
-        if (this.TocSettings.Enabled)
         {
-            md.use(MarkdownItToc, {
-                includeLevel: new MultiRange(this.TocSettings.Levels).toArray(),
-                containerClass: this.TocSettings.Class,
-                markerPattern: this.TocSettings.Indicator,
-                listType: ListType[this.TocSettings.ListType]
+            let slugifier = new Slugifier();
+
+            Anchor(md, {
+                slugify: heading => slugifier.CreateSlug(heading)
             });
         }
 
-        if (this.emoji)
+        md.use(Checkbox);
+
+        if (this.TocSettings)
+        {
+            let slugifier = new Slugifier();
+
+            md.use(MarkdownItToc, {
+                includeLevel: this.TocSettings.Levels.toArray(),
+                containerClass: this.TocSettings.Class,
+                markerPattern: this.TocSettings.Indicator,
+                listType: this.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
+                slugify: heading => slugifier.CreateSlug(heading)
+            });
+        }
+
+        if (this.emojiType)
         {
             // Making the emoji-variable visible for the callback
-            let emoji = this.emoji;
+            let emoji = this.emojiType;
             md.use(MarkdownItEmoji);
             md.renderer.rules.emoji = (token, id) =>
             {
                 switch (emoji)
                 {
-                    case "None":
+                    case EmojiType.None:
                         return token[id].markup;
-                    case "Twitter":
-                        return TwEmoji.parse(token[id].content);
-                    case "Native":
+                    case EmojiType.Native:
                         return token[id].content;
-                    case "GitHub":
-                    default:
+                    case EmojiType.Twitter:
+                        return TwEmoji.parse(token[id].content);
+                    case EmojiType.GitHub:
                         return '<img class="emoji" title=":' +
                             token[id].markup +
                             ':" alt=":' +
                             token[id].markup +
                             ':" src="https://assets-cdn.github.com/images/icons/emoji/unicode/' +
-                            Encoding.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase() +
+                            StringUtils.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase() +
                             '.png" allign="absmiddle" />';
                 }
             };
@@ -454,6 +417,7 @@ export default class Document
 
         // Preparing the attributes
         let view = {};
+
         for (let key in this.Attributes)
         {
             let value = this.Attributes[key];
@@ -461,26 +425,6 @@ export default class Document
             if (value instanceof Date || Date.parse(value))
             {
                 value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
-            }
-            else if (/function[\s]*\(\)[\s]*{([\s\S]*)}/gm.test(value))
-            {
-                value = value.replace(/function[\s]*\(\)[\s]*{([\s\S]*)}/gm, "$1");
-                value = new Function(value);
-
-                try
-                {
-                    let dateTest = (attribute: () => any) =>
-                    {
-                        return attribute();
-                    };
-
-                    if (dateTest(value) instanceof Date)
-                    {
-                        value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, dateTest(value));
-                    }
-                }
-                catch (e)
-                { }
             }
 
             view[key] = value;
@@ -491,134 +435,42 @@ export default class Document
     }
 
     /**
-     * Loads the vs-config
-     */
-    private LoadSettings(): void
-    {
-        this.Quality = Settings.Default.ConversionQuality;
-        this.Emoji = Settings.Default.EmojiType;
-
-        for (let key in Settings.Default.Attributes)
-        {
-            this.Attributes[key] = Settings.Default.Attributes[key];
-        }
-
-        this.Locale = new CultureInfo(Settings.Default.Locale);
-        this.DateFormat = Settings.Default.DateFormat;
-
-        this.Paper = Settings.Default.PaperFormat;
-
-        this.HeaderTemplate = Settings.Default.HeaderTemplate;
-        this.FooterTemplate = Settings.Default.FooterTemplate;
-
-        this.TocSettings = Settings.Default.TocSettings;
-
-        if (Settings.Default.Template)
-        {
-            this.Template = Settings.Default.Template;
-        }
-        else if (Settings.Default.SystemStylesEnabled)
-        {
-            this.Template = Path.join(__dirname, "..", "..", "..", "Resources", "SystemTemplate.html");
-        }
-
-        this.HighlightStyle = Settings.Default.HighlightStyle;
-
-        if (this.HighlightStyle !== "Default" && this.HighlightStyle !== "None")
-        {
-            this.StyleSheets.push(Path.join(__dirname, "..", "..", "..", "node_modules", "highlightjs", "styles", this.HighlightStyle + ".css"));
-        }
-
-        this.SystemStylesEnabled = Settings.Default.SystemStylesEnabled;
-
-        for (let key in Settings.Default.StyleSheets)
-        {
-            this.StyleSheets.push(Settings.Default.StyleSheets[key]);
-        }
-    }
-
-    /**
      * Renders the body of the document.
      */
-    private RenderBody(): string
+    public async Render(): Promise<string>
     {
-        try
+        let styleCode = "<style>\n";
+
+        for (let styleSheet of this.StyleSheets)
         {
-            let template = FS.readFileSync(this.Template).toString();
-
-            // Preparing the styles
-            let styleSheets = this.StyleSheets;
-
-            if (this.SystemStylesEnabled)
+            if (/.*:\/\//g.test(styleSheet) || !Path.isAbsolute(styleSheet))
             {
-                let systemStyles: string[] = [];
-                let stylesRoot = Path.join(__dirname, "..", "..", "..", "Resources", "css");
-                systemStyles.push(Path.join(stylesRoot, "styles.css"));
-                systemStyles.push(Path.join(stylesRoot, "markdown.css"));
-
-                if (this.HighlightStyle === "Default")
-                {
-                    systemStyles.push(Path.join(stylesRoot, "highlight.css"));
-                }
-
-                styleSheets = systemStyles.concat(styleSheets);
+                styleCode += Dedent(`
+                    </style>
+                    <link rel="stylesheet" type="text/css" href="/${styleSheet}" />
+                    <style>`);
             }
-
-            let styleCode = "<style>\n";
-
-            styleSheets.forEach(styleSheet =>
+            else
             {
-                if (FS.existsSync(styleSheet))
+                if (await FileSystem.pathExists(styleSheet))
                 {
-                    styleCode += FS.readFileSync(styleSheet).toString() + "\n";
-                }
-            });
-
-            styleSheets.forEach(styleSheet =>
-            {
-                if (/(http|https)/g.test(URL.parse(styleSheet).protocol))
-                {
-                    {
-                        let result = Request(styleSheet);
-
-                        if (result.statusCode === 200)
-                        {
-                            styleCode += result.body;
-                        }
-                    }
+                    styleCode += (await FileSystem.readFile(styleSheet)).toString() + "\n";
                 }
                 else
                 {
-                    // Removing leading 'file://' from the local path.
-                    styleSheet.replace(/^file:\/\//, "");
-
-                    {
-                        if (FS.existsSync(styleSheet))
-                        {
-                            styleCode += FS.readFileSync(styleSheet).toString() + "\n";
-                        }
-                    }
+                    throw new FileException(null, styleSheet);
                 }
-            });
-            styleCode += "</style>";
-
-            let content = this.Content;
-
-            let view = {
-                styles: styleCode,
-                content: this.Render(content)
-            };
-
-            return Mustache.render(template, view);
-        }
-        catch (e)
-        {
-            if ("path" in e)
-            {
-                throw new UnauthorizedAccessException(e.path);
             }
-
-            throw e;
         }
+
+        styleCode += "</style>";
+        let content = this.Content;
+
+        let view = {
+            styles: styleCode,
+            content: await this.RenderText(content)
+        };
+
+        return Mustache.render(this.Template, view);
     }
 }

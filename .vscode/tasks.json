@@ -21,9 +21,14 @@
             "label": "Compile",
             "type": "npm",
             "script": "compile",
-            "problemMatcher": "$tsc-watch",
-            "isBackground": true,
+            "problemMatcher": "$tsc",
             "group": "build"
+        },
+        {
+            "label": "Lint",
+            "type": "npm",
+            "script": "lint",
+            "problemMatcher": "$tslint5"
         }
     ]
 }

@@ -1,4 +1,15 @@
-.emoji
+pre
 {
-    height: 20px;
+    white-space: pre-wrap;
+}
+
+.page-break
+{
+    display: block;
+    page-break-after: always;
+}
+
+.no-page-break
+{
+    page-break-inside: avoid;
 }

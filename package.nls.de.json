@@ -19,6 +19,8 @@
     "Config.Document.Attributes.Description": "Die Attribute des Dokuments.\nSie können folgendermaßen in das Dokument eingefügt werden: {{ AttributeName }}.",
     "Config.Document.Attributes.Author": "Autor",
     "Config.Document.Attributes.Author.Description": "Der Name des Autors des Dokuments.\nLassen Sie diese Einstellung weg, um den vollständigen Namen des aktuellen Benutzers zu nutzen.",
+    "Config.Document.Attributes.Company": "Firma",
+    "Config.Document.Attributes.Company.Description": "Der Name der Firma des Dokuments.",
     "Config.Document.Paper.PaperFormat": "Papier",
     "Config.Document.Paper.PaperFormat.Description": "Die Dimensionen des gerenderten Dokuments.\nEntweder die Hähe und Breite des Papiers oder ein vordefiniertes Format.",
     "Config.Document.Paper.PaperFormat.Format": "Papier-Format",

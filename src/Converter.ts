@@ -1,12 +1,12 @@
-import * as ChildProcess from "child_process";
-import * as FS from "fs";
+import * as FS from "fs-extra";
+import * as http from "http";
+import * as Server from "http-server";
 import * as Path from "path";
-import * as PhantomJS from "phantomjs-prebuilt";
-import * as Temp from "temp";
-import Document from "./System/Drawing/Document";
+import Puppeteer = require("puppeteer");
+import * as URL from "url";
 import ConversionType from "./ConversionType";
-import PhantomJSTimeoutException from "./System/Web/PhantomJS/PhantomJSTimeoutException";
-import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
+import Document from "./System/Drawing/Document";
+import FileException from "./System/IO/FileException";
 
 /**
  * Provides a markdown-converter.
@@ -14,9 +14,14 @@ import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
 export default class Converter
 {
     /**
+     * The root-directory of the document.
+     */
+    private documentRoot: string;
+
+    /**
      * The document which is to be converted.
      */
-    private document: Document = null;
+    private document: Document;
 
     /**
      * Initializes a new instance of the Constructor class with a filepath.
@@ -24,9 +29,31 @@ export default class Converter
      * @param document
      * The document which is to be converted.
      */
-    constructor(document: Document)
+    constructor(documentRoot: string, document: Document)
     {
+        this.documentRoot = documentRoot;
         this.document = document;
+    }
+
+    /**
+     * Gets or sets the root-directory of the document.
+     */
+    public get DocumentRoot(): string
+    {
+        return this.documentRoot;
+    }
+
+    public set DocumentRoot(value: string)
+    {
+        this.documentRoot = value;
+    }
+
+    /**
+     * Gets the document which is converted by this `Converter`.
+     */
+    public get Document(): Document
+    {
+        return this.document;
     }
 
     /**
@@ -38,76 +65,99 @@ export default class Converter
      * @param path
      * The path to save the converted file to.
      */
-    public Start(conversionType: ConversionType, path: string): void
+    public async Start(conversionType: ConversionType, path: string): Promise<void>
     {
+        let htmlCode = await this.Document.Render();
+
         if (conversionType !== ConversionType.HTML)
         {
-            // Saving the JSON that represents the document to a temporary JSON-file.
-            let jsonPath = Temp.path({ suffix: ".json" });
-            {
-                FS.writeFileSync(jsonPath, this.document.toJSON());
-            }
+            let server = (Server.createServer({
+                root: this.DocumentRoot
+            }) as any).server as http.Server;
 
-            let destinationPath = Path.resolve(path);
-            let tempPath = Temp.path({ suffix: Path.extname(path) });
-            let type = ConversionType[conversionType];
-            let args = [
-                Path.join(__dirname, "PhantomJS", "PDFGenerator.js"),
-                type,
-                jsonPath,
-                tempPath
-            ];
-            
-            let result = ChildProcess.spawnSync(PhantomJS.path, args, { timeout: 2 * 60 * 1000 });
-            
-            if (result.error)
-            {
-                if ("code" in result.error)
-                {
-                    if (result.error["code"] === "ETIMEDOUT")
-                    {
-                        throw new PhantomJSTimeoutException();
-                    }
-                }
-                throw result.error;
-            }
-            
-            let error = result.stderr.toString();
-
-            if (error)
-            {
-                throw new Error(error);
-            }
+            server.listen(8980, "localhost");
 
             try
             {
-                let buffer = FS.readFileSync(tempPath);
-                FS.writeFileSync(destinationPath, buffer);
-            }
-            catch (e)
-            {
-                if ("path" in e)
+                let browser = await Puppeteer.launch();
+                let page = await browser.newPage();
+                page.setRequestInterception(true);
+                page.once(
+                    "request",
+                    request =>
+                    {
+                        request.respond({
+                            body: htmlCode
+                        });
+
+                        page.on("request", nextRequest => nextRequest.continue());
+                    });
+
+                let url = this.Document.FileName ? Path.relative(this.DocumentRoot, this.Document.FileName) : "";
+                await page.goto(URL.resolve("http://localhost:8980/", url));
+
+                switch (conversionType)
                 {
-                    throw new UnauthorizedAccessException(e["path"]);
+                    case ConversionType.PDF:
+                        let styles = `
+                        <style>
+                            :root
+                            {
+                                font-size: 11px;
+                            }
+                        </style>`;
+                        let pdfOptions: Partial<Puppeteer.PDFOptions> = {
+                            margin: {
+                                top: this.Document.Paper.Margin.Top,
+                                right: this.Document.Paper.Margin.Right,
+                                bottom: this.Document.Paper.Margin.Bottom,
+                                left: this.Document.Paper.Margin.Left
+                            },
+                            printBackground: true,
+                            path
+                        };
+
+                        Object.assign(pdfOptions, this.Document.Paper.Format.PDFOptions);
+
+                        if (this.Document.HeaderFooterEnabled)
+                        {
+                            pdfOptions.displayHeaderFooter = true;
+                            pdfOptions.headerTemplate = styles + await this.Document.Header.Render();
+                            pdfOptions.footerTemplate = styles + await this.Document.Footer.Render();
+                        }
+
+                        await page.pdf(pdfOptions);
+                        break;
+                    default:
+                        let screenshotOptions: Partial<Puppeteer.ScreenshotOptions> = {
+                            fullPage: true,
+                            path
+                        };
+
+                        if (conversionType !== ConversionType.PNG)
+                        {
+                            screenshotOptions.quality = this.Document.Quality;
+                        }
+
+                        await page.screenshot(screenshotOptions);
+                        break;
                 }
-                throw e;
+            }
+            catch (exception)
+            {
+                if ("path" in exception)
+                {
+                    throw new FileException(null, exception["path"]);
+                }
             }
             finally
             {
-                if (FS.existsSync(tempPath))
-                {
-                    FS.unlinkSync(tempPath);
-                }
-
-                if (FS.existsSync(jsonPath))
-                {
-                    FS.unlinkSync(jsonPath);
-                }
+                server.close();
             }
         }
         else
         {
-            FS.writeFileSync(path, this.document.HTML);
+            await FS.writeFile(path, htmlCode);
         }
     }
 }

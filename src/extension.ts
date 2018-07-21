@@ -1,70 +1,26 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as VSCode from "vscode";
-import * as Path from "path";
-import * as ChildProcess from "child_process";
-import ConversionType from "./ConversionType";
-import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
-import * as NLS from "vscode-nls";
-import * as NPM from "npm";
-import * as PhantomJS from "phantomjs-prebuilt";
-import ProcessException from "./System/Tasks/ProcessException";
-import Program from "./Program";
-import Settings from "./Properties/Settings";
-import * as Shell from "shelljs";
-import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
-import YAMLException from "./System/YAML/YAMLException";
-import Resources from "./System/ResourceManager";
 import CultureInfo from "culture-info";
+import * as FileSystem from "fs-extra";
+import * as Path from "path";
+import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
+import * as VSCode from "vscode";
+import Program from "./Program";
+import ResourceManager from "./Properties/ResourceManager";
+import Settings from "./Properties/Settings";
+import Exception from "./System/Exception";
+import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: VSCode.ExtensionContext)
+export async function activate(context: VSCode.ExtensionContext)
 {
-    // Gets a value indicating whether phantomjs could be built.
-    let phantomJSBuilt = null;
-    Resources.Culture = new CultureInfo(VSCode.env.language);
+    ResourceManager.Culture = new CultureInfo(VSCode.env.language);
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     // console.log('Congratulations, your extension "markdown-converter" is now active!');
-
-    // Rebuilding PhantomJS if required.
-    if (PhantomJS.platform !== process.platform)
-    {
-        try
-        {
-            let env = process.env;
-            env["PHANTOMJS_PLATFORM"] = process.platform;
-            env["PHANTOMJS_ARCH"] = process.arch;
-            VSCode.window.showInformationMessage(Resources.Get("UpdateMessage"));
-            process.chdir(Path.join(__dirname, "..", ".."));
-
-            ChildProcess.exec(
-                Path.join("node_modules", ".bin", "npm") + " rebuild phantomjs-prebuilt",
-                {
-                    env
-                },
-                (error, stdout, stderr) =>
-                {
-                    if (!error && !stderr)
-                    {
-                        phantomJSBuilt = true;
-                        VSCode.window.showInformationMessage(Resources.Get("UpdateFinishedMessage"));
-                    }
-                    else
-                    {
-                        throw new ProcessException("", stdout, stderr, error);
-                    }
-                });
-        }
-        catch (e)
-        {
-            VSCode.window.showErrorMessage(Resources.Get("UpdateFinishedMessage"));
-            phantomJSBuilt = false;
-        }
-    }
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
@@ -72,107 +28,125 @@ export function activate(context: VSCode.ExtensionContext)
     let disposables = [
         VSCode.commands.registerCommand("markdownConverter.Convert", async () =>
         {
-            // The code you place here will be executed every time your command is executed
-            if (PhantomJS.platform !== process.platform)
-            {
-                if (phantomJSBuilt)
-                {
-                    VSCode.window.showInformationMessage(Resources.Get("UpdateFinishedMessage"));
-                }
-                else
-                {
-                    VSCode.window.showWarningMessage(Resources.Get("UpdateFailedMessage"));
-                }
-            }
-            else
+            if (await FileSystem.pathExists(Puppeteer.executablePath()))
             {
                 try
                 {
-                    let markdownDoc = getMarkdownDoc();
-
-                    if (markdownDoc)
-                    {
-                        /* Preparing the arguments */
-                        let name: string;
-                        let base: string;
-                        let outDir = Settings.Default.OutputDirectory;
-
-                        if (VSCode.workspace.workspaceFolders && (VSCode.workspace.workspaceFolders.length === 1))
-                        {
-                            base = VSCode.workspace.workspaceFolders[0].uri.fsPath;
-                        }
-                        else if (!markdownDoc.isUntitled)
-                        {
-                            base = Path.dirname(markdownDoc.fileName);
-                        }
-                        else
-                        {
-                            base = await VSCode.window.showInputBox({
-                                prompt: Resources.Get("OutDirPrompt"),
-                                validateInput: (value: string): any =>
+                    let document = getMarkdownDoc();
+    
+                    /* Preparing the arguments */
+                    let documentRoot: string;
+                    let outDir = Settings.Default.OutputDirectory;
+    
+                    let workspace = (VSCode.workspace.workspaceFolders || []).find(
+                        (workspaceFolder) => {
+                            let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
+                            let documentParts = document.uri.fsPath.split(Path.sep);
+    
+                            return workspaceParts.every(
+                                (value, index) =>
                                 {
-                                    if (!Path.isAbsolute(value))
-                                    {
-                                        return Resources.Get("OutDirNotAllowed");
-                                    }
-                                }
-                            });
-                        }
-
-                        if (!Path.isAbsolute(outDir))
-                        {
-                            outDir = Path.resolve(base, outDir);
-                        }
-
-                        if (!markdownDoc.isUntitled)
-                        {
-                            name = Path.parse(markdownDoc.fileName).name;
-                        }
-                        else
-                        {
-                            name = "temp";
-                        }
-
-                        let path = process.cwd();
-                        {
-                            process.chdir(base);
-
-                            /* Executing the main logic */
-                            await Program.Main(markdownDoc, Settings.Default.ConversionType, outDir, name);
-                        }
-                        process.chdir(path);
+                                    return value === documentParts[index];
+                                });
+                        });
+                    
+                    if (workspace)
+                    {
+                        documentRoot = workspace.uri.fsPath;
+                    }
+                    else if (!document.isUntitled)
+                    {
+                        documentRoot = Path.dirname(document.fileName);
                     }
                     else
                     {
-                        throw new MarkdownFileNotFoundException();
+                        documentRoot = process.cwd();
                     }
+    
+                    if (!Path.isAbsolute(outDir))
+                    {
+                        outDir = Path.resolve(documentRoot, outDir);
+                    }
+                    
+                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir);
                 }
                 catch (e)
                 {
                     let message;
-
-                    if (e instanceof UnauthorizedAccessException)
+                    
+                    if (e instanceof Exception)
                     {
-                        message = Resources.Get("UnauthorizedAccessException");
+                        message = e.Message;
                     }
-                    else if (e instanceof YAMLException)
-                    {
-                        message = Format(Resources.Get("YAMLException"), e.Mark.line + 1, e.Mark.column);
-                    }
-                    else if (e instanceof Error)
+                    else
                     {
                         throw e;
                     }
+    
                     VSCode.window.showErrorMessage(message);
                 }
+            }
+            else if (
+                await VSCode.window.showInformationMessage(
+                    ResourceManager.Resources.Get("UpdateMessage"),
+                    ResourceManager.Resources.Get<string>("Yes"),
+                    ResourceManager.Resources.Get<string>("No")) === ResourceManager.Resources.Get("Yes"))
+            {
+                let revision = require(Path.join("..", "node_modules", "puppeteer", "package.json")).puppeteer.chromium_revision;
+                let promptRetry;
+
+                do
+                {
+                    promptRetry = false;
+
+                    await VSCode.window.withProgress(
+                        {
+                            location: VSCode.ProgressLocation.Notification,
+                            title: Format(ResourceManager.Resources.Get("UpdateRunning"), revision)
+                        }, async (reporter) => {
+                            try
+                            {
+                                let progress = 0;
+                                let browserFetcher = (Puppeteer as any).createBrowserFetcher();
+                                await browserFetcher.download(
+                                    revision,
+                                    (downloadedBytes, totalBytes) =>
+                                    {
+                                        let newProgress = Math.floor((downloadedBytes / totalBytes) * 100);
+            
+                                        if (newProgress > progress)
+                                        {
+                                            reporter.report({
+                                                increment: newProgress - progress
+                                            });
+            
+                                            progress = newProgress;
+                                        }
+                                    });
+
+                                VSCode.window.showInformationMessage(ResourceManager.Resources.Get("UpdateSuccess"));
+                            }
+                            catch
+                            {
+                                promptRetry = true;
+                            }
+                        });
+                }
+                while (
+                    !await FileSystem.pathExists(Puppeteer.executablePath()) &&
+                    promptRetry &&
+                    await VSCode.window.showWarningMessage(
+                        ResourceManager.Resources.Get("UpdateFailed"),
+                        ResourceManager.Resources.Get("Yes"),
+                        ResourceManager.Resources.Get("No")) === ResourceManager.Resources.Get("Yes"));
             }
         })
     ];
 
-    disposables.forEach(disposable =>
+    for (let disposable of disposables)
     {
         context.subscriptions.push(disposable);
-    });
+    }
 
     /**
      * Tries to find a markdown-file
@@ -190,7 +164,8 @@ export function activate(context: VSCode.ExtensionContext)
                 return textEditor.document;
             }
         }
-        return null;
+        
+        throw new MarkdownFileNotFoundException();
     }
 }
 
