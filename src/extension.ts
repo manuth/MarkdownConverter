@@ -34,7 +34,6 @@ export function activate(context: VSCode.ExtensionContext)
                 if (document)
                 {
                     /* Preparing the arguments */
-                    let name: string;
                     let documentRoot: string;
                     let outDir = Settings.Default.OutputDirectory;
 
@@ -68,8 +67,7 @@ export function activate(context: VSCode.ExtensionContext)
                         outDir = Path.resolve(documentRoot, outDir);
                     }
                     
-                    name = Path.parse(document.fileName).name;
-                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir, name);
+                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir);
                 }
                 else
                 {
