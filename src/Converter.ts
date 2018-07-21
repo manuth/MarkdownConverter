@@ -6,6 +6,7 @@ import Puppeteer = require("puppeteer");
 import * as URL from "url";
 import ConversionType from "./ConversionType";
 import Document from "./System/Drawing/Document";
+import FileException from "./System/IO/FileException";
 
 /**
  * Provides a markdown-converter.
@@ -144,7 +145,10 @@ export default class Converter
             }
             catch (exception)
             {
-                throw exception;
+                if ("path" in exception)
+                {
+                    throw new FileException(null, exception["path"]);
+                }
             }
             finally
             {

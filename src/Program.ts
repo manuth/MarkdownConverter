@@ -9,7 +9,7 @@ import Converter from "./Converter";
 import ResourceManager from "./Properties/ResourceManager";
 import Settings from "./Properties/Settings";
 import Document from "./System/Drawing/Document";
-import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
+import FileException from "./System/IO/FileException";
 
 /**
  * Provides the main logic of the extension
@@ -42,13 +42,29 @@ export default class Program
 
         converter.Document.TocSettings = Settings.Default.TocSettings;
 
-        if (Settings.Default.Template)
+        try
         {
-            converter.Document.Template = (await FileSystem.readFile(Path.resolve(documentRoot, Settings.Default.Template))).toString();
+            if (Settings.Default.Template)
+            {
+                converter.Document.Template = (await FileSystem.readFile(Path.resolve(documentRoot, Settings.Default.Template))).toString();
+            }
+            else if (Settings.Default.SystemStylesEnabled)
+            {
+                converter.Document.Template = (await FileSystem.readFile(ResourceManager.Files.Get("SystemTemplate"))).toString();
+            }
         }
-        else if (Settings.Default.SystemStylesEnabled)
+        catch (exception)
         {
-            converter.Document.Template = (await FileSystem.readFile(ResourceManager.Files.Get("SystemTemplate"))).toString();
+            if (
+                exception instanceof Error &&
+                "path" in exception)
+            {
+                throw new FileException(null, exception["path"]);
+            }
+            else
+            {
+                throw exception;
+            }
         }
 
         if (Settings.Default.SystemStylesEnabled)
@@ -92,68 +108,51 @@ export default class Program
                 await FileSystem.mkdirp(outDir);
             }
 
-            try
+            let extension: string;
+
+            switch (type)
             {
-                let extension: string;
+                case ConversionType.HTML:
+                    extension = "html";
+                    break;
+                case ConversionType.JPEG:
+                    extension = "jpg";
+                    break;
+                case ConversionType.PNG:
+                    extension = "png";
+                    break;
+                case ConversionType.PDF:
+                default:
+                    extension = "pdf";
+                    break;
+            }
 
-                switch (type)
-                {
-                    case ConversionType.HTML:
-                        extension = "html";
-                        break;
-                    case ConversionType.JPEG:
-                        extension = "jpg";
-                        break;
-                    case ConversionType.PNG:
-                        extension = "png";
-                        break;
-                    case ConversionType.PDF:
-                    default:
-                        extension = "pdf";
-                        break;
-                }
-
-                let destination = Path.join(outDir, fileName + "." + extension);
-                await converter.Start(type, destination);
-                window.showInformationMessage(
-                    Format(ResourceManager.Resources.Get("SuccessMessage"), ConversionType[type], destination),
-                    ResourceManager.Resources.Get("OpenFileLabel")).then(
-                        (label) =>
+            let destination = Path.join(outDir, fileName + "." + extension);
+            await converter.Start(type, destination);
+            window.showInformationMessage(
+                Format(ResourceManager.Resources.Get("SuccessMessage"), ConversionType[type], destination),
+                ResourceManager.Resources.Get("OpenFileLabel")).then(
+                    (label) =>
+                    {
+                        if (label === ResourceManager.Resources.Get("OpenFileLabel"))
                         {
-                            if (label === ResourceManager.Resources.Get("OpenFileLabel"))
+                            switch (process.platform)
                             {
-                                switch (process.platform)
-                                {
-                                    case "win32":
-                                        ChildProcess.exec(Format('"{0}"', destination));
-                                        break;
-                                    case "darwin":
-                                        ChildProcess.exec(Format('bash -c \'open "{0}"\'', destination));
-                                        break;
-                                    case "linux":
-                                        ChildProcess.exec(Format('bash -c \'xdg-open "{0}"\'', destination));
-                                        break;
-                                    default:
-                                        window.showWarningMessage(ResourceManager.Resources.Get("UnsupportetPlatformException"));
-                                        break;
-                                }
+                                case "win32":
+                                    ChildProcess.exec(Format('"{0}"', destination));
+                                    break;
+                                case "darwin":
+                                    ChildProcess.exec(Format('bash -c \'open "{0}"\'', destination));
+                                    break;
+                                case "linux":
+                                    ChildProcess.exec(Format('bash -c \'xdg-open "{0}"\'', destination));
+                                    break;
+                                default:
+                                    window.showWarningMessage(ResourceManager.Resources.Get("UnsupportetPlatformException"));
+                                    break;
                             }
-                        });
-            }
-            catch (e)
-            {
-                let message = e.toString();
-                if (e instanceof UnauthorizedAccessException)
-                {
-                    message = Format(ResourceManager.Resources.Get("UnauthorizedAccessException"), e.Path);
-                }
-                else
-                {
-                    throw e;
-                }
-
-                window.showErrorMessage(message);
-            }
+                        }
+                    });
         }
     }
 }

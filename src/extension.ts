@@ -7,9 +7,8 @@ import * as VSCode from "vscode";
 import Program from "./Program";
 import ResourceManager from "./Properties/ResourceManager";
 import Settings from "./Properties/Settings";
+import Exception from "./System/Exception";
 import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
-import UnauthorizedAccessException from "./System/UnauthorizedAccessException";
-import YAMLException from "./System/YAML/YAMLException";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -31,65 +30,55 @@ export function activate(context: VSCode.ExtensionContext)
             {
                 let document = getMarkdownDoc();
 
-                if (document)
+                /* Preparing the arguments */
+                let documentRoot: string;
+                let outDir = Settings.Default.OutputDirectory;
+
+                let workspace = (VSCode.workspace.workspaceFolders || []).find(
+                    (workspaceFolder) => {
+                        let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
+                        let documentParts = document.uri.fsPath.split(Path.sep);
+
+                        return workspaceParts.every(
+                            (value, index) =>
+                            {
+                                return value === documentParts[index];
+                            });
+                    });
+                
+                if (workspace)
                 {
-                    /* Preparing the arguments */
-                    let documentRoot: string;
-                    let outDir = Settings.Default.OutputDirectory;
-
-                    let workspace = (VSCode.workspace.workspaceFolders || []).find(
-                        (workspaceFolder) => {
-                            let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
-                            let documentParts = document.uri.fsPath.split(Path.sep);
-
-                            return workspaceParts.every(
-                                (value, index) =>
-                                {
-                                    return value === documentParts[index];
-                                });
-                        });
-                    
-                    if (workspace)
-                    {
-                        documentRoot = workspace.uri.fsPath;
-                    }
-                    else if (!document.isUntitled)
-                    {
-                        documentRoot = Path.dirname(document.fileName);
-                    }
-                    else
-                    {
-                        documentRoot = process.cwd();
-                    }
-
-                    if (!Path.isAbsolute(outDir))
-                    {
-                        outDir = Path.resolve(documentRoot, outDir);
-                    }
-                    
-                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir);
+                    documentRoot = workspace.uri.fsPath;
+                }
+                else if (!document.isUntitled)
+                {
+                    documentRoot = Path.dirname(document.fileName);
                 }
                 else
                 {
-                    throw new MarkdownFileNotFoundException();
+                    documentRoot = process.cwd();
                 }
+
+                if (!Path.isAbsolute(outDir))
+                {
+                    outDir = Path.resolve(documentRoot, outDir);
+                }
+                
+                await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir);
             }
             catch (e)
             {
                 let message;
-
-                if (e instanceof UnauthorizedAccessException)
+                
+                if (e instanceof Exception)
                 {
-                    message = ResourceManager.Resources.Get("UnauthorizedAccessException");
+                    message = e.Message;
                 }
-                else if (e instanceof YAMLException)
-                {
-                    message = Format(ResourceManager.Resources.Get("YAMLException"), e.Mark.line + 1, e.Mark.column);
-                }
-                else if (e instanceof Error)
+                else
                 {
                     throw e;
                 }
+
                 VSCode.window.showErrorMessage(message);
             }
         })
@@ -116,7 +105,8 @@ export function activate(context: VSCode.ExtensionContext)
                 return textEditor.document;
             }
         }
-        return null;
+        
+        throw new MarkdownFileNotFoundException();
     }
 }
 
