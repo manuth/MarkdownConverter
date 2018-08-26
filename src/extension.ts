@@ -9,14 +9,19 @@ import * as VSCode from "vscode";
 import Program from "./Program";
 import ResourceManager from "./Properties/ResourceManager";
 import Settings from "./Properties/Settings";
+import { getMarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
 import Exception from "./System/Exception";
 import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
+
+var markdown;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: VSCode.ExtensionContext)
 {
+    const contributions = getMarkdownExtensionContributions(context);
     ResourceManager.Culture = new CultureInfo(VSCode.env.language);
+    const outside = this;
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -68,7 +73,7 @@ export async function activate(context: VSCode.ExtensionContext)
                         outDir = Path.resolve(documentRoot, outDir);
                     }
                     
-                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir);
+                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir, outside.markdown, contributions);
                 }
                 catch (e)
                 {
@@ -167,6 +172,13 @@ export async function activate(context: VSCode.ExtensionContext)
         
         throw new MarkdownFileNotFoundException();
     }
+
+    return {
+        extendMarkdownIt(md: any) {
+            outside.markdown = md;
+            return md;
+        }
+    };
 }
 
 // this method is called when your extension is deactivated
