@@ -11,8 +11,7 @@ import FileException from "./System/IO/FileException";
 /**
  * Provides a markdown-converter.
  */
-export default class Converter
-{
+export default class Converter {
     /**
      * The root-directory of the document.
      */
@@ -29,8 +28,7 @@ export default class Converter
      * @param document
      * The document which is to be converted.
      */
-    constructor(documentRoot: string, document: Document)
-    {
+    constructor(documentRoot: string, document: Document) {
         this.documentRoot = documentRoot;
         this.document = document;
     }
@@ -38,21 +36,18 @@ export default class Converter
     /**
      * Gets or sets the root-directory of the document.
      */
-    public get DocumentRoot(): string
-    {
+    public get DocumentRoot(): string {
         return this.documentRoot;
     }
 
-    public set DocumentRoot(value: string)
-    {
+    public set DocumentRoot(value: string) {
         this.documentRoot = value;
     }
 
     /**
      * Gets the document which is converted by this `Converter`.
      */
-    public get Document(): Document
-    {
+    public get Document(): Document {
         return this.document;
     }
 
@@ -65,39 +60,37 @@ export default class Converter
      * @param path
      * The path to save the converted file to.
      */
-    public async Start(conversionType: ConversionType, path: string): Promise<void>
-    {
+    public async Start(conversionType: ConversionType, path: string): Promise<void> {
         let htmlCode = await this.Document.Render();
 
-        if (conversionType !== ConversionType.HTML)
-        {
+        if (conversionType !== ConversionType.HTML) {
             let server = (Server.createServer({
-                root: this.DocumentRoot
+                root: this.DocumentRoot,
+                cors: true
             }) as any).server as http.Server;
 
             server.listen(8980, "localhost");
 
-            try
-            {
-                let browser = await Puppeteer.launch();
+            try {
+                let browser = await Puppeteer.launch({ args: ["--disable-web-security"]});
                 let page = await browser.newPage();
                 page.setRequestInterception(true);
-                page.once(
+                page.on(
                     "request",
-                    request =>
-                    {
-                        request.respond({
-                            body: htmlCode
-                        });
-
-                        page.on("request", nextRequest => nextRequest.continue());
+                    request => {
+                        if (request.url().endsWith(url + ".html")) {
+                            request.respond({
+                                body: htmlCode
+                            });
+                        } else {
+                            request.continue();
+                        }
                     });
 
                 let url = this.Document.FileName ? Path.relative(this.DocumentRoot, this.Document.FileName) : "";
-                await page.goto(URL.resolve("http://localhost:8980/", url));
-
-                switch (conversionType)
-                {
+                await page.goto(URL.resolve("http://localhost:8980/", url + ".html"), { waitUntil: "networkidle0", timeout: 0 });
+                
+                switch (conversionType) {
                     case ConversionType.PDF:
                         let styles = `
                         <style>
@@ -119,8 +112,7 @@ export default class Converter
 
                         Object.assign(pdfOptions, this.Document.Paper.Format.PDFOptions);
 
-                        if (this.Document.HeaderFooterEnabled)
-                        {
+                        if (this.Document.HeaderFooterEnabled) {
                             pdfOptions.displayHeaderFooter = true;
                             pdfOptions.headerTemplate = styles + await this.Document.Header.Render();
                             pdfOptions.footerTemplate = styles + await this.Document.Footer.Render();
@@ -134,8 +126,7 @@ export default class Converter
                             path
                         };
 
-                        if (conversionType !== ConversionType.PNG)
-                        {
+                        if (conversionType !== ConversionType.PNG) {
                             screenshotOptions.quality = this.Document.Quality;
                         }
 
@@ -143,20 +134,16 @@ export default class Converter
                         break;
                 }
             }
-            catch (exception)
-            {
-                if ("path" in exception)
-                {
+            catch (exception) {
+                if ("path" in exception) {
                     throw new FileException(null, exception["path"]);
                 }
             }
-            finally
-            {
+            finally {
                 server.close();
             }
         }
-        else
-        {
+        else {
             await FS.writeFile(path, htmlCode);
         }
     }

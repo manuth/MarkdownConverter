@@ -104,6 +104,7 @@ export default class Document extends Renderable
             <body>
                 <article class="markdown-body">
                     {{{content}}}
+                    {{{scripts}}}                
                 </article>
             </body>
         </html>`);
@@ -120,6 +121,10 @@ export default class Document extends Renderable
         ResourceManager.Files.Get("SystemStyle")
     ];
 
+    public Scripts: string[] = [];
+
+    private markdownParser: MarkdownIt.MarkdownIt | undefined;
+
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
      * 
@@ -129,7 +134,7 @@ export default class Document extends Renderable
      * @param config
      * The configuration to set.
      */
-    constructor(document: TextDocument)
+    constructor(document: TextDocument, markdown: any)
     {
         super();
         this.RawContent = document.getText();
@@ -144,6 +149,8 @@ export default class Document extends Renderable
             this.FileName = null;
             this.Attributes.CreationDate = new Date(Date.now());
         }
+
+        this.markdownParser = markdown as MarkdownIt.MarkdownIt;
     }
 
     /**
@@ -415,6 +422,8 @@ export default class Document extends Renderable
             };
         }
 
+        md = this.markdownParser || md;
+
         // Preparing the attributes
         let view = {};
 
@@ -439,22 +448,20 @@ export default class Document extends Renderable
      */
     public async Render(): Promise<string>
     {
-        let styleCode = "<style>\n";
+        let styleCode = "";
+        let scriptCode = "";
 
         for (let styleSheet of this.StyleSheets)
         {
             if (/.*:\/\//g.test(styleSheet) || !Path.isAbsolute(styleSheet))
             {
-                styleCode += Dedent(`
-                    </style>
-                    <link rel="stylesheet" type="text/css" href="/${styleSheet}" />
-                    <style>`);
+                styleCode += Dedent(`<link rel="stylesheet" type="text/css" href="/${styleSheet}" />\n`);
             }
             else
             {
                 if (await FileSystem.pathExists(styleSheet))
                 {
-                    styleCode += (await FileSystem.readFile(styleSheet)).toString() + "\n";
+                    styleCode += "<style>" + (await FileSystem.readFile(styleSheet)).toString() + "</style>\n";
                 }
                 else
                 {
@@ -463,11 +470,25 @@ export default class Document extends Renderable
             }
         }
 
-        styleCode += "</style>";
+        for (let script of this.Scripts) {
+            if (/.*:\/\//g.test(script) || !Path.isAbsolute(script)) {
+                scriptCode += Dedent(`<script async="" src="${script}"charset="UTF-8"></script>\n`);
+            }
+            else {
+                if (await FileSystem.pathExists(script)) {
+                    scriptCode += "<script>" + (await FileSystem.readFile(script)).toString() + "</script>\n";
+                }
+                else {
+                    throw new FileException(null, script);
+                }
+            }
+        }
+
         let content = this.Content;
 
         let view = {
             styles: styleCode,
+            scripts: scriptCode,
             content: await this.RenderText(content)
         };
 

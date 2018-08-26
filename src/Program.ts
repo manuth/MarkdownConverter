@@ -9,6 +9,7 @@ import Converter from "./Converter";
 import ResourceManager from "./Properties/ResourceManager";
 import Settings from "./Properties/Settings";
 import Document from "./System/Drawing/Document";
+import { MarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
 import FileException from "./System/IO/FileException";
 
 /**
@@ -19,10 +20,10 @@ export default class Program
     /**
      * Converts a markdown-file to other file-types
      */
-    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string)
+    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string, markdownParser: any, mdExtensions: MarkdownExtensionContributions)
     {
         let fileName = Path.parse(document.fileName).name;
-        let converter = new Converter(documentRoot, new Document(document));
+        let converter = new Converter(documentRoot, new Document(document, markdownParser));
         converter.Document.Quality = Settings.Default.ConversionQuality;
         converter.Document.EmojiType = Settings.Default.EmojiType;
 
@@ -99,6 +100,14 @@ export default class Program
             }
 
             converter.Document.StyleSheets.push(styleSheet);
+        }
+
+        for (let styleSheet of mdExtensions.previewStyles) {
+            converter.Document.StyleSheets.push(styleSheet.fsPath);
+        }
+
+        for (let script of mdExtensions.previewScripts) {
+            converter.Document.Scripts.push(script.fsPath.toString());
         }
 
         let prompts = [];

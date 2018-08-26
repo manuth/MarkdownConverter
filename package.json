@@ -39,6 +39,7 @@
         "title": "%Command.Convert%"
       }
     ],
+    "markdown.markdownItPlugins": true,
     "configuration": {
       "title": "%Config%",
       "properties": {
