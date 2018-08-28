@@ -39,6 +39,11 @@ export default class Document extends Renderable
     public fileName: string;
 
     /**
+     * tells the document if it should use the standard system plugins or those from vscode
+     */
+    private useSystemPlugins: boolean;
+
+    /**
      * The quality of the document.
      */
     private quality: number = 90;
@@ -104,6 +109,7 @@ export default class Document extends Renderable
             <body>
                 <article class="markdown-body">
                     {{{content}}}
+                    {{{scripts}}}                
                 </article>
             </body>
         </html>`);
@@ -120,6 +126,10 @@ export default class Document extends Renderable
         ResourceManager.Files.Get("SystemStyle")
     ];
 
+    private scripts: string[] = [];
+
+    private markdownParser: MarkdownIt.MarkdownIt;
+
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
      * 
@@ -129,7 +139,7 @@ export default class Document extends Renderable
      * @param config
      * The configuration to set.
      */
-    constructor(document: TextDocument)
+    constructor(document: TextDocument, markdown: MarkdownIt.MarkdownIt)
     {
         super();
         this.RawContent = document.getText();
@@ -144,6 +154,8 @@ export default class Document extends Renderable
             this.FileName = null;
             this.Attributes.CreationDate = new Date(Date.now());
         }
+
+        this.markdownParser = markdown as MarkdownIt.MarkdownIt;        
     }
 
     /**
@@ -157,6 +169,18 @@ export default class Document extends Renderable
     public set FileName(value: string)
     {
         this.fileName = value;
+    }
+
+    /**
+     * Tells the document if it should use the standard system plugins or those from vscode
+     */
+    public get UseSystemPlugins(): boolean {
+        return this.useSystemPlugins;
+    }
+
+    public set UseSystemPlugins(value: boolean)
+    {
+        this.useSystemPlugins = value;
     }
 
     /**
@@ -335,6 +359,18 @@ export default class Document extends Renderable
     }
 
     /**
+     * Gets or sets the scripts of the document.
+     */
+    public get Scripts(): string[]
+    {
+        return this.scripts;
+    }
+    public set Scripts(value: string[])
+    {
+        this.scripts = value;
+    }
+
+    /**
      * Renders content of the document.
      * 
      * @param content
@@ -342,7 +378,37 @@ export default class Document extends Renderable
      */
     protected async RenderText(content: string): Promise<string>
     {
-        // Preparing markdown-it
+        if (this.markdownParser === undefined || this.UseSystemPlugins)
+        {
+            this.markdownParser = this.getSystemMarkdownParser();
+        } else {
+            // Disable vscode-resource plugin
+            this.markdownParser.normalizeLink = (link: string) => link;
+            this.markdownParser.normalizeLinkText = (link: string) => link;
+            this.markdownParser.validateLink = (link: string) => true;
+        }
+
+        // Preparing the attributes
+        let view = {};
+
+        for (let key in this.Attributes)
+        {
+            let value = this.Attributes[key];
+
+            if (value instanceof Date || Date.parse(value))
+            {
+                value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
+            }
+
+            view[key] = value;
+        }
+
+        let html = this.markdownParser.render(content);
+        return Mustache.render(html, view);
+    }
+
+    private getSystemMarkdownParser()
+    {
         let md = new MarkdownIt({
             html: true,
             highlight: (subject, language) =>
@@ -355,19 +421,15 @@ export default class Document extends Renderable
                 {
                     subject = md.utils.escapeHtml(subject);
                 }
-
                 return '<pre class="hljs"><code><div>' + subject + "</div></code></pre>";
             }
         });
-
         md.validateLink = () =>
         {
             return true;
         };
-
         {
             let slugifier = new Slugifier();
-
             Anchor(md, {
                 slugify: heading => slugifier.CreateSlug(heading)
             });
@@ -378,7 +440,6 @@ export default class Document extends Renderable
         if (this.TocSettings)
         {
             let slugifier = new Slugifier();
-
             md.use(MarkdownItToc, {
                 includeLevel: this.TocSettings.Levels.toArray(),
                 containerClass: this.TocSettings.Class,
@@ -414,24 +475,7 @@ export default class Document extends Renderable
                 }
             };
         }
-
-        // Preparing the attributes
-        let view = {};
-
-        for (let key in this.Attributes)
-        {
-            let value = this.Attributes[key];
-
-            if (value instanceof Date || Date.parse(value))
-            {
-                value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
-            }
-
-            view[key] = value;
-        }
-
-        let html = md.render(content);
-        return Mustache.render(html, view);
+        return md;
     }
 
     /**
@@ -439,22 +483,20 @@ export default class Document extends Renderable
      */
     public async Render(): Promise<string>
     {
-        let styleCode = "<style>\n";
+        let styleCode = "";
+        let scriptCode = "";
 
         for (let styleSheet of this.StyleSheets)
         {
             if (/.*:\/\//g.test(styleSheet) || !Path.isAbsolute(styleSheet))
             {
-                styleCode += Dedent(`
-                    </style>
-                    <link rel="stylesheet" type="text/css" href="/${styleSheet}" />
-                    <style>`);
+                styleCode += Dedent(`<link rel="stylesheet" type="text/css" href="/${styleSheet}" />\n`);
             }
             else
             {
                 if (await FileSystem.pathExists(styleSheet))
                 {
-                    styleCode += (await FileSystem.readFile(styleSheet)).toString() + "\n";
+                    styleCode += "<style>" + (await FileSystem.readFile(styleSheet)).toString() + "</style>\n";
                 }
                 else
                 {
@@ -463,11 +505,30 @@ export default class Document extends Renderable
             }
         }
 
-        styleCode += "</style>";
+        for (let script of this.Scripts)
+        {
+            if (/.*:\/\//g.test(script) || !Path.isAbsolute(script))
+            {
+                scriptCode += Dedent(`<script async="" src="${script}"charset="UTF-8"></script>\n`);
+            }
+            else
+            {
+                if (await FileSystem.pathExists(script))
+                {
+                    scriptCode += "<script>" + (await FileSystem.readFile(script)).toString() + "</script>\n";
+                }
+                else
+                {
+                    throw new FileException(null, script);
+                }
+            }
+        }
+
         let content = this.Content;
 
         let view = {
             styles: styleCode,
+            scripts: scriptCode,
             content: await this.RenderText(content)
         };
 

@@ -40,6 +40,7 @@
         "title": "%Command.Convert%"
       }
     ],
+    "markdown.markdownItPlugins": true,
     "configuration": {
       "title": "%Config%",
       "properties": {
@@ -327,6 +328,12 @@
           "items": {
             "type": "string"
           }
+        },
+        "markdownConverter.Document.UseSystemPlugins": {
+          "title": "%Config.Document.UseSystemPlugins%",
+          "description": "%Config.Document.UseSystemPlugins.Description%",
+          "type": "boolean",
+          "default": false
         }
       }
     }

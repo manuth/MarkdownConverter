@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import CultureInfo from "culture-info";
 import * as FileSystem from "fs-extra";
+import { MarkdownIt } from "markdown-it";
 import * as Path from "path";
 import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
@@ -9,14 +10,19 @@ import * as VSCode from "vscode";
 import Program from "./Program";
 import ResourceManager from "./Properties/ResourceManager";
 import Settings from "./Properties/Settings";
+import { getMarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
 import Exception from "./System/Exception";
 import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
+
+let markdown;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: VSCode.ExtensionContext)
 {
+    const contributions = getMarkdownExtensionContributions(context);
     ResourceManager.Culture = new CultureInfo(VSCode.env.language);
+    const outside = this;
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -33,23 +39,24 @@ export async function activate(context: VSCode.ExtensionContext)
                 try
                 {
                     let document = getMarkdownDoc();
-    
+
                     /* Preparing the arguments */
                     let documentRoot: string;
                     let outDir = Settings.Default.OutputDirectory;
-    
+
                     let workspace = (VSCode.workspace.workspaceFolders || []).find(
-                        (workspaceFolder) => {
+                        (workspaceFolder) =>
+                        {
                             let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
                             let documentParts = document.uri.fsPath.split(Path.sep);
-    
+
                             return workspaceParts.every(
                                 (value, index) =>
                                 {
                                     return value === documentParts[index];
                                 });
                         });
-                    
+
                     if (workspace)
                     {
                         documentRoot = workspace.uri.fsPath;
@@ -62,18 +69,18 @@ export async function activate(context: VSCode.ExtensionContext)
                     {
                         documentRoot = process.cwd();
                     }
-    
+
                     if (!Path.isAbsolute(outDir))
                     {
                         outDir = Path.resolve(documentRoot, outDir);
                     }
-                    
-                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir);
+
+                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir, outside.markdown as MarkdownIt, contributions);
                 }
                 catch (e)
                 {
                     let message;
-                    
+
                     if (e instanceof Exception)
                     {
                         message = e.Message;
@@ -82,7 +89,7 @@ export async function activate(context: VSCode.ExtensionContext)
                     {
                         throw e;
                     }
-    
+
                     VSCode.window.showErrorMessage(message);
                 }
             }
@@ -103,7 +110,8 @@ export async function activate(context: VSCode.ExtensionContext)
                         {
                             location: VSCode.ProgressLocation.Notification,
                             title: Format(ResourceManager.Resources.Get("UpdateRunning"), revision)
-                        }, async (reporter) => {
+                        }, async (reporter) =>
+                        {
                             try
                             {
                                 let progress = 0;
@@ -113,13 +121,13 @@ export async function activate(context: VSCode.ExtensionContext)
                                     (downloadedBytes, totalBytes) =>
                                     {
                                         let newProgress = Math.floor((downloadedBytes / totalBytes) * 100);
-            
+
                                         if (newProgress > progress)
                                         {
                                             reporter.report({
                                                 increment: newProgress - progress
                                             });
-            
+
                                             progress = newProgress;
                                         }
                                     });
@@ -164,9 +172,17 @@ export async function activate(context: VSCode.ExtensionContext)
                 return textEditor.document;
             }
         }
-        
+
         throw new MarkdownFileNotFoundException();
     }
+
+    return {
+        extendMarkdownIt(md: any)
+        {
+            outside.markdown = md;
+            return md;
+        }
+    };
 }
 
 // this method is called when your extension is deactivated

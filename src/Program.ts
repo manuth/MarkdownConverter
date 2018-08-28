@@ -1,6 +1,7 @@
 import * as ChildProcess from "child_process";
 import CultureInfo from "culture-info";
 import * as FileSystem from "fs-extra";
+import { MarkdownIt } from "markdown-it";
 import * as Path from "path";
 import * as Format from "string-template";
 import { TextDocument, window } from "vscode";
@@ -9,6 +10,7 @@ import Converter from "./Converter";
 import ResourceManager from "./Properties/ResourceManager";
 import Settings from "./Properties/Settings";
 import Document from "./System/Drawing/Document";
+import { MarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
 import FileException from "./System/IO/FileException";
 
 /**
@@ -19,10 +21,10 @@ export default class Program
     /**
      * Converts a markdown-file to other file-types
      */
-    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string)
+    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string, markdownParser: MarkdownIt, mdExtensions: MarkdownExtensionContributions)
     {
         let fileName = Path.parse(document.fileName).name;
-        let converter = new Converter(documentRoot, new Document(document));
+        let converter = new Converter(documentRoot, new Document(document, markdownParser));
         converter.Document.Quality = Settings.Default.ConversionQuality;
         converter.Document.EmojiType = Settings.Default.EmojiType;
 
@@ -41,6 +43,8 @@ export default class Program
         converter.Document.Footer.Content = Settings.Default.FooterTemplate;
 
         converter.Document.TocSettings = Settings.Default.TocSettings;
+
+        converter.Document.UseSystemPlugins = Settings.Default.UseSystemPlugins;
 
         try
         {
@@ -101,6 +105,16 @@ export default class Program
             converter.Document.StyleSheets.push(styleSheet);
         }
 
+        for (let styleSheet of mdExtensions.previewStyles)
+        {
+            converter.Document.StyleSheets.push(styleSheet.fsPath);
+        }
+
+        for (let script of mdExtensions.previewScripts)
+        {
+            converter.Document.Scripts.push(script.fsPath.toString());
+        }
+
         let prompts = [];
 
         if (!await FileSystem.pathExists(outDir))
@@ -154,7 +168,7 @@ export default class Program
                                         ChildProcess.exec(Format('bash -c \'xdg-open "{0}"\'', destination));
                                         break;
                                     default:
-                                        window.showWarningMessage(ResourceManager.Resources.Get("UnsupportetPlatformException"));
+                                        window.showWarningMessage(ResourceManager.Resources.Get("UnsupportedPlatformException"));
                                         break;
                                 }
                             }
