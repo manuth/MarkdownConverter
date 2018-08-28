@@ -22,7 +22,7 @@ export default class Converter
      * The document which is to be converted.
      */
     private document: Document;
-
+    
     /**
      * Initializes a new instance of the Constructor class with a filepath.
      * 
