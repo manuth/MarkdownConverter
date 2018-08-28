@@ -470,15 +470,20 @@ export default class Document extends Renderable
             }
         }
 
-        for (let script of this.Scripts) {
-            if (/.*:\/\//g.test(script) || !Path.isAbsolute(script)) {
+        for (let script of this.Scripts)
+        {
+            if (/.*:\/\//g.test(script) || !Path.isAbsolute(script))
+            {
                 scriptCode += Dedent(`<script async="" src="${script}"charset="UTF-8"></script>\n`);
             }
-            else {
-                if (await FileSystem.pathExists(script)) {
+            else
+            {
+                if (await FileSystem.pathExists(script))
+                {
                     scriptCode += "<script>" + (await FileSystem.readFile(script)).toString() + "</script>\n";
                 }
-                else {
+                else
+                {
                     throw new FileException(null, script);
                 }
             }
