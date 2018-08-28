@@ -13,6 +13,7 @@ import Settings from "./Properties/Settings";
 import { getMarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
 import Exception from "./System/Exception";
 import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
+import { Utilities } from "./System/Utilities";
 
 let markdown;
 
@@ -179,7 +180,7 @@ export async function activate(context: VSCode.ExtensionContext)
     return {
         extendMarkdownIt(md: any)
         {
-            outside.markdown = md;
+            Utilities.VSCodeParser = md;
             return md;
         }
     };
