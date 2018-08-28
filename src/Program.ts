@@ -102,11 +102,13 @@ export default class Program
             converter.Document.StyleSheets.push(styleSheet);
         }
 
-        for (let styleSheet of mdExtensions.previewStyles) {
+        for (let styleSheet of mdExtensions.previewStyles)
+        {
             converter.Document.StyleSheets.push(styleSheet.fsPath);
         }
 
-        for (let script of mdExtensions.previewScripts) {
+        for (let script of mdExtensions.previewScripts)
+        {
             converter.Document.Scripts.push(script.fsPath.toString());
         }
 
@@ -163,7 +165,7 @@ export default class Program
                                         ChildProcess.exec(Format('bash -c \'xdg-open "{0}"\'', destination));
                                         break;
                                     default:
-                                        window.showWarningMessage(ResourceManager.Resources.Get("UnsupportetPlatformException"));
+                                        window.showWarningMessage(ResourceManager.Resources.Get("UnsupportedPlatformException"));
                                         break;
                                 }
                             }

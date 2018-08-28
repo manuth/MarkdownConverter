@@ -13,7 +13,7 @@ import { getMarkdownExtensionContributions } from "./System/Drawing/MarkdownExte
 import Exception from "./System/Exception";
 import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
 
-var markdown;
+let markdown;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -38,23 +38,24 @@ export async function activate(context: VSCode.ExtensionContext)
                 try
                 {
                     let document = getMarkdownDoc();
-    
+
                     /* Preparing the arguments */
                     let documentRoot: string;
                     let outDir = Settings.Default.OutputDirectory;
-    
+
                     let workspace = (VSCode.workspace.workspaceFolders || []).find(
-                        (workspaceFolder) => {
+                        (workspaceFolder) =>
+                        {
                             let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
                             let documentParts = document.uri.fsPath.split(Path.sep);
-    
+
                             return workspaceParts.every(
                                 (value, index) =>
                                 {
                                     return value === documentParts[index];
                                 });
                         });
-                    
+
                     if (workspace)
                     {
                         documentRoot = workspace.uri.fsPath;
@@ -67,18 +68,18 @@ export async function activate(context: VSCode.ExtensionContext)
                     {
                         documentRoot = process.cwd();
                     }
-    
+
                     if (!Path.isAbsolute(outDir))
                     {
                         outDir = Path.resolve(documentRoot, outDir);
                     }
-                    
+
                     await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir, outside.markdown, contributions);
                 }
                 catch (e)
                 {
                     let message;
-                    
+
                     if (e instanceof Exception)
                     {
                         message = e.Message;
@@ -87,7 +88,7 @@ export async function activate(context: VSCode.ExtensionContext)
                     {
                         throw e;
                     }
-    
+
                     VSCode.window.showErrorMessage(message);
                 }
             }
@@ -108,7 +109,8 @@ export async function activate(context: VSCode.ExtensionContext)
                         {
                             location: VSCode.ProgressLocation.Notification,
                             title: Format(ResourceManager.Resources.Get("UpdateRunning"), revision)
-                        }, async (reporter) => {
+                        }, async (reporter) =>
+                        {
                             try
                             {
                                 let progress = 0;
@@ -118,13 +120,13 @@ export async function activate(context: VSCode.ExtensionContext)
                                     (downloadedBytes, totalBytes) =>
                                     {
                                         let newProgress = Math.floor((downloadedBytes / totalBytes) * 100);
-            
+
                                         if (newProgress > progress)
                                         {
                                             reporter.report({
                                                 increment: newProgress - progress
                                             });
-            
+
                                             progress = newProgress;
                                         }
                                     });
@@ -169,12 +171,13 @@ export async function activate(context: VSCode.ExtensionContext)
                 return textEditor.document;
             }
         }
-        
+
         throw new MarkdownFileNotFoundException();
     }
 
     return {
-        extendMarkdownIt(md: any) {
+        extendMarkdownIt(md: any)
+        {
             outside.markdown = md;
             return md;
         }
