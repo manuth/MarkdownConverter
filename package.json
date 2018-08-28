@@ -327,6 +327,12 @@
           "items": {
             "type": "string"
           }
+        },
+        "markdownConverter.Document.UseSystemPlugins": {
+          "title": "%Config.Document.UseSystemPlugins%",
+          "description": "%Config.Document.UseSystemPlugins.Description%",
+          "type": "boolean",
+          "default": false
         }
       }
     }

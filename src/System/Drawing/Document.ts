@@ -39,6 +39,11 @@ export default class Document extends Renderable
     public fileName: string;
 
     /**
+     * tells the document if it should use the standard system plugins or those from vscode
+     */
+    private useSystemPlugins: boolean;
+
+    /**
      * The quality of the document.
      */
     private quality: number = 90;
@@ -121,9 +126,9 @@ export default class Document extends Renderable
         ResourceManager.Files.Get("SystemStyle")
     ];
 
-    public Scripts: string[] = [];
+    private scripts: string[] = [];
 
-    private markdownParser: MarkdownIt.MarkdownIt | undefined;
+    private markdownParser: MarkdownIt.MarkdownIt;
 
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
@@ -134,7 +139,7 @@ export default class Document extends Renderable
      * @param config
      * The configuration to set.
      */
-    constructor(document: TextDocument, markdown: any)
+    constructor(document: TextDocument, markdown: MarkdownIt.MarkdownIt)
     {
         super();
         this.RawContent = document.getText();
@@ -150,7 +155,7 @@ export default class Document extends Renderable
             this.Attributes.CreationDate = new Date(Date.now());
         }
 
-        this.markdownParser = markdown as MarkdownIt.MarkdownIt;
+        this.markdownParser = markdown as MarkdownIt.MarkdownIt;        
     }
 
     /**
@@ -164,6 +169,19 @@ export default class Document extends Renderable
     public set FileName(value: string)
     {
         this.fileName = value;
+    }
+
+
+    /**
+     * Tells the document if it should use the standard system plugins or those from vscode
+     */
+    public get UseSystemPlugins(): boolean {
+        return this.useSystemPlugins;
+    }
+
+    public set UseSystemPlugins(value: boolean)
+    {
+        this.useSystemPlugins = value;
     }
 
     /**
@@ -342,6 +360,18 @@ export default class Document extends Renderable
     }
 
     /**
+     * Gets or sets the scripts of the document.
+     */
+    public get Scripts(): string[]
+    {
+        return this.scripts;
+    }
+    public set Scripts(value: string[])
+    {
+        this.scripts = value;
+    }
+
+    /**
      * Renders content of the document.
      * 
      * @param content
@@ -349,7 +379,32 @@ export default class Document extends Renderable
      */
     protected async RenderText(content: string): Promise<string>
     {
-        // Preparing markdown-it
+        if (this.markdownParser === undefined || this.UseSystemPlugins)
+        {
+            this.markdownParser = this.getSystemMarkdownParser();
+        }
+
+        // Preparing the attributes
+        let view = {};
+
+        for (let key in this.Attributes)
+        {
+            let value = this.Attributes[key];
+
+            if (value instanceof Date || Date.parse(value))
+            {
+                value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
+            }
+
+            view[key] = value;
+        }
+
+        let html = this.markdownParser.render(content);
+        return Mustache.render(html, view);
+    }
+
+    private getSystemMarkdownParser()
+    {
         let md = new MarkdownIt({
             html: true,
             highlight: (subject, language) =>
@@ -362,30 +417,23 @@ export default class Document extends Renderable
                 {
                     subject = md.utils.escapeHtml(subject);
                 }
-
                 return '<pre class="hljs"><code><div>' + subject + "</div></code></pre>";
             }
         });
-
         md.validateLink = () =>
         {
             return true;
         };
-
         {
             let slugifier = new Slugifier();
-
             Anchor(md, {
                 slugify: heading => slugifier.CreateSlug(heading)
             });
         }
-
         md.use(Checkbox);
-
         if (this.TocSettings)
         {
             let slugifier = new Slugifier();
-
             md.use(MarkdownItToc, {
                 includeLevel: this.TocSettings.Levels.toArray(),
                 containerClass: this.TocSettings.Class,
@@ -394,7 +442,6 @@ export default class Document extends Renderable
                 slugify: heading => slugifier.CreateSlug(heading)
             });
         }
-
         if (this.emojiType)
         {
             // Making the emoji-variable visible for the callback
@@ -421,26 +468,7 @@ export default class Document extends Renderable
                 }
             };
         }
-
-        md = this.markdownParser || md;
-
-        // Preparing the attributes
-        let view = {};
-
-        for (let key in this.Attributes)
-        {
-            let value = this.Attributes[key];
-
-            if (value instanceof Date || Date.parse(value))
-            {
-                value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
-            }
-
-            view[key] = value;
-        }
-
-        let html = md.render(content);
-        return Mustache.render(html, view);
+        return md;
     }
 
     /**

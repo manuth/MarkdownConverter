@@ -1,6 +1,7 @@
 import * as ChildProcess from "child_process";
 import CultureInfo from "culture-info";
 import * as FileSystem from "fs-extra";
+import { MarkdownIt } from "markdown-it";
 import * as Path from "path";
 import * as Format from "string-template";
 import { TextDocument, window } from "vscode";
@@ -20,7 +21,7 @@ export default class Program
     /**
      * Converts a markdown-file to other file-types
      */
-    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string, markdownParser: any, mdExtensions: MarkdownExtensionContributions)
+    public static async Main(documentRoot: string, document: TextDocument, types: ConversionType[], outDir: string, markdownParser: MarkdownIt, mdExtensions: MarkdownExtensionContributions)
     {
         let fileName = Path.parse(document.fileName).name;
         let converter = new Converter(documentRoot, new Document(document, markdownParser));
@@ -42,6 +43,8 @@ export default class Program
         converter.Document.Footer.Content = Settings.Default.FooterTemplate;
 
         converter.Document.TocSettings = Settings.Default.TocSettings;
+
+        converter.Document.UseSystemPlugins = Settings.Default.UseSystemPlugins;
 
         try
         {

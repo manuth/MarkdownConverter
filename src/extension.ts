@@ -12,6 +12,7 @@ import Settings from "./Properties/Settings";
 import { getMarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
 import Exception from "./System/Exception";
 import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
+import { MarkdownIt } from "markdown-it";
 
 let markdown;
 
@@ -74,7 +75,7 @@ export async function activate(context: VSCode.ExtensionContext)
                         outDir = Path.resolve(documentRoot, outDir);
                     }
 
-                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir, outside.markdown, contributions);
+                    await Program.Main(documentRoot, document, Settings.Default.ConversionType, outDir, outside.markdown as MarkdownIt, contributions);
                 }
                 catch (e)
                 {
