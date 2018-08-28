@@ -171,7 +171,6 @@ export default class Document extends Renderable
         this.fileName = value;
     }
 
-
     /**
      * Tells the document if it should use the standard system plugins or those from vscode
      */
@@ -382,6 +381,11 @@ export default class Document extends Renderable
         if (this.markdownParser === undefined || this.UseSystemPlugins)
         {
             this.markdownParser = this.getSystemMarkdownParser();
+        } else {
+            // Disable vscode-resource plugin
+            this.markdownParser.normalizeLink = (link: string) => link;
+            this.markdownParser.normalizeLinkText = (link: string) => link;
+            this.markdownParser.validateLink = (link: string) => true;
         }
 
         // Preparing the attributes
@@ -430,7 +434,9 @@ export default class Document extends Renderable
                 slugify: heading => slugifier.CreateSlug(heading)
             });
         }
+
         md.use(Checkbox);
+
         if (this.TocSettings)
         {
             let slugifier = new Slugifier();
@@ -442,6 +448,7 @@ export default class Document extends Renderable
                 slugify: heading => slugifier.CreateSlug(heading)
             });
         }
+
         if (this.emojiType)
         {
             // Making the emoji-variable visible for the callback
