@@ -210,6 +210,14 @@ export default class Settings
     }
 
     /**
+     * Gets a value indicating whether to use system-provided plugins.
+     */
+    public get UseSystemPlugins(): boolean
+    {
+        return this.getConfigEntry<boolean>("Document.UseSystemPlugins");
+    }
+
+    /**
      * Gets the stylesheets of the document.
      */
     public get StyleSheets(): string[]

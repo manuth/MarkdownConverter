@@ -66,5 +66,7 @@
     "Config.Document.Design.styles": "Styles",
     "Config.Document.Design.styles.Description": "CSS-code to include into the document.\n\nExample:\n* { color: red !important; }",
     "Config.Document.Design.StyleSheets": "Style-Sheets",
-    "Config.Document.Design.StyleSheets.Description": "Stylesheets to include in the document.\nThey can either be a local path or an URI."
+    "Config.Document.Design.StyleSheets.Description": "Stylesheets to include in the document.\nThey can either be a local path or an URI.",
+    "Config.Document.UseSystemPlugins": "SystemPlugins",
+    "Config.Document.UseSystemPlugins.Description": "Use the SystemPlugins provided by the extension"
 }
