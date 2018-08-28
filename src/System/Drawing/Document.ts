@@ -14,8 +14,8 @@ import * as Path from "path";
 import * as TwEmoji from "twemoji";
 import { TextDocument } from "vscode";
 import * as YAML from "yamljs";
+import { Utilities } from "../../../obj/System/Utilities";
 import ResourceManager from "../../Properties/ResourceManager";
-import Fullname from "../Fullname";
 import DateTimeFormatter from "../Globalization/DateTimeFormatter";
 import FileException from "../IO/FileException";
 import StringUtils from "../Text/StringUtils";
@@ -57,7 +57,7 @@ export default class Document extends Renderable
      * The attributes of the document.
      */
     private attributes: any = {
-        Author: Fullname.FullName,
+        Author: Utilities.FullName,
         CreationDate: new Date()
     };
 
