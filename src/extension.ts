@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import CultureInfo from "culture-info";
 import * as FileSystem from "fs-extra";
+import { MarkdownIt } from "markdown-it";
 import * as Path from "path";
 import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
@@ -12,7 +13,6 @@ import Settings from "./Properties/Settings";
 import { getMarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
 import Exception from "./System/Exception";
 import MarkdownFileNotFoundException from "./System/MarkdownFileNotFoundException";
-import { MarkdownIt } from "markdown-it";
 
 let markdown;
 
