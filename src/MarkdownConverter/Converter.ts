@@ -4,8 +4,8 @@ import * as Server from "http-server";
 import * as Path from "path";
 import Puppeteer = require("puppeteer");
 import * as URL from "url";
-import { Document } from "../Drawing/Document";
-import { FileException } from "../IO/FileException";
+import { Document } from "../System/Drawing/Document";
+import { FileException } from "../System/IO/FileException";
 import { ConversionType } from "./ConversionType";
 
 /**

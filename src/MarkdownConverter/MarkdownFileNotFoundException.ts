@@ -1,5 +1,5 @@
 import { ResourceManager } from "../Properties/ResourceManager";
-import { FileNotFoundException } from "./IO/FileNotFoundException";
+import { FileNotFoundException } from "../System/IO/FileNotFoundException";
 
 /**
  * Occurs when a markdown-file couldn't be found.
