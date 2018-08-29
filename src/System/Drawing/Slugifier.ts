@@ -3,7 +3,7 @@ import * as Transliteration from "transliteration";
 /**
  * Provides the functionality to generate slugs.
  */
-export default class Slugifier
+export class Slugifier
 {
     /**
      * The already generated slugs.

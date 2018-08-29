@@ -1,7 +1,7 @@
 /**
  * Represents a conversion-type.
  */
-enum ConversionType
+export enum ConversionType
 {
     /**
      * Indicates an HTML-conversion.
@@ -23,5 +23,3 @@ enum ConversionType
      */
     PNG
 }
-
-export default ConversionType;

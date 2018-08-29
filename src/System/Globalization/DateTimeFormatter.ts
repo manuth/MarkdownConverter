@@ -1,6 +1,6 @@
 import CultureInfo from "culture-info";
-import ResourceManager from "../../Properties/ResourceManager";
-import StringUtils from "../Text/StringUtils";
+import { ResourceManager } from "../../Properties/ResourceManager";
+import { StringUtils } from "../Text/StringUtils";
 
 /**
  * Gets a set of DateTime-string-tokens.
@@ -10,7 +10,7 @@ let tokens: { [id: string]: string };
 /**
  * Provides the functionallity to format a date.
  */
-export default class DateTimeFormatter
+export class DateTimeFormatter
 {
     /**
      * The locale to format the date.

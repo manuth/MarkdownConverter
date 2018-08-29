@@ -4,7 +4,7 @@ import { ResourceManager } from "localizable-resources";
 /**
  * Provides the functionality for handling resources.
  */
-export default class Resource
+export class Resource
 {
     /**
      * The resources handled by this `Resource`.

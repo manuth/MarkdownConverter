@@ -1,4 +1,4 @@
-export default interface IMark
+export interface IMark
 {
     name: string;
     buffer: Buffer;

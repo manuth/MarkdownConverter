@@ -14,24 +14,24 @@ import * as Path from "path";
 import * as TwEmoji from "twemoji";
 import { TextDocument } from "vscode";
 import * as YAML from "yamljs";
-import ResourceManager from "../../Properties/ResourceManager";
+import { ResourceManager } from "../../Properties/ResourceManager";
 import { Utilities } from "../../System/Utilities";
-import DateTimeFormatter from "../Globalization/DateTimeFormatter";
-import FileException from "../IO/FileException";
-import StringUtils from "../Text/StringUtils";
-import YAMLException from "../YAML/YAMLException";
-import DocumentFragment from "./DocumentFragment";
-import EmojiType from "./EmojiType";
-import ListType from "./ListType";
-import Paper from "./Paper";
-import Renderable from "./Renderable";
-import Slugifier from "./Slugifier";
-import TocSettings from "./TocSettings";
+import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
+import { FileException } from "../IO/FileException";
+import { StringUtils } from "../Text/StringUtils";
+import { YAMLException } from "../YAML/YAMLException";
+import { DocumentFragment } from "./DocumentFragment";
+import { EmojiType } from "./EmojiType";
+import { ListType } from "./ListType";
+import { Paper } from "./Paper";
+import { Renderable } from "./Renderable";
+import { Slugifier } from "./Slugifier";
+import { TocSettings } from "./TocSettings";
 
 /**
  * Represents a document.
  */
-export default class Document extends Renderable
+export class Document extends Renderable
 {
     /**
      * The name of the file represented by this document.

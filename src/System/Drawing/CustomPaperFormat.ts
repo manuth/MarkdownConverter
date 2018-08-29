@@ -1,10 +1,10 @@
 import { PDFOptions } from "puppeteer";
-import PaperFormat from "./PaperFormat";
+import { PaperFormat } from "./PaperFormat";
 
 /**
  * Represents a custom paper-format.
  */
-export default class CustomPaperFormat extends PaperFormat
+export class CustomPaperFormat extends PaperFormat
 {
     /**
      * The width.

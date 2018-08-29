@@ -3,7 +3,7 @@ import { PDFOptions } from "puppeteer";
 /**
  * Represents the format of a paper.
  */
-export default abstract class PaperFormat
+export abstract class PaperFormat
 {
     /**
      * Gets the pdf-options for the paper-format.

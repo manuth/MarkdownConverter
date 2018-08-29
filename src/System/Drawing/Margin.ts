@@ -1,7 +1,7 @@
 /**
  * Represents a margin.
  */
-export default class Margin
+export class Margin
 {
     /**
      * The top margin.

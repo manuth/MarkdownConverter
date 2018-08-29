@@ -1,7 +1,7 @@
 /**
  * Represents an emoji-type.
  */
-enum EmojiType
+export enum EmojiType
 {
     /**
      * Indicates no emoji-type.
@@ -23,5 +23,3 @@ enum EmojiType
      */
     Twitter
 }
-
-export default EmojiType;

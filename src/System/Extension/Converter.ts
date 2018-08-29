@@ -4,14 +4,14 @@ import * as Server from "http-server";
 import * as Path from "path";
 import Puppeteer = require("puppeteer");
 import * as URL from "url";
-import ConversionType from "./ConversionType";
-import Document from "./System/Drawing/Document";
-import FileException from "./System/IO/FileException";
+import { Document } from "../Drawing/Document";
+import { FileException } from "../IO/FileException";
+import { ConversionType } from "./ConversionType";
 
 /**
  * Provides a markdown-converter.
  */
-export default class Converter
+export class Converter
 {
     /**
      * The root-directory of the document.

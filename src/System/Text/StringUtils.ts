@@ -1,7 +1,7 @@
 /**
  * Provides string-functionalities.
  */
-export default class StringUtils
+export class StringUtils
 {
     /**
      * Converts a string to code its code-points-value.

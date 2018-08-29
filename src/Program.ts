@@ -5,18 +5,18 @@ import { MarkdownIt } from "markdown-it";
 import * as Path from "path";
 import * as Format from "string-template";
 import { TextDocument, window } from "vscode";
-import ConversionType from "./ConversionType";
-import Converter from "./Converter";
-import ResourceManager from "./Properties/ResourceManager";
-import Settings from "./Properties/Settings";
-import Document from "./System/Drawing/Document";
+import { ResourceManager } from "./Properties/ResourceManager";
+import { Settings } from "./Properties/Settings";
+import { Document } from "./System/Drawing/Document";
 import { MarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
-import FileException from "./System/IO/FileException";
+import { ConversionType } from "./System/Extension/ConversionType";
+import { Converter } from "./System/Extension/Converter";
+import { FileException } from "./System/IO/FileException";
 
 /**
  * Provides the main logic of the extension
  */
-export default class Program
+export class Program
 {
     /**
      * Converts a markdown-file to other file-types
