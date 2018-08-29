@@ -1,7 +1,7 @@
 /**
  * Represents the orientation of a paper.
  */
-enum PaperOrientation
+export enum PaperOrientation
 {
     /**
      * Indicates the vertical orientation.
@@ -13,5 +13,3 @@ enum PaperOrientation
      */
     Landscape
 }
-
-export default PaperOrientation;

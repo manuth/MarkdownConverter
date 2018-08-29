@@ -1,7 +1,7 @@
 /**
  * Represents a list-type.
  */
-enum ListType
+export enum ListType
 {
     /**
      * Indicates an unordered list.
@@ -13,5 +13,3 @@ enum ListType
      */
     Ordered
 }
-
-export default ListType;

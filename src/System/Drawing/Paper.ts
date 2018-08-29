@@ -1,11 +1,11 @@
-import Margin from "./Margin";
-import PaperFormat from "./PaperFormat";
-import StandardizedPaperFormat from "./StandardizedPaperFormat";
+import { Margin } from "./Margin";
+import { PaperFormat } from "./PaperFormat";
+import { StandardizedPaperFormat } from "./StandardizedPaperFormat";
 
 /**
  * Represents a document-layout.
  */
-export default class Paper
+export class Paper
 {
     /**
      * The margin.

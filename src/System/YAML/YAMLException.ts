@@ -1,13 +1,13 @@
 import * as OS from "os";
 import * as Format from "string-template";
-import ResourceManager from "../../Properties/ResourceManager";
-import Exception from "../Exception";
-import IMark from "./Mark";
+import { ResourceManager } from "../../Properties/ResourceManager";
+import { Exception } from "../Exception";
+import { IMark } from "./Mark";
 
 /**
  * Represents a YAML-exception.
  */
-export default class YAMLException extends Exception
+export class YAMLException extends Exception
 {
     /**
      * The reason of the exception.

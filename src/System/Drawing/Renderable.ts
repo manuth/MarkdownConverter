@@ -1,7 +1,7 @@
 /**
  * Represents a renderable component.
  */
-export default abstract class Renderable
+export abstract class Renderable
 {
     /**
      * The content of the component.
