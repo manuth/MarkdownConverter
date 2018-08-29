@@ -6,12 +6,12 @@ import * as Path from "path";
 import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
 import { commands, env, ExtensionContext, ProgressLocation, TextDocument, window, workspace } from "vscode";
+import { getMarkdownExtensionContributions } from "./MarkdownConverter/MarkdownExtensions";
+import { MarkdownFileNotFoundException } from "./MarkdownConverter/MarkdownFileNotFoundException";
 import { Program } from "./Program";
 import { ResourceManager } from "./Properties/ResourceManager";
 import { Settings } from "./Properties/Settings";
-import { getMarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
 import { Exception } from "./System/Exception";
-import { MarkdownFileNotFoundException } from "./System/MarkdownFileNotFoundException";
 
 let markdown;
 

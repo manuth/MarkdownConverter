@@ -5,12 +5,12 @@ import { MarkdownIt } from "markdown-it";
 import * as Path from "path";
 import * as Format from "string-template";
 import { TextDocument, window } from "vscode";
+import { ConversionType } from "./MarkdownConverter/ConversionType";
+import { Converter } from "./MarkdownConverter/Converter";
+import { MarkdownExtensionContributions } from "./MarkdownConverter/MarkdownExtensions";
 import { ResourceManager } from "./Properties/ResourceManager";
 import { Settings } from "./Properties/Settings";
 import { Document } from "./System/Drawing/Document";
-import { MarkdownExtensionContributions } from "./System/Drawing/MarkdownExtensions";
-import { ConversionType } from "./System/Extension/ConversionType";
-import { Converter } from "./System/Extension/Converter";
 import { FileException } from "./System/IO/FileException";
 
 /**

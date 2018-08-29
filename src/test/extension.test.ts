@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as Dedent from "dedent";
 import * as MarkdownIt from "markdown-it";
-import { Utilities } from "../System/Utilities";
+import { Utilities } from "../MarkdownConverter/Utilities";
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("MarkdownConverter", () =>
