@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import CultureInfo from "culture-info";
 import * as FileSystem from "fs-extra";
+import { MarkdownIt } from "markdown-it";
 import * as Path from "path";
 import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
@@ -22,9 +23,14 @@ let markdown;
 export class Extension
 {
     /**
+     * The context of the extension.
+     */
+    private context: ExtensionContext = null;
+
+    /**
      * The parser provided by `Visual Studio Code`
      */
-    private vsCodeParser;
+    private vsCodeParser: MarkdownIt;
 
     /**
      * Initializes a new instance of the `Extension` class.
@@ -35,6 +41,22 @@ export class Extension
     }
 
     /**
+     * Gets the context of the extension.
+     */
+    public get Context()
+    {
+        return this.context;
+    }
+
+    /**
+     * Gets the parser provided by 
+     */
+    public get VSCodeParser()
+    {
+        return this.vsCodeParser;
+    }
+
+    /**
      * Activates the extension.
      * 
      * @param context
@@ -42,6 +64,8 @@ export class Extension
      */
     public async Activate(context: ExtensionContext)
     {
+        this.context = context;
+
         // context.subscriptions.push(
         //     commands.registerCommand("markdownConverter.Convert", this.Convert)
         // );
