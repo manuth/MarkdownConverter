@@ -10,6 +10,7 @@ import { Extension } from "../extension";
 import { ResourceManager } from "../Properties/ResourceManager";
 import { Settings } from "../Properties/Settings";
 import { Document } from "../System/Drawing/Document";
+import { Exception } from "../System/Exception";
 import { FileException } from "../System/IO/FileException";
 import { Command } from "./Command";
 import { ConversionType } from "./ConversionType";
@@ -319,7 +320,18 @@ export class ConvertCommand extends Command
         }
         catch (exception)
         {
+            let message: string;
 
+            if (exception instanceof Exception)
+            {
+                message = exception.Message;
+            }
+            else
+            {
+                throw exception;
+            }
+
+            window.showErrorMessage(message);
         }
     }
 }
