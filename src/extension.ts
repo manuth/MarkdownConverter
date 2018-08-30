@@ -6,6 +6,7 @@ import * as Path from "path";
 import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
 import { commands, env, ExtensionContext, ProgressLocation, TextDocument, window, workspace } from "vscode";
+import { ConvertCommand } from "./MarkdownConverter/ConvertCommand";
 import { getMarkdownExtensionContributions } from "./MarkdownConverter/MarkdownExtensions";
 import { MarkdownFileNotFoundException } from "./MarkdownConverter/MarkdownFileNotFoundException";
 import { Program } from "./Program";
@@ -41,9 +42,9 @@ export class Extension
      */
     public async Activate(context: ExtensionContext)
     {
-        context.subscriptions.push(
-            commands.registerCommand("markdownConverter.Convert", this.Convert)
-        );
+        // context.subscriptions.push(
+        //     commands.registerCommand("markdownConverter.Convert", this.Convert)
+        // );
         let disposables = [
             commands.registerCommand("markdownConverter.Convert", async () =>
             {
@@ -198,8 +199,12 @@ export class Extension
         };
     }
 
+    /**
+     * Converts the current document.
+     */
     public async Convert()
     {
+        new ConvertCommand(this).Execute();
     }
 
     /**
