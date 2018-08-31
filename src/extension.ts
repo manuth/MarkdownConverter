@@ -240,5 +240,5 @@ export class Extension
 }
 
 let extension = new Extension();
-export let activate = extension.Activate;
-export let deactivate = extension.Dispose;
+export let activate = async (context: ExtensionContext) => await extension.Activate(context);
+export let deactivate = async () => await extension.Dispose();
