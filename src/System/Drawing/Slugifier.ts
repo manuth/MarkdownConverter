@@ -44,7 +44,7 @@ export class Slugifier
 
         while (this.Slugs.includes(slug))
         {
-            slug = slug + "-" + (++counter).toString();
+            slug = `${baseName}-${++counter}`;
         }
 
         this.Slugs.push(slug);
