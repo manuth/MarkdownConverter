@@ -210,21 +210,10 @@ export class Document extends Renderable
     {
         return this.quality;
     }
+    
     public set Quality(value: number)
     {
         this.quality = value;
-    }
-
-    /**
-     * Gets or sets the type of emojis to use.
-     */
-    public get EmojiType(): EmojiType
-    {
-        return this.emojiType;
-    }
-    public set EmojiType(value: EmojiType)
-    {
-        this.emojiType = value;
     }
 
     /**
@@ -234,6 +223,7 @@ export class Document extends Renderable
     {
         return this.attributes;
     }
+
     public set Attributes(value: { [id: string]: any })
     {
         this.attributes = value;
@@ -247,6 +237,7 @@ export class Document extends Renderable
     {
         return this.dateFormat;
     }
+
     public set DateFormat(value: string)
     {
         this.dateFormat = value;
@@ -259,6 +250,7 @@ export class Document extends Renderable
     {
         return this.locale;
     }
+
     public set Locale(value: CultureInfo)
     {
         this.locale = value;
@@ -271,6 +263,7 @@ export class Document extends Renderable
     {
         return this.paper;
     }
+
     public set Paper(value: Paper)
     {
         this.paper = value;
@@ -283,6 +276,7 @@ export class Document extends Renderable
     {
         return this.headerFooterEnabled;
     }
+
     public set HeaderFooterEnabled(value: boolean)
     {
         this.headerFooterEnabled = value;
@@ -305,39 +299,16 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the definitions of the table of contents.
-     */
-    public get TocSettings(): TocSettings
-    {
-        return this.tocSettings;
-    }
-    public set TocSettings(value: TocSettings)
-    {
-        this.tocSettings = value;
-    }
-
-    /**
      * Gets or sets the template to use for the RenderBody-process.
      */
     public get Template(): string
     {
         return this.template;
     }
+
     public set Template(value: string)
     {
         this.template = value;
-    }
-
-    /**
-     * Gets or sets a value indicating whether fancy code-blocks are enabled.
-     */
-    public get HighlightEnabled(): boolean
-    {
-        return this.highlightEnabled;
-    }
-    public set HighlightEnabled(value: boolean)
-    {
-        this.highlightEnabled = value;
     }
 
     /**
@@ -372,7 +343,6 @@ export class Document extends Renderable
      */
     protected async RenderText(content: string): Promise<string>
     {
-        // Preparing the attributes
         let view = {};
 
         for (let key in this.Attributes)
