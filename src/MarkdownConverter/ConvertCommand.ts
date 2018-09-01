@@ -1,17 +1,27 @@
 import * as ChildProcess from "child_process";
 import CultureInfo from "culture-info";
 import * as FileSystem from "fs-extra";
+import * as HighlightJs from "highlight.js";
 import * as MarkdownIt from "markdown-it";
+import * as Anchor from "markdown-it-anchor";
+import * as Checkbox from "markdown-it-checkbox";
+import * as MarkdownItEmoji from "markdown-it-emoji";
+import * as MarkdownItToc from "markdown-it-table-of-contents";
 import * as Path from "path";
 import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
+import * as TwEmoji from "twemoji";
 import { ProgressLocation, TextDocument, window, workspace } from "vscode";
 import { Extension } from "../extension";
 import { ResourceManager } from "../Properties/ResourceManager";
 import { Settings } from "../Properties/Settings";
 import { Document } from "../System/Drawing/Document";
+import { EmojiType } from "../System/Drawing/EmojiType";
+import { ListType } from "../System/Drawing/ListType";
+import { Slugifier } from "../System/Drawing/Slugifier";
 import { Exception } from "../System/Exception";
 import { FileException } from "../System/IO/FileException";
+import { StringUtils } from "../System/Text/StringUtils";
 import { Command } from "./Command";
 import { ConversionType } from "./ConversionType";
 import { Converter } from "./Converter";
@@ -136,6 +146,90 @@ export class ConvertCommand extends Command
         }
 
         return converter;
+    }
+
+    /**
+     * Loads a parser according to the settings.
+     */
+    protected LoadParser(): Promise<MarkdownIt.MarkdownIt>
+    {
+        let parser: MarkdownIt.MarkdownIt;
+
+        if (Settings.Default.SystemStylesEnabled)
+        {
+            parser = this.Extension.VSCodeParser;
+            parser.normalizeLink = (link: string) => link;
+            parser.normalizeLinkText = (link: string) => link;
+        }
+        else
+        {
+            parser = new MarkdownIt({
+                html: true,
+                highlight: (subject, language) =>
+                {
+                    if (Settings.Default.HighlightStyle !== "None")
+                    {
+                        subject = HighlightJs.highlight(language, subject, true).value;
+                    }
+                    else
+                    {
+                        subject = parser.utils.escapeHtml(subject);
+                    }
+
+                    return `<pre class="hljs"><code><div>${subject}</div></code></pre>`;
+                }
+            });
+
+            let slugifier = new Slugifier();
+            Anchor(
+                parser,
+                {
+                    slugify: heading => slugifier.CreateSlug(heading)
+                });
+            parser.use(Checkbox);
+        }
+
+        parser.validateLink = () => true;
+
+        if (Settings.Default.TocSettings)
+        {
+            let slugifier = new Slugifier();
+            parser.use(
+                MarkdownItToc,
+                {
+                    includeLevel: Settings.Default.TocSettings.Levels.toArray(),
+                    containerClass: Settings.Default.TocSettings.Class,
+                    markerPattern: Settings.Default.TocSettings.Indicator,
+                    listType: Settings.Default.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
+                    slugify: heading => slugifier.CreateSlug(heading)
+                });
+        }
+
+        if (Settings.Default.EmojiType)
+        {
+            parser.use(MarkdownItEmoji);
+            parser.renderer.rules["emoji"] = (token, id) =>
+            {
+                switch (Settings.Default.EmojiType)
+                {
+                    case EmojiType.None:
+                        return token[id].markup;
+                    case EmojiType.Native:
+                        return token[id].content;
+                    case EmojiType.Twitter:
+                        return TwEmoji.parse(token[id].content);
+                    case EmojiType.GitHub:
+                        return "<img " +
+                            'class="emoji" ' +
+                            `title=":${token[id].markup}:" ` +
+                            `alt=":${token[id].markup}:" ` +
+                            `src="https://assets-cdn.github.com/images/icons/emoji/unicode/${StringUtils.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase()}.png" ` +
+                            'align="absmiddle" />';
+                }
+            };
+        }
+
+        return null;
     }
 
     /**
