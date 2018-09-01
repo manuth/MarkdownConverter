@@ -60,7 +60,6 @@ export class ConvertCommand extends Command
     {
         let converter = new Converter(documentRoot, new Document(textDocument, Settings.Default.SystemStylesEnabled ? this.Extension.VSCodeParser : new MarkdownIt()));
         converter.Document.Quality = Settings.Default.ConversionQuality;
-        converter.Document.EmojiType = Settings.Default.EmojiType;
 
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
 
@@ -72,8 +71,6 @@ export class ConvertCommand extends Command
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
         converter.Document.Header.Content = Settings.Default.HeaderTemplate;
         converter.Document.Footer.Content = Settings.Default.FooterTemplate;
-
-        converter.Document.TocSettings = Settings.Default.TocSettings;
 
         converter.Document.UseSystemPlugins = Settings.Default.UseSystemPlugins;
 
@@ -117,14 +114,8 @@ export class ConvertCommand extends Command
             }
         }
 
-        if (Settings.Default.HighlightStyle === "None")
+        if (Settings.Default.HighlightStyle !== "None")
         {
-            converter.Document.HighlightEnabled = false;
-        }
-        else
-        {
-            converter.Document.HighlightEnabled = true;
-
             if (Settings.Default.HighlightStyle === "Default")
             {
                 converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultHighlight"));
