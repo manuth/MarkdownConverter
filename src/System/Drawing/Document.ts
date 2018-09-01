@@ -2,30 +2,21 @@ import CultureInfo from "culture-info";
 import * as Dedent from "dedent";
 import * as FrontMatter from "front-matter";
 import * as FileSystem from "fs-extra";
-import * as HighlightJs from "highlight.js";
-import * as MarkdownIt from "markdown-it";
-import * as Anchor from "markdown-it-anchor";
-import * as Checkbox from "markdown-it-checkbox";
-import * as MarkdownItEmoji from "markdown-it-emoji";
-import * as MarkdownItToc from "markdown-it-table-of-contents";
+import { MarkdownIt } from "markdown-it";
 import * as Mustache from "mustache";
 import * as OS from "os";
 import * as Path from "path";
-import * as TwEmoji from "twemoji";
 import { TextDocument } from "vscode";
 import * as YAML from "yamljs";
 import { Utilities } from "../../MarkdownConverter/Utilities";
 import { ResourceManager } from "../../Properties/ResourceManager";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { FileException } from "../IO/FileException";
-import { StringUtils } from "../Text/StringUtils";
 import { YAMLException } from "../YAML/YAMLException";
 import { DocumentFragment } from "./DocumentFragment";
 import { EmojiType } from "./EmojiType";
-import { ListType } from "./ListType";
 import { Paper } from "./Paper";
 import { Renderable } from "./Renderable";
-import { Slugifier } from "./Slugifier";
 import { TocSettings } from "./TocSettings";
 
 /**
@@ -128,7 +119,10 @@ export class Document extends Renderable
 
     private scripts: string[] = [];
 
-    private markdownParser: MarkdownIt.MarkdownIt;
+    /**
+     * The parser for parsing the markdown-content.
+     */
+    private parser: MarkdownIt;
 
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
@@ -139,7 +133,7 @@ export class Document extends Renderable
      * @param config
      * The configuration to set.
      */
-    constructor(document: TextDocument, markdown: MarkdownIt.MarkdownIt)
+    constructor(document: TextDocument, parser: MarkdownIt)
     {
         super();
         this.RawContent = document.getText();
@@ -155,7 +149,7 @@ export class Document extends Renderable
             this.Attributes.CreationDate = new Date(Date.now());
         }
 
-        this.markdownParser = markdown as MarkdownIt.MarkdownIt;        
+        this.parser = parser;
     }
 
     /**
@@ -378,16 +372,6 @@ export class Document extends Renderable
      */
     protected async RenderText(content: string): Promise<string>
     {
-        if (this.markdownParser === undefined || this.UseSystemPlugins)
-        {
-            this.markdownParser = this.getSystemMarkdownParser();
-        } else {
-            // Disable vscode-resource plugin
-            this.markdownParser.normalizeLink = (link: string) => link;
-            this.markdownParser.normalizeLinkText = (link: string) => link;
-            this.markdownParser.validateLink = (link: string) => true;
-        }
-
         // Preparing the attributes
         let view = {};
 
@@ -403,79 +387,8 @@ export class Document extends Renderable
             view[key] = value;
         }
 
-        let html = this.markdownParser.render(content);
+        let html = this.parser.render(content);
         return Mustache.render(html, view);
-    }
-
-    private getSystemMarkdownParser()
-    {
-        let md = new MarkdownIt({
-            html: true,
-            highlight: (subject, language) =>
-            {
-                if (this.HighlightEnabled)
-                {
-                    subject = HighlightJs.highlight(language, subject, true).value;
-                }
-                else
-                {
-                    subject = md.utils.escapeHtml(subject);
-                }
-                return '<pre class="hljs"><code><div>' + subject + "</div></code></pre>";
-            }
-        });
-        md.validateLink = () =>
-        {
-            return true;
-        };
-        {
-            let slugifier = new Slugifier();
-            Anchor(md, {
-                slugify: heading => slugifier.CreateSlug(heading)
-            });
-        }
-
-        md.use(Checkbox);
-
-        if (this.TocSettings)
-        {
-            let slugifier = new Slugifier();
-            md.use(MarkdownItToc, {
-                includeLevel: this.TocSettings.Levels.toArray(),
-                containerClass: this.TocSettings.Class,
-                markerPattern: this.TocSettings.Indicator,
-                listType: this.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
-                slugify: heading => slugifier.CreateSlug(heading)
-            });
-        }
-
-        if (this.emojiType)
-        {
-            // Making the emoji-variable visible for the callback
-            let emoji = this.emojiType;
-            md.use(MarkdownItEmoji);
-            md.renderer.rules.emoji = (token, id) =>
-            {
-                switch (emoji)
-                {
-                    case EmojiType.None:
-                        return token[id].markup;
-                    case EmojiType.Native:
-                        return token[id].content;
-                    case EmojiType.Twitter:
-                        return TwEmoji.parse(token[id].content);
-                    case EmojiType.GitHub:
-                        return '<img class="emoji" title=":' +
-                            token[id].markup +
-                            ':" alt=":' +
-                            token[id].markup +
-                            ':" src="https://assets-cdn.github.com/images/icons/emoji/unicode/' +
-                            StringUtils.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase() +
-                            '.png" allign="absmiddle" />';
-                }
-            };
-        }
-        return md;
     }
 
     /**
