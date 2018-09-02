@@ -103,6 +103,7 @@ export class ConvertCommand extends Command
         if (Settings.Default.SystemStylesEnabled)
         {
             let mdExtensions = getMarkdownExtensionContributions(this.Extension.Context);
+            converter.Document.StyleSheets.push(ResourceManager.Files.Get("SystemStyle"));
 
             for (let styleSheet of mdExtensions.previewStyles)
             {
