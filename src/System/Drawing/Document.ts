@@ -14,10 +14,8 @@ import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { FileException } from "../IO/FileException";
 import { YAMLException } from "../YAML/YAMLException";
 import { DocumentFragment } from "./DocumentFragment";
-import { EmojiType } from "./EmojiType";
 import { Paper } from "./Paper";
 import { Renderable } from "./Renderable";
-import { TocSettings } from "./TocSettings";
 
 /**
  * Represents a document.
@@ -30,19 +28,9 @@ export class Document extends Renderable
     public fileName: string;
 
     /**
-     * tells the document if it should use the standard system plugins or those from vscode
-     */
-    private useSystemPlugins: boolean;
-
-    /**
      * The quality of the document.
      */
     private quality: number = 90;
-
-    /**
-     * The type of emojis to use.
-     */
-    private emojiType: EmojiType = EmojiType.GitHub;
 
     /**
      * The attributes of the document.
@@ -83,11 +71,6 @@ export class Document extends Renderable
     private footer: DocumentFragment = new DocumentFragment(this);
 
     /**
-     * The definitions of the table of contents.
-     */
-    private tocSettings: TocSettings = null;
-
-    /**
      * The template to use for the RenderBody-process.
      */
     private template: string = Dedent(`
@@ -102,11 +85,6 @@ export class Document extends Renderable
                 {{{scripts}}}
             </body>
         </html>`);
-
-    /**
-     * A value indicating whether fancy code-blocks are enabled.
-     */
-    private highlightEnabled: boolean = true;
 
     /**
      * The stylesheets of the document.
@@ -161,18 +139,6 @@ export class Document extends Renderable
     public set FileName(value: string)
     {
         this.fileName = value;
-    }
-
-    /**
-     * Tells the document if it should use the standard system plugins or those from vscode
-     */
-    public get UseSystemPlugins(): boolean {
-        return this.useSystemPlugins;
-    }
-
-    public set UseSystemPlugins(value: boolean)
-    {
-        this.useSystemPlugins = value;
     }
 
     /**

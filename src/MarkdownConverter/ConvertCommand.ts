@@ -73,8 +73,6 @@ export class ConvertCommand extends Command
         converter.Document.Header.Content = Settings.Default.HeaderTemplate;
         converter.Document.Footer.Content = Settings.Default.FooterTemplate;
 
-        converter.Document.UseSystemPlugins = Settings.Default.UseSystemPlugins;
-
         try
         {
             if (Settings.Default.Template)
