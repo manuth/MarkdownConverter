@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [MarkdownConverter Unreleased]
 ### Changes
-  - Allowed users to enable the default parser rather than the default stylesheets
+  - Allowed users to enable the default parser rather than the default stylesheets  
+    Thanks to @mjwsteenbergen for his contribution
+  - Renamed some settings
+    - `markdownConverter.Document.Design.SystemStylesEnabled` => `markdownConverter.Parser.SystemParserEnabled`
+    - `markdownConverter.Document.EmojiType` => `markdownConverter.Parser.EmojiType`
+    - `markdownConverter.Document.Toc` => `markdownConverter.Parser.Toc`
 
 ## [MarkdownConverter v1.0.0]
 ### Changes

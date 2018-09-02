@@ -94,7 +94,7 @@ export class Settings
      */
     public get EmojiType(): EmojiType
     {
-        return EmojiType[this.getConfigEntry<string>("Document.EmojiType")];
+        return EmojiType[this.getConfigEntry<string>("Parser.EmojiType")];
     }
 
     /**
@@ -170,12 +170,12 @@ export class Settings
      */
     public get TocSettings(): TocSettings
     {
-        if (this.getConfigEntry<boolean>("Document.Toc.Enabled"))
+        if (this.getConfigEntry<boolean>("Parser.Toc.Enabled"))
         {
-            let $class = this.getConfigEntry<string>("Document.Toc.Class");
-            let levels = this.getConfigEntry<string>("Document.Toc.Levels");
-            let indicator = new RegExp(this.getConfigEntry("Document.Toc.Indicator"), "im");
-            let listType = this.getConfigEntry<string>("Document.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
+            let $class = this.getConfigEntry<string>("Parser.Toc.Class");
+            let levels = this.getConfigEntry<string>("Parser.Toc.Levels");
+            let indicator = new RegExp(this.getConfigEntry("Parser.Toc.Indicator"), "im");
+            let listType = this.getConfigEntry<string>("Parser.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
 
             return new TocSettings($class, new MultiRange(levels), indicator, listType);
         }
@@ -204,9 +204,9 @@ export class Settings
     /**
      * Gets a value indicating whether to use system-provided styles.
      */
-    public get SystemStylesEnabled(): boolean
+    public get SystemParserEnabled(): boolean
     {
-        return this.getConfigEntry<boolean>("Document.Design.SystemStylesEnabled");
+        return this.getConfigEntry<boolean>("Parser.SystemParserEnabled");
     }
 
     /**

@@ -79,7 +79,7 @@ export class ConvertCommand extends Command
             {
                 converter.Document.Template = (await FileSystem.readFile(Path.resolve(documentRoot, Settings.Default.Template))).toString();
             }
-            else if (Settings.Default.SystemStylesEnabled)
+            else if (Settings.Default.SystemParserEnabled)
             {
                 converter.Document.Template = (await FileSystem.readFile(ResourceManager.Files.Get("SystemTemplate"))).toString();
             }
@@ -98,7 +98,7 @@ export class ConvertCommand extends Command
             }
         }
 
-        if (Settings.Default.SystemStylesEnabled)
+        if (Settings.Default.SystemParserEnabled)
         {
             let mdExtensions = getMarkdownExtensionContributions(this.Extension.Context);
 
@@ -117,7 +117,7 @@ export class ConvertCommand extends Command
         {
             if (Settings.Default.HighlightStyle === "Default")
             {
-                if (!Settings.Default.SystemStylesEnabled)
+                if (!Settings.Default.SystemParserEnabled)
                 {
                     converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultHighlight"));
                 }
@@ -156,7 +156,7 @@ export class ConvertCommand extends Command
                     ignore: []
                 });
 
-        if (Settings.Default.SystemStylesEnabled)
+        if (Settings.Default.SystemParserEnabled)
         {
             parser = this.Extension.VSCodeParser;
             parser.normalizeLink = (link: string) => link;

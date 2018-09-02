@@ -111,9 +111,15 @@
             }
           ]
         },
-        "markdownConverter.Document.EmojiType": {
-          "title": "%Config.Document.EmojiType%",
-          "description": "%Config.Document.EmojiType.Description%",
+        "markdownConverter.Parser.SystemParserEnabled": {
+          "title": "%Config.Parser.SystemParserEnabled%",
+          "description": "%Config.Parser.SystemParserEnabled.Description%",
+          "type": "boolean",
+          "default": true
+        },
+        "markdownConverter.Parser.EmojiType": {
+          "title": "%Config.Parser.EmojiType%",
+          "description": "%Config.Parser.EmojiType.Description%",
           "type": "string",
           "default": "GitHub",
           "enum": [
@@ -121,6 +127,41 @@
             "Native",
             "GitHub",
             "Twitter"
+          ]
+        },
+        "markdownConverter.Parser.Toc.Enabled": {
+          "title": "%Config.Parser.Toc.Enabled%",
+          "description": "%Config.Parser.Toc.Enabled.Description%",
+          "type": "boolean",
+          "default": true
+        },
+        "markdownConverter.Parser.Toc.Class": {
+          "title": "%Config.Parser.Toc.Class%",
+          "description": "%Config.Parser.Toc.Class.Description%",
+          "type": "string",
+          "default": "markdown-converter-toc"
+        },
+        "markdownConverter.Parser.Toc.Levels": {
+          "title": "%Config.Parser.Toc.Levels%",
+          "description": "%Config.Parser.Toc.Levels.Description%",
+          "type": "string",
+          "pattern": "^\\d+\\s*(-\\s*\\d+\\s*)?(,\\s*\\d+\\s*(-\\s*\\d+\\s*)?)*$",
+          "default": "1-6"
+        },
+        "markdownConverter.Parser.Toc.Indicator": {
+          "title": "%Config.Parser.Toc.Indicator%",
+          "description": "%Config.Parser.Toc.Indicator.Description%",
+          "type": "string",
+          "default": "^\\[\\[\\s*toc\\s*\\]\\]"
+        },
+        "markdownConverter.Parser.Toc.ListType": {
+          "title": "%Config.Parser.Toc.ListType%",
+          "description": "%Config.Parser.Toc.ListType.Description%",
+          "type": "string",
+          "default": "Unordered",
+          "enum": [
+            "Ordered",
+            "Unordered"
           ]
         },
         "markdownConverter.Document.Attributes": {
@@ -255,41 +296,6 @@
           "type": "string",
           "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \"></div><div stlyle=\"text-align: center; \">{{ CreationDate }}</div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right; \"></div>"
         },
-        "markdownConverter.Document.Toc.Enabled": {
-          "title": "%Config.Document.Toc.Enabled%",
-          "description": "%Config.Document.Toc.Enabled.Description%",
-          "type": "boolean",
-          "default": true
-        },
-        "markdownConverter.Document.Toc.Class": {
-          "title": "%Config.Document.Toc.Class%",
-          "description": "%Config.Document.Toc.Class.Description%",
-          "type": "string",
-          "default": "markdown-converter-toc"
-        },
-        "markdownConverter.Document.Toc.Levels": {
-          "title": "%Config.Document.Toc.Levels%",
-          "description": "%Config.Document.Toc.Levels.Description%",
-          "type": "string",
-          "pattern": "^\\d+\\s*(-\\s*\\d+\\s*)?(,\\s*\\d+\\s*(-\\s*\\d+\\s*)?)*$",
-          "default": "1-6"
-        },
-        "markdownConverter.Document.Toc.Indicator": {
-          "title": "%Config.Document.Toc.Indicator%",
-          "description": "%Config.Document.Toc.Indicator.Description%",
-          "type": "string",
-          "default": "^\\[\\[\\s*toc\\s*\\]\\]"
-        },
-        "markdownConverter.Document.Toc.ListType": {
-          "title": "%Config.Document.Toc.ListType%",
-          "description": "%Config.Document.Toc.ListType.Description%",
-          "type": "string",
-          "default": "Unordered",
-          "enum": [
-            "Ordered",
-            "Unordered"
-          ]
-        },
         "markdownConverter.Document.Design.Template": {
           "title": "%Config.Document.Design.Template%",
           "description": "%Config.Document.Design.Template.Description%",
@@ -312,12 +318,6 @@
               ]
             }
           ]
-        },
-        "markdownConverter.Document.Design.SystemStylesEnabled": {
-          "title": "%Config.Document.Design.SystemStylesEnabled%",
-          "description": "%Config.Document.Design.SystemStylesEnabled.Description%",
-          "type": "boolean",
-          "default": true
         },
         "markdownConverter.Document.Design.StyleSheets": {
           "title": "%Config.Document.Design.StyleSheets%",
