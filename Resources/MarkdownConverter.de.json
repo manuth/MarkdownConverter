@@ -4,6 +4,7 @@
     "FileException": "Auf die Datei \"{0}\" konnte nicht zugegriffen werden.",
     "MarkdownFileException": "Es konnte keine Markdown-Datei gefunden werden.",
     "YAMLException": "Fehler: Der YAML-Block ist nicht richtig formatiert. Zeile {0}, Spalte {1}.",
+    "UnsupportedPlatformException": "Diese Funktion wird von Ihrer Platform nicht unterstützt!",
     "UpdateMessage": "Bevor Sie mit MarkdownConverter durchstarten können, muss Chromium gedownloadet werden.\nWollen Sie den Download starten?",
     "Yes": "Ja",
     "No": "Nein",
