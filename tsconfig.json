@@ -9,6 +9,7 @@
         "lib": [
             "es7",
             "dom"
-        ]
+        ],
+        "noUnusedLocals": true
     }
 }
