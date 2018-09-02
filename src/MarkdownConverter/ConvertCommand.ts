@@ -58,7 +58,7 @@ export class ConvertCommand extends Command
      */
     protected async LoadConverter(documentRoot: string, textDocument: TextDocument): Promise<Converter>
     {
-        let converter = new Converter(documentRoot, new Document(textDocument, Settings.Default.SystemStylesEnabled ? this.Extension.VSCodeParser : new MarkdownIt()));
+        let converter = new Converter(documentRoot, new Document(textDocument, await this.LoadParser()));
         converter.Document.Quality = Settings.Default.ConversionQuality;
 
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
@@ -142,7 +142,7 @@ export class ConvertCommand extends Command
     /**
      * Loads a parser according to the settings.
      */
-    protected LoadParser(): Promise<MarkdownIt.MarkdownIt>
+    protected async LoadParser(): Promise<MarkdownIt.MarkdownIt>
     {
         let parser: MarkdownIt.MarkdownIt;
 
@@ -170,7 +170,13 @@ export class ConvertCommand extends Command
                     return `<pre class="hljs"><code><div>${subject}</div></code></pre>`;
                 }
             });
+            
+            parser.use(Checkbox);
+        }
 
+        parser.validateLink = () => true;
+
+        {
             let slugifier = new Slugifier();
             Anchor(
                 parser,
@@ -220,7 +226,7 @@ export class ConvertCommand extends Command
             };
         }
 
-        return null;
+        return parser;
     }
 
     /**
