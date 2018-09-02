@@ -1,7 +1,7 @@
 /**
  * Represents an Exception
  */
-export default class Exception extends Error
+export class Exception extends Error
 {
     /**
      * A collection of key/value pairs that provide additional user-defined information about the exception.

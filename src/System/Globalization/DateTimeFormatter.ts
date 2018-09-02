@@ -1,16 +1,11 @@
 import CultureInfo from "culture-info";
-import ResourceManager from "../../Properties/ResourceManager";
-import StringUtils from "../Text/StringUtils";
-
-/**
- * Gets a set of DateTime-string-tokens.
- */
-let tokens: { [id: string]: string };
+import { ResourceManager } from "../../Properties/ResourceManager";
+import { StringUtils } from "../Text/StringUtils";
 
 /**
  * Provides the functionallity to format a date.
  */
-export default class DateTimeFormatter
+export class DateTimeFormatter
 {
     /**
      * The locale to format the date.
@@ -25,22 +20,51 @@ export default class DateTimeFormatter
     /**
      * Returns the tokens to replace.
      */
-    private GetTokens(date: Date): { [id: string]: string }
+    private GetTokens(date: Date = new Date()): { [id: string]: string }
     {
-        let day = date.getDay() - 1;
-
-        if (day < 0)
+        let getDay = () =>
         {
-            day = 6;
-        }
+            let day = date.getDay() - 1;
+    
+            if (day < 0)
+            {
+                day = 6;
+            }
 
-        let dateTimeTokens: { [id: string]: string } = {
-            ddd: ResourceManager.Resources.Get("DateTime.DaysOfWeek.ShortNames", this.locale)[day],
-            dddd: ResourceManager.Resources.Get("DateTime.DaysOfWeek.FullNames", this.locale)[day],
-            MMM: ResourceManager.Resources.Get("DateTime.Months.ShortNames", this.locale)[date.getMonth()],
-            MMMM: ResourceManager.Resources.Get("DateTime.Months.FullNames", this.locale)[date.getMonth()],
-            t: ResourceManager.Resources.Get("DateTime.TimeDesignator.ShortNames", this.locale)[(date.getHours() < 12 ? 0 : 1)],
-            tt: ResourceManager.Resources.Get("DateTime.TimeDesignator.FullNames", this.locale)[(date.getHours() < 12 ? 0 : 1)]
+            return day;
+        };
+
+        let dateTimeTokens: { [id: string]: string } =
+        {
+            get ddd()
+            {
+                return ResourceManager.Resources.Get("DateTime.DaysOfWeek.ShortNames", this.locale)[getDay()];
+            },
+
+            get dddd()
+            {
+                return ResourceManager.Resources.Get("DateTime.DaysOfWeek.FullNames", this.locale)[getDay()];
+            },
+
+            get MMM()
+            {
+                return ResourceManager.Resources.Get("DateTime.Months.ShortNames", this.locale)[date.getMonth()];
+            },
+            
+            get MMMM()
+            {
+                return ResourceManager.Resources.Get("DateTime.Months.FullNames", this.locale)[date.getMonth()];
+            },
+
+            get t()
+            {
+                return ResourceManager.Resources.Get("DateTime.TimeDesignator.ShortNames", this.locale)[(date.getHours() < 12 ? 0 : 1)];
+            },
+
+            get tt()
+            {
+                return ResourceManager.Resources.Get("DateTime.TimeDesignator.FullNames", this.locale)[(date.getHours() < 12 ? 0 : 1)];
+            }
         };
         return dateTimeTokens;
     }
@@ -73,7 +97,7 @@ export default class DateTimeFormatter
      */
     public Format(formatString: string, date: Date = new Date()): string
     {
-        tokens = this.GetTokens(date);
+        let tokens = this.GetTokens(date);
 
         try
         {
@@ -139,6 +163,7 @@ export default class DateTimeFormatter
             }
             return match;
         });
+
         return formatString;
     }
 

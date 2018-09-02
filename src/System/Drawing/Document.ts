@@ -2,36 +2,25 @@ import CultureInfo from "culture-info";
 import * as Dedent from "dedent";
 import * as FrontMatter from "front-matter";
 import * as FileSystem from "fs-extra";
-import * as HighlightJs from "highlight.js";
-import * as MarkdownIt from "markdown-it";
-import * as Anchor from "markdown-it-anchor";
-import * as Checkbox from "markdown-it-checkbox";
-import * as MarkdownItEmoji from "markdown-it-emoji";
-import * as MarkdownItToc from "markdown-it-table-of-contents";
+import { MarkdownIt } from "markdown-it";
 import * as Mustache from "mustache";
 import * as OS from "os";
 import * as Path from "path";
-import * as TwEmoji from "twemoji";
 import { TextDocument } from "vscode";
 import * as YAML from "yamljs";
-import ResourceManager from "../../Properties/ResourceManager";
-import Fullname from "../Fullname";
-import DateTimeFormatter from "../Globalization/DateTimeFormatter";
-import FileException from "../IO/FileException";
-import StringUtils from "../Text/StringUtils";
-import YAMLException from "../YAML/YAMLException";
-import DocumentFragment from "./DocumentFragment";
-import EmojiType from "./EmojiType";
-import ListType from "./ListType";
-import Paper from "./Paper";
-import Renderable from "./Renderable";
-import Slugifier from "./Slugifier";
-import TocSettings from "./TocSettings";
+import { Utilities } from "../../MarkdownConverter/Utilities";
+import { ResourceManager } from "../../Properties/ResourceManager";
+import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
+import { FileException } from "../IO/FileException";
+import { YAMLException } from "../YAML/YAMLException";
+import { DocumentFragment } from "./DocumentFragment";
+import { Paper } from "./Paper";
+import { Renderable } from "./Renderable";
 
 /**
  * Represents a document.
  */
-export default class Document extends Renderable
+export class Document extends Renderable
 {
     /**
      * The name of the file represented by this document.
@@ -44,15 +33,10 @@ export default class Document extends Renderable
     private quality: number = 90;
 
     /**
-     * The type of emojis to use.
-     */
-    private emojiType: EmojiType = EmojiType.GitHub;
-
-    /**
      * The attributes of the document.
      */
     private attributes: any = {
-        Author: Fullname.FullName,
+        Author: Utilities.FullName,
         CreationDate: new Date()
     };
 
@@ -87,11 +71,6 @@ export default class Document extends Renderable
     private footer: DocumentFragment = new DocumentFragment(this);
 
     /**
-     * The definitions of the table of contents.
-     */
-    private tocSettings: TocSettings = null;
-
-    /**
      * The template to use for the RenderBody-process.
      */
     private template: string = Dedent(`
@@ -101,17 +80,11 @@ export default class Document extends Renderable
                 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
                 {{{styles}}}
             </head>
-            <body>
-                <article class="markdown-body">
-                    {{{content}}}
-                </article>
+            <body class="markdown-body">
+                {{{content}}}
+                {{{scripts}}}
             </body>
         </html>`);
-
-    /**
-     * A value indicating whether fancy code-blocks are enabled.
-     */
-    private highlightEnabled: boolean = true;
 
     /**
      * The stylesheets of the document.
@@ -119,6 +92,13 @@ export default class Document extends Renderable
     private styleSheets: string[] = [
         ResourceManager.Files.Get("SystemStyle")
     ];
+
+    private scripts: string[] = [];
+
+    /**
+     * The parser for parsing the markdown-content.
+     */
+    private parser: MarkdownIt;
 
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
@@ -129,7 +109,7 @@ export default class Document extends Renderable
      * @param config
      * The configuration to set.
      */
-    constructor(document: TextDocument)
+    constructor(document: TextDocument, parser: MarkdownIt)
     {
         super();
         this.RawContent = document.getText();
@@ -144,6 +124,8 @@ export default class Document extends Renderable
             this.FileName = null;
             this.Attributes.CreationDate = new Date(Date.now());
         }
+
+        this.parser = parser;
     }
 
     /**
@@ -192,21 +174,10 @@ export default class Document extends Renderable
     {
         return this.quality;
     }
+    
     public set Quality(value: number)
     {
         this.quality = value;
-    }
-
-    /**
-     * Gets or sets the type of emojis to use.
-     */
-    public get EmojiType(): EmojiType
-    {
-        return this.emojiType;
-    }
-    public set EmojiType(value: EmojiType)
-    {
-        this.emojiType = value;
     }
 
     /**
@@ -216,6 +187,7 @@ export default class Document extends Renderable
     {
         return this.attributes;
     }
+
     public set Attributes(value: { [id: string]: any })
     {
         this.attributes = value;
@@ -229,6 +201,7 @@ export default class Document extends Renderable
     {
         return this.dateFormat;
     }
+
     public set DateFormat(value: string)
     {
         this.dateFormat = value;
@@ -241,6 +214,7 @@ export default class Document extends Renderable
     {
         return this.locale;
     }
+
     public set Locale(value: CultureInfo)
     {
         this.locale = value;
@@ -253,6 +227,7 @@ export default class Document extends Renderable
     {
         return this.paper;
     }
+
     public set Paper(value: Paper)
     {
         this.paper = value;
@@ -265,6 +240,7 @@ export default class Document extends Renderable
     {
         return this.headerFooterEnabled;
     }
+
     public set HeaderFooterEnabled(value: boolean)
     {
         this.headerFooterEnabled = value;
@@ -287,39 +263,16 @@ export default class Document extends Renderable
     }
 
     /**
-     * Gets or sets the definitions of the table of contents.
-     */
-    public get TocSettings(): TocSettings
-    {
-        return this.tocSettings;
-    }
-    public set TocSettings(value: TocSettings)
-    {
-        this.tocSettings = value;
-    }
-
-    /**
      * Gets or sets the template to use for the RenderBody-process.
      */
     public get Template(): string
     {
         return this.template;
     }
+
     public set Template(value: string)
     {
         this.template = value;
-    }
-
-    /**
-     * Gets or sets a value indicating whether fancy code-blocks are enabled.
-     */
-    public get HighlightEnabled(): boolean
-    {
-        return this.highlightEnabled;
-    }
-    public set HighlightEnabled(value: boolean)
-    {
-        this.highlightEnabled = value;
     }
 
     /**
@@ -335,6 +288,18 @@ export default class Document extends Renderable
     }
 
     /**
+     * Gets or sets the scripts of the document.
+     */
+    public get Scripts(): string[]
+    {
+        return this.scripts;
+    }
+    public set Scripts(value: string[])
+    {
+        this.scripts = value;
+    }
+
+    /**
      * Renders content of the document.
      * 
      * @param content
@@ -342,80 +307,6 @@ export default class Document extends Renderable
      */
     protected async RenderText(content: string): Promise<string>
     {
-        // Preparing markdown-it
-        let md = new MarkdownIt({
-            html: true,
-            highlight: (subject, language) =>
-            {
-                if (this.HighlightEnabled)
-                {
-                    subject = HighlightJs.highlight(language, subject, true).value;
-                }
-                else
-                {
-                    subject = md.utils.escapeHtml(subject);
-                }
-
-                return '<pre class="hljs"><code><div>' + subject + "</div></code></pre>";
-            }
-        });
-
-        md.validateLink = () =>
-        {
-            return true;
-        };
-
-        {
-            let slugifier = new Slugifier();
-
-            Anchor(md, {
-                slugify: heading => slugifier.CreateSlug(heading)
-            });
-        }
-
-        md.use(Checkbox);
-
-        if (this.TocSettings)
-        {
-            let slugifier = new Slugifier();
-
-            md.use(MarkdownItToc, {
-                includeLevel: this.TocSettings.Levels.toArray(),
-                containerClass: this.TocSettings.Class,
-                markerPattern: this.TocSettings.Indicator,
-                listType: this.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
-                slugify: heading => slugifier.CreateSlug(heading)
-            });
-        }
-
-        if (this.emojiType)
-        {
-            // Making the emoji-variable visible for the callback
-            let emoji = this.emojiType;
-            md.use(MarkdownItEmoji);
-            md.renderer.rules.emoji = (token, id) =>
-            {
-                switch (emoji)
-                {
-                    case EmojiType.None:
-                        return token[id].markup;
-                    case EmojiType.Native:
-                        return token[id].content;
-                    case EmojiType.Twitter:
-                        return TwEmoji.parse(token[id].content);
-                    case EmojiType.GitHub:
-                        return '<img class="emoji" title=":' +
-                            token[id].markup +
-                            ':" alt=":' +
-                            token[id].markup +
-                            ':" src="https://assets-cdn.github.com/images/icons/emoji/unicode/' +
-                            StringUtils.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase() +
-                            '.png" allign="absmiddle" />';
-                }
-            };
-        }
-
-        // Preparing the attributes
         let view = {};
 
         for (let key in this.Attributes)
@@ -430,7 +321,7 @@ export default class Document extends Renderable
             view[key] = value;
         }
 
-        let html = md.render(content);
+        let html = this.parser.render(content);
         return Mustache.render(html, view);
     }
 
@@ -439,22 +330,20 @@ export default class Document extends Renderable
      */
     public async Render(): Promise<string>
     {
-        let styleCode = "<style>\n";
+        let styleCode = "";
+        let scriptCode = "";
 
         for (let styleSheet of this.StyleSheets)
         {
             if (/.*:\/\//g.test(styleSheet) || !Path.isAbsolute(styleSheet))
             {
-                styleCode += Dedent(`
-                    </style>
-                    <link rel="stylesheet" type="text/css" href="/${styleSheet}" />
-                    <style>`);
+                styleCode += Dedent(`<link rel="stylesheet" type="text/css" href="/${styleSheet}" />\n`);
             }
             else
             {
                 if (await FileSystem.pathExists(styleSheet))
                 {
-                    styleCode += (await FileSystem.readFile(styleSheet)).toString() + "\n";
+                    styleCode += "<style>" + (await FileSystem.readFile(styleSheet)).toString() + "</style>\n";
                 }
                 else
                 {
@@ -463,11 +352,30 @@ export default class Document extends Renderable
             }
         }
 
-        styleCode += "</style>";
+        for (let script of this.Scripts)
+        {
+            if (/.*:\/\//g.test(script) || !Path.isAbsolute(script))
+            {
+                scriptCode += Dedent(`<script async="" src="${script}"charset="UTF-8"></script>\n`);
+            }
+            else
+            {
+                if (await FileSystem.pathExists(script))
+                {
+                    scriptCode += "<script>" + (await FileSystem.readFile(script)).toString() + "</script>\n";
+                }
+                else
+                {
+                    throw new FileException(null, script);
+                }
+            }
+        }
+
         let content = this.Content;
 
         let view = {
             styles: styleCode,
+            scripts: scriptCode,
             content: await this.RenderText(content)
         };
 

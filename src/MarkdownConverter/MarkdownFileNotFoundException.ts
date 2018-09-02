@@ -1,10 +1,10 @@
-import ResourceManager from "../Properties/ResourceManager";
-import FileNotFoundException from "./IO/FileNotFoundException";
+import { ResourceManager } from "../Properties/ResourceManager";
+import { FileNotFoundException } from "../System/IO/FileNotFoundException";
 
 /**
  * Occurs when a markdown-file couldn't be found.
  */
-export default class MarkdownFileNotFoundException extends FileNotFoundException
+export class MarkdownFileNotFoundException extends FileNotFoundException
 {
     /**
      * Initializes a new instance of the MarkdownFileNotFoundException class.

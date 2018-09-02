@@ -1,9 +1,11 @@
+import * as lodash from "lodash";
+import * as MarkdownIt from "markdown-it";
 import * as shell from "shelljs";
 
 /**
- * Provides the functionallity to determine the full name of the current user.
+ * Provides static methods.
  */
-export default class Fullname
+export class Utilities
 {
     /**
      * The environment-variables which may contain the username.
@@ -14,6 +16,46 @@ export default class Fullname
         "HGUSER", // Mercurial
         "C9_USER" // Cloud9
     ];
+
+    /**
+     * The markdown-parser provided by `Visual Studio Code`.
+     */
+    private static vscodeParser: MarkdownIt.MarkdownIt;
+
+    /**
+     * Gets the full name of the current user.
+     */
+    public static get FullName(): string
+    {
+        let result: string;
+        let current: IteratorResult<string>;
+        let functionArray = this.functions();
+        do
+        {
+            try
+            {
+                current = functionArray.next();
+                result = current.value.trim();
+            }
+            catch (e) { }
+        }
+        while (!(current.done || result));
+
+        return result;
+    }
+
+    /**
+     * Gets the markdown-parser provided by `Visual Studio Code`.
+     */
+    public static get VSCodeParser(): MarkdownIt.MarkdownIt
+    {
+        return this.Clone(this.vscodeParser);
+    }
+
+    public static set VSCodeParser(value)
+    {
+        this.vscodeParser = value;
+    }
 
     /**
      * Tries to figure out the username using wmic.
@@ -64,7 +106,7 @@ export default class Fullname
     /**
      * A set of functions to figure out the user-name.
      */
-    public static * functions()
+    private static * functions()
     {
         yield this.CheckEnv();
         yield this.CheckAuthorName();
@@ -81,25 +123,13 @@ export default class Fullname
     }
 
     /**
-     * Gets the full name of the current user.
+     * Clones an object.
+     * 
+     * @param object
+     * The object to clone.
      */
-    public static get FullName(): string
+    public static Clone<T>(object: T): T
     {
-        let result: string;
-        let current: IteratorResult<string>;
-        let functionArray = this.functions();
-        do
-        {
-            try
-            {
-                current = functionArray.next();
-                result = current.value.trim();
-            }
-            catch (e) { }
-        }
-        while (!(current.done || result));
-
-        return result;
+        return lodash.cloneDeep<T>(object);
     }
-
 }

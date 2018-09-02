@@ -1,11 +1,11 @@
 import CultureInfo from "culture-info";
 import * as Path from "path";
-import Resource from "../System/Resources/Resource";
+import { Resource } from "../System/Resources/Resource";
 
 /**
  * Represents the resources of the module.
  */
-export default class ResourceManager
+export class ResourceManager
 {
     /**
      * The resources.

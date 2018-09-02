@@ -3,7 +3,7 @@ import * as Transliteration from "transliteration";
 /**
  * Provides the functionality to generate slugs.
  */
-export default class Slugifier
+export class Slugifier
 {
     /**
      * The already generated slugs.
@@ -39,12 +39,12 @@ export default class Slugifier
     {
         let baseName = this.Slugify(text);
 
-        let counter = 0;
+        let counter = 1;
         let slug = baseName;
 
         while (this.Slugs.includes(slug))
         {
-            slug = slug + "-" + (++counter).toString();
+            slug = `${baseName}-${++counter}`;
         }
 
         this.Slugs.push(slug);

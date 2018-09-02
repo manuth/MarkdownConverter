@@ -1,12 +1,12 @@
 import { PDFFormat, PDFOptions } from "puppeteer";
-import PaperFormat from "./PaperFormat";
-import PaperOrientation from "./PaperOrientation";
-import StandardizedFormatType from "./StandardizedFormatType";
+import { PaperFormat } from "./PaperFormat";
+import { PaperOrientation } from "./PaperOrientation";
+import { StandardizedFormatType } from "./StandardizedFormatType";
 
 /**
  * Represents a standardized format of a paper.
  */
-export default class StandardizedPaperFormat extends PaperFormat
+export class StandardizedPaperFormat extends PaperFormat
 {
     /**
      * The format of the paper.

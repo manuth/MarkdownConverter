@@ -1,7 +1,7 @@
 /**
  * Represents a standardized format.
  */
-enum StandardizedFormatType
+export enum StandardizedFormatType
 {
     /**
      * Indicates the A3-format.
@@ -33,5 +33,3 @@ enum StandardizedFormatType
      */
     Tabloid
 }
-
-export default StandardizedFormatType;

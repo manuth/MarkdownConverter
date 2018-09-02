@@ -1,11 +1,11 @@
 import * as Format from "string-template";
-import ResourceManager from "../../Properties/ResourceManager";
-import IOException from "./IOException";
+import { ResourceManager } from "../../Properties/ResourceManager";
+import { IOException } from "./IOException";
 
 /**
  * Represents an Input-/Output-Exception.
  */
-export default class FileException extends IOException
+export class FileException extends IOException
 {
     /**
      * Gets or sets the path to the file which caused the exception.

@@ -2,7 +2,7 @@
   "name": "markdown-converter",
   "displayName": "Markdown Converter",
   "description": "Provides the functionallity to convert MarkDown-files to html, pdf or png.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "manuth",
   "author": {
     "name": "Manuel Thalmann",
@@ -31,7 +31,7 @@
   "activationEvents": [
     "onCommand:markdownConverter.Convert"
   ],
-  "main": "./lib/extension",
+  "main": "./out/extension",
   "contributes": {
     "commands": [
       {
@@ -40,6 +40,7 @@
         "title": "%Command.Convert%"
       }
     ],
+    "markdown.markdownItPlugins": true,
     "configuration": {
       "title": "%Config%",
       "properties": {
@@ -111,9 +112,15 @@
             }
           ]
         },
-        "markdownConverter.Document.EmojiType": {
-          "title": "%Config.Document.EmojiType%",
-          "description": "%Config.Document.EmojiType.Description%",
+        "markdownConverter.Parser.SystemParserEnabled": {
+          "title": "%Config.Parser.SystemParserEnabled%",
+          "description": "%Config.Parser.SystemParserEnabled.Description%",
+          "type": "boolean",
+          "default": true
+        },
+        "markdownConverter.Parser.EmojiType": {
+          "title": "%Config.Parser.EmojiType%",
+          "description": "%Config.Parser.EmojiType.Description%",
           "type": "string",
           "default": "GitHub",
           "enum": [
@@ -121,6 +128,41 @@
             "Native",
             "GitHub",
             "Twitter"
+          ]
+        },
+        "markdownConverter.Parser.Toc.Enabled": {
+          "title": "%Config.Parser.Toc.Enabled%",
+          "description": "%Config.Parser.Toc.Enabled.Description%",
+          "type": "boolean",
+          "default": true
+        },
+        "markdownConverter.Parser.Toc.Class": {
+          "title": "%Config.Parser.Toc.Class%",
+          "description": "%Config.Parser.Toc.Class.Description%",
+          "type": "string",
+          "default": "markdown-converter-toc"
+        },
+        "markdownConverter.Parser.Toc.Levels": {
+          "title": "%Config.Parser.Toc.Levels%",
+          "description": "%Config.Parser.Toc.Levels.Description%",
+          "type": "string",
+          "pattern": "^\\d+\\s*(-\\s*\\d+\\s*)?(,\\s*\\d+\\s*(-\\s*\\d+\\s*)?)*$",
+          "default": "1-6"
+        },
+        "markdownConverter.Parser.Toc.Indicator": {
+          "title": "%Config.Parser.Toc.Indicator%",
+          "description": "%Config.Parser.Toc.Indicator.Description%",
+          "type": "string",
+          "default": "^\\[\\[\\s*toc\\s*\\]\\]"
+        },
+        "markdownConverter.Parser.Toc.ListType": {
+          "title": "%Config.Parser.Toc.ListType%",
+          "description": "%Config.Parser.Toc.ListType.Description%",
+          "type": "string",
+          "default": "Unordered",
+          "enum": [
+            "Ordered",
+            "Unordered"
           ]
         },
         "markdownConverter.Document.Attributes": {
@@ -255,41 +297,6 @@
           "type": "string",
           "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \"></div><div stlyle=\"text-align: center; \">{{ CreationDate }}</div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right; \"></div>"
         },
-        "markdownConverter.Document.Toc.Enabled": {
-          "title": "%Config.Document.Toc.Enabled%",
-          "description": "%Config.Document.Toc.Enabled.Description%",
-          "type": "boolean",
-          "default": true
-        },
-        "markdownConverter.Document.Toc.Class": {
-          "title": "%Config.Document.Toc.Class%",
-          "description": "%Config.Document.Toc.Class.Description%",
-          "type": "string",
-          "default": "markdown-converter-toc"
-        },
-        "markdownConverter.Document.Toc.Levels": {
-          "title": "%Config.Document.Toc.Levels%",
-          "description": "%Config.Document.Toc.Levels.Description%",
-          "type": "string",
-          "pattern": "^\\d+\\s*(-\\s*\\d+\\s*)?(,\\s*\\d+\\s*(-\\s*\\d+\\s*)?)*$",
-          "default": "1-6"
-        },
-        "markdownConverter.Document.Toc.Indicator": {
-          "title": "%Config.Document.Toc.Indicator%",
-          "description": "%Config.Document.Toc.Indicator.Description%",
-          "type": "string",
-          "default": "^\\[\\[\\s*toc\\s*\\]\\]"
-        },
-        "markdownConverter.Document.Toc.ListType": {
-          "title": "%Config.Document.Toc.ListType%",
-          "description": "%Config.Document.Toc.ListType.Description%",
-          "type": "string",
-          "default": "Unordered",
-          "enum": [
-            "Ordered",
-            "Unordered"
-          ]
-        },
         "markdownConverter.Document.Design.Template": {
           "title": "%Config.Document.Design.Template%",
           "description": "%Config.Document.Design.Template.Description%",
@@ -313,12 +320,6 @@
             }
           ]
         },
-        "markdownConverter.Document.Design.SystemStylesEnabled": {
-          "title": "%Config.Document.Design.SystemStylesEnabled%",
-          "description": "%Config.Document.Design.SystemStylesEnabled.Description%",
-          "type": "boolean",
-          "default": true
-        },
         "markdownConverter.Document.Design.StyleSheets": {
           "title": "%Config.Document.Design.StyleSheets%",
           "description": "%Config.Document.Design.StyleSheets.Description%",
@@ -341,48 +342,50 @@
   },
   "devDependencies": {
     "@types/dedent": "^0.7.0",
-    "@types/fs-extra": "^5.0.3",
+    "@types/fs-extra": "^5.0.4",
     "@types/highlight.js": "^9.12.3",
     "@types/http-server": "^0.10.0",
+    "@types/lodash": "^4.14.116",
     "@types/markdown-it": "0.0.3",
     "@types/markdown-it-anchor": "^4.0.1",
-    "@types/mocha": "^2.2.42",
+    "@types/mocha": "^2.2.48",
     "@types/mustache": "^0.8.31",
-    "@types/node": "^10.5.1",
-    "@types/puppeteer": "^1.5.0",
+    "@types/node": "^10.9.4",
+    "@types/puppeteer": "^1.6.0",
     "@types/request-promise-native": "^1.0.15",
-    "@types/shelljs": "^0.7.4",
+    "@types/shelljs": "^0.7.9",
     "@types/string-template": "^1.0.2",
     "@types/transliteration": "^1.6.0",
     "@types/yamljs": "^0.2.30",
-    "tslint": "^5.10.0",
+    "tslint": "^5.11.0",
     "typescript": "^2.9.2",
-    "vscode": "^1.1.18"
+    "vscode": "^1.1.21"
   },
   "dependencies": {
     "culture-info": "0.0.4",
     "dedent": "^0.7.0",
-    "front-matter": "^2.1.2",
+    "front-matter": "^2.3.0",
     "fs-extra": "^6.0.1",
     "highlight.js": "^9.12.0",
     "highlightjs": "^9.10.0",
     "http-server": "^0.11.1",
     "localizable-resources": "^1.0.6",
-    "markdown-it": "^8.4.1",
+    "lodash": "^4.17.10",
+    "markdown-it": "^8.4.2",
     "markdown-it-anchor": "^5.0.2",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-emoji": "^1.3.0",
-    "markdown-it-table-of-contents": "^0.4.0",
+    "markdown-it-table-of-contents": "^0.4.3",
     "multi-integer-range": "^3.0.0",
-    "mustache": "^2.3.0",
-    "puppeteer": "^1.5.0",
+    "mustache": "^2.3.2",
+    "puppeteer": "^1.7.0",
     "rc": "^1.2.8",
-    "request": "^2.87.0",
+    "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "shelljs": "^0.8.2",
     "string-template": "^1.0.0",
-    "transliteration": "^1.6.2",
-    "twemoji": "^2.2.5",
+    "transliteration": "^1.6.6",
+    "twemoji": "^2.5.1",
     "yamljs": "^0.3.0"
   }
 }

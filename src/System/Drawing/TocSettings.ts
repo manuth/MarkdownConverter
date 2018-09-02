@@ -1,10 +1,10 @@
 import { MultiRange } from "multi-integer-range";
-import ListType from "./ListType";
+import { ListType } from "./ListType";
 
 /**
  * Provides basic definitions of a table of contents.
  */
-export default class TocSettings
+export class TocSettings
 {
     /**
      * The class for the div containing the table of contents.

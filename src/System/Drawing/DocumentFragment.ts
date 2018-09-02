@@ -1,10 +1,10 @@
-import Document from "./Document";
-import Renderable from "./Renderable";
+import { Document } from "./Document";
+import { Renderable } from "./Renderable";
 
 /**
  * Represents a fragment of a document.
  */
-export default class DocumentFragment extends Renderable
+export class DocumentFragment extends Renderable
 {
     /**
      * The document this fragment belongs to.
