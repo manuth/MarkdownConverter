@@ -10,6 +10,7 @@ import * as MarkdownItToc from "markdown-it-table-of-contents";
 import * as Path from "path";
 import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
+import * as Transliteration from "transliteration";
 import * as TwEmoji from "twemoji";
 import { ProgressLocation, TextDocument, window, workspace } from "vscode";
 import { Extension } from "../extension";
@@ -145,6 +146,14 @@ export class ConvertCommand extends Command
     protected async LoadParser(): Promise<MarkdownIt.MarkdownIt>
     {
         let parser: MarkdownIt.MarkdownIt;
+        let slugify = text =>
+            Transliteration.slugify(
+                text,
+                {
+                    lowercase: true,
+                    separator: "-",
+                    ignore: []
+                });
 
         if (Settings.Default.SystemStylesEnabled)
         {
@@ -170,23 +179,15 @@ export class ConvertCommand extends Command
                     return `<pre class="hljs"><code><div>${subject}</div></code></pre>`;
                 }
             });
-            
-            parser.use(Checkbox);
         }
 
         parser.validateLink = () => true;
-
-        {
-            let slugifier = new Slugifier();
-            Anchor(
-                parser,
-                {
-                    slugify: heading => slugifier.CreateSlug(heading)
-                });
-            parser.use(Checkbox);
-        }
-
-        parser.validateLink = () => true;
+        
+        Anchor(
+            parser,
+            {
+                slugify
+            });
 
         if (Settings.Default.TocSettings)
         {
@@ -201,6 +202,8 @@ export class ConvertCommand extends Command
                     slugify: heading => slugifier.CreateSlug(heading)
                 });
         }
+
+        parser.use(Checkbox);
 
         if (Settings.Default.EmojiType)
         {
