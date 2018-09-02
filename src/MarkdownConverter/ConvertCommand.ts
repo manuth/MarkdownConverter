@@ -103,7 +103,6 @@ export class ConvertCommand extends Command
         if (Settings.Default.SystemStylesEnabled)
         {
             let mdExtensions = getMarkdownExtensionContributions(this.Extension.Context);
-            converter.Document.StyleSheets.push(ResourceManager.Files.Get("SystemStyle"));
 
             for (let styleSheet of mdExtensions.previewStyles)
             {
@@ -118,9 +117,12 @@ export class ConvertCommand extends Command
 
         if (Settings.Default.HighlightStyle !== "None")
         {
-            if (Settings.Default.HighlightStyle === "Default" && !Settings.Default.SystemStylesEnabled)
+            if (Settings.Default.HighlightStyle === "Default")
             {
-                converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultHighlight"));
+                if (!Settings.Default.SystemStylesEnabled)
+                {
+                    converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultHighlight"));
+                }
             }
             else
             {
