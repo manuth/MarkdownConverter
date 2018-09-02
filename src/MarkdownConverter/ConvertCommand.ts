@@ -118,7 +118,7 @@ export class ConvertCommand extends Command
 
         if (Settings.Default.HighlightStyle !== "None")
         {
-            if (Settings.Default.HighlightStyle === "Default")
+            if (Settings.Default.HighlightStyle === "Default" && !Settings.Default.SystemStylesEnabled)
             {
                 converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultHighlight"));
             }
