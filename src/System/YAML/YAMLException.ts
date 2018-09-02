@@ -1,4 +1,3 @@
-import * as OS from "os";
 import * as Format from "string-template";
 import { ResourceManager } from "../../Properties/ResourceManager";
 import { Exception } from "../Exception";
