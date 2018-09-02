@@ -39,7 +39,7 @@ export class Slugifier
     {
         let baseName = this.Slugify(text);
 
-        let counter = 0;
+        let counter = 1;
         let slug = baseName;
 
         while (this.Slugs.includes(slug))
