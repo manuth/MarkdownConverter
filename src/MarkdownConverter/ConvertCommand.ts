@@ -1,4 +1,5 @@
 import * as ChildProcess from "child_process";
+import clone = require("clone");
 import CultureInfo from "culture-info";
 import * as FileSystem from "fs-extra";
 import * as HighlightJs from "highlight.js";
@@ -158,7 +159,7 @@ export class ConvertCommand extends Command
 
         if (Settings.Default.SystemParserEnabled)
         {
-            parser = this.Extension.VSCodeParser;
+            parser = clone(this.Extension.VSCodeParser);
             parser.normalizeLink = (link: string) => link;
             parser.normalizeLinkText = (link: string) => link;
         }
