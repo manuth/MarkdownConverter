@@ -341,6 +341,7 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "@types/clone": "^0.1.30",
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^5.0.4",
     "@types/highlight.js": "^9.12.3",
@@ -362,6 +363,7 @@
     "vscode": "^1.1.21"
   },
   "dependencies": {
+    "clone": "^2.1.2",
     "culture-info": "0.0.4",
     "dedent": "^0.7.0",
     "front-matter": "^2.3.0",
