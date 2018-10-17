@@ -10,9 +10,9 @@
     "Config.ConversionType": "Ausgabe-Typ",
     "Config.ConversionType.Description": "Eine oder mehr Datei-Typen, zu welchen die Markdown-Datei umgewandelt werden soll.",
     "Config.Locale": "Sprache",
-    "Config.Locale.Description": "Die Sprache, in der das Daten ausgegeben werden.\n\n***Note:***  \nLassen Sie diesen Einstellung weg, um die Sprache von Visual Studio Code zu verwenden.",
+    "Config.Locale.Description": "Die Sprache, in der das Datum ausgegeben werden.\n\n***Note:***  \nLassen Sie diesen Einstellung weg, um die Sprache von Visual Studio Code zu verwenden.",
     "Config.DateFormat": "Datums-Format",
-    "Config.DateFormat.Description": "Ein Format-string, in der die Daten ausgegeben werden soll.  \nSiehe: https://msdn.microsoft.com/de-de/library/8kb3ddd4(v=vs.110).aspx",
+    "Config.DateFormat.Description": "Ein Format-string, in der die Daten ausgegeben werden soll.  \nSiehe: <https://msdn.microsoft.com/de-de/library/8kb3ddd4(v=vs.110).aspx>",
     "Config.Parser.SystemParserEnabled": "System-Parser",
     "Config.Parser.SystemParserEnabled.Description": "`true`, um den von Visual Studio Code bereitgestellten Parser zu verwenden; sonst `false`.",
     "Config.Parser.EmojiType": "Emoji",
@@ -62,7 +62,7 @@
     "Config.Document.Design.Template": "Vorlage",
     "Config.Document.Design.Template.Description": "Der Pfad zur Vorlage des Dokuments.\n\n***Note:***  \n  - `{{{styles}}}` wird durch die CSS-Styles ersetzt.\n  - `{{{content}}}` wird durch den Inhalt des Dokuments ersetzt.",
     "Config.Document.Design.HighlightStyle": "highlight.js-Style",
-    "Config.Document.Design.HighlightStyle.Description": "Der zu nutzende highligh.js-style.\n\nNote:\nDer Wert kann auch true sein, um den Style von VS Code zu nutzen, oder false, um highlight.js zu deaktivieren.",
+    "Config.Document.Design.HighlightStyle.Description": "Der zu nutzende highligh.js-style.\n\n***Note:***  \nDer Wert kann auch `true` sein, um den Style von VS Code zu nutzen, oder false, um highlight.js zu deaktivieren.",
     "Config.Document.Design.StyleSheets": "Style-Sheets",
-    "Config.Document.Design.StyleSheets.Description": "StyleSheets, welche in das Dokument eingebettet werden sollen.\nPfade können sowohl lokal als auch URLs sein."
+    "Config.Document.Design.StyleSheets.Description": "StyleSheets, welche in das Dokument eingebettet werden sollen."
 }
