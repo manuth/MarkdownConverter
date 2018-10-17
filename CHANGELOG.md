@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [MarkdownConverter v1.1.0]
+### Breaking Changes
+  - The `OutDir`-setting is now called `DestinationPath`
+  - The `DestinationPath` is considered relative to the `DestinationOrigin`
+
+## Changes
+  - Documents located in sub-directories are now converted correctly  
+    Thanks to [@mjwsteenbergen](https://github.com/mjwsteenbergen) for reporting the issue
+  - People can now choose whether to consider the `DestinationPath` relative to the `WorkspaceFolder` or relative to the directory of the document-file.
+  - Added a prompt for specifying a `DestinationPath` which is displayed when `MarkdownConverter` the `DestinationPath`, none or more than 1 workspace-folders are opened and the name of the file is untitled
+
 ## [MarkdownConverter v1.0.1]
 ### Changes
   - Allowed users to enable the default parser rather than the default stylesheets  

@@ -1,4 +1,5 @@
 import * as ChildProcess from "child_process";
+import clone = require("clone");
 import CultureInfo from "culture-info";
 import * as FileSystem from "fs-extra";
 import * as HighlightJs from "highlight.js";
@@ -12,7 +13,8 @@ import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
 import * as Transliteration from "transliteration";
 import * as TwEmoji from "twemoji";
-import { ProgressLocation, TextDocument, window, workspace } from "vscode";
+import { isNullOrUndefined } from "util";
+import { ProgressLocation, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { Extension } from "../extension";
 import { ResourceManager } from "../Properties/ResourceManager";
 import { Settings } from "../Properties/Settings";
@@ -26,6 +28,7 @@ import { StringUtils } from "../System/Text/StringUtils";
 import { Command } from "./Command";
 import { ConversionType } from "./ConversionType";
 import { Converter } from "./Converter";
+import { DestinationOrigin } from "./DestinationOrigin";
 import { getMarkdownExtensionContributions } from "./MarkdownExtensions";
 import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
 
@@ -77,7 +80,7 @@ export class ConvertCommand extends Command
         {
             if (Settings.Default.Template)
             {
-                converter.Document.Template = (await FileSystem.readFile(Path.resolve(documentRoot, Settings.Default.Template))).toString();
+                converter.Document.Template = (await FileSystem.readFile(Path.resolve(documentRoot || ".", Settings.Default.Template))).toString();
             }
             else if (Settings.Default.SystemParserEnabled)
             {
@@ -132,7 +135,7 @@ export class ConvertCommand extends Command
         {
             if (!Path.isAbsolute(styleSheet))
             {
-                styleSheet = Path.resolve(documentRoot, styleSheet);
+                styleSheet = Path.resolve(documentRoot || ".", styleSheet);
             }
 
             converter.Document.StyleSheets.push(styleSheet);
@@ -158,7 +161,7 @@ export class ConvertCommand extends Command
 
         if (Settings.Default.SystemParserEnabled)
         {
-            parser = this.Extension.VSCodeParser;
+            parser = clone(this.Extension.VSCodeParser);
             parser.normalizeLink = (link: string) => link;
             parser.normalizeLinkText = (link: string) => link;
         }
@@ -260,45 +263,64 @@ export class ConvertCommand extends Command
         {
             if (await FileSystem.pathExists(Puppeteer.executablePath()))
             {
-                let documentRoot: string;
+                let destinationPath: string;
                 let textDocument = this.GetMarkdownDocument();
-                let outputDirectory = Settings.Default.OutputDirectory;
-                let currentWorkspace = (workspace.workspaceFolders || []).find(
-                    (workspaceFolder) =>
-                    {
-                        let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
-                        let documentParts = textDocument.uri.fsPath.split(Path.sep);
-
-                        return workspaceParts.every(
-                            (value, index) =>
-                            {
-                                return value === documentParts[index];
-                            });
-                    });
-
-                if (currentWorkspace)
+                let documentFolder = textDocument.isUntitled ? null : Path.dirname(textDocument.fileName);
+                let currentWorkspace: WorkspaceFolder;
+                
+                if ((workspace.workspaceFolders || []).length === 1)
                 {
-                    documentRoot = currentWorkspace.uri.fsPath;
-                }
-                else if (!textDocument.isUntitled)
-                {
-                    documentRoot = Path.dirname(textDocument.fileName);
+                     currentWorkspace = workspace.workspaceFolders[0];
                 }
                 else
                 {
-                    documentRoot = process.cwd();
+                    currentWorkspace = textDocument.isUntitled ? (workspace.workspaceFolders || []).find(
+                        (workspaceFolder) =>
+                        {
+                            let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
+                            let documentParts = textDocument.uri.fsPath.split(Path.sep);
+    
+                            return workspaceParts.every(
+                                (value, index) =>
+                                {
+                                    return value === documentParts[index];
+                                });
+                        }) : null;
                 }
 
-                if (!Path.isAbsolute(outputDirectory))
+                let workspaceRoot = !isNullOrUndefined(currentWorkspace) ? currentWorkspace.uri.fsPath : null;
+                let documentRoot = workspaceRoot || documentFolder;
+
+                if (!Path.isAbsolute(Settings.Default.DestinationPath))
                 {
-                    outputDirectory = Path.resolve(documentRoot, outputDirectory);
+                    let origin: string = null;
+
+                    if (Settings.Default.DestinationOrigin === DestinationOrigin.WorkspaceRoot)
+                    {
+                        origin = workspaceRoot || documentFolder;
+                    }
+                    else if (Settings.Default.DestinationOrigin === DestinationOrigin.DocumentFile)
+                    {
+                        origin = documentFolder || workspaceRoot;
+                    }
+
+                    while (isNullOrUndefined(origin))
+                    {
+                        origin = await window.showInputBox({
+                            ignoreFocusOut: true,
+                            prompt: ResourceManager.Resources.Get("DestinationPath"),
+                            placeHolder: ResourceManager.Resources.Get("DestinationPathExample")
+                        });
+                    }
+
+                    destinationPath = Path.resolve(origin, Settings.Default.DestinationPath);
                 }
 
                 let fileName = Path.parse(textDocument.fileName).name;
                 let converter = await this.LoadConverter(documentRoot, textDocument);
                 let prompts = [];
 
-                await FileSystem.ensureDir(outputDirectory);
+                await FileSystem.ensureDir(destinationPath);
 
                 for (let type of Settings.Default.ConversionType)
                 {
@@ -321,7 +343,7 @@ export class ConvertCommand extends Command
                             break;
                     }
 
-                    let destination = Path.join(outputDirectory, `${fileName}.${extension}`);
+                    let destination = Path.join(destinationPath, `${fileName}.${extension}`);
                     await converter.Start(type, destination);
 
                     prompts.push(

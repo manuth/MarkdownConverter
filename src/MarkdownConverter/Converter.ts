@@ -4,6 +4,7 @@ import * as Server from "http-server";
 import * as Path from "path";
 import Puppeteer = require("puppeteer");
 import * as URL from "url";
+import { isNullOrUndefined } from "util";
 import { Document } from "../System/Drawing/Document";
 import { FileException } from "../System/IO/FileException";
 import { ConversionType } from "./ConversionType";
@@ -22,7 +23,7 @@ export class Converter
      * The document which is to be converted.
      */
     private document: Document;
-    
+
     /**
      * Initializes a new instance of the Constructor class with a filepath.
      * 
@@ -82,12 +83,17 @@ export class Converter
             {
                 let browser = await Puppeteer.launch({ args: ["--disable-web-security"] });
                 let page = await browser.newPage();
+                let url = URL.resolve(
+                    "http://localhost:8980/",
+                    ((!isNullOrUndefined(this.Document.FileName) && (!isNullOrUndefined(this.DocumentRoot))) ?
+                    Path.relative(this.DocumentRoot, this.Document.FileName) : "index") + ".html");
+
                 page.setRequestInterception(true);
                 page.on(
                     "request",
                     request =>
                     {
-                        if (request.url().endsWith(url + ".html"))
+                        if (request.url() === url)
                         {
                             request.respond({
                                 body: htmlCode
@@ -98,8 +104,7 @@ export class Converter
                         }
                     });
 
-                let url = this.Document.FileName ? Path.relative(this.DocumentRoot, this.Document.FileName) : "";
-                await page.goto(URL.resolve("http://localhost:8980/", url + ".html"), { waitUntil: "networkidle0", timeout: 0 });
+                await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
 
                 switch (conversionType)
                 {

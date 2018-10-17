@@ -1,8 +1,8 @@
 {
   "name": "markdown-converter",
   "displayName": "Markdown Converter",
-  "description": "Provides the functionallity to convert MarkDown-files to html, pdf or png.",
-  "version": "1.0.1",
+  "markdownDescription": "Provides the functionallity to convert MarkDown-files to html, pdf or png.",
+  "version": "1.1.0",
   "publisher": "manuth",
   "author": {
     "name": "Manuel Thalmann",
@@ -44,27 +44,40 @@
     "configuration": {
       "title": "%Config%",
       "properties": {
-        "markdownConverter.OutDir": {
-          "title": "%Config.OutDir%",
-          "description": "%Config.OutDir.Description%",
+        "markdownConverter.DestinationOrigin": {
+          "title": "%Config.DestinationOrigin%",
+          "markdownDescription": "%Config.DestinationOrigin.Description%",
+          "default": "WorkspaceRoot",
+          "enum": [
+            "WorkspaceRoot",
+            "DocumentFile"
+          ],
+          "enumDescriptions": [
+            "%Config.DestinationOrigin.WorkspaceRoot%",
+            "%Config.DestinationOrigin.DocumentFile%"
+          ]
+        },
+        "markdownConverter.DestinationPath": {
+          "title": "%Config.DestinationPath%",
+          "markdownDescription": "%Config.DestinationPath.Description%",
           "type": "string",
           "default": "."
         },
         "markdownConverter.IgnoreLanguageMode": {
           "title": "%Config.IgnoreLanguageMode%",
-          "description": "%Config.IgnoreLanguageMode.Description%",
+          "markdownDescription": "%Config.IgnoreLanguageMode.Description%",
           "type": "boolean",
           "default": false
         },
         "markdownConverter.ConversionQuality": {
           "title": "%Config.ConversionQuality%",
-          "description": "%Config.ConversionQuality.Description%",
+          "markdownDescription": "%Config.ConversionQuality.Description%",
           "type": "integer",
           "default": 100
         },
         "markdownConverter.ConversionType": {
           "title": "%Config.ConversionType%",
-          "description": "%Config.ConversionType.Description%",
+          "markdownDescription": "%Config.ConversionType.Description%",
           "default": [
             "PDF"
           ],
@@ -84,7 +97,7 @@
         },
         "markdownConverter.Locale": {
           "title": "%Config.Locale%",
-          "description": "%Config.Locale.Description%",
+          "markdownDescription": "%Config.Locale.Description%",
           "default": null,
           "anyOf": [
             {
@@ -97,7 +110,7 @@
         },
         "markdownConverter.DateFormat": {
           "title": "%Config.DateFormat%",
-          "description": "%Config.DateFormat.Description%",
+          "markdownDescription": "%Config.DateFormat.Description%",
           "default": "Default",
           "anyOf": [
             {
@@ -114,13 +127,13 @@
         },
         "markdownConverter.Parser.SystemParserEnabled": {
           "title": "%Config.Parser.SystemParserEnabled%",
-          "description": "%Config.Parser.SystemParserEnabled.Description%",
+          "markdownDescription": "%Config.Parser.SystemParserEnabled.Description%",
           "type": "boolean",
           "default": true
         },
         "markdownConverter.Parser.EmojiType": {
           "title": "%Config.Parser.EmojiType%",
-          "description": "%Config.Parser.EmojiType.Description%",
+          "markdownDescription": "%Config.Parser.EmojiType.Description%",
           "type": "string",
           "default": "GitHub",
           "enum": [
@@ -132,32 +145,32 @@
         },
         "markdownConverter.Parser.Toc.Enabled": {
           "title": "%Config.Parser.Toc.Enabled%",
-          "description": "%Config.Parser.Toc.Enabled.Description%",
+          "markdownDescription": "%Config.Parser.Toc.Enabled.Description%",
           "type": "boolean",
           "default": true
         },
         "markdownConverter.Parser.Toc.Class": {
           "title": "%Config.Parser.Toc.Class%",
-          "description": "%Config.Parser.Toc.Class.Description%",
+          "markdownDescription": "%Config.Parser.Toc.Class.Description%",
           "type": "string",
           "default": "markdown-converter-toc"
         },
         "markdownConverter.Parser.Toc.Levels": {
           "title": "%Config.Parser.Toc.Levels%",
-          "description": "%Config.Parser.Toc.Levels.Description%",
+          "markdownDescription": "%Config.Parser.Toc.Levels.Description%",
           "type": "string",
           "pattern": "^\\d+\\s*(-\\s*\\d+\\s*)?(,\\s*\\d+\\s*(-\\s*\\d+\\s*)?)*$",
           "default": "1-6"
         },
         "markdownConverter.Parser.Toc.Indicator": {
           "title": "%Config.Parser.Toc.Indicator%",
-          "description": "%Config.Parser.Toc.Indicator.Description%",
+          "markdownDescription": "%Config.Parser.Toc.Indicator.Description%",
           "type": "string",
           "default": "^\\[\\[\\s*toc\\s*\\]\\]"
         },
         "markdownConverter.Parser.Toc.ListType": {
           "title": "%Config.Parser.Toc.ListType%",
-          "description": "%Config.Parser.Toc.ListType.Description%",
+          "markdownDescription": "%Config.Parser.Toc.ListType.Description%",
           "type": "string",
           "default": "Unordered",
           "enum": [
@@ -167,26 +180,26 @@
         },
         "markdownConverter.Document.Attributes": {
           "title": "%Config.Document.Attributes%",
-          "description": "%Config.Document.Attributes.Description%",
+          "markdownDescription": "%Config.Document.Attributes.Description%",
           "type": "object",
           "default": null,
           "additionalProperties": true,
           "properties": {
             "Author": {
               "title": "%Config.Document.Attributes.Author%",
-              "description": "%Config.Document.Attributes.Author.Description%",
+              "markdownDescription": "%Config.Document.Attributes.Author.Description%",
               "type": "string"
             },
             "Company": {
               "title": "%Config.Document.Attributes.Company%",
-              "description": "%Config.Document.Attributes.Company.Description%",
+              "markdownDescription": "%Config.Document.Attributes.Company.Description%",
               "type": "string"
             }
           }
         },
         "markdownConverter.Document.Paper.PaperFormat": {
           "title": "%Config.Document.Paper.PaperFormat%",
-          "description": "%Config.Document.Paper.PaperFormat.Description%",
+          "markdownDescription": "%Config.Document.Paper.PaperFormat.Description%",
           "type": "object",
           "default": {
             "Format": "A4"
@@ -200,7 +213,7 @@
               "properties": {
                 "Format": {
                   "title": "%Config.Document.Paper.PaperFormat.Format%",
-                  "description": "%Config.Document.Paper.PaperFormat.Format.Description%",
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Format.Description%",
                   "type": "string",
                   "enum": [
                     "A3",
@@ -213,7 +226,7 @@
                 },
                 "Orientation": {
                   "title": "%Config.Document.Paper.PaperFormat.Orientation%",
-                  "description": "%Config.Document.Paper.PaperFormat.Orientation.Description%",
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Orientation.Description%",
                   "type": "string",
                   "enum": [
                     "Portrait",
@@ -231,11 +244,11 @@
               "properties": {
                 "Width": {
                   "title": "%Config.Document.Paper.PaperFormat.Width%",
-                  "description": "%Config.Document.Paper.PaperFormat.Width.Description%"
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Width.Description%"
                 },
                 "Height": {
                   "title": "%Config.Document.Paper.PaperFormat.Height%",
-                  "description": "%Config.Document.Paper.PaperFormat.Height.Description%"
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Height.Description%"
                 }
               }
             }
@@ -243,7 +256,7 @@
         },
         "markdownConverter.Document.Paper.Margin": {
           "title": "%Config.Document.Paper.Margin%",
-          "description": "%Config.Document.Paper.Margin.Description%",
+          "markdownDescription": "%Config.Document.Paper.Margin.Description%",
           "type": "object",
           "additionalProperties": false,
           "required": [
@@ -255,25 +268,25 @@
           "properties": {
             "Top": {
               "title": "%Config.Document.Paper.Margin.Top%",
-              "description": "%Config.Document.Paper.Margin.Top.Description%",
+              "markdownDescription": "%Config.Document.Paper.Margin.Top.Description%",
               "type": "string",
               "default": "1cm"
             },
             "Right": {
               "title": "%Config.Document.Paper.Margin.Right%",
-              "description": "%Config.Document.Paper.Margin.Right.Description%",
+              "markdownDescription": "%Config.Document.Paper.Margin.Right.Description%",
               "type": "string",
               "default": "1cm"
             },
             "Bottom": {
               "title": "%Config.Document.Paper.Margin.Bottom%",
-              "description": "%Config.Document.Paper.Margin.Bottom.Description%",
+              "markdownDescription": "%Config.Document.Paper.Margin.Bottom.Description%",
               "type": "string",
               "default": "1cm"
             },
             "Left": {
               "title": "%Config.Document.Paper.Margin.Left%",
-              "description": "%Config.Document.Paper.Margin.Left.Description%",
+              "markdownDescription": "%Config.Document.Paper.Margin.Left.Description%",
               "type": "string",
               "default": "1cm"
             }
@@ -281,31 +294,31 @@
         },
         "markdownConverter.Document.HeaderFooterEnabled": {
           "title": "%Config.Document.HeaderFooterEnabled%",
-          "description": "%Config.Document.HeaderFooterEnabled.Description%",
+          "markdownDescription": "%Config.Document.HeaderFooterEnabled.Description%",
           "type": "boolean",
           "default": true
         },
         "markdownConverter.Document.HeaderTemplate": {
           "title": "%Config.Document.HeaderTemplate%",
-          "description": "%Config.Document.HeaderTemplate.Description%",
+          "markdownDescription": "%Config.Document.HeaderTemplate.Description%",
           "type": "string",
           "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">{{ Author }}</div><div style=\"text-align: center; \"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right\">{{ Company }}</div>"
         },
         "markdownConverter.Document.FooterTemplate": {
           "title": "%Config.Document.FooterTemplate%",
-          "description": "%Config.Document.FooterTemplate.Description%",
+          "markdownDescription": "%Config.Document.FooterTemplate.Description%",
           "type": "string",
           "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \"></div><div stlyle=\"text-align: center; \">{{ CreationDate }}</div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right; \"></div>"
         },
         "markdownConverter.Document.Design.Template": {
           "title": "%Config.Document.Design.Template%",
-          "description": "%Config.Document.Design.Template.Description%",
+          "markdownDescription": "%Config.Document.Design.Template.Description%",
           "type": "string",
           "default": null
         },
         "markdownConverter.Document.Design.HighlightStyle": {
           "title": "%Config.Document.Design.HighlightStyle%",
-          "description": "%Config.Document.Design.HighlightStyle.Description%",
+          "markdownDescription": "%Config.Document.Design.HighlightStyle.Description%",
           "default": "Default",
           "anyOf": [
             {
@@ -322,7 +335,7 @@
         },
         "markdownConverter.Document.Design.StyleSheets": {
           "title": "%Config.Document.Design.StyleSheets%",
-          "description": "%Config.Document.Design.StyleSheets.Description%",
+          "markdownDescription": "%Config.Document.Design.StyleSheets.Description%",
           "type": "array",
           "default": [],
           "items": {
@@ -341,20 +354,22 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "@types/clone": "^0.1.30",
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^5.0.4",
     "@types/highlight.js": "^9.12.3",
     "@types/http-server": "^0.10.0",
-    "@types/lodash": "^4.14.116",
+    "@types/lodash": "^4.14.117",
     "@types/markdown-it": "0.0.3",
-    "@types/markdown-it-anchor": "^4.0.1",
+    "@types/markdown-it-anchor": "^4.0.2",
     "@types/mocha": "^2.2.48",
     "@types/mustache": "^0.8.31",
-    "@types/node": "^10.9.4",
-    "@types/puppeteer": "^1.6.0",
+    "@types/node": "^10.12.0",
+    "@types/puppeteer": "^1.9.0",
     "@types/request-promise-native": "^1.0.15",
     "@types/shelljs": "^0.7.9",
     "@types/string-template": "^1.0.2",
+    "@types/tmp": "0.0.33",
     "@types/transliteration": "^1.6.0",
     "@types/yamljs": "^0.2.30",
     "tslint": "^5.11.0",
@@ -362,15 +377,16 @@
     "vscode": "^1.1.21"
   },
   "dependencies": {
+    "clone": "^2.1.2",
     "culture-info": "0.0.4",
     "dedent": "^0.7.0",
     "front-matter": "^2.3.0",
     "fs-extra": "^6.0.1",
-    "highlight.js": "^9.12.0",
-    "highlightjs": "^9.10.0",
+    "highlight.js": "^9.13.1",
+    "highlightjs": "^9.12.0",
     "http-server": "^0.11.1",
     "localizable-resources": "^1.0.6",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "markdown-it": "^8.4.2",
     "markdown-it-anchor": "^5.0.2",
     "markdown-it-checkbox": "^1.1.0",
@@ -378,12 +394,13 @@
     "markdown-it-table-of-contents": "^0.4.3",
     "multi-integer-range": "^3.0.0",
     "mustache": "^2.3.2",
-    "puppeteer": "^1.7.0",
+    "puppeteer": "^1.9.0",
     "rc": "^1.2.8",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "shelljs": "^0.8.2",
     "string-template": "^1.0.0",
+    "tmp": "0.0.33",
     "transliteration": "^1.6.6",
     "twemoji": "^2.5.1",
     "yamljs": "^0.3.0"
