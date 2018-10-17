@@ -4,6 +4,7 @@ import * as Server from "http-server";
 import * as Path from "path";
 import Puppeteer = require("puppeteer");
 import * as URL from "url";
+import { isNullOrUndefined } from "util";
 import { Document } from "../System/Drawing/Document";
 import { FileException } from "../System/IO/FileException";
 import { ConversionType } from "./ConversionType";
@@ -84,7 +85,8 @@ export class Converter
                 let page = await browser.newPage();
                 let url = URL.resolve(
                     "http://localhost:8980/",
-                    (this.Document.FileName ? Path.relative(this.DocumentRoot, this.Document.FileName) : "") + ".html");
+                    ((!isNullOrUndefined(this.Document.FileName) && (!isNullOrUndefined(this.DocumentRoot))) ?
+                    Path.relative(this.DocumentRoot, this.Document.FileName) : "index") + ".html");
 
                 page.setRequestInterception(true);
                 page.on(
