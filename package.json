@@ -1,7 +1,7 @@
 {
   "name": "markdown-converter",
   "displayName": "Markdown Converter",
-  "description": "Provides the functionallity to convert MarkDown-files to html, pdf or png.",
+  "markdownDescription": "Provides the functionallity to convert MarkDown-files to html, pdf or png.",
   "version": "1.0.1",
   "publisher": "manuth",
   "author": {
@@ -45,25 +45,25 @@
       "properties": {
         "markdownConverter.OutDir": {
           "title": "%Config.OutDir%",
-          "description": "%Config.OutDir.Description%",
+          "markdownDescription": "%Config.OutDir.Description%",
           "type": "string",
           "default": "."
         },
         "markdownConverter.IgnoreLanguageMode": {
           "title": "%Config.IgnoreLanguageMode%",
-          "description": "%Config.IgnoreLanguageMode.Description%",
+          "markdownDescription": "%Config.IgnoreLanguageMode.Description%",
           "type": "boolean",
           "default": false
         },
         "markdownConverter.ConversionQuality": {
           "title": "%Config.ConversionQuality%",
-          "description": "%Config.ConversionQuality.Description%",
+          "markdownDescription": "%Config.ConversionQuality.Description%",
           "type": "integer",
           "default": 100
         },
         "markdownConverter.ConversionType": {
           "title": "%Config.ConversionType%",
-          "description": "%Config.ConversionType.Description%",
+          "markdownDescription": "%Config.ConversionType.Description%",
           "default": [
             "PDF"
           ],
@@ -83,7 +83,7 @@
         },
         "markdownConverter.Locale": {
           "title": "%Config.Locale%",
-          "description": "%Config.Locale.Description%",
+          "markdownDescription": "%Config.Locale.Description%",
           "default": null,
           "anyOf": [
             {
@@ -96,7 +96,7 @@
         },
         "markdownConverter.DateFormat": {
           "title": "%Config.DateFormat%",
-          "description": "%Config.DateFormat.Description%",
+          "markdownDescription": "%Config.DateFormat.Description%",
           "default": "Default",
           "anyOf": [
             {
@@ -113,13 +113,13 @@
         },
         "markdownConverter.Parser.SystemParserEnabled": {
           "title": "%Config.Parser.SystemParserEnabled%",
-          "description": "%Config.Parser.SystemParserEnabled.Description%",
+          "markdownDescription": "%Config.Parser.SystemParserEnabled.Description%",
           "type": "boolean",
           "default": true
         },
         "markdownConverter.Parser.EmojiType": {
           "title": "%Config.Parser.EmojiType%",
-          "description": "%Config.Parser.EmojiType.Description%",
+          "markdownDescription": "%Config.Parser.EmojiType.Description%",
           "type": "string",
           "default": "GitHub",
           "enum": [
@@ -131,32 +131,32 @@
         },
         "markdownConverter.Parser.Toc.Enabled": {
           "title": "%Config.Parser.Toc.Enabled%",
-          "description": "%Config.Parser.Toc.Enabled.Description%",
+          "markdownDescription": "%Config.Parser.Toc.Enabled.Description%",
           "type": "boolean",
           "default": true
         },
         "markdownConverter.Parser.Toc.Class": {
           "title": "%Config.Parser.Toc.Class%",
-          "description": "%Config.Parser.Toc.Class.Description%",
+          "markdownDescription": "%Config.Parser.Toc.Class.Description%",
           "type": "string",
           "default": "markdown-converter-toc"
         },
         "markdownConverter.Parser.Toc.Levels": {
           "title": "%Config.Parser.Toc.Levels%",
-          "description": "%Config.Parser.Toc.Levels.Description%",
+          "markdownDescription": "%Config.Parser.Toc.Levels.Description%",
           "type": "string",
           "pattern": "^\\d+\\s*(-\\s*\\d+\\s*)?(,\\s*\\d+\\s*(-\\s*\\d+\\s*)?)*$",
           "default": "1-6"
         },
         "markdownConverter.Parser.Toc.Indicator": {
           "title": "%Config.Parser.Toc.Indicator%",
-          "description": "%Config.Parser.Toc.Indicator.Description%",
+          "markdownDescription": "%Config.Parser.Toc.Indicator.Description%",
           "type": "string",
           "default": "^\\[\\[\\s*toc\\s*\\]\\]"
         },
         "markdownConverter.Parser.Toc.ListType": {
           "title": "%Config.Parser.Toc.ListType%",
-          "description": "%Config.Parser.Toc.ListType.Description%",
+          "markdownDescription": "%Config.Parser.Toc.ListType.Description%",
           "type": "string",
           "default": "Unordered",
           "enum": [
@@ -166,26 +166,26 @@
         },
         "markdownConverter.Document.Attributes": {
           "title": "%Config.Document.Attributes%",
-          "description": "%Config.Document.Attributes.Description%",
+          "markdownDescription": "%Config.Document.Attributes.Description%",
           "type": "object",
           "default": null,
           "additionalProperties": true,
           "properties": {
             "Author": {
               "title": "%Config.Document.Attributes.Author%",
-              "description": "%Config.Document.Attributes.Author.Description%",
+              "markdownDescription": "%Config.Document.Attributes.Author.Description%",
               "type": "string"
             },
             "Company": {
               "title": "%Config.Document.Attributes.Company%",
-              "description": "%Config.Document.Attributes.Company.Description%",
+              "markdownDescription": "%Config.Document.Attributes.Company.Description%",
               "type": "string"
             }
           }
         },
         "markdownConverter.Document.Paper.PaperFormat": {
           "title": "%Config.Document.Paper.PaperFormat%",
-          "description": "%Config.Document.Paper.PaperFormat.Description%",
+          "markdownDescription": "%Config.Document.Paper.PaperFormat.Description%",
           "type": "object",
           "default": {
             "Format": "A4"
@@ -199,7 +199,7 @@
               "properties": {
                 "Format": {
                   "title": "%Config.Document.Paper.PaperFormat.Format%",
-                  "description": "%Config.Document.Paper.PaperFormat.Format.Description%",
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Format.Description%",
                   "type": "string",
                   "enum": [
                     "A3",
@@ -212,7 +212,7 @@
                 },
                 "Orientation": {
                   "title": "%Config.Document.Paper.PaperFormat.Orientation%",
-                  "description": "%Config.Document.Paper.PaperFormat.Orientation.Description%",
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Orientation.Description%",
                   "type": "string",
                   "enum": [
                     "Portrait",
@@ -230,11 +230,11 @@
               "properties": {
                 "Width": {
                   "title": "%Config.Document.Paper.PaperFormat.Width%",
-                  "description": "%Config.Document.Paper.PaperFormat.Width.Description%"
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Width.Description%"
                 },
                 "Height": {
                   "title": "%Config.Document.Paper.PaperFormat.Height%",
-                  "description": "%Config.Document.Paper.PaperFormat.Height.Description%"
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Height.Description%"
                 }
               }
             }
@@ -242,7 +242,7 @@
         },
         "markdownConverter.Document.Paper.Margin": {
           "title": "%Config.Document.Paper.Margin%",
-          "description": "%Config.Document.Paper.Margin.Description%",
+          "markdownDescription": "%Config.Document.Paper.Margin.Description%",
           "type": "object",
           "additionalProperties": false,
           "required": [
@@ -254,25 +254,25 @@
           "properties": {
             "Top": {
               "title": "%Config.Document.Paper.Margin.Top%",
-              "description": "%Config.Document.Paper.Margin.Top.Description%",
+              "markdownDescription": "%Config.Document.Paper.Margin.Top.Description%",
               "type": "string",
               "default": "1cm"
             },
             "Right": {
               "title": "%Config.Document.Paper.Margin.Right%",
-              "description": "%Config.Document.Paper.Margin.Right.Description%",
+              "markdownDescription": "%Config.Document.Paper.Margin.Right.Description%",
               "type": "string",
               "default": "1cm"
             },
             "Bottom": {
               "title": "%Config.Document.Paper.Margin.Bottom%",
-              "description": "%Config.Document.Paper.Margin.Bottom.Description%",
+              "markdownDescription": "%Config.Document.Paper.Margin.Bottom.Description%",
               "type": "string",
               "default": "1cm"
             },
             "Left": {
               "title": "%Config.Document.Paper.Margin.Left%",
-              "description": "%Config.Document.Paper.Margin.Left.Description%",
+              "markdownDescription": "%Config.Document.Paper.Margin.Left.Description%",
               "type": "string",
               "default": "1cm"
             }
@@ -280,31 +280,31 @@
         },
         "markdownConverter.Document.HeaderFooterEnabled": {
           "title": "%Config.Document.HeaderFooterEnabled%",
-          "description": "%Config.Document.HeaderFooterEnabled.Description%",
+          "markdownDescription": "%Config.Document.HeaderFooterEnabled.Description%",
           "type": "boolean",
           "default": true
         },
         "markdownConverter.Document.HeaderTemplate": {
           "title": "%Config.Document.HeaderTemplate%",
-          "description": "%Config.Document.HeaderTemplate.Description%",
+          "markdownDescription": "%Config.Document.HeaderTemplate.Description%",
           "type": "string",
           "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">{{ Author }}</div><div style=\"text-align: center; \"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right\">{{ Company }}</div>"
         },
         "markdownConverter.Document.FooterTemplate": {
           "title": "%Config.Document.FooterTemplate%",
-          "description": "%Config.Document.FooterTemplate.Description%",
+          "markdownDescription": "%Config.Document.FooterTemplate.Description%",
           "type": "string",
           "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \"></div><div stlyle=\"text-align: center; \">{{ CreationDate }}</div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right; \"></div>"
         },
         "markdownConverter.Document.Design.Template": {
           "title": "%Config.Document.Design.Template%",
-          "description": "%Config.Document.Design.Template.Description%",
+          "markdownDescription": "%Config.Document.Design.Template.Description%",
           "type": "string",
           "default": null
         },
         "markdownConverter.Document.Design.HighlightStyle": {
           "title": "%Config.Document.Design.HighlightStyle%",
-          "description": "%Config.Document.Design.HighlightStyle.Description%",
+          "markdownDescription": "%Config.Document.Design.HighlightStyle.Description%",
           "default": "Default",
           "anyOf": [
             {
@@ -321,7 +321,7 @@
         },
         "markdownConverter.Document.Design.StyleSheets": {
           "title": "%Config.Document.Design.StyleSheets%",
-          "description": "%Config.Document.Design.StyleSheets.Description%",
+          "markdownDescription": "%Config.Document.Design.StyleSheets.Description%",
           "type": "array",
           "default": [],
           "items": {
