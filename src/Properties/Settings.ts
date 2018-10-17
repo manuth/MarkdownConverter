@@ -1,6 +1,7 @@
 import * as VSCode from "vscode";
 import { MultiRange } from "../../node_modules/multi-integer-range";
 import { ConversionType } from "../MarkdownConverter/ConversionType";
+import { DestinationOrigin } from "../MarkdownConverter/DestinationOrigin";
 import { CustomPaperFormat } from "../System/Drawing/CustomPaperFormat";
 import { EmojiType } from "../System/Drawing/EmojiType";
 import { ListType } from "../System/Drawing/ListType";
@@ -34,11 +35,19 @@ export class Settings
     }
 
     /**
-     * Gets the path to save the output-files to.
+     * Gets the location the `DestinationPath` is relative to.
      */
-    public get OutputDirectory(): string
+    public get DestinationOrigin(): DestinationOrigin
     {
-        return this.getConfigEntry("OutDir");
+        return DestinationOrigin[this.getConfigEntry<string>("DestinationOrigin")];
+    }
+
+    /**
+     * Gets the path to save the destination-files to.
+     */
+    public get DestinationPath(): string
+    {
+        return this.getConfigEntry("DestinationPath");
     }
 
     /**

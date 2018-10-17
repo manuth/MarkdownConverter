@@ -11,6 +11,8 @@
     "UpdateRunning": "Chromium Version {0} wird heruntergeladen… Bitte warten…",
     "UpdateSuccess": "Download abgeschlossen!\nSie sind nun bereit, um MarkdownConverter nutzen zu können!",
     "UpdateFailed": "Der download ist fehlgeschlagen.\nMöglicherweise hilft es, \"http.proxy\" oder \"http.proxyStrictSSL\" zu deklarieren, falls Sie eine Proxy nutzen.\nWollen Sie den Download erneut starten?",
+    "DestinationPath": "Bitte geben Sie einen Ordner an, in dem Sie die Ausgabedatei ablegen wollen.",
+    "DestinationPathExample": "Bspw. C:\\Temp oder /tmp/",
     "DateTime": {
         "Formats": {
             "Default": "dd.MM.yyyy"
