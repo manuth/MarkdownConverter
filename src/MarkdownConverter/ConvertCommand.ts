@@ -315,6 +315,10 @@ export class ConvertCommand extends Command
 
                     destinationPath = Path.resolve(origin, Settings.Default.DestinationPath);
                 }
+                else
+                {
+                    destinationPath = Settings.Default.DestinationPath;
+                }
 
                 let fileName = Path.parse(textDocument.fileName).name;
                 let converter = await this.LoadConverter(documentRoot, textDocument);
