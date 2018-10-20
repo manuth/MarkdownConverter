@@ -186,7 +186,7 @@ export class ConvertCommand extends Command
         }
 
         parser.validateLink = () => true;
-        
+
         Anchor(
             parser,
             {
@@ -267,25 +267,32 @@ export class ConvertCommand extends Command
                 let textDocument = this.GetMarkdownDocument();
                 let documentFolder = textDocument.isUntitled ? null : Path.dirname(textDocument.fileName);
                 let currentWorkspace: WorkspaceFolder;
-                
-                if ((workspace.workspaceFolders || []).length === 1)
+
+                if (textDocument.isUntitled)
                 {
-                     currentWorkspace = workspace.workspaceFolders[0];
+                    if ((workspace.workspaceFolders || []).length === 1)
+                    {
+                        currentWorkspace = workspace.workspaceFolders[0];
+                    }
+                    else
+                    {
+                        currentWorkspace = null;
+                    }
                 }
                 else
                 {
-                    currentWorkspace = textDocument.isUntitled ? (workspace.workspaceFolders || []).find(
+                    currentWorkspace = (workspace.workspaceFolders || []).find(
                         (workspaceFolder) =>
                         {
                             let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
                             let documentParts = textDocument.uri.fsPath.split(Path.sep);
-    
+
                             return workspaceParts.every(
                                 (value, index) =>
                                 {
                                     return value === documentParts[index];
                                 });
-                        }) : null;
+                        });
                 }
 
                 let workspaceRoot = !isNullOrUndefined(currentWorkspace) ? currentWorkspace.uri.fsPath : null;
