@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [MarkdownConverter v1.1.1]
+### Changes
+  - Fixed absolute path handling
+
 ## [MarkdownConverter v1.1.0]
 ### Breaking Changes
   - The `OutDir`-setting is now called `DestinationPath`
@@ -111,6 +115,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - First release
 
 <!--- References -->
+[MarkdownConverter v1.1.1]: https://github.com/manuth/MarkdownConverter/compare/v1.1.0...v1.1.1
+[MarkdownConverter v1.1.0]: https://github.com/manuth/MarkdownConverter/compare/v1.0.1...v1.1.0
 [MarkdownConverter v1.0.1]: https://github.com/manuth/MarkdownConverter/compare/v1.0.0...v1.0.1
 [MarkdownConverter v1.0.0]: https://github.com/manuth/MarkdownConverter/compare/v0.0.13...v1.0.0
 [MarkdownConverter v0.0.13]: https://github.com/manuth/MarkdownConverter/compare/v0.0.12...v0.0.13
