@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [MarkdownConverter v1.1.2]
+### Changes
+  - Implemented a clean way to handle files outside of the current workspace
+
 ## [MarkdownConverter v1.1.1]
 ### Changes
   - Fixed absolute path handling
@@ -115,6 +119,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - First release
 
 <!--- References -->
+[MarkdownConverter v1.1.1]: https://github.com/manuth/MarkdownConverter/compare/v1.1.1...v1.1.2
 [MarkdownConverter v1.1.1]: https://github.com/manuth/MarkdownConverter/compare/v1.1.0...v1.1.1
 [MarkdownConverter v1.1.0]: https://github.com/manuth/MarkdownConverter/compare/v1.0.1...v1.1.0
 [MarkdownConverter v1.0.1]: https://github.com/manuth/MarkdownConverter/compare/v1.0.0...v1.0.1
