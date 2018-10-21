@@ -81,7 +81,8 @@ export class Converter
 
             try
             {
-                let browser = await Puppeteer.launch({ args: ["--disable-web-security"] });
+                const launchPuppeteer = sandbox => Puppeteer.launch({ args: ["--disable-web-security", ...(sandbox ? [] : ["--no-sandbox"])] });
+                let browser = await launchPuppeteer(true).catch(_ => launchPuppeteer(false));
                 let page = await browser.newPage();
                 let url = URL.resolve(
                     "http://localhost:8980/",
