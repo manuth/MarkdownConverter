@@ -378,6 +378,7 @@ export class ConvertCommand extends Command
                                                         break;
                                                     case "linux":
                                                         ChildProcess.exec(`bash -c 'xdg-open "${destination}"'`);
+                                                        break;
                                                     default:
                                                         window.showWarningMessage(ResourceManager.Resources.Get("UnsupportedPlatformException"));
                                                         break;
