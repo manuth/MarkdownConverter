@@ -170,6 +170,10 @@ export class Converter
                 {
                     throw new FileException(null, exception["path"]);
                 }
+                else
+                {
+                    throw exception;
+                }
             }
             finally
             {
