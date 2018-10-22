@@ -81,13 +81,23 @@ export class Converter
 
             try
             {
-                const launchPuppeteer = sandbox => Puppeteer.launch({ args: ["--disable-web-security", ...(sandbox ? [] : ["--no-sandbox"])] });
-                let browser = await launchPuppeteer(true).catch(_ => launchPuppeteer(false));
+                let browser: Puppeteer.Browser;
+                let browserArguments = ["--disable-web-security"];
+
+                try
+                {
+                    browser = await Puppeteer.launch({ args: browserArguments });
+                }
+                catch
+                {
+                    browser = await Puppeteer.launch({ args: browserArguments.concat(["--no-sandbox"]) });
+                }
+
                 let page = await browser.newPage();
                 let url = URL.resolve(
                     "http://localhost:8980/",
                     ((!isNullOrUndefined(this.Document.FileName) && (!isNullOrUndefined(this.DocumentRoot))) ?
-                    Path.relative(this.DocumentRoot, this.Document.FileName) : "index") + ".html");
+                        Path.relative(this.DocumentRoot, this.Document.FileName) : "index") + ".html");
 
                 page.setRequestInterception(true);
                 page.on(
