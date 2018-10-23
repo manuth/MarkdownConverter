@@ -81,12 +81,23 @@ export class Converter
 
             try
             {
-                let browser = await Puppeteer.launch({ args: ["--disable-web-security"] });
+                let browser: Puppeteer.Browser;
+                let browserArguments = ["--disable-web-security"];
+
+                try
+                {
+                    browser = await Puppeteer.launch({ args: browserArguments });
+                }
+                catch
+                {
+                    browser = await Puppeteer.launch({ args: browserArguments.concat(["--no-sandbox"]) });
+                }
+
                 let page = await browser.newPage();
                 let url = URL.resolve(
                     "http://localhost:8980/",
                     ((!isNullOrUndefined(this.Document.FileName) && (!isNullOrUndefined(this.DocumentRoot))) ?
-                    Path.relative(this.DocumentRoot, this.Document.FileName) : "index") + ".html");
+                        Path.relative(this.DocumentRoot, this.Document.FileName) : "index") + ".html");
 
                 page.setRequestInterception(true);
                 page.on(
@@ -158,6 +169,10 @@ export class Converter
                 if ("path" in exception)
                 {
                     throw new FileException(null, exception["path"]);
+                }
+                else
+                {
+                    throw exception;
                 }
             }
             finally
