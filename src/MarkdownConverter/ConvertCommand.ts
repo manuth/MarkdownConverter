@@ -9,12 +9,11 @@ import * as Checkbox from "markdown-it-checkbox";
 import * as MarkdownItEmoji from "markdown-it-emoji";
 import * as MarkdownItToc from "markdown-it-table-of-contents";
 import * as Path from "path";
-import * as Puppeteer from "puppeteer";
 import * as Format from "string-template";
 import * as Transliteration from "transliteration";
 import * as TwEmoji from "twemoji";
 import { isNullOrUndefined } from "util";
-import { ProgressLocation, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
+import { TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { Extension } from "../extension";
 import { ResourceManager } from "../Properties/ResourceManager";
 import { Settings } from "../Properties/Settings";
@@ -22,20 +21,19 @@ import { Document } from "../System/Drawing/Document";
 import { EmojiType } from "../System/Drawing/EmojiType";
 import { ListType } from "../System/Drawing/ListType";
 import { Slugifier } from "../System/Drawing/Slugifier";
-import { Exception } from "../System/Exception";
 import { FileException } from "../System/IO/FileException";
 import { StringUtils } from "../System/Text/StringUtils";
-import { Command } from "./Command";
 import { ConversionType } from "./ConversionType";
 import { Converter } from "./Converter";
 import { DestinationOrigin } from "./DestinationOrigin";
 import { getMarkdownExtensionContributions } from "./MarkdownExtensions";
 import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
+import { PuppeteerCommand } from "./PuppeteerCommand";
 
 /**
  * Provides a command for converting a markdown-document.
  */
-export class ConvertCommand extends Command
+export class ConvertCommand extends PuppeteerCommand
 {
     /**
      * Initializes a new instance of the `ConvertCommand` class.
@@ -257,210 +255,133 @@ export class ConvertCommand extends Command
         throw new MarkdownFileNotFoundException();
     }
 
-    public async Execute()
+    public async ExecuteCommand()
     {
-        try
+        let destinationPath: string;
+        let textDocument = this.GetMarkdownDocument();
+        let documentFolder = textDocument.isUntitled ? null : Path.dirname(textDocument.fileName);
+        let currentWorkspace: WorkspaceFolder;
+
+        if (textDocument.isUntitled)
         {
-            if (await FileSystem.pathExists(Puppeteer.executablePath()))
+            if ((workspace.workspaceFolders || []).length === 1)
             {
-                let destinationPath: string;
-                let textDocument = this.GetMarkdownDocument();
-                let documentFolder = textDocument.isUntitled ? null : Path.dirname(textDocument.fileName);
-                let currentWorkspace: WorkspaceFolder;
-
-                if (textDocument.isUntitled)
-                {
-                    if ((workspace.workspaceFolders || []).length === 1)
-                    {
-                        currentWorkspace = workspace.workspaceFolders[0];
-                    }
-                    else
-                    {
-                        currentWorkspace = null;
-                    }
-                }
-                else
-                {
-                    currentWorkspace = (workspace.workspaceFolders || []).find(
-                        (workspaceFolder) =>
-                        {
-                            let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
-                            let documentParts = textDocument.uri.fsPath.split(Path.sep);
-
-                            return workspaceParts.every(
-                                (value, index) =>
-                                {
-                                    return value === documentParts[index];
-                                });
-                        });
-                }
-
-                let workspaceRoot = !isNullOrUndefined(currentWorkspace) ? currentWorkspace.uri.fsPath : null;
-                let documentRoot = workspaceRoot || documentFolder;
-
-                if (!Path.isAbsolute(Settings.Default.DestinationPath))
-                {
-                    let origin: string = null;
-
-                    if (Settings.Default.DestinationOrigin === DestinationOrigin.WorkspaceRoot)
-                    {
-                        origin = workspaceRoot || documentFolder;
-                    }
-                    else if (Settings.Default.DestinationOrigin === DestinationOrigin.DocumentFile)
-                    {
-                        origin = documentFolder || workspaceRoot;
-                    }
-
-                    while (isNullOrUndefined(origin))
-                    {
-                        origin = await window.showInputBox({
-                            ignoreFocusOut: true,
-                            prompt: ResourceManager.Resources.Get("DestinationPath"),
-                            placeHolder: ResourceManager.Resources.Get("DestinationPathExample")
-                        });
-                    }
-
-                    destinationPath = Path.resolve(origin, Settings.Default.DestinationPath);
-                }
-                else
-                {
-                    destinationPath = Settings.Default.DestinationPath;
-                }
-
-                let fileName = Path.parse(textDocument.fileName).name;
-                let converter = await this.LoadConverter(documentRoot, textDocument);
-                let prompts = [];
-
-                await FileSystem.ensureDir(destinationPath);
-
-                for (let type of Settings.Default.ConversionType)
-                {
-                    let extension: string;
-
-                    switch (type)
-                    {
-                        case ConversionType.HTML:
-                            extension = "html";
-                            break;
-                        case ConversionType.JPEG:
-                            extension = "jpg";
-                            break;
-                        case ConversionType.PNG:
-                            extension = "png";
-                            break;
-                        default:
-                        case ConversionType.PDF:
-                            extension = "pdf";
-                            break;
-                    }
-
-                    let destination = Path.join(destinationPath, `${fileName}.${extension}`);
-                    await converter.Start(type, destination);
-
-                    prompts.push(
-                        (
-                            async () =>
-                            {
-                                await window.showInformationMessage(
-                                    Format(ResourceManager.Resources.Get("SuccessMessage"), ConversionType[type], destination),
-                                    ResourceManager.Resources.Get("OpenFileLabel")).then(
-                                        (label) =>
-                                        {
-                                            if (label === ResourceManager.Resources.Get("OpenFileLabel"))
-                                            {
-                                                switch (process.platform)
-                                                {
-                                                    case "win32":
-                                                        ChildProcess.exec(`"${destination}"`);
-                                                        break;
-                                                    case "darwin":
-                                                        ChildProcess.exec(`bash -c 'open "${destination}"'`);
-                                                        break;
-                                                    case "linux":
-                                                        ChildProcess.exec(`bash -c 'xdg-open "${destination}"'`);
-                                                        break;
-                                                    default:
-                                                        window.showWarningMessage(ResourceManager.Resources.Get("UnsupportedPlatformException"));
-                                                        break;
-                                                }
-                                            }
-                                        });
-                            })());
-                }
-
-                await Promise.all(prompts);
-            }
-            else if (
-                await window.showInformationMessage(
-                    ResourceManager.Resources.Get("UpdateMessage"),
-                    ResourceManager.Resources.Get<string>("Yes"),
-                    ResourceManager.Resources.Get<string>("No")) === ResourceManager.Resources.Get<string>("Yes"))
-            {
-                let revision = require(Path.join("..", "..", "node_modules", "puppeteer", "package.json"))["puppeteer"]["chromium_revision"];
-                let success = false;
-
-                do
-                {
-                    await window.withProgress(
-                        {
-                            location: ProgressLocation.Notification,
-                            title: Format(ResourceManager.Resources.Get("UpdateRunning"), revision)
-                        },
-                        async (reporter) =>
-                        {
-                            try
-                            {
-                                let progress = 0;
-                                let browserFetcher = (Puppeteer as any).createBrowserFetcher();
-
-                                await browserFetcher.download(
-                                    revision,
-                                    (downloadBytes, totalBytes) =>
-                                    {
-                                        let newProgress = Math.floor((downloadBytes / totalBytes) * 100);
-
-                                        if (newProgress > progress)
-                                        {
-                                            reporter.report({
-                                                increment: newProgress - progress
-                                            });
-
-                                            progress = newProgress;
-                                        }
-                                    });
-
-                                window.showInformationMessage(ResourceManager.Resources.Get("UpdateSuccess"));
-                                success = true;
-                            }
-                            catch
-                            {
-                                success = false;
-                            }
-                        });
-                }
-                while (
-                    !await FileSystem.pathExists(Puppeteer.executablePath()) &&
-                    !success &&
-                    await window.showWarningMessage(
-                        ResourceManager.Resources.Get("UpdateFailed"),
-                        ResourceManager.Resources.Get("Yes"),
-                        ResourceManager.Resources.Get("No")) === ResourceManager.Resources.Get("Yes"));
-            }
-        }
-        catch (exception)
-        {
-            let message: string;
-
-            if (exception instanceof Exception)
-            {
-                message = exception.Message;
+                currentWorkspace = workspace.workspaceFolders[0];
             }
             else
             {
-                throw exception;
+                currentWorkspace = null;
+            }
+        }
+        else
+        {
+            currentWorkspace = (workspace.workspaceFolders || []).find(
+                (workspaceFolder) =>
+                {
+                    let workspaceParts = workspaceFolder.uri.fsPath.split(Path.sep);
+                    let documentParts = textDocument.uri.fsPath.split(Path.sep);
+
+                    return workspaceParts.every(
+                        (value, index) =>
+                        {
+                            return value === documentParts[index];
+                        });
+                });
+        }
+
+        let workspaceRoot = !isNullOrUndefined(currentWorkspace) ? currentWorkspace.uri.fsPath : null;
+        let documentRoot = workspaceRoot || documentFolder;
+
+        if (!Path.isAbsolute(Settings.Default.DestinationPath))
+        {
+            let origin: string = null;
+
+            if (Settings.Default.DestinationOrigin === DestinationOrigin.WorkspaceRoot)
+            {
+                origin = workspaceRoot || documentFolder;
+            }
+            else if (Settings.Default.DestinationOrigin === DestinationOrigin.DocumentFile)
+            {
+                origin = documentFolder || workspaceRoot;
             }
 
-            window.showErrorMessage(message);
+            while (isNullOrUndefined(origin))
+            {
+                origin = await window.showInputBox({
+                    ignoreFocusOut: true,
+                    prompt: ResourceManager.Resources.Get("DestinationPath"),
+                    placeHolder: ResourceManager.Resources.Get("DestinationPathExample")
+                });
+            }
+
+            destinationPath = Path.resolve(origin, Settings.Default.DestinationPath);
         }
+        else
+        {
+            destinationPath = Settings.Default.DestinationPath;
+        }
+
+        let fileName = Path.parse(textDocument.fileName).name;
+        let converter = await this.LoadConverter(documentRoot, textDocument);
+        let prompts = [];
+
+        await FileSystem.ensureDir(destinationPath);
+
+        for (let type of Settings.Default.ConversionType)
+        {
+            let extension: string;
+
+            switch (type)
+            {
+                case ConversionType.HTML:
+                    extension = "html";
+                    break;
+                case ConversionType.JPEG:
+                    extension = "jpg";
+                    break;
+                case ConversionType.PNG:
+                    extension = "png";
+                    break;
+                default:
+                case ConversionType.PDF:
+                    extension = "pdf";
+                    break;
+            }
+
+            let destination = Path.join(destinationPath, `${fileName}.${extension}`);
+            await converter.Start(type, destination);
+
+            prompts.push(
+                (
+                    async () =>
+                    {
+                        await window.showInformationMessage(
+                            Format(ResourceManager.Resources.Get("SuccessMessage"), ConversionType[type], destination),
+                            ResourceManager.Resources.Get("OpenFileLabel")).then(
+                                (label) =>
+                                {
+                                    if (label === ResourceManager.Resources.Get("OpenFileLabel"))
+                                    {
+                                        switch (process.platform)
+                                        {
+                                            case "win32":
+                                                ChildProcess.exec(`"${destination}"`);
+                                                break;
+                                            case "darwin":
+                                                ChildProcess.exec(`bash -c 'open "${destination}"'`);
+                                                break;
+                                            case "linux":
+                                                ChildProcess.exec(`bash -c 'xdg-open "${destination}"'`);
+                                                break;
+                                            default:
+                                                window.showWarningMessage(ResourceManager.Resources.Get("UnsupportedPlatformException"));
+                                                break;
+                                        }
+                                    }
+                                });
+                    })());
+        }
+
+        await Promise.all(prompts);
     }
 }

@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import CultureInfo from "culture-info";
 import { MarkdownIt } from "markdown-it";
+import * as Path from "path";
 import { commands, env, ExtensionContext } from "vscode";
 import { ConvertCommand } from "./MarkdownConverter/ConvertCommand";
 import { ResourceManager } from "./Properties/ResourceManager";
@@ -43,6 +44,14 @@ export class Extension
     public get VSCodeParser()
     {
         return this.vsCodeParser;
+    }
+
+    /**
+     * Gets the chromium-revision of the extension.
+     */
+    public get ChromiumRevision(): string
+    {
+        return require(Path.join("..", "node_modules", "puppeteer", "package.json"))["puppeteer"]["chromium_revision"];
     }
 
     /**
