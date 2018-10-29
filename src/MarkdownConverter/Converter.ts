@@ -1,4 +1,5 @@
 import * as FS from "fs-extra";
+import * as PortFinder from "get-port";
 import * as http from "http";
 import * as Server from "http-server";
 import * as Path from "path";
@@ -68,6 +69,7 @@ export class Converter
      */
     public async Start(conversionType: ConversionType, path: string): Promise<void>
     {
+        let port = await PortFinder();
         let htmlCode = await this.Document.Render();
 
         if (conversionType !== ConversionType.HTML)
@@ -77,7 +79,7 @@ export class Converter
                 cors: true
             }) as any).server as http.Server;
 
-            server.listen(8980, "localhost");
+            server.listen(port, "localhost");
 
             try
             {
@@ -95,7 +97,7 @@ export class Converter
 
                 let page = await browser.newPage();
                 let url = URL.resolve(
-                    "http://localhost:8980/",
+                    `http://localhost:${port}/`,
                     ((!isNullOrUndefined(this.Document.FileName) && (!isNullOrUndefined(this.DocumentRoot))) ?
                         Path.relative(this.DocumentRoot, this.Document.FileName) : "index") + ".html");
 
