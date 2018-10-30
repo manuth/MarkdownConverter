@@ -5,7 +5,7 @@ import { ConversionTask } from "./ConversionTask";
 import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
 
 /**
- * Represens a task for converting a markdown-document.
+ * Represens a task for converting the currently opened document.
  */
 export class ConvertTask extends ConversionTask
 {
