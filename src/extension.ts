@@ -4,7 +4,7 @@ import CultureInfo from "culture-info";
 import { MarkdownIt } from "markdown-it";
 import * as Path from "path";
 import { commands, env, ExtensionContext } from "vscode";
-import { ConvertCommand } from "./MarkdownConverter/ConvertCommand";
+import { ConvertTask } from "./MarkdownConverter/ConvertTask";
 import { ResourceManager } from "./Properties/ResourceManager";
 
 /**
@@ -39,7 +39,7 @@ export class Extension
     }
 
     /**
-     * Gets the parser provided by 
+     * Gets the parser provided by Visual Studio Code.
      */
     public get VSCodeParser()
     {
@@ -81,7 +81,7 @@ export class Extension
      */
     protected async Convert()
     {
-        await new ConvertCommand(this).Execute();
+        await new ConvertTask(this).Execute();
     }
 
     /**
@@ -93,5 +93,7 @@ export class Extension
 }
 
 let extension = new Extension();
+
 export let activate = async (context: ExtensionContext) => await extension.Activate(context);
+
 export let deactivate = async () => await extension.Dispose();

@@ -1,19 +1,19 @@
 import { TextDocument, window } from "vscode";
 import { Extension } from "../extension";
 import { Settings } from "../Properties/Settings";
-import { ConversionCommand } from "./ConversionCommand";
+import { ConversionTask } from "./ConversionTask";
 import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
 
 /**
- * Represens a command for converting a markdown-document.
+ * Represens a task for converting a markdown-document.
  */
-export class ConvertCommand extends ConversionCommand
+export class ConvertTask extends ConversionTask
 {
     /**
-     * Initializes a new instance of the `ConvertCommand` class.
+     * Initializes a new instance of the `ConvertTask` class.
      * 
      * @param extension
-     * The extension the command belongs to.
+     * The extension the task belongs to.
      */
     public constructor(extension: Extension)
     {
@@ -41,7 +41,7 @@ export class ConvertCommand extends ConversionCommand
         throw new MarkdownFileNotFoundException();
     }
 
-    public async ExecuteCommand()
+    public async ExecuteTask()
     {
         this.Convert(this.GetMarkdownDocument());
     }

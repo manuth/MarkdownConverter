@@ -5,18 +5,18 @@ import { ProgressLocation, window } from "vscode";
 import { Extension } from "../extension";
 import { ResourceManager } from "../Properties/ResourceManager";
 import { Exception } from "../System/Exception";
-import { Command } from "./Command";
+import { Task } from "./Task";
 
 /**
- * Represents a command which depends on Puppeteer.
+ * Represents a task which depends on Puppeteer.
  */
-export abstract class PuppeteerCommand extends Command
+export abstract class PuppeteerTask extends Task
 {
     /**
-     * Initializes a new instance of the `PuppeteerCommand` class.
+     * Initializes a new instance of the `PuppeteerTask` class.
      * 
      * @param extension
-     * The extension this command belongs to.
+     * The extension this task belongs to.
      */
     public constructor(extension: Extension)
     {
@@ -24,7 +24,7 @@ export abstract class PuppeteerCommand extends Command
     }
 
     /**
-     * Executes the command.
+     * Executes the task.
      */
     public async Execute()
     {
@@ -32,7 +32,7 @@ export abstract class PuppeteerCommand extends Command
         {
             if (await FileSystem.pathExists(Puppeteer.executablePath()))
             {
-                await this.ExecuteCommand();
+                await this.ExecuteTask();
             }
             else if (
                 await window.showInformationMessage(
@@ -112,7 +112,7 @@ export abstract class PuppeteerCommand extends Command
     }
 
     /**
-     * Executes the command.
+     * Executes the task.
      */
-    protected abstract async ExecuteCommand();
+    protected abstract async ExecuteTask();
 }

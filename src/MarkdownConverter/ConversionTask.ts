@@ -27,18 +27,18 @@ import { ConversionType } from "./ConversionType";
 import { Converter } from "./Converter";
 import { DestinationOrigin } from "./DestinationOrigin";
 import { getMarkdownExtensionContributions } from "./MarkdownExtensions";
-import { PuppeteerCommand } from "./PuppeteerCommand";
+import { PuppeteerTask } from "./PuppeteerTask";
 
 /**
- * Represents a command which is able to convert markdown-files.
+ * Represents a task which is able to convert markdown-files.
  */
-export abstract class ConversionCommand extends PuppeteerCommand
+export abstract class ConversionTask extends PuppeteerTask
 {
     /**
-     * Initializes a new instance of the `ConversionCommand` class.
+     * Initializes a new instance of the `ConversionTask` class.
      * 
      * @param extension
-     * The extension the command belongs to.
+     * The extension the task belongs to.
      */
     public constructor(extension: Extension)
     {

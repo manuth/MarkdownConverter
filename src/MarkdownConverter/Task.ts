@@ -1,20 +1,20 @@
 import { Extension } from "../extension";
 
 /**
- * Represents a command.
+ * Represents a task.
  */
-export abstract class Command
+export abstract class Task
 {
     /**
-     * The extension this command belongs to.
+     * The extension this task belongs to.
      */
     private extension: Extension;
 
     /**
-     * Initializes a new instance of the `Command` class.
+     * Initializes a new instance of the `Task` class.
      * 
      * @param extension
-     * The extension this command belongs to.
+     * The extension this task belongs to.
      */
     public constructor(extension: Extension)
     {
@@ -22,7 +22,7 @@ export abstract class Command
     }
 
     /**
-     * Gets or sets the extension this command belongs to.
+     * Gets or sets the extension this task belongs to.
      */
     public get Extension()
     {
@@ -35,7 +35,7 @@ export abstract class Command
     }
 
     /**
-     * Executes the command.
+     * Executes the task.
      */
     public abstract async Execute();
 }
