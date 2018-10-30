@@ -38,6 +38,11 @@
         "command": "markdownConverter.Convert",
         "category": "Markdown",
         "title": "%Command.Convert%"
+      },
+      {
+        "command": "markdownConverter.ConvertAll",
+        "category": "Markdown",
+        "title": "%Command.ConvertAll%"
       }
     ],
     "markdown.markdownItPlugins": true,

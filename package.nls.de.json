@@ -1,5 +1,6 @@
 {
-    "Command.Convert": "Dokument Konvertieren",
+    "Command.Convert": "Dokument konvertieren",
+    "Command.ConvertAll": "Alle Dokumente konvertieren",
     "Config": "MarkdownConverter-Einstellungen",
     "Config.DestinationOrigin": "Ziel-Ort",
     "Config.DestinationOrigin.Description": "Der Ort zu dem der `#markdownConverter.DestinationPath#` relativ ist.",

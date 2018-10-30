@@ -4,6 +4,7 @@ import CultureInfo from "culture-info";
 import { MarkdownIt } from "markdown-it";
 import * as Path from "path";
 import { commands, env, ExtensionContext } from "vscode";
+import { ConvertAllTask } from "./MarkdownConverter/ConvertAllTask";
 import { ConvertTask } from "./MarkdownConverter/ConvertTask";
 import { ResourceManager } from "./Properties/ResourceManager";
 
@@ -65,7 +66,8 @@ export class Extension
         this.context = context;
 
         context.subscriptions.push(
-            commands.registerCommand("markdownConverter.Convert", async () => await this.Convert()));
+            commands.registerCommand("markdownConverter.Convert", async () => await this.Convert()),
+            commands.registerCommand("markdownConverter.ConvertAll", async () => await this.ConvertAll()));
 
         return {
             extendMarkdownIt: (md: any) =>
@@ -82,6 +84,14 @@ export class Extension
     protected async Convert()
     {
         await new ConvertTask(this).Execute();
+    }
+
+    /**
+     * Converts all documents in the workspace.
+     */
+    protected async ConvertAll()
+    {
+        await new ConvertAllTask(this).Execute();
     }
 
     /**
