@@ -102,7 +102,7 @@ export class Extension
     }
 }
 
-let extension = new Extension();
+export let extension = new Extension();
 
 export let activate = async (context: ExtensionContext) => await extension.Activate(context);
 

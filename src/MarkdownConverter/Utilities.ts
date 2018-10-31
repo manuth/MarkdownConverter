@@ -1,5 +1,3 @@
-import * as lodash from "lodash";
-import * as MarkdownIt from "markdown-it";
 import * as shell from "shelljs";
 
 /**
@@ -16,11 +14,6 @@ export class Utilities
         "HGUSER", // Mercurial
         "C9_USER" // Cloud9
     ];
-
-    /**
-     * The markdown-parser provided by `Visual Studio Code`.
-     */
-    private static vscodeParser: MarkdownIt.MarkdownIt;
 
     /**
      * Gets the full name of the current user.
@@ -42,19 +35,6 @@ export class Utilities
         while (!(current.done || result));
 
         return result;
-    }
-
-    /**
-     * Gets the markdown-parser provided by `Visual Studio Code`.
-     */
-    public static get VSCodeParser(): MarkdownIt.MarkdownIt
-    {
-        return this.Clone(this.vscodeParser);
-    }
-
-    public static set VSCodeParser(value)
-    {
-        this.vscodeParser = value;
     }
 
     /**
@@ -120,16 +100,5 @@ export class Utilities
             yield this.CheckOsaScript();
         }
         return this.CheckGit();
-    }
-
-    /**
-     * Clones an object.
-     * 
-     * @param object
-     * The object to clone.
-     */
-    public static Clone<T>(object: T): T
-    {
-        return lodash.cloneDeep<T>(object);
     }
 }
