@@ -120,7 +120,7 @@ export abstract class ConversionTask extends PuppeteerTask
         let tasks: Promise<void>[] = [];
         let fileName = Path.parse(document.fileName).name;
         let converter = await this.LoadConverter(documentRoot, document);
-
+        await converter.Initialize();
         await FileSystem.ensureDir(destinationPath);
 
         for (let type of Settings.Default.ConversionType)
@@ -179,6 +179,7 @@ export abstract class ConversionTask extends PuppeteerTask
         }
 
         await Promise.all(tasks);
+        await converter.Dispose();
     }
 
     /**
