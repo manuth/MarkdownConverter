@@ -43,6 +43,6 @@ export class ConvertTask extends ConversionTask
 
     public async ExecuteTask()
     {
-        this.Convert(this.GetMarkdownDocument());
+        await this.Convert(this.GetMarkdownDocument());
     }
 }

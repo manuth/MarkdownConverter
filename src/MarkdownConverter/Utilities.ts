@@ -1,4 +1,4 @@
-import * as shell from "shelljs";
+import * as shell from "async-shelljs";
 
 /**
  * Provides static methods.
@@ -11,39 +11,30 @@ export class Utilities
     private static envVars: string[] = [
         "GIT_AUTHOR_NAME",
         "GIT_COMMITTER_NAME",
-        "HGUSER", // Mercurial
-        "C9_USER" // Cloud9
+        "HGUSER",
+        "C9_USER"
     ];
 
     /**
      * Gets the full name of the current user.
      */
-    public static get FullName(): string
+    public static async GetFullName(): Promise<string>
     {
-        let result: string;
         let current: IteratorResult<string>;
-        let functionArray = this.functions();
+        let iterator = this.TryGetUsername();
+        
         do
         {
-            try
+            current = await iterator.next();
+
+            if (current.value !== null)
             {
-                current = functionArray.next();
-                result = current.value.trim();
+                return current.value.trim();
             }
-            catch (e) { }
         }
-        while (!(current.done || result));
+        while (!current.done);
 
-        return result;
-    }
-
-    /**
-     * Tries to figure out the username using wmic.
-     */
-    private static CheckWmic(): string
-    {
-        let fullname = shell.exec('wmic useraccount where name="%username%" get fullname').stdout.replace("FullName", "");
-        return fullname;
+        return "";
     }
 
     /**
@@ -51,54 +42,77 @@ export class Utilities
      */
     private static CheckEnv(): string
     {
-        let env = process.env;
-        let varName = this.envVars.find(x => x in env);
-        let fullname = varName && env[varName];
+        let environment = process.env;
+        let variableNames = this.envVars.filter(x => x in environment);
+        
+        for (let variableName of variableNames)
+        {
+            if (environment[variableName] !== null)
+            {
+                return environment[variableName];
+            }
+        }
 
-        return fullname;
-    }
-
-    /**
-     * Tries to figure out the username using the npm-configuration
-     */
-    private static CheckAuthorName(): string
-    {
-        let fullname = require("rc")("npm")["init-author-name"];
-        return fullname;
+        return null;
     }
 
     /**
      * Tries to figure out the username using git's global settings
      */
-    private static CheckGit(): string
+    private static async CheckGit()
     {
-        return shell.exec("git config --global user.name").stdout;
+        return await shell.asyncExec("git config --global user.name");
+    }
+
+    /**
+     * Tries to figure out the username using wmic.
+     */
+    private static async CheckWmic()
+    {
+        return (await shell.asyncExec('wmic useraccount where name="%username%" get fullname')).replace("FullName", "").trim();
     }
 
     /**
      * Tries to figure out the username using osascript.
      */
-    private static CheckOsaScript(): string
+    private static async CheckOsaScript()
     {
-        return shell.exec("osascript -e long user name of (system info)").stdout;
+        return await shell.asyncExec("osascript -e long user name of (system info)");
     }
 
     /**
      * A set of functions to figure out the user-name.
      */
-    private static * functions()
+    private static async* TryGetUsername()
     {
-        yield this.CheckEnv();
-        yield this.CheckAuthorName();
-        if (process.platform === "win32")
-        {
-            yield this.CheckWmic();
-        }
+        yield Utilities.CheckEnv();
 
-        if (process.platform === "darwin")
+        yield* (async function*()
         {
-            yield this.CheckOsaScript();
-        }
-        return this.CheckGit();
+            let methods: (() => Promise<string>)[] = [];
+            methods.push(Utilities.CheckGit);
+
+            if (process.platform === "win32")
+            {
+                methods.push(Utilities.CheckWmic);
+            }
+
+            if (process.platform === "darwin")
+            {
+                methods.push(Utilities.CheckOsaScript);
+            }
+
+            for (let method of methods)
+            {
+                try
+                {
+                    yield await method();
+                }
+                catch
+                {
+                    yield null;
+                }
+            }
+        })();
     }
 }

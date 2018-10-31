@@ -107,3 +107,4 @@ export let extension = new Extension();
 export let activate = async (context: ExtensionContext) => await extension.Activate(context);
 
 export let deactivate = async () => await extension.Dispose();
+(Symbol as any).asyncIterator = Symbol.asyncIterator || Symbol.for("Symbol.asyncIterator");

@@ -8,7 +8,6 @@ import * as OS from "os";
 import * as Path from "path";
 import { TextDocument } from "vscode";
 import * as YAML from "yamljs";
-import { Utilities } from "../../MarkdownConverter/Utilities";
 import { ResourceManager } from "../../Properties/ResourceManager";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { FileException } from "../IO/FileException";
@@ -35,10 +34,7 @@ export class Document extends Renderable
     /**
      * The attributes of the document.
      */
-    private attributes: any = {
-        Author: Utilities.FullName,
-        CreationDate: new Date()
-    };
+    private attributes: { [key: string]: any } = {};
 
     /**
      * The format to print the date.
@@ -174,7 +170,7 @@ export class Document extends Renderable
     {
         return this.quality;
     }
-    
+
     public set Quality(value: number)
     {
         this.quality = value;

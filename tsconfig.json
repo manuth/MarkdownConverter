@@ -8,8 +8,10 @@
         "declaration": true,
         "lib": [
             "es7",
+            "esnext",
             "dom"
         ],
-        "noUnusedLocals": true
+        "noUnusedLocals": true,
+        "downlevelIteration": true
     }
 }

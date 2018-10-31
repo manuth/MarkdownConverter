@@ -28,6 +28,7 @@ import { Converter } from "./Converter";
 import { DestinationOrigin } from "./DestinationOrigin";
 import { getMarkdownExtensionContributions } from "./MarkdownExtensions";
 import { PuppeteerTask } from "./PuppeteerTask";
+import { Utilities } from "./Utilities";
 
 /**
  * Represents a task which is able to convert markdown-files.
@@ -198,6 +199,7 @@ export abstract class ConversionTask extends PuppeteerTask
         converter.Document.Quality = Settings.Default.ConversionQuality;
 
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
+        converter.Document.Attributes.Author = converter.Document.Attributes.Author || await Utilities.GetFullName();
 
         converter.Document.Locale = new CultureInfo(Settings.Default.Locale);
         converter.Document.DateFormat = Settings.Default.DateFormat;
