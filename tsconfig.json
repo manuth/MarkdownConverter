@@ -1,17 +1,28 @@
 {
+    "compileOnSave": true,
     "compilerOptions": {
-        "target": "es6",
+        "rootDir": "./src",
         "module": "commonjs",
-        "sourceRoot": "src",
-        "outDir": "out",
-        "sourceMap": true,
-        "declaration": true,
         "lib": [
             "es7",
-            "esnext",
             "dom"
         ],
-        "noUnusedLocals": true,
+        "plugins": [
+            {
+                "name": "typescript-tslint-plugin"
+            }
+        ],
+        "target": "es6",
+        "outDir": "./out",
+        "declaration": true,
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
+        "alwaysStrict": true,
+        "strictFunctionTypes": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
         "downlevelIteration": true
     }
 }
