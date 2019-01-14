@@ -351,12 +351,15 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "lint": "tslint -p . -t verbose",
+    "vscode:prepublish": "npm run rebuild",
+    "build": "tsc -p .",
+    "rebuild": "npm run clean && npm run build",
+    "watch": "tsc -p . --watch",
+    "clean": "rimraf ./out",
+    "lint": "tslint -p ./ -t verbose",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    "test": "node ./node_modules/vscode/bin/test",
+    "prepare": "npm run rebuild"
   },
   "devDependencies": {
     "@types/clone": "^0.1.30",

@@ -20,7 +20,7 @@
         {
             "label": "Compile",
             "type": "npm",
-            "script": "compile",
+            "script": "build",
             "problemMatcher": "$tsc",
             "group": "build"
         },
