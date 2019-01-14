@@ -12,7 +12,7 @@ export abstract class Task
 
     /**
      * Initializes a new instance of the `Task` class.
-     * 
+     *
      * @param extension
      * The extension this task belongs to.
      */
@@ -37,5 +37,5 @@ export abstract class Task
     /**
      * Executes the task.
      */
-    public abstract async Execute();
+    public abstract async Execute(): Promise<void>;
 }

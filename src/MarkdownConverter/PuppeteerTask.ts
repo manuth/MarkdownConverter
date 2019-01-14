@@ -14,7 +14,7 @@ export abstract class PuppeteerTask extends Task
 {
     /**
      * Initializes a new instance of the `PuppeteerTask` class.
-     * 
+     *
      * @param extension
      * The extension this task belongs to.
      */
@@ -35,16 +35,16 @@ export abstract class PuppeteerTask extends Task
                 await this.ExecuteTask();
             }
             else if (
-                await window.showInformationMessage(
+                await (window.showInformationMessage(
                     ResourceManager.Resources.Get("UpdateMessage"),
-                    ResourceManager.Resources.Get<string>("No")) === ResourceManager.Resources.Get<string>("Yes"))
+                    ResourceManager.Resources.Get<string>("No")) as Promise<string>) === ResourceManager.Resources.Get<string>("Yes"))
             {
                 let revision = this.Extension.ChromiumRevision;
                 let success = false;
 
                 do
                 {
-                    await window.withProgress(
+                    await (window.withProgress(
                         {
                             location: ProgressLocation.Notification,
                             title: Format(ResourceManager.Resources.Get("UpdateRunning"), revision)
@@ -58,7 +58,7 @@ export abstract class PuppeteerTask extends Task
 
                                 await browserFetcher.download(
                                     revision,
-                                    (downloadBytes, totalBytes) =>
+                                    (downloadBytes: number, totalBytes: number) =>
                                     {
                                         let newProgress = Math.floor((downloadBytes / totalBytes) * 100);
 
@@ -79,15 +79,15 @@ export abstract class PuppeteerTask extends Task
                             {
                                 success = false;
                             }
-                        });
+                        }) as Promise<void>);
                 }
                 while (
                     !await FileSystem.pathExists(Puppeteer.executablePath()) &&
                     !success &&
-                    await window.showWarningMessage(
+                    await (window.showWarningMessage(
                         ResourceManager.Resources.Get("UpdateFailed"),
                         ResourceManager.Resources.Get("Yes"),
-                        ResourceManager.Resources.Get("No")) === ResourceManager.Resources.Get("Yes"));
+                        ResourceManager.Resources.Get("No")) as Promise<string>) === ResourceManager.Resources.Get("Yes"));
             }
         }
         catch (exception)
@@ -104,7 +104,7 @@ export abstract class PuppeteerTask extends Task
             }
             else
             {
-                message = "" + exception;
+                message = `${exception}`;
             }
 
             window.showErrorMessage(message);
@@ -114,5 +114,5 @@ export abstract class PuppeteerTask extends Task
     /**
      * Executes the task.
      */
-    protected abstract async ExecuteTask();
+    protected abstract async ExecuteTask(): Promise<void>;
 }

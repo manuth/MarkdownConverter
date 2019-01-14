@@ -5,6 +5,7 @@
         "module": "commonjs",
         "lib": [
             "es7",
+            "esnext",
             "dom"
         ],
         "plugins": [

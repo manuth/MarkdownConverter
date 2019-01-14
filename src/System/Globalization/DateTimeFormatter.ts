@@ -18,63 +18,11 @@ export class DateTimeFormatter
     private pattern: RegExp = /d{1,4}|f{1,7}|F{1,7}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y{1,5}|\\.|'[^']*'/g;
 
     /**
-     * Returns the tokens to replace.
-     */
-    private GetTokens(date: Date = new Date()): { [id: string]: string }
-    {
-        let getDay = () =>
-        {
-            let day = date.getDay() - 1;
-    
-            if (day < 0)
-            {
-                day = 6;
-            }
-
-            return day;
-        };
-
-        let dateTimeTokens: { [id: string]: string } =
-        {
-            get ddd()
-            {
-                return ResourceManager.Resources.Get("DateTime.DaysOfWeek.ShortNames", this.locale)[getDay()];
-            },
-
-            get dddd()
-            {
-                return ResourceManager.Resources.Get("DateTime.DaysOfWeek.FullNames", this.locale)[getDay()];
-            },
-
-            get MMM()
-            {
-                return ResourceManager.Resources.Get("DateTime.Months.ShortNames", this.locale)[date.getMonth()];
-            },
-            
-            get MMMM()
-            {
-                return ResourceManager.Resources.Get("DateTime.Months.FullNames", this.locale)[date.getMonth()];
-            },
-
-            get t()
-            {
-                return ResourceManager.Resources.Get("DateTime.TimeDesignator.ShortNames", this.locale)[(date.getHours() < 12 ? 0 : 1)];
-            },
-
-            get tt()
-            {
-                return ResourceManager.Resources.Get("DateTime.TimeDesignator.FullNames", this.locale)[(date.getHours() < 12 ? 0 : 1)];
-            }
-        };
-        return dateTimeTokens;
-    }
-
-    /**
      * Initializes a new instance of the DateTimeFormatter class with a locale and a resource-path.
-     * 
+     *
      * @param locale
      * The locale to format the date.
-     * 
+     *
      * @param resourcePath
      * The path to load the localized values from.
      */
@@ -87,11 +35,24 @@ export class DateTimeFormatter
     }
 
     /**
+     * Gets or sets the locale to format the date.
+     */
+    public get Locale(): CultureInfo
+    {
+        return this.locale;
+    }
+
+    public set Locale(value: CultureInfo)
+    {
+        this.locale = value;
+    }
+
+    /**
      * Formats a date-value.
-     * 
+     *
      * @param date
      * The date to format.
-     * 
+     *
      * @param formatString
      * The format-string to format the date-value.
      */
@@ -168,14 +129,55 @@ export class DateTimeFormatter
     }
 
     /**
-     * Gets or sets the locale to format the date.
+     * Returns the tokens to replace.
      */
-    public get Locale(): CultureInfo
+    private GetTokens(date: Date = new Date()): { [id: string]: string }
     {
-        return this.locale;
-    }
-    public set Locale(value: CultureInfo)
-    {
-        this.locale = value;
+        let locale = this.Locale;
+        let getDay = () =>
+        {
+            let day = date.getDay() - 1;
+
+            if (day < 0)
+            {
+                day = 6;
+            }
+
+            return day;
+        };
+
+        let dateTimeTokens: { [id: string]: string } =
+        {
+            get ddd()
+            {
+                return ResourceManager.Resources.Get<string[]>("DateTime.DaysOfWeek.ShortNames", locale)[getDay()];
+            },
+
+            get dddd()
+            {
+                return ResourceManager.Resources.Get<string[]>("DateTime.DaysOfWeek.FullNames", locale)[getDay()];
+            },
+
+            get MMM()
+            {
+                return ResourceManager.Resources.Get<string[]>("DateTime.Months.ShortNames", locale)[date.getMonth()];
+            },
+
+            get MMMM()
+            {
+                return ResourceManager.Resources.Get<string[]>("DateTime.Months.FullNames", locale)[date.getMonth()];
+            },
+
+            get t()
+            {
+                return ResourceManager.Resources.Get<string[]>("DateTime.TimeDesignator.ShortNames", locale)[(date.getHours() < 12 ? 0 : 1)];
+            },
+
+            get tt()
+            {
+                return ResourceManager.Resources.Get<string[]>("DateTime.TimeDesignator.FullNames", locale)[(date.getHours() < 12 ? 0 : 1)];
+            }
+        };
+        return dateTimeTokens;
     }
 }

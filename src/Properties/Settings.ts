@@ -39,7 +39,7 @@ export class Settings
      */
     public get DestinationOrigin(): DestinationOrigin
     {
-        return DestinationOrigin[this.getConfigEntry<string>("DestinationOrigin")];
+        return (DestinationOrigin as any)[this.getConfigEntry<string>("DestinationOrigin")];
     }
 
     /**
@@ -76,7 +76,7 @@ export class Settings
 
         for (let conversionType of conversionTypes)
         {
-            types.push(ConversionType[conversionType]);
+            types.push((ConversionType as any)[conversionType]);
         }
 
         return types;
@@ -103,7 +103,7 @@ export class Settings
      */
     public get EmojiType(): EmojiType
     {
-        return EmojiType[this.getConfigEntry<string>("Parser.EmojiType")];
+        return (EmojiType as any)[this.getConfigEntry<string>("Parser.EmojiType")];
     }
 
     /**
@@ -125,25 +125,25 @@ export class Settings
         {
             let width: string = this.getConfigEntry("Document.Paper.PaperFormat.Width");
             let height: string = this.getConfigEntry("Document.Paper.PaperFormat.Height");
-            
+
             let format = new CustomPaperFormat(width, height);
             paper.Format = format;
         }
         catch (exception)
         {
             let format = new StandardizedPaperFormat();
-            format.Format = StandardizedFormatType[this.getConfigEntry<string>("Document.Paper.PaperFormat.Format")];
-            format.Orientation = PaperOrientation[this.getConfigEntry("Document.Paper.PaperFormat.Orientation", PaperOrientation[PaperOrientation.Portrait])];
+            format.Format = (StandardizedFormatType as any)[this.getConfigEntry<string>("Document.Paper.PaperFormat.Format")];
+            format.Orientation = (PaperOrientation as any)[this.getConfigEntry("Document.Paper.PaperFormat.Orientation", PaperOrientation[PaperOrientation.Portrait])];
             paper.Format = format;
         }
 
-        for (let side of [ "Top", "Right", "Bottom", "Left" ])
+        for (let side of ["Top", "Right", "Bottom", "Left"])
         {
             let configKey = "Document.Paper.Margin." + side;
 
             if (this.config.has(configKey))
             {
-                paper.Margin[side] = this.config.get(configKey);
+                (paper.Margin as any)[side] = this.config.get(configKey);
             }
         }
 
@@ -239,7 +239,7 @@ export class Settings
      *
      * @param key
      * The key of the entry.
-     * 
+     *
      * @param defaultValue
      * The default value to return.
      */

@@ -22,7 +22,7 @@ export class Utilities
     {
         let current: IteratorResult<string>;
         let iterator = this.TryGetUsername();
-        
+
         do
         {
             current = await iterator.next();
@@ -44,7 +44,7 @@ export class Utilities
     {
         let environment = process.env;
         let variableNames = this.envVars.filter(x => x in environment);
-        
+
         for (let variableName of variableNames)
         {
             if (environment[variableName] !== null)
@@ -61,7 +61,7 @@ export class Utilities
      */
     private static async CheckGit()
     {
-        return await shell.asyncExec("git config --global user.name");
+        return shell.asyncExec("git config --global user.name");
     }
 
     /**
@@ -77,7 +77,7 @@ export class Utilities
      */
     private static async CheckOsaScript()
     {
-        return await shell.asyncExec("osascript -e long user name of (system info)");
+        return shell.asyncExec("osascript -e long user name of (system info)");
     }
 
     /**
@@ -87,7 +87,7 @@ export class Utilities
     {
         yield Utilities.CheckEnv();
 
-        yield* (async function*()
+        yield* (async function* ()
         {
             let methods: (() => Promise<string>)[] = [];
             methods.push(Utilities.CheckGit);
