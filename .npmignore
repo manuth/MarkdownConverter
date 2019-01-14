@@ -1,6 +1,3 @@
-# Build results
-[Oo]ut/
-
 # Logs
 logs
 *.log
@@ -62,6 +59,23 @@ typings/
 
 # next.js build output
 .next
+
+# Source-files
+[Ss]rc/
+
+# TypeScript config-files
+tsconfig.json
+tslint.json
+
+# Source-maps
+[Oo]ut/**/*.js.map
+
+# Unit-Tests
+test/
+[Oo]ut/tests/
+
+# Visual Studio Code-Environment
+.vscode/
 
 # Visual Studio Code Experimental Instance
 .vscode-test/
