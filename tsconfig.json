@@ -14,7 +14,7 @@
             }
         ],
         "target": "es6",
-        "outDir": "./out",
+        "outDir": "./lib",
         "declaration": true,
         "sourceMap": true,
         "resolveJsonModule": true,

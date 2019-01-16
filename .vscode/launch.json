@@ -15,7 +15,7 @@
                 "--locale=en"
             ],
             "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
+                "${workspaceFolder}/lib/**/*.js"
             ],
             "preLaunchTask": "Watch"
         },
@@ -26,10 +26,10 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/out/test"
+                "--extensionTestsPath=${workspaceFolder}/lib/test"
             ],
             "outFiles": [
-                "${workspaceFolder}/out/test/**/*.js"
+                "${workspaceFolder}/lib/test/**/*.js"
             ],
             "preLaunchTask": "Watch"
         }

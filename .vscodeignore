@@ -1,9 +1,9 @@
-.vscode/**
-.vscode-test/**
-lib/tests/**
-lib/**/*.map
-node_modules/puppeteer/.local-chromium/**
-src/**
+.vscode/
+.vscode-test/
+[LL]ib/tests/
+[Ll]ib/**/*.map
+node_modules/puppeteer/.local-chromium/
+src/
 .gitignore
 tsconfig.json
 vsc-extension-quickstart.md

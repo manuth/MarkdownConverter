@@ -31,7 +31,7 @@
   "activationEvents": [
     "onCommand:markdownConverter.Convert"
   ],
-  "main": "./out/extension",
+  "main": "./lib/extension",
   "contributes": {
     "commands": [
       {
@@ -355,10 +355,10 @@
     "build": "tsc -p .",
     "rebuild": "npm run clean && npm run build",
     "watch": "tsc -p . --watch",
-    "clean": "rimraf ./out",
+    "clean": "rimraf ./lib",
     "lint": "tslint -p ./ -t verbose",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test",
+    "test": "cross-env CODE_TESTS_PATH=\"./lib/test\" node ./node_modules/vscode/bin/test",
     "prepare": "npm run rebuild"
   },
   "devDependencies": {
@@ -377,6 +377,7 @@
     "@types/string-template": "^1.0.2",
     "@types/transliteration": "^1.6.0",
     "@types/yamljs": "^0.2.30",
+    "cross-env": "^5.2.0",
     "tslint": "^5.11.0",
     "typescript": "^2.9.2",
     "vscode": "^1.1.21"

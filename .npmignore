@@ -68,11 +68,11 @@ tsconfig.json
 tslint.json
 
 # Source-maps
-[Oo]ut/**/*.js.map
+[Ll]ib/**/*.js.map
 
 # Unit-Tests
 test/
-[Oo]ut/tests/
+[Ll]ib/tests/
 
 # Visual Studio Code-Environment
 .vscode/
