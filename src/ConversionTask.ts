@@ -14,19 +14,19 @@ import Transliteration = require("transliteration");
 import TwEmoji = require("twemoji");
 import { isNullOrUndefined } from "util";
 import { TextDocument, window, workspace, WorkspaceFolder } from "vscode";
-import { Extension } from "../extension";
-import { ResourceManager } from "../Properties/ResourceManager";
-import { Settings } from "../Properties/Settings";
-import { Document } from "../System/Drawing/Document";
-import { EmojiType } from "../System/Drawing/EmojiType";
-import { ListType } from "../System/Drawing/ListType";
-import { Slugifier } from "../System/Drawing/Slugifier";
-import { FileException } from "../System/IO/FileException";
 import { ConversionType } from "./ConversionType";
 import { Converter } from "./Converter";
 import { DestinationOrigin } from "./DestinationOrigin";
+import { Extension } from "./extension";
 import { MarkdownContributions } from "./MarkdownContributions";
+import { ResourceManager } from "./Properties/ResourceManager";
+import { Settings } from "./Properties/Settings";
 import { PuppeteerTask } from "./PuppeteerTask";
+import { Document } from "./System/Drawing/Document";
+import { EmojiType } from "./System/Drawing/EmojiType";
+import { ListType } from "./System/Drawing/ListType";
+import { Slugifier } from "./System/Drawing/Slugifier";
+import { FileException } from "./System/IO/FileException";
 import { Utilities } from "./Utilities";
 
 /**

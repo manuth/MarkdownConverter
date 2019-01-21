@@ -1,7 +1,7 @@
 import VSCode = require("vscode");
 import { MultiRange } from "../../node_modules/multi-integer-range";
-import { ConversionType } from "../MarkdownConverter/ConversionType";
-import { DestinationOrigin } from "../MarkdownConverter/DestinationOrigin";
+import { ConversionType } from "../ConversionType";
+import { DestinationOrigin } from "../DestinationOrigin";
 import { CustomPaperFormat } from "../System/Drawing/CustomPaperFormat";
 import { EmojiType } from "../System/Drawing/EmojiType";
 import { ListType } from "../System/Drawing/ListType";

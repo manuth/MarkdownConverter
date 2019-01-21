@@ -6,9 +6,9 @@ import Path = require("path");
 import Puppeteer = require("puppeteer");
 import URL = require("url");
 import { isNullOrUndefined } from "util";
-import { Document } from "../System/Drawing/Document";
-import { FileException } from "../System/IO/FileException";
 import { ConversionType } from "./ConversionType";
+import { Document } from "./System/Drawing/Document";
+import { FileException } from "./System/IO/FileException";
 
 /**
  * Provides a markdown-converter.

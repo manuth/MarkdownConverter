@@ -1,8 +1,8 @@
 import { TextDocument, window } from "vscode";
-import { Extension } from "../extension";
-import { Settings } from "../Properties/Settings";
 import { ConversionTask } from "./ConversionTask";
+import { Extension } from "./extension";
 import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
+import { Settings } from "./Properties/Settings";
 
 /**
  * Represens a task for converting the currently opened document.

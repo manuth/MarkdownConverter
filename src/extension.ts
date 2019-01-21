@@ -4,8 +4,8 @@ import CultureInfo from "culture-info";
 import { MarkdownIt } from "markdown-it";
 import Path = require("path");
 import { commands, env, ExtensionContext } from "vscode";
-import { ConvertAllTask } from "./MarkdownConverter/ConvertAllTask";
-import { ConvertTask } from "./MarkdownConverter/ConvertTask";
+import { ConvertAllTask } from "./ConvertAllTask";
+import { ConvertTask } from "./ConvertTask";
 import { ResourceManager } from "./Properties/ResourceManager";
 
 /**
