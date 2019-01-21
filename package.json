@@ -1,15 +1,12 @@
 {
   "name": "markdown-converter",
   "displayName": "Markdown Converter",
-  "markdownDescription": "Provides the functionallity to convert MarkDown-files to html, pdf or png.",
-  "version": "1.1.2",
-  "publisher": "manuth",
-  "author": {
-    "name": "Manuel Thalmann",
-    "email": "m@nuth.ch",
-    "url": "https://nuth.ch"
-  },
   "icon": "Resources/Icon.png",
+  "version": "1.1.2",
+  "description": "A markdown-converter for Visual Studio Code",
+  "markdownDescription": "A Markdown-converter for Visual Studio Code",
+  "author": "Manuel Thalmann <m@nuth.ch> (https://nuth.ch)",
+  "publisher": "manuth",
   "license": "MIT",
   "keywords": [
     "MarkDown",
@@ -18,20 +15,86 @@
     "PDF",
     "PNG"
   ],
+  "categories": [
+    "Other"
+  ],
+  "main": "lib/extension.js",
+  "types": "lib/extension.d.ts",
+  "directories": {
+    "lib": "lib"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/manuth/MarkdownConverter.git"
   },
+  "bugs": {
+    "url": "https://github.com/manuth/MarkdownConverter/issues"
+  },
+  "homepage": "https://github.com/manuth/MarkdownConverter#readme",
   "engines": {
     "vscode": "^1.23.0"
   },
-  "categories": [
-    "Other"
-  ],
+  "scripts": {
+    "vscode:prepublish": "npm run rebuild",
+    "build": "tsc -p .",
+    "rebuild": "npm run clean && npm run build",
+    "watch": "tsc -p . --watch",
+    "clean": "rimraf ./lib",
+    "lint": "tslint -p ./ -t verbose",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "cross-env CODE_TESTS_PATH=\"./lib/test\" node ./node_modules/vscode/bin/test",
+    "prepare": "npm run rebuild"
+  },
+  "devDependencies": {
+    "@types/clone": "^0.1.30",
+    "@types/dedent": "^0.7.0",
+    "@types/fs-extra": "^5.0.4",
+    "@types/get-port": "^4.0.0",
+    "@types/highlight.js": "^9.12.3",
+    "@types/http-server": "^0.10.0",
+    "@types/markdown-it": "0.0.3",
+    "@types/markdown-it-anchor": "^4.0.2",
+    "@types/mocha": "^2.2.48",
+    "@types/mustache": "^0.8.31",
+    "@types/node": "^10.12.0",
+    "@types/puppeteer": "^1.9.0",
+    "@types/string-template": "^1.0.2",
+    "@types/transliteration": "^1.6.0",
+    "@types/yamljs": "^0.2.30",
+    "cross-env": "^5.2.0",
+    "tslint": "^5.11.0",
+    "typescript": "^2.9.2",
+    "vscode": "^1.1.21"
+  },
+  "dependencies": {
+    "async-shelljs": "^0.1.2",
+    "clone": "^2.1.2",
+    "culture-info": "0.0.4",
+    "dedent": "^0.7.0",
+    "front-matter": "^2.3.0",
+    "fs-extra": "^6.0.1",
+    "get-port": "^4.0.0",
+    "highlight.js": "^9.13.1",
+    "highlightjs": "^9.12.0",
+    "http-server": "^0.11.1",
+    "localizable-resources": "^1.0.6",
+    "markdown-it": "^8.4.2",
+    "markdown-it-anchor": "^5.0.2",
+    "markdown-it-checkbox": "^1.1.0",
+    "markdown-it-emoji": "^1.3.0",
+    "markdown-it-table-of-contents": "^0.4.3",
+    "multi-integer-range": "^3.0.0",
+    "mustache": "^2.3.2",
+    "puppeteer": "^1.9.0",
+    "rc": "^1.2.8",
+    "string-template": "^1.0.0",
+    "transliteration": "^1.6.6",
+    "twemoji": "^2.5.1",
+    "yamljs": "^0.3.0"
+  },
   "activationEvents": [
     "onCommand:markdownConverter.Convert"
   ],
-  "main": "./lib/extension",
   "contributes": {
     "commands": [
       {
@@ -349,63 +412,5 @@
         }
       }
     }
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run rebuild",
-    "build": "tsc -p .",
-    "rebuild": "npm run clean && npm run build",
-    "watch": "tsc -p . --watch",
-    "clean": "rimraf ./lib",
-    "lint": "tslint -p ./ -t verbose",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "cross-env CODE_TESTS_PATH=\"./lib/test\" node ./node_modules/vscode/bin/test",
-    "prepare": "npm run rebuild"
-  },
-  "devDependencies": {
-    "@types/clone": "^0.1.30",
-    "@types/dedent": "^0.7.0",
-    "@types/fs-extra": "^5.0.4",
-    "@types/get-port": "^4.0.0",
-    "@types/highlight.js": "^9.12.3",
-    "@types/http-server": "^0.10.0",
-    "@types/markdown-it": "0.0.3",
-    "@types/markdown-it-anchor": "^4.0.2",
-    "@types/mocha": "^2.2.48",
-    "@types/mustache": "^0.8.31",
-    "@types/node": "^10.12.0",
-    "@types/puppeteer": "^1.9.0",
-    "@types/string-template": "^1.0.2",
-    "@types/transliteration": "^1.6.0",
-    "@types/yamljs": "^0.2.30",
-    "cross-env": "^5.2.0",
-    "tslint": "^5.11.0",
-    "typescript": "^2.9.2",
-    "vscode": "^1.1.21"
-  },
-  "dependencies": {
-    "async-shelljs": "^0.1.2",
-    "clone": "^2.1.2",
-    "culture-info": "0.0.4",
-    "dedent": "^0.7.0",
-    "front-matter": "^2.3.0",
-    "fs-extra": "^6.0.1",
-    "get-port": "^4.0.0",
-    "highlight.js": "^9.13.1",
-    "highlightjs": "^9.12.0",
-    "http-server": "^0.11.1",
-    "localizable-resources": "^1.0.6",
-    "markdown-it": "^8.4.2",
-    "markdown-it-anchor": "^5.0.2",
-    "markdown-it-checkbox": "^1.1.0",
-    "markdown-it-emoji": "^1.3.0",
-    "markdown-it-table-of-contents": "^0.4.3",
-    "multi-integer-range": "^3.0.0",
-    "mustache": "^2.3.2",
-    "puppeteer": "^1.9.0",
-    "rc": "^1.2.8",
-    "string-template": "^1.0.0",
-    "transliteration": "^1.6.6",
-    "twemoji": "^2.5.1",
-    "yamljs": "^0.3.0"
   }
 }
