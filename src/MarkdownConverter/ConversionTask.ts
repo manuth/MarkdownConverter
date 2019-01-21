@@ -26,7 +26,7 @@ import { StringUtils } from "../System/Text/StringUtils";
 import { ConversionType } from "./ConversionType";
 import { Converter } from "./Converter";
 import { DestinationOrigin } from "./DestinationOrigin";
-import { getMarkdownExtensionContributions } from "./MarkdownExtensions";
+import { MarkdownContributions } from "./MarkdownContributions";
 import { PuppeteerTask } from "./PuppeteerTask";
 import { Utilities } from "./Utilities";
 
@@ -238,7 +238,7 @@ export abstract class ConversionTask extends PuppeteerTask
 
         if (Settings.Default.SystemParserEnabled)
         {
-            let mdExtensions = getMarkdownExtensionContributions(this.Extension.Context);
+            let mdExtensions = new MarkdownContributions(this.Extension.Context.extensionPath);
 
             for (let styleSheet of mdExtensions.previewStyles)
             {
