@@ -1,5 +1,5 @@
 import ChildProcess = require("child_process");
-import clone = require("clone");
+import Clone = require("clone");
 import CultureInfo from "culture-info";
 import FileSystem = require("fs-extra");
 import HighlightJs = require("highlight.js");
@@ -22,7 +22,6 @@ import { EmojiType } from "../System/Drawing/EmojiType";
 import { ListType } from "../System/Drawing/ListType";
 import { Slugifier } from "../System/Drawing/Slugifier";
 import { FileException } from "../System/IO/FileException";
-import { StringUtils } from "../System/Text/StringUtils";
 import { ConversionType } from "./ConversionType";
 import { Converter } from "./Converter";
 import { DestinationOrigin } from "./DestinationOrigin";
@@ -296,7 +295,7 @@ export abstract class ConversionTask extends PuppeteerTask
 
         if (Settings.Default.SystemParserEnabled)
         {
-            parser = clone(this.Extension.VSCodeParser);
+            parser = Clone(this.Extension.VSCodeParser);
             parser.normalizeLink = (link: string) => link;
             parser.normalizeLinkText = (link: string) => link;
         }
@@ -362,7 +361,7 @@ export abstract class ConversionTask extends PuppeteerTask
                             'class="emoji" ' +
                             `title=":${token[id].markup}:" ` +
                             `alt=":${token[id].markup}:" ` +
-                            `src="https://assets-cdn.github.com/images/icons/emoji/unicode/${StringUtils.UTF8CharToCodePoints(token[id].content).toString(16).toLowerCase()}.png" ` +
+                            `src="https://assets-cdn.github.com/images/icons/emoji/unicode/${TwEmoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
                             'align="absmiddle" />';
                 }
             };

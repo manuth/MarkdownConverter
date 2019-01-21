@@ -93,8 +93,7 @@ declare module "twemoji"
         /**
          * Provides some utilities.
          */
-        public readonly convert: {
-        }
+        public readonly convert: Utilities
 
         /**
          * Replaces all emojis of the `text` with `<img>`-tags.

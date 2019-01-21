@@ -1,6 +1,5 @@
 import CultureInfo from "culture-info";
 import { ResourceManager } from "../../Properties/ResourceManager";
-import { StringUtils } from "../Text/StringUtils";
 
 /**
  * Provides the functionallity to format a date.
@@ -72,13 +71,13 @@ export class DateTimeFormatter
         {
             if (/^f+$/g.test(match))
             {
-                return StringUtils.PadLeft(date.getMilliseconds().toString(), match.length, "0");
+                return date.getMilliseconds().toString().padStart(match.length, "0");
             }
             else if (/^F+$/g.test(match))
             {
                 if (date.getMilliseconds() > 0)
                 {
-                    return StringUtils.PadLeft(date.getMilliseconds().toString(), match.length, "0");
+                    return date.getMilliseconds().toString().padStart(match.length, "0");
                 }
                 else
                 {
@@ -87,36 +86,36 @@ export class DateTimeFormatter
             }
             else if (/^d{1,2}$/g.test(match))
             {
-                return StringUtils.PadLeft(date.getDate().toString(), match.length, "0");
+                return date.getDate().toString().padStart(match.length, "0");
             }
             else if (/^h+$/g.test(match))
             {
                 let hours = (date.getHours() % 12 || 12);
-                return StringUtils.PadLeft(hours.toString(), match.length, "0");
+                return hours.toString().padStart(match.length, "0");
             }
             else if (/^H+$/g.test(match))
             {
-                return StringUtils.PadLeft(date.getHours().toString(), match.length, "0");
+                return date.getHours().toString().padStart(match.length, "0");
             }
             else if (/^m+$/g.test(match))
             {
-                return StringUtils.PadLeft(date.getMinutes().toString(), match.length, "0");
+                return date.getMinutes().toString().padStart(match.length, "0");
             }
             else if (/^M{1,2}$/g.test(match))
             {
-                return StringUtils.PadLeft((date.getMonth() + 1).toString(), match.length, "0");
+                return (date.getMonth() + 1).toString().padStart(match.length, "0");
             }
             else if (/^s+$/g.test(match))
             {
-                return StringUtils.PadLeft(date.getSeconds().toString(), match.length, "0");
+                return date.getSeconds().toString().padStart(match.length, "0");
             }
             else if (/^y{1,2}$/g.test(match))
             {
-                return StringUtils.PadLeft(date.getFullYear().toString().slice(-2), match.length, "0");
+                return date.getFullYear().toString().slice(-2).padStart(match.length, "0");
             }
             else if (/^y+$/g.test(match))
             {
-                return StringUtils.PadLeft(date.getFullYear().toString(), match.length, "0");
+                return date.getFullYear().toString().padStart(match.length, "0");
             }
             else if (match in tokens)
             {
