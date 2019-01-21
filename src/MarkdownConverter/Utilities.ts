@@ -1,4 +1,4 @@
-import * as shell from "async-shelljs";
+import shell = require("async-shelljs");
 
 /**
  * Provides static methods.

@@ -11,7 +11,7 @@
  * a possible error to the callback or null if none.
  */
 
-import * as testRunner from "vscode/lib/testrunner";
+import testRunner = require("vscode/lib/testrunner");
 
 // You can directly control Mocha options by uncommenting the following lines
 // See https://github.com/mochajs/mocha/wiki/Using-mocha-programmatically#set-options for more info

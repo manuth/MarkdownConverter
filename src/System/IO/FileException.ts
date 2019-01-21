@@ -1,4 +1,4 @@
-import * as Format from "string-template";
+import Format = require("string-template");
 import { ResourceManager } from "../../Properties/ResourceManager";
 import { IOException } from "./IOException";
 

@@ -1,5 +1,5 @@
 
-import * as Path from "path";
+import Path = require("path");
 import { Extension, extensions, Uri } from "vscode";
 
 /**

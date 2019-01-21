@@ -1,6 +1,6 @@
-import * as FileSystem from "fs-extra";
-import * as Puppeteer from "puppeteer";
-import * as Format from "string-template";
+import FileSystem = require("fs-extra");
+import Puppeteer = require("puppeteer");
+import Format = require("string-template");
 import { ProgressLocation, window } from "vscode";
 import { Extension } from "../extension";
 import { ResourceManager } from "../Properties/ResourceManager";

@@ -1,4 +1,4 @@
-import * as VSCode from "vscode";
+import VSCode = require("vscode");
 import { MultiRange } from "../../node_modules/multi-integer-range";
 import { ConversionType } from "../MarkdownConverter/ConversionType";
 import { DestinationOrigin } from "../MarkdownConverter/DestinationOrigin";

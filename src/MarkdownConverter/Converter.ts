@@ -1,10 +1,10 @@
-import * as FS from "fs-extra";
-import * as PortFinder from "get-port";
-import * as http from "http";
-import * as Server from "http-server";
-import * as Path from "path";
+import FS = require("fs-extra");
+import PortFinder = require("get-port");
+import http = require("http");
+import Server = require("http-server");
+import Path = require("path");
 import Puppeteer = require("puppeteer");
-import * as URL from "url";
+import URL = require("url");
 import { isNullOrUndefined } from "util";
 import { Document } from "../System/Drawing/Document";
 import { FileException } from "../System/IO/FileException";

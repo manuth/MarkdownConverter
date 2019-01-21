@@ -1,4 +1,4 @@
-import * as Transliteration from "transliteration";
+import Transliteration = require("transliteration");
 
 /**
  * Provides the functionality to generate slugs.

@@ -1,5 +1,5 @@
 import CultureInfo from "culture-info";
-import * as Path from "path";
+import Path = require("path");
 import { Resource } from "../System/Resources/Resource";
 
 /**

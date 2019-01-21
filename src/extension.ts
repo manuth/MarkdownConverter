@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import CultureInfo from "culture-info";
 import { MarkdownIt } from "markdown-it";
-import * as Path from "path";
+import Path = require("path");
 import { commands, env, ExtensionContext } from "vscode";
 import { ConvertAllTask } from "./MarkdownConverter/ConvertAllTask";
 import { ConvertTask } from "./MarkdownConverter/ConvertTask";
