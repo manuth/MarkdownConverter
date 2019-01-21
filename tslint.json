@@ -26,8 +26,14 @@
         },
         "no-empty-interface": false,
         "no-inferrable-types": true,
+        "unified-signatures": false,
         // Functionality
-        "await-promise": true,
+        "await-promise": {
+            "options": [
+                "PromiseLike",
+                "Thenable"
+            ]
+        },
         "ban-comma-operator": true,
         "forin": false,
         "no-bitwise": false,
@@ -119,7 +125,6 @@
                 ]
             }
         },
-        "await-promise": true,
         // Functionality
         "ban-comma-operator": true,
         "forin": false,

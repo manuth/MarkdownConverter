@@ -11,13 +11,18 @@ export class ConvertTask extends ConversionTask
 {
     /**
      * Initializes a new instance of the `ConvertTask` class.
-     * 
+     *
      * @param extension
      * The extension the task belongs to.
      */
     public constructor(extension: Extension)
     {
         super(extension);
+    }
+
+    public async ExecuteTask()
+    {
+        return this.Convert(this.GetMarkdownDocument());
     }
 
     /**
@@ -39,10 +44,5 @@ export class ConvertTask extends ConversionTask
         }
 
         throw new MarkdownFileNotFoundException();
-    }
-
-    public async ExecuteTask()
-    {
-        await this.Convert(this.GetMarkdownDocument());
     }
 }

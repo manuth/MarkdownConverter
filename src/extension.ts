@@ -57,7 +57,7 @@ export class Extension
 
     /**
      * Activates the extension.
-     * 
+     *
      * @param context
      * A collection of utilities private to an extension.
      */
@@ -66,8 +66,8 @@ export class Extension
         this.context = context;
 
         context.subscriptions.push(
-            commands.registerCommand("markdownConverter.Convert", async () => await this.Convert()),
-            commands.registerCommand("markdownConverter.ConvertAll", async () => await this.ConvertAll()));
+            commands.registerCommand("markdownConverter.Convert", async () => this.Convert()),
+            commands.registerCommand("markdownConverter.ConvertAll", async () => this.ConvertAll()));
 
         return {
             extendMarkdownIt: (md: any) =>
@@ -76,6 +76,13 @@ export class Extension
                 return md;
             }
         };
+    }
+
+    /**
+     * Disposes the extension.
+     */
+    public async Dispose()
+    {
     }
 
     /**
@@ -93,18 +100,23 @@ export class Extension
     {
         await new ConvertAllTask(this).Execute();
     }
-
-    /**
-     * Disposes the extension.
-     */
-    public async Dispose()
-    {
-    }
 }
 
+/**
+ * The extension itself.
+ */
 export let extension = new Extension();
 
-export let activate = async (context: ExtensionContext) => await extension.Activate(context);
+/**
+ * Activates the extension.
+ *
+ * @param context
+ * The context provided by Visual Studio Code.
+ */
+export let activate = async (context: ExtensionContext) => extension.Activate(context);
 
-export let deactivate = async () => await extension.Dispose();
+/**
+ * Deactivates the extension.
+ */
+export let deactivate = async () => extension.Dispose();
 (Symbol as any).asyncIterator = Symbol.asyncIterator || Symbol.for("Symbol.asyncIterator");

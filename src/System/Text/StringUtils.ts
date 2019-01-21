@@ -5,18 +5,17 @@ export class StringUtils
 {
     /**
      * Converts a string to code its code-points-value.
-     * 
+     *
      * @param subject
      * The string to convert.
      */
     public static UTF8CharToCodePoints(subject: string): number
     {
         let buffer = Buffer.from(subject);
-        let result: number = 0;
+        let result = 0;
         let length;
 
-        /* 
-         * Determining the mask-type of the UTF-8 char.
+        /* Determining the mask-type of the UTF-8 char.
          * The UTF-8 Masks are as followed:
          * |     Unicode-Range     |              UTF-8-Mask             | Length (in bytes) |
          * |-----------------------|------------------------------------:|------------------:|
@@ -50,7 +49,7 @@ export class StringUtils
 
         length--;
 
-        for (let i: number = 0; i <= length; i++)
+        for (let i = 0; i <= length; i++)
         {
             if ((buffer[i] & 0xC0) === 0x80 || i === 0)
             {
@@ -67,13 +66,13 @@ export class StringUtils
 
     /**
      * Returns a new string that right-aligns the characters in this instance by padding them on the left with a specified Unicode character, for a specified total length.
-     * 
+     *
      * @param subject
      * The subject to pad.
-     * 
+     *
      * @param totalWidth
      * The number of characters in the resulting string, equal to the number of original characters plus any additional padding characters.
-     * 
+     *
      * @param paddingChar
      * A Unicode padding character.
      */
@@ -88,14 +87,14 @@ export class StringUtils
 
     /**
      * Converts a number to a hexadecimal string.
-     * 
+     *
      * @param subject
      * The number to convert.
-     * 
+     *
      * @param size
      * The length of the string to return.
      */
-    public static DecToHexString(subject: number, length: number = 2): string
+    public static DecToHexString(subject: number, length = 2): string
     {
         return this.PadLeft(subject.toString(16), length, "0");
     }

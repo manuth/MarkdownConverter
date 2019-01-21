@@ -18,10 +18,10 @@ export class CustomPaperFormat extends PaperFormat
 
     /**
      * Initializes a new instance of the `CustomPaperFormat` class.
-     * 
+     *
      * @param width
      * The width.
-     * 
+     *
      * @param height
      * The height.
      */
@@ -39,7 +39,7 @@ export class CustomPaperFormat extends PaperFormat
     {
         return this.width;
     }
-    
+
     public set Width(value: string)
     {
         this.width = value;

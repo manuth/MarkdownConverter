@@ -31,7 +31,7 @@ export class Slugifier
 
     /**
      * Slugifies a text.
-     * 
+     *
      * @param text
      * The text that is to be slugified.
      */
@@ -53,7 +53,7 @@ export class Slugifier
 
     /**
      * Slugifies a text.
-     * 
+     *
      * @param text
      * The text that is to be slugified.
      */

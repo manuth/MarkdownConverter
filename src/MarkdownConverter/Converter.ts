@@ -43,16 +43,16 @@ export class Converter
     /**
      * A value indicating whether the converter has been initialized.
      */
-    private initialized: boolean = false;
+    private initialized = false;
 
     /**
      * A value indicating whether the converter has been disposed.
      */
-    private disposed: boolean = false;
+    private disposed = false;
 
     /**
      * Initializes a new instance of the Constructor class with a filepath.
-     * 
+     *
      * @param document
      * The document which is to be converted.
      */
@@ -192,10 +192,10 @@ export class Converter
 
     /**
      * Starts the conversion.
-     * 
+     *
      * @param conversionType
      * The type to convert the document to.
-     * 
+     *
      * @param path
      * The path to save the converted file to.
      */

@@ -14,10 +14,10 @@ export class FileException extends IOException
 
     /**
      * Initializes a new instance of the FileException class with a message and a path.
-     * 
+     *
      * @param message
      * The message of the exception.
-     * 
+     *
      * @param path
      * The path to the file which caused the exception.
      */

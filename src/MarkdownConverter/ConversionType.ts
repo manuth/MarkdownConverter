@@ -12,7 +12,7 @@ export enum ConversionType
      * Indicates a JPG-conversion
      */
     JPEG,
-    
+
     /**
      * Indicates a PDF-conversion.
      */

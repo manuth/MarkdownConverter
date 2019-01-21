@@ -15,11 +15,11 @@ export class Exception extends Error
 
     /**
      * Initializes a new instance of the `Exception`.
-     * 
+     *
      * @param message
      * The error message that explains the reason for the exception.
-     * 
-     * @param innerException 
+     *
+     * @param innerException
      * The exception that is the cause of the current exception, or a null reference if no inner exception is specified.
      */
     public constructor(message?: string, innerException?: Exception)

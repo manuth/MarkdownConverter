@@ -9,7 +9,7 @@ export class ConvertAllTask extends ConversionTask
 {
     /**
      * Initializes a new instance of the `ConvertAllTask` class.
-     * 
+     *
      * @param extension
      * The extension the task belongs to.
      */

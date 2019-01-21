@@ -13,7 +13,7 @@ export class DocumentFragment extends Renderable
 
     /**
      * Initializes a new instance of the `Document` class.
-     * 
+     *
      * @param document
      * The document this fragment belongs to.
      */
@@ -33,12 +33,12 @@ export class DocumentFragment extends Renderable
 
     /**
      * Renders a text.
-     * 
+     *
      * @param text
      * The text to render.
      */
     protected async RenderText(text: string): Promise<string>
     {
-        return await this.RenderTextBy(this.Document, text);
+        return this.RenderTextBy(this.Document, text);
     }
 }
