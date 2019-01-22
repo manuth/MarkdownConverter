@@ -23,7 +23,6 @@
         "strictFunctionTypes": true,
         "noImplicitAny": true,
         "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "downlevelIteration": true
+        "noImplicitThis": true
     }
 }

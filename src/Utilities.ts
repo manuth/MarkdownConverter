@@ -1,4 +1,5 @@
 import shell = require("async-shelljs");
+import { isNullOrUndefined } from "util";
 
 /**
  * Provides static methods.
@@ -20,19 +21,36 @@ export class Utilities
      */
     public static async GetFullName(): Promise<string>
     {
-        let current: IteratorResult<string>;
-        let iterator = this.TryGetUsername();
+        let methods: (() => Promise<string>)[] = [];
 
-        do
+        methods = [
+            async () => this.CheckEnv(),
+            this.CheckGit
+        ];
+
+        if (process.platform === "win32")
         {
-            current = await iterator.next();
-
-            if (current.value !== null)
-            {
-                return current.value.trim();
-            }
+            methods.push(this.CheckWmic);
         }
-        while (!current.done);
+        else if (process.platform === "darwin")
+        {
+            methods.push(this.CheckOsaScript);
+        }
+
+        for (let method of methods)
+        {
+            try
+            {
+                let result = await method();
+
+                if (!isNullOrUndefined(result))
+                {
+                    return result.trim();
+                }
+            }
+            catch
+            { }
+        }
 
         return "";
     }
@@ -78,41 +96,5 @@ export class Utilities
     private static async CheckOsaScript()
     {
         return shell.asyncExec("osascript -e long user name of (system info)");
-    }
-
-    /**
-     * A set of functions to figure out the user-name.
-     */
-    private static async* TryGetUsername()
-    {
-        yield Utilities.CheckEnv();
-
-        yield* (async function* ()
-        {
-            let methods: (() => Promise<string>)[] = [];
-            methods.push(Utilities.CheckGit);
-
-            if (process.platform === "win32")
-            {
-                methods.push(Utilities.CheckWmic);
-            }
-
-            if (process.platform === "darwin")
-            {
-                methods.push(Utilities.CheckOsaScript);
-            }
-
-            for (let method of methods)
-            {
-                try
-                {
-                    yield await method();
-                }
-                catch
-                {
-                    yield null;
-                }
-            }
-        })();
     }
 }
