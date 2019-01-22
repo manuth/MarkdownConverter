@@ -1,4 +1,4 @@
-import { ResourceManager } from "./Properties/ResourceManager";
+import { Resources } from "./Properties/Resources";
 import { FileNotFoundException } from "./System/IO/FileNotFoundException";
 
 /**
@@ -11,6 +11,6 @@ export class MarkdownFileNotFoundException extends FileNotFoundException
      */
     constructor()
     {
-        super(ResourceManager.Resources.Get("MarkdownFileException"), null);
+        super(Resources.Resources.Get("MarkdownFileException"), null);
     }
 }

@@ -1,14 +1,14 @@
-import CultureInfo from "culture-info";
 import Dedent = require("dedent");
 import FrontMatter = require("front-matter");
 import FileSystem = require("fs-extra");
+import { CultureInfo } from "localized-resource-manager";
 import { MarkdownIt } from "markdown-it";
 import Mustache = require("mustache");
 import OS = require("os");
 import Path = require("path");
 import { TextDocument } from "vscode";
 import YAML = require("yamljs");
-import { ResourceManager } from "../../Properties/ResourceManager";
+import { Resources } from "../../Properties/Resources";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { FileException } from "../IO/FileException";
 import { YAMLException } from "../YAML/YAMLException";
@@ -86,7 +86,7 @@ export class Document extends Renderable
      * The stylesheets of the document.
      */
     private styleSheets: string[] = [
-        ResourceManager.Files.Get("SystemStyle")
+        Resources.Files.Get("SystemStyle")
     ];
 
     /**

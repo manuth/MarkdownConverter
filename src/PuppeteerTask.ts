@@ -3,7 +3,7 @@ import Puppeteer = require("puppeteer");
 import Format = require("string-template");
 import { ProgressLocation, window } from "vscode";
 import { Extension } from "./extension";
-import { ResourceManager } from "./Properties/ResourceManager";
+import { Resources } from "./Properties/Resources";
 import { Exception } from "./System/Exception";
 import { Task } from "./Task";
 
@@ -36,8 +36,8 @@ export abstract class PuppeteerTask extends Task
             }
             else if (
                 await (window.showInformationMessage(
-                    ResourceManager.Resources.Get("UpdateMessage"),
-                    ResourceManager.Resources.Get<string>("No")) as Promise<string>) === ResourceManager.Resources.Get<string>("Yes"))
+                    Resources.Resources.Get("UpdateMessage"),
+                    Resources.Resources.Get<string>("No")) as Promise<string>) === Resources.Resources.Get<string>("Yes"))
             {
                 let revision = this.Extension.ChromiumRevision;
                 let success = false;
@@ -47,7 +47,7 @@ export abstract class PuppeteerTask extends Task
                     await (window.withProgress(
                         {
                             location: ProgressLocation.Notification,
-                            title: Format(ResourceManager.Resources.Get("UpdateRunning"), revision)
+                            title: Format(Resources.Resources.Get("UpdateRunning"), revision)
                         },
                         async (reporter) =>
                         {
@@ -72,7 +72,7 @@ export abstract class PuppeteerTask extends Task
                                         }
                                     });
 
-                                window.showInformationMessage(ResourceManager.Resources.Get("UpdateSuccess"));
+                                window.showInformationMessage(Resources.Resources.Get("UpdateSuccess"));
                                 success = true;
                             }
                             catch
@@ -85,9 +85,9 @@ export abstract class PuppeteerTask extends Task
                     !await FileSystem.pathExists(Puppeteer.executablePath()) &&
                     !success &&
                     await (window.showWarningMessage(
-                        ResourceManager.Resources.Get("UpdateFailed"),
-                        ResourceManager.Resources.Get("Yes"),
-                        ResourceManager.Resources.Get("No")) as Promise<string>) === ResourceManager.Resources.Get("Yes"));
+                        Resources.Resources.Get("UpdateFailed"),
+                        Resources.Resources.Get("Yes"),
+                        Resources.Resources.Get("No")) as Promise<string>) === Resources.Resources.Get("Yes"));
             }
         }
         catch (exception)
@@ -100,7 +100,7 @@ export abstract class PuppeteerTask extends Task
             }
             else if (exception instanceof Error)
             {
-                message = Format(ResourceManager.Resources.Get("UnknownException"), exception.name, exception.message);
+                message = Format(Resources.Resources.Get("UnknownException"), exception.name, exception.message);
             }
             else
             {

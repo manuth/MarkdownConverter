@@ -1,5 +1,5 @@
-import CultureInfo from "culture-info";
-import { ResourceManager } from "../../Properties/ResourceManager";
+import { CultureInfo } from "localized-resource-manager";
+import { Resources } from "../../Properties/Resources";
 
 /**
  * Provides the functionallity to format a date.
@@ -61,7 +61,7 @@ export class DateTimeFormatter
 
         try
         {
-            formatString = ResourceManager.Resources.Get("DateTime.Formats." + formatString, this.locale);
+            formatString = Resources.Resources.Get("DateTime.Formats." + formatString, this.locale);
         }
         catch
         {
@@ -149,32 +149,32 @@ export class DateTimeFormatter
         {
             get ddd()
             {
-                return ResourceManager.Resources.Get<string[]>("DateTime.DaysOfWeek.ShortNames", locale)[getDay()];
+                return Resources.Resources.Get<string[]>("DateTime.DaysOfWeek.ShortNames", locale)[getDay()];
             },
 
             get dddd()
             {
-                return ResourceManager.Resources.Get<string[]>("DateTime.DaysOfWeek.FullNames", locale)[getDay()];
+                return Resources.Resources.Get<string[]>("DateTime.DaysOfWeek.FullNames", locale)[getDay()];
             },
 
             get MMM()
             {
-                return ResourceManager.Resources.Get<string[]>("DateTime.Months.ShortNames", locale)[date.getMonth()];
+                return Resources.Resources.Get<string[]>("DateTime.Months.ShortNames", locale)[date.getMonth()];
             },
 
             get MMMM()
             {
-                return ResourceManager.Resources.Get<string[]>("DateTime.Months.FullNames", locale)[date.getMonth()];
+                return Resources.Resources.Get<string[]>("DateTime.Months.FullNames", locale)[date.getMonth()];
             },
 
             get t()
             {
-                return ResourceManager.Resources.Get<string[]>("DateTime.TimeDesignator.ShortNames", locale)[(date.getHours() < 12 ? 0 : 1)];
+                return Resources.Resources.Get<string[]>("DateTime.TimeDesignator.ShortNames", locale)[(date.getHours() < 12 ? 0 : 1)];
             },
 
             get tt()
             {
-                return ResourceManager.Resources.Get<string[]>("DateTime.TimeDesignator.FullNames", locale)[(date.getHours() < 12 ? 0 : 1)];
+                return Resources.Resources.Get<string[]>("DateTime.TimeDesignator.FullNames", locale)[(date.getHours() < 12 ? 0 : 1)];
             }
         };
         return dateTimeTokens;

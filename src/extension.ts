@@ -1,12 +1,12 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import CultureInfo from "culture-info";
+import { CultureInfo } from "localized-resource-manager";
 import { MarkdownIt } from "markdown-it";
 import Path = require("path");
 import { commands, env, ExtensionContext } from "vscode";
 import { ConvertAllTask } from "./ConvertAllTask";
 import { ConvertTask } from "./ConvertTask";
-import { ResourceManager } from "./Properties/ResourceManager";
+import { Resources } from "./Properties/Resources";
 
 /**
  * Represens the extension itself.
@@ -28,7 +28,7 @@ export class Extension
      */
     public constructor()
     {
-        ResourceManager.Culture = new CultureInfo(env.language);
+        Resources.Culture = new CultureInfo(env.language);
     }
 
     /**

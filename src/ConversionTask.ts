@@ -1,8 +1,8 @@
 import ChildProcess = require("child_process");
 import Clone = require("clone");
-import CultureInfo from "culture-info";
 import FileSystem = require("fs-extra");
 import HighlightJs = require("highlight.js");
+import { CultureInfo } from "localized-resource-manager";
 import MarkdownIt = require("markdown-it");
 import Anchor = require("markdown-it-anchor");
 import Checkbox = require("markdown-it-checkbox");
@@ -19,7 +19,7 @@ import { Converter } from "./Converter";
 import { DestinationOrigin } from "./DestinationOrigin";
 import { Extension } from "./extension";
 import { MarkdownContributions } from "./MarkdownContributions";
-import { ResourceManager } from "./Properties/ResourceManager";
+import { Resources } from "./Properties/Resources";
 import { Settings } from "./Properties/Settings";
 import { PuppeteerTask } from "./PuppeteerTask";
 import { Document } from "./System/Drawing/Document";
@@ -104,8 +104,8 @@ export abstract class ConversionTask extends PuppeteerTask
             {
                 origin = await (window.showInputBox({
                     ignoreFocusOut: true,
-                    prompt: ResourceManager.Resources.Get("DestinationPath"),
-                    placeHolder: ResourceManager.Resources.Get("DestinationPathExample")
+                    prompt: Resources.Resources.Get("DestinationPath"),
+                    placeHolder: Resources.Resources.Get("DestinationPathExample")
                 }) as Promise<string>);
             }
 
@@ -152,10 +152,10 @@ export abstract class ConversionTask extends PuppeteerTask
                     (async () =>
                     {
                         let result = await (window.showInformationMessage(
-                            Format(ResourceManager.Resources.Get("SuccessMessage"), ConversionType[type], destination),
-                            ResourceManager.Resources.Get("OpenFileLabel")) as Promise<string>);
+                            Format(Resources.Resources.Get("SuccessMessage"), ConversionType[type], destination),
+                            Resources.Resources.Get("OpenFileLabel")) as Promise<string>);
 
-                        if (result === ResourceManager.Resources.Get("OpenFileLabel"))
+                        if (result === Resources.Resources.Get("OpenFileLabel"))
                         {
                             switch (process.platform)
                             {
@@ -169,7 +169,7 @@ export abstract class ConversionTask extends PuppeteerTask
                                     ChildProcess.exec(`bash -c 'xdg-open "${destination}"'`);
                                     break;
                                 default:
-                                    window.showWarningMessage(ResourceManager.Resources.Get("UnsupportedPlatformException"));
+                                    window.showWarningMessage(Resources.Resources.Get("UnsupportedPlatformException"));
                                     break;
                             }
                         }
@@ -218,7 +218,7 @@ export abstract class ConversionTask extends PuppeteerTask
             }
             else if (Settings.Default.SystemParserEnabled)
             {
-                converter.Document.Template = (await FileSystem.readFile(ResourceManager.Files.Get("SystemTemplate"))).toString();
+                converter.Document.Template = (await FileSystem.readFile(Resources.Files.Get("SystemTemplate"))).toString();
             }
         }
         catch (exception)
@@ -256,12 +256,12 @@ export abstract class ConversionTask extends PuppeteerTask
             {
                 if (!Settings.Default.SystemParserEnabled)
                 {
-                    converter.Document.StyleSheets.push(ResourceManager.Files.Get("DefaultHighlight"));
+                    converter.Document.StyleSheets.push(Resources.Files.Get("DefaultHighlight"));
                 }
             }
             else
             {
-                converter.Document.StyleSheets.push(Path.join(ResourceManager.Files.Get("HighlightJSStylesDir"), Settings.Default.HighlightStyle + ".css"));
+                converter.Document.StyleSheets.push(Path.join(Resources.Files.Get("HighlightJSStylesDir"), Settings.Default.HighlightStyle + ".css"));
             }
         }
 

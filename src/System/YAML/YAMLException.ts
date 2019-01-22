@@ -1,5 +1,5 @@
 import Format = require("string-template");
-import { ResourceManager } from "../../Properties/ResourceManager";
+import { Resources } from "../../Properties/Resources";
 import { Exception } from "../Exception";
 import { IMark } from "./Mark";
 
@@ -70,7 +70,7 @@ export class YAMLException extends Exception
 
     public get Message(): string
     {
-        return Format(ResourceManager.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
+        return Format(Resources.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
     }
 
     /**
