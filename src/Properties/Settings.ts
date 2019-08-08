@@ -5,6 +5,7 @@ import { DestinationOrigin } from "../DestinationOrigin";
 import { CustomPaperFormat } from "../System/Drawing/CustomPaperFormat";
 import { EmojiType } from "../System/Drawing/EmojiType";
 import { ListType } from "../System/Drawing/ListType";
+import { Margin } from "../System/Drawing/Margin";
 import { Paper } from "../System/Drawing/Paper";
 import { PaperOrientation } from "../System/Drawing/PaperOrientation";
 import { StandardizedFormatType } from "../System/Drawing/StandardizedFormatType";
@@ -39,7 +40,7 @@ export class Settings
      */
     public get DestinationOrigin(): DestinationOrigin
     {
-        return (DestinationOrigin as any)[this.getConfigEntry<string>("DestinationOrigin")];
+        return DestinationOrigin[this.getConfigEntry<keyof typeof DestinationOrigin>("DestinationOrigin")];
     }
 
     /**
@@ -72,11 +73,11 @@ export class Settings
     public get ConversionType(): ConversionType[]
     {
         let types: ConversionType[] = [];
-        let conversionTypes: string[] = this.getConfigEntry("ConversionType", [ConversionType[ConversionType.PDF]]);
+        let conversionTypes = this.getConfigEntry<Array<keyof typeof ConversionType>>("ConversionType", [ConversionType[ConversionType.PDF] as keyof typeof ConversionType]);
 
         for (let conversionType of conversionTypes)
         {
-            types.push((ConversionType as any)[conversionType]);
+            types.push(ConversionType[conversionType]);
         }
 
         return types;
@@ -137,13 +138,13 @@ export class Settings
             paper.Format = format;
         }
 
-        for (let side of ["Top", "Right", "Bottom", "Left"])
+        for (let side of (Object.keys(paper.Margin) as Array<keyof Margin>))
         {
             let configKey = "Document.Paper.Margin." + side;
 
             if (this.config.has(configKey))
             {
-                (paper.Margin as any)[side] = this.config.get(configKey);
+                paper.Margin[side] = this.config.get(configKey);
             }
         }
 
