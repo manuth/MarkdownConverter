@@ -16,9 +16,9 @@ import { ConversionType } from "./ConversionType";
 export class Converter
 {
     /**
-     * The root-directory of the document.
+     * The root-directory of the workspace of the document.
      */
-    private documentRoot: string;
+    private workspaceRoot: string;
 
     /**
      * The document which is to be converted.
@@ -53,21 +53,24 @@ export class Converter
     /**
      * Initializes a new instance of the Constructor class with a filepath.
      *
+     * @param workspaceRoot
+     * The root of the workspace of the document.
+     *
      * @param document
      * The document which is to be converted.
      */
-    constructor(documentRoot: string, document: Document)
+    constructor(workspaceRoot: string, document: Document)
     {
-        this.documentRoot = documentRoot;
+        this.workspaceRoot = workspaceRoot;
         this.document = document;
     }
 
     /**
-     * Gets or sets the root-directory of the document.
+     * Gets or sets the root-directory of the workspace of the document.
      */
-    public get DocumentRoot(): string
+    public get WorkspaceRoot(): string
     {
-        return this.documentRoot;
+        return this.workspaceRoot;
     }
 
     /**
@@ -101,8 +104,8 @@ export class Converter
     {
         return this.Initialized ? (URL.resolve(
             `http://localhost:${this.PortNumber}/`,
-            ((!isNullOrUndefined(this.Document.FileName) && !isNullOrUndefined(this.DocumentRoot)) ?
-                Path.relative(this.DocumentRoot, this.Document.FileName) : "index") + ".html")) : null;
+            ((!isNullOrUndefined(this.Document.FileName) && !isNullOrUndefined(this.WorkspaceRoot)) ?
+                Path.relative(this.WorkspaceRoot, this.Document.FileName) : "index") + ".html")) : null;
     }
 
     /**
@@ -142,7 +145,7 @@ export class Converter
         {
             this.portNumber = await PortFinder();
             this.webServer = (Server.createServer({
-                root: this.DocumentRoot,
+                root: this.WorkspaceRoot,
                 cors: true
             }) as any).server as http.Server;
 
