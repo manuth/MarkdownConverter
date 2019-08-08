@@ -46,6 +46,8 @@
     "prepare": "npm run rebuild"
   },
   "devDependencies": {
+    "@manuth/tsconfig": "^1.2.2",
+    "@manuth/tslint-presets": "^1.0.4",
     "@types/clone": "^0.1.30",
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^8.0.0",

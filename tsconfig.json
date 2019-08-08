@@ -1,4 +1,5 @@
 {
+    "extends": "@manuth/tsconfig/recommended",
     "compileOnSave": true,
     "compilerOptions": {
         "rootDir": "./src",
@@ -14,15 +15,6 @@
             }
         ],
         "target": "es6",
-        "outDir": "./lib",
-        "declaration": true,
-        "sourceMap": true,
-        "resolveJsonModule": true,
-        "forceConsistentCasingInFileNames": true,
-        "alwaysStrict": true,
-        "strictFunctionTypes": true,
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true
+        "outDir": "./lib"
     }
 }
