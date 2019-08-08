@@ -1,6 +1,6 @@
 import { extensions, TextDocument, workspace } from "vscode";
+import { Extension } from "../extension";
 import { ConversionTask } from "./ConversionTask";
-import { Extension } from "./extension";
 
 /**
  * Represents a task for converting all documents in the workspace.

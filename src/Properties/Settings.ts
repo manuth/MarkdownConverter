@@ -1,16 +1,16 @@
 import VSCode = require("vscode");
 import { MultiRange } from "../../node_modules/multi-integer-range";
-import { ConversionType } from "../ConversionType";
-import { DestinationOrigin } from "../DestinationOrigin";
-import { CustomPaperFormat } from "../System/Drawing/CustomPaperFormat";
-import { EmojiType } from "../System/Drawing/EmojiType";
-import { ListType } from "../System/Drawing/ListType";
-import { Margin } from "../System/Drawing/Margin";
-import { Paper } from "../System/Drawing/Paper";
-import { PaperOrientation } from "../System/Drawing/PaperOrientation";
-import { StandardizedFormatType } from "../System/Drawing/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../System/Drawing/StandardizedPaperFormat";
-import { TocSettings } from "../System/Drawing/TocSettings";
+import { ConversionType } from "../Conversion/ConversionType";
+import { DestinationOrigin } from "../System/DestinationOrigin";
+import { CustomPaperFormat } from "../System/Documents/CustomPaperFormat";
+import { EmojiType } from "../System/Documents/EmojiType";
+import { ListType } from "../System/Documents/ListType";
+import { Margin } from "../System/Documents/Margin";
+import { Paper } from "../System/Documents/Paper";
+import { PaperOrientation } from "../System/Documents/PaperOrientation";
+import { StandardizedFormatType } from "../System/Documents/StandardizedFormatType";
+import { StandardizedPaperFormat } from "../System/Documents/StandardizedPaperFormat";
+import { TocSettings } from "../System/Documents/TocSettings";
 
 /**
  * Provides access to settings.

@@ -14,20 +14,20 @@ import Transliteration = require("transliteration");
 import TwEmoji = require("twemoji");
 import { isNullOrUndefined } from "util";
 import { TextDocument, window, workspace, WorkspaceFolder } from "vscode";
+import { Extension } from "../extension";
+import { MarkdownContributions } from "../MarkdownContributions";
+import { Resources } from "../Properties/Resources";
+import { Settings } from "../Properties/Settings";
+import { PuppeteerTask } from "../PuppeteerTask";
+import { DestinationOrigin } from "../System/DestinationOrigin";
+import { Document } from "../System/Documents/Document";
+import { EmojiType } from "../System/Documents/EmojiType";
+import { ListType } from "../System/Documents/ListType";
+import { Slugifier } from "../System/Documents/Slugifier";
+import { FileException } from "../System/IO/FileException";
+import { Utilities } from "../Utilities";
 import { ConversionType } from "./ConversionType";
 import { Converter } from "./Converter";
-import { DestinationOrigin } from "./DestinationOrigin";
-import { Extension } from "./extension";
-import { MarkdownContributions } from "./MarkdownContributions";
-import { Resources } from "./Properties/Resources";
-import { Settings } from "./Properties/Settings";
-import { PuppeteerTask } from "./PuppeteerTask";
-import { Document } from "./System/Drawing/Document";
-import { EmojiType } from "./System/Drawing/EmojiType";
-import { ListType } from "./System/Drawing/ListType";
-import { Slugifier } from "./System/Drawing/Slugifier";
-import { FileException } from "./System/IO/FileException";
-import { Utilities } from "./Utilities";
 
 /**
  * Represents a task which is able to convert markdown-files.
