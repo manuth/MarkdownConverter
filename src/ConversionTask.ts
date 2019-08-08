@@ -281,9 +281,9 @@ export abstract class ConversionTask extends PuppeteerTask
     /**
      * Loads a parser according to the settings.
      */
-    protected async LoadParser(): Promise<MarkdownIt.MarkdownIt>
+    protected async LoadParser(): Promise<MarkdownIt>
     {
-        let parser: MarkdownIt.MarkdownIt;
+        let parser: MarkdownIt;
         let slugify = (text: string) =>
             Transliteration.slugify(
                 text,

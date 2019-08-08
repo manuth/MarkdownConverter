@@ -2,7 +2,7 @@ import Dedent = require("dedent");
 import FrontMatter = require("front-matter");
 import FileSystem = require("fs-extra");
 import { CultureInfo } from "localized-resource-manager";
-import { MarkdownIt } from "markdown-it";
+import MarkdownIt = require("markdown-it");
 import Mustache = require("mustache");
 import OS = require("os");
 import Path = require("path");
