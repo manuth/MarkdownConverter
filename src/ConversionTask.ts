@@ -116,7 +116,7 @@ export abstract class ConversionTask extends PuppeteerTask
             destinationPath = Settings.Default.DestinationPath;
         }
 
-        let tasks: Promise<void>[] = [];
+        let tasks: Array<Promise<void>> = [];
         let fileName = Path.parse(document.fileName).name;
         let converter = await this.LoadConverter(documentRoot, document);
         await converter.Initialize();

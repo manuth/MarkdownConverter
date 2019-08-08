@@ -18,6 +18,9 @@ export class ConvertAllTask extends ConversionTask
         super(extension);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected async ExecuteTask()
     {
         for (let document of await this.GetDocuments())

@@ -33,7 +33,7 @@ export class MarkdownContributions
     /**
      * The plugins of the markdown-preview.
      */
-    private readonly plugins: Thenable<(md: any) => any>[] = [];
+    private readonly plugins: Array<Thenable<(md: any) => any>> = [];
 
     /**
      * A value indicating whether the contributions are loaded.
@@ -78,7 +78,7 @@ export class MarkdownContributions
     /**
      * Gets the plugins of the markdown-preview.
      */
-    public get markdownItPlugins(): Thenable<(md: any) => any>[]
+    public get markdownItPlugins(): Array<Thenable<(md: any) => any>>
     {
         this.Load();
         return this.plugins;

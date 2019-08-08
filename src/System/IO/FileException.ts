@@ -27,6 +27,9 @@ export class FileException extends IOException
         this.Path = path;
     }
 
+    /**
+     * @inheritdoc
+     */
     public get Message(): string
     {
         return Format(Resources.Resources.Get("FileException"), this.Path);

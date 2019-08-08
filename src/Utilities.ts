@@ -21,7 +21,7 @@ export class Utilities
      */
     public static async GetFullName(): Promise<string>
     {
-        let methods: (() => Promise<string>)[] = [];
+        let methods: Array<() => Promise<string>> = [];
 
         methods = [
             async () => this.CheckEnv(),

@@ -46,7 +46,7 @@ export class YAMLException extends Exception
         super();
         if (arguments.length === 1)
         {
-            let exception: { name: string, reason: string, mark: any, message: string } = name;
+            let exception = name;
             this.name = exception.name;
             this.reason = exception.reason;
             this.mark = exception.mark;
@@ -68,6 +68,9 @@ export class YAMLException extends Exception
         return this.name;
     }
 
+    /**
+     * @inheritdoc
+     */
     public get Message(): string
     {
         return Format(Resources.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);

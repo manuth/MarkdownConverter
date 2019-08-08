@@ -38,8 +38,7 @@ export class Margin
      * @param left
      * The left margin.
      */
-    constructor(all: string);
-    constructor(vertical: string, horizontal: string);
+    constructor(all: string, horizontal?: string);
     constructor(top: string, right: string, bottom: string, left: string);
     constructor(top: string, right?: string, bottom?: string, left?: string)
     {

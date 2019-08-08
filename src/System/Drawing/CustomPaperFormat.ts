@@ -58,6 +58,9 @@ export class CustomPaperFormat extends PaperFormat
         this.height = value;
     }
 
+    /**
+     * @inheritdoc
+     */
     public get PDFOptions(): Partial<PDFOptions>
     {
         return {

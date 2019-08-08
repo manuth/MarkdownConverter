@@ -60,6 +60,9 @@ export class StandardizedPaperFormat extends PaperFormat
         this.orientation = value;
     }
 
+    /**
+     * @inheritdoc
+     */
     public get PDFOptions(): Partial<PDFOptions>
     {
         return {

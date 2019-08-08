@@ -20,6 +20,9 @@ export class ConvertTask extends ConversionTask
         super(extension);
     }
 
+    /**
+     * @inheritdoc
+     */
     public async ExecuteTask()
     {
         return this.Convert(this.GetMarkdownDocument());
