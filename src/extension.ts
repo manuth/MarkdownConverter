@@ -1,5 +1,3 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import { CultureInfo } from "localized-resource-manager";
 import MarkdownIt = require("markdown-it");
 import Path = require("path");
@@ -103,9 +101,9 @@ export class Extension
 }
 
 /**
- * The extension itself.
+ * An instance of the extension.
  */
-export let extension = new Extension();
+const extension = new Extension();
 
 /**
  * Activates the extension.
