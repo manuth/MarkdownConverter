@@ -1,4 +1,4 @@
-import { Extension } from "./extension";
+import { Extension } from "../extension";
 
 /**
  * Represents a task.

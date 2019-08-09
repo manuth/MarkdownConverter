@@ -2,9 +2,9 @@ import { CultureInfo } from "localized-resource-manager";
 import MarkdownIt = require("markdown-it");
 import Path = require("path");
 import { commands, env, ExtensionContext } from "vscode";
-import { ConvertAllTask } from "./Conversion/ConvertAllTask";
-import { ConvertTask } from "./Conversion/ConvertTask";
 import { Resources } from "./Properties/Resources";
+import { ConvertAllTask } from "./Tasks/ConvertAllTask";
+import { ConvertTask } from "./Tasks/ConvertTask";
 
 /**
  * Represens the extension itself.

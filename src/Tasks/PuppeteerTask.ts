@@ -2,9 +2,9 @@ import FileSystem = require("fs-extra");
 import Puppeteer = require("puppeteer");
 import Format = require("string-template");
 import { ProgressLocation, window } from "vscode";
-import { Extension } from "./extension";
-import { Resources } from "./Properties/Resources";
-import { Exception } from "./System/Exception";
+import { Extension } from "../extension";
+import { Resources } from "../Properties/Resources";
+import { Exception } from "../System/Exception";
 import { Task } from "./Task";
 
 /**
