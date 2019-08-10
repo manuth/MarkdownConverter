@@ -52,6 +52,14 @@ export class Slugifier
     }
 
     /**
+     * Resets the slugifier.
+     */
+    public Reset(): void
+    {
+        this.Slugs.splice(0, this.Slugs.length);
+    }
+
+    /**
      * Slugifies a text.
      *
      * @param text

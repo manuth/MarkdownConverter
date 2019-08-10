@@ -25,7 +25,7 @@ export class ConvertTask extends ConversionTask
      */
     public async ExecuteTask()
     {
-        return this.Convert(this.GetMarkdownDocument());
+        return this.ConversionRunner.Execute(this.GetMarkdownDocument());
     }
 
     /**

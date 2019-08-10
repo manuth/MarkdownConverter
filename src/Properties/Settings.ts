@@ -1,7 +1,6 @@
 import VSCode = require("vscode");
 import { MultiRange } from "../../node_modules/multi-integer-range";
 import { ConversionType } from "../Conversion/ConversionType";
-import { DestinationOrigin } from "../System/DestinationOrigin";
 import { CustomPaperFormat } from "../System/Documents/CustomPaperFormat";
 import { EmojiType } from "../System/Documents/EmojiType";
 import { ListType } from "../System/Documents/ListType";
@@ -36,19 +35,11 @@ export class Settings
     }
 
     /**
-     * Gets the location the `DestinationPath` is relative to.
-     */
-    public get DestinationOrigin(): DestinationOrigin
-    {
-        return DestinationOrigin[this.getConfigEntry<keyof typeof DestinationOrigin>("DestinationOrigin")];
-    }
-
-    /**
      * Gets the path to save the destination-files to.
      */
-    public get DestinationPath(): string
+    public get DestinationPattern(): string
     {
-        return this.getConfigEntry("DestinationPath");
+        return this.getConfigEntry("DestinationPattern");
     }
 
     /**

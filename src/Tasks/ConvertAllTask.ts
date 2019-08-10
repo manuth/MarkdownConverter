@@ -25,7 +25,7 @@ export class ConvertAllTask extends ConversionTask
     {
         for (let document of await this.GetDocuments())
         {
-            await this.Convert(document);
+            await this.ConversionRunner.Execute(document);
         }
     }
 

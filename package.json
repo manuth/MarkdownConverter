@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/manuth/MarkdownConverter#readme",
   "engines": {
-    "vscode": "^1.23.0"
+    "vscode": "^1.37.0"
   },
   "scripts": {
     "vscode:prepublish": "npm run rebuild",
@@ -71,6 +71,7 @@
     "async-shelljs": "^0.1.2",
     "clone": "^2.1.2",
     "dedent": "^0.7.0",
+    "es6-template-string": "^1.1.0",
     "front-matter": "^3.0.2",
     "fs-extra": "^8.1.0",
     "get-port": "^5.0.0",
@@ -93,7 +94,8 @@
     "yamljs": "^0.3.0"
   },
   "activationEvents": [
-    "onCommand:markdownConverter.Convert"
+    "onCommand:markdownConverter.Convert",
+    "onCommand:markdownConverter.ConvertAll"
   ],
   "contributes": {
     "commands": [
@@ -112,24 +114,11 @@
     "configuration": {
       "title": "%Config%",
       "properties": {
-        "markdownConverter.DestinationOrigin": {
-          "title": "%Config.DestinationOrigin%",
-          "markdownDescription": "%Config.DestinationOrigin.Description%",
-          "default": "WorkspaceRoot",
-          "enum": [
-            "WorkspaceRoot",
-            "DocumentFile"
-          ],
-          "enumDescriptions": [
-            "%Config.DestinationOrigin.WorkspaceRoot%",
-            "%Config.DestinationOrigin.DocumentFile%"
-          ]
-        },
-        "markdownConverter.DestinationPath": {
-          "title": "%Config.DestinationPath%",
-          "markdownDescription": "%Config.DestinationPath.Description%",
+        "markdownConverter.DestinationPattern": {
+          "title": "%Config.DestinationPattern%",
+          "markdownDescription": "%Config.DestinationPattern.Description%",
           "type": "string",
-          "default": "."
+          "default": "${workspaceFolder}/${dirname}/${basename}.${extension}"
         },
         "markdownConverter.IgnoreLanguageMode": {
           "title": "%Config.IgnoreLanguageMode%",
