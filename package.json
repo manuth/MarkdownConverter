@@ -41,8 +41,7 @@
     "watch": "tsc -p . --watch",
     "clean": "rimraf ./lib",
     "lint": "tslint -p ./ -t verbose",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "cross-env CODE_TESTS_PATH=\"./lib/test\" node ./node_modules/vscode/bin/test",
+    "test": "node ./lib/test/runTests",
     "prepare": "npm run rebuild"
   },
   "devDependencies": {
@@ -61,11 +60,14 @@
     "@types/puppeteer": "^1.19.0",
     "@types/string-template": "^1.0.2",
     "@types/transliteration": "^1.6.1",
+    "@types/vscode": "^1.37.0",
     "@types/yamljs": "^0.2.30",
     "cross-env": "^5.2.0",
+    "glob": "^7.1.4",
+    "mocha": "^6.2.0",
     "tslint": "^5.18.0",
     "typescript": "^3.5.3",
-    "vscode": "^1.1.36"
+    "vscode-test": "^1.2.0"
   },
   "dependencies": {
     "async-shelljs": "^0.1.2",

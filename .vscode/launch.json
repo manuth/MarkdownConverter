@@ -10,8 +10,7 @@
             "name": "Launch Extension",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}",
-                "--locale=en"
+                "--extensionDevelopmentPath=${workspaceFolder}"
             ],
             "outFiles": [
                 "${workspaceFolder}/lib/**/*.js"
