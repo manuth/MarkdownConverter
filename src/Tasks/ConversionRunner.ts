@@ -269,6 +269,11 @@ export class ConversionRunner
      */
     protected async LoadConverter(workspaceRoot: string, document: TextDocument): Promise<Converter>
     {
+        if (isNullOrUndefined(this.Extension.VSCodeParser))
+        {
+            await this.Extension.EnableSystemParser();
+        }
+
         let converter = new Converter(workspaceRoot, new Document(document, await this.LoadParser()));
         converter.Document.Quality = Settings.Default.ConversionQuality;
 

@@ -1,7 +1,7 @@
 import { CultureInfo } from "localized-resource-manager";
 import MarkdownIt = require("markdown-it");
 import Path = require("path");
-import { commands, env, ExtensionContext } from "vscode";
+import { commands, env, ExtensionContext, TextEditor, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "./Properties/Resources";
 import { ConvertAllTask } from "./Tasks/ConvertAllTask";
 import { ConvertTask } from "./Tasks/ConvertTask";
@@ -22,10 +22,21 @@ export class Extension
     private vsCodeParser: MarkdownIt = null;
 
     /**
+     * A `TextEditor` which is used for triggering the `extendMarkdownIt`-method.
+     */
+    private systemParserFixEditor: TextEditor;
+
+    /**
+     * A method for resolving the system-parser fix.
+     */
+    private systemParserFixResolver: () => void;
+
+    /**
      * Initializes a new instance of the `Extension` class.
      */
     public constructor()
     {
+        this.systemParserFixResolver = () => { };
         Resources.Culture = new CultureInfo(env.language);
     }
 
@@ -71,6 +82,14 @@ export class Extension
             extendMarkdownIt: (md: any) =>
             {
                 this.vsCodeParser = md;
+
+                if (window.activeTextEditor === this.systemParserFixEditor)
+                {
+                    commands.executeCommand("workbench.action.closeActiveEditor");
+                }
+
+                this.systemParserFixResolver();
+
                 return md;
             }
         };
@@ -81,6 +100,29 @@ export class Extension
      */
     public async Dispose()
     {
+    }
+
+    /**
+     * Enables the system-parser.
+     */
+    public async EnableSystemParser()
+    {
+        let document = await workspace.openTextDocument(Uri.parse("untitled:MarkdownConverter.md"));
+
+        let result = new Promise(
+            (resolve) =>
+            {
+                this.systemParserFixResolver = resolve;
+            });
+
+        this.systemParserFixEditor = await window.showTextDocument(
+            document,
+            {
+                viewColumn: ViewColumn.Beside,
+                preview: true
+            });
+
+        return result;
     }
 
     /**
