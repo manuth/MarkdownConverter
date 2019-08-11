@@ -115,6 +115,7 @@ export class ConversionRunner
 
                     switch (type)
                     {
+                        case ConversionType.SelfContainedHTML:
                         case ConversionType.HTML:
                             extension = "html";
                             break;

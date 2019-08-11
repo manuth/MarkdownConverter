@@ -1,14 +1,18 @@
-import FS = require("fs-extra");
+import FileSystem = require("fs-extra");
 import PortFinder = require("get-port");
+import Glob = require("glob");
 import http = require("http");
 import Server = require("http-server");
 import Path = require("path");
 import Puppeteer = require("puppeteer");
+import { TempDirectory } from "temp-filesystem";
 import URL = require("url");
-import { isNullOrUndefined } from "util";
+import { isNullOrUndefined, promisify } from "util";
+import Scrape = require("website-scraper");
 import { Document } from "../System/Documents/Document";
 import { FileException } from "../System/IO/FileException";
 import { ConversionType } from "./ConversionType";
+import { ConverterPlugin } from "./ConverterPlugin";
 
 /**
  * Provides a markdown-converter.
@@ -210,94 +214,120 @@ export class Converter
         }
         else
         {
-            if (conversionType !== ConversionType.HTML)
+            switch (conversionType)
             {
-                try
-                {
-                    let page = await this.Browser.newPage();
+                case ConversionType.HTML:
+                    await FileSystem.writeFile(path, await this.Document.Render());
+                    break;
+                case ConversionType.SelfContainedHTML:
+                    let tempDir = new TempDirectory();
+                    await FileSystem.remove(tempDir.FullName);
 
-                    page.on(
-                        "request",
-                        async request =>
+                    await Scrape(
                         {
-                            if (request.url() === this.URL)
-                            {
-                                await request.respond(
-                                    {
-                                        body: await this.Document.Render()
-                                    });
-                            }
-                            else
-                            {
-                                await request.continue();
-                            }
-                        });
+                            urls: [this.URL],
+                            directory: tempDir.FullName,
+                            plugins: [
+                                new ConverterPlugin(
+                                    this,
+                                    Path.basename(path))
+                            ]
+                        } as any);
 
-                    await page.setRequestInterception(true);
-                    await page.goto(this.URL, { waitUntil: "networkidle0", timeout: 0 });
-
-                    switch (conversionType)
+                    for (let filename of await promisify(Glob)("**/*", { cwd: tempDir.FullName }))
                     {
-                        case ConversionType.PDF:
-                            let styles = `
-                            <style>
-                                :root
+                        if (await FileSystem.pathExists(tempDir.MakePath(filename)))
+                        {
+                            await FileSystem.move(tempDir.MakePath(filename), Path.join(Path.dirname(path), filename), { overwrite: true });
+                        }
+                    }
+
+                    tempDir.Dispose();
+                    break;
+                default:
+                    try
+                    {
+                        let page = await this.Browser.newPage();
+
+                        page.on(
+                            "request",
+                            async request =>
+                            {
+                                if (request.url() === this.URL)
                                 {
-                                    font-size: 11px;
+                                    await request.respond(
+                                        {
+                                            body: await this.Document.Render()
+                                        });
                                 }
-                            </style>`;
-                            let pdfOptions: Puppeteer.PDFOptions = {
-                                margin: {
-                                    top: this.Document.Paper.Margin.Top,
-                                    right: this.Document.Paper.Margin.Right,
-                                    bottom: this.Document.Paper.Margin.Bottom,
-                                    left: this.Document.Paper.Margin.Left
-                                },
-                                printBackground: true,
-                                path
-                            };
+                                else
+                                {
+                                    await request.continue();
+                                }
+                            });
 
-                            Object.assign(pdfOptions, this.Document.Paper.Format.PDFOptions);
+                        await page.setRequestInterception(true);
+                        await page.goto(this.URL, { waitUntil: "networkidle0", timeout: 0 });
 
-                            if (this.Document.HeaderFooterEnabled)
-                            {
-                                pdfOptions.displayHeaderFooter = true;
-                                pdfOptions.headerTemplate = styles + await this.Document.Header.Render();
-                                pdfOptions.footerTemplate = styles + await this.Document.Footer.Render();
-                            }
+                        switch (conversionType)
+                        {
+                            case ConversionType.PDF:
+                                let styles = `
+                                <style>
+                                    :root
+                                    {
+                                        font-size: 11px;
+                                    }
+                                </style>`;
+                                let pdfOptions: Puppeteer.PDFOptions = {
+                                    margin: {
+                                        top: this.Document.Paper.Margin.Top,
+                                        right: this.Document.Paper.Margin.Right,
+                                        bottom: this.Document.Paper.Margin.Bottom,
+                                        left: this.Document.Paper.Margin.Left
+                                    },
+                                    printBackground: true,
+                                    path
+                                };
 
-                            await page.pdf(pdfOptions);
-                            break;
-                        default:
-                            let screenshotOptions: Puppeteer.ScreenshotOptions = {
-                                fullPage: true,
-                                path
-                            };
+                                Object.assign(pdfOptions, this.Document.Paper.Format.PDFOptions);
 
-                            if (conversionType !== ConversionType.PNG)
-                            {
-                                screenshotOptions.quality = this.Document.Quality;
-                            }
+                                if (this.Document.HeaderFooterEnabled)
+                                {
+                                    pdfOptions.displayHeaderFooter = true;
+                                    pdfOptions.headerTemplate = styles + await this.Document.Header.Render();
+                                    pdfOptions.footerTemplate = styles + await this.Document.Footer.Render();
+                                }
 
-                            await page.screenshot(screenshotOptions);
-                            break;
+                                await page.pdf(pdfOptions);
+                                break;
+                            default:
+                                let screenshotOptions: Puppeteer.ScreenshotOptions = {
+                                    fullPage: true,
+                                    path
+                                };
+
+                                if (conversionType !== ConversionType.PNG)
+                                {
+                                    screenshotOptions.quality = this.Document.Quality;
+                                }
+
+                                await page.screenshot(screenshotOptions);
+                                break;
+                        }
                     }
-                }
-                catch (exception)
-                {
-                    if ("path" in exception)
+                    catch (exception)
                     {
-                        throw new FileException(null, exception["path"]);
+                        if ("path" in exception)
+                        {
+                            throw new FileException(null, exception["path"]);
+                        }
+                        else
+                        {
+                            throw exception;
+                        }
                     }
-                    else
-                    {
-                        throw exception;
-                    }
-                }
-            }
-            else
-            {
-                await FS.writeFile(path, await this.Document.Render());
+                    break;
             }
         }
     }
