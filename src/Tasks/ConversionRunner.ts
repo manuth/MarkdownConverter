@@ -249,10 +249,10 @@ export class ConversionRunner
                         }
                     })();
                 })());
-
-            await Promise.all(tasks);
-            await converter.Dispose();
         }
+
+        await Promise.all(tasks);
+        await converter.Dispose();
     }
 
     /**
