@@ -1,5 +1,6 @@
 import Path = require("path");
 import { Browser, launch } from "puppeteer";
+import Utf8 = require("utf8");
 import { Converter } from "./Converter";
 
 /**
@@ -75,20 +76,20 @@ export class ConverterPlugin
             {
                 if (response.request.href === this.Converter.URL)
                 {
-                    return this.Converter.Document.Render();
+                    return Utf8.encode(await this.Converter.Document.Render());
                 }
                 else
                 {
-                    const contentType = response.headers["content-type"];
-                    const isHtml = contentType && contentType.split(";")[0] === "text/html";
+                    let contentType = response.headers["content-type"];
+                    let isHtml = contentType && contentType.split(";")[0] === "text/html";
 
                     if (isHtml)
                     {
-                        const url = response.request.href;
+                        let url = response.request.href;
 
-                        const page = await browser.newPage();
+                        let page = await browser.newPage();
                         await page.goto(url);
-                        const content = await page.content();
+                        let content = await page.content();
                         await page.close();
                         return content;
                     }
