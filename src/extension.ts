@@ -3,6 +3,7 @@ import MarkdownIt = require("markdown-it");
 import Path = require("path");
 import { commands, env, ExtensionContext, TextEditor, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "./Properties/Resources";
+import { ChainTask } from "./Tasks/ChainTask";
 import { ConvertAllTask } from "./Tasks/ConvertAllTask";
 import { ConvertTask } from "./Tasks/ConvertTask";
 
@@ -76,7 +77,8 @@ export class Extension
 
         context.subscriptions.push(
             commands.registerCommand("markdownConverter.Convert", async () => this.Convert()),
-            commands.registerCommand("markdownConverter.ConvertAll", async () => this.ConvertAll()));
+            commands.registerCommand("markdownConverter.ConvertAll", async () => this.ConvertAll()),
+            commands.registerCommand("markdownConverter.Chain", async () => this.Chain()));
 
         return {
             extendMarkdownIt: (md: any) =>
@@ -139,6 +141,14 @@ export class Extension
     protected async ConvertAll()
     {
         await new ConvertAllTask(this).Execute();
+    }
+
+    /**
+     * Chains multiple documents together.
+     */
+    protected async Chain()
+    {
+        await new ChainTask(this).Execute();
     }
 }
 

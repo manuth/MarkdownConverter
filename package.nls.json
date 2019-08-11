@@ -1,6 +1,7 @@
 {
     "Command.Convert": "Convert Document",
     "Command.ConvertAll": "Convert all Documents",
+    "Command.Chain": "Chain all Documents",
     "Config": "MarkdownConverter-Options",
     "Config.DestinationPattern": "Destination-Pattern",
     "Config.DestinationPattern.Description": "The pattern for creating a destination-path.\n\nFollowing variables can be used inside this expression:\n\n* `${workspaceFolder}`:  \nEither the path to the `workspace` or the directory which contains the document.\n* `${dirname}`:  \nThe relative path from the `${workspaceFolder}` to the directory which contains the document.\n* `${basename}`:  \nThe name of the document-file without extension.\n* `${extension}`:  \nThe file-extension of the destination-datatype.\n* `${filename}`: \nThe name of the document-file.",

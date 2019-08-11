@@ -113,6 +113,11 @@
         "command": "markdownConverter.ConvertAll",
         "category": "Markdown",
         "title": "%Command.ConvertAll%"
+      },
+      {
+        "command": "markdownConverter.Chain",
+        "category": "Markdown",
+        "title": "%Command.Chain%"
       }
     ],
     "markdown.markdownItPlugins": true,
