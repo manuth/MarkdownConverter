@@ -1,5 +1,6 @@
 import { extensions, TextDocument, workspace } from "vscode";
 import { Extension } from "../extension";
+import { MarkdownFileNotFoundException } from "../MarkdownFileNotFoundException";
 import { ConversionTask } from "./ConversionTask";
 
 /**
@@ -16,6 +17,21 @@ export class ConvertAllTask extends ConversionTask
     public constructor(extension: Extension)
     {
         super(extension);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public async Execute()
+    {
+        if ((await this.GetDocuments()).length === 0)
+        {
+            throw new MarkdownFileNotFoundException();
+        }
+        else
+        {
+            return super.Execute();
+        }
     }
 
     /**
