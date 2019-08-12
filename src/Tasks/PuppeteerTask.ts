@@ -37,6 +37,7 @@ export abstract class PuppeteerTask extends Task
             else if (
                 await (window.showInformationMessage(
                     Resources.Resources.Get("UpdateMessage"),
+                    Resources.Resources.Get<string>("Yes"),
                     Resources.Resources.Get<string>("No")) as Promise<string>) === Resources.Resources.Get<string>("Yes"))
             {
                 let revision = this.Extension.ChromiumRevision;
