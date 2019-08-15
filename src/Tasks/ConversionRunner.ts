@@ -17,8 +17,8 @@ import { isNullOrUndefined } from "util";
 import { TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType";
 import { Converter } from "../Conversion/Converter";
-import { Extension } from "../extension";
 import { MarkdownContributions } from "../MarkdownContributions";
+import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 import { Resources } from "../Properties/Resources";
 import { Settings } from "../Properties/Settings";
 import { Document } from "../System/Documents/Document";
@@ -36,7 +36,7 @@ export class ConversionRunner
     /**
      * The extension the runner belongs to.
      */
-    private extension: Extension;
+    private extension: MarkdownConverterExtension;
 
     /**
      * The workspace-folder which has been chosen by the user.
@@ -49,7 +49,7 @@ export class ConversionRunner
      * @param extension
      * The extension the runner belongs to.
      */
-    public constructor(extension: Extension)
+    public constructor(extension: MarkdownConverterExtension)
     {
         this.extension = extension;
     }

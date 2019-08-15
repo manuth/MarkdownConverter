@@ -1,14 +1,17 @@
-import { Extension } from "../extension";
+import { Extension } from "../System/Extensibility/Extension";
 
 /**
  * Represents a task.
+ *
+ * @template TExtension
+ * The type of the extension.
  */
-export abstract class Task
+export abstract class Task<TExtension extends Extension = Extension>
 {
     /**
      * The extension this task belongs to.
      */
-    private extension: Extension;
+    private extension: TExtension;
 
     /**
      * Initializes a new instance of the `Task` class.
@@ -16,7 +19,7 @@ export abstract class Task
      * @param extension
      * The extension this task belongs to.
      */
-    public constructor(extension: Extension)
+    public constructor(extension: TExtension)
     {
         this.extension = extension;
     }
@@ -27,11 +30,6 @@ export abstract class Task
     public get Extension()
     {
         return this.extension;
-    }
-
-    public set Extension(value)
-    {
-        this.extension = value;
     }
 
     /**

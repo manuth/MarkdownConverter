@@ -1,5 +1,5 @@
 import { extensions, TextDocument, workspace } from "vscode";
-import { Extension } from "../extension";
+import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 import { MarkdownFileNotFoundException } from "../MarkdownFileNotFoundException";
 import { ConversionTask } from "./ConversionTask";
 
@@ -14,7 +14,7 @@ export class ConvertAllTask extends ConversionTask
      * @param extension
      * The extension the task belongs to.
      */
-    public constructor(extension: Extension)
+    public constructor(extension: MarkdownConverterExtension)
     {
         super(extension);
     }

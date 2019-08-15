@@ -1,6 +1,6 @@
 import { EOL } from "os";
 import { TextDocument, workspace } from "vscode";
-import { Extension } from "../extension";
+import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 import { ConvertAllTask } from "./ConvertAllTask";
 
 /**
@@ -14,7 +14,7 @@ export class ChainTask extends ConvertAllTask
      * @param extension
      * The extension the task belongs to.
      */
-    public constructor(extension: Extension)
+    public constructor(extension: MarkdownConverterExtension)
     {
         super(extension);
     }

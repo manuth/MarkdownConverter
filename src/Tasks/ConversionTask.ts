@@ -1,4 +1,4 @@
-import { Extension } from "../extension";
+import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 import { ConversionRunner } from "./ConversionRunner";
 import { PuppeteerTask } from "./PuppeteerTask";
 
@@ -18,7 +18,7 @@ export abstract class ConversionTask extends PuppeteerTask
      * @param extension
      * The extension the task belongs to.
      */
-    public constructor(extension: Extension)
+    public constructor(extension: MarkdownConverterExtension)
     {
         super(extension);
         this.conversionRunner = new ConversionRunner(this.Extension);
