@@ -1,7 +1,9 @@
 {
     "SuccessMessage": "Successfully wrote the {0}-file to \"{1}\".",
     "OpenFileLabel": "Open File",
-    "UnknownException": "{0}: {1}",
+    "UncaughtException": "An unexpected error occurred",
+    "UnknownException": "{{UncaughtException}}:\n{0}: {1}",
+    "UnknownError": "{{UncaughtException}}:\n{0}",
     "FileException": "Couldn't access \"{0}\".",
     "MarkdownFileException": "Couldn't find a markdown-file.",
     "YAMLException": "The YAML-block is malformatted. Line {0}, column {1}.",

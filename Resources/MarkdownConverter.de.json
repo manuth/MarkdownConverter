@@ -1,6 +1,7 @@
 {
     "SuccessMessage": "Die konvertierte {0}-Datei wurde erfolgreich nach \"{1}\" geschrieben.",
     "OpenFileLabel": "Datei Öffnen",
+    "UncaughtException": "Ein unerwarteter Fehler ist aufgetreten",
     "FileException": "Auf die Datei \"{0}\" konnte nicht zugegriffen werden.",
     "MarkdownFileException": "Es konnte keine Markdown-Datei gefunden werden.",
     "YAMLException": "Fehler: Der YAML-Block ist nicht richtig formatiert. Zeile {0}, Spalte {1}.",

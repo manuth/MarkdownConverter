@@ -1,4 +1,4 @@
-import { CultureInfo, ResourceManager } from "localized-resource-manager";
+import { CultureInfo, IResourceManager, MustacheResourceManager, ResourceManager } from "localized-resource-manager";
 import Path = require("path");
 
 /**
@@ -9,7 +9,8 @@ export class Resources
     /**
      * The resources.
      */
-    private static resources = new ResourceManager(Path.join(__dirname, "..", "..", "Resources", "MarkdownConverter"));
+    private static resources = new MustacheResourceManager(
+        new ResourceManager(Path.join(__dirname, "..", "..", "Resources", "MarkdownConverter")));
 
     /**
      * The files.
@@ -28,7 +29,7 @@ export class Resources
     /**
      * Gets the resources.
      */
-    public static get Resources(): ResourceManager
+    public static get Resources(): IResourceManager
     {
         return this.resources;
     }
@@ -36,7 +37,7 @@ export class Resources
     /**
      * Gets the files.
      */
-    public static get Files(): ResourceManager
+    public static get Files(): IResourceManager
     {
         return this.files;
     }
