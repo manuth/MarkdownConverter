@@ -1,8 +1,11 @@
 import { EOL } from "os";
+import Format = require("string-template");
 import { Progress, TextDocument, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
+import { Resources } from "../../Properties/Resources";
 import { ConvertAllTask } from "./ConvertAllTask";
+import { IProgressState } from "./IProgressState";
 
 /**
  * Represents a task for chaining multiple documents.
@@ -23,11 +26,36 @@ export class ChainTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    protected async ExecuteTask(fileReporter?: Progress<IConvertedFile>)
+    public get Title()
+    {
+        return Resources.Resources.Get<string>("TaskTitle.Chain");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected async ExecuteTask(progressReporter: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
     {
         let document: TextDocument;
-        let documents = await this.GetDocuments();
+        let documents: TextDocument[] = [];
         let contents: string[];
+
+        progressReporter.report(
+            {
+                message: Resources.Resources.Get("Progress.SearchDocuments")
+            });
+
+        documents = await this.GetDocuments();
+
+        progressReporter.report(
+            {
+                message: Format(Resources.Resources.Get("Progress.DocumentsFound"), documents.length)
+            });
+
+        progressReporter.report(
+            {
+                message: Resources.Resources.Get("Progress.ChainDocuments")
+            });
 
         documents.sort(
             (x, y) =>
@@ -43,6 +71,6 @@ export class ChainTask extends ConvertAllTask
                 content: contents.join(EOL + EOL)
             });
 
-        await this.ConversionRunner.Execute(document, fileReporter);
+        await this.ConversionRunner.Execute(document, progressReporter, fileReporter);
     }
 }

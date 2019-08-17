@@ -1,4 +1,3 @@
-import ChildProcess = require("child_process");
 import Clone = require("clone");
 import { CultureInfo } from "culture-info";
 import Template = require("es6-template-string");
@@ -10,6 +9,7 @@ import Checkbox = require("markdown-it-checkbox");
 import MarkdownItEmoji = require("markdown-it-emoji");
 import MarkdownItToc = require("markdown-it-table-of-contents");
 import Path = require("path");
+import Format = require("string-template");
 import TwEmoji = require("twemoji");
 import { isNullOrUndefined } from "util";
 import { Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
@@ -26,6 +26,7 @@ import { ListType } from "../Documents/ListType";
 import { Slugifier } from "../Documents/Slugifier";
 import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
 import { FileException } from "../IO/FileException";
+import { IProgressState } from "./IProgressState";
 
 /**
  * Provides the functionality to load settings and run a `Converter`.
@@ -72,7 +73,7 @@ export class ConversionRunner
     /**
      * Executes the underlying `Converter`.
      */
-    public async Execute(document: TextDocument, fileReporter?: Progress<IConvertedFile>): Promise<void>
+    public async Execute(document: TextDocument, progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         let tasks: Array<Promise<void>> = [];
         let converter: Converter;
@@ -84,6 +85,14 @@ export class ConversionRunner
         if (!fileReporter)
         {
             fileReporter = {
+                report()
+                { }
+            };
+        }
+
+        if (!progressReporter)
+        {
+            progressReporter = {
                 report()
                 { }
             };
@@ -107,7 +116,7 @@ export class ConversionRunner
 
         workspaceRoot = !isNullOrUndefined(currentWorkspace) ? currentWorkspace.uri.fsPath : null;
         converter = await this.LoadConverter(workspaceRoot || documentFolder, document);
-        await converter.Initialize();
+        await converter.Initialize(progressReporter);
 
         for (let type of Settings.Default.ConversionType)
         {
@@ -119,6 +128,11 @@ export class ConversionRunner
                     let workspaceFolderRequired: boolean;
                     let extension: string;
                     let context: object;
+
+                    progressReporter.report(
+                        {
+                            message: Format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
+                        });
 
                     switch (type)
                     {
@@ -173,24 +187,12 @@ export class ConversionRunner
                                 this.basename = parsedSourcePath.name;
                                 this.extension = extension;
                             }
-
-                            /**
-                             * Either the path of the workspace-folder or the path to the folder of the document.
-                             */
-                            public get workspaceFolder()
-                            {
-                                workspaceFolderRequired = isNullOrUndefined(workspaceFolder);
-
-                                if (workspaceFolderRequired)
-                                {
-                                    return "";
-                                }
-                                else
-                                {
-                                    return workspaceFolder;
-                                }
-                            }
                         }();
+
+                    progressReporter.report(
+                        {
+                            message: Resources.Resources.Get("Progress.ResolveFileName")
+                        });
 
                     do
                     {
@@ -229,7 +231,12 @@ export class ConversionRunner
                     while (workspaceFolderRequired);
 
                     await FileSystem.ensureDir(Path.dirname(destinationPath));
-                    await converter.Start(type, destinationPath);
+                    await converter.Start(type, destinationPath, progressReporter);
+
+                    progressReporter.report(
+                        {
+                            message: Format("ConverterFinished", ConversionType[type])
+                        });
 
                     fileReporter.report(
                         {

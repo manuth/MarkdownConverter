@@ -10,12 +10,12 @@ import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
 import { Resources } from "./Properties/Resources";
 import { Extension } from "./System/Extensibility/Extension";
 import { FileException } from "./System/IO/FileException";
-import { YAMLException } from "./System/YAML/YAMLException";
 import { ChainTask } from "./System/Tasks/ChainTask";
 import { ChromiumNotFoundException } from "./System/Tasks/ChromiumNotFoundException";
 import { ConvertAllTask } from "./System/Tasks/ConvertAllTask";
 import { ConvertTask } from "./System/Tasks/ConvertTask";
 import { PuppeteerTask } from "./System/Tasks/PuppeteerTask";
+import { YAMLException } from "./System/YAML/YAMLException";
 
 /**
  * Represents the `Markdown Converter` extension.
@@ -95,7 +95,8 @@ export class MarkdownConverterExtension extends Extension
             if (task instanceof ConvertAllTask)
             {
                 fileReporter = {
-                    report() { }
+                    report()
+                    { }
                 };
             }
             else
@@ -103,7 +104,16 @@ export class MarkdownConverterExtension extends Extension
                 fileReporter = this.fileReporter;
             }
 
-            task.Execute(fileReporter);
+            window.withProgress(
+                {
+                    cancellable: true,
+                    location: ProgressLocation.Notification,
+                    title: task.Title
+                },
+                async (progressReporter) =>
+                {
+                    await task.Execute(progressReporter, fileReporter);
+                });
         }
         catch (exception)
         {

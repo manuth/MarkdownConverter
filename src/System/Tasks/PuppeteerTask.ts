@@ -4,6 +4,7 @@ import { Progress } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { ChromiumNotFoundException } from "./ChromiumNotFoundException";
+import { IProgressState } from "./IProgressState";
 import { Task } from "./Task";
 
 /**
@@ -36,11 +37,11 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
      * @param fileReporter
      * A component for reporting converted files.
      */
-    public async Execute(fileReporter?: Progress<IConvertedFile>)
+    public async Execute(progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
     {
         if (await FileSystem.pathExists(Puppeteer.executablePath()))
         {
-            await this.ExecuteTask(fileReporter);
+            await this.ExecuteTask(progressReporter, fileReporter);
         }
         else
         {
@@ -51,5 +52,5 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
     /**
      * Executes the task.
      */
-    protected abstract async ExecuteTask(fileReporter?: Progress<IConvertedFile>): Promise<void>;
+    protected abstract async ExecuteTask(progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>): Promise<void>;
 }

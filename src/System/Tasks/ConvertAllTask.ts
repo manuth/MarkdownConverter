@@ -1,8 +1,11 @@
+import Format = require("string-template");
 import { extensions, Progress, TextDocument, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException";
+import { Resources } from "../../Properties/Resources";
 import { ConversionTask } from "./ConversionTask";
+import { IProgressState } from "./IProgressState";
 
 /**
  * Represents a task for converting all documents in the workspace.
@@ -23,7 +26,15 @@ export class ConvertAllTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    public async Execute(fileReporter?: Progress<IConvertedFile>)
+    public get Title()
+    {
+        return Resources.Resources.Get<string>("TaskTitle.ConvertAll");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public async Execute(progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
     {
         if ((await this.GetDocuments()).length === 0)
         {
@@ -31,18 +42,50 @@ export class ConvertAllTask extends ConversionTask
         }
         else
         {
-            return super.Execute(fileReporter);
+            return super.Execute(progressReporter, fileReporter);
         }
     }
 
     /**
      * @inheritdoc
      */
-    protected async ExecuteTask(fileReporter?: Progress<IConvertedFile>)
+    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
     {
-        for (let document of await this.GetDocuments())
+        let documents: TextDocument[];
+        let totalCount: number;
+        let progress = 0;
+
+        progressReporter.report(
+            {
+                message: Resources.Resources.Get("Progress.SearchDocuments")
+            });
+
+        documents = await this.GetDocuments();
+        totalCount = documents.length;
+
+        progressReporter.report(
+            {
+                message: Format(Resources.Resources.Get("Progress.DocumentsFound"), totalCount)
+            });
+
+        for (let i = 0; i < documents.length; i++)
         {
-            await this.ConversionRunner.Execute(document, fileReporter);
+            let document = documents[i];
+            let progressState: IProgressState = {};
+            let newProgress = ((i + 1) / totalCount) * 100;
+
+            progressState = {
+                message: Format(Resources.Resources.Get("Progress.CollectionStep"), i + 1, totalCount)
+            };
+
+            if (newProgress > progress)
+            {
+                progressState.increment = newProgress - progress;
+                progress = newProgress;
+            }
+
+            await this.ConversionRunner.Execute(document, null, fileReporter);
+            progressReporter.report(progressState);
         }
     }
 

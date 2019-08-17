@@ -8,9 +8,12 @@ import Puppeteer = require("puppeteer");
 import { TempDirectory } from "temp-filesystem";
 import URL = require("url");
 import { isNullOrUndefined, promisify } from "util";
+import { Progress } from "vscode";
 import Scrape = require("website-scraper");
+import { Resources } from "../Properties/Resources";
 import { Document } from "../System/Documents/Document";
 import { FileException } from "../System/IO/FileException";
+import { IProgressState } from "../System/Tasks/IProgressState";
 import { ConversionType } from "./ConversionType";
 import { ConverterPlugin } from "./ConverterPlugin";
 
@@ -139,7 +142,7 @@ export class Converter
     /**
      * Initializes the converter.
      */
-    public async Initialize()
+    public async Initialize(progressReporter?: Progress<IProgressState>)
     {
         if (this.Initialized || this.Disposed)
         {
@@ -147,6 +150,11 @@ export class Converter
         }
         else
         {
+            progressReporter.report(
+                {
+                    message: Resources.Resources.Get("Progress.LaunchWebserver")
+                });
+
             this.portNumber = await PortFinder();
             this.webServer = (Server.createServer({
                 root: this.WorkspaceRoot,
@@ -156,6 +164,11 @@ export class Converter
             this.webServer.listen(this.portNumber, "localhost");
 
             let browserArguments = ["--disable-web-security"];
+
+            progressReporter.report(
+                {
+                    message: Resources.Resources.Get("Progress.LaunchChromium")
+                });
 
             try
             {
@@ -206,7 +219,7 @@ export class Converter
      * @param path
      * The path to save the converted file to.
      */
-    public async Start(conversionType: ConversionType, path: string): Promise<void>
+    public async Start(conversionType: ConversionType, path: string, progressReporter?: Progress<IProgressState>): Promise<void>
     {
         if (!this.Initialized)
         {
@@ -217,11 +230,21 @@ export class Converter
             switch (conversionType)
             {
                 case ConversionType.HTML:
+                    progressReporter.report(
+                        {
+                            message: Resources.Resources.Get("Progress.WriteHTML")
+                        });
+
                     await FileSystem.writeFile(path, await this.Document.Render());
                     break;
                 case ConversionType.SelfContainedHTML:
                     let tempDir = new TempDirectory();
                     await FileSystem.remove(tempDir.FullName);
+
+                    progressReporter.report(
+                        {
+                            message: Resources.Resources.Get("Progress.Scrape")
+                        });
 
                     await Scrape(
                         {
@@ -233,6 +256,11 @@ export class Converter
                                     Path.basename(path))
                             ]
                         } as any);
+
+                    progressReporter.report(
+                        {
+                            message: Resources.Resources.Get("Progress.ScrapeFolder")
+                        });
 
                     for (let filename of await promisify(Glob)("**/*", { cwd: tempDir.FullName }))
                     {
@@ -248,6 +276,11 @@ export class Converter
                     try
                     {
                         let page = await this.Browser.newPage();
+
+                        progressReporter.report(
+                            {
+                                message: Resources.Resources.Get("Progress.ChromiumPage")
+                            });
 
                         page.on(
                             "request",
@@ -299,6 +332,11 @@ export class Converter
                                     pdfOptions.footerTemplate = styles + await this.Document.Footer.Render();
                                 }
 
+                                progressReporter.report(
+                                    {
+                                        message: Resources.Resources.Get("Progress.PDF")
+                                    });
+
                                 await page.pdf(pdfOptions);
                                 break;
                             default:
@@ -311,6 +349,11 @@ export class Converter
                                 {
                                     screenshotOptions.quality = this.Document.Quality;
                                 }
+
+                                progressReporter.report(
+                                    {
+                                        message: Resources.Resources.Get("Progress.Screenshot")
+                                    });
 
                                 await page.screenshot(screenshotOptions);
                                 break;

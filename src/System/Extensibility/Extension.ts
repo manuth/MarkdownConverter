@@ -1,7 +1,7 @@
 import { CultureInfo } from "culture-info";
 import MarkdownIt = require("markdown-it");
 import Format = require("string-template");
-import { commands, env, ExtensionContext, TextEditor, Uri, ViewColumn, window, workspace } from "vscode";
+import { commands, env, ExtensionContext, ProgressLocation, TextEditor, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";
 
@@ -156,6 +156,15 @@ export class Extension
      */
     protected async ExecuteTaskInternal(task: Task)
     {
-        return task.Execute();
+        return window.withProgress(
+            {
+                cancellable: true,
+                location: ProgressLocation.Notification,
+                title: task.Title
+            },
+            async (progressReporter) =>
+            {
+                await task.Execute(progressReporter);
+            });
     }
 }

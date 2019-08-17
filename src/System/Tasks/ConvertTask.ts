@@ -2,8 +2,10 @@ import { Progress, TextDocument, window } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException";
+import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
 import { ConversionTask } from "./ConversionTask";
+import { IProgressState } from "./IProgressState";
 
 /**
  * Represens a task for converting the currently opened document.
@@ -24,9 +26,17 @@ export class ConvertTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    protected async ExecuteTask(fileReporter?: Progress<IConvertedFile>)
+    public get Title()
     {
-        return this.ConversionRunner.Execute(this.GetMarkdownDocument(), fileReporter);
+        return Resources.Resources.Get<string>("TaskTitle.Convert");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
+    {
+        return this.ConversionRunner.Execute(this.GetMarkdownDocument(), progressReporter, fileReporter);
     }
 
     /**

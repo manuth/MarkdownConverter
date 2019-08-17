@@ -1,4 +1,6 @@
+import { Progress } from "vscode";
 import { Extension } from "../Extensibility/Extension";
+import { IProgressState } from "./IProgressState";
 
 /**
  * Represents a task.
@@ -33,7 +35,12 @@ export abstract class Task<TExtension extends Extension = Extension>
     }
 
     /**
+     * Gets the title of the task.
+     */
+    public abstract get Title(): string;
+
+    /**
      * Executes the task.
      */
-    public abstract async Execute(): Promise<void>;
+    public abstract async Execute(progressReporter?: Progress<IProgressState>): Promise<void>;
 }
