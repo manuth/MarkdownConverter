@@ -165,7 +165,12 @@ export class MarkdownContributions
      */
     private LoadScripts(contributes: any, extension: Extension<any>)
     {
-        this.scripts.push(...MarkdownContributions.ResolveExtensionResources(extension, contributes["markdown.previewScripts"]));
+        let scripts = contributes["markdown.previewScripts"];
+
+        if (scripts instanceof Array)
+        {
+            this.scripts.push(...MarkdownContributions.ResolveExtensionResources(extension, scripts));
+        }
     }
 
     /**
@@ -203,6 +208,11 @@ export class MarkdownContributions
      */
     private tryLoadPreviewStyles(contributes: any, extension: Extension<any>)
     {
-        this.styles.push(...MarkdownContributions.ResolveExtensionResources(extension, contributes["markdown.previewStyles"]));
+        let styles = contributes["markdown.previewStyles"];
+
+        if (styles instanceof Array)
+        {
+            this.styles.push(...MarkdownContributions.ResolveExtensionResources(extension, styles));
+        }
     }
 }

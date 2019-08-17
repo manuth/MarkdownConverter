@@ -17,7 +17,6 @@ import { isNullOrUndefined } from "util";
 import { TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType";
 import { Converter } from "../Conversion/Converter";
-import { MarkdownContributions } from "../MarkdownContributions";
 import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 import { Resources } from "../Properties/Resources";
 import { Settings } from "../Properties/Settings";
@@ -25,6 +24,7 @@ import { Document } from "../System/Documents/Document";
 import { EmojiType } from "../System/Documents/EmojiType";
 import { ListType } from "../System/Documents/ListType";
 import { Slugifier } from "../System/Documents/Slugifier";
+import { MarkdownContributions } from "../System/Extensibility/MarkdownContributions";
 import { FileException } from "../System/IO/FileException";
 import { Utilities } from "../Utilities";
 

@@ -23,7 +23,7 @@ export class ConvertTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    public async ExecuteTask()
+    protected async ExecuteTask()
     {
         return this.ConversionRunner.Execute(this.GetMarkdownDocument());
     }
