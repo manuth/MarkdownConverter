@@ -26,6 +26,11 @@ export class Extension
     private systemParserFixEditor: TextEditor;
 
     /**
+     * A promise for waiting for the system-parser to be fixed.
+     */
+    private systemParserFixPromise: Promise<void>;
+
+    /**
      * A method for resolving the system-parser fix.
      */
     private systemParserFixResolver: () => void;
@@ -35,7 +40,12 @@ export class Extension
      */
     public constructor()
     {
-        this.systemParserFixResolver = () => { };
+        this.systemParserFixPromise = new Promise(
+            (resolve) =>
+            {
+                this.systemParserFixResolver = resolve;
+            });
+
         Resources.Culture = new CultureInfo(env.language);
     }
 
@@ -96,20 +106,17 @@ export class Extension
     {
         let document = await workspace.openTextDocument(Uri.parse("untitled:.md"));
 
-        let result = new Promise(
-            (resolve) =>
-            {
-                this.systemParserFixResolver = resolve;
-            });
+        if (!this.VSCodeParser)
+        {
+            this.systemParserFixEditor = await window.showTextDocument(
+                document,
+                {
+                    viewColumn: ViewColumn.Beside,
+                    preview: true
+                });
+        }
 
-        this.systemParserFixEditor = await window.showTextDocument(
-            document,
-            {
-                viewColumn: ViewColumn.Beside,
-                preview: true
-            });
-
-        return result;
+        return this.systemParserFixPromise;
     }
 
     /**
