@@ -6,8 +6,11 @@ import Format = require("string-template");
 import { commands, ExtensionContext, Progress, ProgressLocation, window } from "vscode";
 import { ConversionType } from "./Conversion/ConversionType";
 import { IConvertedFile } from "./Conversion/IConvertedFile";
+import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
 import { Resources } from "./Properties/Resources";
 import { Extension } from "./System/Extensibility/Extension";
+import { FileException } from "./System/IO/FileException";
+import { YAMLException } from "./System/YAML/YAMLException";
 import { ChainTask } from "./Tasks/ChainTask";
 import { ChromiumNotFoundException } from "./Tasks/ChromiumNotFoundException";
 import { ConvertAllTask } from "./Tasks/ConvertAllTask";
@@ -164,6 +167,13 @@ export class MarkdownConverterExtension extends Extension
                             Resources.Resources.Get("Yes"),
                             Resources.Resources.Get("No"))) === Resources.Resources.Get("Yes"));
                 }
+            }
+            else if (
+                exception instanceof FileException ||
+                exception instanceof YAMLException ||
+                exception instanceof MarkdownFileNotFoundException)
+            {
+                window.showErrorMessage(exception.Message);
             }
             else
             {
