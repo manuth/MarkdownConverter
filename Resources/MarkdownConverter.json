@@ -1,5 +1,6 @@
 {
     "SuccessMessage": "Successfully wrote the {0}-file to \"{1}\".",
+    "CollectionFinished": "The documents have been converted successfully. Do you want to show info about the files?",
     "OpenFileLabel": "Open File",
     "UncaughtException": "An unexpected error occurred",
     "UnknownException": "{{UncaughtException}}:\n{0}: {1}",

@@ -90,30 +90,49 @@ export class MarkdownConverterExtension extends Extension
     {
         try
         {
-            let fileReporter: Progress<IConvertedFile>;
-
-            if (task instanceof ConvertAllTask)
+            let run = async (fileReporter: Progress<IConvertedFile>) =>
             {
-                fileReporter = {
-                    report()
-                    { }
-                };
+                await window.withProgress(
+                    {
+                        cancellable: true,
+                        location: ProgressLocation.Notification,
+                        title: task.Title
+                    },
+                    async (progressReporter) =>
+                    {
+                        await task.Execute(progressReporter, fileReporter);
+                    });
+            };
+
+            if (task instanceof ConvertAllTask &&
+                !(task instanceof ChainTask))
+            {
+                let files: IConvertedFile[] = [];
+
+                await run(
+                    {
+                        report(file)
+                        {
+                            files.push(file);
+                        }
+                    });
+
+                if (
+                    await(window.showInformationMessage(
+                        Resources.Resources.Get("CollectionFinished"),
+                        Resources.Resources.Get("Yes"),
+                        Resources.Resources.Get("No"))) === Resources.Resources.Get<string>("Yes"))
+                {
+                    for (let file of files)
+                    {
+                        this.fileReporter.report(file);
+                    }
+                }
             }
             else
             {
-                fileReporter = this.fileReporter;
+                await run(this.fileReporter);
             }
-
-            window.withProgress(
-                {
-                    cancellable: true,
-                    location: ProgressLocation.Notification,
-                    title: task.Title
-                },
-                async (progressReporter) =>
-                {
-                    await task.Execute(progressReporter, fileReporter);
-                });
         }
         catch (exception)
         {
