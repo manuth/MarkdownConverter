@@ -1,4 +1,4 @@
-import { Exception } from "../System/Exception";
+import { Exception } from "../Exception";
 
 /**
  * An exception that occurrs when chromium could not be found or is not installed.

@@ -1,4 +1,4 @@
-import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { ConversionRunner } from "./ConversionRunner";
 import { PuppeteerTask } from "./PuppeteerTask";
 

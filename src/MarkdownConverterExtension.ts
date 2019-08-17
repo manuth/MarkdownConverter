@@ -11,11 +11,11 @@ import { Resources } from "./Properties/Resources";
 import { Extension } from "./System/Extensibility/Extension";
 import { FileException } from "./System/IO/FileException";
 import { YAMLException } from "./System/YAML/YAMLException";
-import { ChainTask } from "./Tasks/ChainTask";
-import { ChromiumNotFoundException } from "./Tasks/ChromiumNotFoundException";
-import { ConvertAllTask } from "./Tasks/ConvertAllTask";
-import { ConvertTask } from "./Tasks/ConvertTask";
-import { PuppeteerTask } from "./Tasks/PuppeteerTask";
+import { ChainTask } from "./System/Tasks/ChainTask";
+import { ChromiumNotFoundException } from "./System/Tasks/ChromiumNotFoundException";
+import { ConvertAllTask } from "./System/Tasks/ConvertAllTask";
+import { ConvertTask } from "./System/Tasks/ConvertTask";
+import { PuppeteerTask } from "./System/Tasks/PuppeteerTask";
 
 /**
  * Represents the `Markdown Converter` extension.

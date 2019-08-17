@@ -3,7 +3,7 @@ import MarkdownIt = require("markdown-it");
 import Format = require("string-template");
 import { commands, env, ExtensionContext, TextEditor, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
-import { Task } from "../../Tasks/Task";
+import { Task } from "../Tasks/Task";
 
 /**
  * Represents an extension.

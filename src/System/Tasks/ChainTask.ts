@@ -1,7 +1,7 @@
 import { EOL } from "os";
 import { Progress, TextDocument, workspace } from "vscode";
-import { IConvertedFile } from "../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
+import { IConvertedFile } from "../../Conversion/IConvertedFile";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { ConvertAllTask } from "./ConvertAllTask";
 
 /**

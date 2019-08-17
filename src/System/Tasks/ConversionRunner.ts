@@ -13,19 +13,19 @@ import Path = require("path");
 import TwEmoji = require("twemoji");
 import { isNullOrUndefined } from "util";
 import { Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
-import { ConversionType } from "../Conversion/ConversionType";
-import { Converter } from "../Conversion/Converter";
-import { IConvertedFile } from "../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
-import { Resources } from "../Properties/Resources";
-import { Settings } from "../Properties/Settings";
-import { Document } from "../System/Documents/Document";
-import { EmojiType } from "../System/Documents/EmojiType";
-import { ListType } from "../System/Documents/ListType";
-import { Slugifier } from "../System/Documents/Slugifier";
-import { MarkdownContributions } from "../System/Extensibility/MarkdownContributions";
-import { FileException } from "../System/IO/FileException";
-import { Utilities } from "../Utilities";
+import { ConversionType } from "../../Conversion/ConversionType";
+import { Converter } from "../../Conversion/Converter";
+import { IConvertedFile } from "../../Conversion/IConvertedFile";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
+import { Resources } from "../../Properties/Resources";
+import { Settings } from "../../Properties/Settings";
+import { Utilities } from "../../Utilities";
+import { Document } from "../Documents/Document";
+import { EmojiType } from "../Documents/EmojiType";
+import { ListType } from "../Documents/ListType";
+import { Slugifier } from "../Documents/Slugifier";
+import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
+import { FileException } from "../IO/FileException";
 
 /**
  * Provides the functionality to load settings and run a `Converter`.

@@ -1,7 +1,7 @@
 import { extensions, Progress, TextDocument, workspace } from "vscode";
-import { IConvertedFile } from "../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
-import { MarkdownFileNotFoundException } from "../MarkdownFileNotFoundException";
+import { IConvertedFile } from "../../Conversion/IConvertedFile";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
+import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException";
 import { ConversionTask } from "./ConversionTask";
 
 /**

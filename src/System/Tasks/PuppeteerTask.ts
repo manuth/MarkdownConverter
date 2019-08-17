@@ -1,8 +1,8 @@
 import FileSystem = require("fs-extra");
 import Puppeteer = require("puppeteer");
 import { Progress } from "vscode";
-import { IConvertedFile } from "../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
+import { IConvertedFile } from "../../Conversion/IConvertedFile";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { ChromiumNotFoundException } from "./ChromiumNotFoundException";
 import { Task } from "./Task";
 
