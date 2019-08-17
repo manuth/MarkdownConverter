@@ -1,5 +1,6 @@
 import { EOL } from "os";
-import { TextDocument, workspace } from "vscode";
+import { Progress, TextDocument, workspace } from "vscode";
+import { IConvertedFile } from "../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 import { ConvertAllTask } from "./ConvertAllTask";
 
@@ -22,7 +23,7 @@ export class ChainTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    protected async ExecuteTask()
+    protected async ExecuteTask(fileReporter?: Progress<IConvertedFile>)
     {
         let document: TextDocument;
         let documents = await this.GetDocuments();
@@ -42,6 +43,6 @@ export class ChainTask extends ConvertAllTask
                 content: contents.join(EOL + EOL)
             });
 
-        await this.ConversionRunner.Execute(document);
+        await this.ConversionRunner.Execute(document, fileReporter);
     }
 }

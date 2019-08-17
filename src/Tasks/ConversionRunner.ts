@@ -10,13 +10,12 @@ import Checkbox = require("markdown-it-checkbox");
 import MarkdownItEmoji = require("markdown-it-emoji");
 import MarkdownItToc = require("markdown-it-table-of-contents");
 import Path = require("path");
-import Format = require("string-template");
-import Transliteration = require("transliteration");
 import TwEmoji = require("twemoji");
 import { isNullOrUndefined } from "util";
-import { TextDocument, window, workspace, WorkspaceFolder } from "vscode";
+import { Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType";
 import { Converter } from "../Conversion/Converter";
+import { IConvertedFile } from "../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 import { Resources } from "../Properties/Resources";
 import { Settings } from "../Properties/Settings";
@@ -73,7 +72,7 @@ export class ConversionRunner
     /**
      * Executes the underlying `Converter`.
      */
-    public async Execute(document: TextDocument): Promise<void>
+    public async Execute(document: TextDocument, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         let tasks: Array<Promise<void>> = [];
         let converter: Converter;
@@ -81,6 +80,14 @@ export class ConversionRunner
         let documentFolder = document.isUntitled ? null : Path.dirname(document.fileName);
         let parsedSourcePath = Path.parse(document.fileName);
         let currentWorkspace: WorkspaceFolder;
+
+        if (!fileReporter)
+        {
+            fileReporter = {
+                report()
+                { }
+            };
+        }
 
         if (document.isUntitled)
         {
@@ -224,31 +231,11 @@ export class ConversionRunner
                     await FileSystem.ensureDir(Path.dirname(destinationPath));
                     await converter.Start(type, destinationPath);
 
-                    (async () =>
-                    {
-                        let result = await (window.showInformationMessage(
-                            Format(Resources.Resources.Get("SuccessMessage"), ConversionType[type], destinationPath),
-                            Resources.Resources.Get("OpenFileLabel")) as Promise<string>);
-
-                        if (result === Resources.Resources.Get("OpenFileLabel"))
+                    fileReporter.report(
                         {
-                            switch (process.platform)
-                            {
-                                case "win32":
-                                    ChildProcess.exec(`"${destinationPath}"`);
-                                    break;
-                                case "darwin":
-                                    ChildProcess.exec(`bash -c 'open "${destinationPath}"'`);
-                                    break;
-                                case "linux":
-                                    ChildProcess.exec(`bash -c 'xdg-open "${destinationPath}"'`);
-                                    break;
-                                default:
-                                    window.showWarningMessage(Resources.Resources.Get("UnsupportedPlatformException"));
-                                    break;
-                            }
-                        }
-                    })();
+                            Type: type,
+                            FileName: destinationPath
+                        });
                 })());
         }
 

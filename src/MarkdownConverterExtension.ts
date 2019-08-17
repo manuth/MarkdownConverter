@@ -1,21 +1,64 @@
+import ChildProcess = require("child_process");
 import FileSystem = require("fs-extra");
 import Path = require("path");
 import Puppeteer = require("puppeteer");
 import Format = require("string-template");
-import { commands, ExtensionContext, ProgressLocation, window } from "vscode";
+import { commands, ExtensionContext, Progress, ProgressLocation, window } from "vscode";
+import { ConversionType } from "./Conversion/ConversionType";
+import { IConvertedFile } from "./Conversion/IConvertedFile";
 import { Resources } from "./Properties/Resources";
 import { Extension } from "./System/Extensibility/Extension";
 import { ChainTask } from "./Tasks/ChainTask";
 import { ChromiumNotFoundException } from "./Tasks/ChromiumNotFoundException";
 import { ConvertAllTask } from "./Tasks/ConvertAllTask";
 import { ConvertTask } from "./Tasks/ConvertTask";
-import { Task } from "./Tasks/Task";
+import { PuppeteerTask } from "./Tasks/PuppeteerTask";
 
 /**
  * Represents the `Markdown Converter` extension.
  */
 export class MarkdownConverterExtension extends Extension
 {
+    /**
+     * Provides the functionality to report converted files.
+     */
+    private fileReporter: Progress<IConvertedFile>;
+
+    /**
+     * Initializes a new instance of the `MarkdownConverterExtension` class.
+     */
+    public constructor()
+    {
+        super();
+        this.fileReporter = {
+            async report(file)
+            {
+                let result = await (window.showInformationMessage(
+                    Format(Resources.Resources.Get("SuccessMessage"), ConversionType[file.Type], file.FileName),
+                    Resources.Resources.Get("OpenFileLabel")));
+
+                if (result === Resources.Resources.Get("OpenFileLabel"))
+                {
+                    switch (process.platform)
+                    {
+                        case "win32":
+                            ChildProcess.exec(`"${file.FileName}"`);
+                            break;
+                        case "darwin":
+                            ChildProcess.exec(`bash -c 'open "${file.FileName}"'`);
+                            break;
+                        case "linux":
+                            ChildProcess.exec(`bash -c 'xdg-open "${file.FileName}"'`);
+                            break;
+                        default:
+                            window.showWarningMessage(Resources.Resources.Get("UnsupportedPlatformException"));
+                            break;
+                    }
+                }
+            }
+        };
+    }
+
     /**
      * Gets the chromium-revision of the extension.
      */
@@ -40,11 +83,24 @@ export class MarkdownConverterExtension extends Extension
     /**
      * @inheritdoc
      */
-    protected async ExecuteTaskInternal(task: Task)
+    protected async ExecuteTaskInternal(task: PuppeteerTask)
     {
         try
         {
-            await super.ExecuteTaskInternal(task);
+            let fileReporter: Progress<IConvertedFile>;
+
+            if (task instanceof ConvertAllTask)
+            {
+                fileReporter = {
+                    report() { }
+                };
+            }
+            else
+            {
+                fileReporter = this.fileReporter;
+            }
+
+            task.Execute(fileReporter);
         }
         catch (exception)
         {

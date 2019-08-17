@@ -1,4 +1,5 @@
-import { extensions, TextDocument, workspace } from "vscode";
+import { extensions, Progress, TextDocument, workspace } from "vscode";
+import { IConvertedFile } from "../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 import { MarkdownFileNotFoundException } from "../MarkdownFileNotFoundException";
 import { ConversionTask } from "./ConversionTask";
@@ -22,7 +23,7 @@ export class ConvertAllTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    public async Execute()
+    public async Execute(fileReporter?: Progress<IConvertedFile>)
     {
         if ((await this.GetDocuments()).length === 0)
         {
@@ -30,18 +31,18 @@ export class ConvertAllTask extends ConversionTask
         }
         else
         {
-            return super.Execute();
+            return super.Execute(fileReporter);
         }
     }
 
     /**
      * @inheritdoc
      */
-    protected async ExecuteTask()
+    protected async ExecuteTask(fileReporter?: Progress<IConvertedFile>)
     {
         for (let document of await this.GetDocuments())
         {
-            await this.ConversionRunner.Execute(document);
+            await this.ConversionRunner.Execute(document, fileReporter);
         }
     }
 
