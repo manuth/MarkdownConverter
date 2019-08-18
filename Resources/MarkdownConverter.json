@@ -17,6 +17,8 @@
     "UpdateFailed": "The download failed.\nYou may want to declare \"http.proxy\" or \"http.proxyStrictSSL\" if you're using a proxy.\nDo you want to retry the download?",
     "DestinationPath": "Please specify a destination-path to save the document to.",
     "DestinationPathExample": "e.g. C:\\Temp or /tmp/",
+    "DocumentName": "Please specify the name of the document to create.",
+    "DocumentNameExample": "e.g. Handbook or Manual",
     "Progress": {
         "LaunchWebserver": "Initializing a web-server…",
         "LaunchChromium": "Launching a chromium-instance…",

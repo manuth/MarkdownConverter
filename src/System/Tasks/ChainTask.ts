@@ -1,6 +1,8 @@
+import FileSystem = require("fs-extra");
 import { EOL } from "os";
+import Path = require("path");
 import Format = require("string-template");
-import { Progress, TextDocument, workspace } from "vscode";
+import { Progress, TextDocument, window, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
@@ -37,8 +39,19 @@ export class ChainTask extends ConvertAllTask
     protected async ExecuteTask(progressReporter: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
     {
         let document: TextDocument;
+        let documentName: string;
         let documents: TextDocument[] = [];
         let contents: string[];
+
+        while (!documentName)
+        {
+            documentName = await window.showInputBox(
+                {
+                    ignoreFocusOut: true,
+                    prompt: Resources.Resources.Get("DocumentName"),
+                    placeHolder: Resources.Resources.Get("DocumentNameExample")
+                });
+        }
 
         progressReporter.report(
             {
@@ -71,6 +84,18 @@ export class ChainTask extends ConvertAllTask
                 content: contents.join(EOL + EOL)
             });
 
-        await this.ConversionRunner.Execute(document, progressReporter, fileReporter);
+        return this.ConversionRunner.Execute(
+            document,
+            progressReporter,
+            {
+                report(file)
+                {
+                    let parsedPath = Path.parse(file.FileName);
+                    let newFileName = Path.join(parsedPath.dir, `${documentName}${parsedPath.ext}`);
+                    FileSystem.renameSync(file.FileName, newFileName);
+                    file.FileName = newFileName;
+                    fileReporter.report(file);
+                }
+            });
     }
 }
