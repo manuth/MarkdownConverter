@@ -158,13 +158,13 @@ export class Extension
     {
         return window.withProgress(
             {
-                cancellable: true,
+                cancellable: task.Cancellable,
                 location: ProgressLocation.Notification,
                 title: task.Title
             },
-            async (progressReporter) =>
+            async (progressReporter, cancellationToken) =>
             {
-                await task.Execute(progressReporter);
+                await task.Execute(progressReporter, cancellationToken);
             });
     }
 }

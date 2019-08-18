@@ -1,5 +1,5 @@
 import Format = require("string-template");
-import { extensions, Progress, TextDocument, workspace } from "vscode";
+import { CancellationToken, extensions, Progress, TextDocument, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException";
@@ -34,7 +34,15 @@ export class ConvertAllTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    public async Execute(progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
+    public get Cancellable()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>)
     {
         if ((await this.GetDocuments()).length === 0)
         {
@@ -42,14 +50,14 @@ export class ConvertAllTask extends ConversionTask
         }
         else
         {
-            return super.Execute(progressReporter, fileReporter);
+            return super.Execute(progressReporter, cancellationToken, fileReporter);
         }
     }
 
     /**
      * @inheritdoc
      */
-    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
+    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>)
     {
         let documents: TextDocument[];
         let totalCount: number;
@@ -68,7 +76,7 @@ export class ConvertAllTask extends ConversionTask
                 message: Format(Resources.Resources.Get("Progress.DocumentsFound"), totalCount)
             });
 
-        for (let i = 0; i < documents.length; i++)
+        for (let i = 0; i < documents.length && !cancellationToken.isCancellationRequested; i++)
         {
             let document = documents[i];
             let progressState: IProgressState = {};

@@ -2,7 +2,7 @@ import FileSystem = require("fs-extra");
 import { EOL } from "os";
 import Path = require("path");
 import Format = require("string-template");
-import { Progress, TextDocument, window, workspace } from "vscode";
+import { CancellationToken, Progress, TextDocument, window, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
@@ -36,7 +36,15 @@ export class ChainTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    protected async ExecuteTask(progressReporter: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
+    public get Cancellable()
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected async ExecuteTask(progressReporter: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>)
     {
         let document: TextDocument;
         let documentName: string;

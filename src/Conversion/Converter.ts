@@ -284,7 +284,7 @@ export class Converter
 
                         page.on(
                             "request",
-                            async request =>
+                            async (request) =>
                             {
                                 if (request.url() === this.URL)
                                 {
