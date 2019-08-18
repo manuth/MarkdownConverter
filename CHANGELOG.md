@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## MarkdownConverter 2.0.0
+## MarkdownConverter v2.0.0
 ### General
 It's about time to publish another more verbose release.
 This time I put lots of effort into `MarkdownConverter` to finish some features I wanted to add for a long time.
