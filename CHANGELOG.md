@@ -4,10 +4,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## MarkdownConverter Unreleased
-  - Prevented port-collisions when converting multiple files at once
+## MarkdownConverter 2.0.0
+### General
+It's about time to publish another more verbose release.
+This time I put lots of effort into `MarkdownConverter` to finish some features I wanted to add for a long time.
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v1.1.2...v1.2.0)
+One of the most notable things I think you might find very useful is
+that the destination-path is now fully customizable using the `DestinationPattern`-option.
+The `DestinationPath` and `DestinationOrigin`-options have been dropped in favor of said option.
+
+You might want to set the `DestinationPattern` to whatever pattern to save your documents to, like, for example:
+```json
+{
+  "markdownConverter.DestinationPattern": "${workspaceFolder}/output/${dirname}/${basename}.${extension}"
+}
+```
+
+Also, I finally added an option for converting all files at once and one for chaining all documents together.
+These features make great use of the `DestinationPattern`-option as this makes very clear where to store converted files.
+
+Another pretty nice thing is that now every single command reports each progress that's made.
+This makes it easier to you to check whether the conversion's still running or what's causing trouble.
+
+Continue reading to see what else changed.
+
+Thank you guys for using `MarkdownConverter` and for keeping me motivated!
+You guys are the best! 🎉
+
+## Breaking Changes
+  - Added the `DestinationPattern`-option for specifying a pattern for resolving the destination-path  
+    You can use following epressions in the `DestinationPattern`:
+    - `${workspaceFolder}`:  
+      Either the path to the `workspace`, if any, or the directory which contains the document.
+    - `${dirname}`:  
+      The relative path from the `${workspaceFolder}` to the directory which contains the document.
+    - `${basename}`:  
+      The name of the document-file without extension.
+    - `${extension}`:  
+      The file-extension of the destination-datatype.
+    - `${filename}`:  
+      The name of the document-file with its original extension.
+  - Dropped `DestinationPath` and `DestinationOrigin` in favor of `DestinationPattern`
+
+## Other Changes
+  - Prevented port-collisions when converting multiple files at once
+  - Fixed the threading-issues by automatically disabling sandboxed mode if it fails  
+    Special thanks to [@jkhsjdhjs](https://github.com/jkhsjdhjs) for reporting and also fixing this issue
+  - Improved the exception-handling
+  - Improved the stability of the code
+  - Added a command `Convert All Documents` for converting all markdown-documents in the current workspace at once
+  - Added a command `Chain All Documents` for chaining all markdown-documents in the current workspace and convert them afterwards
+  - Added a fix for loading the VSCodes `markdown-it`-instance  
+    Sadly VSCodes `markdown-it`-parser can only be loaded once a markdown-file has been opened.
+    Thus a temporary, empty markdown-file will be opened once a conversion has started
+    if the VSCode-parser has not been loaded yet.
+  - Provided the functionality to convert to self-contained html-files
+  - Added progress-report to every command
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v1.1.2...v2.0.0)
 
 ## MarkdownConverter v1.1.2
   - Implemented a clean way to handle files outside of the current workspace  
