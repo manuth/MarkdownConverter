@@ -2,7 +2,7 @@
   "name": "markdown-converter",
   "displayName": "Markdown Converter",
   "icon": "Resources/Icon.png",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "A markdown-converter for Visual Studio Code",
   "markdownDescription": "A Markdown-converter for Visual Studio Code",
   "author": "Manuel Thalmann <m@nuth.ch> (https://nuth.ch)",
