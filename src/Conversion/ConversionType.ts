@@ -4,6 +4,11 @@
 export enum ConversionType
 {
     /**
+     * Indicates a self-contained HTML-conversion.
+     */
+    SelfContainedHTML,
+
+    /**
      * Indicates an HTML-conversion.
      */
     HTML,
@@ -12,7 +17,7 @@ export enum ConversionType
      * Indicates a JPG-conversion
      */
     JPEG,
-    
+
     /**
      * Indicates a PDF-conversion.
      */

@@ -1,4 +1,4 @@
-import * as Transliteration from "transliteration";
+import Transliteration = require("transliteration");
 
 /**
  * Provides the functionality to generate slugs.
@@ -31,7 +31,7 @@ export class Slugifier
 
     /**
      * Slugifies a text.
-     * 
+     *
      * @param text
      * The text that is to be slugified.
      */
@@ -52,8 +52,16 @@ export class Slugifier
     }
 
     /**
+     * Resets the slugifier.
+     */
+    public Reset(): void
+    {
+        this.Slugs.splice(0, this.Slugs.length);
+    }
+
+    /**
      * Slugifies a text.
-     * 
+     *
      * @param text
      * The text that is to be slugified.
      */

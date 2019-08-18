@@ -1,7 +1,10 @@
 {
     "SuccessMessage": "Successfully wrote the {0}-file to \"{1}\".",
+    "CollectionFinished": "The documents have been converted successfully. Do you want to show info about the files?",
     "OpenFileLabel": "Open File",
-    "UnknownException": "{0}: {1}",
+    "UncaughtException": "An unexpected error occurred",
+    "UnknownException": "{{UncaughtException}}:\n{0}: {1}",
+    "UnknownError": "{{UncaughtException}}:\n{0}",
     "FileException": "Couldn't access \"{0}\".",
     "MarkdownFileException": "Couldn't find a markdown-file.",
     "YAMLException": "The YAML-block is malformatted. Line {0}, column {1}.",
@@ -14,6 +17,30 @@
     "UpdateFailed": "The download failed.\nYou may want to declare \"http.proxy\" or \"http.proxyStrictSSL\" if you're using a proxy.\nDo you want to retry the download?",
     "DestinationPath": "Please specify a destination-path to save the document to.",
     "DestinationPathExample": "e.g. C:\\Temp or /tmp/",
+    "DocumentName": "Please specify the name of the document to create.",
+    "DocumentNameExample": "e.g. Handbook or Manual",
+    "Progress": {
+        "LaunchWebserver": "Initializing a web-server…",
+        "LaunchChromium": "Launching a chromium-instance…",
+        "ConversionStarting": "Starting to convert the file to the {0}-type…",
+        "ResolveFileName": "Resolving the destination-filename…",
+        "WriteHTML": "Rendering and writing html-file…",
+        "Scrape": "Scraping all files and resources…",
+        "ScrapeFolder": "Moving the scraped files to the correct folder…",
+        "ChromiumPage": "Launching the page in chromium…",
+        "PDF": "Rendering a PDF-file…",
+        "Screenshot": "Taking a screenshot…",
+        "ConverterFinished": "The conversion of the {0}-file has finished",
+        "SearchDocuments": "Searching for markdown-documents…",
+        "DocumentsFound": "Found {0} markdown-documents",
+        "CollectionStep": "Converting document {0} out of {1}…",
+        "ChainDocuments": "Chaining all documents together…"
+    },
+    "TaskTitle": {
+        "Convert": "Convert Document",
+        "ConvertAll": "Convert all Documents",
+        "Chain": "Chain all Documents"
+    },
     "DateTime": {
         "Formats": {
             "Default": "yyyy-MM-dd",

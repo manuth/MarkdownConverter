@@ -25,28 +25,27 @@ export class Margin
 
     /**
      * Initializes a new instance of the Margin class.
-     * 
+     *
      * @param top
      * The top margin.
-     * 
+     *
      * @param right
      * The right margin.
-     * 
+     *
      * @param bottom
      * The bottom margin.
-     * 
+     *
      * @param left
      * The left margin.
      */
-    constructor(all: string);
-    constructor(vertical: string, horizontal: string);
+    constructor(all: string, horizontal?: string);
     constructor(top: string, right: string, bottom: string, left: string);
     constructor(top: string, right?: string, bottom?: string, left?: string)
     {
         this.top =
-        this.right =
-        this.bottom =
-        this.left = top;
+            this.right =
+            this.bottom =
+            this.left = top;
 
         if (right)
         {
@@ -71,6 +70,7 @@ export class Margin
     {
         return this.top;
     }
+
     public set Top(value: string)
     {
         this.top = value;
@@ -83,6 +83,7 @@ export class Margin
     {
         return this.right;
     }
+
     public set Right(value: string)
     {
         this.right = value;
@@ -95,6 +96,7 @@ export class Margin
     {
         return this.bottom;
     }
+
     public set Bottom(value: string)
     {
         this.bottom = value;
@@ -107,6 +109,7 @@ export class Margin
     {
         return this.left;
     }
+
     public set Left(value: string)
     {
         this.left = value;

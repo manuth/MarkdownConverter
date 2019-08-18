@@ -1,4 +1,4 @@
-import * as Format from "string-template";
+import Format = require("string-template");
 import { FileException } from "./FileException";
 
 /**
@@ -8,10 +8,10 @@ export class FileNotFoundException extends FileException
 {
     /**
      * Initializes a new instance of the FileNotFoundException class with a message and a path.
-     * 
+     *
      * @param message
      * The message of the exception.
-     * 
+     *
      * @param path
      * The path to the file which caused the exception.
      */

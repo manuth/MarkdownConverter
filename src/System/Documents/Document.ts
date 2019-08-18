@@ -1,15 +1,14 @@
-import CultureInfo from "culture-info";
-import * as Dedent from "dedent";
-import * as FrontMatter from "front-matter";
-import * as FileSystem from "fs-extra";
-import { MarkdownIt } from "markdown-it";
-import * as Mustache from "mustache";
-import * as OS from "os";
-import * as Path from "path";
+import Dedent = require("dedent");
+import FrontMatter = require("front-matter");
+import FileSystem = require("fs-extra");
+import { CultureInfo } from "localized-resource-manager";
+import MarkdownIt = require("markdown-it");
+import Mustache = require("mustache");
+import OS = require("os");
+import Path = require("path");
 import { TextDocument } from "vscode";
-import * as YAML from "yamljs";
-import { Utilities } from "../../MarkdownConverter/Utilities";
-import { ResourceManager } from "../../Properties/ResourceManager";
+import YAML = require("yamljs");
+import { Resources } from "../../Properties/Resources";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { FileException } from "../IO/FileException";
 import { YAMLException } from "../YAML/YAMLException";
@@ -30,20 +29,17 @@ export class Document extends Renderable
     /**
      * The quality of the document.
      */
-    private quality: number = 90;
+    private quality = 90;
 
     /**
      * The attributes of the document.
      */
-    private attributes: any = {
-        Author: Utilities.FullName,
-        CreationDate: new Date()
-    };
+    private attributes: { [key: string]: any } = {};
 
     /**
      * The format to print the date.
      */
-    private dateFormat: string = "Default";
+    private dateFormat = "Default";
 
     /**
      * The language to print values.
@@ -58,7 +54,7 @@ export class Document extends Renderable
     /**
      * A value indicating whether headers and footers are enabled.
      */
-    private headerFooterEnabled: boolean = false;
+    private headerFooterEnabled = false;
 
     /**
      * The header of the document.
@@ -90,9 +86,12 @@ export class Document extends Renderable
      * The stylesheets of the document.
      */
     private styleSheets: string[] = [
-        ResourceManager.Files.Get("SystemStyle")
+        Resources.Files.Get("SystemStyle")
     ];
 
+    /**
+     * The ecma-scripts of the document.
+     */
     private scripts: string[] = [];
 
     /**
@@ -102,10 +101,10 @@ export class Document extends Renderable
 
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
-     * 
+     *
      * @param document
      * The `TextDocument` to load the info from.
-     * 
+     *
      * @param config
      * The configuration to set.
      */
@@ -174,7 +173,7 @@ export class Document extends Renderable
     {
         return this.quality;
     }
-    
+
     public set Quality(value: number)
     {
         this.quality = value;
@@ -282,6 +281,7 @@ export class Document extends Renderable
     {
         return this.styleSheets;
     }
+
     public set StyleSheets(value: string[])
     {
         this.styleSheets = value;
@@ -294,35 +294,10 @@ export class Document extends Renderable
     {
         return this.scripts;
     }
+
     public set Scripts(value: string[])
     {
         this.scripts = value;
-    }
-
-    /**
-     * Renders content of the document.
-     * 
-     * @param content
-     * The content which is to be rendered.
-     */
-    protected async RenderText(content: string): Promise<string>
-    {
-        let view = {};
-
-        for (let key in this.Attributes)
-        {
-            let value = this.Attributes[key];
-
-            if (value instanceof Date || Date.parse(value))
-            {
-                value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
-            }
-
-            view[key] = value;
-        }
-
-        let html = this.parser.render(content);
-        return Mustache.render(html, view);
     }
 
     /**
@@ -380,5 +355,31 @@ export class Document extends Renderable
         };
 
         return Mustache.render(this.Template, view);
+    }
+
+    /**
+     * Renders content of the document.
+     *
+     * @param content
+     * The content which is to be rendered.
+     */
+    protected async RenderText(content: string): Promise<string>
+    {
+        let view: { [key: string]: string } = {};
+
+        for (let key in this.Attributes)
+        {
+            let value = this.Attributes[key];
+
+            if (value instanceof Date || Date.parse(value))
+            {
+                value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
+            }
+
+            view[key] = value;
+        }
+
+        let html = this.parser.render(content);
+        return Mustache.render(html, view);
     }
 }

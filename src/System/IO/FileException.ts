@@ -1,5 +1,5 @@
-import * as Format from "string-template";
-import { ResourceManager } from "../../Properties/ResourceManager";
+import Format = require("string-template");
+import { Resources } from "../../Properties/Resources";
 import { IOException } from "./IOException";
 
 /**
@@ -14,10 +14,10 @@ export class FileException extends IOException
 
     /**
      * Initializes a new instance of the FileException class with a message and a path.
-     * 
+     *
      * @param message
      * The message of the exception.
-     * 
+     *
      * @param path
      * The path to the file which caused the exception.
      */
@@ -27,8 +27,11 @@ export class FileException extends IOException
         this.Path = path;
     }
 
+    /**
+     * @inheritdoc
+     */
     public get Message(): string
     {
-        return Format(ResourceManager.Resources.Get("FileException"), this.Path);
+        return Format(Resources.Resources.Get("FileException"), this.Path);
     }
 }

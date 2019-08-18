@@ -11,7 +11,7 @@ export abstract class Renderable
     /**
      * Initializes a new instance of the `Renderable` class.
      */
-    public constructor(content: string = "")
+    public constructor(content = "")
     {
         this.content = content;
     }
@@ -30,32 +30,32 @@ export abstract class Renderable
     }
 
     /**
+     * Renders the component.
+     */
+    public async Render(): Promise<string>
+    {
+        return this.RenderText(this.Content);
+    }
+
+    /**
      * Renders a text using a custom renderer.
-     * 
+     *
      * @param renderer
      * The renderer to render the text.
-     * 
+     *
      * @param text
      * The text to render.
      */
     protected async RenderTextBy(renderer: Renderable, text: string): Promise<string>
     {
-        return await renderer.RenderText(text);
+        return renderer.RenderText(text);
     }
 
     /**
      * Renders a text.
-     * 
+     *
      * @param text
      * The text to render.
      */
     protected abstract async RenderText(text: string): Promise<string>;
-
-    /**
-     * Renders the component.
-     */
-    public async Render(): Promise<string>
-    {
-        return await this.RenderText(this.Content);
-    }
 }

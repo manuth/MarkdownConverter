@@ -20,10 +20,10 @@ export class StandardizedPaperFormat extends PaperFormat
 
     /**
      * Initializes a new instance of the `StandardizedPaperFormat` class.
-     * 
+     *
      * @param format
      * The orientation of the paper.
-     * 
+     *
      * @param orientation
      * The orientation of the paper.
      */
@@ -60,6 +60,9 @@ export class StandardizedPaperFormat extends PaperFormat
         this.orientation = value;
     }
 
+    /**
+     * @inheritdoc
+     */
     public get PDFOptions(): Partial<PDFOptions>
     {
         return {

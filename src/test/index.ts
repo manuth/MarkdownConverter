@@ -1,22 +1,48 @@
-//
-// PLEASE DO NOT MODIFY / DELETE UNLESS YOU KNOW WHAT YOU ARE DOING
-//
-// This file is providing the test runner to use when running extension tests.
-// By default the test runner in use is Mocha based.
-//
-// You can provide your own test runner if you want to override it by exporting
-// a function run(testRoot: string, clb: (error:Error) => void) that the extension
-// host can call to run the tests. The test runner is expected to use console.log
-// to report the results back to the caller. When the tests are finished, return
-// a possible error to the callback or null if none.
+import Glob = require("glob");
+import Mocha = require("mocha");
+import Path = require("path");
+import { promisify } from "util";
 
-import * as testRunner from "vscode/lib/testrunner";
+/**
+ * Runs the extension-tests.
+ */
+export async function run()
+{
+    let mocha = new Mocha(
+        {
+            ui: "tdd"
+        });
 
-// You can directly control Mocha options by uncommenting the following lines
-// See https://github.com/mochajs/mocha/wiki/Using-mocha-programmatically#set-options for more info
-testRunner.configure({
-    ui: "tdd", 		// the TDD UI is being used in extension.test.ts (suite, test, etc.)
-    useColors: true // colored output from test results
-});
+    mocha.useColors(true);
 
-module.exports = testRunner;
+    return new Promise(
+        async (resolve, reject) =>
+        {
+            let files = await promisify(Glob)("**/*.test.js", { cwd: __dirname });
+
+            for (let file of files)
+            {
+                mocha.addFile(Path.resolve(__dirname, file));
+            }
+
+            try
+            {
+                mocha.run(
+                    (failures) =>
+                    {
+                        if (failures > 0)
+                        {
+                            reject(new Error(`${failures} ${failures > 1 ? "tests" : "test"} failed.`));
+                        }
+                        else
+                        {
+                            resolve();
+                        }
+                    });
+            }
+            catch (exception)
+            {
+                reject(exception);
+            }
+        });
+}

@@ -1,15 +1,12 @@
 {
   "name": "markdown-converter",
   "displayName": "Markdown Converter",
-  "markdownDescription": "Provides the functionallity to convert MarkDown-files to html, pdf or png.",
-  "version": "1.1.2",
-  "publisher": "manuth",
-  "author": {
-    "name": "Manuel Thalmann",
-    "email": "m@nuth.ch",
-    "url": "https://nuth.ch"
-  },
   "icon": "Resources/Icon.png",
+  "version": "2.0.0",
+  "description": "A markdown-converter for Visual Studio Code",
+  "markdownDescription": "A Markdown-converter for Visual Studio Code",
+  "author": "Manuel Thalmann <m@nuth.ch> (https://nuth.ch)",
+  "publisher": "manuth",
   "license": "MIT",
   "keywords": [
     "MarkDown",
@@ -18,50 +15,122 @@
     "PDF",
     "PNG"
   ],
+  "categories": [
+    "Other"
+  ],
+  "main": "lib/extension.js",
+  "types": "lib/extension.d.ts",
+  "directories": {
+    "lib": "lib"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/manuth/MarkdownConverter.git"
   },
-  "engines": {
-    "vscode": "^1.23.0"
+  "bugs": {
+    "url": "https://github.com/manuth/MarkdownConverter/issues"
   },
-  "categories": [
-    "Other"
-  ],
+  "homepage": "https://github.com/manuth/MarkdownConverter#readme",
+  "engines": {
+    "vscode": "^1.37.0"
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run rebuild",
+    "build": "tsc -p .",
+    "rebuild": "npm run clean && npm run build",
+    "watch": "tsc -p . --watch",
+    "clean": "rimraf ./lib",
+    "lint": "tslint -p ./ -t verbose",
+    "test": "node ./lib/test/runTests",
+    "prepare": "npm run rebuild"
+  },
+  "devDependencies": {
+    "@manuth/tsconfig": "^1.2.2",
+    "@manuth/tslint-presets": "^1.0.4",
+    "@types/clone": "^0.1.30",
+    "@types/dedent": "^0.7.0",
+    "@types/fs-extra": "^8.0.0",
+    "@types/highlight.js": "^9.12.3",
+    "@types/http-server": "^0.10.0",
+    "@types/markdown-it": "0.0.8",
+    "@types/markdown-it-anchor": "^4.0.3",
+    "@types/mocha": "^5.2.7",
+    "@types/mustache": "^0.8.32",
+    "@types/node": "^12.7.2",
+    "@types/puppeteer": "^1.19.1",
+    "@types/string-template": "^1.0.2",
+    "@types/transliteration": "^1.6.1",
+    "@types/utf8": "^2.1.6",
+    "@types/vscode": "^1.37.0",
+    "@types/website-scraper": "^1.2.4",
+    "@types/yamljs": "^0.2.30",
+    "cross-env": "^5.2.0",
+    "glob": "^7.1.4",
+    "mocha": "^6.2.0",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3",
+    "vsce": "^1.66.0",
+    "vscode-test": "^1.2.0"
+  },
+  "dependencies": {
+    "async-shelljs": "^0.1.2",
+    "clone": "^2.1.2",
+    "dedent": "^0.7.0",
+    "es6-template-string": "^1.1.0",
+    "front-matter": "^3.0.2",
+    "fs-extra": "^8.1.0",
+    "get-port": "^5.0.0",
+    "highlight.js": "^9.15.9",
+    "highlightjs": "^9.12.0",
+    "http-server": "^0.11.1",
+    "localized-resource-manager": "^1.0.3",
+    "markdown-it": "^9.1.0",
+    "markdown-it-anchor": "^5.2.4",
+    "markdown-it-checkbox": "^1.1.0",
+    "markdown-it-emoji": "^1.4.0",
+    "markdown-it-table-of-contents": "^0.4.4",
+    "multi-integer-range": "^4.0.7",
+    "mustache": "^3.0.1",
+    "rc": "^1.2.8",
+    "string-template": "^1.0.0",
+    "temp-filesystem": "^1.1.3",
+    "transliteration": "^2.1.5",
+    "twemoji": "^12.1.2",
+    "utf8": "^3.0.0",
+    "website-scraper": "^4.0.1",
+    "yamljs": "^0.3.0"
+  },
   "activationEvents": [
-    "onCommand:markdownConverter.Convert"
+    "onCommand:markdownConverter.Convert",
+    "onCommand:markdownConverter.ConvertAll"
   ],
-  "main": "./out/extension",
   "contributes": {
     "commands": [
       {
         "command": "markdownConverter.Convert",
         "category": "Markdown",
         "title": "%Command.Convert%"
+      },
+      {
+        "command": "markdownConverter.ConvertAll",
+        "category": "Markdown",
+        "title": "%Command.ConvertAll%"
+      },
+      {
+        "command": "markdownConverter.Chain",
+        "category": "Markdown",
+        "title": "%Command.Chain%"
       }
     ],
     "markdown.markdownItPlugins": true,
     "configuration": {
       "title": "%Config%",
       "properties": {
-        "markdownConverter.DestinationOrigin": {
-          "title": "%Config.DestinationOrigin%",
-          "markdownDescription": "%Config.DestinationOrigin.Description%",
-          "default": "WorkspaceRoot",
-          "enum": [
-            "WorkspaceRoot",
-            "DocumentFile"
-          ],
-          "enumDescriptions": [
-            "%Config.DestinationOrigin.WorkspaceRoot%",
-            "%Config.DestinationOrigin.DocumentFile%"
-          ]
-        },
-        "markdownConverter.DestinationPath": {
-          "title": "%Config.DestinationPath%",
-          "markdownDescription": "%Config.DestinationPath.Description%",
+        "markdownConverter.DestinationPattern": {
+          "title": "%Config.DestinationPattern%",
+          "markdownDescription": "%Config.DestinationPattern.Description%",
           "type": "string",
-          "default": "."
+          "default": "${workspaceFolder}/${dirname}/${basename}.${extension}"
         },
         "markdownConverter.IgnoreLanguageMode": {
           "title": "%Config.IgnoreLanguageMode%",
@@ -87,6 +156,7 @@
             "type": "string",
             "enum": [
               "BMP",
+              "SelfContainedHTML",
               "HTML",
               "JPEG",
               "PDF",
@@ -344,65 +414,5 @@
         }
       }
     }
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "lint": "tslint -p . -t verbose",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
-  },
-  "devDependencies": {
-    "@types/clone": "^0.1.30",
-    "@types/dedent": "^0.7.0",
-    "@types/fs-extra": "^5.0.4",
-    "@types/highlight.js": "^9.12.3",
-    "@types/http-server": "^0.10.0",
-    "@types/lodash": "^4.14.117",
-    "@types/markdown-it": "0.0.3",
-    "@types/markdown-it-anchor": "^4.0.2",
-    "@types/mocha": "^2.2.48",
-    "@types/mustache": "^0.8.31",
-    "@types/node": "^10.12.0",
-    "@types/puppeteer": "^1.9.0",
-    "@types/request-promise-native": "^1.0.15",
-    "@types/shelljs": "^0.7.9",
-    "@types/string-template": "^1.0.2",
-    "@types/tmp": "0.0.33",
-    "@types/transliteration": "^1.6.0",
-    "@types/yamljs": "^0.2.30",
-    "tslint": "^5.11.0",
-    "typescript": "^2.9.2",
-    "vscode": "^1.1.21"
-  },
-  "dependencies": {
-    "clone": "^2.1.2",
-    "culture-info": "0.0.4",
-    "dedent": "^0.7.0",
-    "front-matter": "^2.3.0",
-    "fs-extra": "^6.0.1",
-    "highlight.js": "^9.13.1",
-    "highlightjs": "^9.12.0",
-    "http-server": "^0.11.1",
-    "localizable-resources": "^1.0.6",
-    "lodash": "^4.17.11",
-    "markdown-it": "^8.4.2",
-    "markdown-it-anchor": "^5.0.2",
-    "markdown-it-checkbox": "^1.1.0",
-    "markdown-it-emoji": "^1.3.0",
-    "markdown-it-table-of-contents": "^0.4.3",
-    "multi-integer-range": "^3.0.0",
-    "mustache": "^2.3.2",
-    "puppeteer": "^1.9.0",
-    "rc": "^1.2.8",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.5",
-    "shelljs": "^0.8.2",
-    "string-template": "^1.0.0",
-    "tmp": "0.0.33",
-    "transliteration": "^1.6.6",
-    "twemoji": "^2.5.1",
-    "yamljs": "^0.3.0"
   }
 }

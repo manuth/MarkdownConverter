@@ -1,5 +1,5 @@
-import * as Format from "string-template";
-import { ResourceManager } from "../../Properties/ResourceManager";
+import Format = require("string-template");
+import { Resources } from "../../Properties/Resources";
 import { Exception } from "../Exception";
 import { IMark } from "./Mark";
 
@@ -27,16 +27,16 @@ export class YAMLException extends Exception
 
     /**
      * Initializes a new instance of the YAMLException class with a name, a reason, a mark and a message.
-     * 
+     *
      * @param name
      * The name of the exception.
-     * 
+     *
      * @param reason
      * The reason for the exception.
-     * 
+     *
      * @param mark
      * The mark of the position that caused the exception.
-     * 
+     *
      * @param message
      * The message of the exception.
      */
@@ -46,7 +46,7 @@ export class YAMLException extends Exception
         super();
         if (arguments.length === 1)
         {
-            let exception: { name: string, reason: string, mark: any, message: string } = name;
+            let exception = name;
             this.name = exception.name;
             this.reason = exception.reason;
             this.mark = exception.mark;
@@ -68,9 +68,12 @@ export class YAMLException extends Exception
         return this.name;
     }
 
+    /**
+     * @inheritdoc
+     */
     public get Message(): string
     {
-        return Format(ResourceManager.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
+        return Format(Resources.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
     }
 
     /**

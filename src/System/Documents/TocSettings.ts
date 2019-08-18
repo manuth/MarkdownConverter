@@ -28,13 +28,13 @@ export class TocSettings
 
     /**
      * Initializes a new instance of the `TocSettingsClass`.
-     * 
+     *
      * @param $class
      * The css-class of the toc-container.
-     * 
+     *
      * @param levels
      * The levels to display inside the toc.
-     * 
+     *
      * @param indicator
      * A regexp which should be replaced by the toc inside the document.
      */

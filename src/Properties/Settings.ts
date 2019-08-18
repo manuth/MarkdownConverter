@@ -1,15 +1,15 @@
-import * as VSCode from "vscode";
+import VSCode = require("vscode");
 import { MultiRange } from "../../node_modules/multi-integer-range";
-import { ConversionType } from "../MarkdownConverter/ConversionType";
-import { DestinationOrigin } from "../MarkdownConverter/DestinationOrigin";
-import { CustomPaperFormat } from "../System/Drawing/CustomPaperFormat";
-import { EmojiType } from "../System/Drawing/EmojiType";
-import { ListType } from "../System/Drawing/ListType";
-import { Paper } from "../System/Drawing/Paper";
-import { PaperOrientation } from "../System/Drawing/PaperOrientation";
-import { StandardizedFormatType } from "../System/Drawing/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../System/Drawing/StandardizedPaperFormat";
-import { TocSettings } from "../System/Drawing/TocSettings";
+import { ConversionType } from "../Conversion/ConversionType";
+import { CustomPaperFormat } from "../System/Documents/CustomPaperFormat";
+import { EmojiType } from "../System/Documents/EmojiType";
+import { ListType } from "../System/Documents/ListType";
+import { Margin } from "../System/Documents/Margin";
+import { Paper } from "../System/Documents/Paper";
+import { PaperOrientation } from "../System/Documents/PaperOrientation";
+import { StandardizedFormatType } from "../System/Documents/StandardizedFormatType";
+import { StandardizedPaperFormat } from "../System/Documents/StandardizedPaperFormat";
+import { TocSettings } from "../System/Documents/TocSettings";
 
 /**
  * Provides access to settings.
@@ -35,19 +35,11 @@ export class Settings
     }
 
     /**
-     * Gets the location the `DestinationPath` is relative to.
-     */
-    public get DestinationOrigin(): DestinationOrigin
-    {
-        return DestinationOrigin[this.getConfigEntry<string>("DestinationOrigin")];
-    }
-
-    /**
      * Gets the path to save the destination-files to.
      */
-    public get DestinationPath(): string
+    public get DestinationPattern(): string
     {
-        return this.getConfigEntry("DestinationPath");
+        return this.getConfigEntry("DestinationPattern");
     }
 
     /**
@@ -72,7 +64,7 @@ export class Settings
     public get ConversionType(): ConversionType[]
     {
         let types: ConversionType[] = [];
-        let conversionTypes: string[] = this.getConfigEntry("ConversionType", [ConversionType[ConversionType.PDF]]);
+        let conversionTypes = this.getConfigEntry<Array<keyof typeof ConversionType>>("ConversionType", [ConversionType[ConversionType.PDF] as keyof typeof ConversionType]);
 
         for (let conversionType of conversionTypes)
         {
@@ -103,7 +95,7 @@ export class Settings
      */
     public get EmojiType(): EmojiType
     {
-        return EmojiType[this.getConfigEntry<string>("Parser.EmojiType")];
+        return (EmojiType as any)[this.getConfigEntry<string>("Parser.EmojiType")];
     }
 
     /**
@@ -125,19 +117,19 @@ export class Settings
         {
             let width: string = this.getConfigEntry("Document.Paper.PaperFormat.Width");
             let height: string = this.getConfigEntry("Document.Paper.PaperFormat.Height");
-            
+
             let format = new CustomPaperFormat(width, height);
             paper.Format = format;
         }
         catch (exception)
         {
             let format = new StandardizedPaperFormat();
-            format.Format = StandardizedFormatType[this.getConfigEntry<string>("Document.Paper.PaperFormat.Format")];
-            format.Orientation = PaperOrientation[this.getConfigEntry("Document.Paper.PaperFormat.Orientation", PaperOrientation[PaperOrientation.Portrait])];
+            format.Format = (StandardizedFormatType as any)[this.getConfigEntry<string>("Document.Paper.PaperFormat.Format")];
+            format.Orientation = (PaperOrientation as any)[this.getConfigEntry("Document.Paper.PaperFormat.Orientation", PaperOrientation[PaperOrientation.Portrait])];
             paper.Format = format;
         }
 
-        for (let side of [ "Top", "Right", "Bottom", "Left" ])
+        for (let side of (Object.keys(paper.Margin) as Array<keyof Margin>))
         {
             let configKey = "Document.Paper.Margin." + side;
 
@@ -239,7 +231,7 @@ export class Settings
      *
      * @param key
      * The key of the entry.
-     * 
+     *
      * @param defaultValue
      * The default value to return.
      */
