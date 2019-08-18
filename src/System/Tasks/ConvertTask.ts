@@ -1,4 +1,4 @@
-import { Progress, TextDocument, window } from "vscode";
+import { CancellationToken, Progress, TextDocument, window } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException";
@@ -34,7 +34,7 @@ export class ConvertTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>)
+    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>)
     {
         return this.ConversionRunner.Execute(this.GetMarkdownDocument(), progressReporter, fileReporter);
     }

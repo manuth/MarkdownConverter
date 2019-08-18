@@ -1,4 +1,4 @@
-import { Progress } from "vscode";
+import { CancellationToken, Progress } from "vscode";
 import { Extension } from "../Extensibility/Extension";
 import { IProgressState } from "./IProgressState";
 
@@ -40,7 +40,15 @@ export abstract class Task<TExtension extends Extension = Extension>
     public abstract get Title(): string;
 
     /**
+     * Gets a value indicating whether this task can be canceled.
+     */
+    public get Cancellable(): boolean
+    {
+        return false;
+    }
+
+    /**
      * Executes the task.
      */
-    public abstract async Execute(progressReporter?: Progress<IProgressState>): Promise<void>;
+    public abstract async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken): Promise<void>;
 }

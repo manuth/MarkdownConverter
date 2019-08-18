@@ -94,13 +94,13 @@ export class MarkdownConverterExtension extends Extension
             {
                 await window.withProgress(
                     {
-                        cancellable: true,
+                        cancellable: task.Cancellable,
                         location: ProgressLocation.Notification,
                         title: task.Title
                     },
-                    async (progressReporter) =>
+                    async (progressReporter, cancellationToken) =>
                     {
-                        await task.Execute(progressReporter, fileReporter);
+                        await task.Execute(progressReporter, cancellationToken, fileReporter);
                     });
             };
 
