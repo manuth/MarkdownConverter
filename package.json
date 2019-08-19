@@ -91,6 +91,7 @@
     "markdown-it-table-of-contents": "^0.4.4",
     "multi-integer-range": "^4.0.7",
     "mustache": "^3.0.1",
+    "puppeteer": "^1.19.0",
     "rc": "^1.2.8",
     "string-template": "^1.0.0",
     "temp-filesystem": "^1.1.3",
