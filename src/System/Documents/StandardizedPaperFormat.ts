@@ -1,4 +1,4 @@
-import { PDFFormat, PDFOptions } from "puppeteer";
+import { PDFFormat, PDFOptions } from "puppeteer-core";
 import { PaperFormat } from "./PaperFormat";
 import { PaperOrientation } from "./PaperOrientation";
 import { StandardizedFormatType } from "./StandardizedFormatType";

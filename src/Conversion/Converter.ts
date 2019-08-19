@@ -4,7 +4,7 @@ import Glob = require("glob");
 import http = require("http");
 import Server = require("http-server");
 import Path = require("path");
-import Puppeteer = require("puppeteer");
+import Puppeteer = require("puppeteer-core");
 import { TempDirectory } from "temp-filesystem";
 import URL = require("url");
 import { isNullOrUndefined, promisify } from "util";

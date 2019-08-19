@@ -1,5 +1,5 @@
 import FileSystem = require("fs-extra");
-import Puppeteer = require("puppeteer");
+import Puppeteer = require("puppeteer-core");
 import { CancellationToken, Progress } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";

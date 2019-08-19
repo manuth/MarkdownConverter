@@ -1,4 +1,4 @@
-import { PDFOptions } from "puppeteer";
+import { PDFOptions } from "puppeteer-core";
 
 /**
  * Represents the format of a paper.

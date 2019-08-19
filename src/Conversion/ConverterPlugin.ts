@@ -1,5 +1,5 @@
 import Path = require("path");
-import { Browser, launch } from "puppeteer";
+import { Browser, launch } from "puppeteer-core";
 import Utf8 = require("utf8");
 import { Converter } from "./Converter";
 
