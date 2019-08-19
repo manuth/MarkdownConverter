@@ -86,4 +86,4 @@ tslint.json
 .gitignore
 
 # Local Chromium-Versions
-node_modules/puppeteer/.local-chromium/
+node_modules/puppeteer-core/.local-chromium/

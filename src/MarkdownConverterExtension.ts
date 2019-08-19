@@ -1,7 +1,7 @@
 import ChildProcess = require("child_process");
 import FileSystem = require("fs-extra");
 import Path = require("path");
-import Puppeteer = require("puppeteer");
+import Puppeteer = require("puppeteer-core");
 import Format = require("string-template");
 import { commands, ExtensionContext, Progress, ProgressLocation, window } from "vscode";
 import { ConversionType } from "./Conversion/ConversionType";
@@ -67,7 +67,7 @@ export class MarkdownConverterExtension extends Extension
      */
     public get ChromiumRevision(): string
     {
-        return require(Path.join(__dirname, "..", "node_modules", "puppeteer", "package.json"))["puppeteer"]["chromium_revision"];
+        return require(Path.join(__dirname, "..", "node_modules", "puppeteer-core", "package.json"))["puppeteer"]["chromium_revision"];
     }
 
     /**
