@@ -1,5 +1,5 @@
+import { MultiRange } from "multi-integer-range";
 import VSCode = require("vscode");
-import { MultiRange } from "../../node_modules/multi-integer-range";
 import { ConversionType } from "../Conversion/ConversionType";
 import { CustomPaperFormat } from "../System/Documents/CustomPaperFormat";
 import { EmojiType } from "../System/Documents/EmojiType";
