@@ -64,7 +64,7 @@ export class Settings
     public get ConversionType(): ConversionType[]
     {
         let types: ConversionType[] = [];
-        let conversionTypes = this.getConfigEntry<Array<keyof typeof ConversionType>>("ConversionType", [ConversionType[ConversionType.PDF] as keyof typeof ConversionType]);
+        let conversionTypes = this.getConfigEntry<Array<keyof typeof ConversionType>>("ConversionType", [ConversionType[ConversionType.PDF] as any]);
 
         for (let conversionType of conversionTypes)
         {
@@ -127,7 +127,7 @@ export class Settings
         {
             let format = new StandardizedPaperFormat();
             format.Format = StandardizedFormatType[this.getConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`)];
-            format.Orientation = PaperOrientation[this.getConfigEntry<keyof typeof PaperOrientation>(`${formatKey}.Orientation`, PaperOrientation[PaperOrientation.Portrait] as keyof typeof PaperOrientation)];
+            format.Orientation = PaperOrientation[this.getConfigEntry<keyof typeof PaperOrientation>(`${formatKey}.Orientation`, PaperOrientation[PaperOrientation.Portrait] as any)];
             paper.Format = format;
         }
 
