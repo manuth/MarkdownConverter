@@ -112,11 +112,13 @@ export class Settings
     public get PaperFormat(): Paper
     {
         let paper = new Paper();
+        let paperKey = "Document.Paper";
+        let formatKey = `${paperKey}.PaperFormat`;
 
         try
         {
-            let width: string = this.getConfigEntry("Document.Paper.PaperFormat.Width");
-            let height: string = this.getConfigEntry("Document.Paper.PaperFormat.Height");
+            let width: string = this.getConfigEntry(`${formatKey}.Width`);
+            let height: string = this.getConfigEntry(`${formatKey}.Height`);
 
             let format = new CustomPaperFormat(width, height);
             paper.Format = format;
@@ -124,14 +126,14 @@ export class Settings
         catch (exception)
         {
             let format = new StandardizedPaperFormat();
-            format.Format = (StandardizedFormatType as any)[this.getConfigEntry<string>("Document.Paper.PaperFormat.Format")];
-            format.Orientation = (PaperOrientation as any)[this.getConfigEntry("Document.Paper.PaperFormat.Orientation", PaperOrientation[PaperOrientation.Portrait])];
+            format.Format = StandardizedFormatType[this.getConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`)];
+            format.Orientation = PaperOrientation[this.getConfigEntry<keyof typeof PaperOrientation>(`${formatKey}.Orientation`, PaperOrientation[PaperOrientation.Portrait] as keyof typeof PaperOrientation)];
             paper.Format = format;
         }
 
-        for (let side of (Object.keys(paper.Margin) as Array<keyof Margin>))
+        for (let side of (["Top", "Left", "Bottom", "Right"] as Array<keyof Margin>))
         {
-            let configKey = "Document.Paper.Margin." + side;
+            let configKey = `${paperKey}.Margin.` + side;
 
             if (this.config.has(configKey))
             {
