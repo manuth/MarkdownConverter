@@ -18,8 +18,8 @@
   "categories": [
     "Other"
   ],
-  "main": "lib/extension.js",
-  "types": "lib/extension.d.ts",
+  "main": "MarkdownConverter/lib/extension.js",
+  "types": "MarkdownConverter/lib/extension.d.ts",
   "directories": {
     "lib": "lib"
   },
@@ -36,12 +36,12 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run rebuild",
-    "build": "tsc -p .",
+    "build": "tsc -p ./MarkdownConverter/",
     "rebuild": "npm run clean && npm run build",
-    "watch": "tsc -p . --watch",
-    "clean": "rimraf ./lib",
-    "lint": "tslint -p ./ -t verbose",
-    "test": "node ./lib/test/runTests",
+    "watch": "tsc -p ./MarkdownConverter/ --watch",
+    "clean": "rimraf ./MarkdownConverter/lib",
+    "lint": "tslint -p ./MarkdownConverter/ -t verbose",
+    "test": "node ./MarkdownConverter/lib/test/runTests",
     "prepare": "npm run rebuild"
   },
   "devDependencies": {

@@ -13,7 +13,7 @@
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
             "outFiles": [
-                "${workspaceFolder}/lib/**/*.js"
+                "${workspaceFolder}/MarkdownConverter/lib/**/*.js"
             ],
             "preLaunchTask": "Build"
         },
@@ -24,10 +24,10 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/lib/test"
+                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test"
             ],
             "outFiles": [
-                "${workspaceFolder}/lib/test/**/*.js"
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
             "preLaunchTask": "Build"
         }
