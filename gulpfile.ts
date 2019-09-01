@@ -53,6 +53,7 @@ export function Watch()
     log.info("Starting compilation in watch mode...");
     builder();
 }
+Watch.description = "Builds the project in watched mode.";
 
 /**
  * Builds the project.
@@ -113,5 +114,6 @@ export function Build()
         gulp.dest(settings.DestinationPath())
     );
 }
+Build.description = "Builds the project";
 
 export default Build;
