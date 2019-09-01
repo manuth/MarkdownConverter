@@ -83,7 +83,7 @@ MarkdownConverter/[Ll]ib/test/
 MarkdownConverter/[Ll]ib/tests/
 
 # Unused node-modules
-node_modules/!(puppeteer-core|shelljs)
+node_modules/!(shelljs)
 node_modules/@types
 
 # Visual Studio Code-Environment
@@ -94,6 +94,3 @@ node_modules/@types
 
 # Ignore-files
 .gitignore
-
-# Local Chromium-Versions
-node_modules/puppeteer-core/.local-chromium/

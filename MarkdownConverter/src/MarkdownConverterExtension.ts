@@ -146,6 +146,12 @@ export class MarkdownConverterExtension extends Extension
                 {
                     let revision = this.ChromiumRevision;
                     let success = false;
+                    let puppeteerPath = Path.resolve(__dirname, "..", "..", "node_modules", "puppeteer-core");
+
+                    if (!await FileSystem.pathExists(puppeteerPath))
+                    {
+                        await FileSystem.mkdirp(puppeteerPath);
+                    }
 
                     do
                     {

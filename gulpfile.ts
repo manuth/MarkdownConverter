@@ -109,8 +109,6 @@ export function Build()
         ).external(
             [
                 "mocha",
-                "puppeteer-core",
-                "puppeteer-core/package.json",
                 "shelljs",
                 "vscode"
             ]);
