@@ -83,7 +83,8 @@ MarkdownConverter/[Ll]ib/test/
 MarkdownConverter/[Ll]ib/tests/
 
 # Unused node-modules
-node_modules/!(shelljs)
+node_modules/!(highlightjs|shelljs)
+node_modules/highlightjs/!(styles)
 node_modules/@types
 
 # Visual Studio Code-Environment
