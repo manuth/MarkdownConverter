@@ -67,7 +67,7 @@ export class MarkdownConverterExtension extends Extension
      */
     public get ChromiumRevision(): string
     {
-        return require(Path.join(__dirname, "..", "..", "node_modules", "puppeteer-core", "package.json"))["puppeteer"]["chromium_revision"];
+        return require("puppeteer-core/package.json")["puppeteer"]["chromium_revision"];
     }
 
     /**

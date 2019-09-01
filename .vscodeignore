@@ -82,6 +82,10 @@ MarkdownConverter/[Ll]ib/**/*.js.map
 MarkdownConverter/[Ll]ib/test/
 MarkdownConverter/[Ll]ib/tests/
 
+# Unused node-modules
+node_modules/!(puppeteer-core|shelljs)
+node_modules/@types
+
 # Visual Studio Code-Environment
 .vscode/
 

@@ -1,10 +1,13 @@
+import browserify = require("browserify");
 import log = require("fancy-log");
 import gulp = require("gulp");
-import filter = require("gulp-filter");
-import sourcemaps = require("gulp-sourcemaps");
-import ts = require("gulp-typescript");
-import lazyPipe = require("lazypipe");
+import merge = require("merge-stream");
 import minimist = require("minimist");
+import { TempDirectory } from "temp-filesystem";
+import Path = require("upath");
+import buffer = require("vinyl-buffer");
+import source = require("vinyl-source-stream");
+import watchify = require("watchify");
 import { Settings } from "./.gulp/Settings";
 import "./.gulp/TaskFunction";
 
@@ -21,7 +24,7 @@ let args = minimist(
             mode: "m"
         },
         default: {
-            mode: "Release"
+            mode: "Debug"
         }
     });
 
@@ -31,27 +34,13 @@ let args = minimist(
 let settings = new Settings(args["mode"]);
 
 /**
- * The typescript-project.
- */
-let project = ts.createProject(settings.ExtensionPath("tsconfig.json"));
-
-/**
  * Builds the project in watched mode.
  */
 export function Watch()
 {
-    let builder = Build;
-    gulp.watch(
-        settings.SourcePath("**", "*.ts"),
-        function Build()
-        {
-            log.info("File change detected. Starting incremental compilation...");
-            return builder();
-        });
-
     settings.Watch = true;
     log.info("Starting compilation in watch mode...");
-    builder();
+    Build();
 }
 Watch.description = "Builds the project in watched mode.";
 
@@ -60,59 +49,150 @@ Watch.description = "Builds the project in watched mode.";
  */
 export function Build()
 {
-    let reporter: ts.reporter.Reporter = {
-        error(error, typescript)
-        {
-            ts.reporter.defaultReporter().error(error, typescript);
-        },
+    let entries = [
+        "extension.ts",
+        "test/runTests.ts",
+        "test/index.ts",
+        "test/extension.test.ts"
+    ];
 
-        finish(results)
-        {
-            if (settings.Watch)
-            {
-                let errorCount =
-                    results.transpileErrors +
-                    results.optionsErrors +
-                    results.syntaxErrors +
-                    results.globalErrors +
-                    results.semanticErrors +
-                    results.declarationErrors +
-                    results.emitErrors;
-                log.info(`Found ${errorCount} errors. Watching for file changes.`);
-            }
-            else
-            {
-                ts.reporter.defaultReporter().finish(results);
-            }
+    let watcher: browserify.BrowserifyObject;
+    let bundlers: { [entry: string]: browserify.BrowserifyObject } = {};
 
-            results.transpileErrors = 0;
-            results.optionsErrors = 0;
-            results.syntaxErrors = 0;
-            results.globalErrors = 0;
-            results.semanticErrors = 0;
-            results.declarationErrors = 0;
-            results.emitErrors = 0;
-        }
+    let optionBase: browserify.Options = {
+        ...watchify.args,
+        debug: settings.Debug,
+        node: true,
+        ignoreMissing: true
     };
 
-    let builder = lazyPipe().pipe(
-        sourcemaps.init
-    ).pipe(
-        project,
-        reporter
-    ).pipe(
-        sourcemaps.write,
-        "."
-    ).pipe(
-        filter,
-        ["**", "!**/*.ts.map"]
-    );
+    if (settings.Watch)
+    {
+        watcher = watchify(
+            browserify(
+                {
+                    ...optionBase,
+                    entries: entries.map(file => settings.SourcePath(file))
+                }));
 
-    return gulp.src(settings.SourcePath("**", "*.ts")).pipe(
-        builder()
-    ).pipe(
-        gulp.dest(settings.DestinationPath())
-    );
+        watcher.on(
+            "update",
+            () =>
+            {
+                log.info("File change detected. Starting incremental compilation...");
+                build();
+            });
+    }
+
+    for (let file of entries)
+    {
+        let bundler = browserify(
+            {
+                ...optionBase,
+                basedir: Path.normalize(settings.DestinationPath(Path.dirname(file))),
+                entries: [
+                    Path.normalize(settings.SourcePath(file))
+                ],
+                standalone: Path.join(Path.dirname(file), Path.parse(file).name)
+            });
+
+        bundlers[file] = bundler;
+    }
+
+    for (let bundler of entries.map((entry) => bundlers[entry]).concat(settings.Watch ? [watcher] : []))
+    {
+        bundler.plugin(
+            require("tsify"),
+            {
+                project: settings.ExtensionPath("tsconfig.json")
+            }
+        ).external(
+            [
+                "mocha",
+                "puppeteer-core",
+                "puppeteer-core/package.json",
+                "shelljs",
+                "vscode"
+            ]);
+    }
+
+    /**
+     * Builds the project.
+     */
+    // tslint:disable-next-line: completed-docs
+    function build()
+    {
+        let errorMessages: string[] = [];
+        let streams: NodeJS.ReadWriteStream[] = [];
+
+        for (let file of entries)
+        {
+            let fileName = Path.changeExt(file, "js");
+            let stream = bundlers[file].bundle().on(
+                "error",
+                (error) =>
+                {
+                    let message: string = error.message;
+                    if (!errorMessages.includes(message))
+                    {
+                        errorMessages.push(message);
+                        log.error(message);
+                    }
+                }
+            ).pipe(
+                source(fileName)
+            ).pipe(
+                buffer()
+            );
+
+            streams.push(stream);
+        }
+
+        let stream = merge(streams).pipe(
+            gulp.dest(settings.DestinationPath())
+        );
+
+        if (settings.Watch)
+        {
+            let tempDir = new TempDirectory();
+
+            let watcherStream = watcher.bundle().on(
+                "error",
+                () => { }
+            ).pipe(
+                source(Path.basename(tempDir.FullName))
+            ).pipe(
+                buffer()
+            ).pipe(
+                gulp.dest(tempDir.MakePath())
+            );
+
+            Promise.all(
+                [
+                    new Promise(
+                        (resolve) =>
+                        {
+                            stream.on("end", resolve);
+                        }),
+                    new Promise(
+                        (resolve) =>
+                        {
+                            watcherStream.on("end", resolve);
+                        })
+                ]).then(
+                    () =>
+                    {
+                        tempDir.Dispose();
+                        log.info(`Found ${errorMessages.length} errors. Watching for file changes.`);
+                    });
+        }
+
+        return stream;
+    }
+
+    build.displayName = Build.displayName;
+    build.description = Build.description;
+    return build();
 }
 Build.description = "Builds the project";
 
