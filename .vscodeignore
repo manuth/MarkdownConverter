@@ -63,18 +63,18 @@ typings/
 .vscode-test/
 
 # Source-files
-[Ss]rc/
+MarkdownConverter/[Ss]rc/
 
 # TypeScript config-files
-tsconfig.json
-tslint.json
+MarkdownConverter/tsconfig.json
+MarkdownConverter/tslint.json
 
 # Source-maps
-[Ll]ib/**/*.js.map
+MarkdownConverter/[Ll]ib/**/*.js.map
 
 # Unit-Tests
-[Ll]ib/test/
-[Ll]ib/tests/
+MarkdownConverter/[Ll]ib/test/
+MarkdownConverter/[Ll]ib/tests/
 
 # Visual Studio Code-Environment
 .vscode/

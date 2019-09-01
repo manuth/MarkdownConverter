@@ -1,7 +1,7 @@
 {
   "name": "markdown-converter",
   "displayName": "Markdown Converter",
-  "icon": "Resources/Icon.png",
+  "icon": "MarkdownConverter/Resources/Icon.png",
   "version": "2.0.2",
   "description": "A markdown-converter for Visual Studio Code",
   "markdownDescription": "A Markdown-converter for Visual Studio Code",
