@@ -62,6 +62,12 @@ typings/
 # Visual Studio Code Experimental Instance
 .vscode-test/
 
+# gulp-files
+.gulp/
+gulpfile.ts
+tsconfig.json
+tslint.json
+
 # Source-files
 MarkdownConverter/[Ss]rc/
 
