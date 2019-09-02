@@ -56,7 +56,6 @@ export function Build()
         "test/extension.test.ts"
     ];
 
-    let watcher: browserify.BrowserifyObject;
     let bundlers: { [entry: string]: browserify.BrowserifyObject } = {};
 
     let optionBase: browserify.Options = {
@@ -65,24 +64,6 @@ export function Build()
         node: true,
         ignoreMissing: true
     };
-
-    if (settings.Watch)
-    {
-        watcher = watchify(
-            browserify(
-                {
-                    ...optionBase,
-                    entries: entries.map(file => settings.SourcePath(file))
-                }));
-
-        watcher.on(
-            "update",
-            () =>
-            {
-                log.info("File change detected. Starting incremental compilation...");
-                build();
-            });
-    }
 
     for (let file of entries)
     {
@@ -99,7 +80,15 @@ export function Build()
         bundlers[file] = bundler;
     }
 
-    for (let bundler of entries.map((entry) => bundlers[entry]).concat(settings.Watch ? [watcher] : []))
+    if (settings.Watch)
+    {
+        for (let entry of entries)
+        {
+            bundlers[entry] = watchify(bundlers[entry]);
+        }
+    }
+
+    for (let bundler of entries.map((entry) => bundlers[entry]))
     {
         bundler.plugin(
             require("tsify"),
@@ -122,6 +111,26 @@ export function Build()
     {
         let errorMessages: string[] = [];
         let streams: NodeJS.ReadWriteStream[] = [];
+
+        if (settings.Watch)
+        {
+            Promise.all(
+                entries.map(
+                    (entry) =>
+                    {
+                        return new Promise(
+                            (resolve) =>
+                            {
+                                bundlers[entry].on("update", resolve);
+                            });
+                    })
+            ).then(
+                () =>
+                {
+                    log.info("File change detected. Starting incremental compilation...");
+                    build();
+                });
+        }
 
         for (let file of entries)
         {
@@ -152,37 +161,12 @@ export function Build()
 
         if (settings.Watch)
         {
-            let tempDir = new TempDirectory();
-
-            let watcherStream = watcher.bundle().on(
-                "error",
-                () => { }
-            ).pipe(
-                source(Path.basename(tempDir.FullName))
-            ).pipe(
-                buffer()
-            ).pipe(
-                gulp.dest(tempDir.MakePath())
-            );
-
-            Promise.all(
-                [
-                    new Promise(
-                        (resolve) =>
-                        {
-                            stream.on("end", resolve);
-                        }),
-                    new Promise(
-                        (resolve) =>
-                        {
-                            watcherStream.on("end", resolve);
-                        })
-                ]).then(
-                    () =>
-                    {
-                        tempDir.Dispose();
-                        log.info(`Found ${errorMessages.length} errors. Watching for file changes.`);
-                    });
+            stream.on(
+                "end",
+                () =>
+                {
+                    log.info(`Found ${errorMessages.length} errors. Watching for file changes.`);
+                });
         }
 
         return stream;
