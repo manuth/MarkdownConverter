@@ -18,11 +18,12 @@ export async function run()
     return new Promise(
         async (resolve, reject) =>
         {
-            let files = await promisify(Glob)("**/*.test.js", { cwd: __dirname });
+            let testDirectory = Path.resolve(__dirname, "..", "..", "lib", "test");
+            let files = await promisify(Glob)("**/*.test.js", { cwd: testDirectory });
 
             for (let file of files)
             {
-                mocha.addFile(Path.resolve(__dirname, file));
+                mocha.addFile(Path.resolve(testDirectory, file));
             }
 
             try
