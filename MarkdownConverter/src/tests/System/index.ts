@@ -3,6 +3,7 @@ suite(
     () =>
     {
         require("./Exception.test");
+        require("./IO");
         require("./Globalization");
         require("./Documents");
     });
