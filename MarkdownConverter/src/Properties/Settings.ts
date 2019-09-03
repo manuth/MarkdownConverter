@@ -39,7 +39,7 @@ export class Settings
      */
     public get DestinationPattern(): string
     {
-        return this.getConfigEntry("DestinationPattern");
+        return this.GetConfigEntry("DestinationPattern");
     }
 
     /**
@@ -47,7 +47,7 @@ export class Settings
      */
     public get IgnoreLanguageMode(): boolean
     {
-        return this.getConfigEntry("IgnoreLanguageMode");
+        return this.GetConfigEntry("IgnoreLanguageMode");
     }
 
     /**
@@ -55,7 +55,7 @@ export class Settings
      */
     public get ConversionQuality(): number
     {
-        return this.getConfigEntry("ConversionQuality");
+        return this.GetConfigEntry("ConversionQuality");
     }
 
     /**
@@ -64,7 +64,7 @@ export class Settings
     public get ConversionType(): ConversionType[]
     {
         let types: ConversionType[] = [];
-        let conversionTypes = this.getConfigEntry<Array<keyof typeof ConversionType>>("ConversionType", [ConversionType[ConversionType.PDF] as any]);
+        let conversionTypes = this.GetConfigEntry<Array<keyof typeof ConversionType>>("ConversionType", [ConversionType[ConversionType.PDF] as any]);
 
         for (let conversionType of conversionTypes)
         {
@@ -79,7 +79,7 @@ export class Settings
      */
     public get Locale(): string
     {
-        return this.getConfigEntry("Locale") || VSCode.env.language;
+        return this.GetConfigEntry("Locale") || VSCode.env.language;
     }
 
     /**
@@ -87,7 +87,7 @@ export class Settings
      */
     public get DateFormat(): string
     {
-        return this.getConfigEntry("DateFormat");
+        return this.GetConfigEntry("DateFormat");
     }
 
     /**
@@ -95,7 +95,7 @@ export class Settings
      */
     public get EmojiType(): EmojiType
     {
-        return (EmojiType as any)[this.getConfigEntry<string>("Parser.EmojiType")];
+        return EmojiType[this.GetConfigEntry<keyof typeof EmojiType>("Parser.EmojiType")];
     }
 
     /**
@@ -103,7 +103,7 @@ export class Settings
      */
     public get Attributes(): { [Key: string]: any }
     {
-        return this.getConfigEntry("Document.Attributes");
+        return this.GetConfigEntry("Document.Attributes");
     }
 
     /**
@@ -117,8 +117,8 @@ export class Settings
 
         try
         {
-            let width: string = this.getConfigEntry(`${formatKey}.Width`);
-            let height: string = this.getConfigEntry(`${formatKey}.Height`);
+            let width: string = this.GetConfigEntry(`${formatKey}.Width`);
+            let height: string = this.GetConfigEntry(`${formatKey}.Height`);
 
             let format = new CustomPaperFormat(width, height);
             paper.Format = format;
@@ -126,8 +126,8 @@ export class Settings
         catch (exception)
         {
             let format = new StandardizedPaperFormat();
-            format.Format = StandardizedFormatType[this.getConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`)];
-            format.Orientation = PaperOrientation[this.getConfigEntry<keyof typeof PaperOrientation>(`${formatKey}.Orientation`, PaperOrientation[PaperOrientation.Portrait] as any)];
+            format.Format = StandardizedFormatType[this.GetConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`)];
+            format.Orientation = PaperOrientation[this.GetConfigEntry<keyof typeof PaperOrientation>(`${formatKey}.Orientation`, PaperOrientation[PaperOrientation.Portrait] as any)];
             paper.Format = format;
         }
 
@@ -149,7 +149,7 @@ export class Settings
      */
     public get HeaderFooterEnabled(): boolean
     {
-        return this.getConfigEntry("Document.HeaderFooterEnabled");
+        return this.GetConfigEntry("Document.HeaderFooterEnabled");
     }
 
     /**
@@ -157,7 +157,7 @@ export class Settings
      */
     public get HeaderTemplate(): string
     {
-        return this.getConfigEntry("Document.HeaderTemplate");
+        return this.GetConfigEntry("Document.HeaderTemplate");
     }
 
     /**
@@ -165,7 +165,7 @@ export class Settings
      */
     public get FooterTemplate(): string
     {
-        return this.getConfigEntry("Document.FooterTemplate");
+        return this.GetConfigEntry("Document.FooterTemplate");
     }
 
     /**
@@ -173,12 +173,12 @@ export class Settings
      */
     public get TocSettings(): TocSettings
     {
-        if (this.getConfigEntry<boolean>("Parser.Toc.Enabled"))
+        if (this.GetConfigEntry<boolean>("Parser.Toc.Enabled"))
         {
-            let $class = this.getConfigEntry<string>("Parser.Toc.Class");
-            let levels = this.getConfigEntry<string>("Parser.Toc.Levels");
-            let indicator = new RegExp(this.getConfigEntry("Parser.Toc.Indicator"), "im");
-            let listType = this.getConfigEntry<string>("Parser.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
+            let $class = this.GetConfigEntry<string>("Parser.Toc.Class");
+            let levels = this.GetConfigEntry<string>("Parser.Toc.Levels");
+            let indicator = new RegExp(this.GetConfigEntry("Parser.Toc.Indicator"), "im");
+            let listType = this.GetConfigEntry<string>("Parser.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
 
             return new TocSettings($class, new MultiRange(levels), indicator, listType);
         }
@@ -193,7 +193,7 @@ export class Settings
      */
     public get Template(): string
     {
-        return this.getConfigEntry<string>("Document.Design.Template");
+        return this.GetConfigEntry<string>("Document.Design.Template");
     }
 
     /**
@@ -201,7 +201,7 @@ export class Settings
      */
     public get HighlightStyle(): string
     {
-        return this.getConfigEntry("Document.Design.HighlightStyle");
+        return this.GetConfigEntry("Document.Design.HighlightStyle");
     }
 
     /**
@@ -209,7 +209,7 @@ export class Settings
      */
     public get SystemParserEnabled(): boolean
     {
-        return this.getConfigEntry<boolean>("Parser.SystemParserEnabled");
+        return this.GetConfigEntry<boolean>("Parser.SystemParserEnabled");
     }
 
     /**
@@ -217,7 +217,7 @@ export class Settings
      */
     public get StyleSheets(): string[]
     {
-        return this.getConfigEntry("Document.Design.StyleSheets");
+        return this.GetConfigEntry("Document.Design.StyleSheets");
     }
 
     /**
@@ -237,7 +237,7 @@ export class Settings
      * @param defaultValue
      * The default value to return.
      */
-    private getConfigEntry<T>(key: string, defaultValue?: T): T
+    protected GetConfigEntry<T>(key: string, defaultValue?: T): T
     {
         if (this.config.has(key))
         {
