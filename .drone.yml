@@ -11,6 +11,10 @@ steps:
   image: node
   commands:
   - npm run build
+- name: lint
+  image: node
+  commands:
+  - npm run lint
 - name: test
   image: manuth/vscode-test-runner
   commands:
