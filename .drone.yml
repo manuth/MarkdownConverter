@@ -7,14 +7,14 @@ steps:
   image: node
   commands:
   - npm install
-- name: build
-  image: node
-  commands:
-  - npm run build
 - name: lint
   image: node
   commands:
   - npm run lint
+- name: build
+  image: node
+  commands:
+  - npm run build
 - name: test
   image: manuth/vscode-test-runner
   commands:
