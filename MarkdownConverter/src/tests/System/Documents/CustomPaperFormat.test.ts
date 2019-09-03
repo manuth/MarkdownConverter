@@ -5,6 +5,16 @@ suite(
     "CustomPaperFormat",
     () =>
     {
+        let width: string;
+        let height: string;
+
+        suiteSetup(
+            () =>
+            {
+                width = "187cm";
+                height = "190cm";
+            });
+
         suite(
             "constructor(string width, string height)",
             () =>
@@ -13,14 +23,23 @@ suite(
                     "Checking whether the values are assigned correctly…",
                     () =>
                     {
-                        let values: Partial<CustomPaperFormat> = {
-                            Width: "187cm",
-                            Height: "190cm"
-                        };
+                        let format = new CustomPaperFormat(width, height);
+                        Assert.strictEqual(format.Width, width);
+                        Assert.strictEqual(format.Height, height);
+                    });
+            });
 
-                        let format = new CustomPaperFormat(values.Width, values.Height);
-                        Assert.strictEqual(format.Width, values.Width);
-                        Assert.strictEqual(format.Height, values.Height);
+        suite(
+            "PDFOptions",
+            () =>
+            {
+                test(
+                    "Checking whether the puppeteer-options are generated correctly…",
+                    () =>
+                    {
+                        let format = new CustomPaperFormat(width, height);
+                        Assert.strictEqual(format.PDFOptions.width, width);
+                        Assert.strictEqual(format.PDFOptions.height, height);
                     });
             });
     });
