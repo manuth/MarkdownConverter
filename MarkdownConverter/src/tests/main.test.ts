@@ -3,4 +3,5 @@ suite(
     () =>
     {
         require("./Properties");
+        require("./System");
     });
