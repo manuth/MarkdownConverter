@@ -43,6 +43,7 @@ export class TocSettings
         this.class = $class;
         this.levels = levels;
         this.indicator = indicator;
+        this.listType = listType;
     }
 
     /**
