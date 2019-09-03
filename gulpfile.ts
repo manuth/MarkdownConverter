@@ -109,6 +109,7 @@ export function Build()
     // tslint:disable-next-line: completed-docs
     function build()
     {
+        let buildProcessing = true;
         let errorMessages: string[] = [];
         let streams: NodeJS.ReadWriteStream[] = [];
 
@@ -127,8 +128,11 @@ export function Build()
             ).then(
                 () =>
                 {
-                    log.info("File change detected. Starting incremental compilation...");
-                    build();
+                    if (!buildProcessing)
+                    {
+                        log.info("File change detected. Starting incremental compilation...");
+                        build();
+                    }
                 });
         }
 
@@ -166,6 +170,7 @@ export function Build()
                 () =>
                 {
                     log.info(`Found ${errorMessages.length} errors. Watching for file changes.`);
+                    buildProcessing = false;
                 });
         }
 
