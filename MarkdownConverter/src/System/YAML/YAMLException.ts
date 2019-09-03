@@ -73,7 +73,7 @@ export class YAMLException extends Exception
      */
     public get Message(): string
     {
-        return Format(Resources.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
+        return super.Message || Format(Resources.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
     }
 
     /**
