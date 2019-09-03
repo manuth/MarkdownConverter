@@ -4,6 +4,7 @@ suite(
     {
         require("./Renderable.test");
         require("./DocumentFragment.test");
-        require("./Margin.test");
+        require("./StandardizedPaperFormat.test");
         require("./CustomPaperFormat.test");
+        require("./Margin.test");
     });
