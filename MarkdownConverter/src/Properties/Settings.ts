@@ -112,6 +112,7 @@ export class Settings
     public get PaperFormat(): Paper
     {
         let paper = new Paper();
+        let referenceChecker = new Object();
         let paperKey = "Document.Paper";
         let formatKey = `${paperKey}.PaperFormat`;
 
@@ -135,9 +136,9 @@ export class Settings
         {
             let configKey = `${paperKey}.Margin.` + side;
 
-            if (this.config.has(configKey))
+            if (this.GetConfigEntry(configKey, referenceChecker) !== referenceChecker)
             {
-                paper.Margin[side] = this.config.get(configKey);
+                paper.Margin[side] = this.GetConfigEntry(configKey);
             }
         }
 
