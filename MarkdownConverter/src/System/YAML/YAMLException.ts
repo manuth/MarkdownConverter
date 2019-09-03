@@ -1,7 +1,7 @@
 import Format = require("string-template");
 import { Resources } from "../../Properties/Resources";
 import { Exception } from "../Exception";
-import { IMark } from "./Mark";
+import { IMark } from "./IMark";
 
 /**
  * Represents a YAML-exception.
@@ -41,7 +41,7 @@ export class YAMLException extends Exception
      * The message of the exception.
      */
     public constructor(name: string, reason: string, mark: any, message: string);
-    public constructor(name: string | any, reason?: string, mark?: any, message?: string)
+    public constructor(name: string | any, reason?: string, mark?: IMark, message?: string)
     {
         super();
         if (arguments.length === 1)
