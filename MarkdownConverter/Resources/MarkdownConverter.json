@@ -42,8 +42,14 @@
         "Chain": "Chain all Documents"
     },
     "DateTime": {
+        "Era": {
+            "Before": "B.C.",
+            "After": "A.D."
+        },
+        "TimeSeparator": ":",
+        "DateSeparator": "-",
         "Formats": {
-            "Default": "yyyy-MM-dd",
+            "Default": "yyyy/MM/dd",
             "FullDate": "dddd, MMMM d, yyyy"
         },
         "DaysOfWeek": {
