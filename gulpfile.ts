@@ -122,7 +122,13 @@ export function Build()
                         return new Promise(
                             (resolve) =>
                             {
-                                bundlers[entry].on("update", resolve);
+                                let listener = () =>
+                                {
+                                    bundlers[entry].removeListener("update", listener);
+                                    resolve();
+                                };
+
+                                bundlers[entry].on("update", listener);
                             });
                     })
             ).then(
