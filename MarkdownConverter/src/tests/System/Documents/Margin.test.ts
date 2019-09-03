@@ -51,14 +51,19 @@ suite(
                     });
             });
 
-        test(
+        suite(
             "constructor(string top, string right, string bottom, string left)",
             () =>
             {
-                let margin = new Margin(testValue1, testValue2, testValue3, testValue4);
-                Assert.strictEqual(margin.Top, testValue1);
-                Assert.strictEqual(margin.Right, testValue2);
-                Assert.strictEqual(margin.Bottom, testValue3);
-                Assert.strictEqual(margin.Left, testValue4);
+                test(
+                    "Checking whether the values are set correctly…",
+                    () =>
+                    {
+                        let margin = new Margin(testValue1, testValue2, testValue3, testValue4);
+                        Assert.strictEqual(margin.Top, testValue1);
+                        Assert.strictEqual(margin.Right, testValue2);
+                        Assert.strictEqual(margin.Bottom, testValue3);
+                        Assert.strictEqual(margin.Left, testValue4);
+                    });
             });
     });
