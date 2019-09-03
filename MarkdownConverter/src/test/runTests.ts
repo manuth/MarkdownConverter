@@ -7,7 +7,7 @@ import { runTests } from "vscode-test";
     {
         await runTests(
             {
-                extensionDevelopmentPath: Path.resolve(__dirname, "..", ".."),
+                extensionDevelopmentPath: Path.resolve(__dirname, "..", "..", ".."),
                 extensionTestsPath: Path.resolve(__dirname, "..", "..", "lib", "test")
             });
     }
