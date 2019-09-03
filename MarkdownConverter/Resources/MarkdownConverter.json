@@ -44,7 +44,7 @@
     "DateTime": {
         "Formats": {
             "Default": "yyyy-MM-dd",
-            "FullDate": "dd. MMMM yyyy"
+            "FullDate": "dddd, MMMM d, yyyy"
         },
         "DaysOfWeek": {
             "ShortNames": [

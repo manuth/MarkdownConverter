@@ -38,7 +38,8 @@
     },
     "DateTime": {
         "Formats": {
-            "Default": "dd.MM.yyyy"
+            "Default": "dd.MM.yyyy",
+            "FullDate": "dddd, d. MMMM yyyy"
         },
         "DaysOfWeek": {
             "ShortNames": [
