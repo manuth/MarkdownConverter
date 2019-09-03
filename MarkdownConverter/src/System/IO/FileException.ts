@@ -1,5 +1,6 @@
 import Format = require("string-template");
 import { Resources } from "../../Properties/Resources";
+import { Exception } from "../Exception";
 import { IOException } from "./IOException";
 
 /**
@@ -20,10 +21,13 @@ export class FileException extends IOException
      *
      * @param path
      * The path to the file which caused the exception.
+     *
+     * @param innerException
+     * The exception that is the cause of the current exception, or a null reference if no inner exception is specified.
      */
-    constructor(message: string, path: string)
+    constructor(message?: string, path?: string, innerException?: Exception)
     {
-        super(message);
+        super(message, innerException);
         this.Path = path;
     }
 
@@ -32,6 +36,6 @@ export class FileException extends IOException
      */
     public get Message(): string
     {
-        return Format(Resources.Resources.Get("FileException"), this.Path);
+        return this.Message || Format(Resources.Resources.Get("FileException"), this.Path);
     }
 }
