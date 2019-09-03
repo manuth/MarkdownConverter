@@ -36,6 +36,6 @@ export class FileException extends IOException
      */
     public get Message(): string
     {
-        return this.Message || Format(Resources.Resources.Get("FileException"), this.Path);
+        return super.Message || Format(Resources.Resources.Get("FileException"), this.Path);
     }
 }
