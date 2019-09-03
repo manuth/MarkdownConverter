@@ -24,7 +24,7 @@ suite(
                     () =>
                     {
                         exception = new Exception();
-                        Assert.strictEqual(isNullOrUndefined(exception.Message), true);
+                        Assert.equal(!exception.Message, true);
                         Assert.strictEqual(isNullOrUndefined(exception.InnerException), true);
                         exception = new Exception("hello");
                         Assert.strictEqual(exception.Message, "hello");
