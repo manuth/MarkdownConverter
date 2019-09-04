@@ -6,5 +6,6 @@ suite(
         require("./IO");
         require("./YAML");
         require("./Globalization");
+        require("./Extensibility");
         require("./Documents");
     });
