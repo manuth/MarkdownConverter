@@ -2,9 +2,9 @@ import FileSystem = require("fs-extra");
 import PortFinder = require("get-port");
 import Glob = require("glob");
 import http = require("http");
-import Server = require("http-server");
 import Path = require("path");
 import Puppeteer = require("puppeteer-core");
+import handler = require("serve-handler");
 import { TempDirectory } from "temp-filesystem";
 import URL = require("url");
 import { isNullOrUndefined, promisify } from "util";
@@ -158,10 +158,31 @@ export class Converter
                 });
 
             this.portNumber = await PortFinder();
-            this.webServer = (Server.createServer({
-                root: this.WorkspaceRoot,
-                cors: true
-            }) as any).server as http.Server;
+            this.webServer = http.createServer(
+                (request, response) =>
+                {
+                    handler(
+                        request,
+                        response,
+                        {
+                            public: this.WorkspaceRoot,
+                            headers: [
+                                {
+                                    source: "**/*.*",
+                                    headers: [
+                                        {
+                                            key: "Access-Control-Allow-Origin",
+                                            value: "*"
+                                        },
+                                        {
+                                            key: "Access-Control-Allow-Headers",
+                                            value: "Origin, X-Requested-With, Content-Type, Accept, Range"
+                                        }
+                                    ]
+                                }
+                            ]
+                        });
+                });
 
             this.webServer.listen(this.portNumber, "localhost");
 
