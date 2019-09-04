@@ -18,7 +18,13 @@ export class Paper
     private format: PaperFormat = new StandardizedPaperFormat();
 
     /**
-     * Initializes a new instance of the Layout class.
+     * Initializes a new instance of the `Paper` class.
+     *
+     * @param format
+     * Either the format of the paper or `null` to use the default format.
+     *
+     * @param margin
+     * Either the margin of the paper or `null` to use a default margin.
      */
     constructor(format?: PaperFormat, margin?: Margin)
     {
