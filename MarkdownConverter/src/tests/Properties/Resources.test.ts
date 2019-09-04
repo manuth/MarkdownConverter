@@ -10,6 +10,20 @@ suite(
             "Culture",
             () =>
             {
+                let originalLocale: CultureInfo;
+
+                suiteSetup(
+                    () =>
+                    {
+                        originalLocale = Resources.Culture;
+                    });
+
+                suiteTeardown(
+                    () =>
+                    {
+                        Resources.Culture = originalLocale;
+                    });
+
                 test(
                     "Checking whether setting the `Culture` affects all resources…",
                     () =>
