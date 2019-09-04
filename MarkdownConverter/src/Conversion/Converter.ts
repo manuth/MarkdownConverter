@@ -192,11 +192,7 @@ export class Converter
      */
     public async Dispose()
     {
-        if (!this.Initialized)
-        {
-            throw new Error("The converter must be initialized in order to be disposed.");
-        }
-        else
+        if (this.Initialized)
         {
             await this.browser.close();
             await new Promise(
@@ -205,9 +201,10 @@ export class Converter
                     this.WebServer.close(() => resolve());
                 });
 
-            this.initialized = false;
-            this.disposed = true;
         }
+
+        this.initialized = false;
+        this.disposed = true;
     }
 
     /**
