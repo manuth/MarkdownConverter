@@ -115,12 +115,12 @@ export class Document extends Renderable
 
         if (!document.isUntitled)
         {
-            this.FileName = document.fileName;
+            this.fileName = document.fileName;
             this.Attributes.CreationDate = FileSystem.statSync(document.fileName).ctime;
         }
         else
         {
-            this.FileName = null;
+            this.fileName = null;
             this.Attributes.CreationDate = new Date(Date.now());
         }
 
@@ -133,11 +133,6 @@ export class Document extends Renderable
     public get FileName(): string
     {
         return this.fileName;
-    }
-
-    public set FileName(value: string)
-    {
-        this.fileName = value;
     }
 
     /**
