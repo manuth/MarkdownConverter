@@ -157,7 +157,7 @@ export class Document extends Renderable
         try
         {
             let result = FrontMatter(value);
-            Object.assign(this.Attributes, result.attributes);
+            this.Attributes = result.attributes;
             this.Content = result.body;
         }
         catch (exception)
