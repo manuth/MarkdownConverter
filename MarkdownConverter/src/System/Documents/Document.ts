@@ -24,7 +24,7 @@ export class Document extends Renderable
     /**
      * The name of the file represented by this document.
      */
-    public fileName: string;
+    private fileName: string;
 
     /**
      * The quality of the document.
