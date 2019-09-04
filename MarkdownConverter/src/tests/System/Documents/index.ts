@@ -9,5 +9,6 @@ suite(
         require("./CustomPaperFormat.test");
         require("./Margin.test");
         require("./Paper.test");
+        require("./TocSettings.test");
         require("./Document.test");
     });
