@@ -4,4 +4,5 @@ suite(
     {
         require("./Properties");
         require("./System");
+        require("./Conversion");
     });
