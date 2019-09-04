@@ -7,4 +7,5 @@ suite(
         require("./StandardizedPaperFormat.test");
         require("./CustomPaperFormat.test");
         require("./Margin.test");
+        require("./Document.test");
     });
