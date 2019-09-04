@@ -38,7 +38,7 @@ export class TocSettings
      * @param indicator
      * A regexp which should be replaced by the toc inside the document.
      */
-    public constructor($class: string, levels: MultiRange = new MultiRange([]), indicator: RegExp, listType: ListType = ListType.Unordered)
+    public constructor($class: string, levels: MultiRange = new MultiRange([]), indicator: RegExp = /\[\[\s*toc\s*\]\]/g, listType: ListType = ListType.Unordered)
     {
         this.class = $class;
         this.levels = levels;
