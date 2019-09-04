@@ -366,7 +366,7 @@ export class Document extends Renderable
         {
             let value = this.Attributes[key];
 
-            if (value instanceof Date || Date.parse(value))
+            if (value instanceof Date)
             {
                 value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
             }
