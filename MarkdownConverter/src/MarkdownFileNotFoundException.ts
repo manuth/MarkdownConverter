@@ -11,6 +11,14 @@ export class MarkdownFileNotFoundException extends FileNotFoundException
      */
     constructor()
     {
-        super(Resources.Resources.Get("MarkdownFileException"), null);
+        super(null, null);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public get Message()
+    {
+        return Resources.Resources.Get<string>("MarkdownFileException");
     }
 }

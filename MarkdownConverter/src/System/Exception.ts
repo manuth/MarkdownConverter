@@ -20,7 +20,7 @@ export class Exception extends Error
      * The error message that explains the reason for the exception.
      *
      * @param innerException
-     * The exception that is the cause of the current exception, or a null reference if no inner exception is specified.
+     * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
      */
     public constructor(message?: string, innerException?: Exception)
     {
