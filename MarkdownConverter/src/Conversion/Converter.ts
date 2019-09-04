@@ -144,6 +144,8 @@ export class Converter
      */
     public async Initialize(progressReporter?: Progress<IProgressState>)
     {
+        progressReporter = progressReporter || { report() { } };
+
         if (this.Initialized || this.Disposed)
         {
             throw new Error("The converter cannot be re-initialized.");
@@ -218,6 +220,8 @@ export class Converter
      */
     public async Start(conversionType: ConversionType, path: string, progressReporter?: Progress<IProgressState>): Promise<void>
     {
+        progressReporter = progressReporter || { report() { } };
+
         if (!this.Initialized)
         {
             throw new Error("The converter must be initialized in order to use it.");
