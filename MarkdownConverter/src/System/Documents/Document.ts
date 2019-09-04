@@ -307,7 +307,7 @@ export class Document extends Renderable
         {
             if (/.*:\/\//g.test(styleSheet) || !Path.isAbsolute(styleSheet))
             {
-                styleCode += Dedent(`<link rel="stylesheet" type="text/css" href="/${styleSheet}" />\n`);
+                styleCode += Dedent(`<link rel="stylesheet" type="text/css" href="${styleSheet}" />\n`);
             }
             else
             {
