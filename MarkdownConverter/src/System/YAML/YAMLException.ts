@@ -46,7 +46,7 @@ export class YAMLException extends Exception
     public constructor(name: string, reason: string, mark: any, message: string, innerException?: Exception);
     public constructor(name: string | any, reason?: string, mark?: IMark, message?: string, innerException?: Exception)
     {
-        super(...(arguments.length === 1 ? [name.message] : [message, innerException]));
+        super(...(arguments.length === 1 ? [null, name] : [message, innerException]));
         if (arguments.length === 1)
         {
             let exception = name;
@@ -59,7 +59,6 @@ export class YAMLException extends Exception
             this.name = name;
             this.reason = reason;
             this.mark = mark;
-            this.message = message;
         }
     }
 
