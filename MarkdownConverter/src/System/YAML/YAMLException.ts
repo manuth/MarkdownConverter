@@ -38,12 +38,15 @@ export class YAMLException extends Exception
      * The mark of the position that caused the exception.
      *
      * @param message
-     * The message of the exception.
+     * Either the error message that explains the reason for the exception or `null` to use the default message.
+     *
+     * @param innerException
+     * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
      */
-    public constructor(name: string, reason: string, mark: any, message: string);
-    public constructor(name: string | any, reason?: string, mark?: IMark, message?: string)
+    public constructor(name: string, reason: string, mark: any, message: string, innerException?: Exception);
+    public constructor(name: string | any, reason?: string, mark?: IMark, message?: string, innerException?: Exception)
     {
-        super();
+        super(...(arguments.length === 1 ? [name.message] : [message, innerException]));
         if (arguments.length === 1)
         {
             let exception = name;

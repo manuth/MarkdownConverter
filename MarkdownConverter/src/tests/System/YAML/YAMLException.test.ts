@@ -4,6 +4,7 @@ import Dedent = require("dedent");
 import FrontMatter = require("front-matter");
 import { isNullOrUndefined } from "util";
 import { Resources } from "../../../Properties/Resources";
+import { Exception } from "../../../System/Exception";
 import { IMark } from "../../../System/YAML/IMark";
 import { YAMLException } from "../../../System/YAML/YAMLException";
 
@@ -59,11 +60,13 @@ suite(
                         let reason = "reason";
                         let mark: IMark = new Object() as any;
                         let message = "message";
-                        let exception = new YAMLException(name, reason, mark, message);
+                        let innerException = new Exception();
+                        let exception = new YAMLException(name, reason, mark, message, innerException);
                         Assert.strictEqual(exception.Name, name);
                         Assert.strictEqual(exception.Message, message);
                         Assert.strictEqual(exception.Mark, mark);
                         Assert.strictEqual(exception.Reason, reason);
+                        Assert.strictEqual(exception.InnerException, innerException);
                     });
             });
 
