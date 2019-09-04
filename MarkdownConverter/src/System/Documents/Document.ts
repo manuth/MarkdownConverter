@@ -146,9 +146,9 @@ export class Document extends Renderable
     public get RawContent(): string
     {
         return (
-            "---" + OS.EOL +
-            YAML.stringify(this.Attributes).trim() + OS.EOL +
-            "---" + OS.EOL +
+            "---\n" +
+            YAML.stringify(this.Attributes).trim() + "\n" +
+            "---\n" +
             this.Content);
     }
 
