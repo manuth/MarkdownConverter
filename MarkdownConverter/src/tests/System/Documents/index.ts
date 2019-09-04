@@ -2,6 +2,7 @@ suite(
     "Documents",
     () =>
     {
+        require("./Slugifier.test");
         require("./Renderable.test");
         require("./DocumentFragment.test");
         require("./StandardizedPaperFormat.test");
