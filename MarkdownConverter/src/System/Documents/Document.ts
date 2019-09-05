@@ -10,6 +10,7 @@ import { TextDocument } from "vscode";
 import YAML = require("yamljs");
 import { Resources } from "../../Properties/Resources";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
+import { FileException } from "../IO/FileException";
 import { YAMLException } from "../YAML/YAMLException";
 import { DocumentFragment } from "./DocumentFragment";
 import { Paper } from "./Paper";
