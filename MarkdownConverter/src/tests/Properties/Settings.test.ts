@@ -1,6 +1,7 @@
 import Assert = require("assert");
-import { env } from "vscode";
+import { ConfigurationTarget, env, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
+import { Settings } from "../../Properties/Settings";
 import { CustomPaperFormat } from "../../System/Documents/CustomPaperFormat";
 import { EmojiType } from "../../System/Documents/EmojiType";
 import { ListType } from "../../System/Documents/ListType";
@@ -15,11 +16,74 @@ suite(
     () =>
     {
         let settings: TestSettings;
+        let originalSettings: Array<ReturnType<WorkspaceConfiguration["inspect"]>>;
+        let config: WorkspaceConfiguration;
+
+        suiteSetup(
+            async () =>
+            {
+                config = workspace.getConfiguration();
+                settings = new TestSettings();
+                originalSettings = [];
+                let settingKeys = [
+                    "ConversionType",
+                    "Locale",
+                    "Parser.EmojiType",
+                    "Document.Paper.Margin",
+                    "Document.Paper.PaperFormat",
+                    "Parser.Toc.Enabled",
+                    "Parser.Toc.ListType"
+                ];
+
+                for (let key of settingKeys)
+                {
+                    originalSettings.push(config.inspect(`${Settings["configKey"]}.${key}`));
+                }
+
+                for (let setting of originalSettings)
+                {
+                    if (setting.globalValue !== undefined)
+                    {
+                        await config.update(setting.key, undefined, ConfigurationTarget.Global);
+                    }
+
+                    if (setting.workspaceValue !== undefined)
+                    {
+                        await config.update(setting.key, undefined, ConfigurationTarget.Workspace);
+                    }
+
+                    if (setting.workspaceFolderValue !== undefined)
+                    {
+                        await config.update(setting.key, undefined, ConfigurationTarget.WorkspaceFolder);
+                    }
+                }
+            });
+
+        suiteTeardown(
+            () =>
+            {
+                for (let setting of originalSettings)
+                {
+                    if (setting.globalValue !== undefined)
+                    {
+                        config.update(setting.key, setting.globalValue, ConfigurationTarget.Global);
+                    }
+
+                    if (setting.workspaceValue !== undefined)
+                    {
+                        config.update(setting.key, setting.workspaceValue, ConfigurationTarget.Workspace);
+                    }
+
+                    if (setting.workspaceFolderValue !== undefined)
+                    {
+                        config.update(setting.key, setting.workspaceFolderValue, ConfigurationTarget.WorkspaceFolder);
+                    }
+                }
+            });
 
         setup(
             () =>
             {
-                settings = new TestSettings();
                 settings.Resource.Resource = {};
             });
 
@@ -38,7 +102,7 @@ suite(
                     "Checking whether the conversion-types are resolved correctly…",
                     () =>
                     {
-                        settings.Resource.Resource["ConversionType"] = ["HTML"] as Array<(keyof typeof ConversionType)>;
+                        settings.Resource.Resource["ConversionType"] = ["HTML"] as Array<keyof typeof ConversionType>;
                         Assert.strictEqual(settings.ConversionType[0], ConversionType.HTML);
                     });
             });
