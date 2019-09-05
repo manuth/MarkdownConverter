@@ -7,5 +7,6 @@ suite(
         require("./YAML");
         require("./Globalization");
         require("./Extensibility");
+        require("./Tasks");
         require("./Documents");
     });
