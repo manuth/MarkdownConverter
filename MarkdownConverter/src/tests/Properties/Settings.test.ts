@@ -28,18 +28,18 @@ suite(
             () =>
             {
                 test(
+                    "Checking whether the default conversion-type is set correctly…",
+                    () =>
+                    {
+                        Assert.deepEqual(settings.ConversionType, [ConversionType.PDF]);
+                    });
+
+                test(
                     "Checking whether the conversion-types are resolved correctly…",
                     () =>
                     {
                         settings.Resource.Resource["ConversionType"] = ["HTML"] as Array<(keyof typeof ConversionType)>;
                         Assert.strictEqual(settings.ConversionType[0], ConversionType.HTML);
-                    });
-
-                test(
-                    "Checking whether the default conversion-type is set correctly…",
-                    () =>
-                    {
-                        Assert.deepEqual(settings.ConversionType, [ConversionType.PDF]);
                     });
             });
 
