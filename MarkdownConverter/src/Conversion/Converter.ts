@@ -180,7 +180,8 @@ export class Converter
                                         }
                                     ]
                                 }
-                            ]
+                            ],
+                            cleanUrls: false
                         });
                 });
 
