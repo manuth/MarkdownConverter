@@ -272,6 +272,34 @@ export class ConversionRunner
         let converter = new Converter(workspaceRoot, new Document(document, await this.LoadParser()));
         converter.Document.Quality = Settings.Default.ConversionQuality;
 
+        converter.Document.Header.Content = Settings.Default.HeaderTemplate;
+        if ("HeaderPath" in converter.Document.Attributes)
+        {
+            let headerPath = converter.Document.Attributes["HeaderPath"];
+            if (!Path.isAbsolute(headerPath))
+            {
+                headerPath = Path.resolve(converter.WorkspaceRoot, headerPath);
+            }
+            if (await FileSystem.pathExists(headerPath))
+            {
+                converter.Document.Header.Content = FileSystem.readFileSync(headerPath, "utf8");
+            }
+        }
+
+        converter.Document.Footer.Content = Settings.Default.FooterTemplate;
+        if ("FooterPath" in converter.Document.Attributes)
+        {
+            let footerPath = converter.Document.Attributes["FooterPath"];
+            if (!Path.isAbsolute(footerPath))
+            {
+                footerPath = Path.resolve(converter.WorkspaceRoot, footerPath);
+            }
+            if (await FileSystem.pathExists(footerPath))
+            {
+                converter.Document.Footer.Content = FileSystem.readFileSync(footerPath, "utf8");
+            }
+        }
+
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Attributes.Author = converter.Document.Attributes.Author || await Utilities.GetFullName();
 
@@ -281,8 +309,6 @@ export class ConversionRunner
         converter.Document.Paper = Settings.Default.PaperFormat;
 
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
-        converter.Document.Header.Content = Settings.Default.HeaderTemplate;
-        converter.Document.Footer.Content = Settings.Default.FooterTemplate;
 
         try
         {
