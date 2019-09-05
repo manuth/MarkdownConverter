@@ -1,7 +1,6 @@
 import Clone = require("clone");
 import { CultureInfo } from "culture-info";
 import Template = require("es6-template-string");
-import Fs = require("fs");
 import FileSystem = require("fs-extra");
 import HighlightJs = require("highlight.js");
 import MarkdownIt = require("markdown-it");
@@ -273,32 +272,32 @@ export class ConversionRunner
         let converter = new Converter(workspaceRoot, new Document(document, await this.LoadParser()));
         converter.Document.Quality = Settings.Default.ConversionQuality;
 
-        try
+        converter.Document.Header.Content = Settings.Default.HeaderTemplate;
+        if ("HeaderPath" in converter.Document.Attributes)
         {
-            let headerPath = converter.Document.Attributes.HeaderPath;
+            let headerPath = converter.Document.Attributes["HeaderPath"];
             if (!Path.isAbsolute(headerPath))
             {
                 headerPath = Path.resolve(converter.WorkspaceRoot, headerPath);
             }
-            converter.Document.Header.Content = Fs.readFileSync(headerPath, "utf8");
-        }
-        catch (err)
-        {
-            converter.Document.Header.Content = Settings.Default.HeaderTemplate;
+            if (await FileSystem.pathExists(headerPath))
+            {
+                converter.Document.Header.Content = FileSystem.readFileSync(headerPath, "utf8");
+            }
         }
 
-        try
+        converter.Document.Footer.Content = Settings.Default.FooterTemplate;
+        if ("FooterPath" in converter.Document.Attributes)
         {
-            let footerPath = converter.Document.Attributes.FooterPath;
+            let footerPath = converter.Document.Attributes["FooterPath"];
             if (!Path.isAbsolute(footerPath))
             {
                 footerPath = Path.resolve(converter.WorkspaceRoot, footerPath);
             }
-            converter.Document.Footer.Content = Fs.readFileSync(footerPath, "utf8");
-        }
-        catch
-        {
-            converter.Document.Footer.Content = Settings.Default.FooterTemplate;
+            if (await FileSystem.pathExists(footerPath))
+            {
+                converter.Document.Footer.Content = FileSystem.readFileSync(footerPath, "utf8");
+            }
         }
 
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
