@@ -1,12 +1,14 @@
 import Assert = require("assert");
 import FileSystem = require("fs-extra");
 import MarkdownIt = require("markdown-it");
+import Puppeteer = require("puppeteer-core");
 import { TempDirectory, TempFile } from "temp-filesystem";
 import Path = require("upath");
 import { isNullOrUndefined } from "util";
 import { TextDocument, workspace } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Converter } from "../../Conversion/Converter";
+import { extension } from "../../extension";
 import { Document } from "../../System/Documents/Document";
 
 suite(
@@ -20,8 +22,9 @@ suite(
         let textDocument: TextDocument;
 
         suiteSetup(
-            async () =>
+            async function()
             {
+                this.enableTimeouts(false);
                 let parser = new MarkdownIt();
                 tempDir = new TempDirectory();
                 tempFile = new TempFile(
@@ -33,12 +36,18 @@ suite(
                 await FileSystem.writeFile(tempFile.FullName, "This is a test");
                 textDocument = await workspace.openTextDocument(tempFile.FullName);
                 document = new Document(textDocument, parser);
+
+                if (!await FileSystem.pathExists(Puppeteer.executablePath()))
+                {
+                    await Puppeteer.createBrowserFetcher().download(extension.ChromiumRevision);
+                }
             });
 
         suiteTeardown(
             () =>
             {
-                
+                tempDir.Dispose();
+                tempFile.Dispose();
             });
 
         suite(
