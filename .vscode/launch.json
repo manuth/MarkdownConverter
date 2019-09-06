@@ -20,7 +20,7 @@
         {
             "type": "extensionHost",
             "request": "launch",
-            "name": "Launch Tests",
+            "name": "Launch Common Tests",
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
@@ -33,6 +33,32 @@
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
             "preLaunchTask": "Build"
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Tests for Single-File Mode",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
+                "${workspaceFolder}/MarkdownConverter/src/test/single-file/Test.md"
+            ],
+            "env": {
+                "TEST_SUITE": "single-file"
+            },
+            "outFiles": [
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Launch Tests",
+            "configurations": [
+                "Launch Common Tests",
+                "Launch Tests for Single-File Mode"
+            ]
         }
     ]
 }
