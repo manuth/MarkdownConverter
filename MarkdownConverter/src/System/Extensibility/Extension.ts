@@ -134,13 +134,13 @@ export class Extension
         this.context = context;
 
         return {
-            extendMarkdownIt: (md: any) =>
+            extendMarkdownIt: async (md: any) =>
             {
                 this.vsCodeParser = md;
 
                 if (window.activeTextEditor === this.systemParserFixEditor)
                 {
-                    commands.executeCommand("workbench.action.closeActiveEditor");
+                    await commands.executeCommand("workbench.action.closeActiveEditor");
                 }
 
                 this.systemParserFixResolver();
