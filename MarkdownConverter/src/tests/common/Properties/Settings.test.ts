@@ -9,6 +9,7 @@ import { Margin } from "../../../System/Documents/Margin";
 import { PaperOrientation } from "../../../System/Documents/PaperOrientation";
 import { StandardizedFormatType } from "../../../System/Documents/StandardizedFormatType";
 import { StandardizedPaperFormat } from "../../../System/Documents/StandardizedPaperFormat";
+import { ConfigRestorer } from "../../ConfigRestorer";
 import { TestSettings } from "./TestSettings";
 
 suite(
@@ -16,69 +17,31 @@ suite(
     () =>
     {
         let settings: TestSettings;
-        let originalSettings: Array<ReturnType<WorkspaceConfiguration["inspect"]>>;
-        let config: WorkspaceConfiguration;
+        let configRestorer: ConfigRestorer;
 
         suiteSetup(
             async () =>
             {
-                config = workspace.getConfiguration();
                 settings = new TestSettings();
-                originalSettings = [];
-                let settingKeys = [
-                    "ConversionType",
-                    "Locale",
-                    "Parser.EmojiType",
-                    "Document.Paper.Margin",
-                    "Document.Paper.PaperFormat",
-                    "Parser.Toc.Enabled",
-                    "Parser.Toc.ListType"
-                ];
+                configRestorer = new ConfigRestorer(
+                    [
+                        "ConversionType",
+                        "Locale",
+                        "Parser.EmojiType",
+                        "Document.Paper.Margin",
+                        "Document.Paper.PaperFormat",
+                        "Parser.Toc.Enabled",
+                        "Parser.Toc.ListType"
+                    ],
+                    Settings["configKey"]);
 
-                for (let key of settingKeys)
-                {
-                    originalSettings.push(config.inspect(`${Settings["configKey"]}.${key}`));
-                }
-
-                for (let setting of originalSettings)
-                {
-                    if (setting.globalValue !== undefined)
-                    {
-                        await config.update(setting.key, undefined, ConfigurationTarget.Global);
-                    }
-
-                    if (setting.workspaceValue !== undefined)
-                    {
-                        await config.update(setting.key, undefined, ConfigurationTarget.Workspace);
-                    }
-
-                    if (setting.workspaceFolderValue !== undefined)
-                    {
-                        await config.update(setting.key, undefined, ConfigurationTarget.WorkspaceFolder);
-                    }
-                }
+                configRestorer.Clear();
             });
 
         suiteTeardown(
             () =>
             {
-                for (let setting of originalSettings)
-                {
-                    if (setting.globalValue !== undefined)
-                    {
-                        config.update(setting.key, setting.globalValue, ConfigurationTarget.Global);
-                    }
-
-                    if (setting.workspaceValue !== undefined)
-                    {
-                        config.update(setting.key, setting.workspaceValue, ConfigurationTarget.Workspace);
-                    }
-
-                    if (setting.workspaceFolderValue !== undefined)
-                    {
-                        config.update(setting.key, setting.workspaceFolderValue, ConfigurationTarget.WorkspaceFolder);
-                    }
-                }
+                configRestorer.Restore();
             });
 
         setup(

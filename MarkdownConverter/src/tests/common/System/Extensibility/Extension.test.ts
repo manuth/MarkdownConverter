@@ -7,6 +7,7 @@ import { commands, ConfigurationTarget, TextEditor, Uri, window, workspace, Work
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { Settings } from "../../../../Properties/Settings";
 import { Extension } from "../../../../System/Extensibility/Extension";
+import { ConfigRestorer } from "../../../ConfigRestorer";
 
 suite(
     "Extension",
@@ -69,13 +70,21 @@ suite(
                 let mdFile: TempFile;
                 let destinationDirectory: TempDirectory;
                 let pdfFile: string;
-                let originalSettings: Array<ReturnType<WorkspaceConfiguration["inspect"]>>;
+                let configRestorer: ConfigRestorer;
                 let config: WorkspaceConfiguration;
 
                 suiteSetup(
                     async () =>
                     {
-                        config = workspace.getConfiguration();
+                        configRestorer = new ConfigRestorer(
+                            [
+                                "ConversionType",
+                                "DestinationPattern",
+                                "IgnoreLanguageMode"
+                            ],
+                            Settings["configKey"]);
+
+                        config = workspace.getConfiguration(Settings["configKey"]);
                         mdFile = new TempFile(
                             {
                                 postfix: ".txt"
@@ -91,65 +100,16 @@ suite(
                                 # Hello World`));
 
                         await window.showTextDocument(Uri.file(mdFile.FullName));
-
-                        originalSettings = [];
-                        let settingKeys = [
-                            "ConversionType",
-                            "DestinationPattern",
-                            "IgnoreLanguageMode"
-                        ];
-
-                        for (let key of settingKeys)
-                        {
-                            originalSettings.push(config.inspect(`${Settings["configKey"]}.${key}`));
-                        }
-
-                        for (let setting of originalSettings)
-                        {
-                            if (setting.globalValue !== undefined)
-                            {
-                                await config.update(setting.key, undefined, ConfigurationTarget.Global);
-                            }
-
-                            if (setting.workspaceValue !== undefined)
-                            {
-                                await config.update(setting.key, undefined, ConfigurationTarget.Workspace);
-                            }
-
-                            if (setting.workspaceFolderValue !== undefined)
-                            {
-                                await config.update(setting.key, undefined, ConfigurationTarget.WorkspaceFolder);
-                            }
-                        }
-
-                        await config.update(`${Settings["configKey"]}.ConversionType`, [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
-                        await config.update(`${Settings["configKey"]}.DestinationPattern`, Path.normalizeSafe(pdfFile), ConfigurationTarget.Global);
-                        await config.update(`${Settings["configKey"]}.IgnoreLanguageMode`, true, ConfigurationTarget.Global);
+                        configRestorer.Clear();
+                        await config.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
+                        await config.update("DestinationPattern", Path.normalizeSafe(pdfFile), ConfigurationTarget.Global);
+                        await config.update("IgnoreLanguageMode", true, ConfigurationTarget.Global);
                     });
 
                 suiteTeardown(
                     async () =>
                     {
-                        for (let setting of originalSettings)
-                        {
-                            let newSetting = config.inspect(setting.key);
-
-                            if (setting.globalValue !== newSetting.globalValue)
-                            {
-                                await config.update(setting.key, setting.globalValue, ConfigurationTarget.Global);
-                            }
-
-                            if (setting.workspaceValue !== newSetting.workspaceValue)
-                            {
-                                await config.update(setting.key, setting.workspaceValue, ConfigurationTarget.Workspace);
-                            }
-
-                            if (setting.workspaceFolderValue !== newSetting.workspaceFolderValue)
-                            {
-                                await config.update(setting.key, setting.workspaceFolderValue, ConfigurationTarget.WorkspaceFolder);
-                            }
-                        }
-
+                        configRestorer.Restore();
                         await commands.executeCommand("workbench.action.closeActiveEditor");
                         mdFile.Dispose();
                         destinationDirectory.Dispose();
@@ -157,7 +117,7 @@ suite(
 
                 test(
                     "Checking whether the system-parser can be enabled manually…",
-                    async function()
+                    async function ()
                     {
                         this.enableTimeouts(false);
                         await Assert.doesNotReject(
