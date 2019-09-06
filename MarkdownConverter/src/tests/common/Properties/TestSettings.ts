@@ -1,5 +1,5 @@
 import { ObjectResource } from "localized-resource-manager";
-import { Settings } from "../../Properties/Settings";
+import { Settings } from "../../../Properties/Settings";
 
 /**
  * Provides an implementation of the `Settings` class for testing.

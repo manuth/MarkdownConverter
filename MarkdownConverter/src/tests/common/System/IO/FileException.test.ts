@@ -1,8 +1,8 @@
 import Assert = require("assert");
 import { CultureInfo } from "culture-info";
 import { isNullOrUndefined } from "util";
-import { Resources } from "../../../Properties/Resources";
-import { FileException } from "../../../System/IO/FileException";
+import { Resources } from "../../../../Properties/Resources";
+import { FileException } from "../../../../System/IO/FileException";
 
 suite(
     "FileException",

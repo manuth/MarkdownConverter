@@ -1,9 +1,9 @@
 import Assert = require("assert");
-import { Margin } from "../../../System/Documents/Margin";
-import { Paper } from "../../../System/Documents/Paper";
-import { PaperOrientation } from "../../../System/Documents/PaperOrientation";
-import { StandardizedFormatType } from "../../../System/Documents/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../../../System/Documents/StandardizedPaperFormat";
+import { Margin } from "../../../../System/Documents/Margin";
+import { Paper } from "../../../../System/Documents/Paper";
+import { PaperOrientation } from "../../../../System/Documents/PaperOrientation";
+import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
+import { StandardizedPaperFormat } from "../../../../System/Documents/StandardizedPaperFormat";
 
 suite(
     "Paper",

@@ -1,6 +1,6 @@
 import Assert = require("assert");
 import { CultureInfo } from "culture-info";
-import { Resources } from "../../Properties/Resources";
+import { Resources } from "../../../Properties/Resources";
 
 suite(
     "Resources",

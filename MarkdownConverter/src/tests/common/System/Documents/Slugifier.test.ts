@@ -1,5 +1,5 @@
 import Assert = require("assert");
-import { Slugifier } from "../../../System/Documents/Slugifier";
+import { Slugifier } from "../../../../System/Documents/Slugifier";
 
 suite(
     "Slugifier",

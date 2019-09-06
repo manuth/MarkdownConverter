@@ -6,10 +6,10 @@ import { TempDirectory, TempFile } from "temp-filesystem";
 import Path = require("upath");
 import { isNullOrUndefined } from "util";
 import { TextDocument, workspace } from "vscode";
-import { ConversionType } from "../../Conversion/ConversionType";
-import { Converter } from "../../Conversion/Converter";
-import { extension } from "../../extension";
-import { Document } from "../../System/Documents/Document";
+import { ConversionType } from "../../../Conversion/ConversionType";
+import { Converter } from "../../../Conversion/Converter";
+import { extension } from "../../../extension";
+import { Document } from "../../../System/Documents/Document";
 
 suite(
     "Converter",

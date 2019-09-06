@@ -1,8 +1,8 @@
 import Assert = require("assert");
 import MarkdownIt = require("markdown-it");
 import { TextDocument, workspace } from "vscode";
-import { Document } from "../../../System/Documents/Document";
-import { DocumentFragment } from "../../../System/Documents/DocumentFragment";
+import { Document } from "../../../../System/Documents/Document";
+import { DocumentFragment } from "../../../../System/Documents/DocumentFragment";
 
 suite(
     "DocumentFragment",

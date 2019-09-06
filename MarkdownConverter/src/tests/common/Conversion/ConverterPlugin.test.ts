@@ -6,9 +6,9 @@ import Path = require("path");
 import { TempDirectory } from "temp-filesystem";
 import { workspace } from "vscode";
 import Scrape = require("website-scraper");
-import { Converter } from "../../Conversion/Converter";
-import { ConverterPlugin } from "../../Conversion/ConverterPlugin";
-import { Document } from "../../System/Documents/Document";
+import { Converter } from "../../../Conversion/Converter";
+import { ConverterPlugin } from "../../../Conversion/ConverterPlugin";
+import { Document } from "../../../System/Documents/Document";
 
 suite(
     "ConverterPlugin",

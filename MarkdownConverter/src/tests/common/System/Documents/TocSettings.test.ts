@@ -1,7 +1,7 @@
 import Assert = require("assert");
 import MultiRange from "multi-integer-range";
-import { ListType } from "../../../System/Documents/ListType";
-import { TocSettings } from "../../../System/Documents/TocSettings";
+import { ListType } from "../../../../System/Documents/ListType";
+import { TocSettings } from "../../../../System/Documents/TocSettings";
 
 suite(
     "TocSettings",

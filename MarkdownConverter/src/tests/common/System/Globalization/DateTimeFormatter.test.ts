@@ -1,6 +1,6 @@
 import Assert = require("assert");
 import { CultureInfo } from "culture-info";
-import { DateTimeFormatter } from "../../../System/Globalization/DateTimeFormatter";
+import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
 suite(
     "DateTimeFormatter",

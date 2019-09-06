@@ -1,5 +1,5 @@
 import Assert = require("assert");
-import { CustomPaperFormat } from "../../../System/Documents/CustomPaperFormat";
+import { CustomPaperFormat } from "../../../../System/Documents/CustomPaperFormat";
 
 suite(
     "CustomPaperFormat",

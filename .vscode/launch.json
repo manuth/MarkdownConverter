@@ -26,6 +26,9 @@
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test"
             ],
+            "env": {
+                "TEST_SUITE": "common"
+            },
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],

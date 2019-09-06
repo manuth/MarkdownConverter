@@ -1,5 +1,5 @@
 import Assert = require("assert");
-import { Renderable } from "../../../System/Documents/Renderable";
+import { Renderable } from "../../../../System/Documents/Renderable";
 
 suite(
     "Renderable",

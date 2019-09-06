@@ -1,5 +1,5 @@
 import Assert = require("assert");
-import { Margin } from "../../../System/Documents/Margin";
+import { Margin } from "../../../../System/Documents/Margin";
 
 suite(
     "Margin",

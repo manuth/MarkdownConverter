@@ -1,7 +1,7 @@
 import Assert = require("assert");
-import { PaperOrientation } from "../../../System/Documents/PaperOrientation";
-import { StandardizedFormatType } from "../../../System/Documents/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../../../System/Documents/StandardizedPaperFormat";
+import { PaperOrientation } from "../../../../System/Documents/PaperOrientation";
+import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
+import { StandardizedPaperFormat } from "../../../../System/Documents/StandardizedPaperFormat";
 
 suite(
     "StandardizedPaperFormat",

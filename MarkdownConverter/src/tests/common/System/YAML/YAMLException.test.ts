@@ -3,10 +3,10 @@ import { CultureInfo } from "culture-info";
 import Dedent = require("dedent");
 import FrontMatter = require("front-matter");
 import { isNullOrUndefined } from "util";
-import { Resources } from "../../../Properties/Resources";
-import { Exception } from "../../../System/Exception";
-import { IMark } from "../../../System/YAML/IMark";
-import { YAMLException } from "../../../System/YAML/YAMLException";
+import { Resources } from "../../../../Properties/Resources";
+import { Exception } from "../../../../System/Exception";
+import { IMark } from "../../../../System/YAML/IMark";
+import { YAMLException } from "../../../../System/YAML/YAMLException";
 
 suite(
     "YAMLException",

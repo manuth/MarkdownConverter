@@ -1,6 +1,6 @@
 import Assert = require("assert");
 import { isNullOrUndefined } from "util";
-import { Exception } from "../../System/Exception";
+import { Exception } from "../../../System/Exception";
 
 suite(
     "Exception",

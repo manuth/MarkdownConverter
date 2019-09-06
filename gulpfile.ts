@@ -53,7 +53,7 @@ export function Build()
         "extension.ts",
         "test/runTests.ts",
         "test/index.ts",
-        "test/extension.test.ts"
+        "test/common.test.ts"
     ];
 
     let bundlers: { [entry: string]: browserify.BrowserifyObject } = {};

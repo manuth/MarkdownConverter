@@ -4,9 +4,9 @@ import FileSystem = require("fs-extra");
 import { TempDirectory, TempFile } from "temp-filesystem";
 import Path = require("upath");
 import { commands, ConfigurationTarget, TextEditor, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
-import { ConversionType } from "../../../Conversion/ConversionType";
-import { Settings } from "../../../Properties/Settings";
-import { Extension } from "../../../System/Extensibility/Extension";
+import { ConversionType } from "../../../../Conversion/ConversionType";
+import { Settings } from "../../../../Properties/Settings";
+import { Extension } from "../../../../System/Extensibility/Extension";
 
 suite(
     "Extension",
@@ -22,7 +22,7 @@ suite(
                     "Checking whether the extension can be initialized correctly…",
                     () =>
                     {
-                        extension = new Extension(Path.resolve(__dirname, "..", "..", "..", "..", ".."));
+                        extension = new Extension(Path.resolve(__dirname, "..", "..", "..", "..", "..", ".."));
                     });
             });
 

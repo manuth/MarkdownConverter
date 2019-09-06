@@ -7,8 +7,8 @@ import { TempFile } from "temp-filesystem";
 import { isNullOrUndefined } from "util";
 import { TextDocument, workspace } from "vscode";
 import YAML = require("yamljs");
-import { Document } from "../../../System/Documents/Document";
-import { DateTimeFormatter } from "../../../System/Globalization/DateTimeFormatter";
+import { Document } from "../../../../System/Documents/Document";
+import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
 suite(
     "Document",

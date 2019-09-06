@@ -3,8 +3,8 @@ import FileSystem = require("fs-extra");
 import Path = require("path");
 import Puppeteer = require("puppeteer-core");
 import { TempDirectory } from "temp-filesystem";
-import { extension } from "../../../extension";
-import { PuppeteerTask } from "../../../System/Tasks/PuppeteerTask";
+import { extension } from "../../../../extension";
+import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask";
 
 suite(
     "PuppeteerTask",
@@ -37,7 +37,7 @@ suite(
         suiteSetup(
             async () =>
             {
-                puppeteerPath = Path.join(__dirname, "..", "..", "..", "..", "..", "node_modules", "puppeteer-core", ".local-chromium");
+                puppeteerPath = Path.join(__dirname, "..", "..", "..", "..", "..", "..", "node_modules", "puppeteer-core", ".local-chromium");
                 tempDirectory = new TempDirectory();
 
                 if (await FileSystem.pathExists(Puppeteer.executablePath()))
