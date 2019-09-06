@@ -1,6 +1,9 @@
 import { CultureInfo } from "culture-info";
 import MarkdownIt = require("markdown-it");
+import Path = require("path");
+import PkgUp = require("pkg-up");
 import Format = require("string-template");
+import { isNullOrUndefined } from "util";
 import { commands, env, ExtensionContext, ProgressLocation, TextEditor, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";
@@ -14,6 +17,16 @@ export class Extension
      * The context of the extension.
      */
     private context: ExtensionContext = null;
+
+    /**
+     * The path to the root of the extension.
+     */
+    private extensionRoot: string;
+
+    /**
+     * The meta-data of the extension.
+     */
+    private metaData: any;
 
     /**
      * The parser provided by `Visual Studio Code`
@@ -37,9 +50,14 @@ export class Extension
 
     /**
      * Initializes a new instance of the `Extension` class.
+     *
+     * @param extensionRoot
+     * The root of the extension.
      */
-    public constructor()
+    public constructor(extensionRoot: string)
     {
+        this.extensionRoot = Path.dirname(PkgUp.sync({ cwd: extensionRoot }));
+        this.metaData = require(Path.join(this.extensionRoot, "package.json"));
         this.systemParserFixPromise = new Promise(
             (resolve) =>
             {
@@ -55,6 +73,46 @@ export class Extension
     public get Context()
     {
         return this.context;
+    }
+
+    /**
+     * Gets the path to the root of the extension.
+     */
+    public get ExtensionRoot()
+    {
+        return this.extensionRoot;
+    }
+
+    /**
+     * Gets the meta-data of the extension.
+     */
+    public get MetaData()
+    {
+        return this.metaData;
+    }
+
+    /**
+     * Gets the author of the extension.
+     */
+    public get Author()
+    {
+        return this.MetaData["publisher"];
+    }
+
+    /**
+     * Gets the name of the extension.
+     */
+    public get Name()
+    {
+        return this.MetaData["name"];
+    }
+
+    /**
+     * Gets the full name of the extension.
+     */
+    public get FullName()
+    {
+        return `${this.Author}.${this.Name}`;
     }
 
     /**
@@ -104,10 +162,10 @@ export class Extension
      */
     public async EnableSystemParser()
     {
-        let document = await workspace.openTextDocument(Uri.parse("untitled:.md"));
-
-        if (!this.VSCodeParser)
+        if (isNullOrUndefined(this.VSCodeParser))
         {
+            let document = await workspace.openTextDocument(Uri.parse("untitled:.md"));
+
             this.systemParserFixEditor = await window.showTextDocument(
                 document,
                 {

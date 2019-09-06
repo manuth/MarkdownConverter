@@ -32,7 +32,7 @@ export class MarkdownConverterExtension extends Extension
      */
     public constructor()
     {
-        super();
+        super(Path.join(__dirname, "..", ".."));
         this.fileReporter = {
             async report(file)
             {

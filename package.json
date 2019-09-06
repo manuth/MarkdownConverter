@@ -112,6 +112,7 @@
     "markdown-it-table-of-contents": "^0.4.4",
     "multi-integer-range": "^4.0.7",
     "mustache": "^3.0.3",
+    "pkg-up": "^3.1.0",
     "puppeteer-core": "^1.19.0",
     "string-template": "^1.0.0",
     "temp-filesystem": "^1.1.3",
