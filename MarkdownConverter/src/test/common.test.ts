@@ -1,4 +1,6 @@
-(() =>
-{
-    require("../tests/common/main.test");
-})();
+suite(
+    "Common Tests",
+    () =>
+    {
+        require("../tests/common/main.test");
+    });
