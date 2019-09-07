@@ -8,7 +8,7 @@ export class ConfigRestorer
     /**
      * The original settings.
      */
-    private originalSettings: Array<ReturnType<WorkspaceConfiguration["inspect"]>>;
+    private originalSettings: Array<ReturnType<WorkspaceConfiguration["inspect"]>> = [];
 
     /**
      * The section of the setting-keys.
@@ -31,8 +31,14 @@ export class ConfigRestorer
      */
     public constructor(keys: string[], section?: string)
     {
+        let config = workspace.getConfiguration(section);
         this.settingKeys = keys;
         this.section = section;
+
+        for (let key of this.settingKeys)
+        {
+            this.originalSettings.push(config.inspect(key));
+        }
     }
 
     /**
@@ -92,14 +98,6 @@ export class ConfigRestorer
             ["workspaceFolderValue", ConfigurationTarget.WorkspaceFolder]
         ];
 
-        if (restore)
-        {
-            for (let key of this.settingKeys)
-            {
-                this.originalSettings.push(config.inspect(key));
-            }
-        }
-
         for (let setting of this.OriginalSettings)
         {
             let newSetting = rootConfig.inspect(setting.key);
@@ -108,7 +106,7 @@ export class ConfigRestorer
             {
                 if (setting[scope[0]] !== (restore ? newSetting[scope[0]] : undefined))
                 {
-                    await config.update(setting.key, restore ? setting[scope[0]] : undefined, scope[1]);
+                    await rootConfig.update(setting.key, restore ? setting[scope[0]] : undefined, scope[1]);
                 }
             }
         }
