@@ -36,11 +36,6 @@ suite(
                 await FileSystem.writeFile(tempFile.FullName, "This is a test");
                 textDocument = await workspace.openTextDocument(tempFile.FullName);
                 document = new Document(textDocument, parser);
-
-                if (!await FileSystem.pathExists(Puppeteer.executablePath()))
-                {
-                    await Puppeteer.createBrowserFetcher().download(extension.ChromiumRevision);
-                }
             });
 
         suiteTeardown(
