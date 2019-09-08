@@ -12,7 +12,7 @@ suite(
     {
         let puppeteerPath: string;
         let moved = false;
-        let tempDirectory: TempDirectory;
+        let tempPuppeteerPath: string;
 
         /**
          * Provides an implementation of the `PuppeteerTask` for testing.
@@ -37,13 +37,12 @@ suite(
         suiteSetup(
             async () =>
             {
-                puppeteerPath = Path.join(__dirname, "..", "..", "..", "..", "..", "..", "node_modules", "puppeteer-core", ".local-chromium");
-                tempDirectory = new TempDirectory();
+                puppeteerPath = Path.resolve(__dirname, "..", "..", "..", "..", "..", "..", "node_modules", "puppeteer-core", ".local-chromium");
+                tempPuppeteerPath = Path.join(Path.dirname(puppeteerPath), Path.basename(puppeteerPath) + "_");
 
                 if (await FileSystem.pathExists(Puppeteer.executablePath()))
                 {
-                    await FileSystem.remove(tempDirectory.FullName);
-                    await FileSystem.move(puppeteerPath, tempDirectory.FullName);
+                    await FileSystem.rename(puppeteerPath, tempPuppeteerPath);
                     moved = true;
                 }
             });
@@ -53,10 +52,8 @@ suite(
             {
                 if (moved)
                 {
-                    await FileSystem.move(tempDirectory.FullName, puppeteerPath);
+                    await FileSystem.rename(tempPuppeteerPath, puppeteerPath);
                 }
-
-                tempDirectory.Dispose();
             });
 
         suite(
