@@ -100,7 +100,7 @@ suite(
                                 # Hello World`));
 
                         await window.showTextDocument(Uri.file(mdFile.FullName));
-                        configRestorer.Clear();
+                        await configRestorer.Clear();
                         await config.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
                         await config.update("DestinationPattern", Path.normalizeSafe(pdfFile), ConfigurationTarget.Global);
                         await config.update("IgnoreLanguageMode", true, ConfigurationTarget.Global);
@@ -109,7 +109,7 @@ suite(
                 suiteTeardown(
                     async () =>
                     {
-                        configRestorer.Restore();
+                        await configRestorer.Restore();
                         await commands.executeCommand("workbench.action.closeActiveEditor");
                         mdFile.Dispose();
                         destinationDirectory.Dispose();
@@ -117,7 +117,7 @@ suite(
 
                 test(
                     "Checking whether the system-parser can be enabled manually…",
-                    async function ()
+                    async function()
                     {
                         this.enableTimeouts(false);
                         await Assert.doesNotReject(

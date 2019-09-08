@@ -35,13 +35,13 @@ suite(
                     ],
                     Settings["configKey"]);
 
-                configRestorer.Clear();
+                await configRestorer.Clear();
             });
 
         suiteTeardown(
-            () =>
+            async () =>
             {
-                configRestorer.Restore();
+                await configRestorer.Restore();
             });
 
         setup(
