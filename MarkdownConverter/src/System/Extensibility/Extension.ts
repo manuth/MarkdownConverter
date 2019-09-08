@@ -134,17 +134,10 @@ export class Extension
         this.context = context;
 
         return {
-            extendMarkdownIt: async (md: any) =>
+            extendMarkdownIt: (md: any) =>
             {
                 this.vsCodeParser = md;
-
-                if (window.activeTextEditor === this.systemParserFixEditor)
-                {
-                    await commands.executeCommand("workbench.action.closeActiveEditor");
-                }
-
-                this.systemParserFixResolver();
-
+                this.resolveFix();
                 return md;
             }
         };
@@ -165,6 +158,8 @@ export class Extension
         if (isNullOrUndefined(this.VSCodeParser))
         {
             let document = await workspace.openTextDocument(Uri.parse("untitled:.md"));
+            await commands.executeCommand("markdown.showPreview");
+            await commands.executeCommand("workbench.action.closeActiveEditor");
 
             this.systemParserFixEditor = await window.showTextDocument(
                 document,
@@ -224,5 +219,18 @@ export class Extension
             {
                 await task.Execute(progressReporter, cancellationToken);
             });
+    }
+
+    /**
+     * Resolves the system-parser fix.
+     */
+    private async resolveFix()
+    {
+        if (window.activeTextEditor === this.systemParserFixEditor)
+        {
+            await commands.executeCommand("workbench.action.closeActiveEditor");
+        }
+
+        this.systemParserFixResolver();
     }
 }
