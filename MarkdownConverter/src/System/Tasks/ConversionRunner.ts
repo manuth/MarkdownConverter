@@ -358,7 +358,8 @@ export class ConversionRunner
     protected async LoadParser(): Promise<MarkdownIt>
     {
         let parser: MarkdownIt;
-        let slugifier = new Slugifier();
+        let anchorSlugifier = new Slugifier();
+        let tocSlugifier = new Slugifier();
 
         if (Settings.Default.SystemParserEnabled)
         {
@@ -390,9 +391,8 @@ export class ConversionRunner
         Anchor(
             parser,
             {
-                slugify: (heading) => slugifier.CreateSlug(heading)
+                slugify: (heading) => tocSlugifier.CreateSlug(heading)
             });
-        slugifier.Reset();
 
         if (Settings.Default.TocSettings)
         {
@@ -403,7 +403,7 @@ export class ConversionRunner
                     containerClass: Settings.Default.TocSettings.Class,
                     markerPattern: Settings.Default.TocSettings.Indicator,
                     listType: Settings.Default.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
-                    slugify: (heading: string) => slugifier.CreateSlug(heading)
+                    slugify: (heading: string) => anchorSlugifier.CreateSlug(heading)
                 });
         }
 
