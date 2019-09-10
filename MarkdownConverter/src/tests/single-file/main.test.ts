@@ -2,5 +2,5 @@ suite(
     "MarkdownConverter",
     () =>
     {
-
+        require("./System");
     });
