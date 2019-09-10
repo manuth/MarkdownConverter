@@ -9,6 +9,7 @@
     "MarkdownFileException": "Couldn't find a markdown-file.",
     "YAMLException": "The YAML-block is malformatted. Line {0}, column {1}.",
     "UnsupportedPlatformException": "This feature is not supported by your platform!",
+    "NoWorkspaceFolderException": "No workspace-folder is opened!",
     "UpdateMessage": "Before you can get started with MarkdownConverter you need to download chromium.\nDo you want to do this now?",
     "Yes": "Yes",
     "No": "No",

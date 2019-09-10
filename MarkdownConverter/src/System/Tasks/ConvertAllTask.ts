@@ -4,6 +4,7 @@ import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException";
 import { Resources } from "../../Properties/Resources";
+import { NoWorkspaceFolderException } from "../NoWorkspaceFolderException";
 import { ConversionTask } from "./ConversionTask";
 import { IProgressState } from "./IProgressState";
 
@@ -105,50 +106,57 @@ export class ConvertAllTask extends ConversionTask
         let documents: TextDocument[] = [];
         let filePatterns: string[] = [];
 
-        for (let extension of extensions.all)
+        if (workspace.workspaceFolders.length > 0)
         {
-            if (
-                extension.packageJSON.contributes &&
-                extension.packageJSON.contributes.languages)
+            for (let extension of extensions.all)
             {
-                for (let language of extension.packageJSON.contributes.languages)
+                if (
+                    extension.packageJSON.contributes &&
+                    extension.packageJSON.contributes.languages)
                 {
-                    if (language.id === "markdown")
+                    for (let language of extension.packageJSON.contributes.languages)
                     {
-                        for (let fileExtension of language.extensions)
+                        if (language.id === "markdown")
                         {
-                            filePatterns.push(`**/*${fileExtension}`);
+                            for (let fileExtension of language.extensions)
+                            {
+                                filePatterns.push(`**/*${fileExtension}`);
+                            }
                         }
                     }
                 }
             }
-        }
 
-        {
-            let fileAssociations = workspace.getConfiguration().get<{ [key: string]: string }>("files.associations");
-
-            for (let fileAssociation in fileAssociations)
             {
-                if (fileAssociations[fileAssociation] === "markdown")
+                let fileAssociations = workspace.getConfiguration().get<{ [key: string]: string }>("files.associations");
+
+                for (let fileAssociation in fileAssociations)
                 {
-                    filePatterns.push(`**/${fileAssociation}`);
+                    if (fileAssociations[fileAssociation] === "markdown")
+                    {
+                        filePatterns.push(`**/${fileAssociation}`);
+                    }
                 }
             }
-        }
 
-        for (let filePattern of filePatterns)
-        {
-            for (let file of await workspace.findFiles(filePattern))
+            for (let filePattern of filePatterns)
             {
-                let document = await workspace.openTextDocument(file);
-
-                if (document.languageId === "markdown")
+                for (let file of await workspace.findFiles(filePattern))
                 {
-                    documents.push(document);
+                    let document = await workspace.openTextDocument(file);
+
+                    if (document.languageId === "markdown")
+                    {
+                        documents.push(document);
+                    }
                 }
             }
-        }
 
-        return documents;
+            return documents;
+        }
+        else
+        {
+            throw new NoWorkspaceFolderException();
+        }
     }
 }
