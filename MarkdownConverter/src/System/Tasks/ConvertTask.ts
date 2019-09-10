@@ -48,15 +48,9 @@ export class ConvertTask extends ConversionTask
         {
             return window.activeTextEditor.document;
         }
-
-        for (let textEditor of window.visibleTextEditors)
+        else
         {
-            if (textEditor.document.languageId === "markdown")
-            {
-                return textEditor.document;
-            }
+            throw new MarkdownFileNotFoundException();
         }
-
-        throw new MarkdownFileNotFoundException();
     }
 }
