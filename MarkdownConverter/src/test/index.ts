@@ -1,8 +1,11 @@
+import FileSystem = require("fs-extra");
 import Glob = require("glob");
 import minimist = require("minimist");
 import Mocha = require("mocha");
 import Path = require("path");
+import Puppeteer = require("puppeteer-core");
 import { promisify } from "util";
+import { extension } from "../extension";
 
 /**
  * The arguments passed by the user.
@@ -46,6 +49,11 @@ export async function run()
 
             try
             {
+                if (!await FileSystem.pathExists(Puppeteer.executablePath()))
+                {
+                    await Puppeteer.createBrowserFetcher().download(extension.ChromiumRevision);
+                }
+
                 mocha.run(
                     (failures) =>
                     {
