@@ -341,11 +341,6 @@ export class ConversionRunner
 
         for (let styleSheet of Settings.Default.StyleSheets)
         {
-            if (!Path.isAbsolute(styleSheet))
-            {
-                styleSheet = Path.resolve(workspaceRoot || ".", styleSheet);
-            }
-
             converter.Document.StyleSheets.push(styleSheet);
         }
 
