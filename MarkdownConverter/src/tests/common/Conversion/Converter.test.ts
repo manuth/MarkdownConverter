@@ -79,17 +79,17 @@ suite(
                         Assert.strictEqual(converter["WebServer"], null);
                         Assert.strictEqual(converter["Browser"], null);
                     });
+            });
 
-                suite(
-                    "Checking whether the methods act as expected…",
-                    () =>
+        suite(
+            "Checking whether the methods act as expected…",
+            () =>
+            {
+                test(
+                    "Start(ConversionType conversionType, string path, Progress<IProgressState> progressReporter?)",
+                    async () =>
                     {
-                        test(
-                            "Start(ConversionType conversionType, string path, Progress<IProgressState> progressReporter?)",
-                            async () =>
-                            {
-                                await Assert.rejects(converter.Start(ConversionType.HTML, ""));
-                            });
+                        await Assert.rejects(converter.Start(ConversionType.HTML, ""));
                     });
             });
 
