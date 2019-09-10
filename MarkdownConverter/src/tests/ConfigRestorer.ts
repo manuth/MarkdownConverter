@@ -104,7 +104,7 @@ export class ConfigRestorer
 
             for (let scope of scopeMap)
             {
-                if (setting[scope[0]] !== (restore ? newSetting[scope[0]] : undefined))
+                if (newSetting[scope[0]] !== (restore ? setting[scope[0]] : undefined))
                 {
                     await rootConfig.update(setting.key, restore ? setting[scope[0]] : undefined, scope[1]);
                 }
