@@ -357,6 +357,12 @@ suite(
                                 substitutionTester = new SubstitutionTester(await workspace.openTextDocument(Uri.file(testFile.FullName)));
                             });
 
+                        suiteTeardown(
+                            () =>
+                            {
+                                testFile.Dispose();
+                            });
+
                         test(
                             "${basename}",
                             async function()
