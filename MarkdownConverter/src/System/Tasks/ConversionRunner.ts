@@ -417,7 +417,7 @@ export class ConversionRunner
                 switch (Settings.Default.EmojiType)
                 {
                     case EmojiType.None:
-                        return token[id].markup;
+                        return `:${token[id].markup}:`;
                     case EmojiType.Native:
                         return token[id].content;
                     case EmojiType.Twitter:
@@ -427,7 +427,7 @@ export class ConversionRunner
                             'class="emoji" ' +
                             `title=":${token[id].markup}:" ` +
                             `alt=":${token[id].markup}:" ` +
-                            `src="https://assets-cdn.github.com/images/icons/emoji/unicode/${TwEmoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
+                            `src="https://github.githubassets.com/images/icons/emoji/unicode/${TwEmoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
                             'align="absmiddle" />';
                 }
             };
