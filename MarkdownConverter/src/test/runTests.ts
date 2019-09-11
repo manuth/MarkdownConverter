@@ -32,6 +32,17 @@ import { TestOptions } from "vscode-test/out/runTest";
                     Path.resolve(__dirname, "single-file", "Test.md")
                 ]
             });
+
+        await runTests(
+            {
+                ...commonArgs,
+                extensionTestsEnv: {
+                    TEST_SUITE: "single-folder"
+                },
+                launchArgs: [
+                    Path.resolve(__dirname, "single-folder")
+                ]
+            });
     }
     catch (exception)
     {

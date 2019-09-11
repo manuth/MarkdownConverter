@@ -50,6 +50,23 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ]
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Tests for the Single-Folder Mode",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
+                "${workspaceFolder}/MarkdownConverter/src/test/single-folder"
+            ],
+            "env": {
+                "TEST_SUITE": "single-folder"
+            },
+            "outFiles": [
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
+            ]
         }
     ],
     "compounds": [
@@ -57,7 +74,8 @@
             "name": "Launch Tests",
             "configurations": [
                 "Launch Common Tests",
-                "Launch Tests for Single-File Mode"
+                "Launch Tests for Single-File Mode",
+                "Launch Tests for the Single-Folder Mode"
             ]
         }
     ]

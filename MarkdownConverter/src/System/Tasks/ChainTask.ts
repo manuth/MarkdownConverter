@@ -51,16 +51,6 @@ export class ChainTask extends ConvertAllTask
         let documents: TextDocument[] = [];
         let contents: string[];
 
-        while (!documentName)
-        {
-            documentName = await window.showInputBox(
-                {
-                    ignoreFocusOut: true,
-                    prompt: Resources.Resources.Get("DocumentName"),
-                    placeHolder: Resources.Resources.Get("DocumentNameExample")
-                });
-        }
-
         progressReporter.report(
             {
                 message: Resources.Resources.Get("Progress.SearchDocuments")
@@ -72,6 +62,16 @@ export class ChainTask extends ConvertAllTask
             {
                 message: Format(Resources.Resources.Get("Progress.DocumentsFound"), documents.length)
             });
+
+        while (!documentName)
+        {
+            documentName = await window.showInputBox(
+                {
+                    ignoreFocusOut: true,
+                    prompt: Resources.Resources.Get("DocumentName"),
+                    placeHolder: Resources.Resources.Get("DocumentNameExample")
+                });
+        }
 
         progressReporter.report(
             {
