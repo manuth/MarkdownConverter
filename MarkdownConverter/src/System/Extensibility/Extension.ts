@@ -34,11 +34,6 @@ export class Extension
     private vsCodeParser: MarkdownIt;
 
     /**
-     * A `TextEditor` which is used for triggering the `extendMarkdownIt`-method.
-     */
-    private systemParserFixEditor: TextEditor;
-
-    /**
      * A promise for waiting for the system-parser to be fixed.
      */
     private systemParserFixPromise: Promise<void>;
@@ -157,16 +152,16 @@ export class Extension
     {
         if (isNullOrUndefined(this.VSCodeParser))
         {
-            let document = await workspace.openTextDocument(Uri.parse("untitled:.md"));
-            await commands.executeCommand("markdown.showPreview");
-            await commands.executeCommand("workbench.action.closeActiveEditor");
-
-            this.systemParserFixEditor = await window.showTextDocument(
-                document,
+            await window.showTextDocument(
+                await workspace.openTextDocument(Uri.parse("untitled:.md")),
                 {
                     viewColumn: ViewColumn.Beside,
                     preview: true
                 });
+
+            await commands.executeCommand("markdown.showPreview");
+            await commands.executeCommand("workbench.action.closeActiveEditor");
+            await commands.executeCommand("workbench.action.closeActiveEditor");
         }
 
         return this.systemParserFixPromise;
@@ -226,11 +221,6 @@ export class Extension
      */
     private async resolveFix()
     {
-        if (window.activeTextEditor === this.systemParserFixEditor)
-        {
-            await commands.executeCommand("workbench.action.closeActiveEditor");
-        }
-
         this.systemParserFixResolver();
     }
 }
