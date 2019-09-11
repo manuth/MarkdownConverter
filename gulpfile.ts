@@ -55,7 +55,8 @@ export function Build()
         "test/index.ts",
         "test/common.test.ts",
         "test/single-file.test.ts",
-        "test/single-folder.test.ts"
+        "test/single-folder.test.ts",
+        "test/workspace.test.ts"
     ];
 
     let bundlers: { [entry: string]: browserify.BrowserifyObject } = {};

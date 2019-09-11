@@ -67,6 +67,23 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ]
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Tests for the Workspace Mode",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
+                "${workspaceFolder}/MarkdownConverter/src/test/workspace/workspace.code-workspace"
+            ],
+            "env": {
+                "TEST_SUITE": "workspace"
+            },
+            "outFiles": [
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
+            ]
         }
     ],
     "compounds": [
@@ -75,7 +92,8 @@
             "configurations": [
                 "Launch Common Tests",
                 "Launch Tests for Single-File Mode",
-                "Launch Tests for the Single-Folder Mode"
+                "Launch Tests for the Single-Folder Mode",
+                "Launch Tests for the Workspace Mode"
             ]
         }
     ]
