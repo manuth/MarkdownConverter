@@ -16,10 +16,7 @@ import { TestOptions } from "vscode-test/out/runTest";
                 ...commonArgs,
                 extensionTestsEnv: {
                     TEST_SUITE: "common"
-                },
-                launchArgs: [
-                    Path.resolve(__dirname, "common")
-                ]
+                }
             });
 
         await runTests(
