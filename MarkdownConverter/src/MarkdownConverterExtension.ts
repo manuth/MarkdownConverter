@@ -118,17 +118,20 @@ export class MarkdownConverterExtension extends Extension
                         }
                     });
 
-                if (
-                    await(window.showInformationMessage(
-                        Resources.Resources.Get("CollectionFinished"),
-                        Resources.Resources.Get("Yes"),
-                        Resources.Resources.Get("No"))) === Resources.Resources.Get<string>("Yes"))
+                (async () =>
                 {
-                    for (let file of files)
+                    if (
+                        await (window.showInformationMessage(
+                            Resources.Resources.Get("CollectionFinished"),
+                            Resources.Resources.Get("Yes"),
+                            Resources.Resources.Get("No"))) === Resources.Resources.Get<string>("Yes"))
                     {
-                        this.fileReporter.report(file);
+                        for (let file of files)
+                        {
+                            this.fileReporter.report(file);
+                        }
                     }
-                }
+                })();
             }
             else
             {
