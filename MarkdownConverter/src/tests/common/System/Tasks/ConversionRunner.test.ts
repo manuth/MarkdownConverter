@@ -64,6 +64,9 @@ suite(
                         "Document.Design.Template",
                         "Document.Design.HighlightStyle",
                         "Document.Design.StyleSheets",
+                        "Document.HeaderFooterEnabled",
+                        "Document.HeaderTemplate",
+                        "Document.FooterTemplate",
                         "Parser.SystemParserEnabled",
                         "Parser.Toc.Enabled",
                         "Parser.Toc.Class",
@@ -286,6 +289,9 @@ suite(
                         let templateFile = new TempFile();
                         let highlightStyle = "agate";
                         let styleSheet = new TempFile();
+                        let headerFooterEnabled = false;
+                        let headerTemplate = "Hello";
+                        let footerTemplate = "World";
 
                         await FileSystem.writeFile(templateFile.FullName, "This is a test template");
                         await markdownConfig.update("ConversionQuality", conversionQuality, ConfigurationTarget.Global);
@@ -303,6 +309,9 @@ suite(
                         await markdownConfig.update("Document.Design.Template", templateFile.FullName, ConfigurationTarget.Global);
                         await markdownConfig.update("Document.Design.HighlightStyle", highlightStyle, ConfigurationTarget.Global);
                         await markdownConfig.update("Document.Design.StyleSheets", [styleSheet.FullName], ConfigurationTarget.Global);
+                        await markdownConfig.update("Document.HeaderFooterEnabled", headerFooterEnabled, ConfigurationTarget.Global);
+                        await markdownConfig.update("Document.HeaderTemplate", headerTemplate, ConfigurationTarget.Global);
+                        await markdownConfig.update("Document.FooterTemplate", footerTemplate, ConfigurationTarget.Global);
                         await Convert();
 
                         let converter = await new ConversionRunner({ VSCodeParser: {} } as MarkdownConverterExtension)["LoadConverter"](workspaceRoot.FullName, textDocument);
@@ -326,6 +335,9 @@ suite(
                         Assert.strictEqual(converter.Document.Template, (await FileSystem.readFile(templateFile.FullName)).toString());
                         Assert(converter.Document.StyleSheets.filter((stylesheet) => stylesheet.includes(highlightStyle)).length > 0);
                         Assert(converter.Document.StyleSheets.includes(styleSheet.FullName));
+                        Assert.strictEqual(converter.Document.HeaderFooterEnabled, headerFooterEnabled);
+                        Assert.strictEqual(converter.Document.Header.Content, headerTemplate);
+                        Assert.strictEqual(converter.Document.Footer.Content, footerTemplate);
 
                         styleSheet.Dispose();
                         templateFile.Dispose();
