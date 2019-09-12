@@ -160,6 +160,7 @@ export class Extension
                 });
 
             await commands.executeCommand("markdown.showPreview");
+            await new Promise((resolve) => setTimeout(resolve, 100));
             await commands.executeCommand("workbench.action.closeActiveEditor");
             await commands.executeCommand("workbench.action.closeActiveEditor");
         }
