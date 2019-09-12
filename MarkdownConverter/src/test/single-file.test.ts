@@ -10,8 +10,9 @@ suite(
         let configRestorer: ConfigRestorer;
 
         suiteSetup(
-            async () =>
+            async function()
             {
+                this.enableTimeouts(false);
                 config = workspace.getConfiguration(Settings["configKey"]);
                 configRestorer = new ConfigRestorer(
                     [
