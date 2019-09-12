@@ -1,6 +1,9 @@
 import { CultureInfo } from "culture-info";
 import MarkdownIt = require("markdown-it");
+import Path = require("path");
+import PkgUp = require("pkg-up");
 import Format = require("string-template");
+import { isNullOrUndefined } from "util";
 import { commands, env, ExtensionContext, ProgressLocation, TextEditor, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";
@@ -16,14 +19,19 @@ export class Extension
     private context: ExtensionContext = null;
 
     /**
+     * The path to the root of the extension.
+     */
+    private extensionRoot: string;
+
+    /**
+     * The meta-data of the extension.
+     */
+    private metaData: any;
+
+    /**
      * The parser provided by `Visual Studio Code`
      */
     private vsCodeParser: MarkdownIt;
-
-    /**
-     * A `TextEditor` which is used for triggering the `extendMarkdownIt`-method.
-     */
-    private systemParserFixEditor: TextEditor;
 
     /**
      * A promise for waiting for the system-parser to be fixed.
@@ -37,9 +45,14 @@ export class Extension
 
     /**
      * Initializes a new instance of the `Extension` class.
+     *
+     * @param extensionRoot
+     * The root of the extension.
      */
-    public constructor()
+    public constructor(extensionRoot: string)
     {
+        this.extensionRoot = Path.dirname(PkgUp.sync({ cwd: extensionRoot }));
+        this.metaData = require(Path.join(this.extensionRoot, "package.json"));
         this.systemParserFixPromise = new Promise(
             (resolve) =>
             {
@@ -55,6 +68,46 @@ export class Extension
     public get Context()
     {
         return this.context;
+    }
+
+    /**
+     * Gets the path to the root of the extension.
+     */
+    public get ExtensionRoot()
+    {
+        return this.extensionRoot;
+    }
+
+    /**
+     * Gets the meta-data of the extension.
+     */
+    public get MetaData()
+    {
+        return this.metaData;
+    }
+
+    /**
+     * Gets the author of the extension.
+     */
+    public get Author()
+    {
+        return this.MetaData["publisher"];
+    }
+
+    /**
+     * Gets the name of the extension.
+     */
+    public get Name()
+    {
+        return this.MetaData["name"];
+    }
+
+    /**
+     * Gets the full name of the extension.
+     */
+    public get FullName()
+    {
+        return `${this.Author}.${this.Name}`;
     }
 
     /**
@@ -79,14 +132,7 @@ export class Extension
             extendMarkdownIt: (md: any) =>
             {
                 this.vsCodeParser = md;
-
-                if (window.activeTextEditor === this.systemParserFixEditor)
-                {
-                    commands.executeCommand("workbench.action.closeActiveEditor");
-                }
-
-                this.systemParserFixResolver();
-
+                this.resolveFix();
                 return md;
             }
         };
@@ -104,16 +150,19 @@ export class Extension
      */
     public async EnableSystemParser()
     {
-        let document = await workspace.openTextDocument(Uri.parse("untitled:.md"));
-
-        if (!this.VSCodeParser)
+        if (isNullOrUndefined(this.VSCodeParser))
         {
-            this.systemParserFixEditor = await window.showTextDocument(
-                document,
+            await window.showTextDocument(
+                await workspace.openTextDocument(Uri.parse("untitled:.md")),
                 {
                     viewColumn: ViewColumn.Beside,
                     preview: true
                 });
+
+            await commands.executeCommand("markdown.showPreview");
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await commands.executeCommand("workbench.action.closeActiveEditor");
+            await commands.executeCommand("workbench.action.closeActiveEditor");
         }
 
         return this.systemParserFixPromise;
@@ -166,5 +215,13 @@ export class Extension
             {
                 await task.Execute(progressReporter, cancellationToken);
             });
+    }
+
+    /**
+     * Resolves the system-parser fix.
+     */
+    private async resolveFix()
+    {
+        this.systemParserFixResolver();
     }
 }

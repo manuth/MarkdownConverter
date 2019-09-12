@@ -2,5 +2,4 @@ suite(
     "MarkdownConverter",
     () =>
     {
-        require("./Properties");
     });

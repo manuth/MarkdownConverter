@@ -14,7 +14,7 @@ export class DateTimeFormatter
     /**
      * The pattern for replacing the tokens.
      */
-    private pattern: RegExp = /d{1,4}|f{1,7}|F{1,7}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y{1,5}|\\.|'[^']*'/g;
+    private pattern: RegExp = /d{1,4}|f{1,7}|\.?F{1,7}|g{1,2}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y+|:|\/|o|\\.|'[^']*'|"[^"]*"|\\./g;
 
     /**
      * Initializes a new instance of the DateTimeFormatter class with a locale and a resource-path.
@@ -57,11 +57,9 @@ export class DateTimeFormatter
      */
     public Format(formatString: string, date: Date = new Date()): string
     {
-        let tokens = this.GetTokens(date);
-
         try
         {
-            formatString = Resources.Resources.Get("DateTime.Formats." + formatString, this.locale);
+            formatString = this.GetResource("Formats." + formatString);
         }
         catch
         {
@@ -69,24 +67,58 @@ export class DateTimeFormatter
 
         formatString = formatString.replace(this.pattern, (match) =>
         {
-            if (/^f+$/g.test(match))
+            if (/^d{1,2}$/g.test(match))
             {
-                return date.getMilliseconds().toString().padStart(match.length, "0");
+                return date.getDate().toString().padStart(match.length, "0");
             }
-            else if (/^F+$/g.test(match))
+            else if (/^d{3,4}$/g.test(match))
+            {
+                let dayOfWeekKey = "DaysOfWeek";
+                let dayOfWeek = date.getDay() - 1;
+
+                if (dayOfWeek < 0)
+                {
+                    dayOfWeek = 6;
+                }
+
+                if (match === "ddd")
+                {
+                    return this.GetResource<string[]>(`${dayOfWeekKey}.ShortNames`)[dayOfWeek];
+                }
+                else
+                {
+                    return this.GetResource<string[]>(`${dayOfWeekKey}.FullNames`)[dayOfWeek];
+                }
+            }
+            else if (/^f+$/g.test(match))
+            {
+                return date.getMilliseconds().toString().padStart(2, "0").padEnd(match.length, "0").slice(0, match.length);
+            }
+            else if (/^\.?F+$/g.test(match))
             {
                 if (date.getMilliseconds() > 0)
                 {
-                    return date.getMilliseconds().toString().padStart(match.length, "0");
+                    let prefix = match.replace(/^(\.?)F+$/g, "$1");
+                    let result = match.replace(/^\.?(F+)$/g, "$1");
+                    result = date.getMilliseconds().toString().slice(0, match.length).replace(/0*$/g, "");
+
+                    if (result.length > 0)
+                    {
+                        return prefix + result;
+                    }
+                    else
+                    {
+                        return "";
+                    }
                 }
                 else
                 {
                     return "";
                 }
             }
-            else if (/^d{1,2}$/g.test(match))
+            else if (/^g+$/g.test(match))
             {
-                return date.getDate().toString().padStart(match.length, "0");
+                return this.GetResource(`Era.${date.getFullYear() < 0 ? "Before" : "After"}`);
             }
             else if (/^h+$/g.test(match))
             {
@@ -105,21 +137,61 @@ export class DateTimeFormatter
             {
                 return (date.getMonth() + 1).toString().padStart(match.length, "0");
             }
+            else if (/^M{3,4}$/g.test(match))
+            {
+                let monthKey = "Months";
+                let month = date.getMonth();
+
+                if (match === "MMM")
+                {
+                    return this.GetResource<string[]>(`${monthKey}.ShortNames`)[month];
+                }
+                else
+                {
+                    return this.GetResource<string[]>(`${monthKey}.FullNames`)[month];
+                }
+            }
             else if (/^s+$/g.test(match))
             {
                 return date.getSeconds().toString().padStart(match.length, "0");
             }
+            else if (/^t+$/g.test(match))
+            {
+                let designatorKey = "TimeDesignator";
+                let morningTime = date.getHours() < 12;
+
+                if (match === "t")
+                {
+                    return this.GetResource<string[]>(`${designatorKey}.ShortNames`)[(morningTime ? 0 : 1)];
+                }
+                else
+                {
+                    return this.GetResource<string[]>(`${designatorKey}.FullNames`)[(morningTime ? 0 : 1)];
+                }
+            }
             else if (/^y{1,2}$/g.test(match))
             {
-                return date.getFullYear().toString().slice(-2).padStart(match.length, "0");
+                return parseInt(Math.abs(date.getFullYear()).toString().slice(-2), 10).toString().padStart(match.length, "0");
             }
             else if (/^y+$/g.test(match))
             {
-                return date.getFullYear().toString().padStart(match.length, "0");
+                return Math.abs(date.getFullYear()).toString().slice(-match.length).padStart(match.length, "0");
             }
-            else if (match in tokens)
+            else if (/^:$/g.test(match))
             {
-                return tokens[match];
+                return this.GetResource("TimeSeparator");
+            }
+            else if (/^\/$/g.test(match))
+            {
+                return this.GetResource("DateSeparator");
+            }
+            else if (/^'.*'|".*"$/g.test(match))
+            {
+                return match.slice(1, match.length - 1);
+            }
+            else if (/^\\.$/g.test(match))
+            {
+                return match[1];
             }
             return match;
         });
@@ -128,55 +200,13 @@ export class DateTimeFormatter
     }
 
     /**
-     * Returns the tokens to replace.
+     * Gets a date-time resource.
+     *
+     * @param name
+     * The name of the resource to get.
      */
-    private GetTokens(date: Date = new Date()): { [id: string]: string }
+    protected GetResource<T>(name: string): T
     {
-        let locale = this.Locale;
-        let getDay = () =>
-        {
-            let day = date.getDay() - 1;
-
-            if (day < 0)
-            {
-                day = 6;
-            }
-
-            return day;
-        };
-
-        let dateTimeTokens: { [id: string]: string } =
-        {
-            get ddd()
-            {
-                return Resources.Resources.Get<string[]>("DateTime.DaysOfWeek.ShortNames", locale)[getDay()];
-            },
-
-            get dddd()
-            {
-                return Resources.Resources.Get<string[]>("DateTime.DaysOfWeek.FullNames", locale)[getDay()];
-            },
-
-            get MMM()
-            {
-                return Resources.Resources.Get<string[]>("DateTime.Months.ShortNames", locale)[date.getMonth()];
-            },
-
-            get MMMM()
-            {
-                return Resources.Resources.Get<string[]>("DateTime.Months.FullNames", locale)[date.getMonth()];
-            },
-
-            get t()
-            {
-                return Resources.Resources.Get<string[]>("DateTime.TimeDesignator.ShortNames", locale)[(date.getHours() < 12 ? 0 : 1)];
-            },
-
-            get tt()
-            {
-                return Resources.Resources.Get<string[]>("DateTime.TimeDesignator.FullNames", locale)[(date.getHours() < 12 ? 0 : 1)];
-            }
-        };
-        return dateTimeTokens;
+        return Resources.Resources.Get(`DateTime.${name}`, this.Locale);
     }
 }

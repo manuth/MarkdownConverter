@@ -186,14 +186,20 @@ export class MarkdownContributions
     {
         if (contributes["markdown.markdownItPlugins"])
         {
-            this.plugins.push(extension.activate().then(() =>
-            {
-                if (extension.exports && extension.exports.extendMarkdownIt)
+            this.plugins.push(extension.activate().then(
+                async () =>
                 {
-                    return (md: any) => extension.exports.extendMarkdownIt(md);
-                }
-                return (md: any) => md;
-            }));
+                    if (extension.exports && extension.exports.extendMarkdownIt)
+                    {
+                        if (!extension.isActive)
+                        {
+                            await extension.activate();
+                        }
+
+                        return (md: any) => extension.exports.extendMarkdownIt(md);
+                    }
+                    return (md: any) => md;
+                }));
         }
     }
 

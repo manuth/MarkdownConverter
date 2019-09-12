@@ -10,6 +10,7 @@ import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
 import { Resources } from "./Properties/Resources";
 import { Extension } from "./System/Extensibility/Extension";
 import { FileException } from "./System/IO/FileException";
+import { NoWorkspaceFolderException } from "./System/NoWorkspaceFolderException";
 import { ChainTask } from "./System/Tasks/ChainTask";
 import { ChromiumNotFoundException } from "./System/Tasks/ChromiumNotFoundException";
 import { ConvertAllTask } from "./System/Tasks/ConvertAllTask";
@@ -32,7 +33,7 @@ export class MarkdownConverterExtension extends Extension
      */
     public constructor()
     {
-        super();
+        super(Path.join(__dirname, "..", ".."));
         this.fileReporter = {
             async report(file)
             {
@@ -117,17 +118,20 @@ export class MarkdownConverterExtension extends Extension
                         }
                     });
 
-                if (
-                    await(window.showInformationMessage(
-                        Resources.Resources.Get("CollectionFinished"),
-                        Resources.Resources.Get("Yes"),
-                        Resources.Resources.Get("No"))) === Resources.Resources.Get<string>("Yes"))
+                (async () =>
                 {
-                    for (let file of files)
+                    if (
+                        await (window.showInformationMessage(
+                            Resources.Resources.Get("CollectionFinished"),
+                            Resources.Resources.Get("Yes"),
+                            Resources.Resources.Get("No"))) === Resources.Resources.Get<string>("Yes"))
                     {
-                        this.fileReporter.report(file);
+                        for (let file of files)
+                        {
+                            this.fileReporter.report(file);
+                        }
                     }
-                }
+                })();
             }
             else
             {
@@ -206,7 +210,8 @@ export class MarkdownConverterExtension extends Extension
             else if (
                 exception instanceof FileException ||
                 exception instanceof YAMLException ||
-                exception instanceof MarkdownFileNotFoundException)
+                exception instanceof MarkdownFileNotFoundException ||
+                exception instanceof NoWorkspaceFolderException)
             {
                 window.showErrorMessage(exception.Message);
             }

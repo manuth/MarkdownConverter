@@ -3,4 +3,5 @@ suite(
     () =>
     {
         require("./Settings.test");
+        require("./Resources.test");
     });

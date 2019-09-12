@@ -1,6 +1,6 @@
 import FileSystem = require("fs-extra");
 import Puppeteer = require("puppeteer-core");
-import { CancellationToken, Progress } from "vscode";
+import { CancellationToken, CancellationTokenSource, Progress } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { ChromiumNotFoundException } from "./ChromiumNotFoundException";
@@ -41,7 +41,7 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
     {
         if (await FileSystem.pathExists(Puppeteer.executablePath()))
         {
-            await this.ExecuteTask(progressReporter, cancellationToken, fileReporter);
+            await this.ExecuteTask(progressReporter || { report() { } }, cancellationToken || new CancellationTokenSource().token, fileReporter || { report() { } });
         }
         else
         {

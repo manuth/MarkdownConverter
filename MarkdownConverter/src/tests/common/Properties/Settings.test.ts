@@ -1,13 +1,15 @@
 import Assert = require("assert");
-import { env } from "vscode";
-import { ConversionType } from "../../Conversion/ConversionType";
-import { CustomPaperFormat } from "../../System/Documents/CustomPaperFormat";
-import { EmojiType } from "../../System/Documents/EmojiType";
-import { ListType } from "../../System/Documents/ListType";
-import { Margin } from "../../System/Documents/Margin";
-import { PaperOrientation } from "../../System/Documents/PaperOrientation";
-import { StandardizedFormatType } from "../../System/Documents/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../../System/Documents/StandardizedPaperFormat";
+import { ConfigurationTarget, env, workspace, WorkspaceConfiguration } from "vscode";
+import { ConversionType } from "../../../Conversion/ConversionType";
+import { Settings } from "../../../Properties/Settings";
+import { CustomPaperFormat } from "../../../System/Documents/CustomPaperFormat";
+import { EmojiType } from "../../../System/Documents/EmojiType";
+import { ListType } from "../../../System/Documents/ListType";
+import { Margin } from "../../../System/Documents/Margin";
+import { PaperOrientation } from "../../../System/Documents/PaperOrientation";
+import { StandardizedFormatType } from "../../../System/Documents/StandardizedFormatType";
+import { StandardizedPaperFormat } from "../../../System/Documents/StandardizedPaperFormat";
+import { ConfigRestorer } from "../../ConfigRestorer";
 import { TestSettings } from "./TestSettings";
 
 suite(
@@ -15,11 +17,36 @@ suite(
     () =>
     {
         let settings: TestSettings;
+        let configRestorer: ConfigRestorer;
+
+        suiteSetup(
+            async () =>
+            {
+                settings = new TestSettings();
+                configRestorer = new ConfigRestorer(
+                    [
+                        "ConversionType",
+                        "Locale",
+                        "Parser.EmojiType",
+                        "Document.Paper.Margin",
+                        "Document.Paper.PaperFormat",
+                        "Parser.Toc.Enabled",
+                        "Parser.Toc.ListType"
+                    ],
+                    Settings["configKey"]);
+
+                await configRestorer.Clear();
+            });
+
+        suiteTeardown(
+            async () =>
+            {
+                await configRestorer.Restore();
+            });
 
         setup(
             () =>
             {
-                settings = new TestSettings();
                 settings.Resource.Resource = {};
             });
 
@@ -28,18 +55,18 @@ suite(
             () =>
             {
                 test(
-                    "Checking whether the conversion-types are resolved correctly…",
-                    () =>
-                    {
-                        settings.Resource.Resource["ConversionType"] = ["HTML"] as Array<(keyof typeof ConversionType)>;
-                        Assert.strictEqual(settings.ConversionType[0], ConversionType.HTML);
-                    });
-
-                test(
                     "Checking whether the default conversion-type is set correctly…",
                     () =>
                     {
                         Assert.deepEqual(settings.ConversionType, [ConversionType.PDF]);
+                    });
+
+                test(
+                    "Checking whether the conversion-types are resolved correctly…",
+                    () =>
+                    {
+                        settings.Resource.Resource["ConversionType"] = ["HTML"] as Array<keyof typeof ConversionType>;
+                        Assert.strictEqual(settings.ConversionType[0], ConversionType.HTML);
                     });
             });
 

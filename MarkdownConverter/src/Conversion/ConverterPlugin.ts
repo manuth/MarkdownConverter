@@ -27,7 +27,7 @@ export class ConverterPlugin
      * @param websiteName
      * The name of the website to save.
      */
-    public constructor(converter: Converter, websiteName?: string)
+    public constructor(converter: Converter, websiteName: string)
     {
         this.converter = converter;
         this.websiteName = websiteName;
@@ -55,7 +55,7 @@ export class ConverterPlugin
      * @param registerAction
      * A component for registering actions.
      */
-    public apply(registerAction: (name: string, callback: (options: any) => void) => void): void
+    public apply(registerAction: (name: string, callback: (options: any) => any) => void): void
     {
         let browser: Browser;
         let occupiedFilenames: string[];

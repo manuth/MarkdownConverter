@@ -2,9 +2,9 @@ import FileSystem = require("fs-extra");
 import PortFinder = require("get-port");
 import Glob = require("glob");
 import http = require("http");
-import Server = require("http-server");
 import Path = require("path");
 import Puppeteer = require("puppeteer-core");
+import handler = require("serve-handler");
 import { TempDirectory } from "temp-filesystem";
 import URL = require("url");
 import { isNullOrUndefined, promisify } from "util";
@@ -144,6 +144,8 @@ export class Converter
      */
     public async Initialize(progressReporter?: Progress<IProgressState>)
     {
+        progressReporter = progressReporter || { report() { } };
+
         if (this.Initialized || this.Disposed)
         {
             throw new Error("The converter cannot be re-initialized.");
@@ -156,10 +158,32 @@ export class Converter
                 });
 
             this.portNumber = await PortFinder();
-            this.webServer = (Server.createServer({
-                root: this.WorkspaceRoot,
-                cors: true
-            }) as any).server as http.Server;
+            this.webServer = http.createServer(
+                (request, response) =>
+                {
+                    handler(
+                        request,
+                        response,
+                        {
+                            public: this.WorkspaceRoot,
+                            headers: [
+                                {
+                                    source: "**/*.*",
+                                    headers: [
+                                        {
+                                            key: "Access-Control-Allow-Origin",
+                                            value: "*"
+                                        },
+                                        {
+                                            key: "Access-Control-Allow-Headers",
+                                            value: "Origin, X-Requested-With, Content-Type, Accept, Range"
+                                        }
+                                    ]
+                                }
+                            ],
+                            cleanUrls: false
+                        });
+                });
 
             this.webServer.listen(this.portNumber, "localhost");
 
@@ -192,11 +216,7 @@ export class Converter
      */
     public async Dispose()
     {
-        if (!this.Initialized)
-        {
-            throw new Error("The converter must be initialized in order to be disposed.");
-        }
-        else
+        if (this.Initialized)
         {
             await this.browser.close();
             await new Promise(
@@ -205,9 +225,10 @@ export class Converter
                     this.WebServer.close(() => resolve());
                 });
 
-            this.initialized = false;
-            this.disposed = true;
         }
+
+        this.initialized = false;
+        this.disposed = true;
     }
 
     /**
@@ -221,6 +242,8 @@ export class Converter
      */
     public async Start(conversionType: ConversionType, path: string, progressReporter?: Progress<IProgressState>): Promise<void>
     {
+        progressReporter = progressReporter || { report() { } };
+
         if (!this.Initialized)
         {
             throw new Error("The converter must be initialized in order to use it.");

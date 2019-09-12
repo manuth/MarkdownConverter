@@ -24,7 +24,7 @@ export class Exception extends Error
      */
     public constructor(message?: string, innerException?: Exception)
     {
-        super(message);
+        super(...(message ? [message] : []));
 
         if (innerException)
         {

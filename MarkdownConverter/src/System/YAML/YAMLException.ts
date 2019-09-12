@@ -1,7 +1,7 @@
 import Format = require("string-template");
 import { Resources } from "../../Properties/Resources";
 import { Exception } from "../Exception";
-import { IMark } from "./Mark";
+import { IMark } from "./IMark";
 
 /**
  * Represents a YAML-exception.
@@ -38,12 +38,15 @@ export class YAMLException extends Exception
      * The mark of the position that caused the exception.
      *
      * @param message
-     * The message of the exception.
+     * Either the error message that explains the reason for the exception or `null` to use the default message.
+     *
+     * @param innerException
+     * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
      */
-    public constructor(name: string, reason: string, mark: any, message: string);
-    public constructor(name: string | any, reason?: string, mark?: any, message?: string)
+    public constructor(name: string, reason: string, mark: any, message: string, innerException?: Exception);
+    public constructor(name: string | any, reason?: string, mark?: IMark, message?: string, innerException?: Exception)
     {
-        super();
+        super(...(arguments.length === 1 ? [null, name] : [message, innerException]));
         if (arguments.length === 1)
         {
             let exception = name;
@@ -56,7 +59,6 @@ export class YAMLException extends Exception
             this.name = name;
             this.reason = reason;
             this.mark = mark;
-            this.message = message;
         }
     }
 
@@ -73,7 +75,7 @@ export class YAMLException extends Exception
      */
     public get Message(): string
     {
-        return Format(Resources.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
+        return super.Message || Format(Resources.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
     }
 
     /**

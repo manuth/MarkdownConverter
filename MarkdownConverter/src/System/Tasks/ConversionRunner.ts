@@ -153,7 +153,7 @@ export class ConversionRunner
 
                     workspaceFolder =
                         (!isNullOrUndefined(workspaceRoot) || !isNullOrUndefined(documentFolder) ?
-                            (workspaceRoot || documentFolder) : "");
+                            (workspaceRoot || documentFolder) : null);
 
                     context =
                         new class
@@ -235,7 +235,7 @@ export class ConversionRunner
 
                     progressReporter.report(
                         {
-                            message: Format("ConverterFinished", ConversionType[type])
+                            message: Format("Progress.ConverterFinished", ConversionType[type])
                         });
 
                     fileReporter.report(
@@ -367,11 +367,6 @@ export class ConversionRunner
 
         for (let styleSheet of Settings.Default.StyleSheets)
         {
-            if (!Path.isAbsolute(styleSheet))
-            {
-                styleSheet = Path.resolve(workspaceRoot || ".", styleSheet);
-            }
-
             converter.Document.StyleSheets.push(styleSheet);
         }
 
@@ -384,7 +379,8 @@ export class ConversionRunner
     protected async LoadParser(): Promise<MarkdownIt>
     {
         let parser: MarkdownIt;
-        let slugifier = new Slugifier();
+        let anchorSlugifier = new Slugifier();
+        let tocSlugifier = new Slugifier();
 
         if (Settings.Default.SystemParserEnabled)
         {
@@ -416,9 +412,8 @@ export class ConversionRunner
         Anchor(
             parser,
             {
-                slugify: (heading) => slugifier.CreateSlug(heading)
+                slugify: (heading) => tocSlugifier.CreateSlug(heading)
             });
-        slugifier.Reset();
 
         if (Settings.Default.TocSettings)
         {
@@ -429,7 +424,7 @@ export class ConversionRunner
                     containerClass: Settings.Default.TocSettings.Class,
                     markerPattern: Settings.Default.TocSettings.Indicator,
                     listType: Settings.Default.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
-                    slugify: (heading: string) => slugifier.CreateSlug(heading)
+                    slugify: (heading: string) => anchorSlugifier.CreateSlug(heading)
                 });
         }
 
@@ -443,7 +438,7 @@ export class ConversionRunner
                 switch (Settings.Default.EmojiType)
                 {
                     case EmojiType.None:
-                        return token[id].markup;
+                        return `:${token[id].markup}:`;
                     case EmojiType.Native:
                         return token[id].content;
                     case EmojiType.Twitter:
@@ -453,7 +448,7 @@ export class ConversionRunner
                             'class="emoji" ' +
                             `title=":${token[id].markup}:" ` +
                             `alt=":${token[id].markup}:" ` +
-                            `src="https://assets-cdn.github.com/images/icons/emoji/unicode/${TwEmoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
+                            `src="https://github.githubassets.com/images/icons/emoji/unicode/${TwEmoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
                             'align="absmiddle" />';
                 }
             };

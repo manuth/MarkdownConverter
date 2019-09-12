@@ -4,7 +4,7 @@ import { MarkdownConverterExtension } from "./MarkdownConverterExtension";
 /**
  * An instance of the extension.
  */
-const extension = new MarkdownConverterExtension();
+export const extension = new MarkdownConverterExtension();
 
 /**
  * Activates the extension.
