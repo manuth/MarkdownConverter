@@ -57,26 +57,36 @@ suite(
 
                         RenameTester = async () =>
                         {
-                            return new Promise(
+                            let renameTask = new Promise(
                                 (resolve) =>
                                 {
                                     inputBoxResolver = resolve;
-                                    TestRunner();
                                 });
+
+                            let testTask = TestRunner();
+                            await Promise.all([renameTask, testTask]);
                         };
+                    });
+
+                suiteTeardown(
+                    () =>
+                    {
+                        window.showInputBox = showInputBox;
                     });
 
                 test(
                     "Checking whether the user is prompted to input a document-name…",
-                    () =>
+                    async function()
                     {
-                        Assert.doesNotReject(RenameTester);
+                        this.enableTimeouts(false);
+                        await Assert.doesNotReject(() => RenameTester());
                     });
 
                 test(
                     "Checking whether all documents are being chained together…",
-                    async () =>
+                    async function()
                     {
+                        this.enableTimeouts(false);
                         let document: TextDocument;
                         await Assert.doesNotReject(
                             async () =>
