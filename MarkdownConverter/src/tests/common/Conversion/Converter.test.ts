@@ -125,17 +125,17 @@ suite(
                         Assert(!isNullOrUndefined(converter["WebServer"]));
                         Assert(!isNullOrUndefined(converter["Browser"]));
                     });
+            });
 
-                suite(
-                    "Checking whether the methods act as expected…",
+        suite(
+            "Checking whether the methods act as expected…",
+            async () =>
+            {
+                test(
+                    "Initialize(Progress<IProgressState> progressReporter?)",
                     async () =>
                     {
-                        test(
-                            "Initialize(Progress<IProgressState> progressReporter?)",
-                            async () =>
-                            {
-                                await Assert.rejects(converter.Initialize());
-                            });
+                        await Assert.rejects(converter.Initialize());
                     });
             });
 
