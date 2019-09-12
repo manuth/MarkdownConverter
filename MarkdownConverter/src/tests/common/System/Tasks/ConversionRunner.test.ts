@@ -4,8 +4,8 @@ import Dedent = require("dedent");
 import FileSystem = require("fs-extra");
 import MultiRange from "multi-integer-range";
 import { EOL } from "os";
-import Path = require("path");
 import { TempDirectory, TempFile } from "temp-filesystem";
+import Path = require("upath");
 import { commands, ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
@@ -357,6 +357,7 @@ suite(
                     () =>
                     {
                         let testFile: TempFile;
+                        let tempDir: TempDirectory;
                         let substitutionTester: SubstitutionTester;
 
                         suiteSetup(
@@ -367,6 +368,7 @@ suite(
                                         postfix: ".mkdwn"
                                     });
 
+                                tempDir = new TempDirectory();
                                 substitutionTester = new SubstitutionTester(await workspace.openTextDocument(Uri.file(testFile.FullName)));
                             });
 
@@ -400,6 +402,14 @@ suite(
                             {
                                 await markdownConfig.update("DestinationPattern", "${filename}", ConfigurationTarget.Global);
                                 Assert.strictEqual(await substitutionTester.Test(), Path.parse(testFile.FullName).base);
+                            });
+
+                        test(
+                            "Checking whether the `DestinationPatterh` is normalized correctly…",
+                            async () =>
+                            {
+                                await markdownConfig.update("DestinationPattern", Path.joinSafe(tempDir.FullName, "/./test/.././///./."), ConfigurationTarget.Global);
+                                Assert.strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(tempDir.FullName).fsPath);
                             });
                     });
             });
