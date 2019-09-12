@@ -270,45 +270,37 @@ export class ConversionRunner
         }
 
         let converter = new Converter(workspaceRoot, new Document(document, await this.LoadParser()));
+        let headerPath = converter.Document.Attributes["HeaderPath"];
+        let footerPath = converter.Document.Attributes["FooterPath"];
         converter.Document.Quality = Settings.Default.ConversionQuality;
-
-        converter.Document.Header.Content = Settings.Default.HeaderTemplate;
-        if ("HeaderPath" in converter.Document.Attributes)
-        {
-            let headerPath = converter.Document.Attributes["HeaderPath"];
-            if (!Path.isAbsolute(headerPath))
-            {
-                headerPath = Path.resolve(converter.WorkspaceRoot, headerPath);
-            }
-            if (await FileSystem.pathExists(headerPath))
-            {
-                converter.Document.Header.Content = FileSystem.readFileSync(headerPath, "utf8");
-            }
-        }
-
-        converter.Document.Footer.Content = Settings.Default.FooterTemplate;
-        if ("FooterPath" in converter.Document.Attributes)
-        {
-            let footerPath = converter.Document.Attributes["FooterPath"];
-            if (!Path.isAbsolute(footerPath))
-            {
-                footerPath = Path.resolve(converter.WorkspaceRoot, footerPath);
-            }
-            if (await FileSystem.pathExists(footerPath))
-            {
-                converter.Document.Footer.Content = FileSystem.readFileSync(footerPath, "utf8");
-            }
-        }
-
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Attributes.Author = converter.Document.Attributes.Author || await Utilities.GetFullName();
-
         converter.Document.Locale = new CultureInfo(Settings.Default.Locale);
         converter.Document.DateFormat = Settings.Default.DateFormat;
-
         converter.Document.Paper = Settings.Default.PaperFormat;
-
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
+
+        if (
+            headerPath &&
+            await FileSystem.pathExists(Path.resolve(converter.WorkspaceRoot, headerPath)))
+        {
+            converter.Document.Header.Content = FileSystem.readFileSync(headerPath).toString();
+        }
+        else
+        {
+            converter.Document.Header.Content = Settings.Default.HeaderTemplate;
+        }
+
+        if (
+            footerPath &&
+            await FileSystem.pathExists(Path.resolve(converter.WorkspaceRoot, footerPath)))
+        {
+            converter.Document.Header.Content = FileSystem.readFileSync(footerPath).toString();
+        }
+        else
+        {
+            converter.Document.Header.Content = Settings.Default.FooterTemplate;
+        }
 
         try
         {
