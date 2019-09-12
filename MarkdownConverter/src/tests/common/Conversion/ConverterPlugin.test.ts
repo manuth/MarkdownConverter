@@ -23,8 +23,9 @@ suite(
         let cssFile: string;
 
         suiteSetup(
-            async () =>
+            async function()
             {
+                this.enableTimeouts(false);
                 let parser = new MarkdownIt(
                     {
                         html: true

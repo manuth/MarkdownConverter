@@ -389,8 +389,9 @@ suite(
 
                         test(
                             "${extension}",
-                            async () =>
+                            async function()
                             {
+                                this.enableTimeouts(false);
                                 await markdownConfig.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
                                 await markdownConfig.update("DestinationPattern", "${extension}", ConfigurationTarget.Global);
                                 Assert.strictEqual(await substitutionTester.Test(), "pdf");
@@ -398,16 +399,18 @@ suite(
 
                         test(
                             "${filename}",
-                            async () =>
+                            async function()
                             {
+                                this.enableTimeouts(false);
                                 await markdownConfig.update("DestinationPattern", "${filename}", ConfigurationTarget.Global);
                                 Assert.strictEqual(await substitutionTester.Test(), Path.parse(testFile.FullName).base);
                             });
 
                         test(
                             "Checking whether the `DestinationPatterh` is normalized correctly…",
-                            async () =>
+                            async function()
                             {
+                                this.enableTimeouts(false);
                                 await markdownConfig.update("DestinationPattern", Path.joinSafe(tempDir.FullName, "/./test/.././///./."), ConfigurationTarget.Global);
                                 Assert.strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(tempDir.FullName).fsPath);
                             });
