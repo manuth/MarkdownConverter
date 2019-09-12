@@ -30,8 +30,9 @@ suite(
         let mdFile: TempFile;
         let destinationFile: TempFile;
         let Convert: () => Promise<void>;
-        let Clean = async () =>
+        let Clean: Mocha.AsyncFunc = async function()
         {
+            this.enableTimeouts(false);
             await markdownRestorer.Clear();
             await configRestorer.Clear();
             await markdownConfig.update("ConversionType", [ConversionType[ConversionType.HTML]], true);
@@ -120,7 +121,7 @@ suite(
             "LoadParser()",
             () =>
             {
-                setup(() => Clean());
+                setup(Clean);
 
                 test(
                     "Checking whether the system-parser is used if `markdownConverter.Parser.SystemParserEnabled` is true…",

@@ -21,9 +21,9 @@ suite(
             {
                 test(
                     "Checking whether an exception occurrs if no workspace-folder is opened…",
-                    () =>
+                    async () =>
                     {
-                        Assert.rejects(task.Execute, NoWorkspaceFolderException);
+                        await Assert.rejects(() => task.Execute(), NoWorkspaceFolderException);
                     });
             });
     });

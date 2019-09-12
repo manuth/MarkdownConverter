@@ -101,7 +101,7 @@ suite(
                     "Checking whether the converter can be initialized…",
                     async () =>
                     {
-                        await Assert.doesNotReject(converter.Initialize());
+                        await Assert.doesNotReject(() => converter.Initialize());
                     });
             });
 

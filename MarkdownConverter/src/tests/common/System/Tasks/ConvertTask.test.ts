@@ -67,7 +67,7 @@ suite(
                     async () =>
                     {
                         await config.update("IgnoreLanguageMode", true, ConfigurationTarget.Global);
-                        Assert.doesNotThrow(task["GetMarkdownDocument"]);
+                        Assert.doesNotThrow(() => task["GetMarkdownDocument"]());
                     });
             });
     });
