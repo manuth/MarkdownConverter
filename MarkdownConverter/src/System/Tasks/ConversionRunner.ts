@@ -153,7 +153,7 @@ export class ConversionRunner
 
                     workspaceFolder =
                         (!isNullOrUndefined(workspaceRoot) || !isNullOrUndefined(documentFolder) ?
-                            (workspaceRoot || documentFolder) : "");
+                            (workspaceRoot || documentFolder) : null);
 
                     context =
                         new class
