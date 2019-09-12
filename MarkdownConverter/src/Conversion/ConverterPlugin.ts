@@ -65,7 +65,21 @@ export class ConverterPlugin
         registerAction("beforeStart",
             async ({ options }) =>
             {
-                browser = await launch();
+                let browserArguments = ["--disable-web-security"];
+
+                try
+                {
+                    browser = await launch({
+                        args: browserArguments
+                    });
+                }
+                catch
+                {
+                    browser = await launch({
+                        args: browserArguments.concat(["--no-sandbox"])
+                    });
+                }
+
                 occupiedFilenames = [];
                 subdirectories = options.subdirectories;
                 defaultFilename = this.WebsiteName || options.defaultFilename;
