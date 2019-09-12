@@ -6,7 +6,7 @@ import { TestOptions } from "vscode-test/out/runTest";
 {
     let commonArgs: TestOptions = {
         extensionDevelopmentPath: Path.resolve(__dirname, "..", "..", ".."),
-        extensionTestsPath: Path.resolve(__dirname, "..", "..", "lib", "test"),
+        extensionTestsPath: Path.resolve(__dirname, "..", "..", "lib", "test")
     };
 
     try
