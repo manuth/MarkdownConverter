@@ -295,11 +295,11 @@ export class ConversionRunner
             footerTemplate &&
             await FileSystem.pathExists(Path.resolve(converter.WorkspaceRoot, footerTemplate)))
         {
-            converter.Document.Header.Content = FileSystem.readFileSync(footerTemplate).toString();
+            converter.Document.Footer.Content = FileSystem.readFileSync(footerTemplate).toString();
         }
         else
         {
-            converter.Document.Header.Content = Settings.Default.FooterTemplate;
+            converter.Document.Footer.Content = Settings.Default.FooterTemplate;
         }
 
         try
