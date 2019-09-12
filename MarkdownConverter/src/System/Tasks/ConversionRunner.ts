@@ -270,8 +270,8 @@ export class ConversionRunner
         }
 
         let converter = new Converter(workspaceRoot, new Document(document, await this.LoadParser()));
-        let headerPath = converter.Document.Attributes["HeaderPath"];
-        let footerPath = converter.Document.Attributes["FooterPath"];
+        let headerTemplate = converter.Document.Attributes["HeaderTemplate"];
+        let footerTemplate = converter.Document.Attributes["FooterTemplate"];
         converter.Document.Quality = Settings.Default.ConversionQuality;
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Attributes.Author = converter.Document.Attributes.Author || await Utilities.GetFullName();
@@ -281,10 +281,10 @@ export class ConversionRunner
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
 
         if (
-            headerPath &&
-            await FileSystem.pathExists(Path.resolve(converter.WorkspaceRoot, headerPath)))
+            headerTemplate &&
+            await FileSystem.pathExists(Path.resolve(converter.WorkspaceRoot, headerTemplate)))
         {
-            converter.Document.Header.Content = FileSystem.readFileSync(headerPath).toString();
+            converter.Document.Header.Content = FileSystem.readFileSync(headerTemplate).toString();
         }
         else
         {
@@ -292,10 +292,10 @@ export class ConversionRunner
         }
 
         if (
-            footerPath &&
-            await FileSystem.pathExists(Path.resolve(converter.WorkspaceRoot, footerPath)))
+            footerTemplate &&
+            await FileSystem.pathExists(Path.resolve(converter.WorkspaceRoot, footerTemplate)))
         {
-            converter.Document.Header.Content = FileSystem.readFileSync(footerPath).toString();
+            converter.Document.Header.Content = FileSystem.readFileSync(footerTemplate).toString();
         }
         else
         {
