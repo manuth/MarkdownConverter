@@ -2,7 +2,7 @@
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-	"version": "0.2.0",
+    "version": "0.2.0",
     "configurations": [
         {
             "type": "extensionHost",
@@ -15,7 +15,8 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/**/*.js"
             ],
-            "preLaunchTask": "Build"
+            "preLaunchTask": "Watch Release",
+            "postDebugTask": "Stop Release"
         },
         {
             "type": "extensionHost",
@@ -32,7 +33,7 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Build"
+            "preLaunchTask": "Watch Debug"
         },
         {
             "type": "extensionHost",
@@ -49,7 +50,8 @@
             },
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ]
+            ],
+            "preLaunchTask": "Watch Debug"
         },
         {
             "type": "extensionHost",
@@ -66,7 +68,8 @@
             },
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ]
+            ],
+            "preLaunchTask": "Watch Debug"
         },
         {
             "type": "extensionHost",
@@ -83,18 +86,8 @@
             },
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ]
-        }
-    ],
-    "compounds": [
-        {
-            "name": "Launch Tests",
-            "configurations": [
-                "Launch Common Tests",
-                "Launch Tests for Single-File Mode",
-                "Launch Tests for the Single-Folder Mode",
-                "Launch Tests for the Workspace Mode"
-            ]
+            ],
+            "preLaunchTask": "Watch Debug"
         }
     ]
 }
