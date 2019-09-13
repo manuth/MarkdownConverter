@@ -4,6 +4,8 @@ import { TestOptions } from "vscode-test/out/runTest";
 
 (async function main()
 {
+    let environmentPath = Path.resolve(__dirname, "..", "..", "src", "test");
+
     let commonArgs: TestOptions = {
         extensionDevelopmentPath: Path.resolve(__dirname, "..", "..", ".."),
         extensionTestsPath: Path.resolve(__dirname, "..", "..", "lib", "test")
@@ -26,7 +28,7 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "single-file"
                 },
                 launchArgs: [
-                    Path.resolve(__dirname, "single-file", "Test.md")
+                    Path.resolve(environmentPath, "single-file", "Test.md")
                 ]
             });
 
@@ -37,7 +39,18 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "single-folder"
                 },
                 launchArgs: [
-                    Path.resolve(__dirname, "single-folder")
+                    Path.resolve(environmentPath, "single-folder")
+                ]
+            });
+
+        await runTests(
+            {
+                ...commonArgs,
+                extensionTestsEnv: {
+                    TEST_SUITE: "workspace"
+                },
+                launchArgs: [
+                    Path.resolve(environmentPath, "workspace", "workspace.code-workspace")
                 ]
             });
     }
