@@ -54,7 +54,7 @@ let args = minimist(
 /**
  * The settings for building the project.
  */
-let settings = new Settings(args["mode"]);
+let settings = new Settings(args["target"]);
 
 /**
  * Builds the project.
