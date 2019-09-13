@@ -37,7 +37,7 @@
   "scripts": {
     "vscode:prepublish": "npm run clean && npm run release",
     "build": "gulp Build",
-    "release": "gulp Build -m Release",
+    "release": "gulp Build -t Release",
     "rebuild": "npm run clean && npm run build",
     "watch": "gulp Watch",
     "clean": "rimraf ./MarkdownConverter/lib",

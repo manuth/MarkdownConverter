@@ -41,13 +41,13 @@ let args = minimist(
     process.argv.slice(2),
     {
         string: [
-            "mode"
+            "target"
         ],
         alias: {
-            mode: "m"
+            target: "t"
         },
         default: {
-            mode: "Debug"
+            target: "Debug"
         }
     });
 
