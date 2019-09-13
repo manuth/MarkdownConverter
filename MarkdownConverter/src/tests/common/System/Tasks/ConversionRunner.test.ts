@@ -35,6 +35,7 @@ suite(
             this.enableTimeouts(false);
             await markdownRestorer.Clear();
             await configRestorer.Clear();
+            await FileSystem.writeFile(mdFile.FullName, "");
             await markdownConfig.update("ConversionType", [ConversionType[ConversionType.HTML]], true);
             await markdownConfig.update("DestinationPattern", destinationFile.FullName, true);
             await markdownConfig.update("Parser.SystemParserEnabled", false, true);
@@ -343,6 +344,39 @@ suite(
                         styleSheet.Dispose();
                         templateFile.Dispose();
                         workspaceRoot.Dispose();
+                    });
+
+                test(
+                    "Checking whether the header- and footer-template are loaded from a file according to the `HeaderTemplate` and `FooterTemplate`-attribute…",
+                    async () =>
+                    {
+                        let header = "This is a header";
+                        let footer = "This is a footer";
+                        let headerTemplate = new TempFile();
+                        let footerTemplate = new TempFile();
+                        await FileSystem.writeFile(headerTemplate.FullName, header);
+                        await FileSystem.writeFile(footerTemplate.FullName, footer);
+
+                        await FileSystem.writeFile(
+                            mdFile.FullName,
+                            Dedent(
+                                `
+                                ---
+                                HeaderTemplate: ${headerTemplate.FullName}
+                                FooterTemplate: ${footerTemplate.FullName}
+                                ---`));
+
+                        await Convert();
+
+                        let converter = await new ConversionRunner(
+                            { VSCodeParser: {} } as MarkdownConverterExtension)["LoadConverter"](
+                                Path.dirname(mdFile.FullName),
+                                await workspace.openTextDocument(mdFile.FullName));
+
+                        Assert.strictEqual(converter.Document.Header.Content, header);
+                        Assert.strictEqual(converter.Document.Footer.Content, footer);
+                        headerTemplate.Dispose();
+                        footerTemplate.Dispose();
                     });
             });
 
