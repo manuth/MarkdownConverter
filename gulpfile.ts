@@ -6,6 +6,7 @@ import sourcemaps = require("gulp-sourcemaps");
 import ts = require("gulp-typescript");
 import merge = require("merge-stream");
 import minimist = require("minimist");
+import PromiseQueue = require("promise-queue");
 import Path = require("upath");
 import buffer = require("vinyl-buffer");
 import source = require("vinyl-source-stream");
@@ -84,8 +85,11 @@ Watch.description = "Builds the project in watched mode.";
 /**
  * Executes the compilation for the Release-target.
  */
-function Release()
+async function Release()
 {
+    let streams: Array<Promise<NodeJS.ReadWriteStream>> = [];
+    let queue: PromiseQueue = new PromiseQueue();
+
     if (settings.Watch)
     {
         log.info(watchStartMessage);
@@ -95,131 +99,111 @@ function Release()
         "extension.ts"
     ];
 
-    let bundlers: { [entry: string]: browserify.BrowserifyObject } = {};
     let optionBase: browserify.Options = {
         ...watchify.args,
         node: true,
         ignoreMissing: true
     };
 
-    for (let file of entries)
     {
-        let bundler = browserify(
-            {
-                ...optionBase,
-                basedir: Path.normalize(settings.DestinationPath(Path.dirname(file))),
-                entries: [
-                    Path.normalize(settings.SourcePath(file))
-                ],
-                standalone: Path.join(Path.dirname(file), Path.parse(file).name)
-            });
-
-        if (settings.Watch)
-        {
-            bundler = watchify(bundler);
-        }
-
-        bundlers[file] = bundler;
-    }
-
-    for (let bundler of entries.map((entry) => bundlers[entry]))
-    {
-        bundler.plugin(
-            require("tsify"),
-            {
-                project: settings.ExtensionPath("tsconfig.json")
-            }
-        ).external(
-            [
-                "mocha",
-                "shelljs",
-                "vscode"
-            ]);
-    }
-
-    /**
-     * Builds the project.
-     */
-    // tslint:disable-next-line: completed-docs
-    function build()
-    {
-        let buildProcessing = true;
         let errorMessages: string[] = [];
-        let streams: NodeJS.ReadWriteStream[] = [];
-
-        if (settings.Watch)
-        {
-            Promise.all(
-                entries.map(
-                    (entry) =>
-                    {
-                        return new Promise(
-                            (resolve) =>
-                            {
-                                let listener = () =>
-                                {
-                                    bundlers[entry].removeListener("update", listener);
-                                    resolve();
-                                };
-
-                                bundlers[entry].on("update", listener);
-                            });
-                    })
-            ).then(
-                () =>
-                {
-                    if (!buildProcessing)
-                    {
-                        log.info(incrementalMessage);
-                        build();
-                    }
-                });
-        }
 
         for (let file of entries)
         {
-            let fileName = Path.changeExt(file, "js");
-            let stream = bundlers[file].bundle().on(
-                "error",
-                (error) =>
+            let bundler = browserify(
                 {
-                    let message: string = error.message;
-                    if (!errorMessages.includes(message))
-                    {
-                        errorMessages.push(message);
-                        log.error(message);
-                    }
-                }
-            ).pipe(
-                source(fileName)
-            ).pipe(
-                buffer()
-            );
-
-            streams.push(stream);
-        }
-
-        let stream = merge(streams).pipe(
-            gulp.dest(settings.DestinationPath())
-        );
-
-        if (settings.Watch)
-        {
-            stream.on(
-                "end",
-                () =>
-                {
-                    log.info(watchFinishMessage(errorMessages.length));
-                    buildProcessing = false;
+                    ...optionBase,
+                    basedir: Path.normalize(settings.DestinationPath(Path.dirname(file))),
+                    entries: [
+                        Path.normalize(settings.SourcePath(file))
+                    ],
+                    standalone: Path.join(Path.dirname(file), Path.parse(file).name)
                 });
-        }
 
-        return stream;
+            if (settings.Watch)
+            {
+                bundler = watchify(bundler);
+            }
+
+            bundler.plugin(
+                require("tsify"),
+                {
+                    project: settings.ExtensionPath("tsconfig.json")
+                }
+            ).external(
+                [
+                    "mocha",
+                    "shelljs",
+                    "vscode"
+                ]);
+
+            let bundle = async () =>
+            {
+                return new Promise<NodeJS.ReadWriteStream>(
+                    (resolve) =>
+                    {
+                        let stream = bundler.bundle().on(
+                            "error",
+                            (error) =>
+                            {
+                                let message: string = error.message;
+
+                                if (!errorMessages.includes(message))
+                                {
+                                    errorMessages.push(message);
+                                    log.error(message);
+                                }
+                            }
+                        ).pipe(
+                            source(Path.changeExt(file, "js"))
+                        ).pipe(
+                            buffer()
+                        ).pipe(
+                            gulp.dest(settings.DestinationPath())
+                        );
+
+                        stream.on(
+                            "end",
+                            () =>
+                            {
+                                if (settings.Watch && ((queue.getQueueLength() + queue.getPendingLength()) === 1))
+                                {
+                                    log.info(watchFinishMessage(errorMessages.length));
+                                }
+
+                                errorMessages.splice(0, errorMessages.length);
+                                resolve(stream);
+                            });
+                    });
+            };
+
+            if (settings.Watch)
+            {
+                bundler.on(
+                    "update",
+                    () =>
+                    {
+                        if ((queue.getQueueLength() + queue.getPendingLength()) === 0)
+                        {
+                            log.info(incrementalMessage);
+                        }
+
+                        queue.add(
+                            async () =>
+                            {
+                                return bundle();
+                            });
+                    });
+            }
+
+            let build = () => queue.add(bundle);
+            build.displayName = Build.displayName;
+            build.description = Build.description;
+            streams.push(build());
+        }
     }
 
-    build.displayName = Build.displayName;
-    build.description = Build.description;
-    return build();
+    return merge(await Promise.all(streams)) as NodeJS.ReadWriteStream;
 }
 Build.description = "Builds the project";
 
