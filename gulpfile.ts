@@ -1,5 +1,6 @@
 import browserify = require("browserify");
 import log = require("fancy-log");
+import FileSystem = require("fs-extra");
 import gulp = require("gulp");
 import filter = require("gulp-filter");
 import sourcemaps = require("gulp-sourcemaps");
@@ -318,6 +319,14 @@ function Debug()
     }
 
     return builder();
+}
+
+/**
+ * Cleans all builds.
+ */
+export async function Clean()
+{
+    await FileSystem.remove(settings.DestinationPath());
 }
 
 /**
