@@ -75,12 +75,8 @@ MarkdownConverter/[Ss]rc/
 MarkdownConverter/tsconfig.json
 MarkdownConverter/tslint.json
 
-# Source-maps
-MarkdownConverter/[Ll]ib/**/*.js.map
-
-# Unit-Tests
-MarkdownConverter/[Ll]ib/test/
-MarkdownConverter/[Ll]ib/tests/
+# Unit-Tests and debug-files
+MarkdownConverter/[Ll]ib/!(extension.js)
 
 # Unused node-modules
 node_modules/!(highlightjs|shelljs)

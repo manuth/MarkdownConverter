@@ -1,15 +1,38 @@
 import browserify = require("browserify");
 import log = require("fancy-log");
 import gulp = require("gulp");
+import filter = require("gulp-filter");
+import sourcemaps = require("gulp-sourcemaps");
+import ts = require("gulp-typescript");
 import merge = require("merge-stream");
 import minimist = require("minimist");
-import { TempDirectory } from "temp-filesystem";
 import Path = require("upath");
 import buffer = require("vinyl-buffer");
 import source = require("vinyl-source-stream");
 import watchify = require("watchify");
 import { Settings } from "./.gulp/Settings";
 import "./.gulp/TaskFunction";
+
+/**
+ * The message that is printed when starting the compilation in watch mode.
+ */
+const watchStartMessage = "Starting compilation in watch mode...";
+
+/**
+ * The message that is printed when starting an incremental compilation.
+ */
+const incrementalMessage = "File change detected. Starting incremental compilation...";
+
+/**
+ * Generates the message that is printed after finishing a compilation in watch mode.
+ *
+ * @param errorCount
+ * The number of errors which occurred.
+ */
+const watchFinishMessage = (errorCount: number) =>
+{
+    return `Found ${errorCount} errors. Watching for file changes.`;
+};
 
 /**
  * The arguments passed by the user.
@@ -34,36 +57,47 @@ let args = minimist(
 let settings = new Settings(args["mode"]);
 
 /**
+ * Builds the project.
+ */
+export function Build()
+{
+    if (settings.Debug)
+    {
+        return Debug();
+    }
+    else
+    {
+        return Release();
+    }
+}
+
+/**
  * Builds the project in watched mode.
  */
 export function Watch()
 {
     settings.Watch = true;
-    log.info("Starting compilation in watch mode...");
     Build();
 }
 Watch.description = "Builds the project in watched mode.";
 
 /**
- * Builds the project.
+ * Executes the compilation for the Release-target.
  */
-export function Build()
+function Release()
 {
+    if (settings.Watch)
+    {
+        log.info(watchStartMessage);
+    }
+
     let entries = [
-        "extension.ts",
-        "test/runTests.ts",
-        "test/index.ts",
-        "test/common.test.ts",
-        "test/single-file.test.ts",
-        "test/single-folder.test.ts",
-        "test/workspace.test.ts"
+        "extension.ts"
     ];
 
     let bundlers: { [entry: string]: browserify.BrowserifyObject } = {};
-
     let optionBase: browserify.Options = {
         ...watchify.args,
-        debug: settings.Debug,
         node: true,
         ignoreMissing: true
     };
@@ -80,15 +114,12 @@ export function Build()
                 standalone: Path.join(Path.dirname(file), Path.parse(file).name)
             });
 
-        bundlers[file] = bundler;
-    }
-
-    if (settings.Watch)
-    {
-        for (let entry of entries)
+        if (settings.Watch)
         {
-            bundlers[entry] = watchify(bundlers[entry]);
+            bundler = watchify(bundler);
         }
+
+        bundlers[file] = bundler;
     }
 
     for (let bundler of entries.map((entry) => bundlers[entry]))
@@ -139,7 +170,7 @@ export function Build()
                 {
                     if (!buildProcessing)
                     {
-                        log.info("File change detected. Starting incremental compilation...");
+                        log.info(incrementalMessage);
                         build();
                     }
                 });
@@ -178,7 +209,7 @@ export function Build()
                 "end",
                 () =>
                 {
-                    log.info(`Found ${errorMessages.length} errors. Watching for file changes.`);
+                    log.info(watchFinishMessage(errorMessages.length));
                     buildProcessing = false;
                 });
         }
@@ -191,5 +222,83 @@ export function Build()
     return build();
 }
 Build.description = "Builds the project";
+
+/**
+ * Executes the compilation for the Debug-target.
+ */
+function Debug()
+{
+    let project = ts.createProject(settings.ExtensionPath("tsconfig.json"));
+
+    /**
+     * Compiles a Debug-build.
+     */
+    let builder = () =>
+    {
+        let reporter: ts.reporter.Reporter = {
+            error(error, typescript)
+            {
+                ts.reporter.defaultReporter().error(error, typescript);
+            },
+
+            finish(results)
+            {
+                if (settings.Watch)
+                {
+                    let errorCount =
+                        results.transpileErrors +
+                        results.optionsErrors +
+                        results.syntaxErrors +
+                        results.globalErrors +
+                        results.semanticErrors +
+                        results.declarationErrors +
+                        results.emitErrors;
+                    log.info(watchFinishMessage(errorCount));
+
+                    results.transpileErrors = 0;
+                    results.optionsErrors = 0;
+                    results.syntaxErrors = 0;
+                    results.globalErrors = 0;
+                    results.semanticErrors = 0;
+                    results.declarationErrors = 0;
+                    results.emitErrors = 0;
+                }
+                else
+                {
+                    ts.reporter.defaultReporter().finish(results);
+                }
+            }
+        };
+
+        return gulp.src(settings.SourcePath("**", "*.ts")).pipe(
+            sourcemaps.init()
+        ).pipe(
+            project(reporter)
+        ).pipe(
+            sourcemaps.write(".")
+        ).pipe(
+            filter(["**", "!**/*.ts.map"])
+        ).pipe(
+            gulp.dest(settings.DestinationPath())
+        );
+    };
+
+    if (settings.Watch)
+    {
+        log.info(watchStartMessage);
+
+        gulp.watch(
+            settings.SourcePath("**", "*.ts"),
+            function Build()
+            {
+                log.info(incrementalMessage);
+                return builder();
+            });
+
+        builder();
+    }
+
+    return builder();
+}
 
 export default Build;
