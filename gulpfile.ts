@@ -6,13 +6,20 @@ import sourcemaps = require("gulp-sourcemaps");
 import ts = require("gulp-typescript");
 import merge = require("merge-stream");
 import minimist = require("minimist");
+import { Server, Socket } from "net";
 import PromiseQueue = require("promise-queue");
+import parseArgsStringToArgv from "string-argv";
 import Path = require("upath");
 import buffer = require("vinyl-buffer");
 import source = require("vinyl-source-stream");
 import watchify = require("watchify");
 import { Settings } from "./.gulp/Settings";
 import "./.gulp/TaskFunction";
+
+/**
+ * The port to listen for stop-requests.
+ */
+const watchConnectorPort = 25123;
 
 /**
  * The message that is printed when starting the compilation in watch mode.
@@ -38,48 +45,78 @@ const watchFinishMessage = (errorCount: number) =>
 /**
  * The arguments passed by the user.
  */
-let args = minimist(
-    process.argv.slice(2),
-    {
-        string: [
-            "target"
-        ],
-        alias: {
-            target: "t"
-        },
-        default: {
-            target: "Debug"
-        }
-    });
+let options = ParseArgs(process.argv.slice(2));
+
+/**
+ * Parses the specified arguments.
+ *
+ * @param args
+ * The arguments to parse.
+ */
+function ParseArgs(args: string[])
+{
+    return minimist(
+        args,
+        {
+            string: [
+                "target"
+            ],
+            alias: {
+                target: "t"
+            },
+            default: {
+                target: "Debug"
+            }
+        });
+}
 
 /**
  * The settings for building the project.
  */
-let settings = new Settings(args["target"]);
+let settings = new Settings(options["target"]);
 
 /**
  * Builds the project.
  */
 export function Build()
 {
-    if (settings.Debug)
-    {
-        return Debug();
-    }
-    else
-    {
-        return Release();
-    }
+    return settings.Debug ? Debug() : Release();
 }
 
 /**
  * Builds the project in watched mode.
  */
-export function Watch()
+export let Watch: gulp.TaskFunction = (done) =>
 {
     settings.Watch = true;
     Build();
-}
+
+    let server = new Server(
+        (socket) =>
+        {
+            socket.on(
+                "data",
+                (data) =>
+                {
+                    let args = parseArgsStringToArgv(data.toString());
+                    socket.destroy();
+
+                    if (args[0] === "stop")
+                    {
+                        let options = ParseArgs(args.slice(1));
+
+                        if (options["target"] === settings.Target)
+                        {
+                            server.close();
+                            done();
+                            process.exit();
+                        }
+                    }
+                });
+        });
+
+    server.listen(watchConnectorPort);
+};
 Watch.description = "Builds the project in watched mode.";
 
 /**
@@ -278,11 +315,40 @@ function Debug()
                 log.info(incrementalMessage);
                 return builder();
             });
-
-        builder();
     }
 
     return builder();
 }
+
+/**
+ * Stops a watch-task.
+ */
+export async function Stop()
+{
+    try
+    {
+        await new Promise(
+            (resolve, reject) =>
+            {
+                let client = new Socket();
+
+                client.connect(
+                    watchConnectorPort,
+                    "localhost",
+                    async () =>
+                    {
+                        client.write(`stop -t ${settings.Target}`);
+                    });
+
+                client.on("close", resolve);
+                client.on("error", reject);
+            });
+    }
+    catch
+    {
+        log.info("The specified task is not running.");
+    }
+}
+Stop.description = "Stops a watch-task";
 
 export default Build;
