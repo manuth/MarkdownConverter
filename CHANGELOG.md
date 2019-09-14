@@ -41,7 +41,7 @@ Continue reading to see what else changed.
 Thank you guys for using `MarkdownConverter` and for keeping me motivated!
 You guys are the best! 🎉
 
-## Breaking Changes
+### Breaking Changes
   - Added the `DestinationPattern`-option for specifying a pattern for resolving the destination-path  
     You can use following epressions in the `DestinationPattern`:
     - `${workspaceFolder}`:  
@@ -56,7 +56,7 @@ You guys are the best! 🎉
       The name of the document-file with its original extension.
   - Dropped `DestinationPath` and `DestinationOrigin` in favor of `DestinationPattern`
 
-## Other Changes
+### Other Changes
   - Prevented port-collisions when converting multiple files at once
   - Fixed the threading-issues by automatically disabling sandboxed mode if it fails  
     Special thanks to [@jkhsjdhjs](https://github.com/jkhsjdhjs) for reporting and also fixing this issue
@@ -90,7 +90,7 @@ You guys are the best! 🎉
   - The `OutDir`-setting is now called `DestinationPath`
   - The `DestinationPath` is considered relative to the `DestinationOrigin`
 
-## Other
+### Other
   - Documents located in sub-directories are now converted correctly  
     Thanks to [@mjwsteenbergen](https://github.com/mjwsteenbergen) for reporting the issue
   - People can now choose whether to consider the `DestinationPath` relative to the `WorkspaceFolder` or relative to the directory of the document-file.
