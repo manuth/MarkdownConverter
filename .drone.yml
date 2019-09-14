@@ -19,7 +19,7 @@ steps:
   image: manuth/vscode-test-runner
   commands:
   - xvfb-run npm run test
-- name: build release
+- name: build extension
   image: node
   commands:
   - npx vsce package
@@ -36,7 +36,6 @@ steps:
   - sed -i '2,$d ; s/## \(.* v[0-9.]*\)[\r\n$]/\1/' ReleaseTitle.md
   when:
     event:
-    - push
     - tag
 - name: publish
   image: plugins/github-release
@@ -49,7 +48,6 @@ steps:
     note: ReleaseNotes.md
   when:
     event:
-    - push
     - tag
 - name: publish extension
   image: node
@@ -60,7 +58,6 @@ steps:
   - npx vsce publish --pat $ACCESS_TOKEN
   when:
     event:
-    - push
     - tag
 
 trigger:
