@@ -41,7 +41,7 @@
     "rebuild": "npm run clean && npm run build",
     "rebuild-release": "npm run clean && npm run release",
     "watch": "gulp Watch",
-    "watch-Release": "gulp Watch -t Release",
+    "watch-release": "gulp Watch -t Release",
     "stop": "gulp Stop -t Debug",
     "stop-release": "gulp Stop -t Release",
     "clean": "gulp Clean",
