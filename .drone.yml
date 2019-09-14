@@ -42,7 +42,7 @@ steps:
     api_key:
       from_secret: github_token
     files:
-      - \*.vsix
+      - "*.vsix"
     title: ReleaseTitle.md
     note: ReleaseNotes.md
   when:
