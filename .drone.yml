@@ -22,7 +22,7 @@ steps:
 - name: build release
   image: node
   commands:
-  - npm run release
+  - npx vsce package
   when:
     event:
     - push
