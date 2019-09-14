@@ -4,6 +4,7 @@ import FileSystem = require("fs-extra");
 import gulp = require("gulp");
 import filter = require("gulp-filter");
 import sourcemaps = require("gulp-sourcemaps");
+import terser = require("gulp-terser");
 import ts = require("gulp-typescript");
 import merge = require("merge-stream");
 import minimist = require("minimist");
@@ -196,6 +197,8 @@ async function Release()
                             source(Path.changeExt(file, "js"))
                         ).pipe(
                             buffer()
+                        ).pipe(
+                            terser()
                         ).pipe(
                             gulp.dest(settings.DestinationPath())
                         );
