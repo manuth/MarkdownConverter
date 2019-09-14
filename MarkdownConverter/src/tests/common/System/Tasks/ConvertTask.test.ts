@@ -16,7 +16,6 @@ suite(
             "GetMarkdownDocument()",
             () =>
             {
-                let originalMethod: ConversionRunner["Execute"];
                 let config: WorkspaceConfiguration;
                 let configRestorer: ConfigRestorer;
                 let testFile: TempFile;

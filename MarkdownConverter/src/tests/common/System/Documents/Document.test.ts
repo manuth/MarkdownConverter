@@ -21,11 +21,7 @@ suite(
         let tempFile: TempFile;
         let textDocument: TextDocument;
         let parser: MarkdownIt;
-        let parserVerifier: MarkdownIt;
-        let verifierText: string;
         let testDocument: Document;
-        let untitledDocument: Document;
-        let verifierDocument: Document;
 
         suiteSetup(
             async () =>
@@ -54,18 +50,12 @@ suite(
 
                 parser = new MarkdownIt();
                 testDocument = new Document(textDocument, parser);
-                untitledDocument = new Document(untitledTextDocument, parser);
+            });
 
-                parserVerifier = {
-                    ...new MarkdownIt(),
-                    render()
-                    {
-                        return verifierText;
-                    }
-                };
-
-                verifierText = "parsed by parser";
-                verifierDocument = new Document(textDocument, parserVerifier);
+        suiteTeardown(
+            () =>
+            {
+                tempFile.Dispose();
             });
 
         suite(

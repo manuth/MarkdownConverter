@@ -66,6 +66,14 @@ suite(
                 websiteName = "TestWebsite.html";
             });
 
+        suiteTeardown(
+            async () =>
+            {
+                tempDirectory.Dispose();
+                destinationDirectory.Dispose();
+                await converter.Dispose();
+            });
+
         suite(
             "constructor(Converter converter, string websiteName)",
             () =>

@@ -114,6 +114,8 @@ suite(
             {
                 await markdownRestorer.Restore();
                 await configRestorer.Restore();
+                mdFile.Dispose();
+                destinationFile.Dispose();
             });
 
         setup(Clean);
@@ -419,6 +421,7 @@ suite(
                             () =>
                             {
                                 testFile.Dispose();
+                                tempDir.Dispose();
                             });
 
                         test(
