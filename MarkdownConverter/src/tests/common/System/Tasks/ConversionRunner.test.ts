@@ -347,7 +347,7 @@ suite(
                     });
 
                 test(
-                    "Checking whether the header- and footer-template are loaded from a file according to the `HeaderTemplate` and `FooterTemplate`-attribute…",
+                    "Checking whether the header- and footer-template are loaded from a file according to the attributes…",
                     async () =>
                     {
                         let header = "This is a header";
