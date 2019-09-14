@@ -60,9 +60,10 @@ steps:
     - tag
 
 trigger:
-  branch:
-  - master
-  - dev
+  ref:
+  - refs/heads/master
+  - refs/heads/dev
+  - refs/tags/*
   event:
   - push
   - tag
