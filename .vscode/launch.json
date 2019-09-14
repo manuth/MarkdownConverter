@@ -2,7 +2,7 @@
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-	"version": "0.2.0",
+    "version": "0.2.0",
     "configurations": [
         {
             "type": "extensionHost",
@@ -13,23 +13,81 @@
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
             "outFiles": [
-                "${workspaceFolder}/lib/**/*.js"
+                "${workspaceFolder}/MarkdownConverter/lib/**/*.js"
             ],
-            "preLaunchTask": "Build"
+            "preLaunchTask": "Watch Release",
+            "postDebugTask": "Stop Release"
         },
         {
             "type": "extensionHost",
             "request": "launch",
-            "name": "Launch Tests",
+            "name": "Launch Common Tests",
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/lib/test"
+                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test"
             ],
+            "env": {
+                "TEST_SUITE": "common"
+            },
             "outFiles": [
-                "${workspaceFolder}/lib/test/**/*.js"
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Build"
+            "preLaunchTask": "Watch Debug"
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Tests for Single-File Mode",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
+                "${workspaceFolder}/MarkdownConverter/src/test/single-file/Test.md"
+            ],
+            "env": {
+                "TEST_SUITE": "single-file"
+            },
+            "outFiles": [
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
+            ],
+            "preLaunchTask": "Watch Debug"
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Tests for the Single-Folder Mode",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
+                "${workspaceFolder}/MarkdownConverter/src/test/single-folder"
+            ],
+            "env": {
+                "TEST_SUITE": "single-folder"
+            },
+            "outFiles": [
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
+            ],
+            "preLaunchTask": "Watch Debug"
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Tests for the Workspace Mode",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
+                "${workspaceFolder}/MarkdownConverter/src/test/workspace/workspace.code-workspace"
+            ],
+            "env": {
+                "TEST_SUITE": "workspace"
+            },
+            "outFiles": [
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
+            ],
+            "preLaunchTask": "Watch Debug"
         }
     ]
 }

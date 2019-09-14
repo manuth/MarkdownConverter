@@ -4,7 +4,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build",
+            "label": "Debug",
+            "type": "npm",
+            "script": "build",
+            "group": "build",
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "Release",
+            "type": "npm",
+            "script": "build-release",
+            "group": "build",
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "Watch Debug",
             "type": "npm",
             "script": "watch",
             "group": {
@@ -18,13 +32,45 @@
             }
         },
         {
-            "label": "Rebuild",
+            "label": "Watch Release",
             "type": "npm",
-            "script": "rebuild",
-            "problemMatcher": "$tsc",
+            "script": "watch-release",
+            "group": "build",
+            "problemMatcher": "$tsc-watch",
+            "isBackground": true,
             "presentation": {
                 "reveal": "never"
             }
+        },
+        {
+            "label": "Stop Debug",
+            "type": "npm",
+            "script": "stop",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
+            "label": "Stop Release",
+            "type": "npm",
+            "script": "stop-release",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
+            "label": "Rebuild",
+            "type": "npm",
+            "script": "rebuild",
+            "problemMatcher": "$tsc"
+        },
+        {
+            "label": "Rebuild Release",
+            "type": "npm",
+            "script": "rebuild-release",
+            "problemMatcher": "$tsc"
         },
         {
             "label": "Lint",

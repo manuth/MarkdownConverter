@@ -4,6 +4,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## MarkdownConverter v3.0.0
+### General
+Hey Guys!
+
+It's time for another big update once more, because I finally managed it to stuff all features I ever wanted into MarkdownConverter!  
+Though I'm still not that satisfied about the document-chaining feature but I'll find a way to improve this feature for sure.
+
+Lots of things have changed in background. First I set up my own [Drone CI Server](https://drone.nuth.ch) which allows me to automatically check, test and also publish my projects.
+
+MarkdownConverter is the very first project I'm trying to run using my CI-Server so please don't be mad if anything fails or something. 😅
+
+Thanks to @damgot it's now possible to override the `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate`-settings by setting the `HeaderTemplate` and/or `FooterTemplate` front-matter attribute to a path to a file to load the template from.
+
+The path is either relative to the workspace-folder, if present, or to the directory containing the document.
+
+Another change is that my project now is compressed and merged into nearly a single file using [`browserify`](https://npmjs.com/package/browserify). This might make my extension run even faster.
+
+### Changes
+  - Provide the functionality to override the header- and footer-template
+  - Fix a few issues
+    - The margin- and toc-settings are now loaded correctly
+    - Self-contained html-files now can be converted on single-threaded environments
+  - Improve performance
+    - MarkdownConverter is now compressed using browserify.
+  - Improve developer experience
+    - The project is now built using gulp
+  - The project is now automatically tested on [manuth's Drone CI](https://drone.nuth.ch/manuth/MarkdownConverter/)
+  - Update all dependencies
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v2.0.2...v3.0.0)
+
 ## MarkdownConverter v2.0.2
   - Fix malworking setting-parser
 
@@ -41,7 +72,7 @@ Continue reading to see what else changed.
 Thank you guys for using `MarkdownConverter` and for keeping me motivated!
 You guys are the best! 🎉
 
-## Breaking Changes
+### Breaking Changes
   - Added the `DestinationPattern`-option for specifying a pattern for resolving the destination-path  
     You can use following epressions in the `DestinationPattern`:
     - `${workspaceFolder}`:  
@@ -56,7 +87,7 @@ You guys are the best! 🎉
       The name of the document-file with its original extension.
   - Dropped `DestinationPath` and `DestinationOrigin` in favor of `DestinationPattern`
 
-## Other Changes
+### Other Changes
   - Prevented port-collisions when converting multiple files at once
   - Fixed the threading-issues by automatically disabling sandboxed mode if it fails  
     Special thanks to [@jkhsjdhjs](https://github.com/jkhsjdhjs) for reporting and also fixing this issue
@@ -90,7 +121,7 @@ You guys are the best! 🎉
   - The `OutDir`-setting is now called `DestinationPath`
   - The `DestinationPath` is considered relative to the `DestinationOrigin`
 
-## Other
+### Other
   - Documents located in sub-directories are now converted correctly  
     Thanks to [@mjwsteenbergen](https://github.com/mjwsteenbergen) for reporting the issue
   - People can now choose whether to consider the `DestinationPath` relative to the `WorkspaceFolder` or relative to the directory of the document-file.

@@ -1,5 +1,0 @@
-suite(
-    "MarkdownConverter",
-    () =>
-    {
-    });

@@ -1,0 +1,6 @@
+suite(
+    "System",
+    () =>
+    {
+        require("./Tasks");
+    });

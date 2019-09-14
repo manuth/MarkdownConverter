@@ -1,12 +1,9 @@
 {
     "extends": "@manuth/tsconfig/recommended",
-    "compileOnSave": true,
     "compilerOptions": {
-        "rootDir": "./src",
         "module": "commonjs",
         "lib": [
             "es7",
-            "esnext",
             "dom"
         ],
         "plugins": [
@@ -14,7 +11,9 @@
                 "name": "typescript-tslint-plugin"
             }
         ],
-        "target": "es6",
-        "outDir": "./lib"
-    }
+        "target": "es6"
+    },
+    "files": [
+        "./gulpfile.ts"
+    ]
 }
