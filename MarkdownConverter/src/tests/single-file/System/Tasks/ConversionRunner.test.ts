@@ -25,9 +25,8 @@ suite(
                         let untitledSubstitutionTester: SubstitutionTester;
 
                         suiteSetup(
-                            async function()
+                            async () =>
                             {
-                                this.enableTimeouts(false);
                                 config = workspace.getConfiguration(Settings["configKey"]);
                                 configRestorer = new ConfigRestorer(["DestinationPattern"], Settings["configKey"]);
                                 testFile = new TempFile(
@@ -56,7 +55,8 @@ suite(
                             "Checking whether ${workspaceFolder} resolves to the folder containing the file…",
                             async function()
                             {
-                                this.enableTimeouts(false);
+                                this.slow(1 * 1000);
+                                this.timeout(4 * 1000);
                                 await config.update("DestinationPattern", "${workspaceFolder}", ConfigurationTarget.Global);
                                 Assert.strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(Path.dirname(testFile.FullName)).fsPath);
                             });
@@ -65,7 +65,8 @@ suite(
                             "Checking whether ${dirname} is empty…",
                             async function()
                             {
-                                this.enableTimeouts(false);
+                                this.slow(1 * 1000);
+                                this.timeout(4 * 1000);
                                 await config.update("DestinationPattern", "${dirname}", ConfigurationTarget.Global);
                                 Assert(/^\.?$/g.test(await substitutionTester.Test()));
                             });
@@ -74,7 +75,8 @@ suite(
                             "Checking whether the user is prompted to specify the ${workspaceFolder}-path if the file is untitled and no workspace is opened…",
                             async function()
                             {
-                                this.enableTimeouts(false);
+                                this.slow(1 * 1000);
+                                this.timeout(4 * 1000);
                                 let inputWorkspaceName = "This is a workspace-folder for testing";
                                 let original = window.showInputBox;
                                 window.showInputBox = async () =>

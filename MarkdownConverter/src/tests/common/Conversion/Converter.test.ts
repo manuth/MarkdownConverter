@@ -22,9 +22,8 @@ suite(
         let textDocument: TextDocument;
 
         suiteSetup(
-            async function()
+            async () =>
             {
-                this.enableTimeouts(false);
                 let parser = new MarkdownIt();
                 tempDir = new TempDirectory();
                 tempFile = new TempFile(
@@ -99,8 +98,9 @@ suite(
             {
                 test(
                     "Checking whether the converter can be initialized…",
-                    async () =>
+                    async function()
                     {
+                        this.slow(380);
                         await Assert.doesNotReject(() => converter.Initialize());
                     });
             });
@@ -147,7 +147,8 @@ suite(
                     "Checking whether files can be converted…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(15 * 1000);
+                        this.timeout(1 * 60 * 1000);
 
                         let conversionTypes = [
                             ConversionType.HTML,

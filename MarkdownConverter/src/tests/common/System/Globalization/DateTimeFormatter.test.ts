@@ -120,8 +120,9 @@ suite(
 
                         test(
                             "Checking whether custom format strings are processed correctly…",
-                            () =>
+                            function()
                             {
+                                this.slow(200);
                                 Assert.strictEqual(formatter.Format("d", date), "1");
                                 Assert.strictEqual(formatter.Format("dd", date), "01");
                                 Assert.strictEqual(formatter.Format("d", twelveDays), "12");
@@ -185,8 +186,9 @@ suite(
 
                         test(
                             "Checking whether localizable custom format strings are processed correctly…",
-                            () =>
+                            function()
                             {
+                                this.slow(125);
                                 formatter.Locale = new CultureInfo("en");
                                 Assert.strictEqual(formatter.Format("ddd", date), "Wed");
                                 Assert.strictEqual(formatter.Format("dddd", date), "Wednesday");

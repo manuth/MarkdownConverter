@@ -25,7 +25,8 @@ suite(
         suiteSetup(
             async function()
             {
-                this.enableTimeouts(false);
+                this.slow(0.85 * 1000);
+                this.timeout(3.4 * 1000);
                 let parser = new MarkdownIt(
                     {
                         html: true
@@ -87,8 +88,11 @@ suite(
             {
                 test(
                     "Checking whether the plugin can be applied to the website…",
-                    async () =>
+                    async function()
                     {
+                        this.slow(1 * 1000);
+                        this.timeout(4 * 1000);
+
                         await Assert.doesNotReject(
                             async () =>
                             {

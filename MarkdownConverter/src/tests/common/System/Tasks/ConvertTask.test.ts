@@ -64,8 +64,9 @@ suite(
 
                 test(
                     "Checking whether no exception is thrown if `IgnoreLanguageMode` is enabled…",
-                    async () =>
+                    async function()
                     {
+                        this.slow(80);
                         await config.update("IgnoreLanguageMode", true, ConfigurationTarget.Global);
                         Assert.doesNotThrow(() => task["GetMarkdownDocument"]());
                     });

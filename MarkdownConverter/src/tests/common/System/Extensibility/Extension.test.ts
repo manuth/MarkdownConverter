@@ -119,7 +119,8 @@ suite(
                     "Checking whether the system-parser can be enabled manually…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(11.5 * 1000);
+                        this.timeout(46 * 1000);
                         await Assert.doesNotReject(
                             async () =>
                             {

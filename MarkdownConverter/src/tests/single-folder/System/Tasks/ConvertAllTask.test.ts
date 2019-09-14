@@ -74,7 +74,8 @@ suite(
                     "Checking whether all files are being converted…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(16.5 * 1000);
+                        this.timeout(1.1 * 60 * 1000);
                         await markdownConfig.update("DestinationPattern", Path.joinSafe(tempDir.FullName, "${basename}.${extension}"), ConfigurationTarget.Global);
                         await markdownConfig.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
                         await commands.executeCommand("markdownConverter.ConvertAll");
@@ -86,7 +87,8 @@ suite(
                     "Checking whether an exception is thrown if no markdown-file exists in the workspace…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(1.2 * 1000);
+                        this.timeout(4.8 * 1000);
                         await config.update("files.exclude", { "**/*.md": true }, ConfigurationTarget.Global);
                         await Assert.rejects(() => task.Execute(), MarkdownFileNotFoundException);
                     });

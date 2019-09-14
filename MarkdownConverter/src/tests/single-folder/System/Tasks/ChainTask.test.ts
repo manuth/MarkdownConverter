@@ -78,7 +78,8 @@ suite(
                     "Checking whether the user is prompted to input a document-name…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(2.5 * 1000);
+                        this.timeout(10 * 1000);
                         await Assert.doesNotReject(() => RenameTester());
                     });
 
@@ -86,7 +87,8 @@ suite(
                     "Checking whether all documents are being chained together…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(2 * 1000);
+                        this.timeout(8 * 1000);
                         let document: TextDocument;
                         await Assert.doesNotReject(
                             async () =>

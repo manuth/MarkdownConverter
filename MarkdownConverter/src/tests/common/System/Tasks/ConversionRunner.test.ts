@@ -32,7 +32,8 @@ suite(
         let Convert: () => Promise<void>;
         let Clean: Mocha.AsyncFunc = async function()
         {
-            this.enableTimeouts(false);
+            this.slow(2 * 1000);
+            this.timeout(8 * 1000);
             await markdownRestorer.Clear();
             await configRestorer.Clear();
             await FileSystem.writeFile(mdFile.FullName, "");
@@ -109,9 +110,8 @@ suite(
             });
 
         suiteTeardown(
-            async function()
+            async () =>
             {
-                this.enableTimeouts(false);
                 await markdownRestorer.Restore();
                 await configRestorer.Restore();
             });
@@ -128,7 +128,8 @@ suite(
                     "Checking whether the system-parser is used if `markdownConverter.Parser.SystemParserEnabled` is true…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(6.5 * 1000);
+                        this.timeout(26 * 1000);
                         let firstResult: string;
                         let secondResult: string;
                         await FileSystem.writeFile(mdFile.FullName, "line1" + EOL + "line2");
@@ -146,7 +147,8 @@ suite(
                     "Checking whether the system-parser is disabled if `markdownConverter.Parser.SystemParserEnabled` is false…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(2.5 * 1000);
+                        this.timeout(10 * 1000);
                         await FileSystem.writeFile(
                             mdFile.FullName,
                             Dedent(
@@ -168,7 +170,8 @@ suite(
                     "Checking whether anchors are created correctly…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(3 * 1000);
+                        this.timeout(12 * 1000);
                         await FileSystem.writeFile(
                             mdFile.FullName,
                             Dedent(
@@ -187,7 +190,8 @@ suite(
                     "Checking whether the toc is applied according to the settings…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(3.5 * 1000);
+                        this.timeout(14 * 1000);
                         let tocClass = "markdown-converter-toc-test";
                         let levels = new MultiRange([2]).toString();
                         let indicator = "\\[\\[\\s*toc-test\\s*\\]\\]";
@@ -221,7 +225,8 @@ suite(
                     "Checking whether checkboxes are rendered…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(2.5 * 1000);
+                        this.timeout(10 * 1000);
                         await FileSystem.writeFile(
                             mdFile.FullName,
                             Dedent(
@@ -240,7 +245,8 @@ suite(
                     "Checking whether emojis are rendered according to the `Parser.EmojiType`-setting…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(5.5 * 1000);
+                        this.timeout(22 * 1000);
                         let result: CheerioStatic;
                         await FileSystem.writeFile(mdFile.FullName, "**:sparkles:**");
                         await commands.executeCommand("workbench.action.files.revert");
@@ -268,7 +274,8 @@ suite(
                     "Checking whether the settings are applied correctly…",
                     async function()
                     {
-                        this.enableTimeouts(false);
+                        this.slow(4.25 * 1000);
+                        this.timeout(17 * 1000);
                         let workspaceRoot = new TempDirectory();
                         let textDocument = await workspace.openTextDocument({ language: "markdown" });
                         let conversionQuality = 78;
@@ -348,8 +355,10 @@ suite(
 
                 test(
                     "Checking whether the header- and footer-template are loaded from a file according to the attributes…",
-                    async () =>
+                    async function()
                     {
+                        this.slow(3 * 1000);
+                        this.timeout(12 * 1000);
                         let header = "This is a header";
                         let footer = "This is a footer";
                         let headerTemplate = new TempFile();
@@ -416,7 +425,8 @@ suite(
                             "${basename}",
                             async function()
                             {
-                                this.enableTimeouts(false);
+                                this.slow(1.25 * 1000);
+                                this.timeout(5 * 1000);
                                 await markdownConfig.update("DestinationPattern", "${basename}", ConfigurationTarget.Global);
                                 Assert.strictEqual(await substitutionTester.Test(), Path.parse(testFile.FullName).name);
                             });
@@ -425,7 +435,8 @@ suite(
                             "${extension}",
                             async function()
                             {
-                                this.enableTimeouts(false);
+                                this.slow(1.25 * 1000);
+                                this.timeout(5 * 1000);
                                 await markdownConfig.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
                                 await markdownConfig.update("DestinationPattern", "${extension}", ConfigurationTarget.Global);
                                 Assert.strictEqual(await substitutionTester.Test(), "pdf");
@@ -435,7 +446,8 @@ suite(
                             "${filename}",
                             async function()
                             {
-                                this.enableTimeouts(false);
+                                this.slow(1.25 * 1000);
+                                this.timeout(5 * 1000);
                                 await markdownConfig.update("DestinationPattern", "${filename}", ConfigurationTarget.Global);
                                 Assert.strictEqual(await substitutionTester.Test(), Path.parse(testFile.FullName).base);
                             });
@@ -444,7 +456,8 @@ suite(
                             "Checking whether the `DestinationPatterh` is normalized correctly…",
                             async function()
                             {
-                                this.enableTimeouts(false);
+                                this.slow(1.25 * 1000);
+                                this.timeout(5 * 1000);
                                 await markdownConfig.update("DestinationPattern", Path.joinSafe(tempDir.FullName, "/./test/.././///./."), ConfigurationTarget.Global);
                                 Assert.strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(tempDir.FullName).fsPath);
                             });
