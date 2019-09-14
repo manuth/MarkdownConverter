@@ -93,4 +93,18 @@ suite(
                         await Assert.rejects(() => task.Execute(), MarkdownFileNotFoundException);
                     });
             });
+
+        suite(
+            "GetDocuments()",
+            () =>
+            {
+                test(
+                    "Checking whether all documents in the folder are found…",
+                    async function()
+                    {
+                        this.slow(1.2 * 1000);
+                        this.timeout(4.8 * 1000);
+                        Assert.strictEqual((await task["GetDocuments"]()).length, 2);
+                    });
+            });
     });
