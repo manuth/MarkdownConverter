@@ -25,7 +25,6 @@ steps:
   - npx vsce package
   when:
     event:
-    - push
     - tag
 - name: release notes
   image: ubuntu
