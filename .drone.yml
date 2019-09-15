@@ -30,9 +30,9 @@ steps:
   image: ubuntu
   commands:
   - cp -f CHANGELOG.md ReleaseNotes.md
-  - sed -i '0,/## .* v[0-9.]*/{ /##/P ; d } ; /## .* v[0-9.]*/,$d' ReleaseNotes.md
+  - sed -i '0,/## .* v[0-9.]*/{ /## .* v[0-9.]*/P ; d } ; /## .* v[0-9.]*/,$d' ReleaseNotes.md
   - cp -f ReleaseNotes.md ReleaseTitle.md
-  - sed -i '2,$d ; s/## \(.* v[0-9.]*\)[\r\n$]/\1/' ReleaseTitle.md
+  - sed -i '2,$d ; s/## \(.* v[0-9.]*\)/\1/' ReleaseTitle.md
   - cat ReleaseTitle.md
   - cat ReleaseNotes.md
   # when:
