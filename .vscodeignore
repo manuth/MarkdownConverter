@@ -91,3 +91,6 @@ node_modules/@types
 
 # Ignore-files
 .gitignore
+
+# Drone configuration
+.drone.yml
