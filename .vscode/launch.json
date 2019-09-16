@@ -15,6 +15,20 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/**/*.js"
             ],
+            "preLaunchTask": "Watch Debug",
+            "postDebugTask": "Stop Debug"
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Extension Release",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/MarkdownConverter/lib/**/*.js"
+            ],
             "preLaunchTask": "Watch Release",
             "postDebugTask": "Stop Release"
         },
@@ -33,7 +47,7 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Watch Debug"
+            "preLaunchTask": "Debug"
         },
         {
             "type": "extensionHost",
@@ -51,7 +65,7 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Watch Debug"
+            "preLaunchTask": "Debug"
         },
         {
             "type": "extensionHost",
@@ -69,7 +83,7 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Watch Debug"
+            "preLaunchTask": "Debug"
         },
         {
             "type": "extensionHost",
@@ -87,7 +101,7 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Watch Debug"
+            "preLaunchTask": "Debug"
         }
     ]
 }

@@ -74,8 +74,10 @@ suite(
                 let config: WorkspaceConfiguration;
 
                 suiteSetup(
-                    async () =>
+                    async function()
                     {
+                        this.timeout(4 * 1000);
+
                         configRestorer = new ConfigRestorer(
                             [
                                 "ConversionType",
@@ -107,8 +109,9 @@ suite(
                     });
 
                 suiteTeardown(
-                    async () =>
+                    async function()
                     {
+                        this.timeout(4 * 1000);
                         await configRestorer.Restore();
                         await commands.executeCommand("workbench.action.closeActiveEditor");
                         mdFile.Dispose();

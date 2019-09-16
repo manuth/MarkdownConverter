@@ -2,7 +2,7 @@
   "name": "markdown-converter",
   "displayName": "Markdown Converter",
   "icon": "MarkdownConverter/Resources/Icon.png",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A markdown-converter for Visual Studio Code",
   "markdownDescription": "A Markdown-converter for Visual Studio Code",
   "author": "Manuel Thalmann <m@nuth.ch> (https://nuth.ch)",
@@ -111,7 +111,6 @@
     "watchify": "^3.11.1"
   },
   "dependencies": {
-    "async-shelljs": "^0.1.2",
     "clone": "^2.1.2",
     "dedent": "^0.7.0",
     "es6-template-string": "^1.1.0",
