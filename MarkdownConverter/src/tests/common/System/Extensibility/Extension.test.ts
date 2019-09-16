@@ -74,8 +74,10 @@ suite(
                 let config: WorkspaceConfiguration;
 
                 suiteSetup(
-                    async () =>
+                    async function()
                     {
+                        this.timeout(4 * 1000);
+
                         configRestorer = new ConfigRestorer(
                             [
                                 "ConversionType",
