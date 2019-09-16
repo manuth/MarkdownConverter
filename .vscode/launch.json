@@ -47,7 +47,7 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Watch Debug"
+            "preLaunchTask": "Debug"
         },
         {
             "type": "extensionHost",
@@ -65,7 +65,7 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Watch Debug"
+            "preLaunchTask": "Debug"
         },
         {
             "type": "extensionHost",
@@ -83,7 +83,7 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Watch Debug"
+            "preLaunchTask": "Debug"
         },
         {
             "type": "extensionHost",
@@ -101,7 +101,7 @@
             "outFiles": [
                 "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
             ],
-            "preLaunchTask": "Watch Debug"
+            "preLaunchTask": "Debug"
         }
     ]
 }
