@@ -111,7 +111,6 @@
     "watchify": "^3.11.1"
   },
   "dependencies": {
-    "async-shelljs": "^0.1.2",
     "clone": "^2.1.2",
     "dedent": "^0.7.0",
     "es6-template-string": "^1.1.0",

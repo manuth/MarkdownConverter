@@ -79,7 +79,7 @@ MarkdownConverter/tslint.json
 MarkdownConverter/[Ll]ib/!(extension.js)
 
 # Unused node-modules
-node_modules/!(highlightjs|shelljs)
+node_modules/!(highlightjs)
 node_modules/highlightjs/!(styles)
 node_modules/@types
 

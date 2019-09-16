@@ -172,7 +172,6 @@ async function Release()
             ).external(
                 [
                     "mocha",
-                    "shelljs",
                     "vscode"
                 ]);
 

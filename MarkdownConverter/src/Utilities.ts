@@ -1,5 +1,5 @@
-import shell = require("async-shelljs");
-import { isNullOrUndefined } from "util";
+import { exec } from "child_process";
+import { isNullOrUndefined, promisify } from "util";
 
 /**
  * Provides static methods.
@@ -25,7 +25,7 @@ export class Utilities
 
         methods = [
             async () => this.CheckEnv(),
-            this.CheckGit
+            async () => this.CheckGit()
         ];
 
         if (process.platform === "win32")
@@ -56,6 +56,26 @@ export class Utilities
     }
 
     /**
+     * Executes the command.
+     *
+     * @param command
+     * The command to execute.
+     */
+    private static async ExecuteCommand(command: string)
+    {
+        let result = await promisify(exec)(command);
+
+        if (result.stderr)
+        {
+            throw new Error(result.stderr);
+        }
+        else
+        {
+            return result.stdout;
+        }
+    }
+
+    /**
      * Tries to figure out the username using environment-variables.
      */
     private static CheckEnv(): string
@@ -79,7 +99,7 @@ export class Utilities
      */
     private static async CheckGit()
     {
-        return shell.asyncExec("git config --global user.name");
+        return this.ExecuteCommand("git config --global user.name");
     }
 
     /**
@@ -87,7 +107,7 @@ export class Utilities
      */
     private static async CheckWmic()
     {
-        return (await shell.asyncExec('wmic useraccount where name="%username%" get fullname')).replace("FullName", "").trim();
+        return (await this.ExecuteCommand('wmic useraccount where name="%username%" get fullname')).replace("FullName", "").trim();
     }
 
     /**
@@ -95,6 +115,6 @@ export class Utilities
      */
     private static async CheckOsaScript()
     {
-        return shell.asyncExec("osascript -e long user name of (system info)");
+        return this.ExecuteCommand("osascript -e long user name of (system info)");
     }
 }
