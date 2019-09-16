@@ -1,6 +1,4 @@
 # MarkdownConverter
-[![Build Status](https://drone.nuth.ch/api/badges/manuth/MarkdownConverter/status.svg)](https://drone.nuth.ch/manuth/MarkdownConverter)
-
 A markdown-converter for [Visual Studio Code][VSCode]
 
 ## What's `MarkdownConverter`?
