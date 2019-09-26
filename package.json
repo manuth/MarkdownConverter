@@ -140,7 +140,8 @@
   },
   "activationEvents": [
     "onCommand:markdownConverter.Convert",
-    "onCommand:markdownConverter.ConvertAll"
+    "onCommand:markdownConverter.ConvertAll",
+    "onCommand:markdownConverter.Chain"
   ],
   "contributes": {
     "commands": [
