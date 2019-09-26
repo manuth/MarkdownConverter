@@ -235,7 +235,7 @@ export class ConversionRunner
 
                     progressReporter.report(
                         {
-                            message: Format("Progress.ConverterFinished", ConversionType[type])
+                            message: Format(Resources.Resources.Get("Progress.ConverterFinished"), ConversionType[type])
                         });
 
                     fileReporter.report(

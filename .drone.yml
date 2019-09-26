@@ -64,7 +64,7 @@ trigger:
   - refs/heads/master
   - refs/heads/dev
   - refs/pull/**
-  - refs/tags/*
+  - refs/tags/**
   event:
   - push
   - pull_request
