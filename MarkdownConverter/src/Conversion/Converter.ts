@@ -298,6 +298,7 @@ export class Converter
                 default:
                     try
                     {
+                        let body = await this.Document.Render();
                         let page = await this.Browser.newPage();
 
                         progressReporter.report(
@@ -313,7 +314,7 @@ export class Converter
                                 {
                                     await request.respond(
                                         {
-                                            body: await this.Document.Render()
+                                            body
                                         });
                                 }
                                 else
