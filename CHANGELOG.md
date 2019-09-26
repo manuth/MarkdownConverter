@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## MarkdownConverter v3.0.2
+  - Fix issue #42 reported by @damgot
+    - The conversion-process is now prevented from failing silently
+  - Update all packages
+  - Fix dependency-error
+  - Improve the debug-experience
+    - Source-maps now point to the correct source-files
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.0.1...v3.0.2)
+
 ## MarkdownConverter v3.0.1
   - Drop any non-browserifiable dependency
   - Improve the build automation
