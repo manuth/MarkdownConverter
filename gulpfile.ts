@@ -299,6 +299,14 @@ function Debug()
         ).pipe(
             project(reporter)
         ).pipe(
+            (sourcemaps as any).mapSources(
+                (sourcePath: string) =>
+                {
+                    let sourceFile = Path.resolve(settings.DestinationPath(), sourcePath);
+                    let baseDir = settings.DestinationPath(Path.relative(settings.SourcePath(), Path.dirname(sourceFile)));
+                    return Path.relative(baseDir, sourceFile);
+                })
+        ).pipe(
             sourcemaps.write(".")
         ).pipe(
             filter(["**", "!**/*.ts.map"])
