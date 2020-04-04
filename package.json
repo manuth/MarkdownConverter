@@ -93,7 +93,7 @@
     "gulp-terser": "^1.2.0",
     "gulp-typescript": "^5.0.1",
     "merge-stream": "^2.0.0",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "mocha": "^6.2.0",
     "promise-queue": "^2.2.5",
     "string-argv": "^0.3.1",
