@@ -1,14 +1,11 @@
 import Assert = require("assert");
 import FileSystem = require("fs-extra");
 import MarkdownIt = require("markdown-it");
-import Puppeteer = require("puppeteer-core");
 import { TempDirectory, TempFile } from "temp-filesystem";
 import Path = require("upath");
-import { isNullOrUndefined } from "util";
 import { TextDocument, workspace } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { Converter } from "../../../Conversion/Converter";
-import { extension } from "../../../extension";
 import { Document } from "../../../System/Documents/Document";
 
 suite(
@@ -120,10 +117,10 @@ suite(
                     "Checking whether the properties have been initialized…",
                     () =>
                     {
-                        Assert(!isNullOrUndefined(converter.URL));
-                        Assert(!isNullOrUndefined(converter.PortNumber));
-                        Assert(!isNullOrUndefined(converter["WebServer"]));
-                        Assert(!isNullOrUndefined(converter["Browser"]));
+                        Assert(converter.URL);
+                        Assert(converter.PortNumber);
+                        Assert(converter["WebServer"]);
+                        Assert(converter["Browser"]);
                     });
             });
 

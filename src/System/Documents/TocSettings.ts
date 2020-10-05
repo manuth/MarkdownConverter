@@ -29,7 +29,7 @@ export class TocSettings
     /**
      * Initializes a new instance of the `TocSettingsClass`.
      *
-     * @param $class
+     * @param className
      * The css-class of the toc-container.
      *
      * @param levels
@@ -37,10 +37,13 @@ export class TocSettings
      *
      * @param indicator
      * A regexp which should be replaced by the toc inside the document.
+     *
+     * @param listType
+     * The list-type of the toc.
      */
-    public constructor($class: string, levels: MultiRange = new MultiRange([]), indicator: RegExp = /\[\[\s*toc\s*\]\]/g, listType: ListType = ListType.Unordered)
+    public constructor(className: string, levels: MultiRange = new MultiRange([]), indicator = /\[\[\s*toc\s*\]\]/g, listType: ListType = ListType.Unordered)
     {
-        this.class = $class;
+        this.class = className;
         this.levels = levels;
         this.indicator = indicator;
         this.listType = listType;
@@ -53,6 +56,10 @@ export class TocSettings
     {
         return this.class;
     }
+
+    /**
+     * @inheritdoc
+     */
     public set Class(value: string)
     {
         this.class = value;
@@ -65,6 +72,10 @@ export class TocSettings
     {
         return this.levels;
     }
+
+    /**
+     * @inheritdoc
+     */
     public set Levels(value: MultiRange)
     {
         this.levels = value;
@@ -77,6 +88,10 @@ export class TocSettings
     {
         return this.indicator;
     }
+
+    /**
+     * @inheritdoc
+     */
     public set Indicator(value: RegExp)
     {
         this.indicator = value;
@@ -89,6 +104,10 @@ export class TocSettings
     {
         return this.listType;
     }
+
+    /**
+     * @inheritdoc
+     */
     public set ListType(value: ListType)
     {
         this.listType = value;

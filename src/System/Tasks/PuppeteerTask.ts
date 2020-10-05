@@ -26,7 +26,7 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
     /**
      * Gets or sets the extension this task belongs to.
      */
-    public get Extension()
+    public get Extension(): MarkdownConverterExtension
     {
         return super.Extension;
     }
@@ -34,10 +34,16 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
     /**
      * Executes the task.
      *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
+     *
      * @param fileReporter
      * A component for reporting converted files.
      */
-    public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>)
+    public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         if (await FileSystem.pathExists(Puppeteer.executablePath()))
         {
@@ -51,6 +57,15 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
 
     /**
      * Executes the task.
+     *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
+     *
+     * @param fileReporter
+     * A component for reporting converted files.
      */
     protected abstract async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>;
 }

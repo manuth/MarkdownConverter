@@ -27,7 +27,7 @@ export abstract class ConversionTask extends PuppeteerTask
     /**
      * Gets a component for running a conversion.
      */
-    public get ConversionRunner()
+    public get ConversionRunner(): ConversionRunner
     {
         return this.conversionRunner;
     }

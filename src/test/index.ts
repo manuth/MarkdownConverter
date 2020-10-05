@@ -1,10 +1,10 @@
+import Path = require("path");
+import { promisify } from "util";
 import FileSystem = require("fs-extra");
 import Glob = require("glob");
 import minimist = require("minimist");
 import Mocha = require("mocha");
-import Path = require("path");
 import Puppeteer = require("puppeteer-core");
-import { promisify } from "util";
 import { extension } from "../extension";
 
 /**
@@ -27,7 +27,7 @@ let args = minimist(
 /**
  * Runs the extension-tests.
  */
-export async function run()
+export async function run(): Promise<void>
 {
     let mocha = new Mocha(
         {

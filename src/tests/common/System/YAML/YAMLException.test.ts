@@ -2,7 +2,6 @@ import Assert = require("assert");
 import { CultureInfo } from "culture-info";
 import Dedent = require("dedent");
 import fm = require("front-matter");
-import { isNullOrUndefined } from "util";
 import { Resources } from "../../../../Properties/Resources";
 import { Exception } from "../../../../System/Exception";
 import { IMark } from "../../../../System/YAML/IMark";
@@ -41,10 +40,10 @@ suite(
                     () =>
                     {
                         let exception = new YAMLException(yamlError);
-                        Assert.strictEqual(!isNullOrUndefined(exception.Name), true);
-                        Assert.strictEqual(!isNullOrUndefined(exception.Message), true);
-                        Assert.strictEqual(!isNullOrUndefined(exception.Mark), true);
-                        Assert.strictEqual(!isNullOrUndefined(exception.Reason), true);
+                        Assert.ok(exception.Name);
+                        Assert.ok(exception.Message);
+                        Assert.ok(exception.Mark);
+                        Assert.ok(exception.Reason);
                     });
             });
 
@@ -99,7 +98,7 @@ suite(
                         germanMessage = exception.Message;
                         Resources.Culture = new CultureInfo("en");
                         englishMessage = exception.Message;
-                        Assert.notEqual(germanMessage, englishMessage);
+                        Assert.notStrictEqual(germanMessage, englishMessage);
                     });
             });
     });

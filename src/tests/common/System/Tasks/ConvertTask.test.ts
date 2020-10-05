@@ -4,7 +4,6 @@ import { ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } f
 import { extension } from "../../../../extension";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { Settings } from "../../../../Properties/Settings";
-import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 import { ConvertTask } from "../../../../System/Tasks/ConvertTask";
 import { ConfigRestorer } from "../../../ConfigRestorer";
 

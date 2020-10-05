@@ -40,6 +40,9 @@ export class CustomPaperFormat extends PaperFormat
         return this.width;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Width(value: string)
     {
         this.width = value;
@@ -53,6 +56,9 @@ export class CustomPaperFormat extends PaperFormat
         return this.height;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Height(value: string)
     {
         this.height = value;

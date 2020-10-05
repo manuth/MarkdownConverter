@@ -1,5 +1,5 @@
 import MarkdownIt = require("markdown-it");
-import { TextDocument, workspace } from "vscode";
+import { TextDocument } from "vscode";
 import { Converter } from "../Conversion/Converter";
 import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 import { ConversionRunner } from "../System/Tasks/ConversionRunner";
@@ -27,13 +27,17 @@ export class SubstitutionTester
 
     /**
      * Tests the current substitution-settings.
+     *
+     * @returns
+     * The result of the substitution.
      */
-    public async Test()
+    public async Test(): Promise<string>
     {
         return new Promise<string>(
             async (resolve) =>
             {
                 let originalStart = Converter.prototype.Start;
+
                 Converter.prototype.Start = async (type, path) =>
                 {
                     resolve(path);

@@ -26,7 +26,7 @@ export class Paper
      * @param margin
      * Either the margin of the paper or `null` to use a default margin.
      */
-    constructor(format?: PaperFormat, margin?: Margin)
+    public constructor(format?: PaperFormat, margin?: Margin)
     {
         if (format)
         {
@@ -46,6 +46,10 @@ export class Paper
     {
         return this.margin;
     }
+
+    /**
+     * @inheritdoc
+     */
     public set Margin(value: Margin)
     {
         this.margin = value;
@@ -59,6 +63,9 @@ export class Paper
         return this.format;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Format(value: PaperFormat)
     {
         this.format = value;

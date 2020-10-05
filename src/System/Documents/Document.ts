@@ -1,11 +1,10 @@
+import Path = require("path");
 import Dedent = require("dedent");
 import fm = require("front-matter");
 import FileSystem = require("fs-extra");
 import { CultureInfo } from "localized-resource-manager";
 import MarkdownIt = require("markdown-it");
 import Mustache = require("mustache");
-import OS = require("os");
-import Path = require("path");
 import { TextDocument } from "vscode";
 import YAML = require("yamljs");
 import { Resources } from "../../Properties/Resources";
@@ -105,10 +104,10 @@ export class Document extends Renderable
      * @param document
      * The `TextDocument` to load the info from.
      *
-     * @param config
-     * The configuration to set.
+     * @param parser
+     * The parser for rendering the document.
      */
-    constructor(document: TextDocument, parser: MarkdownIt)
+    public constructor(document: TextDocument, parser: MarkdownIt)
     {
         super();
         this.RawContent = document.getText();
@@ -147,6 +146,9 @@ export class Document extends Renderable
             this.Content);
     }
 
+    /**
+     * @inheritdoc
+     */
     public set RawContent(value: string)
     {
         try
@@ -169,6 +171,9 @@ export class Document extends Renderable
         return this.quality;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Quality(value: number)
     {
         this.quality = value;
@@ -177,12 +182,15 @@ export class Document extends Renderable
     /**
      * Gets or sets the attributes of the document.
      */
-    public get Attributes(): { [id: string]: any }
+    public get Attributes(): Record<string, unknown>
     {
         return this.attributes;
     }
 
-    public set Attributes(value: { [id: string]: any })
+    /**
+     * @inheritdoc
+     */
+    public set Attributes(value: Record<string, unknown>)
     {
         this.attributes = value;
     }
@@ -190,12 +198,14 @@ export class Document extends Renderable
     /**
      * Gets or sets the format to print the date.
      */
-
     public get DateFormat(): string
     {
         return this.dateFormat;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set DateFormat(value: string)
     {
         this.dateFormat = value;
@@ -209,6 +219,9 @@ export class Document extends Renderable
         return this.locale;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Locale(value: CultureInfo)
     {
         this.locale = value;
@@ -222,6 +235,9 @@ export class Document extends Renderable
         return this.paper;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Paper(value: Paper)
     {
         this.paper = value;
@@ -235,6 +251,9 @@ export class Document extends Renderable
         return this.headerFooterEnabled;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set HeaderFooterEnabled(value: boolean)
     {
         this.headerFooterEnabled = value;
@@ -264,6 +283,9 @@ export class Document extends Renderable
         return this.template;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Template(value: string)
     {
         this.template = value;
@@ -277,6 +299,9 @@ export class Document extends Renderable
         return this.styleSheets;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set StyleSheets(value: string[])
     {
         this.styleSheets = value;
@@ -290,6 +315,9 @@ export class Document extends Renderable
         return this.scripts;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Scripts(value: string[])
     {
         this.scripts = value;
@@ -297,6 +325,9 @@ export class Document extends Renderable
 
     /**
      * Renders the body of the document.
+     *
+     * @returns
+     * The rendered text.
      */
     public async Render(): Promise<string>
     {
@@ -309,16 +340,13 @@ export class Document extends Renderable
             {
                 styleCode += Dedent(`<link rel="stylesheet" type="text/css" href="${styleSheet}" />\n`);
             }
+            else if (await FileSystem.pathExists(styleSheet))
+            {
+                styleCode += "<style>" + (await FileSystem.readFile(styleSheet)).toString() + "</style>\n";
+            }
             else
             {
-                if (await FileSystem.pathExists(styleSheet))
-                {
-                    styleCode += "<style>" + (await FileSystem.readFile(styleSheet)).toString() + "</style>\n";
-                }
-                else
-                {
-                    throw new FileException(null, styleSheet);
-                }
+                throw new FileException(null, styleSheet);
             }
         }
 
@@ -328,16 +356,13 @@ export class Document extends Renderable
             {
                 scriptCode += Dedent(`<script async="" src="${script}"charset="UTF-8"></script>\n`);
             }
+            else if (await FileSystem.pathExists(script))
+            {
+                scriptCode += "<script>" + (await FileSystem.readFile(script)).toString() + "</script>\n";
+            }
             else
             {
-                if (await FileSystem.pathExists(script))
-                {
-                    scriptCode += "<script>" + (await FileSystem.readFile(script)).toString() + "</script>\n";
-                }
-                else
-                {
-                    throw new FileException(null, script);
-                }
+                throw new FileException(null, script);
             }
         }
 
@@ -357,10 +382,13 @@ export class Document extends Renderable
      *
      * @param content
      * The content which is to be rendered.
+     *
+     * @returns
+     * The rendered text.
      */
     protected async RenderText(content: string): Promise<string>
     {
-        let view: { [key: string]: string } = {};
+        let view: Record<string, unknown> = {};
 
         for (let key in this.Attributes)
         {

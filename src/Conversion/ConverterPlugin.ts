@@ -36,7 +36,7 @@ export class ConverterPlugin
     /**
      * Gets the converter this plugin belongs to.
      */
-    public get Converter()
+    public get Converter(): Converter
     {
         return this.converter;
     }
@@ -44,7 +44,7 @@ export class ConverterPlugin
     /**
      * Gets the name of the website to save.
      */
-    public get WebsiteName()
+    public get WebsiteName(): string
     {
         return this.websiteName;
     }
@@ -116,6 +116,7 @@ export class ConverterPlugin
         registerAction("generateFilename", ({ resource }) =>
         {
             let result: string;
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             let filename: string = require("website-scraper/lib/filename-generator/by-type")(resource, { subdirectories, defaultFilename }, occupiedFilenames);
 
             if (filename === "index.html")

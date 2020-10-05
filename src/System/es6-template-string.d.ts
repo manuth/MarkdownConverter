@@ -1,8 +1,9 @@
-declare module "es6-template-string" {
+declare module "es6-template-string"
+{
     /**
      * Provides the functionality to process es6 template-strings.
      */
-    interface ES6Template
+    interface IES6Template
     {
         /**
          * Renders an es6 template-string.
@@ -12,46 +13,56 @@ declare module "es6-template-string" {
          *
          * @param context
          * The variables to use.
-         */
-        (template: string, context?: object): string;
-    
-        /**
-         * Renders an es6 template-string.
          *
-         * @param template
-         * The template to render.
-         *
-         * @param context
-         * The variables to use.
+         * @returns
+         * The rendered text.
          */
-        render(template: string, context?: object): string;
-    
+        render(template: string, context?: Record<string, unknown>): string;
+
         /**
          * Compiles a template.
          *
          * @param template
          * The template to render.
+         *
+         * @returns
+         * The rendered text.
          */
-        compile(template: string): CompiledRenderer;
+        compile(template: string): ICompiledRenderer;
+
+        /**
+         * Renders an es6 template-string.
+         *
+         * @param template
+         * The template to render.
+         *
+         * @param context
+         * The variables to use.
+         *
+         * @returns
+         * The rendered text.
+         */
+        (template: string, context?: Record<string, unknown>): string;
     }
-    
+
     /**
      * Represents a compiled renderer.
      */
-    interface CompiledRenderer
-    {
+    type ICompiledRenderer =
         /**
          * Renders the compiled template.
          *
          * @param context
          * The variables to use.
+         *
+         * @returns
+         * The rendered text.
          */
-        (context: object): string;
-    }
-    
+        (context: Record<string, unknown>) => string;
+
     /**
      * Provides the functionality to render es6 string-templates.
      */
-    var template: ES6Template;
+    const template: IES6Template;
     export = template;
 }

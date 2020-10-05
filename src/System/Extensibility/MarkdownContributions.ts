@@ -1,4 +1,3 @@
-
 import Path = require("path");
 import { Extension, extensions, Uri } from "vscode";
 
@@ -42,6 +41,9 @@ export class MarkdownContributions
 
     /**
      * Initializes a new instance of the `MarkdownContributions` class.
+     *
+     * @param extensionPath
+     * The path to the extension.
      */
     public constructor(extensionPath: string)
     {
@@ -92,6 +94,9 @@ export class MarkdownContributions
      *
      * @param resourcePath
      * The path to the resource.
+     *
+     * @returns
+     * The path to the resource.
      */
     private static ResolveExtensionResource(extension: Extension<any>, resourcePath: string): Uri
     {
@@ -106,6 +111,9 @@ export class MarkdownContributions
      *
      * @param resourcePaths
      * The paths to the resources.
+     *
+     * @returns
+     * The path to the resources.
      */
     private static ResolveExtensionResources(extension: Extension<any>, resourcePaths: string[]): Uri[]
     {
@@ -135,9 +143,11 @@ export class MarkdownContributions
         }
 
         this.loaded = true;
+
         for (const extension of extensions.all)
         {
-            const contributes = extension.packageJSON && extension.packageJSON.contributes;
+            const contributes = extension.packageJSON?.contributes;
+
             if (!contributes)
             {
                 continue;
@@ -163,7 +173,7 @@ export class MarkdownContributions
      * @param extension
      * The extension to load the contributions from.
      */
-    private LoadScripts(contributes: any, extension: Extension<any>)
+    private LoadScripts(contributes: any, extension: Extension<any>): void
     {
         let scripts = contributes["markdown.previewScripts"];
 
@@ -176,20 +186,20 @@ export class MarkdownContributions
     /**
      * Loads a markdown-it plugin.
      *
-     * @param contributes
-     * The contributions of the extension.
-     *
      * @param extension
      * The extension of to load the plug-in from.
+     *
+     * @param contributes
+     * The contributions of the extension.
      */
-    private LoadMarkdownPlugins(extension: Extension<any>, contributes: any)
+    private LoadMarkdownPlugins(extension: Extension<any>, contributes: any): void
     {
         if (contributes["markdown.markdownItPlugins"])
         {
             this.plugins.push(extension.activate().then(
                 async () =>
                 {
-                    if (extension.exports && extension.exports.extendMarkdownIt)
+                    if (extension.exports?.extendMarkdownIt)
                     {
                         if (!extension.isActive)
                         {
@@ -212,7 +222,7 @@ export class MarkdownContributions
      * @param extension
      * The extension to load the contributions from.
      */
-    private tryLoadPreviewStyles(contributes: any, extension: Extension<any>)
+    private tryLoadPreviewStyles(contributes: any, extension: Extension<any>): void
     {
         let styles = contributes["markdown.previewStyles"];
 

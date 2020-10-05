@@ -24,7 +24,7 @@ suite(
                         Assert.strictEqual(defaultPaper.Margin.Right, defaultPaper.Margin.Top);
                         Assert.strictEqual(defaultPaper.Margin.Bottom, defaultPaper.Margin.Right);
                         Assert.strictEqual(defaultPaper.Margin.Left, defaultPaper.Margin.Bottom);
-                        Assert.strictEqual(defaultPaper.Format instanceof StandardizedPaperFormat, true);
+                        Assert.ok(defaultPaper.Format instanceof StandardizedPaperFormat);
 
                         if (defaultPaper.Format instanceof StandardizedPaperFormat)
                         {
@@ -33,11 +33,11 @@ suite(
                         }
 
                         let marginPaper = new Paper(null, margin);
-                        Assert.deepEqual(marginPaper.Format, defaultPaper.Format);
+                        Assert.deepStrictEqual(marginPaper.Format, defaultPaper.Format);
                         Assert.strictEqual(marginPaper.Margin, margin);
 
                         let formatPaper = new Paper(paperFormat);
-                        Assert.deepEqual(formatPaper.Margin, defaultPaper.Margin);
+                        Assert.deepStrictEqual(formatPaper.Margin, defaultPaper.Margin);
                     });
             });
     });

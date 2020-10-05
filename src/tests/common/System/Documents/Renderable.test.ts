@@ -12,8 +12,14 @@ suite(
         {
             /**
              * @inheritdoc
+             *
+             * @param text
+             * The text to render.
+             *
+             * @returns
+             * The rendered text.
              */
-            protected async RenderText(text: string)
+            protected async RenderText(text: string): Promise<string>
             {
                 return text;
             }
@@ -36,8 +42,14 @@ suite(
                 {
                     /**
                      * @inheritdoc
+                     *
+                     * @param text
+                     * The text to render.
+                     *
+                     * @returns
+                     * The rendered text.
                      */
-                    protected async RenderText(text: string)
+                    protected async RenderText(text: string): Promise<string>
                     {
                         return verifier + text;
                     }
@@ -47,8 +59,14 @@ suite(
                 {
                     /**
                      * @inheritdoc
+                     *
+                     * @param text
+                     * The text to render.
+                     *
+                     * @returns
+                     * The rendered text.
                      */
-                    protected async RenderText(text: string)
+                    protected async RenderText(text: string): Promise<string>
                     {
                         return otherVerifier + text;
                     }

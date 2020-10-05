@@ -25,7 +25,7 @@ export class FileException extends IOException
      * @param innerException
      * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
      */
-    constructor(message?: string, path?: string, innerException?: Exception)
+    public constructor(message?: string, path?: string, innerException?: Exception)
     {
         super(message, innerException);
         this.Path = path;

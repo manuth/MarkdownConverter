@@ -10,6 +10,9 @@ export abstract class Renderable
 
     /**
      * Initializes a new instance of the `Renderable` class.
+     *
+     * @param content
+     * The content of the renderable component.
      */
     public constructor(content = "")
     {
@@ -24,6 +27,9 @@ export abstract class Renderable
         return this.content;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Content(value: string)
     {
         this.content = value;
@@ -31,6 +37,9 @@ export abstract class Renderable
 
     /**
      * Renders the component.
+     *
+     * @returns
+     * The rendered text.
      */
     public async Render(): Promise<string>
     {
@@ -45,6 +54,9 @@ export abstract class Renderable
      *
      * @param text
      * The text to render.
+     *
+     * @returns
+     * The rendered text.
      */
     protected async RenderTextBy(renderer: Renderable, text: string): Promise<string>
     {
@@ -56,6 +68,9 @@ export abstract class Renderable
      *
      * @param text
      * The text to render.
+     *
+     * @returns
+     * The rendered text.
      */
     protected abstract async RenderText(text: string): Promise<string>;
 }

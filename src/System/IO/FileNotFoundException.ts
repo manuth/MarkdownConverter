@@ -19,13 +19,14 @@ export class FileNotFoundException extends FileException
      * @param innerException
      * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
      */
-    constructor(message: string, path: string, innerException?: Exception)
+    public constructor(message: string, path: string, innerException?: Exception)
     {
         if (arguments.length === 1)
         {
             path = message;
             message = Format("The file {0} couldn't be found.", path);
         }
+
         super(message, path, innerException);
     }
 }

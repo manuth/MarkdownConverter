@@ -1,6 +1,5 @@
 import Assert = require("assert");
 import { CultureInfo } from "culture-info";
-import { isNullOrUndefined } from "util";
 import { Resources } from "../../../../Properties/Resources";
 import { FileException } from "../../../../System/IO/FileException";
 
@@ -17,7 +16,7 @@ suite(
                     () =>
                     {
                         let exception = new FileException("hello", "world");
-                        Assert.strictEqual(isNullOrUndefined(exception.InnerException), true);
+                        Assert.ok(!exception.InnerException);
                         Assert.strictEqual(exception.Message, "hello");
                         Assert.strictEqual(exception.Path, "world");
                     });
@@ -26,7 +25,7 @@ suite(
                     "Checking whether a default message is set…",
                     () =>
                     {
-                        Assert.strictEqual(isNullOrUndefined(new FileException().Message), false);
+                        Assert.ok(new FileException().Message);
                     });
             });
 
@@ -60,7 +59,7 @@ suite(
                         germanMessage = exception.Message;
                         Resources.Culture = new CultureInfo("en");
                         englishMessage = exception.Message;
-                        Assert.notEqual(germanMessage, englishMessage);
+                        Assert.notStrictEqual(germanMessage, englishMessage);
                     });
             });
     });

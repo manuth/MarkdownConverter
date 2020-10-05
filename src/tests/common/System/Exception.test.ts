@@ -1,5 +1,4 @@
 import Assert = require("assert");
-import { isNullOrUndefined } from "util";
 import { Exception } from "../../../System/Exception";
 
 suite(
@@ -24,11 +23,11 @@ suite(
                     () =>
                     {
                         exception = new Exception();
-                        Assert.equal(!exception.Message, true);
-                        Assert.strictEqual(isNullOrUndefined(exception.InnerException), true);
+                        Assert.ok(!exception.Message);
+                        Assert.ok(!exception.InnerException);
                         exception = new Exception("hello");
                         Assert.strictEqual(exception.Message, "hello");
-                        Assert.strictEqual(isNullOrUndefined(exception.InnerException), true);
+                        Assert.ok(!exception.InnerException);
                         exception = new Exception("hello", innerException);
                         Assert.strictEqual(exception.Message, "hello");
                         Assert.strictEqual(exception.InnerException, innerException);

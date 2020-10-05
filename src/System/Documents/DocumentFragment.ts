@@ -36,6 +36,9 @@ export class DocumentFragment extends Renderable
      *
      * @param text
      * The text to render.
+     *
+     * @returns
+     * The rendered text.
      */
     protected async RenderText(text: string): Promise<string>
     {

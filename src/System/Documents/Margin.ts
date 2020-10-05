@@ -26,6 +26,25 @@ export class Margin
     /**
      * Initializes a new instance of the Margin class.
      *
+     * @param all
+     * The margin to apply on all sides.
+     */
+    public constructor(all: string);
+
+    /**
+     * Initializes a new instance of the Margin class.
+     *
+     * @param vertical
+     * The margin to apply vertically.
+     *
+     * @param horizontal
+     * The margin to apply horizontally.
+     */
+    public constructor(vertical: string, horizontal: string);
+
+    /**
+     * Initializes a new instance of the Margin class.
+     *
      * @param top
      * The top margin.
      *
@@ -38,9 +57,24 @@ export class Margin
      * @param left
      * The left margin.
      */
-    constructor(all: string, horizontal?: string);
-    constructor(top: string, right: string, bottom: string, left: string);
-    constructor(top: string, right?: string, bottom?: string, left?: string)
+    public constructor(top: string, right: string, bottom: string, left: string);
+
+    /**
+     * Initializes a new instance of the Margin class.
+     *
+     * @param top
+     * The top margin.
+     *
+     * @param right
+     * The right margin.
+     *
+     * @param bottom
+     * The bottom margin.
+     *
+     * @param left
+     * The left margin.
+     */
+    public constructor(top: string, right?: string, bottom?: string, left?: string)
     {
         this.top =
             this.right =
@@ -71,6 +105,9 @@ export class Margin
         return this.top;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Top(value: string)
     {
         this.top = value;
@@ -84,6 +121,9 @@ export class Margin
         return this.right;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Right(value: string)
     {
         this.right = value;
@@ -97,6 +137,9 @@ export class Margin
         return this.bottom;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Bottom(value: string)
     {
         this.bottom = value;
@@ -110,6 +153,9 @@ export class Margin
         return this.left;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Left(value: string)
     {
         this.left = value;

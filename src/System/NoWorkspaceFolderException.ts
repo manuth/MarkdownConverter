@@ -9,7 +9,7 @@ export class NoWorkspaceFolderException extends Exception
     /**
      * Initializes a new instance of the MarkdownFileNotFoundException class.
      */
-    constructor()
+    public constructor()
     {
         super(Resources.Resources.Get("NoWorkspaceFolderException"), null);
     }

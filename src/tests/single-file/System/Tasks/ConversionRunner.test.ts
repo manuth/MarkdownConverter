@@ -79,6 +79,7 @@ suite(
                                 this.timeout(4 * 1000);
                                 let inputWorkspaceName = "This is a workspace-folder for testing";
                                 let original = window.showInputBox;
+
                                 window.showInputBox = async () =>
                                 {
                                     return inputWorkspaceName;

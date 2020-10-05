@@ -1,13 +1,12 @@
+import Path = require("path");
+import { Package } from "@manuth/package-json-editor";
 import { CultureInfo } from "culture-info";
 import MarkdownIt = require("markdown-it");
-import Path = require("path");
 import PkgUp = require("pkg-up");
 import Format = require("string-template");
-import { isNullOrUndefined } from "util";
-import { commands, env, ExtensionContext, ProgressLocation, TextEditor, Uri, ViewColumn, window, workspace } from "vscode";
+import { commands, env, ExtensionContext, ProgressLocation, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";
-import { Package } from "@manuth/package-json-editor";
 
 /**
  * Represents an extension.
@@ -72,7 +71,7 @@ export class Extension
     /**
      * Gets context of the of the extension.
      */
-    public get Context()
+    public get Context(): ExtensionContext
     {
         return this.context;
     }
@@ -80,7 +79,7 @@ export class Extension
     /**
      * Gets the path to the root of the extension.
      */
-    public get ExtensionRoot()
+    public get ExtensionRoot(): string
     {
         return this.extensionRoot;
     }
@@ -88,7 +87,7 @@ export class Extension
     /**
      * Gets the meta-data of the extension.
      */
-    public get MetaData()
+    public get MetaData(): Package
     {
         return this.metaData;
     }
@@ -96,15 +95,15 @@ export class Extension
     /**
      * Gets the author of the extension.
      */
-    public get Author()
+    public get Author(): string
     {
-        return this.MetaData.AdditionalProperties.Get("publisher");
+        return this.MetaData.AdditionalProperties.Get("publisher") as string;
     }
 
     /**
      * Gets the name of the extension.
      */
-    public get Name()
+    public get Name(): string
     {
         return this.MetaData.Name;
     }
@@ -112,7 +111,7 @@ export class Extension
     /**
      * Gets the full name of the extension.
      */
-    public get FullName()
+    public get FullName(): string
     {
         return `${this.Author}.${this.Name}`;
     }
@@ -120,7 +119,7 @@ export class Extension
     /**
      * Gets the parser provided by Visual Studio Code.
      */
-    public get VSCodeParser()
+    public get VSCodeParser(): MarkdownIt
     {
         return this.vsCodeParser;
     }
@@ -130,8 +129,11 @@ export class Extension
      *
      * @param context
      * A collection of utilities private to an extension.
+     *
+     * @returns
+     * The extension-body.
      */
-    public async Active(context: ExtensionContext)
+    public async Active(context: ExtensionContext): Promise<unknown>
     {
         this.context = context;
 
@@ -148,16 +150,15 @@ export class Extension
     /**
      * Disposes the extension.
      */
-    public async Dispose()
-    {
-    }
+    public async Dispose(): Promise<void>
+    { }
 
     /**
      * Enables the system-parser.
      */
-    public async EnableSystemParser()
+    public async EnableSystemParser(): Promise<void>
     {
-        if (isNullOrUndefined(this.VSCodeParser))
+        if (!this.VSCodeParser)
         {
             await window.showTextDocument(
                 await workspace.openTextDocument(Uri.parse("untitled:.md")),
@@ -180,7 +181,7 @@ export class Extension
      * @param task
      * The task to execute.
      */
-    protected async ExecuteTask(task: Task)
+    protected async ExecuteTask(task: Task): Promise<void>
     {
         try
         {
@@ -209,7 +210,7 @@ export class Extension
      * @param task
      * The task to execute.
      */
-    protected async ExecuteTaskInternal(task: Task)
+    protected async ExecuteTaskInternal(task: Task): Promise<void>
     {
         return window.withProgress(
             {
@@ -226,7 +227,7 @@ export class Extension
     /**
      * Resolves the system-parser fix.
      */
-    private async resolveFix()
+    private resolveFix(): void
     {
         this.systemParserFixResolver();
     }

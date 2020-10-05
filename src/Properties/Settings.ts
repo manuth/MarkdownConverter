@@ -237,6 +237,9 @@ export class Settings
      *
      * @param defaultValue
      * The default value to return.
+     *
+     * @returns
+     * The value of the configuration with the specified `key`.
      */
     protected GetConfigEntry<T>(key: string, defaultValue?: T): T
     {
@@ -244,16 +247,13 @@ export class Settings
         {
             return this.config.get<T>(key);
         }
+        else if (arguments.length > 1)
+        {
+            return defaultValue;
+        }
         else
         {
-            if (arguments.length > 1)
-            {
-                return defaultValue;
-            }
-            else
-            {
-                throw new RangeError();
-            }
+            throw new RangeError();
         }
     }
 }

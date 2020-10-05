@@ -24,6 +24,10 @@ export class Slugifier
     {
         return this.slugs;
     }
+
+    /**
+     * @inheritdoc
+     */
     protected set Slugs(value: string[])
     {
         this.slugs = value;
@@ -34,6 +38,9 @@ export class Slugifier
      *
      * @param text
      * The text that is to be slugified.
+     *
+     * @returns
+     * The slugified text.
      */
     public CreateSlug(text: string): string
     {
@@ -64,6 +71,9 @@ export class Slugifier
      *
      * @param text
      * The text that is to be slugified.
+     *
+     * @returns
+     * The slugified text.
      */
     protected Slugify(text: string): string
     {

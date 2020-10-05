@@ -22,15 +22,24 @@ suite(
 
                 document = new class extends Document
                 {
-                    constructor()
+                    /**
+                     * Initializes a new instance of the class.
+                     */
+                    public constructor()
                     {
                         super(textDocument, new MarkdownIt());
                     }
 
                     /**
                      * @inheritdoc
+                     *
+                     * @param text
+                     * The text to render.
+                     *
+                     * @returns
+                     * The rendered text.
                      */
-                    protected async RenderText(text: string)
+                    protected async RenderText(text: string): Promise<string>
                     {
                         return verifier + text;
                     }

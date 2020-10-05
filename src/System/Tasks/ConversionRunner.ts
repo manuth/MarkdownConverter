@@ -1,3 +1,4 @@
+import Path = require("path");
 import Clone = require("clone");
 import { CultureInfo } from "culture-info";
 import Template = require("es6-template-string");
@@ -8,10 +9,8 @@ import Anchor = require("markdown-it-anchor");
 import Checkbox = require("markdown-it-checkbox");
 import MarkdownItEmoji = require("markdown-it-emoji");
 import MarkdownItToc = require("markdown-it-table-of-contents");
-import Path = require("path");
 import Format = require("string-template");
 import TwEmoji = require("twemoji");
-import { isNullOrUndefined } from "util";
 import { Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Converter } from "../../Conversion/Converter";
@@ -57,7 +56,7 @@ export class ConversionRunner
     /**
      * Gets the extension the runner belongs to.
      */
-    public get Extension()
+    public get Extension(): MarkdownConverterExtension
     {
         return this.extension;
     }
@@ -72,6 +71,15 @@ export class ConversionRunner
 
     /**
      * Executes the underlying `Converter`.
+     *
+     * @param document
+     * The document to convert.
+     *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param fileReporter
+     * A component for reporting converted files.
      */
     public async Execute(document: TextDocument, progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
@@ -114,8 +122,8 @@ export class ConversionRunner
             currentWorkspace = workspace.getWorkspaceFolder(document.uri);
         }
 
-        workspaceRoot = !isNullOrUndefined(currentWorkspace) ? currentWorkspace.uri.fsPath : null;
-        converter = await this.LoadConverter(workspaceRoot || documentFolder, document);
+        workspaceRoot = currentWorkspace?.uri.fsPath ?? null;
+        converter = await this.LoadConverter(workspaceRoot ?? documentFolder, document);
         await converter.Initialize(progressReporter);
 
         for (let type of Settings.Default.ConversionType)
@@ -151,9 +159,7 @@ export class ConversionRunner
                             break;
                     }
 
-                    workspaceFolder =
-                        (!isNullOrUndefined(workspaceRoot) || !isNullOrUndefined(documentFolder) ?
-                            (workspaceRoot || documentFolder) : null);
+                    workspaceFolder = workspaceRoot ?? documentFolder ?? null;
 
                     context =
                         new class
@@ -178,14 +184,23 @@ export class ConversionRunner
                              */
                             public extension: string;
 
-                            constructor()
+                            /**
+                             * Initializes a new instance of the class.
+                             */
+                            public constructor()
                             {
-                                this.dirname =
-                                    (!isNullOrUndefined(workspaceRoot) && !isNullOrUndefined(documentFolder)) ?
-                                        Path.relative(workspaceRoot, documentFolder) : "";
                                 this.filename = parsedSourcePath.base;
                                 this.basename = parsedSourcePath.name;
                                 this.extension = extension;
+
+                                if (workspaceRoot !== null && documentFolder !== null)
+                                {
+                                    this.dirname = Path.relative(workspaceRoot, documentFolder);
+                                }
+                                else
+                                {
+                                    this.dirname = "";
+                                }
                             }
                         }();
 
@@ -205,7 +220,7 @@ export class ConversionRunner
                             try
                             {
                                 destinationPath = Path.normalize(Template(Settings.Default.DestinationPattern, { ...context, workspaceFolder }));
-                                workspaceFolderRequired = isNullOrUndefined(workspaceFolder);
+                                workspaceFolderRequired = !workspaceFolder;
                             }
                             catch (exception)
                             {
@@ -215,7 +230,7 @@ export class ConversionRunner
 
                         if (workspaceFolderRequired)
                         {
-                            while (isNullOrUndefined(workspaceFolder))
+                            while (workspaceFolder === null || workspaceFolder === undefined)
                             {
                                 this.lastChosenWorkspaceFolder = workspaceFolder = await (
                                     window.showInputBox(
@@ -264,7 +279,7 @@ export class ConversionRunner
      */
     protected async LoadConverter(workspaceRoot: string, document: TextDocument): Promise<Converter>
     {
-        if (isNullOrUndefined(this.Extension.VSCodeParser))
+        if (!this.Extension.VSCodeParser)
         {
             await this.Extension.EnableSystemParser();
         }
@@ -367,6 +382,9 @@ export class ConversionRunner
 
     /**
      * Loads a parser according to the settings.
+     *
+     * @returns
+     * The parser.
      */
     protected async LoadParser(): Promise<MarkdownIt>
     {
@@ -425,6 +443,7 @@ export class ConversionRunner
         if (Settings.Default.EmojiType)
         {
             parser.use(MarkdownItEmoji);
+
             parser.renderer.rules["emoji"] = (token, id) =>
             {
                 switch (Settings.Default.EmojiType)

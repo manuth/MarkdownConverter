@@ -22,18 +22,30 @@ export class TestSettings extends Settings
     /**
      * Gets or sets the resource to load the settings from.
      */
-    public get Resource()
+    public get Resource(): ObjectResource
     {
         return this.resource;
     }
 
-    public set Resource(value)
+    /**
+     * @inheritdoc
+     */
+    public set Resource(value: ObjectResource)
     {
         this.resource = value;
     }
 
     /**
      * @inheritdoc
+     *
+     * @param key
+     * The key of the entry.
+     *
+     * @param defaultValue
+     * The default value to return.
+     *
+     * @returns
+     * The value of the configuration.
      */
     protected GetConfigEntry<T>(key: string, defaultValue?: T): T
     {
@@ -43,7 +55,7 @@ export class TestSettings extends Settings
         }
         else
         {
-            return super.GetConfigEntry(...(arguments as any as [string, T]));
+            return super.GetConfigEntry(key, defaultValue);
         }
     }
 }

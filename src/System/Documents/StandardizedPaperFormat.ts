@@ -42,6 +42,9 @@ export class StandardizedPaperFormat extends PaperFormat
         return this.format;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Format(value: StandardizedFormatType)
     {
         this.format = value;
@@ -55,6 +58,9 @@ export class StandardizedPaperFormat extends PaperFormat
         return this.orientation;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Orientation(value: PaperOrientation)
     {
         this.orientation = value;

@@ -30,8 +30,9 @@ suite(
                 suiteSetup(
                     () =>
                     {
-                        let inputBoxResolver = () => { };
+                        let inputBoxResolver = (): void => { };
                         showInputBox = window.showInputBox;
+
                         window.showInputBox = async () =>
                         {
                             inputBoxResolver();

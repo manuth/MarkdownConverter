@@ -1,9 +1,9 @@
 import Assert = require("assert");
+import { EOL } from "os";
 import Cheerio = require("cheerio");
 import Dedent = require("dedent");
 import FileSystem = require("fs-extra");
 import MultiRange from "multi-integer-range";
-import { EOL } from "os";
 import { TempDirectory, TempFile } from "temp-filesystem";
 import Path = require("upath");
 import { commands, ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
@@ -30,6 +30,7 @@ suite(
         let mdFile: TempFile;
         let destinationFile: TempFile;
         let Convert: () => Promise<void>;
+
         let Clean: Mocha.AsyncFunc = async function()
         {
             this.slow(2 * 1000);

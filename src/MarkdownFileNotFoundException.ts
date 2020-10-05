@@ -9,7 +9,7 @@ export class MarkdownFileNotFoundException extends FileNotFoundException
     /**
      * Initializes a new instance of the MarkdownFileNotFoundException class.
      */
-    constructor()
+    public constructor()
     {
         super(null, null);
     }
@@ -17,7 +17,7 @@ export class MarkdownFileNotFoundException extends FileNotFoundException
     /**
      * @inheritdoc
      */
-    public get Message()
+    public get Message(): string
     {
         return Resources.Resources.Get<string>("MarkdownFileException");
     }

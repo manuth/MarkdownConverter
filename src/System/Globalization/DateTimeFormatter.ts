@@ -14,18 +14,15 @@ export class DateTimeFormatter
     /**
      * The pattern for replacing the tokens.
      */
-    private pattern: RegExp = /d{1,4}|f{1,7}|\.?F{1,7}|g{1,2}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y+|:|\/|o|\\.|'[^']*'|"[^"]*"|\\./g;
+    private pattern = /d{1,4}|f{1,7}|\.?F{1,7}|g{1,2}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y+|:|\/|o|\\.|'[^']*'|"[^"]*"|\\./g;
 
     /**
      * Initializes a new instance of the DateTimeFormatter class with a locale and a resource-path.
      *
      * @param locale
      * The locale to format the date.
-     *
-     * @param resourcePath
-     * The path to load the localized values from.
      */
-    constructor(locale?: CultureInfo)
+    public constructor(locale?: CultureInfo)
     {
         if (locale)
         {
@@ -41,6 +38,9 @@ export class DateTimeFormatter
         return this.locale;
     }
 
+    /**
+     * @inheritdoc
+     */
     public set Locale(value: CultureInfo)
     {
         this.locale = value;
@@ -49,11 +49,14 @@ export class DateTimeFormatter
     /**
      * Formats a date-value.
      *
+     * @param formatString
+     * The format-string to format the date-value.
+     *
      * @param date
      * The date to format.
      *
-     * @param formatString
-     * The format-string to format the date-value.
+     * @returns
+     * The formatted date.
      */
     public Format(formatString: string, date: Date = new Date()): string
     {
@@ -204,6 +207,9 @@ export class DateTimeFormatter
      *
      * @param name
      * The name of the resource to get.
+     *
+     * @returns
+     * The resource with the specified `name`.
      */
     protected GetResource<T>(name: string): T
     {

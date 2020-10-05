@@ -1,13 +1,13 @@
+import http = require("http");
+import Path = require("path");
+import URL = require("url");
+import { promisify } from "util";
 import FileSystem = require("fs-extra");
 import PortFinder = require("get-port");
 import Glob = require("glob");
-import http = require("http");
-import Path = require("path");
 import Puppeteer = require("puppeteer-core");
 import handler = require("serve-handler");
 import { TempDirectory } from "temp-filesystem";
-import URL = require("url");
-import { isNullOrUndefined, promisify } from "util";
 import { Progress } from "vscode";
 import Scrape = require("website-scraper");
 import { Resources } from "../Properties/Resources";
@@ -66,7 +66,7 @@ export class Converter
      * @param document
      * The document which is to be converted.
      */
-    constructor(workspaceRoot: string, document: Document)
+    public constructor(workspaceRoot: string, document: Document)
     {
         this.workspaceRoot = workspaceRoot;
         this.document = document;
@@ -109,10 +109,13 @@ export class Converter
      */
     public get URL(): string
     {
-        return this.Initialized ? (URL.resolve(
-            `http://localhost:${this.PortNumber}/`,
-            ((!isNullOrUndefined(this.Document.FileName) && !isNullOrUndefined(this.WorkspaceRoot)) ?
-                Path.relative(this.WorkspaceRoot, this.Document.FileName) : "index") + ".html")) : null;
+        return this.Initialized ?
+            (URL.resolve(
+                `http://localhost:${this.PortNumber}/`,
+                ((this.Document.FileName && this.WorkspaceRoot) ?
+                    Path.relative(this.WorkspaceRoot, this.Document.FileName) :
+                    "index") + ".html")) :
+            null;
     }
 
     /**
@@ -134,15 +137,18 @@ export class Converter
     /**
      * Gets the browser which is used to perform the conversion.
      */
-    protected get Browser()
+    protected get Browser(): Puppeteer.Browser
     {
         return this.Initialized ? this.browser : null;
     }
 
     /**
      * Initializes the converter.
+     *
+     * @param progressReporter
+     * A component for reporting progress.
      */
-    public async Initialize(progressReporter?: Progress<IProgressState>)
+    public async Initialize(progressReporter?: Progress<IProgressState>): Promise<void>
     {
         progressReporter = progressReporter || { report() { } };
 
@@ -214,17 +220,17 @@ export class Converter
     /**
      * Disposes the converter.
      */
-    public async Dispose()
+    public async Dispose(): Promise<void>
     {
         if (this.Initialized)
         {
             await this.browser.close();
+
             await new Promise(
                 (resolve) =>
                 {
                     this.WebServer.close(() => resolve());
                 });
-
         }
 
         this.initialized = false;
@@ -239,6 +245,9 @@ export class Converter
      *
      * @param path
      * The path to save the converted file to.
+     *
+     * @param progressReporter
+     * A component for reporting progress.
      */
     public async Start(conversionType: ConversionType, path: string, progressReporter?: Progress<IProgressState>): Promise<void>
     {

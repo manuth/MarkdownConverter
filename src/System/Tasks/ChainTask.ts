@@ -1,7 +1,7 @@
-import fm = require("front-matter");
-import FileSystem = require("fs-extra");
 import { EOL } from "os";
 import Path = require("path");
+import fm = require("front-matter");
+import FileSystem = require("fs-extra");
 import Format = require("string-template");
 import { CancellationToken, Progress, TextDocument, window, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
@@ -29,7 +29,7 @@ export class ChainTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    public get Title()
+    public get Title(): string
     {
         return Resources.Resources.Get<string>("TaskTitle.Chain");
     }
@@ -37,15 +37,24 @@ export class ChainTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    public get Cancellable()
+    public get Cancellable(): boolean
     {
         return false;
     }
 
     /**
      * @inheritdoc
+     *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
+     *
+     * @param fileReporter
+     * A component for reporting converted files.
      */
-    protected async ExecuteTask(progressReporter: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>)
+    protected async ExecuteTask(progressReporter: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         let document: TextDocument;
         let documentName: string;

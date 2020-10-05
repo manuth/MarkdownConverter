@@ -1,7 +1,8 @@
 import ChildProcess = require("child_process");
-import FileSystem = require("fs-extra");
 import Path = require("path");
+import FileSystem = require("fs-extra");
 import Puppeteer = require("puppeteer-core");
+import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
 import Format = require("string-template");
 import { commands, ExtensionContext, Progress, ProgressLocation, window } from "vscode";
 import { Constants } from "./Constants";
@@ -18,7 +19,6 @@ import { ConvertAllTask } from "./System/Tasks/ConvertAllTask";
 import { ConvertTask } from "./System/Tasks/ConvertTask";
 import { PuppeteerTask } from "./System/Tasks/PuppeteerTask";
 import { YAMLException } from "./System/YAML/YAMLException";
-import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
 
 /**
  * Represents the `Markdown Converter` extension.
@@ -75,8 +75,14 @@ export class MarkdownConverterExtension extends Extension
 
     /**
      * @inheritdoc
+     *
+     * @param context
+     * A collection of utilities private to an extension.
+     *
+     * @returns
+     * The extension-body.
      */
-    public async Activate(context: ExtensionContext)
+    public async Activate(context: ExtensionContext): Promise<unknown>
     {
         context.subscriptions.push(
             commands.registerCommand("markdownConverter.Convert", async () => this.ExecuteTask(new ConvertTask(this))),
@@ -88,12 +94,15 @@ export class MarkdownConverterExtension extends Extension
 
     /**
      * @inheritdoc
+     *
+     * @param task
+     * The task to execute.
      */
-    protected async ExecuteTaskInternal(task: PuppeteerTask)
+    protected async ExecuteTaskInternal(task: PuppeteerTask): Promise<void>
     {
         try
         {
-            let run = async (fileReporter: Progress<IConvertedFile>) =>
+            let run = async (fileReporter: Progress<IConvertedFile>): Promise<void> =>
             {
                 await window.withProgress(
                     {

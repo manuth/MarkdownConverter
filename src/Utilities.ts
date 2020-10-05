@@ -1,5 +1,5 @@
 import { exec } from "child_process";
-import { isNullOrUndefined, promisify } from "util";
+import { promisify } from "util";
 
 /**
  * Provides static methods.
@@ -18,6 +18,9 @@ export class Utilities
 
     /**
      * Gets the full name of the current user.
+     *
+     * @returns
+     * The full name of the current user.
      */
     public static async GetFullName(): Promise<string>
     {
@@ -43,7 +46,7 @@ export class Utilities
             {
                 let result = await method();
 
-                if (!isNullOrUndefined(result))
+                if (result)
                 {
                     return result.trim();
                 }
@@ -60,8 +63,11 @@ export class Utilities
      *
      * @param command
      * The command to execute.
+     *
+     * @returns
+     * The output of the command.
      */
-    private static async ExecuteCommand(command: string)
+    private static async ExecuteCommand(command: string): Promise<string>
     {
         let result = await promisify(exec)(command);
 
@@ -77,6 +83,9 @@ export class Utilities
 
     /**
      * Tries to figure out the username using environment-variables.
+     *
+     * @returns
+     * The result of the environment-lookup.
      */
     private static CheckEnv(): string
     {
@@ -95,25 +104,34 @@ export class Utilities
     }
 
     /**
-     * Tries to figure out the username using git's global settings
+     * Tries to figure out the username using git's global settings.
+     *
+     * @returns
+     * The result of the git-lookup.
      */
-    private static async CheckGit()
+    private static async CheckGit(): Promise<string>
     {
         return this.ExecuteCommand("git config --global user.name");
     }
 
     /**
      * Tries to figure out the username using wmic.
+     *
+     * @returns
+     * The result of the wmic-lookup.
      */
-    private static async CheckWmic()
+    private static async CheckWmic(): Promise<string>
     {
         return (await this.ExecuteCommand('wmic useraccount where name="%username%" get fullname')).replace("FullName", "").trim();
     }
 
     /**
      * Tries to figure out the username using osascript.
+     *
+     * @returns
+     * The result of the osascript-lookup.
      */
-    private static async CheckOsaScript()
+    private static async CheckOsaScript(): Promise<string>
     {
         return this.ExecuteCommand("osascript -e long user name of (system info)");
     }

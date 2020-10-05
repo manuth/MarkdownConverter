@@ -4,7 +4,6 @@ import fm = require("front-matter");
 import FileSystem = require("fs-extra");
 import MarkdownIt = require("markdown-it");
 import { TempFile } from "temp-filesystem";
-import { isNullOrUndefined } from "util";
 import { TextDocument, workspace } from "vscode";
 import YAML = require("yamljs");
 import { Document } from "../../../../System/Documents/Document";
@@ -78,7 +77,7 @@ suite(
                         Assert.strictEqual(document.Attributes["CreationDate"].getTime(), (await FileSystem.stat(tempFile.FullName)).ctime.getTime());
 
                         document = new Document(untitledTextDocument, parser);
-                        Assert.strictEqual(isNullOrUndefined(document.FileName), true);
+                        Assert.ok(!document.FileName);
                     });
             });
 
@@ -142,7 +141,7 @@ suite(
                                 Assert.throws(
                                     () =>
                                     {
-                                        testDocument.RawContent = `---\nThis: is: incorrect: YAML\n---\n`;
+                                        testDocument.RawContent = "---\nThis: is: incorrect: YAML\n---\n";
                                     });
                             });
                     });
@@ -206,7 +205,6 @@ suite(
             "RenderText(string content)",
             () =>
             {
-
                 teardown(
                     () =>
                     {
@@ -275,7 +273,7 @@ suite(
                                 englishContent = await testDocument.Render();
                                 testDocument.Locale = new CultureInfo("de");
                                 germanContent = await testDocument.Render();
-                                Assert.strictEqual(englishContent !== germanContent, true);
+                                Assert.ok(englishContent !== germanContent);
                             });
 
                         test(
@@ -283,7 +281,7 @@ suite(
                             async () =>
                             {
                                 testDocument.Content = "**important**";
-                                Assert.strictEqual((await testDocument.Render()).includes(parser.renderInline(testDocument.Content)), true);
+                                Assert.ok((await testDocument.Render()).includes(parser.renderInline(testDocument.Content)));
                             });
                     });
             });

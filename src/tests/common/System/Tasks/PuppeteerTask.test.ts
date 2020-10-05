@@ -1,11 +1,9 @@
 import Assert = require("assert");
-import FileSystem = require("fs-extra");
 import { dirname } from "path";
 import Path = require("path");
+import FileSystem = require("fs-extra");
 import pkgUp = require("pkg-up");
 import Puppeteer = require("puppeteer-core");
-import { TempDirectory } from "temp-filesystem";
-import { Constants } from "../../../../Constants";
 import { extension } from "../../../../extension";
 import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask";
 
@@ -25,7 +23,7 @@ suite(
             /**
              * @inheritdoc
              */
-            public get Title()
+            public get Title(): string
             {
                 return "Test";
             }
@@ -33,7 +31,7 @@ suite(
             /**
              * @inheritdoc
              */
-            protected async ExecuteTask()
+            protected async ExecuteTask(): Promise<void>
             { }
         }
 

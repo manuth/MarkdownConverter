@@ -45,11 +45,8 @@ export interface IMark
     /**
      * Generates a string representing the marker.
      *
-     * @param indent
-     * The indentation of the error-message.
-     *
-     * @param maxLength
-     * The max number of characters to render in a row.
+     * @param compact
+     * A value indicating whether the string should be compact.
      *
      * @returns
      * A string representing the marker.

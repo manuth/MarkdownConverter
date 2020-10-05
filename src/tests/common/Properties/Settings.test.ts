@@ -1,5 +1,5 @@
 import Assert = require("assert");
-import { ConfigurationTarget, env, workspace, WorkspaceConfiguration } from "vscode";
+import { env } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { Settings } from "../../../Properties/Settings";
 import { CustomPaperFormat } from "../../../System/Documents/CustomPaperFormat";
@@ -58,7 +58,7 @@ suite(
                     "Checking whether the default conversion-type is set correctly…",
                     () =>
                     {
-                        Assert.deepEqual(settings.ConversionType, [ConversionType.PDF]);
+                        Assert.deepStrictEqual(settings.ConversionType, [ConversionType.PDF]);
                     });
 
                 test(
@@ -150,7 +150,7 @@ suite(
                             });
 
                         let paperFormat = settings.PaperFormat.Format as CustomPaperFormat;
-                        Assert.strictEqual(settings.PaperFormat.Format instanceof CustomPaperFormat, true);
+                        Assert.ok(settings.PaperFormat.Format instanceof CustomPaperFormat);
                         Assert.strictEqual(paperFormat.Width, customFormat.Width);
                         Assert.strictEqual(paperFormat.Height, customFormat.Height);
                         checkMargin(settings.PaperFormat.Margin);
@@ -168,7 +168,7 @@ suite(
                             });
 
                         let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
-                        Assert.strictEqual(settings.PaperFormat.Format instanceof StandardizedPaperFormat, true);
+                        Assert.ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
                         Assert.strictEqual(paperFormat.Format, StandardizedFormatType.A5);
                         Assert.strictEqual(paperFormat.Orientation, PaperOrientation.Landscape);
                         checkMargin(settings.PaperFormat.Margin);
@@ -179,7 +179,7 @@ suite(
                     () =>
                     {
                         let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
-                        Assert.strictEqual(settings.PaperFormat.Format instanceof StandardizedPaperFormat, true);
+                        Assert.ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
                         Assert.strictEqual(paperFormat.Format, StandardizedFormatType.A4);
                         Assert.strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
                         checkMargin(settings.PaperFormat.Margin);

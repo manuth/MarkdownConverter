@@ -26,21 +26,33 @@ export class ConvertTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    public get Title()
+    public get Title(): string
     {
         return Resources.Resources.Get<string>("TaskTitle.Convert");
     }
 
     /**
      * @inheritdoc
+     *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
+     *
+     * @param fileReporter
+     * A component for reporting converted files.
      */
-    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>)
+    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         return this.ConversionRunner.Execute(this.GetMarkdownDocument(), progressReporter, fileReporter);
     }
 
     /**
      * Tries to find a markdown-file.
+     *
+     * @returns
+     * The best matching markdown-document.
      */
     protected GetMarkdownDocument(): TextDocument
     {

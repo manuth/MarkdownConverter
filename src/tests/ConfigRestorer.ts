@@ -44,7 +44,7 @@ export class ConfigRestorer
     /**
      * Gets the section of the setting-keys.
      */
-    public get Section()
+    public get Section(): string
     {
         return this.section;
     }
@@ -68,7 +68,7 @@ export class ConfigRestorer
     /**
      * Removes the specified configuration from VSCode and saves them for restoration.
      */
-    public async Clear()
+    public async Clear(): Promise<void>
     {
         return this.Toggle();
     }
@@ -76,7 +76,7 @@ export class ConfigRestorer
     /**
      * Restores the saved configuration.
      */
-    public async Restore()
+    public async Restore(): Promise<void>
     {
         return this.Toggle(true);
     }
@@ -87,10 +87,9 @@ export class ConfigRestorer
      * @param restore
      * A value indicating whether a restoration should be performed.
      */
-    protected async Toggle(restore?: boolean)
+    protected async Toggle(restore?: boolean): Promise<void>
     {
         let rootConfig = workspace.getConfiguration();
-        let config = workspace.getConfiguration(this.Section);
 
         let scopeMap: Array<[keyof ReturnType<WorkspaceConfiguration["inspect"]>, ConfigurationTarget]> = [
             ["globalValue", ConfigurationTarget.Global],

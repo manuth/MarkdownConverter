@@ -1,5 +1,4 @@
 import Assert = require("assert");
-import { workspace, WorkspaceConfiguration } from "vscode";
 import { extension } from "../../../../extension";
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { ConfigRestorer } from "../../../ConfigRestorer";

@@ -20,6 +20,7 @@ export class YAMLException extends Exception
 
     /**
      * Initializes a new instance of the YAMLException class.
+     *
      * @param exception
      * The exception to copy the values from.
      */
@@ -44,9 +45,29 @@ export class YAMLException extends Exception
      * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
      */
     public constructor(name: string, reason: string, mark: any, message: string, innerException?: Exception);
+
+    /**
+     * Initializes a new instance of the YAMLException class with a name, a reason, a mark and a message.
+     *
+     * @param name
+     * The name of the exception.
+     *
+     * @param reason
+     * The reason for the exception.
+     *
+     * @param mark
+     * The mark of the position that caused the exception.
+     *
+     * @param message
+     * Either the error message that explains the reason for the exception or `null` to use the default message.
+     *
+     * @param innerException
+     * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
+     */
     public constructor(name: string | any, reason?: string, mark?: IMark, message?: string, innerException?: Exception)
     {
         super(...(arguments.length === 1 ? [null, name] : [message, innerException]));
+
         if (arguments.length === 1)
         {
             let exception = name;

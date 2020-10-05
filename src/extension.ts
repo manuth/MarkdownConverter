@@ -11,10 +11,13 @@ export const extension = new MarkdownConverterExtension();
  *
  * @param context
  * The context provided by Visual Studio Code.
+ *
+ * @returns
+ * The extension-body.
  */
-export let activate = async (context: ExtensionContext) => extension.Activate(context);
+export let activate = async (context: ExtensionContext): Promise<unknown> => extension.Activate(context);
 
 /**
  * Deactivates the extension.
  */
-export let deactivate = async () => extension.Dispose();
+export let deactivate = async (): Promise<void> => extension.Dispose();

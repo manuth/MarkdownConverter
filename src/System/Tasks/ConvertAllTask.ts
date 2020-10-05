@@ -27,7 +27,7 @@ export class ConvertAllTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    public get Title()
+    public get Title(): string
     {
         return Resources.Resources.Get<string>("TaskTitle.ConvertAll");
     }
@@ -35,15 +35,24 @@ export class ConvertAllTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    public get Cancellable()
+    public get Cancellable(): boolean
     {
         return true;
     }
 
     /**
      * @inheritdoc
+     *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
+     *
+     * @param fileReporter
+     * A component for reporting converted files.
      */
-    public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>)
+    public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         if ((await this.GetDocuments()).length === 0)
         {
@@ -57,8 +66,17 @@ export class ConvertAllTask extends ConversionTask
 
     /**
      * @inheritdoc
+     *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
+     *
+     * @param fileReporter
+     * A component for reporting converted files.
      */
-    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>)
+    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         let documents: TextDocument[];
         let totalCount: number;
@@ -100,6 +118,9 @@ export class ConvertAllTask extends ConversionTask
 
     /**
      * Gets all markdown-documents of the workspace.
+     *
+     * @returns
+     * All markdown-documents of the workspace.
      */
     protected async GetDocuments(): Promise<TextDocument[]>
     {
@@ -110,9 +131,7 @@ export class ConvertAllTask extends ConversionTask
         {
             for (let extension of extensions.all)
             {
-                if (
-                    extension.packageJSON.contributes &&
-                    extension.packageJSON.contributes.languages)
+                if (extension.packageJSON.contributes?.languages)
                 {
                     for (let language of extension.packageJSON.contributes.languages)
                     {

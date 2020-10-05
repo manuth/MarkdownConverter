@@ -3,7 +3,7 @@ import Dedent = require("dedent");
 import FileSystem = require("fs-extra");
 import { TempDirectory, TempFile } from "temp-filesystem";
 import Path = require("upath");
-import { commands, ConfigurationTarget, TextEditor, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
+import { commands, ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Constants } from "../../../../Constants";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { Settings } from "../../../../Properties/Settings";

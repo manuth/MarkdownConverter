@@ -29,7 +29,7 @@ export abstract class Task<TExtension extends Extension = Extension>
     /**
      * Gets or sets the extension this task belongs to.
      */
-    public get Extension()
+    public get Extension(): TExtension
     {
         return this.extension;
     }
@@ -49,6 +49,12 @@ export abstract class Task<TExtension extends Extension = Extension>
 
     /**
      * Executes the task.
+     *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
      */
     public abstract async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken): Promise<void>;
 }
