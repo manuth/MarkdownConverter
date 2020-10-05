@@ -127,7 +127,7 @@ export class ConversionRunner
                     let workspaceFolder: string;
                     let workspaceFolderRequired: boolean;
                     let extension: string;
-                    let context: object;
+                    let context: any;
 
                     progressReporter.report(
                         {

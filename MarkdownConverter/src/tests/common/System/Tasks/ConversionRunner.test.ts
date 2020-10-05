@@ -249,7 +249,7 @@ suite(
                     {
                         this.slow(5.5 * 1000);
                         this.timeout(22 * 1000);
-                        let result: CheerioStatic;
+                        let result: cheerio.Root;
                         await FileSystem.writeFile(mdFile.FullName, "**:sparkles:**");
                         await commands.executeCommand("workbench.action.files.revert");
                         await markdownConfig.update("Parser.EmojiType", EmojiType[EmojiType.None], ConfigurationTarget.Global);

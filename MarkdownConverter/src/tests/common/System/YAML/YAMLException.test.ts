@@ -1,7 +1,7 @@
 import Assert = require("assert");
 import { CultureInfo } from "culture-info";
 import Dedent = require("dedent");
-import FrontMatter = require("front-matter");
+import fm = require("front-matter");
 import { isNullOrUndefined } from "util";
 import { Resources } from "../../../../Properties/Resources";
 import { Exception } from "../../../../System/Exception";
@@ -19,7 +19,7 @@ suite(
             {
                 try
                 {
-                    FrontMatter(
+                    (fm as any)(
                         Dedent(
                             `
                             ---

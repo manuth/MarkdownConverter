@@ -1,8 +1,11 @@
 import Assert = require("assert");
 import FileSystem = require("fs-extra");
+import { dirname } from "path";
 import Path = require("path");
+import pkgUp = require("pkg-up");
 import Puppeteer = require("puppeteer-core");
 import { TempDirectory } from "temp-filesystem";
+import { Constants } from "../../../../Constants";
 import { extension } from "../../../../extension";
 import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask";
 
@@ -37,7 +40,8 @@ suite(
         suiteSetup(
             async () =>
             {
-                puppeteerPath = Path.resolve(__dirname, "..", "..", "..", "..", "..", "..", "node_modules", "puppeteer-core", ".local-chromium");
+                let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: Puppeteer.executablePath() }));
+                puppeteerPath = Path.resolve(puppeteerProjectRoot, ".local-chromium");
                 tempPuppeteerPath = Path.join(Path.dirname(puppeteerPath), Path.basename(puppeteerPath) + "_");
 
                 if (await FileSystem.pathExists(Puppeteer.executablePath()))

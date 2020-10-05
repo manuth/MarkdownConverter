@@ -1,5 +1,5 @@
 import Dedent = require("dedent");
-import FrontMatter = require("front-matter");
+import fm = require("front-matter");
 import FileSystem = require("fs-extra");
 import { CultureInfo } from "localized-resource-manager";
 import MarkdownIt = require("markdown-it");
@@ -151,7 +151,7 @@ export class Document extends Renderable
     {
         try
         {
-            let result = FrontMatter(value);
+            let result = (fm as any)(value);
             this.Attributes = result.attributes;
             this.Content = result.body;
         }

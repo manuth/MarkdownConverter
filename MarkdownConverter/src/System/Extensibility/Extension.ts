@@ -7,6 +7,7 @@ import { isNullOrUndefined } from "util";
 import { commands, env, ExtensionContext, ProgressLocation, TextEditor, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";
+import { Package } from "@manuth/package-json-editor";
 
 /**
  * Represents an extension.
@@ -19,6 +20,11 @@ export class Extension
     private context: ExtensionContext = null;
 
     /**
+     * The path to the extension-manifest.
+     */
+    private extensionManifestPath: string;
+
+    /**
      * The path to the root of the extension.
      */
     private extensionRoot: string;
@@ -26,7 +32,7 @@ export class Extension
     /**
      * The meta-data of the extension.
      */
-    private metaData: any;
+    private metaData: Package;
 
     /**
      * The parser provided by `Visual Studio Code`
@@ -51,8 +57,9 @@ export class Extension
      */
     public constructor(extensionRoot: string)
     {
-        this.extensionRoot = Path.dirname(PkgUp.sync({ cwd: extensionRoot }));
-        this.metaData = require(Path.join(this.extensionRoot, "package.json"));
+        this.extensionManifestPath = PkgUp.sync({ cwd: extensionRoot });
+        this.extensionRoot = Path.dirname(this.extensionManifestPath);
+        this.metaData = new Package(Path.join(this.extensionManifestPath));
         this.systemParserFixPromise = new Promise(
             (resolve) =>
             {
@@ -91,7 +98,7 @@ export class Extension
      */
     public get Author()
     {
-        return this.MetaData["publisher"];
+        return this.MetaData.AdditionalProperties.Get("publisher");
     }
 
     /**
@@ -99,7 +106,7 @@ export class Extension
      */
     public get Name()
     {
-        return this.MetaData["name"];
+        return this.MetaData.Name;
     }
 
     /**

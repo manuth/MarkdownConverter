@@ -31,10 +31,10 @@ export async function run()
 {
     let mocha = new Mocha(
         {
-            ui: "tdd"
+            ui: "tdd",
+            color: true,
+            bail: true
         });
-
-    mocha.useColors(true);
 
     return new Promise(
         async (resolve, reject) =>

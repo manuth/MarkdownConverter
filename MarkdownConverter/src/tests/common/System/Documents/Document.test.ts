@@ -1,6 +1,6 @@
 import Assert = require("assert");
 import { CultureInfo } from "culture-info";
-import FrontMatter = require("front-matter");
+import fm = require("front-matter");
 import FileSystem = require("fs-extra");
 import MarkdownIt = require("markdown-it");
 import { TempFile } from "temp-filesystem";
@@ -108,7 +108,7 @@ suite(
                             "Checking whether the raw content is generated correctly…",
                             () =>
                             {
-                                let frontMatter = FrontMatter<any>(testDocument.RawContent);
+                                let frontMatter = (fm as any)(testDocument.RawContent) as fm.FrontMatterResult<any>;
                                 Assert.strictEqual(frontMatter.body, content);
 
                                 for (let key of Object.keys(attributes))

@@ -4,6 +4,7 @@ import Path = require("path");
 import Puppeteer = require("puppeteer-core");
 import Format = require("string-template");
 import { commands, ExtensionContext, Progress, ProgressLocation, window } from "vscode";
+import { Constants } from "./Constants";
 import { ConversionType } from "./Conversion/ConversionType";
 import { IConvertedFile } from "./Conversion/IConvertedFile";
 import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
@@ -17,6 +18,7 @@ import { ConvertAllTask } from "./System/Tasks/ConvertAllTask";
 import { ConvertTask } from "./System/Tasks/ConvertTask";
 import { PuppeteerTask } from "./System/Tasks/PuppeteerTask";
 import { YAMLException } from "./System/YAML/YAMLException";
+import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
 
 /**
  * Represents the `Markdown Converter` extension.
@@ -33,7 +35,7 @@ export class MarkdownConverterExtension extends Extension
      */
     public constructor()
     {
-        super(Path.join(__dirname, "..", ".."));
+        super(Constants.PackageDirectory);
         this.fileReporter = {
             async report(file)
             {
@@ -68,7 +70,7 @@ export class MarkdownConverterExtension extends Extension
      */
     public get ChromiumRevision(): string
     {
-        return require("puppeteer-core/package.json")["puppeteer"]["chromium_revision"];
+        return PUPPETEER_REVISIONS.chromium;
     }
 
     /**
@@ -150,7 +152,7 @@ export class MarkdownConverterExtension extends Extension
                 {
                     let revision = this.ChromiumRevision;
                     let success = false;
-                    let puppeteerPath = Path.resolve(__dirname, "..", "..", "node_modules", "puppeteer-core");
+                    let puppeteerPath = Path.resolve(Constants.PackageDirectory, "node_modules", "puppeteer-core");
 
                     if (!await FileSystem.pathExists(puppeteerPath))
                     {

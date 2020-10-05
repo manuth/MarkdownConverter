@@ -1,0 +1,17 @@
+{
+    "extends": "@manuth/tsconfig/recommended",
+    "compilerOptions": {
+        "declaration": true,
+        "module": "CommonJS",
+        "lib": [
+            "ES2020",
+            "DOM"
+        ],
+        "plugins": [
+            {
+                "name": "@manuth/typescript-eslint-plugin"
+            }
+        ],
+        "target": "ES6"
+    }
+}

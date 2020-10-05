@@ -1,4 +1,4 @@
-import FrontMatter = require("front-matter");
+import fm = require("front-matter");
 import FileSystem = require("fs-extra");
 import { EOL } from "os";
 import Path = require("path");
@@ -85,7 +85,7 @@ export class ChainTask extends ConvertAllTask
                 return x.uri.toString().toLowerCase().localeCompare(y.uri.toString().toLowerCase());
             });
 
-        contents = documents.map((textDocument) => FrontMatter(textDocument.getText()).body);
+        contents = documents.map((textDocument) => (fm as any)(textDocument.getText()).body);
 
         document = await workspace.openTextDocument(
             {

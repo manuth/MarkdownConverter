@@ -4,9 +4,6 @@
         "noEmit": true
     },
     "include": [
-        "webpack.config.ts",
-        "./webpack/**/*",
-        "gulpfile.ts",
-        "./gulp/**/*"
+        "./.eslintrc.js"
     ]
 }

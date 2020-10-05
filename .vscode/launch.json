@@ -12,11 +12,29 @@
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
+            "preLaunchTask": "Build",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/**/*.js"
+                "${workspaceFolder}/MarkdownConverter/**/*.js",
+                "!**/node_modules/**"
+            ]
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Extension Debug",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}"
             ],
-            "preLaunchTask": "Watch Debug",
-            "postDebugTask": "Stop Debug"
+            "preLaunchTask": "Build Debug",
+            "postDebugTask": "Debug Cleanup",
+            "sourceMaps": true,
+            "stopOnEntry": true,
+            "outFiles": [
+                "${workspaceFolder}/MarkdownConverter/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -26,11 +44,13 @@
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
+            "preLaunchTask": "Build Release",
+            "postDebugTask": "Debug Cleanup",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/**/*.js"
-            ],
-            "preLaunchTask": "Watch Release",
-            "postDebugTask": "Stop Release"
+                "${workspaceFolder}/MarkdownConverter/lib/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -44,10 +64,13 @@
             "env": {
                 "TEST_SUITE": "common"
             },
+            "internalConsoleOptions": "openOnSessionStart",
+            "stopOnEntry": true,
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ],
-            "preLaunchTask": "Debug"
+                "${workspaceFolder}/MarkdownConverter/lib/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -62,10 +85,14 @@
             "env": {
                 "TEST_SUITE": "single-file"
             },
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "Build Debug",
+            "postDebugTask": "Debug Cleanup",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ],
-            "preLaunchTask": "Debug"
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -80,10 +107,14 @@
             "env": {
                 "TEST_SUITE": "single-folder"
             },
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "Build Debug",
+            "postDebugTask": "Debug Cleanup",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ],
-            "preLaunchTask": "Debug"
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -98,10 +129,14 @@
             "env": {
                 "TEST_SUITE": "workspace"
             },
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "Build Debug",
+            "postDebugTask": "Debug Cleanup",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ],
-            "preLaunchTask": "Debug"
+                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js",
+                "!**/node_modules/**"
+            ]
         }
     ]
 }

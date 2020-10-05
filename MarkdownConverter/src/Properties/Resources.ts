@@ -1,5 +1,4 @@
-import { CultureInfo, IResourceManager, MustacheResourceManager, ResourceManager } from "localized-resource-manager";
-import Path = require("path");
+import { CultureInfo, IResourceManager, MustacheResourceManager, ObjectResource, ResourceManager } from "localized-resource-manager";
 
 /**
  * Represents the resources of the module.
@@ -9,13 +8,20 @@ export class Resources
     /**
      * The resources.
      */
-    private static resources = new MustacheResourceManager(
-        new ResourceManager(Path.join(__dirname, "..", "..", "Resources", "MarkdownConverter")));
+    private static resources: IResourceManager = new MustacheResourceManager(
+        new ResourceManager(
+            [
+                new ObjectResource(require("../../Resources/MarkdownConverter.json")),
+                new ObjectResource(require("../../Resources/MarkdownConverter.de.json"), new CultureInfo("de"))
+            ]));
 
     /**
      * The files.
      */
-    private static files = new ResourceManager(Path.join(__dirname, "..", "..", "Resources", "Files"));
+    private static files = new ResourceManager(
+        [
+            new ObjectResource(require("./Files"))
+        ]);
 
     /**
      * Sets the culture of the resources.
