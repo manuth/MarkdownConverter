@@ -15,7 +15,7 @@
             "preLaunchTask": "Build",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/**/*.js",
+                "${workspaceFolder}/**/*.js",
                 "!**/node_modules/**"
             ]
         },
@@ -32,7 +32,7 @@
             "sourceMaps": true,
             "stopOnEntry": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/**/*.js",
+                "${workspaceFolder}/**/*.js",
                 "!**/node_modules/**"
             ]
         },
@@ -48,7 +48,7 @@
             "postDebugTask": "Debug Cleanup",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/**/*.js",
+                "${workspaceFolder}/**/*.js",
                 "!**/node_modules/**"
             ]
         },
@@ -59,7 +59,7 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test"
+                "--extensionTestsPath=${workspaceFolder}/lib/test"
             ],
             "env": {
                 "TEST_SUITE": "common"
@@ -68,7 +68,7 @@
             "stopOnEntry": true,
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/**/*.js",
+                "${workspaceFolder}/**/*.js",
                 "!**/node_modules/**"
             ]
         },
@@ -79,8 +79,8 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
-                "${workspaceFolder}/MarkdownConverter/src/test/single-file/Test.md"
+                "--extensionTestsPath=${workspaceFolder}/lib/test",
+                "${workspaceFolder}/src/test/single-file/Test.md"
             ],
             "env": {
                 "TEST_SUITE": "single-file"
@@ -90,7 +90,7 @@
             "postDebugTask": "Debug Cleanup",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js",
+                "${workspaceFolder}/**/*.js",
                 "!**/node_modules/**"
             ]
         },
@@ -101,8 +101,8 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
-                "${workspaceFolder}/MarkdownConverter/src/test/single-folder"
+                "--extensionTestsPath=${workspaceFolder}/lib/test",
+                "${workspaceFolder}/src/test/single-folder"
             ],
             "env": {
                 "TEST_SUITE": "single-folder"
@@ -112,7 +112,7 @@
             "postDebugTask": "Debug Cleanup",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js",
+                "${workspaceFolder}/**/*.js",
                 "!**/node_modules/**"
             ]
         },
@@ -123,8 +123,8 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
-                "${workspaceFolder}/MarkdownConverter/src/test/workspace/workspace.code-workspace"
+                "--extensionTestsPath=${workspaceFolder}/lib/test",
+                "${workspaceFolder}/src/test/workspace/workspace.code-workspace"
             ],
             "env": {
                 "TEST_SUITE": "workspace"
@@ -134,7 +134,7 @@
             "postDebugTask": "Debug Cleanup",
             "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js",
+                "${workspaceFolder}/**/*.js",
                 "!**/node_modules/**"
             ]
         }

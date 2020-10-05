@@ -109,10 +109,9 @@ tsconfig.json
 tslint.json
 
 # Source-files
-MarkdownConverter/[Ss]rc/
+[Ss]rc/
 
 # TypeScript config-files
-MarkdownConverter/tsconfig.json
 tsconfig.json
 tsconfig.*.json
 
@@ -124,7 +123,7 @@ tsconfig.*.json
 [Ll]ib/**/*.map
 
 # Unit-Tests and debug-files
-MarkdownConverter/[Ll]ib/!(extension.js)
+[Ll]ib/!(extension.js)
 
 # Unused node-modules
 node_modules/!(highlightjs)

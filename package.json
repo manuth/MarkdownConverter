@@ -15,8 +15,8 @@
   "engines": {
     "vscode": "^1.38.0"
   },
-  "main": "MarkdownConverter/lib/extension.js",
-  "types": "MarkdownConverter/lib/extension.d.ts",
+  "main": "lib/extension.js",
+  "types": "lib/extension.d.ts",
   "directories": {
     "lib": "lib"
   },
@@ -43,12 +43,12 @@
     "build": "tsc -b tsconfig.build.json",
     "rebuild": "npm run clean && npm run build",
     "watch": "npm run build -- --watch",
-    "clean": "npm run build -- --clean && rimraf ./MarkdownConverter/lib",
+    "clean": "npm run build -- --clean && rimraf ./lib",
     "lint-base": "eslint --max-warnings 0 --ignore-pattern \"!.eslintrc.js\"",
-    "lint-code": "npm run lint-base -- --ext .js,.jsx,.ts,.tsx .eslintrc.js webpack.config.ts ./MarkdownConverter/src",
+    "lint-code": "npm run lint-base -- --ext .js,.jsx,.ts,.tsx .eslintrc.js webpack.config.ts ./src",
     "lint": "npm run lint-code && npm run lint-code",
     "lint-ide": "npm run lint || exit 0",
-    "test": "node ./MarkdownConverter/lib/test/runTests",
+    "test": "node ./lib/test/runTests",
     "prepare": "npm run rebuild"
   },
   "dependencies": {

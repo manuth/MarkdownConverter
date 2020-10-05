@@ -12,7 +12,7 @@ import { Constants } from "../Constants";
  */
 function GetResourcePath(...path: string[]): string
 {
-    return join(Constants.PackageDirectory, "MarkdownConverter", "Resources", ...path);
+    return join(Constants.PackageDirectory, "Resources", ...path);
 }
 
 /**

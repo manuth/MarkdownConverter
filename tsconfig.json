@@ -1,12 +1,15 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
-        "noEmit": true
+        "composite": true,
+        "rootDir": "./src",
+        "outDir": "./lib"
     },
     "include": [
-        "webpack.config.ts",
-        "./webpack/**/*",
-        "gulpfile.ts",
-        "./gulp/**/*"
+        "./src/**/*"
+    ],
+    "exclude": [
+        "./src/test/**/*",
+        "./src/tests/**/*"
     ]
 }

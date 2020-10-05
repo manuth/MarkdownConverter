@@ -1,7 +1,7 @@
 import { dirname, join, parse, relative, resolve } from "path";
 import { Configuration, WatchIgnorePlugin } from "webpack";
 
-let sourceRoot = join(__dirname, "MarkdownConverter", "src");
+let sourceRoot = join(__dirname, "src");
 
 let externalModules: string[] = [
     "mocha",
@@ -35,7 +35,7 @@ let config: Configuration = {
     target: "node",
     entry,
     output: {
-        path: resolve(__dirname, "MarkdownConverter", "lib"),
+        path: resolve(__dirname, "lib"),
         filename: "[name].js",
         libraryTarget: "commonjs2",
         devtoolFallbackModuleFilenameTemplate: "../[resource-path]"

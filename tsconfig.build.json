@@ -3,7 +3,13 @@
     "files": [],
     "references": [
         {
-            "path": "./MarkdownConverter/tsconfig.build.json"
+            "path": "."
+        },
+        {
+            "path": "./src/tests"
+        },
+        {
+            "path": "./src/test"
         }
     ]
 }
