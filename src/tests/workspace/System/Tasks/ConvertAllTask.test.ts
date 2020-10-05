@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { strictEqual } from "assert";
 import { extension } from "../../../../extension";
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { ConfigRestorer } from "../../../ConfigRestorer";
@@ -38,6 +38,6 @@ suite(
             {
                 this.slow(3.75 * 1000);
                 this.timeout(15 * 1000);
-                Assert.strictEqual((await task["GetDocuments"]()).length, 4);
+                strictEqual((await task["GetDocuments"]()).length, 4);
             });
     });

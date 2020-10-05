@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { strictEqual } from "assert";
 import { CultureInfo } from "culture-info";
 import { Resources } from "../../../Properties/Resources";
 
@@ -30,8 +30,8 @@ suite(
                     {
                         let culture = new CultureInfo("zh-Hans-CN");
                         Resources.Culture = culture;
-                        Assert.strictEqual(Resources.Resources.Locale, culture);
-                        Assert.strictEqual(Resources.Files.Locale, culture);
+                        strictEqual(Resources.Resources.Locale, culture);
+                        strictEqual(Resources.Files.Locale, culture);
                     });
             });
     });

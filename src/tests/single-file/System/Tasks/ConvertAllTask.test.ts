@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { rejects } from "assert";
 import { extension } from "../../../../extension";
 import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolderException";
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
@@ -23,7 +23,7 @@ suite(
                     "Checking whether an exception occurrs if no workspace-folder is opened…",
                     async () =>
                     {
-                        await Assert.rejects(() => task.Execute(), NoWorkspaceFolderException);
+                        await rejects(() => task.Execute(), NoWorkspaceFolderException);
                     });
             });
     });

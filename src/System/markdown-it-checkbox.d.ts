@@ -1,5 +1,5 @@
 declare module "markdown-it-checkbox"
 {
-    let MarkdownItCheckbox: any;
-    export = MarkdownItCheckbox;
+    let checkbox: any;
+    export = checkbox;
 }

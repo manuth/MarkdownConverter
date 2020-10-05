@@ -1,9 +1,9 @@
-import ChildProcess = require("child_process");
-import Path = require("path");
-import FileSystem = require("fs-extra");
-import Puppeteer = require("puppeteer-core");
+import { exec } from "child_process";
+import { resolve } from "path";
+import { mkdirp, pathExists } from "fs-extra";
+import { createBrowserFetcher, executablePath } from "puppeteer-core";
 import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
-import Format = require("string-template");
+import format = require("string-template");
 import { commands, ExtensionContext, Progress, ProgressLocation, window } from "vscode";
 import { Constants } from "./Constants";
 import { ConversionType } from "./Conversion/ConversionType";
@@ -40,7 +40,7 @@ export class MarkdownConverterExtension extends Extension
             async report(file)
             {
                 let result = await (window.showInformationMessage(
-                    Format(Resources.Resources.Get("SuccessMessage"), ConversionType[file.Type], file.FileName),
+                    format(Resources.Resources.Get("SuccessMessage"), ConversionType[file.Type], file.FileName),
                     Resources.Resources.Get("OpenFileLabel")));
 
                 if (result === Resources.Resources.Get("OpenFileLabel"))
@@ -48,13 +48,13 @@ export class MarkdownConverterExtension extends Extension
                     switch (process.platform)
                     {
                         case "win32":
-                            ChildProcess.exec(`"${file.FileName}"`);
+                            exec(`"${file.FileName}"`);
                             break;
                         case "darwin":
-                            ChildProcess.exec(`bash -c 'open "${file.FileName}"'`);
+                            exec(`bash -c 'open "${file.FileName}"'`);
                             break;
                         case "linux":
-                            ChildProcess.exec(`bash -c 'xdg-open "${file.FileName}"'`);
+                            exec(`bash -c 'xdg-open "${file.FileName}"'`);
                             break;
                         default:
                             window.showWarningMessage(Resources.Resources.Get("UnsupportedPlatformException"));
@@ -161,11 +161,11 @@ export class MarkdownConverterExtension extends Extension
                 {
                     let revision = this.ChromiumRevision;
                     let success = false;
-                    let puppeteerPath = Path.resolve(Constants.PackageDirectory, "node_modules", "puppeteer-core");
+                    let puppeteerPath = resolve(Constants.PackageDirectory, "node_modules", "puppeteer-core");
 
-                    if (!await FileSystem.pathExists(puppeteerPath))
+                    if (!await pathExists(puppeteerPath))
                     {
-                        await FileSystem.mkdirp(puppeteerPath);
+                        await mkdirp(puppeteerPath);
                     }
 
                     do
@@ -173,14 +173,14 @@ export class MarkdownConverterExtension extends Extension
                         await (window.withProgress(
                             {
                                 location: ProgressLocation.Notification,
-                                title: Format(Resources.Resources.Get("UpdateRunning"), revision)
+                                title: format(Resources.Resources.Get("UpdateRunning"), revision)
                             },
                             async (reporter) =>
                             {
                                 try
                                 {
                                     let progress = 0;
-                                    let browserFetcher = Puppeteer.createBrowserFetcher();
+                                    let browserFetcher = createBrowserFetcher();
 
                                     await browserFetcher.download(
                                         revision,
@@ -210,7 +210,7 @@ export class MarkdownConverterExtension extends Extension
                             }));
                     }
                     while (
-                        !await FileSystem.pathExists(Puppeteer.executablePath()) &&
+                        !await pathExists(executablePath()) &&
                         !success &&
                         await (window.showWarningMessage(
                             Resources.Resources.Get("UpdateFailed"),

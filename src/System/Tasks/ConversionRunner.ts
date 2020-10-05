@@ -1,16 +1,16 @@
-import Path = require("path");
-import Clone = require("clone");
+import { dirname, join, normalize, parse, relative, resolve } from "path";
+import clone = require("clone");
 import { CultureInfo } from "culture-info";
-import Template = require("es6-template-string");
-import FileSystem = require("fs-extra");
-import HighlightJs = require("highlight.js");
+import template = require("es6-template-string");
+import { ensureDir, pathExists, readFile } from "fs-extra";
+import { highlight } from "highlight.js";
 import MarkdownIt = require("markdown-it");
-import Anchor = require("markdown-it-anchor");
-import Checkbox = require("markdown-it-checkbox");
-import MarkdownItEmoji = require("markdown-it-emoji");
-import MarkdownItToc = require("markdown-it-table-of-contents");
-import Format = require("string-template");
-import TwEmoji = require("twemoji");
+import anchor = require("markdown-it-anchor");
+import checkbox = require("markdown-it-checkbox");
+import emoji = require("markdown-it-emoji");
+import toc = require("markdown-it-table-of-contents");
+import format = require("string-template");
+import twemoji = require("twemoji");
 import { Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Converter } from "../../Conversion/Converter";
@@ -86,8 +86,8 @@ export class ConversionRunner
         let tasks: Array<Promise<void>> = [];
         let converter: Converter;
         let workspaceRoot: string;
-        let documentFolder = document.isUntitled ? null : Path.dirname(document.fileName);
-        let parsedSourcePath = Path.parse(document.fileName);
+        let documentFolder = document.isUntitled ? null : dirname(document.fileName);
+        let parsedSourcePath = parse(document.fileName);
         let currentWorkspace: WorkspaceFolder;
 
         if (!fileReporter)
@@ -139,7 +139,7 @@ export class ConversionRunner
 
                     progressReporter.report(
                         {
-                            message: Format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
+                            message: format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
                         });
 
                     switch (type)
@@ -195,7 +195,7 @@ export class ConversionRunner
 
                                 if (workspaceRoot !== null && documentFolder !== null)
                                 {
-                                    this.dirname = Path.relative(workspaceRoot, documentFolder);
+                                    this.dirname = relative(workspaceRoot, documentFolder);
                                 }
                                 else
                                 {
@@ -213,13 +213,13 @@ export class ConversionRunner
                     {
                         try
                         {
-                            destinationPath = Path.normalize(Template(Settings.Default.DestinationPattern, context));
+                            destinationPath = normalize(template(Settings.Default.DestinationPattern, context));
                         }
                         catch
                         {
                             try
                             {
-                                destinationPath = Path.normalize(Template(Settings.Default.DestinationPattern, { ...context, workspaceFolder }));
+                                destinationPath = normalize(template(Settings.Default.DestinationPattern, { ...context, workspaceFolder }));
                                 workspaceFolderRequired = !workspaceFolder;
                             }
                             catch (exception)
@@ -245,12 +245,12 @@ export class ConversionRunner
                     }
                     while (workspaceFolderRequired);
 
-                    await FileSystem.ensureDir(Path.dirname(destinationPath));
+                    await ensureDir(dirname(destinationPath));
                     await converter.Start(type, destinationPath, progressReporter);
 
                     progressReporter.report(
                         {
-                            message: Format(Resources.Resources.Get("Progress.ConverterFinished"), ConversionType[type])
+                            message: format(Resources.Resources.Get("Progress.ConverterFinished"), ConversionType[type])
                         });
 
                     fileReporter.report(
@@ -285,8 +285,8 @@ export class ConversionRunner
         }
 
         let converter = new Converter(workspaceRoot, new Document(document, await this.LoadParser()));
-        let headerTemplate = converter.Document.Attributes["HeaderTemplate"];
-        let footerTemplate = converter.Document.Attributes["FooterTemplate"];
+        let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string;
+        let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string;
         converter.Document.Quality = Settings.Default.ConversionQuality;
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Attributes.Author = converter.Document.Attributes.Author || await Utilities.GetFullName();
@@ -297,9 +297,9 @@ export class ConversionRunner
 
         if (
             headerTemplate &&
-            await FileSystem.pathExists(Path.resolve(converter.WorkspaceRoot, headerTemplate)))
+            await pathExists(resolve(converter.WorkspaceRoot, headerTemplate)))
         {
-            converter.Document.Header.Content = FileSystem.readFileSync(headerTemplate).toString();
+            converter.Document.Header.Content = (await readFile(headerTemplate)).toString();
         }
         else
         {
@@ -308,9 +308,9 @@ export class ConversionRunner
 
         if (
             footerTemplate &&
-            await FileSystem.pathExists(Path.resolve(converter.WorkspaceRoot, footerTemplate)))
+            await pathExists(resolve(converter.WorkspaceRoot, footerTemplate)))
         {
-            converter.Document.Footer.Content = FileSystem.readFileSync(footerTemplate).toString();
+            converter.Document.Footer.Content = (await readFile(footerTemplate)).toString();
         }
         else
         {
@@ -321,11 +321,11 @@ export class ConversionRunner
         {
             if (Settings.Default.Template)
             {
-                converter.Document.Template = (await FileSystem.readFile(Path.resolve(workspaceRoot || ".", Settings.Default.Template))).toString();
+                converter.Document.Template = (await readFile(resolve(workspaceRoot || ".", Settings.Default.Template))).toString();
             }
             else if (Settings.Default.SystemParserEnabled)
             {
-                converter.Document.Template = (await FileSystem.readFile(Resources.Files.Get("SystemTemplate"))).toString();
+                converter.Document.Template = (await readFile(Resources.Files.Get("SystemTemplate"))).toString();
             }
         }
         catch (exception)
@@ -368,7 +368,7 @@ export class ConversionRunner
             }
             else
             {
-                converter.Document.StyleSheets.push(Path.join(Resources.Files.Get("HighlightJSStylesDir"), Settings.Default.HighlightStyle + ".css"));
+                converter.Document.StyleSheets.push(join(Resources.Files.Get("HighlightJSStylesDir"), Settings.Default.HighlightStyle + ".css"));
             }
         }
 
@@ -394,7 +394,7 @@ export class ConversionRunner
 
         if (Settings.Default.SystemParserEnabled)
         {
-            parser = Clone(this.Extension.VSCodeParser);
+            parser = clone(this.Extension.VSCodeParser);
             parser.normalizeLink = (link: string) => link;
             parser.normalizeLinkText = (link: string) => link;
         }
@@ -406,7 +406,7 @@ export class ConversionRunner
                 {
                     if (Settings.Default.HighlightStyle !== "None")
                     {
-                        subject = HighlightJs.highlight(language, subject, true).value;
+                        subject = highlight(language, subject, true).value;
                     }
                     else
                     {
@@ -419,7 +419,7 @@ export class ConversionRunner
         }
 
         parser.validateLink = () => true;
-        Anchor(
+        anchor(
             parser,
             {
                 slugify: (heading) => tocSlugifier.CreateSlug(heading)
@@ -428,7 +428,7 @@ export class ConversionRunner
         if (Settings.Default.TocSettings)
         {
             parser.use(
-                MarkdownItToc,
+                toc,
                 {
                     includeLevel: Settings.Default.TocSettings.Levels.toArray(),
                     containerClass: Settings.Default.TocSettings.Class,
@@ -438,11 +438,11 @@ export class ConversionRunner
                 });
         }
 
-        parser.use(Checkbox);
+        parser.use(checkbox);
 
         if (Settings.Default.EmojiType)
         {
-            parser.use(MarkdownItEmoji);
+            parser.use(emoji);
 
             parser.renderer.rules["emoji"] = (token, id) =>
             {
@@ -453,13 +453,13 @@ export class ConversionRunner
                     case EmojiType.Native:
                         return token[id].content;
                     case EmojiType.Twitter:
-                        return TwEmoji.parse(token[id].content);
+                        return twemoji.parse(token[id].content);
                     case EmojiType.GitHub:
                         return "<img " +
                             'class="emoji" ' +
                             `title=":${token[id].markup}:" ` +
                             `alt=":${token[id].markup}:" ` +
-                            `src="https://github.githubassets.com/images/icons/emoji/unicode/${TwEmoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
+                            `src="https://github.githubassets.com/images/icons/emoji/unicode/${twemoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
                             'align="absmiddle" />';
                 }
             };

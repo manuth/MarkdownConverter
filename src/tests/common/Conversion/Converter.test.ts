@@ -1,8 +1,8 @@
-import Assert = require("assert");
-import FileSystem = require("fs-extra");
+import { doesNotReject, ok, rejects, strictEqual } from "assert";
+import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import { TempDirectory, TempFile } from "temp-filesystem";
-import Path = require("upath");
+import { changeExt } from "upath";
 import { TextDocument, workspace } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { Converter } from "../../../Conversion/Converter";
@@ -23,13 +23,14 @@ suite(
             {
                 let parser = new MarkdownIt();
                 tempDir = new TempDirectory();
+
                 tempFile = new TempFile(
                     {
                         dir: tempDir.FullName,
                         postfix: ".md"
                     });
 
-                await FileSystem.writeFile(tempFile.FullName, "This is a test");
+                await writeFile(tempFile.FullName, "This is a test");
                 textDocument = await workspace.openTextDocument(tempFile.FullName);
                 document = new Document(textDocument, parser);
             });
@@ -50,8 +51,8 @@ suite(
                     () =>
                     {
                         converter = new Converter(tempDir.FullName, document);
-                        Assert.strictEqual(converter.WorkspaceRoot, tempDir.FullName);
-                        Assert.strictEqual(converter.Document, document);
+                        strictEqual(converter.WorkspaceRoot, tempDir.FullName);
+                        strictEqual(converter.Document, document);
                     });
             });
 
@@ -63,17 +64,17 @@ suite(
                     "Checking whether the object is neither initialized nor disposed…",
                     () =>
                     {
-                        Assert(!converter.Initialized && !converter.Disposed);
+                        ok(!converter.Initialized && !converter.Disposed);
                     });
 
                 test(
                     "Checking whether unitialized properties equal to `null`…",
                     () =>
                     {
-                        Assert.strictEqual(converter.URL, null);
-                        Assert.strictEqual(converter.PortNumber, null);
-                        Assert.strictEqual(converter["WebServer"], null);
-                        Assert.strictEqual(converter["Browser"], null);
+                        strictEqual(converter.URL, null);
+                        strictEqual(converter.PortNumber, null);
+                        strictEqual(converter["WebServer"], null);
+                        strictEqual(converter["Browser"], null);
                     });
             });
 
@@ -85,7 +86,7 @@ suite(
                     "Start(ConversionType conversionType, string path, Progress<IProgressState> progressReporter?)",
                     async () =>
                     {
-                        await Assert.rejects(converter.Start(ConversionType.HTML, ""));
+                        await rejects(converter.Start(ConversionType.HTML, ""));
                     });
             });
 
@@ -98,7 +99,7 @@ suite(
                     async function()
                     {
                         this.slow(380);
-                        await Assert.doesNotReject(() => converter.Initialize());
+                        await doesNotReject(() => converter.Initialize());
                     });
             });
 
@@ -110,17 +111,17 @@ suite(
                     "Checking whether the converter is initialized…",
                     () =>
                     {
-                        Assert(converter.Initialized);
+                        ok(converter.Initialized);
                     });
 
                 test(
                     "Checking whether the properties have been initialized…",
                     () =>
                     {
-                        Assert(converter.URL);
-                        Assert(converter.PortNumber);
-                        Assert(converter["WebServer"]);
-                        Assert(converter["Browser"]);
+                        ok(converter.URL);
+                        ok(converter.PortNumber);
+                        ok(converter["WebServer"]);
+                        ok(converter["Browser"]);
                     });
             });
 
@@ -132,7 +133,7 @@ suite(
                     "Initialize(Progress<IProgressState> progressReporter?)",
                     async () =>
                     {
-                        await Assert.rejects(converter.Initialize());
+                        await rejects(converter.Initialize());
                     });
             });
 
@@ -176,18 +177,18 @@ suite(
                                     break;
                             }
 
-                            let path = Path.changeExt(tempFile.FullName, extension);
+                            let path = changeExt(tempFile.FullName, extension);
                             await converter.Start(conversionType, path);
-                            Assert(await FileSystem.pathExists(path));
-                            await FileSystem.remove(path);
+                            ok(await pathExists(path));
+                            await remove(path);
 
                             if (conversionType === ConversionType.SelfContainedHTML)
                             {
-                                let resourcePath = Path.changeExt(path, null);
+                                let resourcePath = changeExt(path, null);
 
-                                if (await FileSystem.pathExists(resourcePath))
+                                if (await pathExists(resourcePath))
                                 {
-                                    await FileSystem.remove(resourcePath);
+                                    await remove(resourcePath);
                                 }
                             }
                         }

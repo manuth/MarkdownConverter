@@ -1,5 +1,5 @@
-import FileSystem = require("fs-extra");
-import Puppeteer = require("puppeteer-core");
+import { pathExists } from "fs-extra";
+import { executablePath } from "puppeteer-core";
 import { CancellationToken, CancellationTokenSource, Progress } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
@@ -8,7 +8,7 @@ import { IProgressState } from "./IProgressState";
 import { Task } from "./Task";
 
 /**
- * Represents a task which depends on Puppeteer.
+ * Represents a task which depends on
  */
 export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
 {
@@ -45,7 +45,7 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
      */
     public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
-        if (await FileSystem.pathExists(Puppeteer.executablePath()))
+        if (await pathExists(executablePath()))
         {
             await this.ExecuteTask(progressReporter || { report() { } }, cancellationToken || new CancellationTokenSource().token, fileReporter || { report() { } });
         }

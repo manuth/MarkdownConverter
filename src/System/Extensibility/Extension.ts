@@ -1,9 +1,9 @@
-import Path = require("path");
+import { dirname, join } from "path";
 import { Package } from "@manuth/package-json-editor";
 import { CultureInfo } from "culture-info";
 import MarkdownIt = require("markdown-it");
-import PkgUp = require("pkg-up");
-import Format = require("string-template");
+import pkgUp = require("pkg-up");
+import format = require("string-template");
 import { commands, env, ExtensionContext, ProgressLocation, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";
@@ -56,9 +56,10 @@ export class Extension
      */
     public constructor(extensionRoot: string)
     {
-        this.extensionManifestPath = PkgUp.sync({ cwd: extensionRoot });
-        this.extensionRoot = Path.dirname(this.extensionManifestPath);
-        this.metaData = new Package(Path.join(this.extensionManifestPath));
+        this.extensionManifestPath = pkgUp.sync({ cwd: extensionRoot });
+        this.extensionRoot = dirname(this.extensionManifestPath);
+        this.metaData = new Package(join(this.extensionManifestPath));
+
         this.systemParserFixPromise = new Promise(
             (resolve) =>
             {
@@ -193,11 +194,11 @@ export class Extension
 
             if (exception instanceof Error)
             {
-                message = Format(Resources.Resources.Get("UnknownException"), exception.name, exception.message);
+                message = format(Resources.Resources.Get("UnknownException"), exception.name, exception.message);
             }
             else
             {
-                message = Format(Resources.Resources.Get("UnknownError"), exception);
+                message = format(Resources.Resources.Get("UnknownError"), exception);
             }
 
             window.showErrorMessage(message);

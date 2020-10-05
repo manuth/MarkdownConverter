@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { strictEqual } from "assert";
 import MarkdownIt = require("markdown-it");
 import { TextDocument, workspace } from "vscode";
 import { Document } from "../../../../System/Documents/Document";
@@ -55,7 +55,7 @@ suite(
                     () =>
                     {
                         let documentFragment = new DocumentFragment(document);
-                        Assert.strictEqual(documentFragment.Document, document);
+                        strictEqual(documentFragment.Document, document);
                     });
             });
 
@@ -69,7 +69,7 @@ suite(
                     {
                         let documentFragment = new DocumentFragment(document);
                         documentFragment.Content = text;
-                        Assert.strictEqual(await documentFragment.Render(), verifier + text);
+                        strictEqual(await documentFragment.Render(), verifier + text);
                     });
             });
     });

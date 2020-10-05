@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { strictEqual } from "assert";
 import { PaperOrientation } from "../../../../System/Documents/PaperOrientation";
 import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
 import { StandardizedPaperFormat } from "../../../../System/Documents/StandardizedPaperFormat";
@@ -26,14 +26,14 @@ suite(
                     () =>
                     {
                         let paperFormat = new StandardizedPaperFormat();
-                        Assert.strictEqual(paperFormat.Format, StandardizedFormatType.A4);
-                        Assert.strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
+                        strictEqual(paperFormat.Format, StandardizedFormatType.A4);
+                        strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
                         paperFormat = new StandardizedPaperFormat(format);
-                        Assert.strictEqual(paperFormat.Format, format);
-                        Assert.strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
+                        strictEqual(paperFormat.Format, format);
+                        strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
                         paperFormat = new StandardizedPaperFormat(format, orientation);
-                        Assert.strictEqual(paperFormat.Format, format);
-                        Assert.strictEqual(paperFormat.Orientation, orientation);
+                        strictEqual(paperFormat.Format, format);
+                        strictEqual(paperFormat.Orientation, orientation);
                     });
             });
 
@@ -46,8 +46,8 @@ suite(
                     () =>
                     {
                         let paperFormat = new StandardizedPaperFormat(format, orientation);
-                        Assert.strictEqual(paperFormat.PDFOptions.format, "A3");
-                        Assert.strictEqual(paperFormat.PDFOptions.landscape, false);
+                        strictEqual(paperFormat.PDFOptions.format, "A3");
+                        strictEqual(paperFormat.PDFOptions.landscape, false);
                     });
             });
     });

@@ -1,6 +1,6 @@
-import Path = require("path");
+import { join, parse } from "path";
 import { Browser, launch } from "puppeteer-core";
-import Utf8 = require("utf8");
+import { encode } from "utf8";
 import { Converter } from "./Converter";
 
 /**
@@ -90,7 +90,7 @@ export class ConverterPlugin
             {
                 if (response.request.href === this.Converter.URL)
                 {
-                    return Utf8.encode(await this.Converter.Document.Render());
+                    return encode(await this.Converter.Document.Render());
                 }
                 else
                 {
@@ -125,7 +125,7 @@ export class ConverterPlugin
             }
             else
             {
-                result = Path.join(Path.parse(defaultFilename).name, filename);
+                result = join(parse(defaultFilename).name, filename);
             }
 
             occupiedFilenames.push(filename);

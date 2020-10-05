@@ -1,6 +1,6 @@
-import Assert = require("assert");
+import { notStrictEqual, ok, strictEqual } from "assert";
 import { CultureInfo } from "culture-info";
-import Dedent = require("dedent");
+import dedent = require("dedent");
 import fm = require("front-matter");
 import { Resources } from "../../../../Properties/Resources";
 import { Exception } from "../../../../System/Exception";
@@ -19,7 +19,7 @@ suite(
                 try
                 {
                     (fm as any)(
-                        Dedent(
+                        dedent(
                             `
                             ---
                             this: is: an: invalid: YAML: string
@@ -40,10 +40,10 @@ suite(
                     () =>
                     {
                         let exception = new YAMLException(yamlError);
-                        Assert.ok(exception.Name);
-                        Assert.ok(exception.Message);
-                        Assert.ok(exception.Mark);
-                        Assert.ok(exception.Reason);
+                        ok(exception.Name);
+                        ok(exception.Message);
+                        ok(exception.Mark);
+                        ok(exception.Reason);
                     });
             });
 
@@ -61,11 +61,11 @@ suite(
                         let message = "message";
                         let innerException = new Exception();
                         let exception = new YAMLException(name, reason, mark, message, innerException);
-                        Assert.strictEqual(exception.Name, name);
-                        Assert.strictEqual(exception.Message, message);
-                        Assert.strictEqual(exception.Mark, mark);
-                        Assert.strictEqual(exception.Reason, reason);
-                        Assert.strictEqual(exception.InnerException, innerException);
+                        strictEqual(exception.Name, name);
+                        strictEqual(exception.Message, message);
+                        strictEqual(exception.Mark, mark);
+                        strictEqual(exception.Reason, reason);
+                        strictEqual(exception.InnerException, innerException);
                     });
             });
 
@@ -98,7 +98,7 @@ suite(
                         germanMessage = exception.Message;
                         Resources.Culture = new CultureInfo("en");
                         englishMessage = exception.Message;
-                        Assert.notStrictEqual(germanMessage, englishMessage);
+                        notStrictEqual(germanMessage, englishMessage);
                     });
             });
     });

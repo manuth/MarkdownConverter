@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { notStrictEqual, ok, strictEqual } from "assert";
 import { CultureInfo } from "culture-info";
 import { Resources } from "../../../../Properties/Resources";
 import { FileException } from "../../../../System/IO/FileException";
@@ -16,16 +16,16 @@ suite(
                     () =>
                     {
                         let exception = new FileException("hello", "world");
-                        Assert.ok(!exception.InnerException);
-                        Assert.strictEqual(exception.Message, "hello");
-                        Assert.strictEqual(exception.Path, "world");
+                        ok(!exception.InnerException);
+                        strictEqual(exception.Message, "hello");
+                        strictEqual(exception.Path, "world");
                     });
 
                 test(
                     "Checking whether a default message is set…",
                     () =>
                     {
-                        Assert.ok(new FileException().Message);
+                        ok(new FileException().Message);
                     });
             });
 
@@ -59,7 +59,7 @@ suite(
                         germanMessage = exception.Message;
                         Resources.Culture = new CultureInfo("en");
                         englishMessage = exception.Message;
-                        Assert.notStrictEqual(germanMessage, englishMessage);
+                        notStrictEqual(germanMessage, englishMessage);
                     });
             });
     });

@@ -1,8 +1,8 @@
-import Assert = require("assert");
-import Dedent = require("dedent");
-import FileSystem = require("fs-extra");
+import { doesNotReject, ok, strictEqual } from "assert";
+import { normalize, resolve } from "path";
+import dedent = require("dedent");
+import { pathExists, writeFile } from "fs-extra";
 import { TempDirectory, TempFile } from "temp-filesystem";
-import Path = require("upath");
 import { commands, ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Constants } from "../../../../Constants";
 import { ConversionType } from "../../../../Conversion/ConversionType";
@@ -24,7 +24,7 @@ suite(
                     "Checking whether the extension can be initialized correctly…",
                     () =>
                     {
-                        extension = new Extension(Path.resolve(Constants.PackageDirectory));
+                        extension = new Extension(resolve(Constants.PackageDirectory));
                     });
             });
 
@@ -36,7 +36,7 @@ suite(
                     "Checking whether the author is resolved correctly…",
                     () =>
                     {
-                        Assert.strictEqual(extension.Author, "manuth");
+                        strictEqual(extension.Author, "manuth");
                     });
             });
 
@@ -48,7 +48,7 @@ suite(
                     "Checking whether the extension-name is resolved correctly…",
                     () =>
                     {
-                        Assert.strictEqual(extension.Name, "markdown-converter");
+                        strictEqual(extension.Name, "markdown-converter");
                     });
             });
 
@@ -60,7 +60,7 @@ suite(
                     "Checking whether the full extension-name is resolved correctly…",
                     () =>
                     {
-                        Assert.strictEqual(extension.FullName, "manuth.markdown-converter");
+                        strictEqual(extension.FullName, "manuth.markdown-converter");
                     });
             });
 
@@ -96,16 +96,16 @@ suite(
                         destinationDirectory = new TempDirectory();
                         pdfFile = destinationDirectory.MakePath("test.pdf");
 
-                        await FileSystem.writeFile(
+                        await writeFile(
                             mdFile.FullName,
-                            Dedent(
+                            dedent(
                                 `
                                 # Hello World`));
 
                         await window.showTextDocument(Uri.file(mdFile.FullName));
                         await configRestorer.Clear();
                         await config.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
-                        await config.update("DestinationPattern", Path.normalizeSafe(pdfFile), ConfigurationTarget.Global);
+                        await config.update("DestinationPattern", normalize(pdfFile), ConfigurationTarget.Global);
                         await config.update("IgnoreLanguageMode", true, ConfigurationTarget.Global);
                     });
 
@@ -125,12 +125,14 @@ suite(
                     {
                         this.slow(11.5 * 1000);
                         this.timeout(46 * 1000);
-                        await Assert.doesNotReject(
+
+                        await doesNotReject(
                             async () =>
                             {
                                 await commands.executeCommand("markdownConverter.Convert");
                             });
-                        Assert(await FileSystem.pathExists(pdfFile));
+
+                        ok(await pathExists(pdfFile));
                     });
             });
     });

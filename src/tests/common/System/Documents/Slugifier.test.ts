@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { doesNotThrow, strictEqual } from "assert";
 import { Slugifier } from "../../../../System/Documents/Slugifier";
 
 suite(
@@ -24,7 +24,7 @@ suite(
                     "Checking whether a slugifier can be initialized…",
                     () =>
                     {
-                        Assert.doesNotThrow(
+                        doesNotThrow(
                             () =>
                             {
                                 slugifier = new Slugifier();
@@ -40,14 +40,14 @@ suite(
                     "Checking whether slugs are created correctly…",
                     () =>
                     {
-                        Assert.strictEqual(slugifier.CreateSlug(slug), expected);
+                        strictEqual(slugifier.CreateSlug(slug), expected);
                     });
 
                 test(
                     "Checking whether numbers are appended to duplicate slugs…",
                     () =>
                     {
-                        Assert.strictEqual(slugifier.CreateSlug(slug), `${expected}-2`);
+                        strictEqual(slugifier.CreateSlug(slug), `${expected}-2`);
                     });
             });
 
@@ -60,7 +60,7 @@ suite(
                     () =>
                     {
                         slugifier.Reset();
-                        Assert.strictEqual(slugifier.CreateSlug(slug), expected);
+                        strictEqual(slugifier.CreateSlug(slug), expected);
                     });
             });
     });

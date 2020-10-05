@@ -1,4 +1,4 @@
-import Format = require("string-template");
+import format = require("string-template");
 import { CancellationToken, extensions, Progress, TextDocument, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
@@ -92,7 +92,7 @@ export class ConvertAllTask extends ConversionTask
 
         progressReporter.report(
             {
-                message: Format(Resources.Resources.Get("Progress.DocumentsFound"), totalCount)
+                message: format(Resources.Resources.Get("Progress.DocumentsFound"), totalCount)
             });
 
         for (let i = 0; i < documents.length && !cancellationToken.isCancellationRequested; i++)
@@ -102,7 +102,7 @@ export class ConvertAllTask extends ConversionTask
             let newProgress = ((i + 1) / totalCount) * 100;
 
             progressState = {
-                message: Format(Resources.Resources.Get("Progress.CollectionStep"), i + 1, totalCount)
+                message: format(Resources.Resources.Get("Progress.CollectionStep"), i + 1, totalCount)
             };
 
             if (newProgress > progress)

@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { deepStrictEqual, ok, strictEqual } from "assert";
 import { env } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { Settings } from "../../../Properties/Settings";
@@ -58,7 +58,7 @@ suite(
                     "Checking whether the default conversion-type is set correctly…",
                     () =>
                     {
-                        Assert.deepStrictEqual(settings.ConversionType, [ConversionType.PDF]);
+                        deepStrictEqual(settings.ConversionType, [ConversionType.PDF]);
                     });
 
                 test(
@@ -66,7 +66,7 @@ suite(
                     () =>
                     {
                         settings.Resource.Resource["ConversionType"] = ["HTML"] as Array<keyof typeof ConversionType>;
-                        Assert.strictEqual(settings.ConversionType[0], ConversionType.HTML);
+                        strictEqual(settings.ConversionType[0], ConversionType.HTML);
                     });
             });
 
@@ -79,14 +79,14 @@ suite(
                     () =>
                     {
                         settings.Resource.Resource["Locale"] = "de";
-                        Assert.strictEqual(settings.Locale, "de");
+                        strictEqual(settings.Locale, "de");
                     });
 
                 test(
                     "Checking whether the locale defaults to the locale of vscode…",
                     () =>
                     {
-                        Assert.strictEqual(settings.Locale, env.language);
+                        strictEqual(settings.Locale, env.language);
                     });
             });
 
@@ -99,7 +99,7 @@ suite(
                     () =>
                     {
                         settings.Resource.Resource["Parser.EmojiType"] = "Native" as keyof typeof EmojiType;
-                        Assert.strictEqual(settings.EmojiType, EmojiType.Native);
+                        strictEqual(settings.EmojiType, EmojiType.Native);
                     });
             });
 
@@ -127,10 +127,10 @@ suite(
 
                         checkMargin = (margin: Margin) =>
                         {
-                            Assert.strictEqual(margin.Top, newMargin.Top);
-                            Assert.strictEqual(margin.Left, newMargin.Left);
-                            Assert.strictEqual(margin.Bottom, newMargin.Bottom);
-                            Assert.strictEqual(margin.Right, newMargin.Right);
+                            strictEqual(margin.Top, newMargin.Top);
+                            strictEqual(margin.Left, newMargin.Left);
+                            strictEqual(margin.Bottom, newMargin.Bottom);
+                            strictEqual(margin.Right, newMargin.Right);
                         };
                     });
 
@@ -150,9 +150,9 @@ suite(
                             });
 
                         let paperFormat = settings.PaperFormat.Format as CustomPaperFormat;
-                        Assert.ok(settings.PaperFormat.Format instanceof CustomPaperFormat);
-                        Assert.strictEqual(paperFormat.Width, customFormat.Width);
-                        Assert.strictEqual(paperFormat.Height, customFormat.Height);
+                        ok(settings.PaperFormat.Format instanceof CustomPaperFormat);
+                        strictEqual(paperFormat.Width, customFormat.Width);
+                        strictEqual(paperFormat.Height, customFormat.Height);
                         checkMargin(settings.PaperFormat.Margin);
                     });
 
@@ -168,9 +168,9 @@ suite(
                             });
 
                         let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
-                        Assert.ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
-                        Assert.strictEqual(paperFormat.Format, StandardizedFormatType.A5);
-                        Assert.strictEqual(paperFormat.Orientation, PaperOrientation.Landscape);
+                        ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
+                        strictEqual(paperFormat.Format, StandardizedFormatType.A5);
+                        strictEqual(paperFormat.Orientation, PaperOrientation.Landscape);
                         checkMargin(settings.PaperFormat.Margin);
                     });
 
@@ -179,9 +179,9 @@ suite(
                     () =>
                     {
                         let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
-                        Assert.ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
-                        Assert.strictEqual(paperFormat.Format, StandardizedFormatType.A4);
-                        Assert.strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
+                        ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
+                        strictEqual(paperFormat.Format, StandardizedFormatType.A4);
+                        strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
                         checkMargin(settings.PaperFormat.Margin);
                     });
             });
@@ -195,7 +195,7 @@ suite(
                     () =>
                     {
                         settings.Resource.Resource["Parser.Toc.Enabled"] = false;
-                        Assert.strictEqual(settings.TocSettings, null);
+                        strictEqual(settings.TocSettings, null);
                     });
 
                 test(
@@ -204,9 +204,9 @@ suite(
                     {
                         settings.Resource.Resource["Parser.Toc.Enabled"] = true;
                         settings.Resource.Resource["Parser.Toc.ListType"] = "ul";
-                        Assert.strictEqual(settings.TocSettings.ListType, ListType.Unordered);
+                        strictEqual(settings.TocSettings.ListType, ListType.Unordered);
                         settings.Resource.Resource["Parser.Toc.ListType"] = "ol";
-                        Assert.strictEqual(settings.TocSettings.ListType, ListType.Ordered);
+                        strictEqual(settings.TocSettings.ListType, ListType.Ordered);
                     });
             });
     });

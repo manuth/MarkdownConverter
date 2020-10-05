@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { ok, strictEqual } from "assert";
 import { Exception } from "../../../System/Exception";
 
 suite(
@@ -23,14 +23,14 @@ suite(
                     () =>
                     {
                         exception = new Exception();
-                        Assert.ok(!exception.Message);
-                        Assert.ok(!exception.InnerException);
+                        ok(!exception.Message);
+                        ok(!exception.InnerException);
                         exception = new Exception("hello");
-                        Assert.strictEqual(exception.Message, "hello");
-                        Assert.ok(!exception.InnerException);
+                        strictEqual(exception.Message, "hello");
+                        ok(!exception.InnerException);
                         exception = new Exception("hello", innerException);
-                        Assert.strictEqual(exception.Message, "hello");
-                        Assert.strictEqual(exception.InnerException, innerException);
+                        strictEqual(exception.Message, "hello");
+                        strictEqual(exception.InnerException, innerException);
                     });
             });
     });

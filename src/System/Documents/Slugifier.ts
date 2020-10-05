@@ -1,4 +1,4 @@
-import Transliteration = require("transliteration");
+import { slugify } from "transliteration";
 
 /**
  * Provides the functionality to generate slugs.
@@ -77,7 +77,7 @@ export class Slugifier
      */
     protected Slugify(text: string): string
     {
-        return Transliteration.slugify(
+        return slugify(
             text,
             {
                 lowercase: true,

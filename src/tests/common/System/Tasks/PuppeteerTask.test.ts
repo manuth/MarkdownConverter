@@ -1,9 +1,8 @@
-import Assert = require("assert");
-import { dirname } from "path";
-import Path = require("path");
-import FileSystem = require("fs-extra");
+import { rejects } from "assert";
+import { basename, dirname, join, resolve } from "path";
+import { pathExists, rename } from "fs-extra";
 import pkgUp = require("pkg-up");
-import Puppeteer = require("puppeteer-core");
+import { executablePath } from "puppeteer-core";
 import { extension } from "../../../../extension";
 import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask";
 
@@ -38,13 +37,13 @@ suite(
         suiteSetup(
             async () =>
             {
-                let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: Puppeteer.executablePath() }));
-                puppeteerPath = Path.resolve(puppeteerProjectRoot, ".local-chromium");
-                tempPuppeteerPath = Path.join(Path.dirname(puppeteerPath), Path.basename(puppeteerPath) + "_");
+                let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: executablePath() }));
+                puppeteerPath = resolve(puppeteerProjectRoot, ".local-chromium");
+                tempPuppeteerPath = join(dirname(puppeteerPath), basename(puppeteerPath) + "_");
 
-                if (await FileSystem.pathExists(Puppeteer.executablePath()))
+                if (await pathExists(executablePath()))
                 {
-                    await FileSystem.rename(puppeteerPath, tempPuppeteerPath);
+                    await rename(puppeteerPath, tempPuppeteerPath);
                     moved = true;
                 }
             });
@@ -54,7 +53,7 @@ suite(
             {
                 if (moved)
                 {
-                    await FileSystem.rename(tempPuppeteerPath, puppeteerPath);
+                    await rename(tempPuppeteerPath, puppeteerPath);
                 }
             });
 
@@ -66,7 +65,7 @@ suite(
                     "Checking whether executing the task without puppeteer installed throws an exception…",
                     async () =>
                     {
-                        await Assert.rejects(new PuppeteerTaskTest(extension).Execute());
+                        await rejects(new PuppeteerTaskTest(extension).Execute());
                     });
             });
     });

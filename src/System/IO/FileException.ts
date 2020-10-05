@@ -1,4 +1,4 @@
-import Format = require("string-template");
+import format = require("string-template");
 import { Resources } from "../../Properties/Resources";
 import { Exception } from "../Exception";
 import { IOException } from "./IOException";
@@ -36,6 +36,6 @@ export class FileException extends IOException
      */
     public get Message(): string
     {
-        return super.Message || Format(Resources.Resources.Get("FileException"), this.Path);
+        return super.Message || format(Resources.Resources.Get("FileException"), this.Path);
     }
 }

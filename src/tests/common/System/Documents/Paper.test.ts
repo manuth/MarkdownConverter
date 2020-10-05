@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { deepStrictEqual, ok, strictEqual } from "assert";
 import { Margin } from "../../../../System/Documents/Margin";
 import { Paper } from "../../../../System/Documents/Paper";
 import { PaperOrientation } from "../../../../System/Documents/PaperOrientation";
@@ -20,24 +20,24 @@ suite(
                         let defaultPaper = new Paper();
                         let margin = new Margin("10cm");
                         let paperFormat = new StandardizedPaperFormat(StandardizedFormatType.A5);
-                        Assert.strictEqual(defaultPaper.Margin.Top, "1cm");
-                        Assert.strictEqual(defaultPaper.Margin.Right, defaultPaper.Margin.Top);
-                        Assert.strictEqual(defaultPaper.Margin.Bottom, defaultPaper.Margin.Right);
-                        Assert.strictEqual(defaultPaper.Margin.Left, defaultPaper.Margin.Bottom);
-                        Assert.ok(defaultPaper.Format instanceof StandardizedPaperFormat);
+                        strictEqual(defaultPaper.Margin.Top, "1cm");
+                        strictEqual(defaultPaper.Margin.Right, defaultPaper.Margin.Top);
+                        strictEqual(defaultPaper.Margin.Bottom, defaultPaper.Margin.Right);
+                        strictEqual(defaultPaper.Margin.Left, defaultPaper.Margin.Bottom);
+                        ok(defaultPaper.Format instanceof StandardizedPaperFormat);
 
                         if (defaultPaper.Format instanceof StandardizedPaperFormat)
                         {
-                            Assert.strictEqual(defaultPaper.Format.Format, StandardizedFormatType.A4);
-                            Assert.strictEqual(defaultPaper.Format.Orientation, PaperOrientation.Portrait);
+                            strictEqual(defaultPaper.Format.Format, StandardizedFormatType.A4);
+                            strictEqual(defaultPaper.Format.Orientation, PaperOrientation.Portrait);
                         }
 
                         let marginPaper = new Paper(null, margin);
-                        Assert.deepStrictEqual(marginPaper.Format, defaultPaper.Format);
-                        Assert.strictEqual(marginPaper.Margin, margin);
+                        deepStrictEqual(marginPaper.Format, defaultPaper.Format);
+                        strictEqual(marginPaper.Margin, margin);
 
                         let formatPaper = new Paper(paperFormat);
-                        Assert.deepStrictEqual(formatPaper.Margin, defaultPaper.Margin);
+                        deepStrictEqual(formatPaper.Margin, defaultPaper.Margin);
                     });
             });
     });

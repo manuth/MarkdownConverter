@@ -1,8 +1,8 @@
 import { EOL } from "os";
-import Path = require("path");
+import { join, parse } from "path";
 import fm = require("front-matter");
-import FileSystem = require("fs-extra");
-import Format = require("string-template");
+import { renameSync } from "fs-extra";
+import format = require("string-template");
 import { CancellationToken, Progress, TextDocument, window, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
@@ -70,7 +70,7 @@ export class ChainTask extends ConvertAllTask
 
         progressReporter.report(
             {
-                message: Format(Resources.Resources.Get("Progress.DocumentsFound"), documents.length)
+                message: format(Resources.Resources.Get("Progress.DocumentsFound"), documents.length)
             });
 
         while (!documentName)
@@ -108,9 +108,9 @@ export class ChainTask extends ConvertAllTask
             {
                 report(file)
                 {
-                    let parsedPath = Path.parse(file.FileName);
-                    let newFileName = Path.join(parsedPath.dir, `${documentName}${parsedPath.ext}`);
-                    FileSystem.renameSync(file.FileName, newFileName);
+                    let parsedPath = parse(file.FileName);
+                    let newFileName = join(parsedPath.dir, `${documentName}${parsedPath.ext}`);
+                    renameSync(file.FileName, newFileName);
                     file.FileName = newFileName;
                     fileReporter.report(file);
                 }

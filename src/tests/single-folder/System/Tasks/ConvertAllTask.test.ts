@@ -1,7 +1,7 @@
-import Assert = require("assert");
-import FileSystem = require("fs-extra");
+import { ok, rejects, strictEqual } from "assert";
+import { pathExists } from "fs-extra";
 import { TempDirectory } from "temp-filesystem";
-import Path = require("upath");
+import { join } from "upath";
 import { commands, ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { extension } from "../../../../extension";
@@ -76,11 +76,11 @@ suite(
                     {
                         this.slow(16.5 * 1000);
                         this.timeout(1.1 * 60 * 1000);
-                        await markdownConfig.update("DestinationPattern", Path.joinSafe(tempDir.FullName, "${basename}.${extension}"), ConfigurationTarget.Global);
+                        await markdownConfig.update("DestinationPattern", join(tempDir.FullName, "${basename}.${extension}"), ConfigurationTarget.Global);
                         await markdownConfig.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
                         await commands.executeCommand("markdownConverter.ConvertAll");
-                        Assert(await FileSystem.pathExists(tempDir.MakePath("Test1.pdf")));
-                        Assert(await FileSystem.pathExists(tempDir.MakePath("Test2.pdf")));
+                        ok(await pathExists(tempDir.MakePath("Test1.pdf")));
+                        ok(await pathExists(tempDir.MakePath("Test2.pdf")));
                     });
 
                 test(
@@ -90,7 +90,7 @@ suite(
                         this.slow(1.2 * 1000);
                         this.timeout(4.8 * 1000);
                         await config.update("files.exclude", { "**/*.md": true }, ConfigurationTarget.Global);
-                        await Assert.rejects(() => task.Execute(), MarkdownFileNotFoundException);
+                        await rejects(() => task.Execute(), MarkdownFileNotFoundException);
                     });
             });
 
@@ -104,7 +104,7 @@ suite(
                     {
                         this.slow(1.2 * 1000);
                         this.timeout(4.8 * 1000);
-                        Assert.strictEqual((await task["GetDocuments"]()).length, 2);
+                        strictEqual((await task["GetDocuments"]()).length, 2);
                     });
             });
     });

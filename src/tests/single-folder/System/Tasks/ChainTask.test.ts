@@ -1,5 +1,5 @@
-import Assert = require("assert");
-import Cheerio = require("cheerio");
+import { doesNotReject, strictEqual } from "assert";
+import { load } from "cheerio";
 import MarkdownIt = require("markdown-it");
 import anchor = require("markdown-it-anchor");
 import { TextDocument, window } from "vscode";
@@ -81,7 +81,7 @@ suite(
                     {
                         this.slow(2.5 * 1000);
                         this.timeout(10 * 1000);
-                        await Assert.doesNotReject(() => RenameTester());
+                        await doesNotReject(() => RenameTester());
                     });
 
                 test(
@@ -91,15 +91,15 @@ suite(
                         this.slow(2 * 1000);
                         this.timeout(8 * 1000);
                         let document: TextDocument;
-                        await Assert.doesNotReject(
+                        await doesNotReject(
                             async () =>
                             {
                                 document = await TestRunner();
                             });
 
-                        let result = Cheerio.load(new MarkdownIt().use(anchor).render(document.getText()));
-                        Assert.strictEqual(result("#test-1").length, 1);
-                        Assert.strictEqual(result("#test-2").length, 1);
+                        let result = load(new MarkdownIt().use(anchor).render(document.getText()));
+                        strictEqual(result("#test-1").length, 1);
+                        strictEqual(result("#test-2").length, 1);
                     });
             });
     });

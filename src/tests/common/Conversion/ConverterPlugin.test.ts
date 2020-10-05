@@ -1,11 +1,11 @@
-import Assert = require("assert");
-import Path = require("path");
-import Dedent = require("dedent");
-import FileSystem = require("fs-extra");
+import { doesNotReject, doesNotThrow, ok } from "assert";
+import { basename, parse } from "path";
+import dedent = require("dedent");
+import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import { TempDirectory } from "temp-filesystem";
 import { workspace } from "vscode";
-import Scrape = require("website-scraper");
+import websiteScraper = require("website-scraper");
 import { Converter } from "../../../Conversion/Converter";
 import { ConverterPlugin } from "../../../Conversion/ConverterPlugin";
 import { Document } from "../../../System/Documents/Document";
@@ -27,6 +27,7 @@ suite(
             {
                 this.slow(0.85 * 1000);
                 this.timeout(3.4 * 1000);
+
                 let parser = new MarkdownIt(
                     {
                         html: true
@@ -35,22 +36,23 @@ suite(
                 parser.validateLink = () => true;
                 tempDirectory = new TempDirectory();
                 destinationDirectory = new TempDirectory();
-                await FileSystem.remove(destinationDirectory.FullName);
+                await remove(destinationDirectory.FullName);
                 cssFile = tempDirectory.MakePath("styles.css");
                 mdFile = tempDirectory.MakePath("Test.md");
-                await FileSystem.writeFile(
+
+                await writeFile(
                     cssFile,
-                    Dedent(
+                    dedent(
                         `
                         :root {
                             color: red !important;
                         }`));
 
-                await FileSystem.writeFile(
+                await writeFile(
                     mdFile,
-                    Dedent(
+                    dedent(
                         `
-                        <link rel="stylesheet" type="text/css" href="./${Path.basename(cssFile)}">
+                        <link rel="stylesheet" type="text/css" href="./${basename(cssFile)}">
                         <b>test</b>
 
                         # Hello World`));
@@ -82,7 +84,7 @@ suite(
                     "Checking whether the plugin can be initialized…",
                     () =>
                     {
-                        Assert.doesNotThrow(
+                        doesNotThrow(
                             () =>
                             {
                                 plugin = new ConverterPlugin(converter, websiteName);
@@ -101,10 +103,10 @@ suite(
                         this.slow(1 * 1000);
                         this.timeout(4 * 1000);
 
-                        await Assert.doesNotReject(
+                        await doesNotReject(
                             async () =>
                             {
-                                await Scrape(
+                                await websiteScraper(
                                     {
                                         urls: [converter.URL],
                                         directory: destinationDirectory.FullName,
@@ -119,8 +121,8 @@ suite(
                     "Checking whether the expected files have been generated…",
                     async () =>
                     {
-                        Assert(await FileSystem.pathExists(destinationDirectory.MakePath(websiteName)));
-                        Assert(await FileSystem.pathExists(destinationDirectory.MakePath(Path.parse(websiteName).name, "css", Path.basename(cssFile))));
+                        ok(await pathExists(destinationDirectory.MakePath(websiteName)));
+                        ok(await pathExists(destinationDirectory.MakePath(parse(websiteName).name, "css", basename(cssFile))));
                     });
             });
     });

@@ -1,10 +1,10 @@
-import Path = require("path");
+import { resolve } from "path";
 import { promisify } from "util";
-import FileSystem = require("fs-extra");
-import Glob = require("glob");
+import { pathExists } from "fs-extra";
+import { glob } from "glob";
 import minimist = require("minimist");
 import Mocha = require("mocha");
-import Puppeteer = require("puppeteer-core");
+import { createBrowserFetcher, executablePath } from "puppeteer-core";
 import { extension } from "../extension";
 
 /**
@@ -37,21 +37,21 @@ export async function run(): Promise<void>
         });
 
     return new Promise(
-        async (resolve, reject) =>
+        async (solve, reject) =>
         {
-            let testDirectory = Path.resolve(__dirname, "..", "..", "lib", "test");
-            let files = await promisify(Glob)(`**/${args["suite"]}.test.js`, { cwd: testDirectory });
+            let testDirectory = resolve(__dirname, "..", "..", "lib", "test");
+            let files = await promisify(glob)(`**/${args["suite"]}.test.js`, { cwd: testDirectory });
 
             for (let file of files)
             {
-                mocha.addFile(Path.resolve(testDirectory, file));
+                mocha.addFile(resolve(testDirectory, file));
             }
 
             try
             {
-                if (!await FileSystem.pathExists(Puppeteer.executablePath()))
+                if (!await pathExists(executablePath()))
                 {
-                    await Puppeteer.createBrowserFetcher().download(extension.ChromiumRevision);
+                    await createBrowserFetcher().download(extension.ChromiumRevision);
                 }
 
                 mocha.run(
@@ -63,7 +63,7 @@ export async function run(): Promise<void>
                         }
                         else
                         {
-                            resolve();
+                            solve();
                         }
                     });
             }

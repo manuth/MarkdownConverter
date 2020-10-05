@@ -4,8 +4,5 @@
     "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
     "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
     "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
-    "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
-    "markdownConverter.ConversionType": [
-        "HTML"
-    ]
+    "typescript.format.placeOpenBraceOnNewLineForFunctions": true
 }

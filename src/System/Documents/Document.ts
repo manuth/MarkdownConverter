@@ -1,12 +1,12 @@
-import Path = require("path");
-import Dedent = require("dedent");
+import { isAbsolute } from "path";
+import dedent = require("dedent");
 import fm = require("front-matter");
-import FileSystem = require("fs-extra");
+import { pathExists, readFile, statSync } from "fs-extra";
 import { CultureInfo } from "localized-resource-manager";
 import MarkdownIt = require("markdown-it");
-import Mustache = require("mustache");
+import { render } from "mustache";
 import { TextDocument } from "vscode";
-import YAML = require("yamljs");
+import { stringify } from "yamljs";
 import { Resources } from "../../Properties/Resources";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { FileException } from "../IO/FileException";
@@ -68,7 +68,7 @@ export class Document extends Renderable
     /**
      * The template to use for the RenderBody-process.
      */
-    private template: string = Dedent(`
+    private template: string = dedent(`
         <!DOCTYPE html>
         <html>
             <head>
@@ -115,7 +115,7 @@ export class Document extends Renderable
         if (!document.isUntitled)
         {
             this.fileName = document.fileName;
-            this.Attributes.CreationDate = FileSystem.statSync(document.fileName).ctime;
+            this.Attributes.CreationDate = statSync(document.fileName).ctime;
         }
         else
         {
@@ -141,7 +141,7 @@ export class Document extends Renderable
     {
         return (
             "---\n" +
-            YAML.stringify(this.Attributes).trim() + "\n" +
+            stringify(this.Attributes).trim() + "\n" +
             "---\n" +
             this.Content);
     }
@@ -336,13 +336,13 @@ export class Document extends Renderable
 
         for (let styleSheet of this.StyleSheets)
         {
-            if (/.*:\/\//g.test(styleSheet) || !Path.isAbsolute(styleSheet))
+            if (/.*:\/\//g.test(styleSheet) || !isAbsolute(styleSheet))
             {
-                styleCode += Dedent(`<link rel="stylesheet" type="text/css" href="${styleSheet}" />\n`);
+                styleCode += dedent(`<link rel="stylesheet" type="text/css" href="${styleSheet}" />\n`);
             }
-            else if (await FileSystem.pathExists(styleSheet))
+            else if (await pathExists(styleSheet))
             {
-                styleCode += "<style>" + (await FileSystem.readFile(styleSheet)).toString() + "</style>\n";
+                styleCode += "<style>" + (await readFile(styleSheet)).toString() + "</style>\n";
             }
             else
             {
@@ -352,13 +352,13 @@ export class Document extends Renderable
 
         for (let script of this.Scripts)
         {
-            if (/.*:\/\//g.test(script) || !Path.isAbsolute(script))
+            if (/.*:\/\//g.test(script) || !isAbsolute(script))
             {
-                scriptCode += Dedent(`<script async="" src="${script}"charset="UTF-8"></script>\n`);
+                scriptCode += dedent(`<script async="" src="${script}"charset="UTF-8"></script>\n`);
             }
-            else if (await FileSystem.pathExists(script))
+            else if (await pathExists(script))
             {
-                scriptCode += "<script>" + (await FileSystem.readFile(script)).toString() + "</script>\n";
+                scriptCode += "<script>" + (await readFile(script)).toString() + "</script>\n";
             }
             else
             {
@@ -374,7 +374,7 @@ export class Document extends Renderable
             content: await this.RenderText(content)
         };
 
-        return Mustache.render(this.Template, view);
+        return render(this.Template, view);
     }
 
     /**
@@ -403,6 +403,6 @@ export class Document extends Renderable
         }
 
         let html = this.parser.render(content);
-        return Mustache.render(html, view);
+        return render(html, view);
     }
 }

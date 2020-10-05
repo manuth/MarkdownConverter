@@ -1,5 +1,5 @@
 import { MultiRange } from "multi-integer-range";
-import VSCode = require("vscode");
+import { env, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType";
 import { CustomPaperFormat } from "../System/Documents/CustomPaperFormat";
 import { EmojiType } from "../System/Documents/EmojiType";
@@ -79,7 +79,7 @@ export class Settings
      */
     public get Locale(): string
     {
-        return this.GetConfigEntry("Locale") || VSCode.env.language;
+        return this.GetConfigEntry("Locale") || env.language;
     }
 
     /**
@@ -224,9 +224,9 @@ export class Settings
     /**
      * Gets the configuration.
      */
-    private get config(): VSCode.WorkspaceConfiguration
+    private get config(): WorkspaceConfiguration
     {
-        return VSCode.workspace.getConfiguration(Settings.configKey);
+        return workspace.getConfiguration(Settings.configKey);
     }
 
     /**
@@ -247,7 +247,7 @@ export class Settings
         {
             return this.config.get<T>(key);
         }
-        else if (arguments.length > 1)
+        else if (defaultValue !== undefined)
         {
             return defaultValue;
         }

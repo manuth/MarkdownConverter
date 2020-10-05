@@ -15,6 +15,7 @@ suite(
                 this.slow(2 * 1000);
                 this.timeout(8 * 1000);
                 config = workspace.getConfiguration(Settings["configKey"]);
+
                 configRestorer = new ConfigRestorer(
                     [
                         "Parser.SystemParserEnabled"

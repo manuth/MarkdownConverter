@@ -1,11 +1,11 @@
-import Assert = require("assert");
+import { ok, strictEqual, throws } from "assert";
 import { CultureInfo } from "culture-info";
 import fm = require("front-matter");
-import FileSystem = require("fs-extra");
+import { stat, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import { TempFile } from "temp-filesystem";
 import { TextDocument, workspace } from "vscode";
-import YAML = require("yamljs");
+import { stringify } from "yamljs";
 import { Document } from "../../../../System/Documents/Document";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
@@ -26,19 +26,20 @@ suite(
             async () =>
             {
                 content = "This is a test.";
+
                 attributes = {
                     hello: "world",
                     date: new Date("1291-08-01")
                 };
 
-                rawContent = `---\n${YAML.stringify(attributes).trim()}\n---\n${content}`;
+                rawContent = `---\n${stringify(attributes).trim()}\n---\n${content}`;
 
                 tempFile = new TempFile(
                     {
                         postfix: ".md"
                     });
 
-                await FileSystem.writeFile(tempFile.FullName, rawContent);
+                await writeFile(tempFile.FullName, rawContent);
                 textDocument = await workspace.openTextDocument(tempFile.FullName);
 
                 untitledTextDocument = await workspace.openTextDocument(
@@ -69,15 +70,15 @@ suite(
 
                         for (let key of Object.keys(attributes))
                         {
-                            Assert.strictEqual(JSON.stringify(document.Attributes[key]), JSON.stringify(attributes[key]));
+                            strictEqual(JSON.stringify(document.Attributes[key]), JSON.stringify(attributes[key]));
                         }
 
                         document.Content = content;
-                        Assert.strictEqual(document.FileName, textDocument.fileName);
-                        Assert.strictEqual(document.Attributes["CreationDate"].getTime(), (await FileSystem.stat(tempFile.FullName)).ctime.getTime());
+                        strictEqual(document.FileName, textDocument.fileName);
+                        strictEqual((document.Attributes["CreationDate"] as Date).getTime(), (await stat(tempFile.FullName)).ctime.getTime());
 
                         document = new Document(untitledTextDocument, parser);
-                        Assert.ok(!document.FileName);
+                        ok(!document.FileName);
                     });
             });
 
@@ -108,11 +109,11 @@ suite(
                             () =>
                             {
                                 let frontMatter = (fm as any)(testDocument.RawContent) as fm.FrontMatterResult<any>;
-                                Assert.strictEqual(frontMatter.body, content);
+                                strictEqual(frontMatter.body, content);
 
                                 for (let key of Object.keys(attributes))
                                 {
-                                    Assert.strictEqual(JSON.stringify(frontMatter.attributes[key]), JSON.stringify(attributes[key]));
+                                    strictEqual(JSON.stringify(frontMatter.attributes[key]), JSON.stringify(attributes[key]));
                                 }
                             });
                     });
@@ -125,12 +126,12 @@ suite(
                             "Checking whether the raw content is processed correctly…",
                             () =>
                             {
-                                testDocument.RawContent = `---\n${YAML.stringify(attributes)}---\n${content}`;
-                                Assert.strictEqual(testDocument.Content, content);
+                                testDocument.RawContent = `---\n${stringify(attributes)}---\n${content}`;
+                                strictEqual(testDocument.Content, content);
 
                                 for (let key of Object.keys(attributes))
                                 {
-                                    Assert.strictEqual(JSON.stringify(testDocument.Attributes[key]), JSON.stringify(attributes[key]));
+                                    strictEqual(JSON.stringify(testDocument.Attributes[key]), JSON.stringify(attributes[key]));
                                 }
                             });
 
@@ -138,7 +139,7 @@ suite(
                             "Checking whether setting malformed YAML causes an error…",
                             () =>
                             {
-                                Assert.throws(
+                                throws(
                                     () =>
                                     {
                                         testDocument.RawContent = "---\nThis: is: incorrect: YAML\n---\n";
@@ -172,7 +173,7 @@ suite(
                     async () =>
                     {
                         testDocument.StyleSheets.push(styleSheet);
-                        Assert.strictEqual(
+                        strictEqual(
                             new RegExp(
                                 `<link.*?type="text/css".*?href="${styleSheet}".*?/>`,
                                 "g").test(await testDocument.Render()),
@@ -184,7 +185,7 @@ suite(
                     async () =>
                     {
                         testDocument.Scripts.push(script);
-                        Assert.strictEqual(
+                        strictEqual(
                             new RegExp(
                                 `<script.*?src="${script}".*?>.*?</script>`,
                                 "g").test(await testDocument.Render()),
@@ -196,7 +197,7 @@ suite(
                     async () =>
                     {
                         testDocument.Template = "hello{{content}}world";
-                        Assert.strictEqual(
+                        strictEqual(
                             /^hello[\s\S]*world$/gm.test(await testDocument.Render()), true);
                     });
             });
@@ -273,7 +274,7 @@ suite(
                                 englishContent = await testDocument.Render();
                                 testDocument.Locale = new CultureInfo("de");
                                 germanContent = await testDocument.Render();
-                                Assert.ok(englishContent !== germanContent);
+                                ok(englishContent !== germanContent);
                             });
 
                         test(
@@ -281,7 +282,7 @@ suite(
                             async () =>
                             {
                                 testDocument.Content = "**important**";
-                                Assert.ok((await testDocument.Render()).includes(parser.renderInline(testDocument.Content)));
+                                ok((await testDocument.Render()).includes(parser.renderInline(testDocument.Content)));
                             });
                     });
             });

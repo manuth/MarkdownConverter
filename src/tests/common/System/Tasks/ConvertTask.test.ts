@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { doesNotThrow, throws } from "assert";
 import { TempFile } from "temp-filesystem";
 import { ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { extension } from "../../../../extension";
@@ -24,6 +24,7 @@ suite(
                     async () =>
                     {
                         config = workspace.getConfiguration(Settings["configKey"]);
+
                         configRestorer = new ConfigRestorer(
                             [
                                 "IgnoreLanguageMode"
@@ -57,7 +58,7 @@ suite(
                     "Checking whether an exception is thrown if no markdown-file is opened…",
                     () =>
                     {
-                        Assert.throws(task["GetMarkdownDocument"], MarkdownFileNotFoundException);
+                        throws(task["GetMarkdownDocument"], MarkdownFileNotFoundException);
                     });
 
                 test(
@@ -66,7 +67,7 @@ suite(
                     {
                         this.slow(80);
                         await config.update("IgnoreLanguageMode", true, ConfigurationTarget.Global);
-                        Assert.doesNotThrow(() => task["GetMarkdownDocument"]());
+                        doesNotThrow(() => task["GetMarkdownDocument"]());
                     });
             });
     });

@@ -1,5 +1,5 @@
-import Assert = require("assert");
-import Path = require("path");
+import { ok, strictEqual } from "assert";
+import { dirname } from "path";
 import { TempFile } from "temp-filesystem";
 import { ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Settings } from "../../../../Properties/Settings";
@@ -58,7 +58,7 @@ suite(
                                 this.slow(1 * 1000);
                                 this.timeout(4 * 1000);
                                 await config.update("DestinationPattern", "${workspaceFolder}", ConfigurationTarget.Global);
-                                Assert.strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(Path.dirname(testFile.FullName)).fsPath);
+                                strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(dirname(testFile.FullName)).fsPath);
                             });
 
                         test(
@@ -68,7 +68,7 @@ suite(
                                 this.slow(1 * 1000);
                                 this.timeout(4 * 1000);
                                 await config.update("DestinationPattern", "${dirname}", ConfigurationTarget.Global);
-                                Assert(/^\.?$/g.test(await substitutionTester.Test()));
+                                ok(/^\.?$/g.test(await substitutionTester.Test()));
                             });
 
                         test(
@@ -86,7 +86,7 @@ suite(
                                 };
 
                                 await config.update("DestinationPattern", "${workspaceFolder}", ConfigurationTarget.Global);
-                                Assert.strictEqual(await untitledSubstitutionTester.Test(), inputWorkspaceName);
+                                strictEqual(await untitledSubstitutionTester.Test(), inputWorkspaceName);
                                 window.showInputBox = original;
                             });
                     });

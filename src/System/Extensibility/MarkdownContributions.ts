@@ -1,4 +1,4 @@
-import Path = require("path");
+import { join } from "path";
 import { Extension, extensions, Uri } from "vscode";
 
 /**
@@ -100,7 +100,7 @@ export class MarkdownContributions
      */
     private static ResolveExtensionResource(extension: Extension<any>, resourcePath: string): Uri
     {
-        return Uri.file(Path.join(extension.extensionPath, resourcePath)).with({ scheme: "vscode-resource" });
+        return Uri.file(join(extension.extensionPath, resourcePath)).with({ scheme: "vscode-resource" });
     }
 
     /**

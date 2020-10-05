@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { strictEqual } from "assert";
 import { Margin } from "../../../../System/Documents/Margin";
 
 suite(
@@ -28,10 +28,10 @@ suite(
                     () =>
                     {
                         let margin = new Margin(testValue2);
-                        Assert.strictEqual(margin.Top, testValue2);
-                        Assert.strictEqual(margin.Right, testValue2);
-                        Assert.strictEqual(margin.Bottom, testValue2);
-                        Assert.strictEqual(margin.Left, testValue2);
+                        strictEqual(margin.Top, testValue2);
+                        strictEqual(margin.Right, testValue2);
+                        strictEqual(margin.Bottom, testValue2);
+                        strictEqual(margin.Left, testValue2);
                     });
             });
 
@@ -44,10 +44,10 @@ suite(
                     () =>
                     {
                         let margin = new Margin(testValue1, testValue4);
-                        Assert.strictEqual(margin.Top, testValue1);
-                        Assert.strictEqual(margin.Right, testValue4);
-                        Assert.strictEqual(margin.Bottom, testValue1);
-                        Assert.strictEqual(margin.Left, testValue4);
+                        strictEqual(margin.Top, testValue1);
+                        strictEqual(margin.Right, testValue4);
+                        strictEqual(margin.Bottom, testValue1);
+                        strictEqual(margin.Left, testValue4);
                     });
             });
 
@@ -60,10 +60,10 @@ suite(
                     () =>
                     {
                         let margin = new Margin(testValue1, testValue2, testValue3, testValue4);
-                        Assert.strictEqual(margin.Top, testValue1);
-                        Assert.strictEqual(margin.Right, testValue2);
-                        Assert.strictEqual(margin.Bottom, testValue3);
-                        Assert.strictEqual(margin.Left, testValue4);
+                        strictEqual(margin.Top, testValue1);
+                        strictEqual(margin.Right, testValue2);
+                        strictEqual(margin.Bottom, testValue3);
+                        strictEqual(margin.Left, testValue4);
                     });
             });
     });

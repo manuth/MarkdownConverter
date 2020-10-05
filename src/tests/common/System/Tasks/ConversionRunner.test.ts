@@ -1,11 +1,11 @@
-import Assert = require("assert");
+import { notStrictEqual, ok, strictEqual } from "assert";
 import { EOL } from "os";
-import Cheerio = require("cheerio");
-import Dedent = require("dedent");
-import FileSystem = require("fs-extra");
+import { dirname, join, parse } from "path";
+import { load } from "cheerio";
+import dedent = require("dedent");
+import { readFile, writeFile } from "fs-extra";
 import MultiRange from "multi-integer-range";
 import { TempDirectory, TempFile } from "temp-filesystem";
-import Path = require("upath");
 import { commands, ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
@@ -37,7 +37,7 @@ suite(
             this.timeout(8 * 1000);
             await markdownRestorer.Clear();
             await configRestorer.Clear();
-            await FileSystem.writeFile(mdFile.FullName, "");
+            await writeFile(mdFile.FullName, "");
             await markdownConfig.update("ConversionType", [ConversionType[ConversionType.HTML]], true);
             await markdownConfig.update("DestinationPattern", destinationFile.FullName, true);
             await markdownConfig.update("Parser.SystemParserEnabled", false, true);
@@ -135,15 +135,15 @@ suite(
                         this.timeout(26 * 1000);
                         let firstResult: string;
                         let secondResult: string;
-                        await FileSystem.writeFile(mdFile.FullName, "line1" + EOL + "line2");
+                        await writeFile(mdFile.FullName, "line1" + EOL + "line2");
                         await markdownConfig.update("Parser.SystemParserEnabled", true, ConfigurationTarget.Global);
                         await config.update("markdown.preview.breaks", true, ConfigurationTarget.Global);
                         await Convert();
-                        firstResult = (await FileSystem.readFile(destinationFile.FullName)).toString();
+                        firstResult = (await readFile(destinationFile.FullName)).toString();
                         await config.update("markdown.preview.breaks", false, ConfigurationTarget.Global);
                         await Convert();
-                        secondResult = (await FileSystem.readFile(destinationFile.FullName)).toString();
-                        Assert.notStrictEqual(firstResult, secondResult);
+                        secondResult = (await readFile(destinationFile.FullName)).toString();
+                        notStrictEqual(firstResult, secondResult);
                     });
 
                 test(
@@ -152,9 +152,9 @@ suite(
                     {
                         this.slow(2.5 * 1000);
                         this.timeout(10 * 1000);
-                        await FileSystem.writeFile(
+                        await writeFile(
                             mdFile.FullName,
-                            Dedent(
+                            dedent(
                                 `
                                 <b>test</b>
                                 \`\`\`cs
@@ -164,9 +164,9 @@ suite(
                         await commands.executeCommand("workbench.action.files.revert");
                         await markdownConfig.update("Parser.SystemParserEnabled", false, ConfigurationTarget.Global);
                         await Convert();
-                        let result = Cheerio.load((await FileSystem.readFile(destinationFile.FullName)).toString());
-                        Assert.strictEqual(result("b:contains('test')").length, 1);
-                        Assert.strictEqual(result("pre.hljs").length, 1);
+                        let result = load((await readFile(destinationFile.FullName)).toString());
+                        strictEqual(result("b:contains('test')").length, 1);
+                        strictEqual(result("pre.hljs").length, 1);
                     });
 
                 test(
@@ -175,18 +175,18 @@ suite(
                     {
                         this.slow(3 * 1000);
                         this.timeout(12 * 1000);
-                        await FileSystem.writeFile(
+                        await writeFile(
                             mdFile.FullName,
-                            Dedent(
+                            dedent(
                                 `
                                 # Test
                                 # Test`));
 
                         await commands.executeCommand("workbench.action.files.revert");
                         await Convert();
-                        let result = Cheerio.load((await FileSystem.readFile(destinationFile.FullName)).toString());
-                        Assert.strictEqual(result("#test").length, 1);
-                        Assert.strictEqual(result("#test-2").length, 1);
+                        let result = load((await readFile(destinationFile.FullName)).toString());
+                        strictEqual(result("#test").length, 1);
+                        strictEqual(result("#test-2").length, 1);
                     });
 
                 test(
@@ -202,9 +202,9 @@ suite(
                         let excludedHeading = "Not Included";
                         let includedHeading = "Included";
 
-                        await FileSystem.writeFile(
+                        await writeFile(
                             mdFile.FullName,
-                            Dedent(
+                            dedent(
                                 `
                                 # Table of Contents
                                 [[toc-test]]
@@ -218,10 +218,10 @@ suite(
                         await markdownConfig.update("Parser.Toc.Indicator", indicator, ConfigurationTarget.Global);
                         await markdownConfig.update("Parser.Toc.ListType", listType, ConfigurationTarget.Global);
                         await Convert();
-                        let result = Cheerio.load((await FileSystem.readFile(destinationFile.FullName)).toString());
-                        Assert.strictEqual(result(`.${tocClass}`).length, 1);
-                        Assert.strictEqual(result('ol li a[href="#included"]').length, 1);
-                        Assert.strictEqual(result('ol li a[href="#not-included"]').length, 0);
+                        let result = load((await readFile(destinationFile.FullName)).toString());
+                        strictEqual(result(`.${tocClass}`).length, 1);
+                        strictEqual(result('ol li a[href="#included"]').length, 1);
+                        strictEqual(result('ol li a[href="#not-included"]').length, 0);
                     });
 
                 test(
@@ -230,9 +230,9 @@ suite(
                     {
                         this.slow(2.5 * 1000);
                         this.timeout(10 * 1000);
-                        await FileSystem.writeFile(
+                        await writeFile(
                             mdFile.FullName,
-                            Dedent(
+                            dedent(
                                 `
                                 # ToDo's
                                 - [ ] Rob a bank
@@ -240,8 +240,8 @@ suite(
                                 - [ ] Buy a new monitor`));
 
                         await Convert();
-                        let result = Cheerio.load((await FileSystem.readFile(destinationFile.FullName)));
-                        Assert.strictEqual(result('li input[type="checkbox"]').length, 3);
+                        let result = load((await readFile(destinationFile.FullName)));
+                        strictEqual(result('li input[type="checkbox"]').length, 3);
                     });
 
                 test(
@@ -251,19 +251,19 @@ suite(
                         this.slow(5.5 * 1000);
                         this.timeout(22 * 1000);
                         let result: cheerio.Root;
-                        await FileSystem.writeFile(mdFile.FullName, "**:sparkles:**");
+                        await writeFile(mdFile.FullName, "**:sparkles:**");
                         await commands.executeCommand("workbench.action.files.revert");
                         await markdownConfig.update("Parser.EmojiType", EmojiType[EmojiType.None], ConfigurationTarget.Global);
                         await Convert();
-                        result = Cheerio.load((await FileSystem.readFile(destinationFile.FullName)).toString());
-                        Assert.strictEqual(
+                        result = load((await readFile(destinationFile.FullName)).toString());
+                        strictEqual(
                             result("b:contains(':sparkles:')").length +
                             result("strong:contains(':sparkles:')").length,
                             1);
                         await markdownConfig.update("Parser.EmojiType", EmojiType[EmojiType.GitHub], ConfigurationTarget.Global);
                         await Convert();
-                        result = Cheerio.load((await FileSystem.readFile(destinationFile.FullName)).toString());
-                        Assert.strictEqual(result("b img").length + result("strong img").length, 1);
+                        result = load((await readFile(destinationFile.FullName)).toString());
+                        strictEqual(result("b img").length + result("strong img").length, 1);
                     });
             });
 
@@ -305,7 +305,7 @@ suite(
                         let headerTemplate = "Hello";
                         let footerTemplate = "World";
 
-                        await FileSystem.writeFile(templateFile.FullName, "This is a test template");
+                        await writeFile(templateFile.FullName, "This is a test template");
                         await markdownConfig.update("ConversionQuality", conversionQuality, ConfigurationTarget.Global);
                         await markdownConfig.update("Document.Attributes", attributes, ConfigurationTarget.Global);
                         await markdownConfig.update("Locale", locale, ConfigurationTarget.Global);
@@ -327,29 +327,29 @@ suite(
                         await Convert();
 
                         let converter = await new ConversionRunner({ VSCodeParser: {} } as MarkdownConverterExtension)["LoadConverter"](workspaceRoot.FullName, textDocument);
-                        Assert.strictEqual(converter.Document.Quality, conversionQuality);
+                        strictEqual(converter.Document.Quality, conversionQuality);
 
                         for (let key of Object.keys(attributes) as Array<keyof typeof attributes>)
                         {
-                            Assert.strictEqual(attributes[key], converter.Document.Attributes[key]);
+                            strictEqual(attributes[key], converter.Document.Attributes[key]);
                         }
 
-                        Assert.strictEqual(converter.Document.Locale.Name, locale);
-                        Assert.strictEqual(converter.Document.DateFormat, dateFormat);
-                        Assert.strictEqual((converter.Document.Paper.Format as StandardizedPaperFormat).Format, paperFormat.Format);
-                        Assert.strictEqual((converter.Document.Paper.Format as StandardizedPaperFormat).Orientation, paperFormat.Orientation);
+                        strictEqual(converter.Document.Locale.Name, locale);
+                        strictEqual(converter.Document.DateFormat, dateFormat);
+                        strictEqual((converter.Document.Paper.Format as StandardizedPaperFormat).Format, paperFormat.Format);
+                        strictEqual((converter.Document.Paper.Format as StandardizedPaperFormat).Orientation, paperFormat.Orientation);
 
                         for (let key of Object.keys(margin) as Array<keyof typeof margin>)
                         {
-                            Assert.strictEqual(converter.Document.Paper.Margin[key], margin[key]);
+                            strictEqual(converter.Document.Paper.Margin[key], margin[key]);
                         }
 
-                        Assert.strictEqual(converter.Document.Template, (await FileSystem.readFile(templateFile.FullName)).toString());
-                        Assert(converter.Document.StyleSheets.filter((stylesheet) => stylesheet.includes(highlightStyle)).length > 0);
-                        Assert(converter.Document.StyleSheets.includes(styleSheet.FullName));
-                        Assert.strictEqual(converter.Document.HeaderFooterEnabled, headerFooterEnabled);
-                        Assert.strictEqual(converter.Document.Header.Content, headerTemplate);
-                        Assert.strictEqual(converter.Document.Footer.Content, footerTemplate);
+                        strictEqual(converter.Document.Template, (await readFile(templateFile.FullName)).toString());
+                        ok(converter.Document.StyleSheets.filter((stylesheet) => stylesheet.includes(highlightStyle)).length > 0);
+                        ok(converter.Document.StyleSheets.includes(styleSheet.FullName));
+                        strictEqual(converter.Document.HeaderFooterEnabled, headerFooterEnabled);
+                        strictEqual(converter.Document.Header.Content, headerTemplate);
+                        strictEqual(converter.Document.Footer.Content, footerTemplate);
 
                         styleSheet.Dispose();
                         templateFile.Dispose();
@@ -366,12 +366,12 @@ suite(
                         let footer = "This is a footer";
                         let headerTemplate = new TempFile();
                         let footerTemplate = new TempFile();
-                        await FileSystem.writeFile(headerTemplate.FullName, header);
-                        await FileSystem.writeFile(footerTemplate.FullName, footer);
+                        await writeFile(headerTemplate.FullName, header);
+                        await writeFile(footerTemplate.FullName, footer);
 
-                        await FileSystem.writeFile(
+                        await writeFile(
                             mdFile.FullName,
-                            Dedent(
+                            dedent(
                                 `
                                 ---
                                 HeaderTemplate: ${headerTemplate.FullName}
@@ -382,11 +382,11 @@ suite(
 
                         let converter = await new ConversionRunner(
                             { VSCodeParser: {} } as MarkdownConverterExtension)["LoadConverter"](
-                                Path.dirname(mdFile.FullName),
+                                dirname(mdFile.FullName),
                                 await workspace.openTextDocument(mdFile.FullName));
 
-                        Assert.strictEqual(converter.Document.Header.Content, header);
-                        Assert.strictEqual(converter.Document.Footer.Content, footer);
+                        strictEqual(converter.Document.Header.Content, header);
+                        strictEqual(converter.Document.Footer.Content, footer);
                         headerTemplate.Dispose();
                         footerTemplate.Dispose();
                     });
@@ -432,7 +432,7 @@ suite(
                                 this.slow(1.25 * 1000);
                                 this.timeout(5 * 1000);
                                 await markdownConfig.update("DestinationPattern", "${basename}", ConfigurationTarget.Global);
-                                Assert.strictEqual(await substitutionTester.Test(), Path.parse(testFile.FullName).name);
+                                strictEqual(await substitutionTester.Test(), parse(testFile.FullName).name);
                             });
 
                         test(
@@ -443,7 +443,7 @@ suite(
                                 this.timeout(5 * 1000);
                                 await markdownConfig.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
                                 await markdownConfig.update("DestinationPattern", "${extension}", ConfigurationTarget.Global);
-                                Assert.strictEqual(await substitutionTester.Test(), "pdf");
+                                strictEqual(await substitutionTester.Test(), "pdf");
                             });
 
                         test(
@@ -453,7 +453,7 @@ suite(
                                 this.slow(1.25 * 1000);
                                 this.timeout(5 * 1000);
                                 await markdownConfig.update("DestinationPattern", "${filename}", ConfigurationTarget.Global);
-                                Assert.strictEqual(await substitutionTester.Test(), Path.parse(testFile.FullName).base);
+                                strictEqual(await substitutionTester.Test(), parse(testFile.FullName).base);
                             });
 
                         test(
@@ -462,8 +462,8 @@ suite(
                             {
                                 this.slow(1.25 * 1000);
                                 this.timeout(5 * 1000);
-                                await markdownConfig.update("DestinationPattern", Path.joinSafe(tempDir.FullName, "/./test/.././///./."), ConfigurationTarget.Global);
-                                Assert.strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(tempDir.FullName).fsPath);
+                                await markdownConfig.update("DestinationPattern", join(tempDir.FullName, "/./test/.././///./."), ConfigurationTarget.Global);
+                                strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(tempDir.FullName).fsPath);
                             });
                     });
             });

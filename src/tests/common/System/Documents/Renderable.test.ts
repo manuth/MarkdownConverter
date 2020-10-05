@@ -1,4 +1,4 @@
-import Assert = require("assert");
+import { strictEqual } from "assert";
 import { Renderable } from "../../../../System/Documents/Renderable";
 
 suite(
@@ -82,9 +82,9 @@ suite(
                     () =>
                     {
                         let renderer = new TestRenderable();
-                        Assert.strictEqual(renderer.Content, "");
+                        strictEqual(renderer.Content, "");
                         renderer = new TestRenderable("hello");
-                        Assert.strictEqual(renderer.Content, "hello");
+                        strictEqual(renderer.Content, "hello");
                     });
             });
 
@@ -96,7 +96,7 @@ suite(
                     "Checking whether text can be renderer…",
                     async () =>
                     {
-                        Assert.strictEqual(await renderer.Render(), verifier + text);
+                        strictEqual(await renderer.Render(), verifier + text);
                     });
             });
 
@@ -108,7 +108,7 @@ suite(
                     "Checking whether text can be rendered by another Renderable…",
                     async () =>
                     {
-                        Assert.strictEqual(await renderer["RenderTextBy"](otherRenderer, renderer.Content), otherVerifier + text);
+                        strictEqual(await renderer["RenderTextBy"](otherRenderer, renderer.Content), otherVerifier + text);
                     });
             });
     });

@@ -65,7 +65,7 @@
                 "TEST_SUITE": "common"
             },
             "internalConsoleOptions": "openOnSessionStart",
-            "stopOnEntry": true,
+            "preLaunchTask": "Build",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/**/*.js",
@@ -86,8 +86,7 @@
                 "TEST_SUITE": "single-file"
             },
             "internalConsoleOptions": "openOnSessionStart",
-            "preLaunchTask": "Build Debug",
-            "postDebugTask": "Debug Cleanup",
+            "preLaunchTask": "Build",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/**/*.js",
@@ -108,8 +107,7 @@
                 "TEST_SUITE": "single-folder"
             },
             "internalConsoleOptions": "openOnSessionStart",
-            "preLaunchTask": "Build Debug",
-            "postDebugTask": "Debug Cleanup",
+            "preLaunchTask": "Build",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/**/*.js",
@@ -130,8 +128,7 @@
                 "TEST_SUITE": "workspace"
             },
             "internalConsoleOptions": "openOnSessionStart",
-            "preLaunchTask": "Build Debug",
-            "postDebugTask": "Debug Cleanup",
+            "preLaunchTask": "Build",
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceFolder}/**/*.js",

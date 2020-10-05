@@ -1,4 +1,4 @@
-import Format = require("string-template");
+import format = require("string-template");
 import { Exception } from "../Exception";
 import { FileException } from "./FileException";
 
@@ -24,7 +24,7 @@ export class FileNotFoundException extends FileException
         if (arguments.length === 1)
         {
             path = message;
-            message = Format("The file {0} couldn't be found.", path);
+            message = format("The file {0} couldn't be found.", path);
         }
 
         super(message, path, innerException);

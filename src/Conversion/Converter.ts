@@ -1,15 +1,15 @@
-import http = require("http");
-import Path = require("path");
-import URL = require("url");
+import { createServer, Server } from "http";
+import { basename, dirname, join, relative } from "path";
+import { resolve } from "url";
 import { promisify } from "util";
-import FileSystem = require("fs-extra");
-import PortFinder = require("get-port");
-import Glob = require("glob");
-import Puppeteer = require("puppeteer-core");
-import handler = require("serve-handler");
+import { move, pathExists, remove, writeFile } from "fs-extra";
+import getPort = require("get-port");
+import { glob } from "glob";
+import { Browser, launch, PDFOptions, ScreenshotOptions } from "puppeteer-core";
+import serveHandler = require("serve-handler");
 import { TempDirectory } from "temp-filesystem";
 import { Progress } from "vscode";
-import Scrape = require("website-scraper");
+import websiteScraper = require("website-scraper");
 import { Resources } from "../Properties/Resources";
 import { Document } from "../System/Documents/Document";
 import { FileException } from "../System/IO/FileException";
@@ -35,7 +35,7 @@ export class Converter
     /**
      * The web-server of the converter.
      */
-    private webServer: http.Server;
+    private webServer: Server;
 
     /**
      * The port-number the web-server runs on.
@@ -45,7 +45,7 @@ export class Converter
     /**
      * The browser which is used to perform the conversion.
      */
-    private browser: Puppeteer.Browser;
+    private browser: Browser;
 
     /**
      * A value indicating whether the converter has been initialized.
@@ -110,10 +110,10 @@ export class Converter
     public get URL(): string
     {
         return this.Initialized ?
-            (URL.resolve(
+            (resolve(
                 `http://localhost:${this.PortNumber}/`,
                 ((this.Document.FileName && this.WorkspaceRoot) ?
-                    Path.relative(this.WorkspaceRoot, this.Document.FileName) :
+                    relative(this.WorkspaceRoot, this.Document.FileName) :
                     "index") + ".html")) :
             null;
     }
@@ -129,7 +129,7 @@ export class Converter
     /**
      * Gets or sets the web-server of the converter.
      */
-    protected get WebServer(): http.Server
+    protected get WebServer(): Server
     {
         return this.Initialized ? this.webServer : null;
     }
@@ -137,7 +137,7 @@ export class Converter
     /**
      * Gets the browser which is used to perform the conversion.
      */
-    protected get Browser(): Puppeteer.Browser
+    protected get Browser(): Browser
     {
         return this.Initialized ? this.browser : null;
     }
@@ -163,11 +163,12 @@ export class Converter
                     message: Resources.Resources.Get("Progress.LaunchWebserver")
                 });
 
-            this.portNumber = await PortFinder();
-            this.webServer = http.createServer(
+            this.portNumber = await getPort();
+
+            this.webServer = createServer(
                 (request, response) =>
                 {
-                    handler(
+                    serveHandler(
                         request,
                         response,
                         {
@@ -202,15 +203,17 @@ export class Converter
 
             try
             {
-                this.browser = await Puppeteer.launch({
-                    args: browserArguments
-                });
+                this.browser = await launch(
+                    {
+                        args: browserArguments
+                    });
             }
             catch
             {
-                this.browser = await Puppeteer.launch({
-                    args: browserArguments.concat(["--no-sandbox"])
-                });
+                this.browser = await launch(
+                    {
+                        args: browserArguments.concat(["--no-sandbox"])
+                    });
             }
 
             this.initialized = true;
@@ -267,25 +270,25 @@ export class Converter
                             message: Resources.Resources.Get("Progress.WriteHTML")
                         });
 
-                    await FileSystem.writeFile(path, await this.Document.Render());
+                    await writeFile(path, await this.Document.Render());
                     break;
                 case ConversionType.SelfContainedHTML:
                     let tempDir = new TempDirectory();
-                    await FileSystem.remove(tempDir.FullName);
+                    await remove(tempDir.FullName);
 
                     progressReporter.report(
                         {
                             message: Resources.Resources.Get("Progress.Scrape")
                         });
 
-                    await Scrape(
+                    await websiteScraper(
                         {
                             urls: [this.URL],
                             directory: tempDir.FullName,
                             plugins: [
                                 new ConverterPlugin(
                                     this,
-                                    Path.basename(path))
+                                    basename(path))
                             ]
                         } as any);
 
@@ -294,11 +297,11 @@ export class Converter
                             message: Resources.Resources.Get("Progress.ScrapeFolder")
                         });
 
-                    for (let filename of await promisify(Glob)("**/*", { cwd: tempDir.FullName }))
+                    for (let filename of await promisify(glob)("**/*", { cwd: tempDir.FullName }))
                     {
-                        if (await FileSystem.pathExists(tempDir.MakePath(filename)))
+                        if (await pathExists(tempDir.MakePath(filename)))
                         {
-                            await FileSystem.move(tempDir.MakePath(filename), Path.join(Path.dirname(path), filename), { overwrite: true });
+                            await move(tempDir.MakePath(filename), join(dirname(path), filename), { overwrite: true });
                         }
                     }
 
@@ -339,13 +342,14 @@ export class Converter
                         {
                             case ConversionType.PDF:
                                 let styles = `
-                                <style>
-                                    :root
-                                    {
-                                        font-size: 11px;
-                                    }
-                                </style>`;
-                                let pdfOptions: Puppeteer.PDFOptions = {
+                                    <style>
+                                        :root
+                                        {
+                                            font-size: 11px;
+                                        }
+                                    </style>`;
+
+                                let pdfOptions: PDFOptions = {
                                     margin: {
                                         top: this.Document.Paper.Margin.Top,
                                         right: this.Document.Paper.Margin.Right,
@@ -373,7 +377,7 @@ export class Converter
                                 await page.pdf(pdfOptions);
                                 break;
                             default:
-                                let screenshotOptions: Puppeteer.ScreenshotOptions = {
+                                let screenshotOptions: ScreenshotOptions = {
                                     fullPage: true,
                                     path
                                 };
