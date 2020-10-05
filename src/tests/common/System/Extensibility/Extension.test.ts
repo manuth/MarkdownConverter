@@ -1,5 +1,6 @@
 import { doesNotReject, ok, strictEqual } from "assert";
 import { normalize, resolve } from "path";
+import { Package } from "@manuth/package-json-editor";
 import dedent = require("dedent");
 import { pathExists, writeFile } from "fs-extra";
 import { TempDirectory, TempFile } from "temp-filesystem";
@@ -24,7 +25,7 @@ suite(
                     "Checking whether the extension can be initialized correctly…",
                     () =>
                     {
-                        extension = new Extension(resolve(Constants.PackageDirectory));
+                        extension = new Extension(new Package(resolve(Constants.PackageDirectory, "package.json")));
                     });
             });
 

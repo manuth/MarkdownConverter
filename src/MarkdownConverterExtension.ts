@@ -1,5 +1,6 @@
 import { exec } from "child_process";
-import { resolve } from "path";
+import { join, resolve } from "path";
+import { Package } from "@manuth/package-json-editor";
 import { mkdirp, pathExists } from "fs-extra";
 import { createBrowserFetcher, executablePath } from "puppeteer-core";
 import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
@@ -35,7 +36,8 @@ export class MarkdownConverterExtension extends Extension
      */
     public constructor()
     {
-        super(Constants.PackageDirectory);
+        super(new Package(join(Constants.PackageDirectory, "package.json")));
+
         this.fileReporter = {
             async report(file)
             {

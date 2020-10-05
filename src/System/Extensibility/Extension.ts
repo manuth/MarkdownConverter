@@ -1,8 +1,7 @@
-import { dirname, join } from "path";
+import { dirname } from "path";
 import { Package } from "@manuth/package-json-editor";
 import { CultureInfo } from "culture-info";
 import MarkdownIt = require("markdown-it");
-import pkgUp = require("pkg-up");
 import format = require("string-template");
 import { commands, env, ExtensionContext, ProgressLocation, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
@@ -51,14 +50,14 @@ export class Extension
     /**
      * Initializes a new instance of the `Extension` class.
      *
-     * @param extensionRoot
-     * The root of the extension.
+     * @param extensionPackage
+     * The package of the extension.
      */
-    public constructor(extensionRoot: string)
+    public constructor(extensionPackage: Package)
     {
-        this.extensionManifestPath = pkgUp.sync({ cwd: extensionRoot });
+        this.metaData = extensionPackage;
+        this.extensionManifestPath = extensionPackage.FileName;
         this.extensionRoot = dirname(this.extensionManifestPath);
-        this.metaData = new Package(join(this.extensionManifestPath));
 
         this.systemParserFixPromise = new Promise(
             (resolve) =>
