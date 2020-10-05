@@ -45,8 +45,7 @@
     "watch": "npm run build -- --watch",
     "clean": "npm run build -- --clean && rimraf ./lib",
     "lint-base": "eslint --max-warnings 0 --ignore-pattern \"!.eslintrc.js\"",
-    "lint-code": "npm run lint-base -- --ext .js,.jsx,.ts,.tsx .eslintrc.js webpack.config.ts ./src",
-    "lint": "npm run lint-code && npm run lint-code",
+    "lint": "npm run lint-base -- --ext .js,.jsx,.ts,.tsx .eslintrc.js webpack.config.ts ./src",
     "lint-ide": "npm run lint || exit 0",
     "test": "node ./lib/test/runTests",
     "prepare": "npm run rebuild"
