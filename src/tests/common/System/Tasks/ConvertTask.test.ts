@@ -1,6 +1,6 @@
 import { doesNotThrow, throws } from "assert";
 import { TempFile } from "temp-filesystem";
-import { ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
+import { ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { extension } from "../../../../extension";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { Settings } from "../../../../Properties/Settings";
@@ -18,7 +18,24 @@ suite(
                 let config: WorkspaceConfiguration;
                 let configRestorer: ConfigRestorer;
                 let testFile: TempFile;
-                let task: ConvertTask;
+                let task: TestConvertTask;
+
+                /**
+                 * Provides an implementation of the `ConvertTask` class for testing.
+                 */
+                class TestConvertTask extends ConvertTask
+                {
+                    /**
+                     * @inheritdoc
+                     *
+                     * @returns
+                     * The best matching markdown-document.
+                     */
+                    public GetMarkdownDocument(): TextDocument
+                    {
+                        return super.GetMarkdownDocument();
+                    }
+                }
 
                 suiteSetup(
                     async () =>
@@ -36,7 +53,7 @@ suite(
                                 postfix: ".txt"
                             });
 
-                        task = new ConvertTask(extension);
+                        task = new TestConvertTask(extension);
                         await window.showTextDocument(Uri.file(testFile.FullName));
                     });
 
@@ -58,7 +75,7 @@ suite(
                     "Checking whether an exception is thrown if no markdown-file is opened…",
                     () =>
                     {
-                        throws(task["GetMarkdownDocument"], MarkdownFileNotFoundException);
+                        throws(() => task.GetMarkdownDocument(), MarkdownFileNotFoundException);
                     });
 
                 test(
@@ -67,7 +84,7 @@ suite(
                     {
                         this.slow(80);
                         await config.update("IgnoreLanguageMode", true, ConfigurationTarget.Global);
-                        doesNotThrow(() => task["GetMarkdownDocument"]());
+                        doesNotThrow(() => task.GetMarkdownDocument());
                     });
             });
     });
