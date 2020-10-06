@@ -6,7 +6,7 @@ import { TestOptions } from "vscode-test/out/runTest";
 {
     let environmentPath = resolve(__dirname, "..", "..", "src", "test");
 
-    let commonArgs: TestOptions = {
+    let commonOptions: TestOptions = {
         extensionDevelopmentPath: resolve(__dirname, "..", ".."),
         extensionTestsPath: resolve(__dirname, "..", "..", "lib", "test")
     };
@@ -15,7 +15,7 @@ import { TestOptions } from "vscode-test/out/runTest";
     {
         await runTests(
             {
-                ...commonArgs,
+                ...commonOptions,
                 extensionTestsEnv: {
                     TEST_SUITE: "common"
                 }
@@ -23,7 +23,7 @@ import { TestOptions } from "vscode-test/out/runTest";
 
         await runTests(
             {
-                ...commonArgs,
+                ...commonOptions,
                 extensionTestsEnv: {
                     TEST_SUITE: "single-file"
                 },
@@ -34,7 +34,7 @@ import { TestOptions } from "vscode-test/out/runTest";
 
         await runTests(
             {
-                ...commonArgs,
+                ...commonOptions,
                 extensionTestsEnv: {
                     TEST_SUITE: "single-folder"
                 },
@@ -45,7 +45,7 @@ import { TestOptions } from "vscode-test/out/runTest";
 
         await runTests(
             {
-                ...commonArgs,
+                ...commonOptions,
                 extensionTestsEnv: {
                     TEST_SUITE: "workspace"
                 },
