@@ -22,11 +22,6 @@ export class Settings
     public static readonly ConfigKey = "markdownConverter";
 
     /**
-     * Gets the key of the configuration of the extension.
-     */
-    private static readonly configKey: string = "markdownConverter";
-
-    /**
      * A default instance of the `Settings` class.
      */
     private static defaultInstance: Settings = new Settings();
