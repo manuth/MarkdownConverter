@@ -24,7 +24,10 @@ import { TestOptions } from "vscode-test/out/runTest";
                 ...commonOptions,
                 extensionTestsEnv: {
                     TEST_SUITE: "common"
-                }
+                },
+                launchArgs: [
+                    ...commonArgs
+                ]
             });
 
         await runTests(
