@@ -9,6 +9,11 @@ export class Exception extends Error
     private data: any[];
 
     /**
+     * The message of the exception.
+     */
+    private exceptionMessage: string;
+
+    /**
      * The Exception instance that caused the current exception.
      */
     private innerException: Exception = null;
@@ -24,7 +29,8 @@ export class Exception extends Error
      */
     public constructor(message?: string, innerException?: Exception)
     {
-        super(...(message ? [message] : []));
+        super();
+        this.exceptionMessage = message;
 
         if (innerException)
         {
@@ -53,7 +59,15 @@ export class Exception extends Error
      */
     public get Message(): string
     {
-        return this.message;
+        return this.exceptionMessage;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public get message(): string
+    {
+        return this.Message;
     }
 
     /**
@@ -62,5 +76,13 @@ export class Exception extends Error
     public get StackTrace(): string
     {
         return this.stack;
+    }
+
+    /**
+     * Gets a string representing this exception.
+     */
+    public toString()
+    {
+        return this.Message;
     }
 }
