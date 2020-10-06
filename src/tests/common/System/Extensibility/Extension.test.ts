@@ -86,9 +86,10 @@ suite(
                                 "DestinationPattern",
                                 "IgnoreLanguageMode"
                             ],
-                            Settings["configKey"]);
+                            Settings.ConfigKey);
 
-                        config = workspace.getConfiguration(Settings["configKey"]);
+                        config = workspace.getConfiguration(Settings.ConfigKey);
+
                         mdFile = new TempFile(
                             {
                                 postfix: ".txt"

@@ -23,13 +23,13 @@ suite(
                 suiteSetup(
                     async () =>
                     {
-                        config = workspace.getConfiguration(Settings["configKey"]);
+                        config = workspace.getConfiguration(Settings.ConfigKey);
 
                         configRestorer = new ConfigRestorer(
                             [
                                 "IgnoreLanguageMode"
                             ],
-                            Settings["configKey"]);
+                            Settings.ConfigKey);
 
                         testFile = new TempFile(
                             {

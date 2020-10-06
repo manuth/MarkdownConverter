@@ -14,12 +14,12 @@ suite(
             {
                 this.slow(2 * 1000);
                 this.timeout(8 * 1000);
-                config = workspace.getConfiguration(Settings["configKey"]);
+                config = workspace.getConfiguration(Settings.ConfigKey);
                 configRestorer = new ConfigRestorer(
                     [
                         "Parser.SystemParserEnabled"
                     ],
-                    Settings["configKey"]);
+                    Settings.ConfigKey);
 
                 await configRestorer.Clear();
                 await config.update("Parser.SystemParserEnabled", false, ConfigurationTarget.Global);

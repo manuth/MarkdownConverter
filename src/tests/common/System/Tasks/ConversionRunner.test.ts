@@ -85,7 +85,7 @@ suite(
                         "markdown.preview.breaks"
                     ]);
 
-                markdownConfig = workspace.getConfiguration(Settings["configKey"]);
+                markdownConfig = workspace.getConfiguration(Settings.ConfigKey);
 
                 markdownRestorer = new ConfigRestorer(
                     [
@@ -111,7 +111,7 @@ suite(
                         "Parser.Toc.ListType",
                         "Parser.EmojiType"
                     ],
-                    Settings["configKey"]);
+                    Settings.ConfigKey);
 
                 await markdownRestorer.Clear();
                 await configRestorer.Clear();

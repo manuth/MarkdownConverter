@@ -25,7 +25,8 @@ suite(
             {
                 task = new TestConvertAllTask(extension);
                 config = workspace.getConfiguration();
-                markdownConfig = workspace.getConfiguration(Settings["configKey"]);
+                markdownConfig = workspace.getConfiguration(Settings.ConfigKey);
+
                 configRestorer = new ConfigRestorer(
                     [
                         "files.exclude"
@@ -36,7 +37,7 @@ suite(
                         "ConversionType",
                         "DestinationPattern"
                     ],
-                    Settings["configKey"]);
+                    Settings.ConfigKey);
             });
 
         suiteTeardown(

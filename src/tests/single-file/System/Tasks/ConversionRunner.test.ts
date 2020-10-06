@@ -27,8 +27,9 @@ suite(
                         suiteSetup(
                             async () =>
                             {
-                                config = workspace.getConfiguration(Settings["configKey"]);
-                                configRestorer = new ConfigRestorer(["DestinationPattern"], Settings["configKey"]);
+                                config = workspace.getConfiguration(Settings.ConfigKey);
+                                configRestorer = new ConfigRestorer(["DestinationPattern"], Settings.ConfigKey);
+
                                 testFile = new TempFile(
                                     {
                                         postfix: ".md"

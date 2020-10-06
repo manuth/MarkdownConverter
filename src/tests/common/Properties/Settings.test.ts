@@ -23,6 +23,7 @@ suite(
             async () =>
             {
                 settings = new TestSettings();
+
                 configRestorer = new ConfigRestorer(
                     [
                         "ConversionType",
@@ -33,7 +34,7 @@ suite(
                         "Parser.Toc.Enabled",
                         "Parser.Toc.ListType"
                     ],
-                    Settings["configKey"]);
+                    Settings.ConfigKey);
 
                 await configRestorer.Clear();
             });
