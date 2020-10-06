@@ -143,8 +143,9 @@ suite(
             });
 
         suiteTeardown(
-            async () =>
+            async function()
             {
+                this.timeout(5 * 1000);
                 await markdownRestorer.Restore();
                 await configRestorer.Restore();
                 mdFile.Dispose();
