@@ -75,7 +75,7 @@ suite(
 
                         document.Content = content;
                         strictEqual(document.FileName, textDocument.fileName);
-                        strictEqual((document.Attributes["CreationDate"] as Date).getTime(), (await stat(tempFile.FullName)).ctime.getTime());
+                        strictEqual(new Date(document.Attributes["CreationDate"] as any).getTime(), (await stat(tempFile.FullName)).ctime.getTime());
 
                         document = new Document(untitledTextDocument, parser);
                         ok(!document.FileName);
