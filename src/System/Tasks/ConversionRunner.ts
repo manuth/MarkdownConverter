@@ -1,8 +1,8 @@
 import { CultureInfo } from "@manuth/resource-manager";
-import clone = require("clone");
 import template = require("es6-template-string");
 import { ensureDir, pathExists, readFile } from "fs-extra";
 import { highlight } from "highlight.js";
+import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
 import anchor = require("markdown-it-anchor");
 import checkbox = require("markdown-it-checkbox");
@@ -394,7 +394,7 @@ export class ConversionRunner
 
         if (Settings.Default.SystemParserEnabled)
         {
-            parser = clone(this.Extension.VSCodeParser);
+            parser = cloneDeep(this.Extension.VSCodeParser);
             parser.normalizeLink = (link: string) => link;
             parser.normalizeLinkText = (link: string) => link;
         }
