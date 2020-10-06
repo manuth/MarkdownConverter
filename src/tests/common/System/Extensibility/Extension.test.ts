@@ -78,7 +78,7 @@ suite(
                 suiteSetup(
                     async function()
                     {
-                        this.timeout(4 * 1000);
+                        this.timeout(8 * 1000);
 
                         configRestorer = new ConfigRestorer(
                             [
@@ -114,7 +114,7 @@ suite(
                 suiteTeardown(
                     async function()
                     {
-                        this.timeout(4 * 1000);
+                        this.timeout(8 * 1000);
                         await configRestorer.Restore();
                         await commands.executeCommand("workbench.action.closeActiveEditor");
                         mdFile.Dispose();
