@@ -5,12 +5,7 @@ import { TestOptions } from "vscode-test/out/runTest";
 (async function main()
 {
     let environmentPath = resolve(__dirname, "..", "..", "src", "test");
-
-    let commonArgs: string[] = [
-        "--disable-gpu",
-        "--headless",
-        "--no-sandbox"
-    ];
+    let commonArgs = process.argv.slice(2);
 
     let commonOptions: TestOptions = {
         extensionDevelopmentPath: resolve(__dirname, "..", ".."),
