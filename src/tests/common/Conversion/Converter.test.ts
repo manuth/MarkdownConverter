@@ -1,6 +1,8 @@
 import { doesNotReject, ok, rejects, strictEqual } from "assert";
+import { Server } from "http";
 import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
+import { Browser } from "puppeteer-core";
 import { TempDirectory, TempFile } from "temp-filesystem";
 import { changeExt } from "upath";
 import { TextDocument, workspace } from "vscode";
@@ -12,11 +14,33 @@ suite(
     "Converter",
     () =>
     {
-        let converter: Converter;
+        let converter: TestConverter;
         let document: Document;
         let tempDir: TempDirectory;
         let tempFile: TempFile;
         let textDocument: TextDocument;
+
+        /**
+         * Provides an implementation of the `Converter` class for testing.
+         */
+        class TestConverter extends Converter
+        {
+            /**
+             * @inheritdoc
+             */
+            public get WebServer(): Server
+            {
+                return super.WebServer;
+            }
+
+            /**
+             * @inheritdoc
+             */
+            public get Browser(): Browser
+            {
+                return super.Browser;
+            }
+        }
 
         suiteSetup(
             async () =>
@@ -50,7 +74,7 @@ suite(
                     "Checking whether the properties are set correctly…",
                     () =>
                     {
-                        converter = new Converter(tempDir.FullName, document);
+                        converter = new TestConverter(tempDir.FullName, document);
                         strictEqual(converter.WorkspaceRoot, tempDir.FullName);
                         strictEqual(converter.Document, document);
                     });
@@ -73,8 +97,8 @@ suite(
                     {
                         strictEqual(converter.URL, null);
                         strictEqual(converter.PortNumber, null);
-                        strictEqual(converter["WebServer"], null);
-                        strictEqual(converter["Browser"], null);
+                        strictEqual(converter.WebServer, null);
+                        strictEqual(converter.Browser, null);
                     });
             });
 
@@ -120,8 +144,8 @@ suite(
                     {
                         ok(converter.URL);
                         ok(converter.PortNumber);
-                        ok(converter["WebServer"]);
-                        ok(converter["Browser"]);
+                        ok(converter.WebServer);
+                        ok(converter.Browser);
                     });
             });
 
