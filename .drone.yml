@@ -18,7 +18,7 @@ steps:
   - name: test
     image: manuth/vscode-test-runner
     commands:
-      - xvfb-run npm run test
+      - xvfb-run npm run test -- --disable-gpu
   - name: publish extension
     image: node:lts
     environment:
