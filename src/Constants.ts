@@ -1,4 +1,4 @@
-import { dirname } from "path";
+import { dirname } from "upath";
 import pkgUp = require("pkg-up");
 
 /**

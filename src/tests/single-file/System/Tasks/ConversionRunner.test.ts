@@ -1,5 +1,5 @@
 import { ok, strictEqual } from "assert";
-import { dirname } from "path";
+import { dirname } from "upath";
 import { TempFile } from "temp-filesystem";
 import { ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Settings } from "../../../../Properties/Settings";

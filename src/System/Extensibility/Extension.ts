@@ -1,4 +1,4 @@
-import { dirname } from "path";
+import { dirname } from "upath";
 import { Package } from "@manuth/package-json-editor";
 import { CultureInfo } from "culture-info";
 import MarkdownIt = require("markdown-it");

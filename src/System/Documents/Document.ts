@@ -1,4 +1,4 @@
-import { isAbsolute } from "path";
+import { isAbsolute } from "upath";
 import dedent = require("dedent");
 import fm = require("front-matter");
 import { pathExists, readFile, statSync } from "fs-extra";

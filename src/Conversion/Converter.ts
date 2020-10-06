@@ -1,5 +1,5 @@
 import { createServer, Server } from "http";
-import { basename, dirname, join, relative } from "path";
+import { basename, dirname, join, relative } from "upath";
 import { resolve } from "url";
 import { promisify } from "util";
 import { move, pathExists, remove, writeFile } from "fs-extra";

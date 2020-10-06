@@ -1,5 +1,5 @@
 import { doesNotReject, doesNotThrow, ok } from "assert";
-import { basename, parse } from "path";
+import { basename, parse } from "upath";
 import dedent = require("dedent");
 import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");

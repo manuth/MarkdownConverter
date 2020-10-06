@@ -1,5 +1,5 @@
 import { EOL } from "os";
-import { join, parse } from "path";
+import { join, parse } from "upath";
 import fm = require("front-matter");
 import { renameSync } from "fs-extra";
 import format = require("string-template");

@@ -1,4 +1,4 @@
-import { dirname, join, normalize, parse, relative, resolve } from "path";
+import { dirname, join, normalize, parse, relative, resolve } from "upath";
 import clone = require("clone");
 import { CultureInfo } from "culture-info";
 import template = require("es6-template-string");

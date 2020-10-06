@@ -1,6 +1,6 @@
 import { notStrictEqual, ok, strictEqual } from "assert";
 import { EOL } from "os";
-import { dirname, join, parse } from "path";
+import { dirname, join, parse } from "upath";
 import { load } from "cheerio";
 import dedent = require("dedent");
 import { readFile, writeFile } from "fs-extra";

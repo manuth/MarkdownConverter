@@ -1,5 +1,5 @@
 import { exec } from "child_process";
-import { join, resolve } from "path";
+import { join, resolve } from "upath";
 import { Package } from "@manuth/package-json-editor";
 import { mkdirp, pathExists } from "fs-extra";
 import { createBrowserFetcher, executablePath } from "puppeteer-core";

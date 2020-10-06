@@ -1,4 +1,4 @@
-import { join, parse } from "path";
+import { join, parse } from "upath";
 import { Browser, launch } from "puppeteer-core";
 import { encode } from "utf8";
 import { Converter } from "./Converter";

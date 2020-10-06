@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import { resolve } from "upath";
 import { runTests } from "vscode-test";
 import { TestOptions } from "vscode-test/out/runTest";
 

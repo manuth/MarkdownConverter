@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import { resolve } from "upath";
 import { promisify } from "util";
 import { pathExists } from "fs-extra";
 import { glob } from "glob";
