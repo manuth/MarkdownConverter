@@ -19,6 +19,11 @@ export class Settings
     /**
      * Gets the key of the configuration of the extension.
      */
+    public static readonly ConfigKey = "markdownConverter";
+
+    /**
+     * Gets the key of the configuration of the extension.
+     */
     private static readonly configKey: string = "markdownConverter";
 
     /**
@@ -226,7 +231,7 @@ export class Settings
      */
     private get config(): WorkspaceConfiguration
     {
-        return workspace.getConfiguration(Settings.configKey);
+        return workspace.getConfiguration(Settings.ConfigKey);
     }
 
     /**
