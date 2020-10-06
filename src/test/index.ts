@@ -1,6 +1,4 @@
-import { promisify } from "util";
 import { pathExists } from "fs-extra";
-import { glob } from "glob";
 import minimist = require("minimist");
 import Mocha = require("mocha");
 import { createBrowserFetcher, executablePath } from "puppeteer-core";
@@ -40,12 +38,7 @@ export async function run(): Promise<void>
         async (solve, reject) =>
         {
             let testDirectory = resolve(__dirname, "..", "..", "lib", "test");
-            let files = await promisify(glob)(`**/${args["suite"]}.test.js`, { cwd: testDirectory });
-
-            for (let file of files)
-            {
-                mocha.addFile(resolve(testDirectory, file));
-            }
+            mocha.addFile(resolve(testDirectory, `${args["suite"]}.test.js`));
 
             try
             {
