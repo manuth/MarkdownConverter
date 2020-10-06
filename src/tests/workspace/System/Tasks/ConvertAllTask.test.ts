@@ -1,19 +1,20 @@
 import { strictEqual } from "assert";
 import { extension } from "../../../../extension";
-import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { ConfigRestorer } from "../../../ConfigRestorer";
+import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 suite(
     "ConvertAllTask",
     () =>
     {
-        let task: ConvertAllTask;
+        let task: TestConvertAllTask;
         let configRestorer: ConfigRestorer;
 
         suiteSetup(
             () =>
             {
-                task = new ConvertAllTask(extension);
+                task = new TestConvertAllTask(extension);
+
                 configRestorer = new ConfigRestorer(
                     [
                         "files.exclude"
@@ -38,6 +39,6 @@ suite(
             {
                 this.slow(3.75 * 1000);
                 this.timeout(15 * 1000);
-                strictEqual((await task["GetDocuments"]()).length, 4);
+                strictEqual((await task.GetDocuments()).length, 4);
             });
     });

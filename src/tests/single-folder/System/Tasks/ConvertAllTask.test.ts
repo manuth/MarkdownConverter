@@ -7,14 +7,14 @@ import { ConversionType } from "../../../../Conversion/ConversionType";
 import { extension } from "../../../../extension";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { Settings } from "../../../../Properties/Settings";
-import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { ConfigRestorer } from "../../../ConfigRestorer";
+import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 suite(
     "ConvertAllTask",
     () =>
     {
-        let task: ConvertAllTask;
+        let task: TestConvertAllTask;
         let config: WorkspaceConfiguration;
         let markdownConfig: WorkspaceConfiguration;
         let configRestorer: ConfigRestorer;
@@ -23,13 +23,14 @@ suite(
         suiteSetup(
             () =>
             {
-                task = new ConvertAllTask(extension);
+                task = new TestConvertAllTask(extension);
                 config = workspace.getConfiguration();
                 markdownConfig = workspace.getConfiguration(Settings["configKey"]);
                 configRestorer = new ConfigRestorer(
                     [
                         "files.exclude"
                     ]);
+
                 markdownConfigRestorer = new ConfigRestorer(
                     [
                         "ConversionType",
@@ -104,7 +105,7 @@ suite(
                     {
                         this.slow(1.2 * 1000);
                         this.timeout(4.8 * 1000);
-                        strictEqual((await task["GetDocuments"]()).length, 2);
+                        strictEqual((await task.GetDocuments()).length, 2);
                     });
             });
     });
