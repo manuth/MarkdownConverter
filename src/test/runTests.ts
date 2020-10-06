@@ -32,8 +32,8 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "single-file"
                 },
                 launchArgs: [
-                    ...commonArgs,
-                    resolve(environmentPath, "single-file", "Test.md")
+                    resolve(environmentPath, "single-file", "Test.md"),
+                    ...commonArgs
                 ]
             });
 
@@ -44,8 +44,8 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "single-folder"
                 },
                 launchArgs: [
-                    ...commonArgs,
-                    resolve(environmentPath, "single-folder")
+                    resolve(environmentPath, "single-folder"),
+                    ...commonArgs
                 ]
             });
 
@@ -56,8 +56,8 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "workspace"
                 },
                 launchArgs: [
-                    ...commonArgs,
-                    resolve(environmentPath, "workspace", "workspace.code-workspace")
+                    resolve(environmentPath, "workspace", "workspace.code-workspace"),
+                    ...commonArgs
                 ]
             });
     }
