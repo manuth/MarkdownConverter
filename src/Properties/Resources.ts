@@ -1,4 +1,4 @@
-import { CultureInfo, IResourceManager, MustacheResourceManager, ObjectResource, ResourceManager } from "localized-resource-manager";
+import { CultureInfo, IResourceManager, MustacheResourceManager, ObjectResource, ResourceManager } from "@manuth/resource-manager";
 
 /**
  * Represents the resources of the module.

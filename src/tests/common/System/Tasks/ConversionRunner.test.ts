@@ -1,11 +1,11 @@
 import { notStrictEqual, ok, strictEqual } from "assert";
 import { EOL } from "os";
-import { dirname, join, parse } from "upath";
+import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import dedent = require("dedent");
 import { readFile, writeFile } from "fs-extra";
 import MultiRange from "multi-integer-range";
-import { TempDirectory, TempFile } from "temp-filesystem";
+import { dirname, join, parse } from "upath";
 import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { Converter } from "../../../../Conversion/Converter";
@@ -118,12 +118,12 @@ suite(
 
                 mdFile = new TempFile(
                     {
-                        postfix: ".md"
+                        Suffix: ".md"
                     });
 
                 destinationFile = new TempFile(
                     {
-                        postfix: ".html"
+                        Suffix: ".html"
                     });
 
                 await window.showTextDocument(Uri.file(mdFile.FullName));
@@ -442,7 +442,7 @@ suite(
                             {
                                 testFile = new TempFile(
                                     {
-                                        postfix: ".mkdwn"
+                                        Suffix: ".mkdwn"
                                     });
 
                                 tempDir = new TempDirectory();

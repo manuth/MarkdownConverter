@@ -1,8 +1,8 @@
-import { dirname } from "upath";
 import { Package } from "@manuth/package-json-editor";
-import { CultureInfo } from "culture-info";
+import { CultureInfo } from "@manuth/resource-manager";
 import MarkdownIt = require("markdown-it");
 import format = require("string-template");
+import { dirname } from "upath";
 import { commands, env, ExtensionContext, ProgressLocation, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";

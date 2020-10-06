@@ -1,4 +1,4 @@
-import { CultureInfo } from "localized-resource-manager";
+import { CultureInfo } from "@manuth/resource-manager";
 import { Resources } from "../../Properties/Resources";
 
 /**

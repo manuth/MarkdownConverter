@@ -1,9 +1,9 @@
 import { doesNotReject, doesNotThrow, ok } from "assert";
-import { basename, parse } from "upath";
+import { TempDirectory } from "@manuth/temp-files";
 import dedent = require("dedent");
 import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
-import { TempDirectory } from "temp-filesystem";
+import { basename, parse } from "upath";
 import { workspace } from "vscode";
 import websiteScraper = require("website-scraper");
 import { Converter } from "../../../Conversion/Converter";

@@ -1,6 +1,5 @@
-import { dirname, join, normalize, parse, relative, resolve } from "upath";
+import { CultureInfo } from "@manuth/resource-manager";
 import clone = require("clone");
-import { CultureInfo } from "culture-info";
 import template = require("es6-template-string");
 import { ensureDir, pathExists, readFile } from "fs-extra";
 import { highlight } from "highlight.js";
@@ -11,6 +10,7 @@ import emoji = require("markdown-it-emoji");
 import toc = require("markdown-it-table-of-contents");
 import format = require("string-template");
 import twemoji = require("twemoji");
+import { dirname, join, normalize, parse, relative, resolve } from "upath";
 import { Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Converter } from "../../Conversion/Converter";

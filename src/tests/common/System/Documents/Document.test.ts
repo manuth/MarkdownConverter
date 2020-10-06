@@ -1,9 +1,9 @@
 import { ok, strictEqual, throws } from "assert";
-import { CultureInfo } from "culture-info";
+import { CultureInfo } from "@manuth/resource-manager";
+import { TempFile } from "@manuth/temp-files";
 import fm = require("front-matter");
 import { stat, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
-import { TempFile } from "temp-filesystem";
 import { TextDocument, workspace } from "vscode";
 import { stringify } from "yamljs";
 import { Document } from "../../../../System/Documents/Document";
@@ -36,7 +36,7 @@ suite(
 
                 tempFile = new TempFile(
                     {
-                        postfix: ".md"
+                        Suffix: ".md"
                     });
 
                 await writeFile(tempFile.FullName, rawContent);

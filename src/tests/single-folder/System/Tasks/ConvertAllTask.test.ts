@@ -1,6 +1,6 @@
 import { ok, rejects, strictEqual } from "assert";
+import { TempDirectory } from "@manuth/temp-files";
 import { pathExists } from "fs-extra";
-import { TempDirectory } from "temp-filesystem";
 import { join } from "upath";
 import { commands, ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";

@@ -1,8 +1,8 @@
 import { EOL } from "os";
-import { join, parse } from "upath";
 import fm = require("front-matter");
 import { renameSync } from "fs-extra";
 import format = require("string-template");
+import { join, parse } from "upath";
 import { CancellationToken, Progress, TextDocument, window, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";

@@ -1,5 +1,5 @@
 import { strictEqual } from "assert";
-import { CultureInfo } from "culture-info";
+import { CultureInfo } from "@manuth/resource-manager";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
 suite(

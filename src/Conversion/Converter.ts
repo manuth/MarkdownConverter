@@ -1,13 +1,13 @@
 import { createServer, Server } from "http";
-import { basename, dirname, join, relative } from "upath";
 import { resolve } from "url";
 import { promisify } from "util";
+import { TempDirectory } from "@manuth/temp-files";
 import { move, pathExists, remove, writeFile } from "fs-extra";
 import getPort = require("get-port");
 import { glob } from "glob";
 import { Browser, launch, PDFOptions, ScreenshotOptions } from "puppeteer-core";
 import serveHandler = require("serve-handler");
-import { TempDirectory } from "temp-filesystem";
+import { basename, dirname, join, relative } from "upath";
 import { Progress } from "vscode";
 import websiteScraper = require("website-scraper");
 import { Resources } from "../Properties/Resources";

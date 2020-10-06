@@ -1,9 +1,9 @@
 import { doesNotReject, ok, strictEqual } from "assert";
-import { normalize, resolve } from "upath";
 import { Package } from "@manuth/package-json-editor";
+import { TempDirectory, TempFile } from "@manuth/temp-files";
 import dedent = require("dedent");
 import { pathExists, writeFile } from "fs-extra";
-import { TempDirectory, TempFile } from "temp-filesystem";
+import { normalize, resolve } from "upath";
 import { commands, ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Constants } from "../../../../Constants";
 import { ConversionType } from "../../../../Conversion/ConversionType";
@@ -92,7 +92,7 @@ suite(
 
                         mdFile = new TempFile(
                             {
-                                postfix: ".txt"
+                                Suffix: ".txt"
                             });
 
                         destinationDirectory = new TempDirectory();

@@ -1,8 +1,8 @@
 import { rejects } from "assert";
-import { basename, dirname, join, resolve } from "upath";
 import { pathExists, rename } from "fs-extra";
 import pkgUp = require("pkg-up");
 import { executablePath } from "puppeteer-core";
+import { basename, dirname, join, resolve } from "upath";
 import { extension } from "../../../../extension";
 import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask";
 

@@ -1,9 +1,9 @@
 import { doesNotReject, ok, rejects, strictEqual } from "assert";
 import { Server } from "http";
+import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import { Browser } from "puppeteer-core";
-import { TempDirectory, TempFile } from "temp-filesystem";
 import { changeExt } from "upath";
 import { TextDocument, workspace } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
@@ -50,8 +50,8 @@ suite(
 
                 tempFile = new TempFile(
                     {
-                        dir: tempDir.FullName,
-                        postfix: ".md"
+                        Directory: tempDir.FullName,
+                        Suffix: ".md"
                     });
 
                 await writeFile(tempFile.FullName, "This is a test");

@@ -1,5 +1,5 @@
 import { doesNotThrow, throws } from "assert";
-import { TempFile } from "temp-filesystem";
+import { TempFile } from "@manuth/temp-files";
 import { ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { extension } from "../../../../extension";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
@@ -50,7 +50,7 @@ suite(
 
                         testFile = new TempFile(
                             {
-                                postfix: ".txt"
+                                Suffix: ".txt"
                             });
 
                         task = new TestConvertTask(extension);

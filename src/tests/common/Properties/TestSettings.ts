@@ -1,4 +1,4 @@
-import { ObjectResource } from "localized-resource-manager";
+import { ObjectResource } from "@manuth/resource-manager";
 import { Settings } from "../../../Properties/Settings";
 
 /**

@@ -1,5 +1,5 @@
 import { notStrictEqual, ok, strictEqual } from "assert";
-import { CultureInfo } from "culture-info";
+import { CultureInfo } from "@manuth/resource-manager";
 import { Resources } from "../../../../Properties/Resources";
 import { FileException } from "../../../../System/IO/FileException";
 

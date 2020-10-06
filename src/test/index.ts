@@ -1,10 +1,10 @@
-import { resolve } from "upath";
 import { promisify } from "util";
 import { pathExists } from "fs-extra";
 import { glob } from "glob";
 import minimist = require("minimist");
 import Mocha = require("mocha");
 import { createBrowserFetcher, executablePath } from "puppeteer-core";
+import { resolve } from "upath";
 import { extension } from "../extension";
 
 /**

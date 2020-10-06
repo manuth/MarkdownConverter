@@ -51,6 +51,8 @@
     "prepare": "npm run rebuild"
   },
   "dependencies": {
+    "@manuth/resource-manager": "^1.2.1",
+    "@manuth/temp-files": "^2.0.0",
     "clone": "^2.1.2",
     "dedent": "^0.7.0",
     "es6-template-string": "^1.1.0",
@@ -60,7 +62,6 @@
     "glob": "^7.1.6",
     "highlight.js": "^10.2.1",
     "highlightjs": "^9.12.0",
-    "localized-resource-manager": "^1.2.0",
     "markdown-it": "^11.0.1",
     "markdown-it-anchor": "^6.0.0",
     "markdown-it-checkbox": "^1.1.0",
@@ -72,7 +73,6 @@
     "puppeteer-core": "^5.3.1",
     "serve-handler": "^6.1.3",
     "string-template": "^1.0.0",
-    "temp-filesystem": "^1.1.3",
     "transliteration": "^2.1.11",
     "twemoji": "^13.0.1",
     "utf8": "^3.0.0",

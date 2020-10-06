@@ -1,10 +1,10 @@
-import { isAbsolute } from "upath";
+import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
 import { pathExists, readFile, statSync } from "fs-extra";
-import { CultureInfo } from "localized-resource-manager";
 import MarkdownIt = require("markdown-it");
 import { render } from "mustache";
+import { isAbsolute } from "upath";
 import { TextDocument } from "vscode";
 import { stringify } from "yamljs";
 import { Resources } from "../../Properties/Resources";

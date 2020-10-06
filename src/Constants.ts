@@ -1,5 +1,5 @@
-import { dirname } from "upath";
 import pkgUp = require("pkg-up");
+import { dirname } from "upath";
 
 /**
  * Provides constants for the extension.

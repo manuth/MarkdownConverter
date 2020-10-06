@@ -1,10 +1,10 @@
 import { exec } from "child_process";
-import { join, resolve } from "upath";
 import { Package } from "@manuth/package-json-editor";
 import { mkdirp, pathExists } from "fs-extra";
 import { createBrowserFetcher, executablePath } from "puppeteer-core";
 import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
 import format = require("string-template");
+import { join, resolve } from "upath";
 import { commands, ExtensionContext, Progress, ProgressLocation, window } from "vscode";
 import { Constants } from "./Constants";
 import { ConversionType } from "./Conversion/ConversionType";

@@ -1,6 +1,6 @@
 import { ok, strictEqual } from "assert";
+import { TempFile } from "@manuth/temp-files";
 import { dirname } from "upath";
-import { TempFile } from "temp-filesystem";
 import { ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Settings } from "../../../../Properties/Settings";
 import { ConfigRestorer } from "../../../ConfigRestorer";
@@ -32,7 +32,7 @@ suite(
 
                                 testFile = new TempFile(
                                     {
-                                        postfix: ".md"
+                                        Suffix: ".md"
                                     });
 
                                 substitutionTester = new SubstitutionTester(await workspace.openTextDocument(testFile.FullName));
