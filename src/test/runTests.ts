@@ -6,6 +6,12 @@ import { TestOptions } from "vscode-test/out/runTest";
 {
     let environmentPath = resolve(__dirname, "..", "..", "src", "test");
 
+    let commonArgs: string[] = [
+        "--disable-gpu",
+        "--headless",
+        "--no-sandbox"
+    ];
+
     let commonOptions: TestOptions = {
         extensionDevelopmentPath: resolve(__dirname, "..", ".."),
         extensionTestsPath: resolve(__dirname, "..", "..", "lib", "test")
@@ -28,6 +34,7 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "single-file"
                 },
                 launchArgs: [
+                    ...commonArgs,
                     resolve(environmentPath, "single-file", "Test.md")
                 ]
             });
@@ -39,6 +46,7 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "single-folder"
                 },
                 launchArgs: [
+                    ...commonArgs,
                     resolve(environmentPath, "single-folder")
                 ]
             });
@@ -50,6 +58,7 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "workspace"
                 },
                 launchArgs: [
+                    ...commonArgs,
                     resolve(environmentPath, "workspace", "workspace.code-workspace")
                 ]
             });
