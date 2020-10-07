@@ -23,6 +23,7 @@ export function ConfigInterceptorTests(): void
             suiteSetup(
                 async function()
                 {
+                    this.timeout(5 * 1000);
                     config = workspace.getConfiguration(Settings.ConfigKey, workspace.workspaceFolders[0].uri);
                     key = "ConversionType";
                     originalSetting = [ConversionType[ConversionType.JPEG]] as any;
