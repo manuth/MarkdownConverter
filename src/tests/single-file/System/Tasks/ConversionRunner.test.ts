@@ -1,10 +1,10 @@
 import { ok, strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
 import { dirname } from "upath";
-import { ConfigurationTarget, Uri, window, workspace } from "vscode";
-import { SubstitutionTester } from "../../../SubstitutionTester";
+import { Uri, window, workspace } from "vscode";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ITestContext } from "../../../ITestContext";
+import { SubstitutionTester } from "../../../SubstitutionTester";
 
 /**
  * Registers tests for the `ConversionRunner` class.

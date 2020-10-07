@@ -1,4 +1,3 @@
-import { workspace } from "vscode";
 import { ISettings } from "../Properties/ISettings";
 import { Settings } from "../Properties/Settings";
 import { ConfigInterceptor } from "../tests/ConfigInterceptor";
