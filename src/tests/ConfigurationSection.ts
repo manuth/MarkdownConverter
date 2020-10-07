@@ -1,5 +1,6 @@
+import { types } from "util";
 import { ConfigurationScope, ConfigurationTarget, WorkspaceConfiguration } from "vscode";
-import { Settings } from "../Properties/Settings";
+import { ISettings } from "../Properties/ISettings";
 import { ConfigInterceptor } from "./ConfigInterceptor";
 
 /**
@@ -11,6 +12,11 @@ export class ConfigurationSection implements WorkspaceConfiguration
      * The key of this section.
      */
     private section: string;
+
+    /**
+     * The scope of this section.
+     */
+    private scope: ConfigurationScope;
 
     /**
      * The interceptor of this section.
@@ -38,6 +44,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
     {
         this.interceptor = interceptor;
         this.section = section;
+        this.scope = scope;
         this.target = this.interceptor.Target(section, scope);
     }
 
@@ -131,11 +138,33 @@ export class ConfigurationSection implements WorkspaceConfiguration
     {
         try
         {
-            return this.GetInterception(section) ?? defaultValue;
+            return this.GetInterception(section) ?? defaultValue ?? this.Target.inspect(section).defaultValue;
         }
         catch
         {
-            return this.Target.get(section, defaultValue);
+            let value = this.Target.get(section, defaultValue);
+
+            if (types.isProxy(value))
+            {
+                let configurationSection = new ConfigurationSection(this.Interceptor, this.GetKey(section), this.scope);
+
+                return new Proxy<any>(
+                    {},
+                    {
+                        get(target, key)
+                        {
+                            return configurationSection.get(key as string);
+                        },
+                        has(target, key)
+                        {
+                            return configurationSection.has(key as string);
+                        }
+                    });
+            }
+            else
+            {
+                return value;
+            }
         }
     }
 
@@ -150,7 +179,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
      */
     public has(section: string): boolean
     {
-        return this.get(section) !== undefined;
+        return this.HasInterception(section) ? (this.GetInterception(section) !== undefined) : this.Target.has(section);
     }
 
     /**
@@ -206,20 +235,6 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Determines the key of the specified `section`.
-     *
-     * @param section
-     * The section of the key to get.
-     *
-     * @returns
-     * The key of the specified `section`.
-     */
-    protected GetKey(section: string): string
-    {
-        return this.Target.inspect(section).key;
-    }
-
-    /**
      * Gets the interception for the specified `section`.
      *
      * @param section
@@ -228,22 +243,33 @@ export class ConfigurationSection implements WorkspaceConfiguration
      * @returns
      * The intercepted value for the specified `section`.
      */
-    protected GetInterception(section: string): any
+    public GetInterception(section: string): any
     {
-        let key = this.GetKey(section);
-        let path = key.split(".");
+        let key = this.GetInterceptionKey(section);
 
-        if (path[0] === Settings.ConfigKey)
+        if (this.Interceptor.SettingManager.Exists(key))
         {
-            let markdownKey = path.slice(1).join(".");
-
-            if (markdownKey in this.Interceptor.Settings)
-            {
-                return (this.Interceptor.Settings as any)[markdownKey];
-            }
+            return this.Interceptor.SettingManager.Get(key);
         }
+        else
+        {
+            throw new Error();
+        }
+    }
 
-        throw new Error();
+    /**
+     * Sets an intercepted config-value.
+     *
+     * @param section
+     * The section to intercept.
+     *
+     * @param value
+     * The value to intercept.
+     */
+    public SetInterception(section: string, value: any): void
+    {
+        let key = this.GetInterceptionKey(section);
+        this.Interceptor.Settings[key as keyof ISettings] = value;
     }
 
     /**
@@ -255,7 +281,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
      * @returns
      * A value indicating whether an interception for the specified `section` exists.
      */
-    protected HasInterception(section: string): boolean
+    public HasInterception(section: string): boolean
     {
         try
         {
@@ -266,5 +292,50 @@ export class ConfigurationSection implements WorkspaceConfiguration
         {
             return false;
         }
+    }
+
+    /**
+     * Gets the key of the specified `section` relative to the intercepted section.
+     *
+     * @param section
+     * The section of the key to get.
+     *
+     * @returns
+     * The key relative to the intercepted section.
+     */
+    protected GetInterceptionKey(section: string): string
+    {
+        if (!this.Interceptor.Section)
+        {
+            return section;
+        }
+        else
+        {
+            let key = this.GetKey(section);
+            let path = key.split(".");
+
+            if (path[0] === this.Interceptor.Section)
+            {
+                return path.slice(1).join(".");
+            }
+            else
+            {
+                throw new Error();
+            }
+        }
+    }
+
+    /**
+     * Determines the key of the specified `section`.
+     *
+     * @param section
+     * The section of the key to get.
+     *
+     * @returns
+     * The key of the specified `section`.
+     */
+    protected GetKey(section: string): string
+    {
+        return this.Target.inspect(section).key;
     }
 }

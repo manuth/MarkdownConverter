@@ -65,8 +65,7 @@ export class DateTimeFormatter
             formatString = this.GetResource("Formats." + formatString);
         }
         catch
-        {
-        }
+        { }
 
         formatString = formatString.replace(this.pattern, (match) =>
         {
