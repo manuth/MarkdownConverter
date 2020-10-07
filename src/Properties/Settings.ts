@@ -115,16 +115,16 @@ export class Settings
         let referenceChecker = new Object();
         let paperKey = "Document.Paper";
         let formatKey = `${paperKey}.PaperFormat`;
+        let widthKey = `${formatKey}.Width`;
+        let heightKey = `${formatKey}.Height`;
 
-        try
+        if (
+            this.config.has(widthKey) &&
+            this.config.has(heightKey))
         {
-            let width: string = this.GetConfigEntry(`${formatKey}.Width`);
-            let height: string = this.GetConfigEntry(`${formatKey}.Height`);
-
-            let format = new CustomPaperFormat(width, height);
-            paper.Format = format;
+            paper.Format = new CustomPaperFormat(this.GetConfigEntry(widthKey), this.GetConfigEntry(heightKey));
         }
-        catch (exception)
+        else
         {
             let format = new StandardizedPaperFormat();
             format.Format = StandardizedFormatType[this.GetConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`)];
@@ -243,17 +243,6 @@ export class Settings
      */
     protected GetConfigEntry<T>(key: string, defaultValue?: T): T
     {
-        if (this.config.has(key))
-        {
-            return this.config.get<T>(key);
-        }
-        else if (defaultValue !== undefined)
-        {
-            return defaultValue;
-        }
-        else
-        {
-            throw new RangeError();
-        }
+        return this.config.get<T>(key, defaultValue);
     }
 }

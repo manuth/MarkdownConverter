@@ -4,17 +4,19 @@ import { TempDirectory, TempFile } from "@manuth/temp-files";
 import dedent = require("dedent");
 import { pathExists, writeFile } from "fs-extra";
 import { normalize, resolve } from "upath";
-import { commands, ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
+import { commands, Uri, window } from "vscode";
 import { Constants } from "../../../../Constants";
-import { ConversionType } from "../../../../Conversion/ConversionType";
-import { Settings } from "../../../../Properties/Settings";
+import { ISettings } from "../../../../Properties/ISettings";
 import { Extension } from "../../../../System/Extensibility/Extension";
-import { ConfigRestorer } from "../../../ConfigRestorer";
+import { ITestContext } from "../../../ITestContext";
 
 /**
  * Registers tests for the `Extension` class.
+ *
+ * @param context
+ * The test-context.
  */
-export function ExtensionTests(): void
+export function ExtensionTests(context: ITestContext<ISettings>): void
 {
     suite(
         "Extension",
@@ -77,23 +79,11 @@ export function ExtensionTests(): void
                     let mdFile: TempFile;
                     let destinationDirectory: TempDirectory;
                     let pdfFile: string;
-                    let configRestorer: ConfigRestorer;
-                    let config: WorkspaceConfiguration;
 
                     suiteSetup(
                         async function()
                         {
                             this.timeout(8 * 1000);
-
-                            configRestorer = new ConfigRestorer(
-                                [
-                                    "ConversionType",
-                                    "DestinationPattern",
-                                    "IgnoreLanguageMode"
-                                ],
-                                Settings.ConfigKey);
-
-                            config = workspace.getConfiguration(Settings.ConfigKey);
 
                             mdFile = new TempFile(
                                 {
@@ -110,20 +100,23 @@ export function ExtensionTests(): void
                                     # Hello World`));
 
                             await window.showTextDocument(Uri.file(mdFile.FullName));
-                            await configRestorer.Clear();
-                            await config.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
-                            await config.update("DestinationPattern", normalize(pdfFile), ConfigurationTarget.Global);
-                            await config.update("IgnoreLanguageMode", true, ConfigurationTarget.Global);
                         });
 
                     suiteTeardown(
                         async function()
                         {
                             this.timeout(8 * 1000);
-                            await configRestorer.Restore();
                             await commands.executeCommand("workbench.action.closeActiveEditor");
                             mdFile.Dispose();
                             destinationDirectory.Dispose();
+                        });
+
+                    setup(
+                        () =>
+                        {
+                            context.Settings.ConversionType = ["PDF"];
+                            context.Settings.DestinationPattern = normalize(pdfFile);
+                            context.Settings.IgnoreLanguageMode = true;
                         });
 
                     test(
@@ -132,6 +125,7 @@ export function ExtensionTests(): void
                         {
                             this.slow(11.5 * 1000);
                             this.timeout(46 * 1000);
+                            this.timeout(0);
 
                             await doesNotReject(
                                 async () =>

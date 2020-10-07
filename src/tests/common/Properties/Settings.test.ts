@@ -1,6 +1,7 @@
 import { deepStrictEqual, ok, strictEqual } from "assert";
 import { env } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
+import { ISettings } from "../../../Properties/ISettings";
 import { Settings } from "../../../Properties/Settings";
 import { CustomPaperFormat } from "../../../System/Documents/CustomPaperFormat";
 import { EmojiType } from "../../../System/Documents/EmojiType";
@@ -9,51 +10,26 @@ import { Margin } from "../../../System/Documents/Margin";
 import { PaperOrientation } from "../../../System/Documents/PaperOrientation";
 import { StandardizedFormatType } from "../../../System/Documents/StandardizedFormatType";
 import { StandardizedPaperFormat } from "../../../System/Documents/StandardizedPaperFormat";
-import { ConfigRestorer } from "../../ConfigRestorer";
-import { TestSettings } from "./TestSettings";
+import { ITestContext } from "../../ITestContext";
 
 /**
  * Registers tests for the `Settings` class.
+ *
+ * @param context
+ * The test-context.
  */
-export function SettingTests(): void
+export function SettingTests(context: ITestContext<ISettings>): void
 {
     suite(
         "Settings",
         () =>
         {
-            let settings: TestSettings;
-            let configRestorer: ConfigRestorer;
+            let settings: Settings;
 
             suiteSetup(
-                async () =>
-                {
-                    settings = new TestSettings();
-
-                    configRestorer = new ConfigRestorer(
-                        [
-                            "ConversionType",
-                            "Locale",
-                            "Parser.EmojiType",
-                            "Document.Paper.Margin",
-                            "Document.Paper.PaperFormat",
-                            "Parser.Toc.Enabled",
-                            "Parser.Toc.ListType"
-                        ],
-                        Settings.ConfigKey);
-
-                    await configRestorer.Clear();
-                });
-
-            suiteTeardown(
-                async () =>
-                {
-                    await configRestorer.Restore();
-                });
-
-            setup(
                 () =>
                 {
-                    settings.Resource.Resource = {};
+                    settings = Settings.Default;
                 });
 
             suite(
@@ -64,6 +40,7 @@ export function SettingTests(): void
                         "Checking whether the default conversion-type is set correctly…",
                         () =>
                         {
+                            context.Clear();
                             deepStrictEqual(settings.ConversionType, [ConversionType.PDF]);
                         });
 
@@ -71,7 +48,7 @@ export function SettingTests(): void
                         "Checking whether the conversion-types are resolved correctly…",
                         () =>
                         {
-                            settings.Resource.Resource["ConversionType"] = ["HTML"] as Array<keyof typeof ConversionType>;
+                            context.Settings["ConversionType"] = ["HTML"] as Array<keyof typeof ConversionType>;
                             strictEqual(settings.ConversionType[0], ConversionType.HTML);
                         });
                 });
@@ -84,7 +61,7 @@ export function SettingTests(): void
                         "Checking whether the locale-setting is loaded correctly…",
                         () =>
                         {
-                            settings.Resource.Resource["Locale"] = "de";
+                            context.Settings["Locale"] = "de";
                             strictEqual(settings.Locale, "de");
                         });
 
@@ -104,7 +81,7 @@ export function SettingTests(): void
                         "Checking whether the emoji-type is resolved correctly…",
                         () =>
                         {
-                            settings.Resource.Resource["Parser.EmojiType"] = "Native" as keyof typeof EmojiType;
+                            context.Settings["Parser.EmojiType"] = "Native";
                             strictEqual(settings.EmojiType, EmojiType.Native);
                         });
                 });
@@ -113,8 +90,6 @@ export function SettingTests(): void
                 "PaperFormat",
                 () =>
                 {
-                    let paperKey = "Document.Paper";
-                    let formatKey = `${paperKey}.PaperFormat`;
                     let checkMargin: (margin: Margin) => void;
 
                     setup(
@@ -127,9 +102,7 @@ export function SettingTests(): void
                                 Right: "20cm"
                             };
 
-                            settings.Resource.Resource = {
-                                [`${paperKey}.Margin`]: newMargin
-                            };
+                            context.Settings["Document.Paper.Margin"] = newMargin;
 
                             checkMargin = (margin: Margin) =>
                             {
@@ -146,15 +119,12 @@ export function SettingTests(): void
                         {
                             let customFormat = {
                                 Width: "28cm",
-                                Height: "29cm"
+                                Height: "29cm",
+                                Format: undefined as string,
+                                Orientation: undefined as string
                             };
 
-                            Object.assign(
-                                settings.Resource.Resource,
-                                {
-                                    [formatKey]: customFormat
-                                });
-
+                            context.Settings["Document.Paper.PaperFormat"] = customFormat;
                             let paperFormat = settings.PaperFormat.Format as CustomPaperFormat;
                             ok(settings.PaperFormat.Format instanceof CustomPaperFormat);
                             strictEqual(paperFormat.Width, customFormat.Width);
@@ -166,12 +136,12 @@ export function SettingTests(): void
                         "Checking whether a correct standardized paper-format is loaded if either width or height is not specified…",
                         () =>
                         {
-                            Object.assign(
-                                settings.Resource.Resource,
-                                {
-                                    [`${formatKey}.Format`]: "A5" as keyof typeof StandardizedFormatType,
-                                    [`${formatKey}.Orientation`]: "Landscape" as keyof typeof PaperOrientation
-                                });
+                            context.Settings["Document.Paper.PaperFormat"] = {
+                                Width: undefined as string,
+                                Height: undefined as string,
+                                Format: "A5" as keyof typeof StandardizedFormatType,
+                                Orientation: "Landscape" as keyof typeof PaperOrientation
+                            };
 
                             let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
                             ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
@@ -184,6 +154,7 @@ export function SettingTests(): void
                         "Checking whether the default paper-format is correct…",
                         () =>
                         {
+                            context.Clear();
                             let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
                             ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
                             strictEqual(paperFormat.Format, StandardizedFormatType.A4);
@@ -200,7 +171,7 @@ export function SettingTests(): void
                         "Checking whether the `Toc`-settings equals null if toc is disabled…",
                         () =>
                         {
-                            settings.Resource.Resource["Parser.Toc.Enabled"] = false;
+                            context.Settings["Parser.Toc.Enabled"] = false;
                             strictEqual(settings.TocSettings, null);
                         });
 
@@ -208,10 +179,10 @@ export function SettingTests(): void
                         "Checking whether the `ListType`-option is parsed correctly…",
                         () =>
                         {
-                            settings.Resource.Resource["Parser.Toc.Enabled"] = true;
-                            settings.Resource.Resource["Parser.Toc.ListType"] = "ul";
+                            context.Settings["Parser.Toc.Enabled"] = true;
+                            context.Settings["Parser.Toc.ListType"] = "ul";
                             strictEqual(settings.TocSettings.ListType, ListType.Unordered);
-                            settings.Resource.Resource["Parser.Toc.ListType"] = "ol";
+                            context.Settings["Parser.Toc.ListType"] = "ol";
                             strictEqual(settings.TocSettings.ListType, ListType.Ordered);
                         });
                 });

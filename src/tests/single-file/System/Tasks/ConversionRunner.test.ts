@@ -1,15 +1,18 @@
 import { ok, strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
 import { dirname } from "upath";
-import { ConfigurationTarget, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
-import { Settings } from "../../../../Properties/Settings";
-import { ConfigRestorer } from "../../../ConfigRestorer";
+import { ConfigurationTarget, Uri, window, workspace } from "vscode";
 import { SubstitutionTester } from "../../../SubstitutionTester";
+import { ISettings } from "../../../../Properties/ISettings";
+import { ITestContext } from "../../../ITestContext";
 
 /**
  * Registers tests for the `ConversionRunner` class.
+ *
+ * @param context
+ * The test-context.
  */
-export function ConversionRunnerTests(): void
+export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 {
     suite(
         "ConversionRunner",
@@ -23,8 +26,6 @@ export function ConversionRunnerTests(): void
                         "Checking whether the `DestinationPattern` is substituted correctly…",
                         () =>
                         {
-                            let config: WorkspaceConfiguration;
-                            let configRestorer: ConfigRestorer;
                             let testFile: TempFile;
                             let substitutionTester: SubstitutionTester;
                             let untitledSubstitutionTester: SubstitutionTester;
@@ -32,9 +33,6 @@ export function ConversionRunnerTests(): void
                             suiteSetup(
                                 async () =>
                                 {
-                                    config = workspace.getConfiguration(Settings.ConfigKey);
-                                    configRestorer = new ConfigRestorer(["DestinationPattern"], Settings.ConfigKey);
-
                                     testFile = new TempFile(
                                         {
                                             Suffix: ".md"
@@ -47,14 +45,7 @@ export function ConversionRunnerTests(): void
                             suiteTeardown(
                                 async () =>
                                 {
-                                    await configRestorer.Restore();
                                     testFile.Dispose();
-                                });
-
-                            setup(
-                                async () =>
-                                {
-                                    await configRestorer.Clear();
                                 });
 
                             test(
@@ -63,7 +54,7 @@ export function ConversionRunnerTests(): void
                                 {
                                     this.slow(1 * 1000);
                                     this.timeout(4 * 1000);
-                                    await config.update("DestinationPattern", "${workspaceFolder}", ConfigurationTarget.Global);
+                                    context.Settings.DestinationPattern = "${workspaceFolder}";
                                     strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(dirname(testFile.FullName)).fsPath);
                                 });
 
@@ -73,7 +64,7 @@ export function ConversionRunnerTests(): void
                                 {
                                     this.slow(1 * 1000);
                                     this.timeout(4 * 1000);
-                                    await config.update("DestinationPattern", "${dirname}", ConfigurationTarget.Global);
+                                    context.Settings.DestinationPattern = "${dirname}";
                                     ok(/^\.?$/g.test(await substitutionTester.Test()));
                                 });
 
@@ -92,7 +83,7 @@ export function ConversionRunnerTests(): void
                                         return inputWorkspaceName;
                                     };
 
-                                    await config.update("DestinationPattern", "${workspaceFolder}", ConfigurationTarget.Global);
+                                    context.Settings.DestinationPattern = "${workspaceFolder}";
                                     strictEqual(await untitledSubstitutionTester.Test(), inputWorkspaceName);
                                     window.showInputBox = original;
                                 });

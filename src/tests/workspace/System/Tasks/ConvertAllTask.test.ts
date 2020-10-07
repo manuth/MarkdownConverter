@@ -1,6 +1,5 @@
 import { strictEqual } from "assert";
 import { extension } from "../../../../extension";
-import { ConfigRestorer } from "../../../ConfigRestorer";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 /**
@@ -13,29 +12,11 @@ export function ConvertAllTaskTests(): void
         () =>
         {
             let task: TestConvertAllTask;
-            let configRestorer: ConfigRestorer;
 
             suiteSetup(
                 () =>
                 {
                     task = new TestConvertAllTask(extension);
-
-                    configRestorer = new ConfigRestorer(
-                        [
-                            "files.exclude"
-                        ]);
-                });
-
-            suiteTeardown(
-                async () =>
-                {
-                    await configRestorer.Restore();
-                });
-
-            setup(
-                async () =>
-                {
-                    await configRestorer.Clear();
                 });
 
             test(

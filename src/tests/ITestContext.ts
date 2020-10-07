@@ -1,12 +1,15 @@
-import { ISettings } from "../Properties/ISettings";
-
 /**
  * Represents a test-context.
  */
-export interface ITestContext
+export interface ITestContext<TSection extends any = any>
 {
     /**
      * Gets or sets the intercepted settings.
      */
-    Settings: ISettings;
+    Settings: Partial<TSection>;
+
+    /**
+     * Forces all settings to resolve to the default value.
+     */
+    Clear(): void;
 }

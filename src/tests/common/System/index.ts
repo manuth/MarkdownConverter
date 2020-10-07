@@ -1,3 +1,5 @@
+import { ISettings } from "../../../Properties/ISettings";
+import { ITestContext } from "../../ITestContext";
 import { DocumentTests } from "./Documents";
 import { ExceptionTests } from "./Exception.test";
 import { ExtensibilityTests } from "./Extensibility";
@@ -8,8 +10,11 @@ import { YAMLTests } from "./YAML";
 
 /**
  * Registers tests for system-components.
+ *
+ * @param context
+ * The test-context.
  */
-export function SystemTests(): void
+export function SystemTests(context: ITestContext<ISettings>): void
 {
     suite(
         "System",
@@ -19,8 +24,8 @@ export function SystemTests(): void
             IOTests();
             YAMLTests();
             GlobalizationTests();
-            ExtensibilityTests();
-            TaskTests();
+            ExtensibilityTests(context);
+            TaskTests(context);
             DocumentTests();
         });
 }

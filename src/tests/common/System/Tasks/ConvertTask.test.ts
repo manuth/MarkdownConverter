@@ -1,16 +1,19 @@
 import { doesNotThrow, throws } from "assert";
 import { TempFile } from "@manuth/temp-files";
-import { ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
+import { TextDocument, Uri, window } from "vscode";
 import { extension } from "../../../../extension";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
-import { Settings } from "../../../../Properties/Settings";
+import { ISettings } from "../../../../Properties/ISettings";
 import { ConvertTask } from "../../../../System/Tasks/ConvertTask";
-import { ConfigRestorer } from "../../../ConfigRestorer";
+import { ITestContext } from "../../../ITestContext";
 
 /**
  * Registers tests for the `ConvertTask` class.
+ *
+ * @param context
+ * The test-context.
  */
-export function ConvertTaskTests(): void
+export function ConvertTaskTests(context: ITestContext<ISettings>): void
 {
     suite(
         "ConvertTask",
@@ -20,8 +23,6 @@ export function ConvertTaskTests(): void
                 "GetMarkdownDocument()",
                 () =>
                 {
-                    let config: WorkspaceConfiguration;
-                    let configRestorer: ConfigRestorer;
                     let testFile: TempFile;
                     let task: TestConvertTask;
 
@@ -45,19 +46,6 @@ export function ConvertTaskTests(): void
                     suiteSetup(
                         async () =>
                         {
-                            config = workspace.getConfiguration(Settings.ConfigKey);
-
-                            configRestorer = new ConfigRestorer(
-                                [
-                                    "IgnoreLanguageMode"
-                                ],
-                                Settings.ConfigKey);
-
-                            testFile = new TempFile(
-                                {
-                                    Suffix: ".txt"
-                                });
-
                             task = new TestConvertTask(extension);
                             await window.showTextDocument(Uri.file(testFile.FullName));
                         });
@@ -65,15 +53,13 @@ export function ConvertTaskTests(): void
                     suiteTeardown(
                         async () =>
                         {
-                            await configRestorer.Restore();
                             testFile.Dispose();
                         });
 
                     setup(
                         async () =>
                         {
-                            await configRestorer.Clear();
-                            await config.update("IgnoreLanguageMode", false, ConfigurationTarget.Global);
+                            context.Settings.IgnoreLanguageMode = false;
                         });
 
                     test(
@@ -88,7 +74,7 @@ export function ConvertTaskTests(): void
                         async function()
                         {
                             this.slow(80);
-                            await config.update("IgnoreLanguageMode", true, ConfigurationTarget.Global);
+                            context.Settings.IgnoreLanguageMode = true;
                             doesNotThrow(() => task.GetMarkdownDocument());
                         });
                 });

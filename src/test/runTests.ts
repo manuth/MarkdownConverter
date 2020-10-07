@@ -1,3 +1,5 @@
+import { join } from "path";
+import { pathExists, remove } from "fs-extra";
 import { resolve } from "upath";
 import { runTests } from "vscode-test";
 import { TestOptions } from "vscode-test/out/runTest";
@@ -7,11 +9,17 @@ import { TestOptions } from "vscode-test/out/runTest";
     let environmentPath = resolve(__dirname, "..", "..", "src", "test");
     let commonArgs = process.argv.slice(2);
     let singleFolderPath = resolve(environmentPath, "single-folder");
+    let tempSettingsPath = join(singleFolderPath, ".vscode");
 
     let commonOptions: TestOptions = {
         extensionDevelopmentPath: resolve(__dirname, "..", ".."),
         extensionTestsPath: resolve(__dirname, "..", "..", "lib", "test")
     };
+
+    if (await pathExists(tempSettingsPath))
+    {
+        await remove(tempSettingsPath);
+    }
 
     try
     {
@@ -34,6 +42,7 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "common"
                 },
                 launchArgs: [
+                    singleFolderPath,
                     ...commonArgs
                 ]
             });
@@ -79,5 +88,12 @@ import { TestOptions } from "vscode-test/out/runTest";
         console.error(exception);
         console.error("Failed to run tests");
         process.exit(1);
+    }
+    finally
+    {
+        if (await pathExists(tempSettingsPath))
+        {
+            await remove(tempSettingsPath);
+        }
     }
 })();

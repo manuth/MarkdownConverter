@@ -3,60 +3,34 @@ import { TempDirectory } from "@manuth/temp-files";
 import { pathExists } from "fs-extra";
 import { join } from "upath";
 import { commands, ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
-import { ConversionType } from "../../../../Conversion/ConversionType";
 import { extension } from "../../../../extension";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
-import { Settings } from "../../../../Properties/Settings";
-import { ConfigRestorer } from "../../../ConfigRestorer";
+import { ISettings } from "../../../../Properties/ISettings";
+import { ITestContext } from "../../../ITestContext";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 /**
  * Registers tests for the `ConvertAllTask` class.
+ *
+ * @param context
+ * The test-context.
  */
-export function ConvertAllTaskTests(): void
+export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
 {
     suite(
         "ConvertAllTask",
         () =>
         {
+            let excludeKey: string;
             let task: TestConvertAllTask;
             let config: WorkspaceConfiguration;
-            let markdownConfig: WorkspaceConfiguration;
-            let configRestorer: ConfigRestorer;
-            let markdownConfigRestorer: ConfigRestorer;
 
             suiteSetup(
                 () =>
                 {
+                    excludeKey = "files.exclude";
                     task = new TestConvertAllTask(extension);
-                    config = workspace.getConfiguration();
-                    markdownConfig = workspace.getConfiguration(Settings.ConfigKey);
-
-                    configRestorer = new ConfigRestorer(
-                        [
-                            "files.exclude"
-                        ]);
-
-                    markdownConfigRestorer = new ConfigRestorer(
-                        [
-                            "ConversionType",
-                            "DestinationPattern"
-                        ],
-                        Settings.ConfigKey);
-                });
-
-            suiteTeardown(
-                async () =>
-                {
-                    await configRestorer.Restore();
-                    await markdownConfigRestorer.Restore();
-                });
-
-            setup(
-                async () =>
-                {
-                    await configRestorer.Clear();
-                    await markdownConfigRestorer.Clear();
+                    config = workspace.getConfiguration(undefined, workspace.workspaceFolders[0]);
                 });
 
             suite(
@@ -83,8 +57,8 @@ export function ConvertAllTaskTests(): void
                         {
                             this.slow(16.5 * 1000);
                             this.timeout(1.1 * 60 * 1000);
-                            await markdownConfig.update("DestinationPattern", join(tempDir.FullName, "${basename}.${extension}"), ConfigurationTarget.Global);
-                            await markdownConfig.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
+                            context.Settings.DestinationPattern = join(tempDir.FullName, "${basename}.${extension}");
+                            context.Settings.ConversionType = ["PDF"];
                             await commands.executeCommand("markdownConverter.ConvertAll");
                             ok(await pathExists(tempDir.MakePath("Test1.pdf")));
                             ok(await pathExists(tempDir.MakePath("Test2.pdf")));
@@ -96,8 +70,9 @@ export function ConvertAllTaskTests(): void
                         {
                             this.slow(1.2 * 1000);
                             this.timeout(4.8 * 1000);
-                            await config.update("files.exclude", { "**/*.md": true }, ConfigurationTarget.Global);
+                            await config.update(excludeKey, { "**/*.md": true }, ConfigurationTarget.Workspace);
                             await rejects(() => task.Execute(), MarkdownFileNotFoundException);
+                            await config.update(excludeKey, undefined);
                         });
                 });
 

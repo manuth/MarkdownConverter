@@ -85,6 +85,17 @@ export function ConfigInterceptorTests(): void
                 });
 
             test(
+                "Checking whether default values are returned if the absence of a seciton is simulated…",
+                () =>
+                {
+                    (interceptor.Section as any)[key] = undefined;
+
+                    strictEqual(
+                        workspace.getConfiguration(Settings.ConfigKey).get(key),
+                        workspace.getConfiguration(Settings.ConfigKey).inspect(key).defaultValue);
+                });
+
+            test(
                 "Checking whether variable-inception is intercepted, too…",
                 async () =>
                 {

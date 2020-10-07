@@ -6,33 +6,30 @@ import dedent = require("dedent");
 import { readFile, writeFile } from "fs-extra";
 import MultiRange from "multi-integer-range";
 import { dirname, join, parse } from "upath";
-import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
-import { ConversionType } from "../../../../Conversion/ConversionType";
+import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace } from "vscode";
 import { Converter } from "../../../../Conversion/Converter";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
-import { Settings } from "../../../../Properties/Settings";
-import { EmojiType } from "../../../../System/Documents/EmojiType";
+import { ISettings } from "../../../../Properties/ISettings";
 import { Margin } from "../../../../System/Documents/Margin";
 import { PaperOrientation } from "../../../../System/Documents/PaperOrientation";
 import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
 import { StandardizedPaperFormat } from "../../../../System/Documents/StandardizedPaperFormat";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
-import { ConfigRestorer } from "../../../ConfigRestorer";
+import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
 
 /**
  * Registers tests for the `ConversionRunner` class.
+ *
+ * @param context
+ * The test-context.
  */
-export function ConversionRunnerTests(): void
+export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 {
     suite(
         "ConversionRunner",
         () =>
         {
-            let config: WorkspaceConfiguration;
-            let configRestorer: ConfigRestorer;
-            let markdownConfig: WorkspaceConfiguration;
-            let markdownRestorer: ConfigRestorer;
             let mdFile: TempFile;
             let destinationFile: TempFile;
             let Convert: () => Promise<void>;
@@ -68,59 +65,9 @@ export function ConversionRunnerTests(): void
                 }
             }
 
-            let Clean: Mocha.AsyncFunc = async function()
-            {
-                this.slow(2 * 1000);
-                this.timeout(8 * 1000);
-                await markdownRestorer.Clear();
-                await configRestorer.Clear();
-                await writeFile(mdFile.FullName, "");
-                await markdownConfig.update("ConversionType", [ConversionType[ConversionType.HTML]], true);
-                await markdownConfig.update("DestinationPattern", destinationFile.FullName, true);
-                await markdownConfig.update("Parser.SystemParserEnabled", false, true);
-            };
-
             suiteSetup(
                 async () =>
                 {
-                    config = workspace.getConfiguration();
-
-                    configRestorer = new ConfigRestorer(
-                        [
-                            "markdown.preview.breaks"
-                        ]);
-
-                    markdownConfig = workspace.getConfiguration(Settings.ConfigKey);
-
-                    markdownRestorer = new ConfigRestorer(
-                        [
-                            "ConversionType",
-                            "ConversionQuality",
-                            "DestinationPattern",
-                            "Locale",
-                            "DateFormat",
-                            "Document.Attributes",
-                            "Document.Paper.PaperFormat",
-                            "Document.Paper.Margin",
-                            "Document.Design.Template",
-                            "Document.Design.HighlightStyle",
-                            "Document.Design.StyleSheets",
-                            "Document.HeaderFooterEnabled",
-                            "Document.HeaderTemplate",
-                            "Document.FooterTemplate",
-                            "Parser.SystemParserEnabled",
-                            "Parser.Toc.Enabled",
-                            "Parser.Toc.Class",
-                            "Parser.Toc.Levels",
-                            "Parser.Toc.Indicator",
-                            "Parser.Toc.ListType",
-                            "Parser.EmojiType"
-                        ],
-                        Settings.ConfigKey);
-
-                    await markdownRestorer.Clear();
-                    await configRestorer.Clear();
-
                     mdFile = new TempFile(
                         {
                             Suffix: ".md"
@@ -151,34 +98,42 @@ export function ConversionRunnerTests(): void
                 async function()
                 {
                     this.timeout(5 * 1000);
-                    await markdownRestorer.Restore();
-                    await configRestorer.Restore();
                     mdFile.Dispose();
                     destinationFile.Dispose();
                 });
 
-            setup(Clean);
+            setup(
+                async function()
+                {
+                    this.slow(2 * 1000);
+                    this.timeout(8 * 1000);
+                    await writeFile(mdFile.FullName, "");
+                    context.Settings.ConversionType = ["HTML"];
+                    context.Settings.DestinationPattern = destinationFile.FullName;
+                    context.Settings["Parser.SystemParserEnabled"] = false;
+                });
 
             suite(
                 "LoadParser()",
                 () =>
                 {
-                    setup(Clean);
-
                     test(
                         "Checking whether the system-parser is used if `markdownConverter.Parser.SystemParserEnabled` is true…",
                         async function()
                         {
                             this.slow(6.5 * 1000);
                             this.timeout(26 * 1000);
+                            this.timeout(0);
                             let firstResult: string;
                             let secondResult: string;
+                            let lineBreakSetting = "markdown.preview.breaks";
+                            let config = workspace.getConfiguration(undefined, workspace.workspaceFolders[0]);
                             await writeFile(mdFile.FullName, "line1" + EOL + "line2");
-                            await markdownConfig.update("Parser.SystemParserEnabled", true, ConfigurationTarget.Global);
-                            await config.update("markdown.preview.breaks", true, ConfigurationTarget.Global);
+                            context.Settings["Parser.SystemParserEnabled"] = true;
+                            await config.update(lineBreakSetting, true, ConfigurationTarget.Workspace);
                             await Convert();
                             firstResult = (await readFile(destinationFile.FullName)).toString();
-                            await config.update("markdown.preview.breaks", false, ConfigurationTarget.Global);
+                            await config.update(lineBreakSetting, false, ConfigurationTarget.Workspace);
                             await Convert();
                             secondResult = (await readFile(destinationFile.FullName)).toString();
                             notStrictEqual(firstResult, secondResult);
@@ -200,7 +155,7 @@ export function ConversionRunnerTests(): void
                                     \`\`\``));
 
                             await commands.executeCommand("workbench.action.files.revert");
-                            await markdownConfig.update("Parser.SystemParserEnabled", false, ConfigurationTarget.Global);
+                            context.Settings["Parser.SystemParserEnabled"] = false;
                             await Convert();
                             let result = load((await readFile(destinationFile.FullName)).toString());
                             strictEqual(result("b:contains('test')").length, 1);
@@ -250,11 +205,11 @@ export function ConversionRunnerTests(): void
                                     # ${excludedHeading}
                                     ## ${includedHeading}`));
 
-                            await markdownConfig.update("Parser.Toc.Enabled", true, ConfigurationTarget.Global);
-                            await markdownConfig.update("Parser.Toc.Class", tocClass, ConfigurationTarget.Global);
-                            await markdownConfig.update("Parser.Toc.Levels", levels, ConfigurationTarget.Global);
-                            await markdownConfig.update("Parser.Toc.Indicator", indicator, ConfigurationTarget.Global);
-                            await markdownConfig.update("Parser.Toc.ListType", listType, ConfigurationTarget.Global);
+                            context.Settings["Parser.Toc.Enabled"] = true;
+                            context.Settings["Parser.Toc.Class"] = tocClass;
+                            context.Settings["Parser.Toc.Levels"] = levels;
+                            context.Settings["Parser.Toc.Indicator"] = indicator;
+                            context.Settings["Parser.Toc.ListType"] = listType;
                             await Convert();
                             let result = load((await readFile(destinationFile.FullName)).toString());
                             strictEqual(result(`.${tocClass}`).length, 1);
@@ -291,14 +246,16 @@ export function ConversionRunnerTests(): void
                             let result: cheerio.Root;
                             await writeFile(mdFile.FullName, "**:sparkles:**");
                             await commands.executeCommand("workbench.action.files.revert");
-                            await markdownConfig.update("Parser.EmojiType", EmojiType[EmojiType.None], ConfigurationTarget.Global);
+                            context.Settings["Parser.EmojiType"] = "None";
                             await Convert();
                             result = load((await readFile(destinationFile.FullName)).toString());
+
                             strictEqual(
                                 result("b:contains(':sparkles:')").length +
                                 result("strong:contains(':sparkles:')").length,
                                 1);
-                            await markdownConfig.update("Parser.EmojiType", EmojiType[EmojiType.GitHub], ConfigurationTarget.Global);
+
+                            context.Settings["Parser.EmojiType"] = "GitHub";
                             await Convert();
                             result = load((await readFile(destinationFile.FullName)).toString());
                             strictEqual(result("b img").length + result("strong img").length, 1);
@@ -309,8 +266,6 @@ export function ConversionRunnerTests(): void
                 "LoadConverter(string workspaceRoot, TextDocument document)",
                 () =>
                 {
-                    setup(Clean);
-
                     test(
                         "Checking whether the settings are applied correctly…",
                         async function()
@@ -344,24 +299,23 @@ export function ConversionRunnerTests(): void
                             let footerTemplate = "World";
 
                             await writeFile(templateFile.FullName, "This is a test template");
-                            await markdownConfig.update("ConversionQuality", conversionQuality, ConfigurationTarget.Global);
-                            await markdownConfig.update("Document.Attributes", attributes, ConfigurationTarget.Global);
-                            await markdownConfig.update("Locale", locale, ConfigurationTarget.Global);
-                            await markdownConfig.update("DateFormat", dateFormat, ConfigurationTarget.Global);
-                            await markdownConfig.update(
-                                "Document.Paper.PaperFormat",
-                                {
-                                    Format: StandardizedFormatType[paperFormat.Format] as any,
-                                    Orientation: PaperOrientation[paperFormat.Orientation] as any
-                                } as Partial<StandardizedPaperFormat>,
-                                ConfigurationTarget.Global);
-                            await markdownConfig.update("Document.Paper.Margin", margin, ConfigurationTarget.Global);
-                            await markdownConfig.update("Document.Design.Template", templateFile.FullName, ConfigurationTarget.Global);
-                            await markdownConfig.update("Document.Design.HighlightStyle", highlightStyle, ConfigurationTarget.Global);
-                            await markdownConfig.update("Document.Design.StyleSheets", [styleSheet.FullName], ConfigurationTarget.Global);
-                            await markdownConfig.update("Document.HeaderFooterEnabled", headerFooterEnabled, ConfigurationTarget.Global);
-                            await markdownConfig.update("Document.HeaderTemplate", headerTemplate, ConfigurationTarget.Global);
-                            await markdownConfig.update("Document.FooterTemplate", footerTemplate, ConfigurationTarget.Global);
+                            context.Settings.ConversionQuality = conversionQuality;
+                            context.Settings["Document.Attributes"] = attributes;
+                            context.Settings.Locale = locale;
+                            context.Settings.DateFormat = dateFormat;
+
+                            context.Settings["Document.Paper.PaperFormat"] = {
+                                Format: StandardizedFormatType[paperFormat.Format] as any,
+                                Orientation: PaperOrientation[paperFormat.Orientation] as any
+                            };
+
+                            context.Settings["Document.Paper.Margin"] = margin;
+                            context.Settings["Document.Design.Template"] = templateFile.FullName;
+                            context.Settings["Document.Design.HighlightStyle"] = highlightStyle;
+                            context.Settings["Document.Design.StyleSheets"] = [styleSheet.FullName];
+                            context.Settings["Document.HeaderFooterEnabled"] = headerFooterEnabled;
+                            context.Settings["Document.HeaderTemplate"] = headerTemplate;
+                            context.Settings["Document.FooterTemplate"] = footerTemplate;
                             await Convert();
 
                             let converter = await new TestConversionRunner().LoadConverter(workspaceRoot.FullName, textDocument);
@@ -433,8 +387,6 @@ export function ConversionRunnerTests(): void
                 "Execute(TextDocument document, Progress<IProgressState> progressReporter?, Progress<IConvertedFile> fileReporter?)",
                 () =>
                 {
-                    setup(Clean);
-
                     suite(
                         "Checking whether the `DestinationPattern` is substituted correctly…",
                         () =>
@@ -468,7 +420,7 @@ export function ConversionRunnerTests(): void
                                 {
                                     this.slow(1.25 * 1000);
                                     this.timeout(5 * 1000);
-                                    await markdownConfig.update("DestinationPattern", "${basename}", ConfigurationTarget.Global);
+                                    context.Settings.DestinationPattern = "${basename}";
                                     strictEqual(await substitutionTester.Test(), parse(testFile.FullName).name);
                                 });
 
@@ -478,8 +430,8 @@ export function ConversionRunnerTests(): void
                                 {
                                     this.slow(1.25 * 1000);
                                     this.timeout(5 * 1000);
-                                    await markdownConfig.update("ConversionType", [ConversionType[ConversionType.PDF]], ConfigurationTarget.Global);
-                                    await markdownConfig.update("DestinationPattern", "${extension}", ConfigurationTarget.Global);
+                                    context.Settings.ConversionType = ["PDF"];
+                                    context.Settings.DestinationPattern = "${extension}";
                                     strictEqual(await substitutionTester.Test(), "pdf");
                                 });
 
@@ -489,7 +441,7 @@ export function ConversionRunnerTests(): void
                                 {
                                     this.slow(1.25 * 1000);
                                     this.timeout(5 * 1000);
-                                    await markdownConfig.update("DestinationPattern", "${filename}", ConfigurationTarget.Global);
+                                    context.Settings.DestinationPattern = "${filename}";
                                     strictEqual(await substitutionTester.Test(), parse(testFile.FullName).base);
                                 });
 
@@ -499,7 +451,7 @@ export function ConversionRunnerTests(): void
                                 {
                                     this.slow(1.25 * 1000);
                                     this.timeout(5 * 1000);
-                                    await markdownConfig.update("DestinationPattern", join(tempDir.FullName, "/./test/.././///./."), ConfigurationTarget.Global);
+                                    context.Settings.DestinationPattern = join(tempDir.FullName, "/./test/.././///./.");
                                     strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(tempDir.FullName).fsPath);
                                 });
                         });
