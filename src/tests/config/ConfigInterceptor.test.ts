@@ -91,7 +91,7 @@ export function ConfigInterceptorTests(): void
                 {
                     (interceptor.Settings as any)[key] = undefined;
 
-                    strictEqual(
+                    deepStrictEqual(
                         workspace.getConfiguration(Settings.ConfigKey).get(key),
                         workspace.getConfiguration(Settings.ConfigKey).inspect(key).defaultValue);
                 });
