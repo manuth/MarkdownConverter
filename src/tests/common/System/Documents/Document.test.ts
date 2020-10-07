@@ -9,6 +9,9 @@ import { stringify } from "yamljs";
 import { Document } from "../../../../System/Documents/Document";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
+/**
+ * Registers tests for the `Document` class.
+ */
 export function DocumentTests(): void
 {
     suite(

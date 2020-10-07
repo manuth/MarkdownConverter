@@ -80,8 +80,11 @@ export class Exception extends Error
 
     /**
      * Gets a string representing this exception.
+     *
+     * @returns
+     * A string representing this object.
      */
-    public toString()
+    public toString(): string
     {
         return this.Message;
     }
