@@ -123,7 +123,6 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         {
                             this.slow(6.5 * 1000);
                             this.timeout(26 * 1000);
-                            this.timeout(0);
                             let firstResult: string;
                             let secondResult: string;
                             let lineBreakSetting = "markdown.preview.breaks";
