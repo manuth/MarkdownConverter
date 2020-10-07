@@ -173,8 +173,6 @@ export class ConfigurationSection implements WorkspaceConfiguration
 
             result = {
                 ...result,
-                defaultLanguageValue: value,
-                defaultValue: value,
                 globalLanguageValue: value,
                 globalValue: value,
                 workspaceFolderLanguageValue: value,
