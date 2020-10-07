@@ -1,6 +1,7 @@
 import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
 import { Settings } from "../Properties/Settings";
 import { ConfigRestorer } from "../tests/ConfigRestorer";
+import { WorkspaceTests } from "../tests/workspace";
 
 suite(
     "Test for Visual Studio Code in Workspace Mode",
@@ -32,5 +33,5 @@ suite(
                 await configRestorer.Restore();
             });
 
-        require("../tests/workspace/main.test");
+        WorkspaceTests();
     });

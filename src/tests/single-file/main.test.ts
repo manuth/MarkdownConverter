@@ -1,6 +1,0 @@
-suite(
-    "MarkdownConverter",
-    () =>
-    {
-        require("./System");
-    });

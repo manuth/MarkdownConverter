@@ -1,6 +1,8 @@
+import { ConfigTests } from "../tests/config";
+
 suite(
     "Config Tests",
     () =>
     {
-        require("../tests/config");
+        ConfigTests();
     });

@@ -1,6 +1,7 @@
 import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
 import { Settings } from "../Properties/Settings";
 import { ConfigRestorer } from "../tests/ConfigRestorer";
+import { SingleFileTests } from "../tests/single-file";
 
 suite(
     "Test for Visual Studio Code in Single-File Mode",
@@ -32,5 +33,5 @@ suite(
                 await configRestorer.Restore();
             });
 
-        require("../tests/single-file/main.test");
+        SingleFileTests();
     });

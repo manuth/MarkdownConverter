@@ -1,8 +1,18 @@
-suite(
-    "Tasks",
-    () =>
-    {
-        require("./PuppeteerTask.test");
-        require("./ConversionRunner.test");
-        require("./ConvertTask.test");
-    });
+import { ConversionRunnerTests } from "./ConversionRunner.test";
+import { ConvertTaskTests } from "./ConvertTask.test";
+import { PuppeteerTaskTests } from "./PuppeteerTask.test";
+
+/**
+ * Registers tests for tasks.
+ */
+export function TaskTests(): void
+{
+    suite(
+        "Tasks",
+        () =>
+        {
+            PuppeteerTaskTests();
+            ConversionRunnerTests();
+            ConvertTaskTests();
+        });
+}

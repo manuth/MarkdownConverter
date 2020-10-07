@@ -1,5 +1,6 @@
 import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
 import { Settings } from "../Properties/Settings";
+import { CommonTests } from "../tests/common";
 import { ConfigRestorer } from "../tests/ConfigRestorer";
 
 suite(
@@ -32,5 +33,5 @@ suite(
                 await configRestorer.Restore();
             });
 
-        require("../tests/common/main.test");
+        CommonTests();
     });

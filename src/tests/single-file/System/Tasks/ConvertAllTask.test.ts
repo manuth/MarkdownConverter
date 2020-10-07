@@ -3,27 +3,33 @@ import { extension } from "../../../../extension";
 import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolderException";
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 
-suite(
-    "ConvertAllTask",
-    () =>
-    {
-        let task: ConvertAllTask;
+/**
+ * Registers tests for the `ConvertAllTask` class.
+ */
+export function ConvertAllTaskTests(): void
+{
+    suite(
+        "ConvertAllTask",
+        () =>
+        {
+            let task: ConvertAllTask;
 
-        suiteSetup(
-            () =>
-            {
-                task = new ConvertAllTask(extension);
-            });
+            suiteSetup(
+                () =>
+                {
+                    task = new ConvertAllTask(extension);
+                });
 
-        suite(
-            "Execute(Progress<IProgressState> progressReporter?, CancellationToken cancellationToken?, Progress<IConverterFile> fileReporter?)",
-            () =>
-            {
-                test(
-                    "Checking whether an exception occurrs if no workspace-folder is opened…",
-                    async () =>
-                    {
-                        await rejects(() => task.Execute(), NoWorkspaceFolderException);
-                    });
-            });
-    });
+            suite(
+                "Execute(Progress<IProgressState> progressReporter?, CancellationToken cancellationToken?, Progress<IConverterFile> fileReporter?)",
+                () =>
+                {
+                    test(
+                        "Checking whether an exception occurrs if no workspace-folder is opened…",
+                        async () =>
+                        {
+                            await rejects(() => task.Execute(), NoWorkspaceFolderException);
+                        });
+                });
+        });
+}

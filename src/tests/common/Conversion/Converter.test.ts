@@ -10,212 +10,218 @@ import { ConversionType } from "../../../Conversion/ConversionType";
 import { Converter } from "../../../Conversion/Converter";
 import { Document } from "../../../System/Documents/Document";
 
-suite(
-    "Converter",
-    () =>
-    {
-        let converter: TestConverter;
-        let document: Document;
-        let tempDir: TempDirectory;
-        let tempFile: TempFile;
-        let textDocument: TextDocument;
-
-        /**
-         * Provides an implementation of the `Converter` class for testing.
-         */
-        class TestConverter extends Converter
+/**
+ * Registers tests for the `Converter` class.
+ */
+export function ConverterTests(): void
+{
+    suite(
+        "Converter",
+        () =>
         {
-            /**
-             * @inheritdoc
-             */
-            public get WebServer(): Server
-            {
-                return super.WebServer;
-            }
+            let converter: TestConverter;
+            let document: Document;
+            let tempDir: TempDirectory;
+            let tempFile: TempFile;
+            let textDocument: TextDocument;
 
             /**
-             * @inheritdoc
+             * Provides an implementation of the `Converter` class for testing.
              */
-            public get Browser(): Browser
+            class TestConverter extends Converter
             {
-                return super.Browser;
+                /**
+                 * @inheritdoc
+                 */
+                public get WebServer(): Server
+                {
+                    return super.WebServer;
+                }
+
+                /**
+                 * @inheritdoc
+                 */
+                public get Browser(): Browser
+                {
+                    return super.Browser;
+                }
             }
-        }
 
-        suiteSetup(
-            async () =>
-            {
-                let parser = new MarkdownIt();
-                tempDir = new TempDirectory();
+            suiteSetup(
+                async () =>
+                {
+                    let parser = new MarkdownIt();
+                    tempDir = new TempDirectory();
 
-                tempFile = new TempFile(
-                    {
-                        Directory: tempDir.FullName,
-                        Suffix: ".md"
-                    });
-
-                await writeFile(tempFile.FullName, "This is a test");
-                textDocument = await workspace.openTextDocument(tempFile.FullName);
-                document = new Document(textDocument, parser);
-            });
-
-        suiteTeardown(
-            () =>
-            {
-                tempDir.Dispose();
-                tempFile.Dispose();
-            });
-
-        suite(
-            "constructor(string workspaceRoot, Document document)",
-            () =>
-            {
-                test(
-                    "Checking whether the properties are set correctly…",
-                    () =>
-                    {
-                        converter = new TestConverter(tempDir.FullName, document);
-                        strictEqual(converter.WorkspaceRoot, tempDir.FullName);
-                        strictEqual(converter.Document, document);
-                    });
-            });
-
-        suite(
-            "Checking the state of the converter before the initialization…",
-            () =>
-            {
-                test(
-                    "Checking whether the object is neither initialized nor disposed…",
-                    () =>
-                    {
-                        ok(!converter.Initialized && !converter.Disposed);
-                    });
-
-                test(
-                    "Checking whether unitialized properties equal to `null`…",
-                    () =>
-                    {
-                        strictEqual(converter.URL, null);
-                        strictEqual(converter.PortNumber, null);
-                        strictEqual(converter.WebServer, null);
-                        strictEqual(converter.Browser, null);
-                    });
-            });
-
-        suite(
-            "Checking whether the methods act as expected…",
-            () =>
-            {
-                test(
-                    "Start(ConversionType conversionType, string path, Progress<IProgressState> progressReporter?)",
-                    async () =>
-                    {
-                        await rejects(converter.Start(ConversionType.HTML, ""));
-                    });
-            });
-
-        suite(
-            "Initialize(progressReporter?: Progress<IProgressState>)",
-            () =>
-            {
-                test(
-                    "Checking whether the converter can be initialized…",
-                    async function()
-                    {
-                        this.slow(380);
-                        await doesNotReject(() => converter.Initialize());
-                    });
-            });
-
-        suite(
-            "Checking the state of the converter after the initialization…",
-            () =>
-            {
-                test(
-                    "Checking whether the converter is initialized…",
-                    () =>
-                    {
-                        ok(converter.Initialized);
-                    });
-
-                test(
-                    "Checking whether the properties have been initialized…",
-                    () =>
-                    {
-                        ok(converter.URL);
-                        ok(converter.PortNumber);
-                        ok(converter.WebServer);
-                        ok(converter.Browser);
-                    });
-            });
-
-        suite(
-            "Checking whether the methods act as expected…",
-            async () =>
-            {
-                test(
-                    "Initialize(Progress<IProgressState> progressReporter?)",
-                    async () =>
-                    {
-                        await rejects(converter.Initialize());
-                    });
-            });
-
-        suite(
-            "Start(ConversionType conversionType, string path, Progress<IProgressState> progressReporter?)",
-            () =>
-            {
-                test(
-                    "Checking whether files can be converted…",
-                    async function()
-                    {
-                        this.slow(15 * 1000);
-                        this.timeout(1 * 60 * 1000);
-
-                        let conversionTypes = [
-                            ConversionType.HTML,
-                            ConversionType.JPEG,
-                            ConversionType.PDF,
-                            ConversionType.PNG,
-                            ConversionType.SelfContainedHTML
-                        ];
-
-                        for (let conversionType of conversionTypes)
+                    tempFile = new TempFile(
                         {
-                            let extension: string;
+                            Directory: tempDir.FullName,
+                            Suffix: ".md"
+                        });
 
-                            switch (conversionType)
+                    await writeFile(tempFile.FullName, "This is a test");
+                    textDocument = await workspace.openTextDocument(tempFile.FullName);
+                    document = new Document(textDocument, parser);
+                });
+
+            suiteTeardown(
+                () =>
+                {
+                    tempDir.Dispose();
+                    tempFile.Dispose();
+                });
+
+            suite(
+                "constructor",
+                () =>
+                {
+                    test(
+                        "Checking whether the properties are set correctly…",
+                        () =>
+                        {
+                            converter = new TestConverter(tempDir.FullName, document);
+                            strictEqual(converter.WorkspaceRoot, tempDir.FullName);
+                            strictEqual(converter.Document, document);
+                        });
+                });
+
+            suite(
+                "Checking the state of the converter before the initialization…",
+                () =>
+                {
+                    test(
+                        "Checking whether the object is neither initialized nor disposed…",
+                        () =>
+                        {
+                            ok(!converter.Initialized && !converter.Disposed);
+                        });
+
+                    test(
+                        "Checking whether unitialized properties equal to `null`…",
+                        () =>
+                        {
+                            strictEqual(converter.URL, null);
+                            strictEqual(converter.PortNumber, null);
+                            strictEqual(converter.WebServer, null);
+                            strictEqual(converter.Browser, null);
+                        });
+                });
+
+            suite(
+                "Checking whether the methods act as expected…",
+                () =>
+                {
+                    test(
+                        "Start(ConversionType conversionType, string path, Progress<IProgressState> progressReporter?)",
+                        async () =>
+                        {
+                            await rejects(converter.Start(ConversionType.HTML, ""));
+                        });
+                });
+
+            suite(
+                "Initialize(progressReporter?: Progress<IProgressState>)",
+                () =>
+                {
+                    test(
+                        "Checking whether the converter can be initialized…",
+                        async function()
+                        {
+                            this.slow(380);
+                            await doesNotReject(() => converter.Initialize());
+                        });
+                });
+
+            suite(
+                "Checking the state of the converter after the initialization…",
+                () =>
+                {
+                    test(
+                        "Checking whether the converter is initialized…",
+                        () =>
+                        {
+                            ok(converter.Initialized);
+                        });
+
+                    test(
+                        "Checking whether the properties have been initialized…",
+                        () =>
+                        {
+                            ok(converter.URL);
+                            ok(converter.PortNumber);
+                            ok(converter.WebServer);
+                            ok(converter.Browser);
+                        });
+                });
+
+            suite(
+                "Checking whether the methods act as expected…",
+                async () =>
+                {
+                    test(
+                        "Initialize(Progress<IProgressState> progressReporter?)",
+                        async () =>
+                        {
+                            await rejects(converter.Initialize());
+                        });
+                });
+
+            suite(
+                "Start(ConversionType conversionType, string path, Progress<IProgressState> progressReporter?)",
+                () =>
+                {
+                    test(
+                        "Checking whether files can be converted…",
+                        async function()
+                        {
+                            this.slow(15 * 1000);
+                            this.timeout(1 * 60 * 1000);
+
+                            let conversionTypes = [
+                                ConversionType.HTML,
+                                ConversionType.JPEG,
+                                ConversionType.PDF,
+                                ConversionType.PNG,
+                                ConversionType.SelfContainedHTML
+                            ];
+
+                            for (let conversionType of conversionTypes)
                             {
-                                case ConversionType.HTML:
-                                case ConversionType.SelfContainedHTML:
-                                    extension = "html";
-                                    break;
-                                case ConversionType.JPEG:
-                                    extension = "jpg";
-                                    break;
-                                case ConversionType.PDF:
-                                    extension = "pdf";
-                                    break;
-                                case ConversionType.PNG:
-                                    extension = "png";
-                                    break;
-                            }
+                                let extension: string;
 
-                            let path = changeExt(tempFile.FullName, extension);
-                            await converter.Start(conversionType, path);
-                            ok(await pathExists(path));
-                            await remove(path);
-
-                            if (conversionType === ConversionType.SelfContainedHTML)
-                            {
-                                let resourcePath = changeExt(path, null);
-
-                                if (await pathExists(resourcePath))
+                                switch (conversionType)
                                 {
-                                    await remove(resourcePath);
+                                    case ConversionType.HTML:
+                                    case ConversionType.SelfContainedHTML:
+                                        extension = "html";
+                                        break;
+                                    case ConversionType.JPEG:
+                                        extension = "jpg";
+                                        break;
+                                    case ConversionType.PDF:
+                                        extension = "pdf";
+                                        break;
+                                    case ConversionType.PNG:
+                                        extension = "png";
+                                        break;
+                                }
+
+                                let path = changeExt(tempFile.FullName, extension);
+                                await converter.Start(conversionType, path);
+                                ok(await pathExists(path));
+                                await remove(path);
+
+                                if (conversionType === ConversionType.SelfContainedHTML)
+                                {
+                                    let resourcePath = changeExt(path, null);
+
+                                    if (await pathExists(resourcePath))
+                                    {
+                                        await remove(resourcePath);
+                                    }
                                 }
                             }
-                        }
-                    });
-            });
-    });
+                        });
+                });
+        });
+}
