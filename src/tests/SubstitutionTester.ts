@@ -34,7 +34,7 @@ export class SubstitutionTester
     public async Test(): Promise<string>
     {
         return new Promise<string>(
-            async (resolve) =>
+            async (resolve, reject) =>
             {
                 let originalStart = Converter.prototype.Start;
 
@@ -44,7 +44,14 @@ export class SubstitutionTester
                     Converter.prototype.Start = originalStart;
                 };
 
-                new ConversionRunner({ VSCodeParser: new MarkdownIt() } as MarkdownConverterExtension).Execute(this.TextDocument);
+                try
+                {
+                    new ConversionRunner({ VSCodeParser: new MarkdownIt() } as MarkdownConverterExtension).Execute(this.TextDocument);
+                }
+                catch (error)
+                {
+                    reject(error);
+                }
             });
     }
 }
