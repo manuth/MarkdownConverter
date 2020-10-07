@@ -55,6 +55,27 @@
         {
             "type": "extensionHost",
             "request": "launch",
+            "name": "Launch Config Tests",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/lib/test",
+                "${workspaceFolder}/src/test/single-folder"
+            ],
+            "env": {
+                "TEST_SUITE": "config"
+            },
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "Build",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
             "name": "Launch Common Tests",
             "runtimeExecutable": "${execPath}",
             "args": [

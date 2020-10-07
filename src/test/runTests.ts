@@ -6,6 +6,7 @@ import { TestOptions } from "vscode-test/out/runTest";
 {
     let environmentPath = resolve(__dirname, "..", "..", "src", "test");
     let commonArgs = process.argv.slice(2);
+    let singleFolderPath = resolve(environmentPath, "single-folder");
 
     let commonOptions: TestOptions = {
         extensionDevelopmentPath: resolve(__dirname, "..", ".."),
@@ -14,6 +15,18 @@ import { TestOptions } from "vscode-test/out/runTest";
 
     try
     {
+        await runTests(
+            {
+                ...commonOptions,
+                extensionTestsEnv: {
+                    TEST_SUITE: "config"
+                },
+                launchArgs: [
+                    singleFolderPath,
+                    ...commonArgs
+                ]
+            });
+
         await runTests(
             {
                 ...commonOptions,
@@ -44,7 +57,7 @@ import { TestOptions } from "vscode-test/out/runTest";
                     TEST_SUITE: "single-folder"
                 },
                 launchArgs: [
-                    resolve(environmentPath, "single-folder"),
+                    singleFolderPath,
                     ...commonArgs
                 ]
             });

@@ -1,6 +1,9 @@
 # Build results
 [Ll]ib/
 
+# Test-Files
+[Ss]rc/test/single-folder/.vscode
+
 # Logs
 logs
 *.log
