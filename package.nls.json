@@ -15,6 +15,8 @@
     "Config.Locale.Description": "The `locale` to print the date.\n\n***Note:***  \nThis option defaults to VSCode's locale.",
     "Config.DateFormat": "Date-Format",
     "Config.DateFormat.Description": "A format-string to print dates.  \nSee: <https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx>",
+    "Config.ChromiumArgs": "Chromium-Arguments",
+    "Config.ChromiumArgs.Description": "A set of arguments to pass to chromium.\n\nThis feature might be useful if you want to pass arguments such as `--no-sandbox` to chromium.",
     "Config.Parser.SystemParserEnabled": "System-Parser",
     "Config.Parser.SystemParserEnabled.Description": "`true` to use system-provided parser; otherwise `false`.",
     "Config.Parser.EmojiType": "Emoji",

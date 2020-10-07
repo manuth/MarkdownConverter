@@ -91,6 +91,14 @@ export class Settings
     }
 
     /**
+     * Gets the arguments to pass to chromium.
+     */
+    public get ChromiumArgs(): string[]
+    {
+        return this.GetConfigEntry("ChromiumArgs");
+    }
+
+    /**
      * Gets the emojis to render into the document.
      */
     public get EmojiType(): EmojiType

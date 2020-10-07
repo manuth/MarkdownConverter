@@ -8,9 +8,11 @@ import { glob } from "glob";
 import { Browser, launch, PDFOptions, ScreenshotOptions } from "puppeteer-core";
 import serveHandler = require("serve-handler");
 import { basename, dirname, join, relative } from "upath";
-import { Progress } from "vscode";
+import { Progress, workspace } from "vscode";
 import websiteScraper = require("website-scraper");
+import { ISettings } from "../Properties/ISettings";
 import { Resources } from "../Properties/Resources";
+import { Settings } from "../Properties/Settings";
 import { Document } from "../System/Documents/Document";
 import { FileException } from "../System/IO/FileException";
 import { IProgressState } from "../System/Tasks/IProgressState";
@@ -205,15 +207,26 @@ export class Converter
             {
                 this.browser = await launch(
                     {
-                        args: browserArguments
+                        args: [
+                            ...browserArguments,
+                            ...Settings.Default.ChromiumArgs
+                        ]
                     });
             }
             catch
             {
                 this.browser = await launch(
                     {
-                        args: browserArguments.concat(["--no-sandbox"])
+                        args: [
+                            ...browserArguments,
+                            ...Settings.Default.ChromiumArgs,
+                            "--no-sandbox"
+                        ]
                     });
+
+                await workspace.getConfiguration(Settings.ConfigKey).update(
+                    "ChromiumArgs" as keyof ISettings,
+                    [...Settings.Default.ChromiumArgs, "--no-sandbox"]);
             }
 
             this.initialized = true;

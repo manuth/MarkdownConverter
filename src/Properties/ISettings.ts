@@ -37,6 +37,11 @@ export interface ISettings
     DateFormat?: string;
 
     /**
+     * The arguments to pass to chromium.
+     */
+    ChromiumArgs?: string[];
+
+    /**
      * A value indicating whether the parser of `vscode` should be used.
      */
     ["Parser.SystemParserEnabled"]?: boolean;

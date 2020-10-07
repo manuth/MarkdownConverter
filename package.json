@@ -234,6 +234,15 @@
             }
           ]
         },
+        "markdownConverter.ChromiumArgs": {
+          "title": "%Config.ChromiumArgs%",
+          "markdownDescription": "%Config.ChromiumArgs.Description%",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
         "markdownConverter.Parser.SystemParserEnabled": {
           "title": "%Config.Parser.SystemParserEnabled%",
           "markdownDescription": "%Config.Parser.SystemParserEnabled.Description%",
