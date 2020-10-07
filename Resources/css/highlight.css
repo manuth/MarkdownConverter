@@ -11,31 +11,31 @@ https://raw.githubusercontent.com/isagalaev/highlight.js/master/src/styles/vs201
 .hljs-literal,
 .hljs-symbol,
 .hljs-name {
-	color: #569CD6;
+    color: #569CD6;
 }
 .hljs-link {
-	color: #569CD6;
-	text-decoration: underline;
+    color: #569CD6;
+    text-decoration: underline;
 }
 
 .hljs-built_in,
 .hljs-type {
-	color: #4EC9B0;
+    color: #4EC9B0;
 }
 
 .hljs-number,
 .hljs-class {
-	color: #B8D7A3;
+    color: #B8D7A3;
 }
 
 .hljs-string,
 .hljs-meta-string {
-	color: #D69D85;
+    color: #D69D85;
 }
 
 .hljs-regexp,
 .hljs-template-tag {
-	color: #9A5334;
+    color: #9A5334;
 }
 
 .hljs-subst,
@@ -43,50 +43,50 @@ https://raw.githubusercontent.com/isagalaev/highlight.js/master/src/styles/vs201
 .hljs-title,
 .hljs-params,
 .hljs-formula {
-	color: #DCDCDC;
+    color: #DCDCDC;
 }
 
 .hljs-comment,
 .hljs-quote {
-	color: #57A64A;
-	font-style: italic;
+    color: #57A64A;
+    font-style: italic;
 }
 
 .hljs-doctag {
-	color: #608B4E;
+    color: #608B4E;
 }
 
 .hljs-meta,
 .hljs-meta-keyword,
 .hljs-tag {
-	color: #9B9B9B;
+    color: #9B9B9B;
 }
 
 .hljs-variable,
 .hljs-template-variable {
-	color: #BD63C5;
+    color: #BD63C5;
 }
 
 .hljs-attr,
 .hljs-attribute,
 .hljs-builtin-name {
-	color: #9CDCFE;
+    color: #9CDCFE;
 }
 
 .hljs-section {
-	color: gold;
+    color: gold;
 }
 
 .hljs-emphasis {
-	font-style: italic;
+    font-style: italic;
 }
 
 .hljs-strong {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 /*.hljs-code {
-	font-family:'Monospace';
+    font-family:'Monospace';
 }*/
 
 .hljs-bullet,
@@ -95,19 +95,19 @@ https://raw.githubusercontent.com/isagalaev/highlight.js/master/src/styles/vs201
 .hljs-selector-class,
 .hljs-selector-attr,
 .hljs-selector-pseudo {
-	color: #D7BA7D;
+    color: #D7BA7D;
 }
 
 .hljs-addition {
-	background-color: #144212;
-	display: inline-block;
-	width: 100%;
+    background-color: #144212;
+    display: inline-block;
+    width: 100%;
 }
 
 .hljs-deletion {
-	background-color: #600;
-	display: inline-block;
-	width: 100%;
+    background-color: #600;
+    display: inline-block;
+    width: 100%;
 }
 
 
@@ -122,13 +122,13 @@ Visual Studio-like style based on original C# coloring by Jason Diamond <jason@d
 
 .vscode-light .hljs-function,
 .vscode-light .hljs-params {
-	color: inherit;
+    color: inherit;
 }
 
 .vscode-light .hljs-comment,
 .vscode-light .hljs-quote,
 .vscode-light .hljs-variable {
-	color: #008000;
+    color: #008000;
 }
 
 .vscode-light .hljs-keyword,
@@ -136,7 +136,7 @@ Visual Studio-like style based on original C# coloring by Jason Diamond <jason@d
 .vscode-light .hljs-built_in,
 .vscode-light .hljs-name,
 .vscode-light .hljs-tag {
-	color: #00f;
+    color: #00f;
 }
 
 .vscode-light .hljs-string,
@@ -148,35 +148,35 @@ Visual Studio-like style based on original C# coloring by Jason Diamond <jason@d
 .vscode-light .hljs-template-variable,
 .vscode-light .hljs-type,
 .vscode-light .hljs-addition {
-	color: #a31515;
+    color: #a31515;
 }
 
 .vscode-light .hljs-deletion,
 .vscode-light .hljs-selector-attr,
 .vscode-light .hljs-selector-pseudo,
 .vscode-light .hljs-meta {
-	color: #2b91af;
+    color: #2b91af;
 }
 
 .vscode-light .hljs-doctag {
-	color: #808080;
+    color: #808080;
 }
 
 .vscode-light .hljs-attr {
-	color: #f00;
+    color: #f00;
 }
 
 .vscode-light .hljs-symbol,
 .vscode-light .hljs-bullet,
 .vscode-light .hljs-link {
-	color: #00b0e8;
+    color: #00b0e8;
 }
 
 
 .vscode-light .hljs-emphasis {
-	font-style: italic;
+    font-style: italic;
 }
 
 .vscode-light .hljs-strong {
-	font-weight: bold;
+    font-weight: bold;
 }
