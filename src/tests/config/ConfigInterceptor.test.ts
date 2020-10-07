@@ -16,31 +16,9 @@ export function ConfigInterceptorTests(): void
         {
             let config: WorkspaceConfiguration;
             let key: keyof ISettings;
-            let interceptor: TestConfigInterceptor;
+            let interceptor: ConfigInterceptor<ISettings>;
             let originalSetting: Array<keyof typeof ConversionType>;
             let interceptedSetting: Array<keyof typeof ConversionType>;
-
-            /**
-             * Provides an implementation of the `ConfigInterceptor` class.
-             */
-            class TestConfigInterceptor extends ConfigInterceptor
-            {
-                /**
-                 * @inheritdoc
-                 */
-                public Setup(): void
-                {
-                    super.Setup();
-                }
-
-                /**
-                 * @inheritdoc
-                 */
-                public Dispose(): void
-                {
-                    super.Dispose();
-                }
-            }
 
             suiteSetup(
                 async function()
@@ -50,8 +28,8 @@ export function ConfigInterceptorTests(): void
                     originalSetting = [ConversionType[ConversionType.JPEG]] as any;
                     interceptedSetting = [ConversionType[ConversionType.HTML]] as any;
                     await config.update(key, originalSetting, ConfigurationTarget.Workspace);
-                    interceptor = new TestConfigInterceptor();
-                    interceptor.Setup();
+                    interceptor = new ConfigInterceptor(Settings.ConfigKey);
+                    interceptor.Initialize();
                 });
 
             suiteTeardown(
@@ -111,8 +89,6 @@ export function ConfigInterceptorTests(): void
                 async () =>
                 {
                     let result = workspace.getConfiguration(Settings.ConfigKey).inspect(key);
-                    deepStrictEqual(result.defaultLanguageValue, result.defaultValue);
-                    deepStrictEqual(result.defaultValue, result.globalLanguageValue);
                     deepStrictEqual(result.globalLanguageValue, result.globalValue);
                     deepStrictEqual(result.globalValue, result.workspaceFolderLanguageValue);
                     deepStrictEqual(result.workspaceFolderLanguageValue, result.workspaceFolderValue);
@@ -128,6 +104,16 @@ export function ConfigInterceptorTests(): void
                     let markdownConfig = workspace.getConfiguration(Settings.ConfigKey);
                     ok(key in markdownConfig);
                     strictEqual(markdownConfig[key], interceptedSetting);
+                });
+
+            test(
+                "Checking whether object-proxies are intercepted…",
+                () =>
+                {
+                    interceptor.Settings["Parser.SystemParserEnabled"] = true;
+                    strictEqual(workspace.getConfiguration(Settings.ConfigKey).Parser.SystemParserEnabled, true);
+                    interceptor.Settings["Parser.SystemParserEnabled"] = false;
+                    strictEqual(workspace.getConfiguration(Settings.ConfigKey).Parser.SystemParserEnabled, false);
                 });
         });
 }
