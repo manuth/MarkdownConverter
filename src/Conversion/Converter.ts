@@ -223,10 +223,6 @@ export class Converter
                             "--no-sandbox"
                         ]
                     });
-
-                await workspace.getConfiguration(Settings.ConfigKey).update(
-                    "ChromiumArgs" as keyof ISettings,
-                    [...Settings.Default.ChromiumArgs, "--no-sandbox"]);
             }
 
             this.initialized = true;
