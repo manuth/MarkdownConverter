@@ -46,6 +46,7 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
                     suiteSetup(
                         async () =>
                         {
+                            testFile = new TempFile();
                             task = new TestConvertTask(extension);
                             await window.showTextDocument(Uri.file(testFile.FullName));
                         });
