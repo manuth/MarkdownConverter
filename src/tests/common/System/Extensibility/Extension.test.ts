@@ -125,7 +125,6 @@ export function ExtensionTests(context: ITestContext<ISettings>): void
                         {
                             this.slow(11.5 * 1000);
                             this.timeout(46 * 1000);
-                            this.timeout(0);
 
                             await doesNotReject(
                                 async () =>
