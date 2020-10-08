@@ -111,11 +111,7 @@ export class Converter
     public get URL(): string
     {
         return this.Initialized ?
-            (resolve(
-                `http://localhost:${this.PortNumber}/`,
-                ((this.Document.FileName && this.WorkspaceRoot) ?
-                    relative(this.WorkspaceRoot, this.Document.FileName) :
-                    "index") + ".html")) :
+            (resolve(`http://localhost:${this.PortNumber}/`, this.WebDocumentName)) :
             null;
     }
 
@@ -125,6 +121,16 @@ export class Converter
     public get PortNumber(): number
     {
         return this.Initialized ? this.portNumber : null;
+    }
+
+    /**
+     * Gets the name of the website containing the document.
+     */
+    protected get WebDocumentName(): string
+    {
+        return ((this.Document.FileName && this.WorkspaceRoot) ?
+            relative(this.WorkspaceRoot, this.Document.FileName) :
+            "index") + ".html";
     }
 
     /**
