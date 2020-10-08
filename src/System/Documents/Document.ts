@@ -402,7 +402,7 @@ export class Document extends Renderable
             view[key] = value;
         }
 
-        let html = this.parser.render(content);
-        return render(html, view);
+        let renderedContent = render(content, view);
+        return this.parser.render(renderedContent);
     }
 }
