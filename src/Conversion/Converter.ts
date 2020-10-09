@@ -24,9 +24,9 @@ import { ConverterPlugin } from "./ConverterPlugin";
 export class Converter
 {
     /**
-     * The root-directory of the workspace of the document.
+     * The root of the document-context.
      */
-    private workspaceRoot: string;
+    private documentRoot: string;
 
     /**
      * The document which is to be converted.
@@ -61,24 +61,24 @@ export class Converter
     /**
      * Initializes a new instance of the Constructor class with a filepath.
      *
-     * @param workspaceRoot
-     * The root of the workspace of the document.
+     * @param documentRoot
+     * The root of the document-context.
      *
      * @param document
      * The document which is to be converted.
      */
-    public constructor(workspaceRoot: string, document: Document)
+    public constructor(documentRoot: string, document: Document)
     {
-        this.workspaceRoot = workspaceRoot;
+        this.documentRoot = documentRoot;
         this.document = document;
     }
 
     /**
-     * Gets or sets the root-directory of the workspace of the document.
+     * Gets the root of the document-context.
      */
-    public get WorkspaceRoot(): string
+    public get DocumentRoot(): string
     {
-        return this.workspaceRoot;
+        return this.documentRoot;
     }
 
     /**
@@ -128,8 +128,8 @@ export class Converter
      */
     protected get WebDocumentName(): string
     {
-        return ((this.Document.FileName && this.WorkspaceRoot) ?
-            relative(this.WorkspaceRoot, this.Document.FileName) :
+        return ((this.Document.FileName && this.DocumentRoot) ?
+            relative(this.DocumentRoot, this.Document.FileName) :
             "index") + ".html";
     }
 
@@ -175,7 +175,7 @@ export class Converter
             this.webServer = createServer(
                 async (request, response) =>
                 {
-                    if (normalize(join(this.WorkspaceRoot, request.url)) === normalize(join(this.WorkspaceRoot, this.WebDocumentName)))
+                    if (normalize(join(this.DocumentRoot, request.url)) === normalize(join(this.DocumentRoot, this.WebDocumentName)))
                     {
                         let content = await this.Document.Render();
                         response.writeHead(200);
@@ -188,7 +188,7 @@ export class Converter
                             request,
                             response,
                             {
-                                public: this.WorkspaceRoot,
+                                public: this.DocumentRoot,
                                 headers: [
                                     {
                                         source: "**/*.*",

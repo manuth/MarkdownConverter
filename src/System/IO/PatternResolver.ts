@@ -98,9 +98,6 @@ export class PatternResolver
     /**
      * Resolves the pattern.
      *
-     * @param destinationRoot
-     * The path to the folder to resolve the pattern to.
-     *
      * @param documentRoot
      * The path to the folder containing the document.
      *
@@ -110,9 +107,12 @@ export class PatternResolver
      * @param type
      * The type of the file to create the filename for.
      *
+     * @param destinationRoot
+     * The path to the folder to resolve the pattern to.
+     *
      * @returns
      */
-    public Resolve(destinationRoot: string, documentRoot: string, document: TextDocument, type: ConversionType): string
+    public Resolve(documentRoot: string, document: TextDocument, type: ConversionType, destinationRoot?: string): string
     {
         let extension: string;
         let context: IPatternContext;
@@ -144,7 +144,7 @@ export class PatternResolver
             filename: parsedPath.base,
             basename: parsedPath.name,
             extension,
-            dirname: (destinationRoot !== documentRoot) ? relative(destinationRoot, documentRoot) : ".",
+            dirname: (destinationRoot !== null) ? relative(destinationRoot, documentRoot) : ".",
             workspaceFolder: destinationRoot
         };
 
