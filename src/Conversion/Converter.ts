@@ -387,9 +387,15 @@ export class Converter
                                     path
                                 };
 
-                                if (conversionType !== ConversionType.PNG)
+                                switch (conversionType)
                                 {
-                                    screenshotOptions.quality = this.Document.Quality;
+                                    case ConversionType.JPEG:
+                                        screenshotOptions.type = "jpeg";
+                                        screenshotOptions.quality = this.Document.Quality;
+                                        break;
+                                    case ConversionType.PNG:
+                                        screenshotOptions.type = "png";
+                                        break;
                                 }
 
                                 progressReporter.report(
