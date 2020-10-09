@@ -1,6 +1,6 @@
-import { ok, strictEqual } from "assert";
+import { strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
-import { dirname } from "upath";
+import { dirname, resolve } from "upath";
 import { Uri, window, workspace } from "vscode";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ITestContext } from "../../../ITestContext";
@@ -64,8 +64,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 {
                                     this.slow(1 * 1000);
                                     this.timeout(4 * 1000);
-                                    context.Settings.DestinationPattern = "${dirname}";
-                                    ok(/^\.?$/g.test(await substitutionTester.Test()));
+                                    context.Settings.DestinationPattern = resolve("${dirname}");
+                                    strictEqual(await substitutionTester.Test(), resolve("."));
                                 });
 
                             test(
@@ -83,8 +83,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                         return inputWorkspaceName;
                                     };
 
-                                    context.Settings.DestinationPattern = "${workspaceFolder}";
-                                    strictEqual(await untitledSubstitutionTester.Test(), inputWorkspaceName);
+                                    context.Settings.DestinationPattern = resolve("${workspaceFolder}");
+                                    strictEqual(await untitledSubstitutionTester.Test(), resolve(inputWorkspaceName));
                                     window.showInputBox = original;
                                 });
                         });

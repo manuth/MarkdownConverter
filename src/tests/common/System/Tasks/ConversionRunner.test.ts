@@ -5,7 +5,7 @@ import { load } from "cheerio";
 import dedent = require("dedent");
 import { readFile, writeFile } from "fs-extra";
 import MultiRange from "multi-integer-range";
-import { dirname, join, parse } from "upath";
+import { dirname, join, parse, resolve } from "upath";
 import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace } from "vscode";
 import { Converter } from "../../../../Conversion/Converter";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
@@ -419,8 +419,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 {
                                     this.slow(1.25 * 1000);
                                     this.timeout(5 * 1000);
-                                    context.Settings.DestinationPattern = "${basename}";
-                                    strictEqual(await substitutionTester.Test(), parse(testFile.FullName).name);
+                                    context.Settings.DestinationPattern = resolve("${basename}");
+                                    strictEqual(await substitutionTester.Test(), resolve(parse(testFile.FullName).name));
                                 });
 
                             test(
@@ -430,8 +430,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                     this.slow(1.25 * 1000);
                                     this.timeout(5 * 1000);
                                     context.Settings.ConversionType = ["PDF"];
-                                    context.Settings.DestinationPattern = "${extension}";
-                                    strictEqual(await substitutionTester.Test(), "pdf");
+                                    context.Settings.DestinationPattern = resolve("${extension}");
+                                    strictEqual(await substitutionTester.Test(), resolve("pdf"));
                                 });
 
                             test(
@@ -440,8 +440,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 {
                                     this.slow(1.25 * 1000);
                                     this.timeout(5 * 1000);
-                                    context.Settings.DestinationPattern = "${filename}";
-                                    strictEqual(await substitutionTester.Test(), parse(testFile.FullName).base);
+                                    context.Settings.DestinationPattern = resolve("${filename}");
+                                    strictEqual(await substitutionTester.Test(), resolve(parse(testFile.FullName).base));
                                 });
 
                             test(
@@ -451,7 +451,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                     this.slow(1.25 * 1000);
                                     this.timeout(5 * 1000);
                                     context.Settings.DestinationPattern = join(tempDir.FullName, "/./test/.././///./.");
-                                    strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(tempDir.FullName).fsPath);
+                                    strictEqual(resolve(Uri.file(await substitutionTester.Test()).fsPath), resolve(Uri.file(tempDir.FullName).fsPath));
                                 });
                         });
                 });
