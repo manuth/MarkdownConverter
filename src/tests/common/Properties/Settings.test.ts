@@ -49,6 +49,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             context.Settings["ConversionType"] = ["HTML"] as Array<keyof typeof ConversionType>;
+                            strictEqual(settings.ConversionType.length, 1);
                             strictEqual(settings.ConversionType[0], ConversionType.HTML);
                         });
                 });
@@ -69,6 +70,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         "Checking whether the locale defaults to the locale of vscode…",
                         () =>
                         {
+                            context.Clear();
                             strictEqual(settings.Locale, env.language);
                         });
                 });
