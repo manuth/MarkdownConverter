@@ -7,7 +7,7 @@ import getPort = require("get-port");
 import { glob } from "glob";
 import { Browser, launch, PDFOptions, ScreenshotOptions } from "puppeteer-core";
 import serveHandler = require("serve-handler");
-import { basename, dirname, join, relative } from "upath";
+import { basename, dirname, join, normalize, relative } from "upath";
 import { Progress } from "vscode";
 import websiteScraper = require("website-scraper");
 import { Resources } from "../Properties/Resources";
@@ -173,30 +173,40 @@ export class Converter
             this.portNumber = await getPort();
 
             this.webServer = createServer(
-                (request, response) =>
+                async (request, response) =>
                 {
-                    serveHandler(
-                        request,
-                        response,
-                        {
-                            public: this.WorkspaceRoot,
-                            headers: [
-                                {
-                                    source: "**/*.*",
-                                    headers: [
-                                        {
-                                            key: "Access-Control-Allow-Origin",
-                                            value: "*"
-                                        },
-                                        {
-                                            key: "Access-Control-Allow-Headers",
-                                            value: "Origin, X-Requested-With, Content-Type, Accept, Range"
-                                        }
-                                    ]
-                                }
-                            ],
-                            cleanUrls: false
-                        });
+                    if (normalize(join(this.WorkspaceRoot, request.url)) === normalize(join(this.WorkspaceRoot, this.WebDocumentName)))
+                    {
+                        let content = await this.Document.Render();
+                        response.writeHead(200);
+                        response.write(content);
+                        response.end();
+                    }
+                    else
+                    {
+                        serveHandler(
+                            request,
+                            response,
+                            {
+                                public: this.WorkspaceRoot,
+                                headers: [
+                                    {
+                                        source: "**/*.*",
+                                        headers: [
+                                            {
+                                                key: "Access-Control-Allow-Origin",
+                                                value: "*"
+                                            },
+                                            {
+                                                key: "Access-Control-Allow-Headers",
+                                                value: "Origin, X-Requested-With, Content-Type, Accept, Range"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                cleanUrls: false
+                            });
+                    }
                 });
 
             this.webServer.listen(this.portNumber, "localhost");
@@ -324,7 +334,6 @@ export class Converter
                 default:
                     try
                     {
-                        let body = await this.Document.Render();
                         let page = await this.Browser.newPage();
 
                         progressReporter.report(
@@ -332,24 +341,6 @@ export class Converter
                                 message: Resources.Resources.Get("Progress.ChromiumPage")
                             });
 
-                        page.on(
-                            "request",
-                            async (request) =>
-                            {
-                                if (request.url() === this.URL)
-                                {
-                                    await request.respond(
-                                        {
-                                            body
-                                        });
-                                }
-                                else
-                                {
-                                    await request.continue();
-                                }
-                            });
-
-                        await page.setRequestInterception(true);
                         await page.goto(this.URL, { waitUntil: "networkidle0", timeout: 0 });
 
                         switch (conversionType)
