@@ -81,24 +81,54 @@ export function ConverterPluginTests(): void
                     await converter.Dispose();
                 });
 
+            setup(
+                async () =>
+                {
+                    plugin = new ConverterPlugin(converter, websiteName);
+                });
+
+            teardown(
+                async () =>
+                {
+                    if (await pathExists(destinationDirectory.FullName))
+                    {
+                        await remove(destinationDirectory.FullName);
+                    }
+                });
+
+            /**
+             * Scrapes the website.
+             */
+            async function ScrapeWebsite(): Promise<void>
+            {
+                await websiteScraper(
+                    {
+                        urls: [converter.URL],
+                        directory: destinationDirectory.FullName,
+                        plugins: [
+                            plugin
+                        ]
+                    });
+            }
+
             suite(
-                "constructor(Converter converter, string websiteName)",
+                "constructor",
                 () =>
                 {
                     test(
-                        "Checking whether the plugin can be initialized…",
+                        "Checking whether new plugins can be initialized…",
                         () =>
                         {
                             doesNotThrow(
                                 () =>
                                 {
-                                    plugin = new ConverterPlugin(converter, websiteName);
+                                    new ConverterPlugin(converter, websiteName);
                                 });
                         });
                 });
 
             suite(
-                "apply(Function registerAction)",
+                "apply",
                 () =>
                 {
                     test(
@@ -107,25 +137,14 @@ export function ConverterPluginTests(): void
                         {
                             this.slow(1 * 1000);
                             this.timeout(4 * 1000);
-
-                            await doesNotReject(
-                                async () =>
-                                {
-                                    await websiteScraper(
-                                        {
-                                            urls: [converter.URL],
-                                            directory: destinationDirectory.FullName,
-                                            plugins: [
-                                                plugin
-                                            ]
-                                        } as any);
-                                });
+                            await doesNotReject(async () => ScrapeWebsite());
                         });
 
                     test(
                         "Checking whether the expected files have been generated…",
                         async () =>
                         {
+                            await ScrapeWebsite();
                             ok(await pathExists(destinationDirectory.MakePath(websiteName)));
                             ok(await pathExists(destinationDirectory.MakePath(parse(websiteName).name, "css", basename(cssFile))));
                         });
