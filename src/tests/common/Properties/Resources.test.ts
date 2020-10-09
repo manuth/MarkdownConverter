@@ -23,6 +23,12 @@ export function ResourceTests(): void
                             originalLocale = Resources.Culture;
                         });
 
+                    teardown(
+                        () =>
+                        {
+                            Resources.Culture = originalLocale;
+                        });
+
                     suiteTeardown(
                         () =>
                         {
