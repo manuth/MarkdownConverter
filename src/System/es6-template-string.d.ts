@@ -17,7 +17,7 @@ declare module "es6-template-string"
          * @returns
          * The rendered text.
          */
-        render(template: string, context?: Record<string, unknown>): string;
+        render(template: string, context?: any): string;
 
         /**
          * Compiles a template.
@@ -42,7 +42,7 @@ declare module "es6-template-string"
          * @returns
          * The rendered text.
          */
-        (template: string, context?: Record<string, unknown>): string;
+        (template: string, context?: any): string;
     }
 
     /**
@@ -58,7 +58,7 @@ declare module "es6-template-string"
          * @returns
          * The rendered text.
          */
-        (context: Record<string, unknown>) => string;
+        (context: any) => string;
 
     /**
      * Provides the functionality to render es6 string-templates.
