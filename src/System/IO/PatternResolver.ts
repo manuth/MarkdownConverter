@@ -1,6 +1,6 @@
 import template = require("es6-template-string");
 import format = require("string-template");
-import { parse, relative } from "upath";
+import { parse, relative, resolve } from "upath";
 import { Progress, TextDocument } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Resources } from "../../Properties/Resources";
@@ -153,6 +153,13 @@ export class PatternResolver
                 message: Resources.Resources.Get("Progress.ResolveFileName")
             });
 
-        return template(this.Pattern, context);
+        let result = template(this.Pattern, context);
+
+        if (destinationRoot)
+        {
+            result = resolve(destinationRoot, result);
+        }
+
+        return result;
     }
 }
