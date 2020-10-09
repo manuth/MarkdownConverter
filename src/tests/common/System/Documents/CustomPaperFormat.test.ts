@@ -12,6 +12,7 @@ export function CustomPaperFormatTests(): void
         {
             let width: string;
             let height: string;
+            let format: CustomPaperFormat;
 
             suiteSetup(
                 () =>
@@ -20,15 +21,20 @@ export function CustomPaperFormatTests(): void
                     height = "190cm";
                 });
 
+            setup(
+                () =>
+                {
+                    format = new CustomPaperFormat(width, height);
+                });
+
             suite(
-                "constructor(string width, string height)",
+                "constructor",
                 () =>
                 {
                     test(
                         "Checking whether the values are assigned correctly…",
                         () =>
                         {
-                            let format = new CustomPaperFormat(width, height);
                             strictEqual(format.Width, width);
                             strictEqual(format.Height, height);
                         });
@@ -42,7 +48,6 @@ export function CustomPaperFormatTests(): void
                         "Checking whether the puppeteer-options are generated correctly…",
                         () =>
                         {
-                            let format = new CustomPaperFormat(width, height);
                             strictEqual(format.PDFOptions.width, width);
                             strictEqual(format.PDFOptions.height, height);
                         });
