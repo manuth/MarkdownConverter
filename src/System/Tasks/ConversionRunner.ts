@@ -1,5 +1,5 @@
 import { CultureInfo } from "@manuth/resource-manager";
-import template = require("es6-template-string");
+import { TempDirectory } from "@manuth/temp-files";
 import { ensureDir, pathExists, readFile } from "fs-extra";
 import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
@@ -10,7 +10,7 @@ import emoji = require("markdown-it-emoji");
 import toc = require("markdown-it-table-of-contents");
 import format = require("string-template");
 import twemoji = require("twemoji");
-import { dirname, join, normalize, parse, relative, resolve } from "upath";
+import { dirname, join, resolve } from "upath";
 import { Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Converter } from "../../Conversion/Converter";
@@ -25,6 +25,7 @@ import { ListType } from "../Documents/ListType";
 import { Slugifier } from "../Documents/Slugifier";
 import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
 import { FileException } from "../IO/FileException";
+import { PatternResolver } from "../IO/PatternResolver";
 import { IProgressState } from "./IProgressState";
 
 /**
@@ -83,11 +84,12 @@ export class ConversionRunner
      */
     public async Execute(document: TextDocument, progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
+        let patternResolver: PatternResolver;
         let tasks: Array<Promise<void>> = [];
         let converter: Converter;
-        let workspaceRoot: string;
-        let documentFolder = document.isUntitled ? null : dirname(document.fileName);
-        let parsedSourcePath = parse(document.fileName);
+        let tempDir: TempDirectory;
+        let destinationRoot: string;
+        let documentRoot = document.isUntitled ? null : dirname(document.fileName);
         let currentWorkspace: WorkspaceFolder;
 
         if (!fileReporter)
@@ -122,8 +124,35 @@ export class ConversionRunner
             currentWorkspace = workspace.getWorkspaceFolder(document.uri);
         }
 
-        workspaceRoot = currentWorkspace?.uri.fsPath ?? null;
-        converter = await this.LoadConverter(workspaceRoot ?? documentFolder, document);
+        patternResolver = new PatternResolver(Settings.Default.DestinationPattern, progressReporter);
+        destinationRoot = currentWorkspace?.uri.fsPath ?? documentRoot;
+
+        if (destinationRoot === null && documentRoot === null)
+        {
+            if (patternResolver.Variables.includes("workspaceFolder"))
+            {
+                while (destinationRoot === null || destinationRoot === undefined)
+                {
+                    this.lastChosenWorkspaceFolder = destinationRoot = await (
+                        window.showInputBox(
+                            {
+                                ignoreFocusOut: true,
+                                prompt: Resources.Resources.Get("DestinationPath"),
+                                value: this.lastChosenWorkspaceFolder || undefined,
+                                placeHolder: Resources.Resources.Get("DestinationPathExample")
+                            }));
+                }
+            }
+            else
+            {
+                tempDir = new TempDirectory();
+                destinationRoot = tempDir.FullName;
+            }
+
+            documentRoot = destinationRoot;
+        }
+
+        converter = await this.LoadConverter(destinationRoot, document);
         await converter.Initialize(progressReporter);
 
         for (let type of Settings.Default.ConversionType)
@@ -131,120 +160,7 @@ export class ConversionRunner
             tasks.push(
                 (async () =>
                 {
-                    let destinationPath: string;
-                    let workspaceFolder: string;
-                    let workspaceFolderRequired: boolean;
-                    let extension: string;
-                    let context: any;
-
-                    progressReporter.report(
-                        {
-                            message: format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
-                        });
-
-                    switch (type)
-                    {
-                        case ConversionType.SelfContainedHTML:
-                        case ConversionType.HTML:
-                            extension = "html";
-                            break;
-                        case ConversionType.JPEG:
-                            extension = "jpg";
-                            break;
-                        case ConversionType.PNG:
-                            extension = "png";
-                            break;
-                        case ConversionType.PDF:
-                            extension = "pdf";
-                            break;
-                    }
-
-                    workspaceFolder = workspaceRoot ?? documentFolder ?? null;
-
-                    context =
-                        new class
-                        {
-                            /**
-                             * The name of the directory of the document.
-                             */
-                            public dirname: string;
-
-                            /**
-                             * The name of the document-file.
-                             */
-                            public filename: string;
-
-                            /**
-                             * The name of the document-file without extension.
-                             */
-                            public basename: string;
-
-                            /**
-                             * The name of the extension of the destination-type.
-                             */
-                            public extension: string;
-
-                            /**
-                             * Initializes a new instance of the class.
-                             */
-                            public constructor()
-                            {
-                                this.filename = parsedSourcePath.base;
-                                this.basename = parsedSourcePath.name;
-                                this.extension = extension;
-
-                                if (workspaceRoot !== null && documentFolder !== null)
-                                {
-                                    this.dirname = relative(workspaceRoot, documentFolder);
-                                }
-                                else
-                                {
-                                    this.dirname = "";
-                                }
-                            }
-                        }();
-
-                    progressReporter.report(
-                        {
-                            message: Resources.Resources.Get("Progress.ResolveFileName")
-                        });
-
-                    do
-                    {
-                        try
-                        {
-                            destinationPath = normalize(template(Settings.Default.DestinationPattern, context));
-                        }
-                        catch
-                        {
-                            try
-                            {
-                                destinationPath = normalize(template(Settings.Default.DestinationPattern, { ...context, workspaceFolder }));
-                                workspaceFolderRequired = !workspaceFolder;
-                            }
-                            catch (exception)
-                            {
-                                throw exception;
-                            }
-                        }
-
-                        if (workspaceFolderRequired)
-                        {
-                            while (workspaceFolder === null || workspaceFolder === undefined)
-                            {
-                                this.lastChosenWorkspaceFolder = workspaceFolder = await (
-                                    window.showInputBox(
-                                        {
-                                            ignoreFocusOut: true,
-                                            prompt: Resources.Resources.Get("DestinationPath"),
-                                            value: this.lastChosenWorkspaceFolder || undefined,
-                                            placeHolder: Resources.Resources.Get("DestinationPathExample")
-                                        }));
-                            }
-                        }
-                    }
-                    while (workspaceFolderRequired);
-
+                    let destinationPath = patternResolver.Resolve(destinationRoot, documentRoot, document, type);
                     await ensureDir(dirname(destinationPath));
                     await converter.Start(type, destinationPath, progressReporter);
 
