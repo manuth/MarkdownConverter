@@ -97,7 +97,7 @@ export function ConverterTests(): void
                         () =>
                         {
                             converter = new TestConverter(tempDir.FullName, document);
-                            strictEqual(converter.WorkspaceRoot, tempDir.FullName);
+                            strictEqual(converter.DocumentRoot, tempDir.FullName);
                             strictEqual(converter.Document, document);
                         });
                 });
