@@ -3,7 +3,7 @@ import { CultureInfo } from "@manuth/resource-manager";
 import MarkdownIt = require("markdown-it");
 import format = require("string-template");
 import { dirname } from "upath";
-import { commands, env, ExtensionContext, ProgressLocation, Uri, ViewColumn, window, workspace } from "vscode";
+import { commands, env, ProgressLocation, Uri, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";
 
@@ -12,11 +12,6 @@ import { Task } from "../Tasks/Task";
  */
 export class Extension
 {
-    /**
-     * The context of the extension.
-     */
-    private context: ExtensionContext = null;
-
     /**
      * The path to the extension-manifest.
      */
@@ -50,15 +45,11 @@ export class Extension
     /**
      * Initializes a new instance of the `Extension` class.
      *
-     * @param context
-     * The context of the extension.
-     *
      * @param extensionPackage
      * The package of the extension.
      */
-    public constructor(context: ExtensionContext, extensionPackage: Package)
+    public constructor(extensionPackage: Package)
     {
-        this.context = context;
         this.metaData = extensionPackage;
         this.extensionManifestPath = extensionPackage.FileName;
         this.extensionRoot = dirname(this.extensionManifestPath);
@@ -70,14 +61,6 @@ export class Extension
             });
 
         Resources.Culture = new CultureInfo(env.language);
-    }
-
-    /**
-     * Gets context of the of the extension.
-     */
-    public get Context(): ExtensionContext
-    {
-        return this.context;
     }
 
     /**

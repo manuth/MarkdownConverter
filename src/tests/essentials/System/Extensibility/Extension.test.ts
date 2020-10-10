@@ -1,10 +1,5 @@
 import { doesNotThrow, notStrictEqual, ok } from "assert";
-import { Package } from "@manuth/package-json-editor";
-import { join } from "upath";
-import { extensions } from "vscode";
-import { Constants } from "../../../../Constants";
 import { extension } from "../../../../extension";
-import { Extension } from "../../../../System/Extensibility/Extension";
 
 /**
  * Registers tests for the `Extension` class.
@@ -15,15 +10,6 @@ export function ExtensionTests(): void
         "Extension",
         () =>
         {
-            suiteSetup(
-                async () =>
-                {
-                    await extensions.getExtension(
-                        new Extension(
-                            null,
-                            new Package(join(Constants.PackageDirectory, "package.json"))).FullName).activate();
-                });
-
             suite(
                 "EnableSystemParser",
                 () =>

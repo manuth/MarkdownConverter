@@ -27,6 +27,11 @@ import { YAMLException } from "./System/YAML/YAMLException";
 export class MarkdownConverterExtension extends Extension
 {
     /**
+     * The context of the extension.
+     */
+    private context: ExtensionContext = null;
+
+    /**
      * Provides the functionality to report converted files.
      */
     private fileReporter: Progress<IConvertedFile>;
@@ -39,7 +44,8 @@ export class MarkdownConverterExtension extends Extension
      */
     public constructor(context: ExtensionContext)
     {
-        super(context, new Package(join(Constants.PackageDirectory, "package.json")));
+        super(new Package(join(Constants.PackageDirectory, "package.json")));
+        this.context = context;
 
         this.fileReporter = {
             async report(file)
@@ -68,6 +74,14 @@ export class MarkdownConverterExtension extends Extension
                 }
             }
         };
+    }
+
+    /**
+     * Gets context of the of the extension.
+     */
+    public get Context(): ExtensionContext
+    {
+        return this.context;
     }
 
     /**
