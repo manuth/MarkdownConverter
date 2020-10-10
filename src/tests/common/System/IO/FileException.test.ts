@@ -12,8 +12,16 @@ export function FileExceptionTests(): void
         "FileException",
         () =>
         {
+            let exception: FileException;
+
+            setup(
+                () =>
+                {
+                    exception = new FileException();
+                });
+
             suite(
-                "constructor(string message, string path)",
+                "constructor",
                 () =>
                 {
                     test(
@@ -24,13 +32,6 @@ export function FileExceptionTests(): void
                             ok(!exception.InnerException);
                             strictEqual(exception.Message, "hello");
                             strictEqual(exception.Path, "world");
-                        });
-
-                    test(
-                        "Checking whether a default message is set…",
-                        () =>
-                        {
-                            ok(new FileException().Message);
                         });
                 });
 
@@ -53,16 +54,25 @@ export function FileExceptionTests(): void
                         });
 
                     test(
+                        "Checking whether a default message is set…",
+                        () =>
+                        {
+                            ok(exception.Message);
+                        });
+
+                    test(
                         "Checking whether the message is localized…",
                         () =>
                         {
-                            let exception = new FileException(null, "world");
+                            let customException = new FileException(null, "world");
                             let germanMessage: string;
                             let englishMessage: string;
 
                             Resources.Culture = new CultureInfo("de");
+                            strictEqual(exception.Message, customException.Message);
                             germanMessage = exception.Message;
                             Resources.Culture = new CultureInfo("en");
+                            strictEqual(exception.Message, customException.Message);
                             englishMessage = exception.Message;
                             notStrictEqual(germanMessage, englishMessage);
                         });
