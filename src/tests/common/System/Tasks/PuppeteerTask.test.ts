@@ -63,14 +63,14 @@ export function PuppeteerTaskTests(): void
                 });
 
             suite(
-                "Execute(Progress<IProgressState> progressReporter?, CancellationToken cancellationToken?, Progress<IConvertedFile> fileReporter?)",
+                "Execute",
                 () =>
                 {
                     test(
                         "Checking whether executing the task without puppeteer installed throws an exception…",
                         async () =>
                         {
-                            await rejects(new PuppeteerTaskTest(extension).Execute());
+                            await rejects(() => new PuppeteerTaskTest(extension).Execute());
                         });
                 });
         });

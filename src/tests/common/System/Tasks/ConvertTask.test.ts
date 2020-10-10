@@ -20,7 +20,7 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
         () =>
         {
             suite(
-                "GetMarkdownDocument()",
+                "GetMarkdownDocument",
                 () =>
                 {
                     let testFile: TempFile;
