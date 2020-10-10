@@ -37,11 +37,11 @@ export function YAMLExceptionTests(): void
                 });
 
             suite(
-                "constructor(any exception)",
+                "constructor",
                 () =>
                 {
                     test(
-                        "Checking whether the values are set correctly…",
+                        "Checking whether an exception can be constructed based on a YAML-error…",
                         () =>
                         {
                             let exception = new YAMLException(yamlError);
@@ -50,14 +50,9 @@ export function YAMLExceptionTests(): void
                             ok(exception.Mark);
                             ok(exception.Reason);
                         });
-                });
 
-            suite(
-                "constructor(string name, string reason?, IMark mark?, string message?)",
-                () =>
-                {
                     test(
-                        "Checking whether the values are set correctly…",
+                        "Checking whether custom values can be passed…",
                         () =>
                         {
                             let name = "name";
