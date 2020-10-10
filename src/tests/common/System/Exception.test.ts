@@ -20,7 +20,7 @@ export function ExceptionTests(): void
                 });
 
             suite(
-                "constructor(string message?, Exception innerException?)",
+                "constructor",
                 () =>
                 {
                     test(
