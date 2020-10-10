@@ -50,11 +50,15 @@ export class Extension
     /**
      * Initializes a new instance of the `Extension` class.
      *
+     * @param context
+     * The context of the extension.
+     *
      * @param extensionPackage
      * The package of the extension.
      */
-    public constructor(extensionPackage: Package)
+    public constructor(context: ExtensionContext, extensionPackage: Package)
     {
+        this.context = context;
         this.metaData = extensionPackage;
         this.extensionManifestPath = extensionPackage.FileName;
         this.extensionRoot = dirname(this.extensionManifestPath);
@@ -127,16 +131,11 @@ export class Extension
     /**
      * Activates the extension.
      *
-     * @param context
-     * A collection of utilities private to an extension.
-     *
      * @returns
      * The extension-body.
      */
-    public async Active(context: ExtensionContext): Promise<unknown>
+    public async Activate(): Promise<unknown>
     {
-        this.context = context;
-
         return {
             extendMarkdownIt: (md: any) =>
             {

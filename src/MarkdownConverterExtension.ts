@@ -33,10 +33,13 @@ export class MarkdownConverterExtension extends Extension
 
     /**
      * Initializes a new instance of the `MarkdownConverterExtension` class.
+     *
+     * @param context
+     * The context of the extension.
      */
-    public constructor()
+    public constructor(context: ExtensionContext)
     {
-        super(new Package(join(Constants.PackageDirectory, "package.json")));
+        super(context, new Package(join(Constants.PackageDirectory, "package.json")));
 
         this.fileReporter = {
             async report(file)
@@ -78,20 +81,17 @@ export class MarkdownConverterExtension extends Extension
     /**
      * @inheritdoc
      *
-     * @param context
-     * A collection of utilities private to an extension.
-     *
      * @returns
      * The extension-body.
      */
-    public async Activate(context: ExtensionContext): Promise<unknown>
+    public async Activate(): Promise<unknown>
     {
-        context.subscriptions.push(
+        this.Context.subscriptions.push(
             commands.registerCommand("markdownConverter.Convert", async () => this.ExecuteTask(new ConvertTask(this))),
             commands.registerCommand("markdownConverter.ConvertAll", async () => this.ExecuteTask(new ConvertAllTask(this))),
             commands.registerCommand("markdownConverter.Chain", async () => this.ExecuteTask(new ChainTask(this))));
 
-        return super.Active(context);
+        return super.Activate();
     }
 
     /**

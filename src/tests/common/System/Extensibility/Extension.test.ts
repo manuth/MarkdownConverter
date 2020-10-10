@@ -9,6 +9,7 @@ import { Constants } from "../../../../Constants";
 import { ISettings } from "../../../../Properties/ISettings";
 import { Extension } from "../../../../System/Extensibility/Extension";
 import { ITestContext } from "../../../ITestContext";
+import { TestConstants } from "../../../TestConstants";
 
 /**
  * Registers tests for the `Extension` class.
@@ -32,7 +33,7 @@ export function ExtensionTests(context: ITestContext<ISettings>): void
                         "Checking whether the extension can be initialized correctly…",
                         () =>
                         {
-                            extension = new Extension(new Package(resolve(Constants.PackageDirectory, "package.json")));
+                            extension = new Extension(TestConstants.Extension.Context, new Package(resolve(Constants.PackageDirectory, "package.json")));
                         });
                 });
 

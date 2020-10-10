@@ -4,7 +4,7 @@ import { MarkdownConverterExtension } from "./MarkdownConverterExtension";
 /**
  * An instance of the extension.
  */
-export const extension = new MarkdownConverterExtension();
+export let extension: MarkdownConverterExtension;
 
 /**
  * Activates the extension.
@@ -15,9 +15,13 @@ export const extension = new MarkdownConverterExtension();
  * @returns
  * The extension-body.
  */
-export let activate = async (context: ExtensionContext): Promise<unknown> => extension.Activate(context);
+export let activate = async (context: ExtensionContext): Promise<unknown> =>
+{
+    extension = new MarkdownConverterExtension(context);
+    return extension.Activate();
+};
 
 /**
  * Deactivates the extension.
  */
-export let deactivate = async (): Promise<void> => extension.Dispose();
+export let deactivate = async (): Promise<void> => extension?.Dispose();
