@@ -6,7 +6,7 @@ import dedent = require("dedent");
 import { readFile, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import MultiRange from "multi-integer-range";
-import { dirname, join, parse, resolve } from "upath";
+import { dirname, join, resolve } from "upath";
 import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Converter } from "../../../../Conversion/Converter";
 import { extension } from "../../../../extension";
@@ -395,73 +395,37 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                 "Execute",
                 () =>
                 {
-                    suite(
-                        "Checking whether the `DestinationPattern` is substituted correctly…",
+                    let testFile: TempFile;
+                    let tempDir: TempDirectory;
+                    let substitutionTester: SubstitutionTester;
+
+                    suiteSetup(
+                        async () =>
+                        {
+                            testFile = new TempFile(
+                                {
+                                    Suffix: ".mkdwn"
+                                });
+
+                            tempDir = new TempDirectory();
+                            substitutionTester = new SubstitutionTester(await workspace.openTextDocument(Uri.file(testFile.FullName)));
+                        });
+
+                    suiteTeardown(
                         () =>
                         {
-                            let testFile: TempFile;
-                            let tempDir: TempDirectory;
-                            let substitutionTester: SubstitutionTester;
+                            testFile.Dispose();
+                            tempDir.Dispose();
+                        });
 
-                            suiteSetup(
-                                async () =>
-                                {
-                                    testFile = new TempFile(
-                                        {
-                                            Suffix: ".mkdwn"
-                                        });
-
-                                    tempDir = new TempDirectory();
-                                    substitutionTester = new SubstitutionTester(await workspace.openTextDocument(Uri.file(testFile.FullName)));
-                                });
-
-                            suiteTeardown(
-                                () =>
-                                {
-                                    testFile.Dispose();
-                                    tempDir.Dispose();
-                                });
-
-                            test(
-                                "${basename}",
-                                async function()
-                                {
-                                    this.slow(1.25 * 1000);
-                                    this.timeout(5 * 1000);
-                                    context.Settings.DestinationPattern = resolve("${basename}");
-                                    strictEqual(await substitutionTester.Test(), resolve(parse(testFile.FullName).name));
-                                });
-
-                            test(
-                                "${extension}",
-                                async function()
-                                {
-                                    this.slow(1.25 * 1000);
-                                    this.timeout(5 * 1000);
-                                    context.Settings.ConversionType = ["PDF"];
-                                    context.Settings.DestinationPattern = resolve("${extension}");
-                                    strictEqual(await substitutionTester.Test(), resolve("pdf"));
-                                });
-
-                            test(
-                                "${filename}",
-                                async function()
-                                {
-                                    this.slow(1.25 * 1000);
-                                    this.timeout(5 * 1000);
-                                    context.Settings.DestinationPattern = resolve("${filename}");
-                                    strictEqual(await substitutionTester.Test(), resolve(parse(testFile.FullName).base));
-                                });
-
-                            test(
-                                "Checking whether the `DestinationPatterh` is normalized correctly…",
-                                async function()
-                                {
-                                    this.slow(1.25 * 1000);
-                                    this.timeout(5 * 1000);
-                                    context.Settings.DestinationPattern = join(tempDir.FullName, "/./test/.././///./.");
-                                    strictEqual(resolve(Uri.file(await substitutionTester.Test()).fsPath), resolve(Uri.file(tempDir.FullName).fsPath));
-                                });
+                    test(
+                        "Checking whether the `DestinationPatterh` is normalized correctly…",
+                        async function()
+                        {
+                            this.slow(1.25 * 1000);
+                            this.timeout(5 * 1000);
+                            context.Settings.DestinationPattern = join(tempDir.FullName, "/./test/.././///./.");
+                            strictEqual(resolve(Uri.file(await substitutionTester.Test()).fsPath), resolve(Uri.file(tempDir.FullName).fsPath));
                         });
                 });
         });
