@@ -21,7 +21,7 @@ export function ConvertAllTaskTests(): void
                 });
 
             suite(
-                "Execute(Progress<IProgressState> progressReporter?, CancellationToken cancellationToken?, Progress<IConverterFile> fileReporter?)",
+                "Execute",
                 () =>
                 {
                     test(
