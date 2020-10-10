@@ -88,7 +88,7 @@ export function PatternResolverTests(): void
                             "basename",
                             (result) =>
                             {
-                                strictEqual(result, parse(testFile.FullName));
+                                strictEqual(result, parse(testFile.FullName).name);
                             }
                         ],
                         [
