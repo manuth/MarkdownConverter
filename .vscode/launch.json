@@ -55,7 +55,7 @@
         {
             "type": "extensionHost",
             "request": "launch",
-            "name": "Launch Config Tests",
+            "name": "Launch Essential Tests",
             "runtimeExecutable": "${execPath}",
             "args": [
                 "${workspaceFolder}/src/test/single-folder",
@@ -63,7 +63,7 @@
                 "--extensionTestsPath=${workspaceFolder}/lib/test"
             ],
             "env": {
-                "TEST_SUITE": "config"
+                "TEST_SUITE": "essentials"
             },
             "internalConsoleOptions": "openOnSessionStart",
             "preLaunchTask": "Build",

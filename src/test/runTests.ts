@@ -27,7 +27,7 @@ import { TestOptions } from "vscode-test/out/runTest";
             {
                 ...commonOptions,
                 extensionTestsEnv: {
-                    TEST_SUITE: "config"
+                    TEST_SUITE: "essentials"
                 },
                 launchArgs: [
                     singleFolderPath,
