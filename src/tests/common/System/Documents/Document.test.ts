@@ -19,13 +19,14 @@ export function DocumentTests(): void
         () =>
         {
             let content: string;
-            let attributes: { [key: string]: any };
+            let attributes: Record<string, any>;
             let rawContent: string;
-            let untitledTextDocument: TextDocument;
             let tempFile: TempFile;
-            let textDocument: TextDocument;
             let parser: MarkdownIt;
-            let testDocument: Document;
+            let textDocument: TextDocument;
+            let untitledTextDocument: TextDocument;
+            let document: Document;
+            let untitledDocument: Document;
 
             suiteSetup(
                 async () =>
@@ -54,7 +55,6 @@ export function DocumentTests(): void
                         });
 
                     parser = new MarkdownIt();
-                    testDocument = new Document(textDocument, parser);
                 });
 
             suiteTeardown(
@@ -63,16 +63,21 @@ export function DocumentTests(): void
                     tempFile.Dispose();
                 });
 
+            setup(
+                () =>
+                {
+                    document = new Document(textDocument, parser);
+                    untitledDocument = new Document(untitledTextDocument, parser);
+                });
+
             suite(
-                "constructor(TextDocument document, MarkdownIt parser)",
+                "constructor",
                 () =>
                 {
                     test(
                         "Checking whether the properties are set correctly…",
                         async () =>
                         {
-                            let document = new Document(textDocument, parser);
-
                             for (let key of Object.keys(attributes))
                             {
                                 strictEqual(JSON.stringify(document.Attributes[key]), JSON.stringify(attributes[key]));
@@ -81,9 +86,7 @@ export function DocumentTests(): void
                             document.Content = content;
                             strictEqual(document.FileName, textDocument.fileName);
                             strictEqual(new Date(document.Attributes["CreationDate"] as any).getTime(), (await stat(tempFile.FullName)).ctime.getTime());
-
-                            document = new Document(untitledTextDocument, parser);
-                            ok(!document.FileName);
+                            ok(!untitledDocument.FileName);
                         });
                 });
 
@@ -96,65 +99,55 @@ export function DocumentTests(): void
                     suiteSetup(
                         () =>
                         {
-                            originalContent = testDocument.RawContent;
+                            originalContent = document.RawContent;
                         });
 
                     suiteTeardown(
                         () =>
                         {
-                            testDocument.RawContent = originalContent;
+                            document.RawContent = originalContent;
                         });
 
-                    suite(
-                        "getter",
+                    test(
+                        "Checking whether the raw content is generated correctly…",
                         () =>
                         {
-                            test(
-                                "Checking whether the raw content is generated correctly…",
-                                () =>
-                                {
-                                    let frontMatter = (fm as any)(testDocument.RawContent) as fm.FrontMatterResult<any>;
-                                    strictEqual(frontMatter.body, content);
+                            let frontMatter = (fm as any)(document.RawContent) as fm.FrontMatterResult<any>;
+                            strictEqual(frontMatter.body, content);
 
-                                    for (let key of Object.keys(attributes))
-                                    {
-                                        strictEqual(JSON.stringify(frontMatter.attributes[key]), JSON.stringify(attributes[key]));
-                                    }
-                                });
+                            for (let key of Object.keys(attributes))
+                            {
+                                strictEqual(JSON.stringify(frontMatter.attributes[key]), JSON.stringify(attributes[key]));
+                            }
                         });
 
-                    suite(
-                        "setter",
+                    test(
+                        "Checking whether the raw content is parsed correctly…",
                         () =>
                         {
-                            test(
-                                "Checking whether the raw content is processed correctly…",
+                            document.RawContent = `---\n${stringify(attributes)}---\n${content}`;
+                            strictEqual(document.Content, content);
+
+                            for (let key of Object.keys(attributes))
+                            {
+                                strictEqual(JSON.stringify(document.Attributes[key]), JSON.stringify(attributes[key]));
+                            }
+                        });
+
+                    test(
+                        "Checking whether setting malformed YAML causes an error…",
+                        () =>
+                        {
+                            throws(
                                 () =>
                                 {
-                                    testDocument.RawContent = `---\n${stringify(attributes)}---\n${content}`;
-                                    strictEqual(testDocument.Content, content);
-
-                                    for (let key of Object.keys(attributes))
-                                    {
-                                        strictEqual(JSON.stringify(testDocument.Attributes[key]), JSON.stringify(attributes[key]));
-                                    }
-                                });
-
-                            test(
-                                "Checking whether setting malformed YAML causes an error…",
-                                () =>
-                                {
-                                    throws(
-                                        () =>
-                                        {
-                                            testDocument.RawContent = "---\nThis: is: incorrect: YAML\n---\n";
-                                        });
+                                    document.RawContent = "---\nThis: is: incorrect: YAML\n---\n";
                                 });
                         });
                 });
 
             suite(
-                "Render()",
+                "Render",
                 () =>
                 {
                     let styleSheet: string;
@@ -167,128 +160,110 @@ export function DocumentTests(): void
                             script = "https://this.is.an/other.test.js";
                         });
 
-                    teardown(
-                        () =>
-                        {
-                            testDocument = new Document(textDocument, parser);
-                        });
-
                     test(
                         "Checking whether stylesheets are added to the rendered document…",
                         async () =>
                         {
-                            testDocument.StyleSheets.push(styleSheet);
-                            strictEqual(
+                            document.StyleSheets.push(styleSheet);
+
+                            ok(
                                 new RegExp(
                                     `<link.*?type="text/css".*?href="${styleSheet}".*?/>`,
-                                    "g").test(await testDocument.Render()),
-                                true);
+                                    "g").test(await document.Render()));
                         });
 
                     test(
                         "Checking whether scripts are added to the rendered document…",
                         async () =>
                         {
-                            testDocument.Scripts.push(script);
-                            strictEqual(
+                            document.Scripts.push(script);
+
+                            ok(
                                 new RegExp(
                                     `<script.*?src="${script}".*?>.*?</script>`,
-                                    "g").test(await testDocument.Render()),
-                                true);
+                                    "g").test(await document.Render()));
                         });
 
                     test(
                         "Checking whether Document.Template is applied using Mustache…",
                         async () =>
                         {
-                            testDocument.Template = "hello{{content}}world";
-                            strictEqual(
-                                /^hello[\s\S]*world$/gm.test(await testDocument.Render()), true);
+                            document.Template = "hello{{content}}world";
+                            ok(/^hello[\s\S]*world$/gm.test(await document.Render()));
                         });
                 });
 
             suite(
-                "RenderText(string content)",
+                "RenderText",
                 () =>
                 {
-                    teardown(
+                    let content: string;
+
+                    suiteSetup(
                         () =>
                         {
-                            testDocument = new Document(textDocument, parser);
+                            content = "";
+
+                            for (let key of Object.keys(attributes))
+                            {
+                                content += `{{${key}}}\n\n`;
+                            }
                         });
 
-                    suite(
-                        "Checking whether attributes are substituted using Mustache…",
-                        () =>
+                    test(
+                        "Checking whether non-date attributes are substituted correctly…",
+                        async () =>
                         {
-                            let content: string;
+                            document.Content = content;
 
-                            suiteSetup(
-                                () =>
+                            for (let key of Object.keys(attributes))
+                            {
+                                if (!(attributes[key] instanceof Date))
                                 {
-                                    content = "";
+                                    (await document.Render()).includes(attributes[key]);
+                                }
+                            }
+                        });
 
-                                    for (let key of Object.keys(attributes))
-                                    {
-                                        content += `{{${key}}}\n\n`;
-                                    }
-                                });
+                    test(
+                        "Checking whether date-attributes are formatted using the DateTimeFormatter…",
+                        async () =>
+                        {
+                            document.Content = content;
 
-                            test(
-                                "Checking whether non-date attributes are substituted correctly…",
-                                async () =>
+                            for (let key of Object.keys(attributes))
+                            {
+                                if (attributes[key] instanceof Date)
                                 {
-                                    testDocument.Content = content;
+                                    (await document.Render()).includes(
+                                        new DateTimeFormatter(document.Locale).Format(document.DateFormat, attributes[key]));
+                                }
+                            }
+                        });
 
-                                    for (let key of Object.keys(attributes))
-                                    {
-                                        if (!(attributes[key] instanceof Date))
-                                        {
-                                            (await testDocument.Render()).includes(attributes[key]);
-                                        }
-                                    }
-                                });
+                    test(
+                        "Checking whether the locale of the document affects the date-format…",
+                        async () =>
+                        {
+                            document.Content = content;
+                            document.DateFormat = "dddd";
 
-                            test(
-                                "Checking whether date-attributes are formatted using the DateTimeFormatter…",
-                                async () =>
-                                {
-                                    testDocument.Content = content;
+                            let englishContent: string;
+                            let germanContent: string;
 
-                                    for (let key of Object.keys(attributes))
-                                    {
-                                        if (attributes[key] instanceof Date)
-                                        {
-                                            (await testDocument.Render()).includes(
-                                                new DateTimeFormatter(testDocument.Locale).Format(testDocument.DateFormat, attributes[key]));
-                                        }
-                                    }
-                                });
+                            document.Locale = new CultureInfo("en");
+                            englishContent = await document.Render();
+                            document.Locale = new CultureInfo("de");
+                            germanContent = await document.Render();
+                            ok(englishContent !== germanContent);
+                        });
 
-                            test(
-                                "Checking whether the locale of the document affects the date-format…",
-                                async () =>
-                                {
-                                    testDocument.Content = content;
-                                    testDocument.DateFormat = "dddd";
-
-                                    let englishContent: string;
-                                    let germanContent: string;
-
-                                    testDocument.Locale = new CultureInfo("en");
-                                    englishContent = await testDocument.Render();
-                                    testDocument.Locale = new CultureInfo("de");
-                                    germanContent = await testDocument.Render();
-                                    ok(englishContent !== germanContent);
-                                });
-
-                            test(
-                                "Checking whether markdown is parsed when rendering the document…",
-                                async () =>
-                                {
-                                    testDocument.Content = "**important**";
-                                    ok((await testDocument.Render()).includes(parser.renderInline(testDocument.Content)));
-                                });
+                    test(
+                        "Checking whether markdown is parsed when rendering the document…",
+                        async () =>
+                        {
+                            document.Content = "**important**";
+                            ok((await document.Render()).includes(parser.renderInline(document.Content)));
                         });
                 });
         });
