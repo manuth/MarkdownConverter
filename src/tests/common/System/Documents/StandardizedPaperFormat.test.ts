@@ -14,6 +14,7 @@ export function StandardizedPaperFormatTests(): void
         {
             let format: StandardizedFormatType;
             let orientation: PaperOrientation;
+            let paperFormat: StandardizedPaperFormat;
 
             suiteSetup(
                 () =>
@@ -22,8 +23,14 @@ export function StandardizedPaperFormatTests(): void
                     orientation = PaperOrientation.Portrait;
                 });
 
+            setup(
+                () =>
+                {
+                    paperFormat = new StandardizedPaperFormat(format, orientation);
+                });
+
             suite(
-                "constructor(StandardizedFormatType format?, PaperOrientation orientation?)",
+                "constructor",
                 () =>
                 {
                     test(
@@ -50,7 +57,6 @@ export function StandardizedPaperFormatTests(): void
                         "Checking whether the puppeteer-options are generated correctly…",
                         () =>
                         {
-                            let paperFormat = new StandardizedPaperFormat(format, orientation);
                             strictEqual(paperFormat.PDFOptions.format, "A3");
                             strictEqual(paperFormat.PDFOptions.landscape, false);
                         });

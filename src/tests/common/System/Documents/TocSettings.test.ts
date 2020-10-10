@@ -12,24 +12,42 @@ export function TocSettingTests(): void
         "TocSettings",
         () =>
         {
+            let className: string;
+            let levels: MultiRange;
+            let indicator: RegExp;
+            let listType: ListType;
+            let tocSettings: TocSettings;
+
+            suiteSetup(
+                () =>
+                {
+                    className = "toc";
+                    levels = new MultiRange("1-6");
+                    indicator = /insert-my-toc-here-plz/g;
+                    listType = ListType.Ordered;
+                });
+
+            setup(
+                () =>
+                {
+                    tocSettings = new TocSettings(className, levels, indicator, listType);
+                });
+
             suite(
-                "constructor(string $class, MultiRange levels?, RegExp indicator?, ListType listType?)",
+                "constructor",
                 () =>
                 {
                     test(
                         "Checking whether the properties are initialized correctly…",
                         () =>
                         {
-                            let $class = "toc";
-                            let levels = new MultiRange("1-6");
-                            let indicator = /insert-my-toc-here-plz/g;
-                            let listType = ListType.Ordered;
-                            let tocSettings = new TocSettings($class);
-                            strictEqual(tocSettings.Class, $class);
-                            strictEqual(tocSettings.Levels.toArray().length, 0);
-                            strictEqual(tocSettings.Indicator.source, /\[\[\s*toc\s*\]\]/g.source);
-                            strictEqual(tocSettings.ListType, ListType.Unordered);
-                            tocSettings = new TocSettings($class, levels, indicator, listType);
+                            let defaultToc = new TocSettings(className);
+                            strictEqual(defaultToc.Class, className);
+                            strictEqual(defaultToc.Levels.toArray().length, 0);
+                            strictEqual(defaultToc.Indicator.source, /\[\[\s*toc\s*\]\]/g.source);
+                            strictEqual(defaultToc.ListType, ListType.Unordered);
+
+                            strictEqual(tocSettings.Class, className);
                             strictEqual(tocSettings.Levels, levels);
                             strictEqual(tocSettings.Indicator, indicator);
                             strictEqual(tocSettings.ListType, listType);

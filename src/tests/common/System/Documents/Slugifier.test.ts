@@ -1,4 +1,4 @@
-import { doesNotThrow, strictEqual } from "assert";
+import { notStrictEqual, strictEqual } from "assert";
 import { Slugifier } from "../../../../System/Documents/Slugifier";
 
 /**
@@ -21,24 +21,14 @@ export function SlugifierTests(): void
                     expected = "this-is-a-test";
                 });
 
-            suite(
-                "constructor()",
+            setup(
                 () =>
                 {
-                    test(
-                        "Checking whether a slugifier can be initialized…",
-                        () =>
-                        {
-                            doesNotThrow(
-                                () =>
-                                {
-                                    slugifier = new Slugifier();
-                                });
-                        });
+                    slugifier = new Slugifier();
                 });
 
             suite(
-                "CreateSlug(string text)",
+                "CreateSlug",
                 () =>
                 {
                     test(
@@ -52,18 +42,21 @@ export function SlugifierTests(): void
                         "Checking whether numbers are appended to duplicate slugs…",
                         () =>
                         {
+                            slugifier.CreateSlug(slug);
                             strictEqual(slugifier.CreateSlug(slug), `${expected}-2`);
                         });
                 });
 
             suite(
-                "Reset()",
+                "Reset",
                 () =>
                 {
                     test(
                         "Checking whether the counter of the slugs can be reset correctly…",
                         () =>
                         {
+                            slugifier.CreateSlug(slug);
+                            notStrictEqual(slugifier.CreateSlug(slug), expected);
                             slugifier.Reset();
                             strictEqual(slugifier.CreateSlug(slug), expected);
                         });

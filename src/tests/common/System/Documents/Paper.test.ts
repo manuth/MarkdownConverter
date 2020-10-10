@@ -15,7 +15,7 @@ export function PaperTests(): void
         () =>
         {
             suite(
-                "constructor(PaperFormat format?, Margin margin?)",
+                "constructor",
                 () =>
                 {
                     test(

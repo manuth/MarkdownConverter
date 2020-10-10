@@ -96,7 +96,7 @@ export function RenderableTests(): void
                 });
 
             suite(
-                "constructor(string content?)",
+                "constructor",
                 () =>
                 {
                     test(
@@ -111,7 +111,7 @@ export function RenderableTests(): void
                 });
 
             suite(
-                "Render()",
+                "Render",
                 () =>
                 {
                     test(
@@ -123,7 +123,7 @@ export function RenderableTests(): void
                 });
 
             suite(
-                "RenderTextBy(Renderable renderer, string text)",
+                "RenderTextBy",
                 () =>
                 {
                     test(
