@@ -37,7 +37,7 @@ export function DateTimeFormatterTests(): void
                 });
 
             suite(
-                "Format(string formatString, Date date)",
+                "Format",
                 () =>
                 {
                     let originalLocale: CultureInfo;
