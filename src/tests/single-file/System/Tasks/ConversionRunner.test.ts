@@ -61,8 +61,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                         return inputWorkspaceName;
                                     };
 
-                                    context.Settings.DestinationPattern = resolve("${workspaceFolder}");
+                                    context.Settings.DestinationPattern = "${workspaceFolder}";
                                     strictEqual(await untitledSubstitutionTester.Test(), resolve(inputWorkspaceName));
+                                    context.Settings.DestinationPattern = "./Test";
+                                    strictEqual(await untitledSubstitutionTester.Test(), resolve(inputWorkspaceName, context.Settings.DestinationPattern));
                                     window.showInputBox = original;
                                 });
                         });
