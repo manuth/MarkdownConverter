@@ -25,11 +25,11 @@ export function MarginTests(): void
                 });
 
             suite(
-                "constructor(string all)",
+                "constructor",
                 () =>
                 {
                     test(
-                        "Checking whether the values are set correctly…",
+                        "Checking whether all values of the margin can be set at once…",
                         () =>
                         {
                             let margin = new Margin(testValue2);
@@ -38,14 +38,9 @@ export function MarginTests(): void
                             strictEqual(margin.Bottom, testValue2);
                             strictEqual(margin.Left, testValue2);
                         });
-                });
 
-            suite(
-                "constructor(string vertical, string horizontal)",
-                () =>
-                {
                     test(
-                        "Checking whether the values are set correctly…",
+                        "Checking whether horizontal and vertical values can be set…",
                         () =>
                         {
                             let margin = new Margin(testValue1, testValue4);
@@ -54,14 +49,9 @@ export function MarginTests(): void
                             strictEqual(margin.Bottom, testValue1);
                             strictEqual(margin.Left, testValue4);
                         });
-                });
 
-            suite(
-                "constructor(string top, string right, string bottom, string left)",
-                () =>
-                {
                     test(
-                        "Checking whether the values are set correctly…",
+                        "Checking whether the values can be set separately…",
                         () =>
                         {
                             let margin = new Margin(testValue1, testValue2, testValue3, testValue4);
