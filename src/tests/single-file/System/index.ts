@@ -1,5 +1,6 @@
 import { ISettings } from "../../../Properties/ISettings";
 import { ITestContext } from "../../ITestContext";
+import { IOTests } from "./IO";
 import { TaskTests } from "./Tasks";
 
 /**
@@ -14,6 +15,7 @@ export function SystemTests(context: ITestContext<ISettings>): void
         "System",
         () =>
         {
+            IOTests();
             TaskTests(context);
         });
 }

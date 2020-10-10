@@ -1,7 +1,7 @@
 import { strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
-import { dirname, resolve } from "upath";
-import { Uri, window, workspace } from "vscode";
+import { resolve } from "upath";
+import { window, workspace } from "vscode";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
@@ -19,7 +19,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
         () =>
         {
             suite(
-                "Execute(TextDocument document, Progress<IProgressState> progressReporter?, Progress<IConvertedFile> fileReporter?)",
+                "Execute",
                 () =>
                 {
                     suite(
@@ -27,7 +27,6 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             let testFile: TempFile;
-                            let substitutionTester: SubstitutionTester;
                             let untitledSubstitutionTester: SubstitutionTester;
 
                             suiteSetup(
@@ -38,7 +37,6 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                             Suffix: ".md"
                                         });
 
-                                    substitutionTester = new SubstitutionTester(await workspace.openTextDocument(testFile.FullName));
                                     untitledSubstitutionTester = new SubstitutionTester(await workspace.openTextDocument());
                                 });
 
@@ -46,26 +44,6 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 async () =>
                                 {
                                     testFile.Dispose();
-                                });
-
-                            test(
-                                "Checking whether ${workspaceFolder} resolves to the folder containing the file…",
-                                async function()
-                                {
-                                    this.slow(1 * 1000);
-                                    this.timeout(4 * 1000);
-                                    context.Settings.DestinationPattern = "${workspaceFolder}";
-                                    strictEqual(Uri.file(await substitutionTester.Test()).fsPath, Uri.file(dirname(testFile.FullName)).fsPath);
-                                });
-
-                            test(
-                                "Checking whether ${dirname} is empty…",
-                                async function()
-                                {
-                                    this.slow(1 * 1000);
-                                    this.timeout(4 * 1000);
-                                    context.Settings.DestinationPattern = resolve("${dirname}");
-                                    strictEqual(await substitutionTester.Test(), resolve("."));
                                 });
 
                             test(
