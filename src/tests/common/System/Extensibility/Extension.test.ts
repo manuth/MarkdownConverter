@@ -2,17 +2,12 @@ import { strictEqual } from "assert";
 import { Package } from "@manuth/package-json-editor";
 import { resolve } from "upath";
 import { Constants } from "../../../../Constants";
-import { ISettings } from "../../../../Properties/ISettings";
 import { Extension } from "../../../../System/Extensibility/Extension";
-import { ITestContext } from "../../../ITestContext";
 
 /**
  * Registers tests for the `Extension` class.
- *
- * @param context
- * The test-context.
  */
-export function ExtensionTests(context: ITestContext<ISettings>): void
+export function ExtensionTests(): void
 {
     suite(
         "Extension",

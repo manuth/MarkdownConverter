@@ -24,7 +24,7 @@ export function SystemTests(context: ITestContext<ISettings>): void
             IOTests();
             YAMLTests();
             GlobalizationTests();
-            ExtensibilityTests(context);
+            ExtensibilityTests();
             TaskTests(context);
             DocumentTests();
         });
