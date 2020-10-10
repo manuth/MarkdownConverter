@@ -11,7 +11,7 @@ import toc = require("markdown-it-table-of-contents");
 import format = require("string-template");
 import twemoji = require("twemoji");
 import { dirname, isAbsolute, join, resolve } from "upath";
-import { Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
+import { CancellationToken, Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Converter } from "../../Conversion/Converter";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
@@ -79,125 +79,120 @@ export class ConversionRunner
      * @param progressReporter
      * A component for reporting progress.
      *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
+     *
      * @param fileReporter
      * A component for reporting converted files.
      */
-    public async Execute(document: TextDocument, progressReporter?: Progress<IProgressState>, fileReporter?: Progress<IConvertedFile>): Promise<void>
+    public async Execute(document: TextDocument, progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
-        let patternResolver: PatternResolver;
-        let tasks: Array<Promise<void>> = [];
-        let converter: Converter;
-        let tempDir: TempDirectory;
-        let workspaceFolder: string;
-        let documentRoot: string;
-        let documentDirname = document.isUntitled ? null : dirname(document.fileName);
-        let currentWorkspace: WorkspaceFolder;
-
-        if (!fileReporter)
+        if (!(cancellationToken?.isCancellationRequested ?? false))
         {
-            fileReporter = {
-                report()
-                { }
-            };
-        }
+            let patternResolver: PatternResolver;
+            let tasks: Array<Promise<void>> = [];
+            let converter: Converter;
+            let tempDir: TempDirectory;
+            let workspaceFolder: string;
+            let documentRoot: string;
+            let documentDirname = document.isUntitled ? null : dirname(document.fileName);
+            let currentWorkspace: WorkspaceFolder;
 
-        if (!progressReporter)
-        {
-            progressReporter = {
-                report()
-                { }
-            };
-        }
-
-        if (document.isUntitled)
-        {
-            if ((workspace.workspaceFolders || []).length === 1)
+            if (document.isUntitled)
             {
-                currentWorkspace = workspace.workspaceFolders[0];
+                if ((workspace.workspaceFolders || []).length === 1)
+                {
+                    currentWorkspace = workspace.workspaceFolders[0];
+                }
+                else
+                {
+                    currentWorkspace = null;
+                }
             }
             else
             {
-                currentWorkspace = null;
+                currentWorkspace = workspace.getWorkspaceFolder(document.uri);
             }
-        }
-        else
-        {
-            currentWorkspace = workspace.getWorkspaceFolder(document.uri);
-        }
 
-        patternResolver = new PatternResolver(Settings.Default.DestinationPattern, progressReporter);
-        workspaceFolder = currentWorkspace?.uri.fsPath ?? documentDirname;
+            patternResolver = new PatternResolver(Settings.Default.DestinationPattern, progressReporter);
+            workspaceFolder = currentWorkspace?.uri.fsPath ?? documentDirname;
 
-        if (workspaceFolder === null)
-        {
-            if (
-                patternResolver.Variables.includes("workspaceFolder") ||
-                !isAbsolute(patternResolver.Pattern))
+            if (workspaceFolder === null)
             {
-                while (workspaceFolder === null)
+                if (
+                    patternResolver.Variables.includes("workspaceFolder") ||
+                    !isAbsolute(patternResolver.Pattern))
                 {
-                    this.lastChosenWorkspaceFolder = workspaceFolder = await (
-                        window.showInputBox(
-                            {
-                                ignoreFocusOut: true,
-                                prompt: Resources.Resources.Get("DestinationPath"),
-                                value: this.lastChosenWorkspaceFolder || undefined,
-                                placeHolder: Resources.Resources.Get("DestinationPathExample")
-                            }));
-                }
+                    while (
+                        (workspaceFolder === null) &&
+                        !cancellationToken?.isCancellationRequested)
+                    {
+                        this.lastChosenWorkspaceFolder = workspaceFolder = await (
+                            window.showInputBox(
+                                {
+                                    ignoreFocusOut: true,
+                                    prompt: Resources.Resources.Get("DestinationPath"),
+                                    value: this.lastChosenWorkspaceFolder || undefined,
+                                    placeHolder: Resources.Resources.Get("DestinationPathExample")
+                                }));
+                    }
 
+                    documentRoot = workspaceFolder;
+                }
+                else
+                {
+                    tempDir = new TempDirectory();
+                    documentRoot = tempDir.FullName;
+                }
+            }
+            else
+            {
                 documentRoot = workspaceFolder;
             }
-            else
+
+            converter = await this.LoadConverter(documentRoot, document);
+            await converter.Initialize(progressReporter);
+
+            for (let type of Settings.Default.ConversionType)
             {
-                tempDir = new TempDirectory();
-                documentRoot = tempDir.FullName;
-            }
-        }
-        else
-        {
-            documentRoot = workspaceFolder;
-        }
-
-        converter = await this.LoadConverter(documentRoot, document);
-        await converter.Initialize(progressReporter);
-
-        for (let type of Settings.Default.ConversionType)
-        {
-            tasks.push(
-                (async () =>
+                if (!(cancellationToken?.isCancellationRequested ?? false))
                 {
-                    let destinationPath = patternResolver.Resolve(documentRoot, document, type, workspaceFolder);
-
-                    if (
-                        !isAbsolute(destinationPath) &&
-                        !patternResolver.Variables.includes("workspaceFolder"))
-                    {
-                        destinationPath = resolve(workspaceFolder, destinationPath);
-                    }
-                    else
-                    {
-                        destinationPath = resolve(destinationPath);
-                    }
-
-                    await ensureDir(dirname(destinationPath));
-                    await converter.Start(type, destinationPath, progressReporter);
-
-                    progressReporter.report(
+                    tasks.push(
+                        (async () =>
                         {
-                            message: format(Resources.Resources.Get("Progress.ConverterFinished"), ConversionType[type])
-                        });
+                            let destinationPath = patternResolver.Resolve(documentRoot, document, type, workspaceFolder);
 
-                    fileReporter.report(
-                        {
-                            Type: type,
-                            FileName: destinationPath
-                        });
-                })());
+                            if (
+                                !isAbsolute(destinationPath) &&
+                                !patternResolver.Variables.includes("workspaceFolder"))
+                            {
+                                destinationPath = resolve(workspaceFolder, destinationPath);
+                            }
+                            else
+                            {
+                                destinationPath = resolve(destinationPath);
+                            }
+
+                            await ensureDir(dirname(destinationPath));
+                            await converter.Start(type, destinationPath, progressReporter);
+
+                            progressReporter.report(
+                                {
+                                    message: format(Resources.Resources.Get("Progress.ConverterFinished"), ConversionType[type])
+                                });
+
+                            fileReporter.report(
+                                {
+                                    Type: type,
+                                    FileName: destinationPath
+                                });
+                        })());
+                }
+            }
+
+            await Promise.all(tasks);
+            await converter.Dispose();
         }
-
-        await Promise.all(tasks);
-        await converter.Dispose();
     }
 
     /**
@@ -354,6 +349,7 @@ export class ConversionRunner
         }
 
         parser.validateLink = () => true;
+
         anchor(
             parser,
             {

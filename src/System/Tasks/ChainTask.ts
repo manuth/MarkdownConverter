@@ -54,21 +54,21 @@ export class ChainTask extends ConvertAllTask
      * @param fileReporter
      * A component for reporting converted files.
      */
-    protected async ExecuteTask(progressReporter: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
+    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         let document: TextDocument;
         let documentName: string;
         let documents: TextDocument[] = [];
         let contents: string[];
 
-        progressReporter.report(
+        progressReporter?.report(
             {
                 message: Resources.Resources.Get("Progress.SearchDocuments")
             });
 
         documents = await this.GetDocuments();
 
-        progressReporter.report(
+        progressReporter?.report(
             {
                 message: format(Resources.Resources.Get("Progress.DocumentsFound"), documents.length)
             });
@@ -83,7 +83,7 @@ export class ChainTask extends ConvertAllTask
                 });
         }
 
-        progressReporter.report(
+        progressReporter?.report(
             {
                 message: Resources.Resources.Get("Progress.ChainDocuments")
             });
@@ -105,6 +105,7 @@ export class ChainTask extends ConvertAllTask
         return this.ConversionRunner.Execute(
             document,
             progressReporter,
+            cancellationToken,
             {
                 report(file)
                 {

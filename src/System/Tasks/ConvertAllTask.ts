@@ -82,7 +82,7 @@ export class ConvertAllTask extends ConversionTask
         let totalCount: number;
         let progress = 0;
 
-        progressReporter.report(
+        progressReporter?.report(
             {
                 message: Resources.Resources.Get("Progress.SearchDocuments")
             });
@@ -90,12 +90,12 @@ export class ConvertAllTask extends ConversionTask
         documents = await this.GetDocuments();
         totalCount = documents.length;
 
-        progressReporter.report(
+        progressReporter?.report(
             {
                 message: format(Resources.Resources.Get("Progress.DocumentsFound"), totalCount)
             });
 
-        for (let i = 0; i < documents.length && !cancellationToken.isCancellationRequested; i++)
+        for (let i = 0; i < documents.length && !(cancellationToken.isCancellationRequested ?? false); i++)
         {
             let document = documents[i];
             let progressState: IProgressState = {};
@@ -111,8 +111,8 @@ export class ConvertAllTask extends ConversionTask
                 progress = newProgress;
             }
 
-            await this.ConversionRunner.Execute(document, null, fileReporter);
-            progressReporter.report(progressState);
+            await this.ConversionRunner.Execute(document, null, cancellationToken, fileReporter);
+            progressReporter?.report(progressState);
         }
     }
 

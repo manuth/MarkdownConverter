@@ -1,6 +1,6 @@
 import { pathExists } from "fs-extra";
 import { executablePath } from "puppeteer-core";
-import { CancellationToken, CancellationTokenSource, Progress } from "vscode";
+import { CancellationToken, Progress } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { ChromiumNotFoundException } from "./ChromiumNotFoundException";
@@ -47,7 +47,7 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
     {
         if (await pathExists(executablePath()))
         {
-            await this.ExecuteTask(progressReporter || { report() { } }, cancellationToken || new CancellationTokenSource().token, fileReporter || { report() { } });
+            await this.ExecuteTask(progressReporter, cancellationToken, fileReporter);
         }
         else
         {

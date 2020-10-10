@@ -45,7 +45,7 @@ export class ConvertTask extends ConversionTask
      */
     protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
-        return this.ConversionRunner.Execute(this.GetMarkdownDocument(), progressReporter, fileReporter);
+        return this.ConversionRunner.Execute(this.GetMarkdownDocument(), progressReporter, cancellationToken, fileReporter);
     }
 
     /**
