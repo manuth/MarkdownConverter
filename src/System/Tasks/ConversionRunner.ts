@@ -358,7 +358,7 @@ export class ConversionRunner
 
         parser.use(checkbox);
 
-        if (Settings.Default.EmojiType)
+        if (Settings.Default.EmojiType !== null && Settings.Default.EmojiType !== undefined)
         {
             parser.use(emoji);
 
