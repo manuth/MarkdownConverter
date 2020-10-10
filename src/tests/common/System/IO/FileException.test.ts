@@ -64,15 +64,12 @@ export function FileExceptionTests(): void
                         "Checking whether the message is localized…",
                         () =>
                         {
-                            let customException = new FileException(null, "world");
                             let germanMessage: string;
                             let englishMessage: string;
 
                             Resources.Culture = new CultureInfo("de");
-                            strictEqual(exception.Message, customException.Message);
                             germanMessage = exception.Message;
                             Resources.Culture = new CultureInfo("en");
-                            strictEqual(exception.Message, customException.Message);
                             englishMessage = exception.Message;
                             notStrictEqual(germanMessage, englishMessage);
                         });
