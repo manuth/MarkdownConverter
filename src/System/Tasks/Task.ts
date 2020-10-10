@@ -44,7 +44,7 @@ export abstract class Task<TExtension extends Extension = Extension>
      */
     public get Cancellable(): boolean
     {
-        return false;
+        return true;
     }
 
     /**
