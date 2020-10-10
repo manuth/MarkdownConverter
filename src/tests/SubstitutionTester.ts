@@ -1,7 +1,6 @@
-import MarkdownIt = require("markdown-it");
 import { TextDocument } from "vscode";
 import { Converter } from "../Conversion/Converter";
-import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
+import { extension } from "../extension";
 import { ConversionRunner } from "../System/Tasks/ConversionRunner";
 
 /**
@@ -37,16 +36,18 @@ export class SubstitutionTester
             async (resolve, reject) =>
             {
                 let originalStart = Converter.prototype.Start;
+                let result: string;
 
                 Converter.prototype.Start = async (type, path) =>
                 {
-                    resolve(path);
+                    result = path;
                     Converter.prototype.Start = originalStart;
                 };
 
                 try
                 {
-                    new ConversionRunner({ VSCodeParser: new MarkdownIt() } as MarkdownConverterExtension).Execute(this.TextDocument);
+                    await new ConversionRunner(extension).Execute(this.TextDocument);
+                    resolve(result);
                 }
                 catch (error)
                 {
