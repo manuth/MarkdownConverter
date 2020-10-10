@@ -144,7 +144,7 @@ export class PatternResolver
             filename: parsedPath.base,
             basename: parsedPath.name,
             extension,
-            dirname: (destinationRoot !== null) ? relative(destinationRoot, documentRoot) : ".",
+            dirname: ((destinationRoot ?? null) !== null) ? relative(destinationRoot, documentRoot) : ".",
             workspaceFolder: destinationRoot
         };
 
