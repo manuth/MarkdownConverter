@@ -17,6 +17,7 @@ export function DocumentFragmentTests(): void
             let verifier: string;
             let textDocument: TextDocument;
             let document: Document;
+            let documentFragment: DocumentFragment;
 
             suiteSetup(
                 async () =>
@@ -51,8 +52,14 @@ export function DocumentFragmentTests(): void
                     }();
                 });
 
+            setup(
+                () =>
+                {
+                    documentFragment = new DocumentFragment(document);
+                });
+
             suite(
-                "constructor(Document document)",
+                "constructorW",
                 () =>
                 {
                     test(
@@ -65,14 +72,13 @@ export function DocumentFragmentTests(): void
                 });
 
             suite(
-                "RenderText(string text)",
+                "RenderText",
                 () =>
                 {
                     test(
                         "Checking whether the text is rendered by the `Document`-object…",
                         async () =>
                         {
-                            let documentFragment = new DocumentFragment(document);
                             documentFragment.Content = text;
                             strictEqual(await documentFragment.Render(), verifier + text);
                         });
