@@ -169,9 +169,15 @@ export class ConversionRunner
                 {
                     let destinationPath = patternResolver.Resolve(documentRoot, document, type, workspaceFolder);
 
-                    if (!isAbsolute(destinationPath))
+                    if (
+                        !isAbsolute(destinationPath) &&
+                        !patternResolver.Variables.includes("workspaceFolder"))
                     {
                         destinationPath = resolve(workspaceFolder, destinationPath);
+                    }
+                    else
+                    {
+                        destinationPath = resolve(destinationPath);
                     }
 
                     await ensureDir(dirname(destinationPath));
