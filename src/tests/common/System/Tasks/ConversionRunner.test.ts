@@ -7,7 +7,7 @@ import { readFile, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import MultiRange from "multi-integer-range";
 import { dirname, join, parse, resolve } from "upath";
-import { commands, ConfigurationTarget, TextDocument, Uri, workspace, WorkspaceConfiguration } from "vscode";
+import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Converter } from "../../../../Conversion/Converter";
 import { extension } from "../../../../extension";
 import { ISettings } from "../../../../Properties/ISettings";
@@ -39,7 +39,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
             const line1Text = "Hello";
             const line2Text = "World";
             const text = `${line1Text}${EOL}${line2Text}`;
-            const newLineSelector = "body br";
+            const newLineSelector = "br";
 
             /**
              * Provides an implementation of the `ConversionRunner` class for testing.
@@ -92,6 +92,23 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                 return load(body)(selector);
             }
 
+            /**
+             * Reloads the system-parser.
+             */
+            async function ReloadSystemParser(): Promise<void>
+            {
+                let markdownUri = Uri.parse("untitled:.md");
+                await commands.executeCommand("workbench.action.closeAllGroups");
+                await window.showTextDocument(markdownUri);
+                await commands.executeCommand("markdown.showPreview");
+                await commands.executeCommand("workbench.action.closeAllGroups");
+                await window.showTextDocument(markdownUri);
+                await commands.executeCommand("workbench.action.files.revert");
+                await commands.executeCommand("workbench.action.focusFirstEditorGroup");
+                await new Promise((resolve) => setTimeout(resolve, 100));
+                await commands.executeCommand("markdown.showPreview");
+            }
+
             suiteSetup(
                 () =>
                 {
@@ -99,6 +116,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         {
                             Suffix: ".md"
                         });
+
+                    config = workspace.getConfiguration(undefined, workspace.workspaceFolders[0]);
                 });
 
             suiteTeardown(
@@ -121,8 +140,9 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                     let parser: MarkdownIt;
 
                     setup(
-                        async () =>
+                        async function()
                         {
+                            this.timeout(5 * 1000);
                             parser = await conversionRunner.LoadParser();
                         });
 
@@ -134,8 +154,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             this.timeout(26 * 1000);
                             context.Settings[systemParserOption] = true;
                             await config.update(lineBreakOption, true, ConfigurationTarget.Workspace);
+                            await ReloadSystemParser();
                             strictEqual((await Select((await conversionRunner.LoadParser()).render(text), newLineSelector)).length, 1);
                             await config.update(lineBreakOption, false, ConfigurationTarget.Workspace);
+                            await ReloadSystemParser();
                             strictEqual((await Select((await conversionRunner.LoadParser()).render(text), newLineSelector)).length, 0);
                         });
 
