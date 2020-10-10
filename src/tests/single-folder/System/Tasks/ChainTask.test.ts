@@ -25,10 +25,10 @@ export function ChainTaskTests(): void
                 });
 
             suite(
-                "ExecuteTask",
+                "Execute",
                 () =>
                 {
-                    let showInputBox = window["showInputBox"];
+                    let showInputBox: typeof window.showInputBox;
                     let RenameTester: () => Promise<void>;
                     let TestRunner: () => Promise<TextDocument>;
 
