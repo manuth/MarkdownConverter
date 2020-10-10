@@ -197,11 +197,6 @@ export class ConversionRunner
      */
     protected async LoadConverter(documentRoot: string, document: TextDocument): Promise<Converter>
     {
-        if (!this.Extension.VSCodeParser)
-        {
-            await this.Extension.EnableSystemParser();
-        }
-
         let converter = new Converter(documentRoot, new Document(document, await this.LoadParser()));
         let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string;
         let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string;
@@ -312,6 +307,11 @@ export class ConversionRunner
 
         if (Settings.Default.SystemParserEnabled)
         {
+            if (!this.Extension.VSCodeParser)
+            {
+                await this.Extension.EnableSystemParser();
+            }
+
             parser = cloneDeep(this.Extension.VSCodeParser);
             parser.normalizeLink = (link: string) => link;
             parser.normalizeLinkText = (link: string) => link;
