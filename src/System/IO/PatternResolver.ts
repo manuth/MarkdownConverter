@@ -1,6 +1,6 @@
 import template = require("es6-template-string");
 import format = require("string-template");
-import { parse, relative, resolve } from "upath";
+import { dirname, parse, relative } from "upath";
 import { Progress, TextDocument } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Resources } from "../../Properties/Resources";
@@ -107,12 +107,12 @@ export class PatternResolver
      * @param type
      * The type of the file to create the filename for.
      *
-     * @param destinationRoot
-     * The path to the folder to resolve the pattern to.
+     * @param workspaceRoot
+     * The path to the current workspace.
      *
      * @returns
      */
-    public Resolve(documentRoot: string, document: TextDocument, type: ConversionType, destinationRoot?: string): string
+    public Resolve(documentRoot: string, document: TextDocument, type: ConversionType, workspaceRoot?: string): string
     {
         let extension: string;
         let context: IPatternContext;
@@ -144,8 +144,8 @@ export class PatternResolver
             filename: parsedPath.base,
             basename: parsedPath.name,
             extension,
-            dirname: ((destinationRoot ?? null) !== null) ? relative(destinationRoot, documentRoot) : ".",
-            workspaceFolder: destinationRoot
+            dirname: document.isUntitled ? "." : relative(documentRoot, dirname(document.fileName)),
+            workspaceFolder: workspaceRoot
         };
 
         this.Reporter?.report(
@@ -154,12 +154,6 @@ export class PatternResolver
             });
 
         let result = template(this.Pattern, context);
-
-        if (destinationRoot)
-        {
-            result = resolve(destinationRoot, result);
-        }
-
         return result;
     }
 }

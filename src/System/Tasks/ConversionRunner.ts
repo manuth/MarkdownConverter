@@ -88,8 +88,9 @@ export class ConversionRunner
         let tasks: Array<Promise<void>> = [];
         let converter: Converter;
         let tempDir: TempDirectory;
-        let destinationRoot: string;
-        let documentRoot = document.isUntitled ? null : dirname(document.fileName);
+        let workspaceFolder: string;
+        let documentRoot: string;
+        let documentDirname = document.isUntitled ? null : dirname(document.fileName);
         let currentWorkspace: WorkspaceFolder;
 
         if (!fileReporter)
@@ -125,17 +126,17 @@ export class ConversionRunner
         }
 
         patternResolver = new PatternResolver(Settings.Default.DestinationPattern, progressReporter);
-        destinationRoot = currentWorkspace?.uri.fsPath ?? documentRoot;
+        workspaceFolder = currentWorkspace?.uri.fsPath ?? documentDirname;
 
-        if (destinationRoot === null && documentRoot === null)
+        if (workspaceFolder === null)
         {
             if (
                 patternResolver.Variables.includes("workspaceFolder") ||
                 !isAbsolute(patternResolver.Pattern))
             {
-                while (destinationRoot === null || destinationRoot === undefined)
+                while (workspaceFolder === null)
                 {
-                    this.lastChosenWorkspaceFolder = destinationRoot = await (
+                    this.lastChosenWorkspaceFolder = workspaceFolder = await (
                         window.showInputBox(
                             {
                                 ignoreFocusOut: true,
@@ -145,13 +146,17 @@ export class ConversionRunner
                             }));
                 }
 
-                documentRoot = destinationRoot;
+                documentRoot = workspaceFolder;
             }
             else
             {
                 tempDir = new TempDirectory();
                 documentRoot = tempDir.FullName;
             }
+        }
+        else
+        {
+            documentRoot = workspaceFolder;
         }
 
         converter = await this.LoadConverter(documentRoot, document);
@@ -162,7 +167,13 @@ export class ConversionRunner
             tasks.push(
                 (async () =>
                 {
-                    let destinationPath = patternResolver.Resolve(documentRoot, document, type, destinationRoot);
+                    let destinationPath = patternResolver.Resolve(documentRoot, document, type, workspaceFolder);
+
+                    if (!isAbsolute(destinationPath))
+                    {
+                        destinationPath = resolve(workspaceFolder, destinationPath);
+                    }
+
                     await ensureDir(dirname(destinationPath));
                     await converter.Start(type, destinationPath, progressReporter);
 
