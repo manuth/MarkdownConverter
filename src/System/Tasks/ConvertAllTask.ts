@@ -5,6 +5,7 @@ import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException";
 import { Resources } from "../../Properties/Resources";
 import { NoWorkspaceFolderException } from "../NoWorkspaceFolderException";
+import { OperationCancelledException } from "../OperationCancelledException";
 import { ConversionTask } from "./ConversionTask";
 import { IProgressState } from "./IProgressState";
 
@@ -95,24 +96,31 @@ export class ConvertAllTask extends ConversionTask
                 message: format(Resources.Resources.Get("Progress.DocumentsFound"), totalCount)
             });
 
-        for (let i = 0; i < documents.length && !(cancellationToken.isCancellationRequested ?? false); i++)
+        for (let i = 0; i < documents.length; i++)
         {
-            let document = documents[i];
-            let progressState: IProgressState = {};
-            let newProgress = ((i + 1) / totalCount) * 100;
-
-            progressState = {
-                message: format(Resources.Resources.Get("Progress.CollectionStep"), i + 1, totalCount)
-            };
-
-            if (newProgress > progress)
+            if (!(cancellationToken.isCancellationRequested ?? false))
             {
-                progressState.increment = newProgress - progress;
-                progress = newProgress;
-            }
+                let document = documents[i];
+                let progressState: IProgressState = {};
+                let newProgress = ((i + 1) / totalCount) * 100;
 
-            await this.ConversionRunner.Execute(document, null, cancellationToken, fileReporter);
-            progressReporter?.report(progressState);
+                progressState = {
+                    message: format(Resources.Resources.Get("Progress.CollectionStep"), i + 1, totalCount)
+                };
+
+                if (newProgress > progress)
+                {
+                    progressState.increment = newProgress - progress;
+                    progress = newProgress;
+                }
+
+                await this.ConversionRunner.Execute(document, null, cancellationToken, fileReporter);
+                progressReporter?.report(progressState);
+            }
+            else
+            {
+                throw new OperationCancelledException();
+            }
         }
     }
 

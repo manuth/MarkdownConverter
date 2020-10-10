@@ -26,6 +26,7 @@ import { Slugifier } from "../Documents/Slugifier";
 import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
 import { FileException } from "../IO/FileException";
 import { PatternResolver } from "../IO/PatternResolver";
+import { OperationCancelledException } from "../OperationCancelledException";
 import { IProgressState } from "./IProgressState";
 
 /**
@@ -123,18 +124,23 @@ export class ConversionRunner
                     patternResolver.Variables.includes("workspaceFolder") ||
                     !isAbsolute(patternResolver.Pattern))
                 {
-                    while (
-                        (workspaceFolder === null) &&
-                        !cancellationToken?.isCancellationRequested)
+                    while (workspaceFolder === null)
                     {
-                        this.lastChosenWorkspaceFolder = workspaceFolder = await (
-                            window.showInputBox(
-                                {
-                                    ignoreFocusOut: true,
-                                    prompt: Resources.Resources.Get("DestinationPath"),
-                                    value: this.lastChosenWorkspaceFolder || undefined,
-                                    placeHolder: Resources.Resources.Get("DestinationPathExample")
-                                }));
+                        if (!(cancellationToken.isCancellationRequested ?? false))
+                        {
+                            this.lastChosenWorkspaceFolder = workspaceFolder = await (
+                                window.showInputBox(
+                                    {
+                                        ignoreFocusOut: true,
+                                        prompt: Resources.Resources.Get("DestinationPath"),
+                                        value: this.lastChosenWorkspaceFolder || undefined,
+                                        placeHolder: Resources.Resources.Get("DestinationPathExample")
+                                    }));
+                        }
+                        else
+                        {
+                            throw new OperationCancelledException();
+                        }
                     }
 
                     documentRoot = workspaceFolder;
@@ -188,10 +194,18 @@ export class ConversionRunner
                                 });
                         })());
                 }
+                else
+                {
+                    throw new OperationCancelledException();
+                }
             }
 
             await Promise.all(tasks);
             await converter.Dispose();
+        }
+        else
+        {
+            throw new OperationCancelledException();
         }
     }
 

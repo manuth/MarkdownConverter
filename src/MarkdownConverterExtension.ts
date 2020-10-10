@@ -14,6 +14,7 @@ import { Resources } from "./Properties/Resources";
 import { Extension } from "./System/Extensibility/Extension";
 import { FileException } from "./System/IO/FileException";
 import { NoWorkspaceFolderException } from "./System/NoWorkspaceFolderException";
+import { OperationCancelledException } from "./System/OperationCancelledException";
 import { ChainTask } from "./System/Tasks/ChainTask";
 import { ChromiumNotFoundException } from "./System/Tasks/ChromiumNotFoundException";
 import { ConvertAllTask } from "./System/Tasks/ConvertAllTask";
@@ -233,6 +234,10 @@ export class MarkdownConverterExtension extends Extension
                             Resources.Resources.Get("Yes"),
                             Resources.Resources.Get("No"))) === Resources.Resources.Get("Yes"));
                 }
+            }
+            else if (exception instanceof OperationCancelledException)
+            {
+                window.showInformationMessage(exception.Message);
             }
             else if (
                 exception instanceof FileException ||
