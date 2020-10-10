@@ -1,9 +1,13 @@
+import { Package } from "@manuth/package-json-editor";
 import { pathExists } from "fs-extra";
 import minimist = require("minimist");
 import Mocha = require("mocha");
 import { createBrowserFetcher, executablePath } from "puppeteer-core";
-import { resolve } from "upath";
+import { join, resolve } from "upath";
+import { extensions } from "vscode";
+import { Constants } from "../Constants";
 import { extension } from "../extension";
+import { Extension } from "../System/Extensibility/Extension";
 
 /**
  * The arguments passed by the user.
@@ -27,6 +31,9 @@ let args = minimist(
  */
 export async function run(): Promise<void>
 {
+    await extensions.getExtension(
+        new Extension(new Package(join(Constants.PackageDirectory, "package.json"))).FullName).activate();
+
     let mocha = new Mocha(
         {
             ui: "tdd",
