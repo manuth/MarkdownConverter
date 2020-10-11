@@ -59,7 +59,7 @@ export async function run(): Promise<void>
                     {
                         if (failures > 0)
                         {
-                            reject(new Error(`${failures} ${failures > 1 ? "tests" : "test"} failed.`));
+                            reject(new Error(`${failures} test${failures > 1 ? "s" : ""} failed.`));
                         }
                         else
                         {
