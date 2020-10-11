@@ -180,7 +180,7 @@ export class ConversionRunner
                             }
 
                             await ensureDir(dirname(destinationPath));
-                            await converter.Start(type, destinationPath, progressReporter);
+                            await converter.Start(type, destinationPath, progressReporter, cancellationToken);
 
                             progressReporter.report(
                                 {

@@ -8,12 +8,13 @@ import { glob } from "glob";
 import { Browser, launch, PDFOptions, ScreenshotOptions } from "puppeteer-core";
 import serveHandler = require("serve-handler");
 import { basename, dirname, join, normalize, relative } from "upath";
-import { Progress } from "vscode";
+import { CancellationToken, Progress } from "vscode";
 import websiteScraper = require("website-scraper");
 import { Resources } from "../Properties/Resources";
 import { Settings } from "../Properties/Settings";
 import { Document } from "../System/Documents/Document";
 import { FileException } from "../System/IO/FileException";
+import { OperationCancelledException } from "../System/OperationCancelledException";
 import { IProgressState } from "../System/Tasks/IProgressState";
 import { ConversionType } from "./ConversionType";
 import { ConverterPlugin } from "./ConverterPlugin";
@@ -275,11 +276,12 @@ export class Converter
      *
      * @param progressReporter
      * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellations.
      */
-    public async Start(conversionType: ConversionType, path: string, progressReporter?: Progress<IProgressState>): Promise<void>
+    public async Start(conversionType: ConversionType, path: string, progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken): Promise<void>
     {
-        progressReporter = progressReporter || { report() { } };
-
         if (!this.Initialized)
         {
             throw new Error("The converter must be initialized in order to use it.");
@@ -289,7 +291,7 @@ export class Converter
             switch (conversionType)
             {
                 case ConversionType.HTML:
-                    progressReporter.report(
+                    progressReporter?.report(
                         {
                             message: Resources.Resources.Get("Progress.WriteHTML")
                         });
@@ -300,7 +302,7 @@ export class Converter
                     let tempDir = new TempDirectory();
                     await remove(tempDir.FullName);
 
-                    progressReporter.report(
+                    progressReporter?.report(
                         {
                             message: Resources.Resources.Get("Progress.Scrape")
                         });
@@ -316,16 +318,23 @@ export class Converter
                             ]
                         } as any);
 
-                    progressReporter.report(
+                    progressReporter?.report(
                         {
                             message: Resources.Resources.Get("Progress.ScrapeFolder")
                         });
 
                     for (let filename of await promisify(glob)("**/*", { cwd: tempDir.FullName }))
                     {
-                        if (await pathExists(tempDir.MakePath(filename)))
+                        if (!(cancellationToken.isCancellationRequested ?? false))
                         {
-                            await move(tempDir.MakePath(filename), join(dirname(path), filename), { overwrite: true });
+                            if (await pathExists(tempDir.MakePath(filename)))
+                            {
+                                await move(tempDir.MakePath(filename), join(dirname(path), filename), { overwrite: true });
+                            }
+                        }
+                        else
+                        {
+                            throw new OperationCancelledException();
                         }
                     }
 
@@ -336,7 +345,7 @@ export class Converter
                     {
                         let page = await this.Browser.newPage();
 
-                        progressReporter.report(
+                        progressReporter?.report(
                             {
                                 message: Resources.Resources.Get("Progress.ChromiumPage")
                             });
@@ -374,7 +383,7 @@ export class Converter
                                     pdfOptions.footerTemplate = styles + await this.Document.Footer.Render();
                                 }
 
-                                progressReporter.report(
+                                progressReporter?.report(
                                     {
                                         message: Resources.Resources.Get("Progress.PDF")
                                     });
@@ -398,7 +407,7 @@ export class Converter
                                         break;
                                 }
 
-                                progressReporter.report(
+                                progressReporter?.report(
                                     {
                                         message: Resources.Resources.Get("Progress.Screenshot")
                                     });
