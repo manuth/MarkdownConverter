@@ -422,8 +422,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         "Checking whether the `DestinationPattern` is normalized correctly…",
                         async function()
                         {
-                            this.slow(1.25 * 1000);
-                            this.timeout(5 * 1000);
+                            this.slow(4 * 1000);
+                            this.timeout(8 * 1000);
                             context.Settings.DestinationPattern = join(tempDir.FullName, "/./test/.././///./.");
                             strictEqual(resolve(Uri.file(await substitutionTester.Test()).fsPath), resolve(Uri.file(tempDir.FullName).fsPath));
                         });

@@ -27,8 +27,8 @@ export function ConvertAllTaskTests(): void
                         "Checking whether all documents in the workspace are found…",
                         async function()
                         {
-                            this.slow(3.75 * 1000);
-                            this.timeout(15 * 1000);
+                            this.slow(15 * 1000);
+                            this.timeout(30 * 1000);
                             strictEqual((await task.GetDocuments()).length, 4);
                         });
                 });

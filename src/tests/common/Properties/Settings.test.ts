@@ -38,16 +38,20 @@ export function SettingTests(context: ITestContext<ISettings>): void
                 {
                     test(
                         "Checking whether the default conversion-type is set correctly…",
-                        () =>
+                        function()
                         {
+                            this.slow(1 * 1000);
+                            this.timeout(2 * 1000);
                             context.Clear();
                             deepStrictEqual(settings.ConversionType, [ConversionType.PDF]);
                         });
 
                     test(
                         "Checking whether the conversion-types are resolved correctly…",
-                        () =>
+                        function()
                         {
+                            this.slow(1 * 1000);
+                            this.timeout(2 * 1000);
                             context.Settings.ConversionType = ["HTML"] as Array<keyof typeof ConversionType>;
                             strictEqual(settings.ConversionType.length, 1);
                             strictEqual(settings.ConversionType[0], ConversionType.HTML);
@@ -60,16 +64,20 @@ export function SettingTests(context: ITestContext<ISettings>): void
                 {
                     test(
                         "Checking whether the locale-setting is loaded correctly…",
-                        () =>
+                        function()
                         {
+                            this.slow(1 * 1000);
+                            this.timeout(2 * 1000);
                             context.Settings.Locale = "de";
                             strictEqual(settings.Locale, "de");
                         });
 
                     test(
                         "Checking whether the locale defaults to the locale of vscode…",
-                        () =>
+                        function()
                         {
+                            this.slow(1 * 1000);
+                            this.timeout(2 * 1000);
                             context.Clear();
                             strictEqual(settings.Locale, env.language);
                         });

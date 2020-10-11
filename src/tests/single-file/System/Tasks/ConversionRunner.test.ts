@@ -50,9 +50,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 "Checking whether the user is prompted to specify the ${workspaceFolder}-path if the file is untitled and no workspace is opened…",
                                 async function()
                                 {
-                                    this.slow(1 * 1000);
-                                    // this.timeout(4 * 1000);
-                                    this.timeout(0);
+                                    this.slow(5 * 1000);
+                                    this.timeout(10 * 1000);
                                     let inputWorkspaceName = "This is a workspace-folder for testing";
                                     let original = window.showInputBox;
 

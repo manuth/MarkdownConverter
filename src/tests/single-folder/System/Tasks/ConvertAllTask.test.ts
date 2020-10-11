@@ -55,8 +55,8 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                         "Checking whether all files are being converted…",
                         async function()
                         {
-                            this.slow(16.5 * 1000);
-                            this.timeout(1.1 * 60 * 1000);
+                            this.slow(0.5 * 60 * 1000);
+                            this.timeout(1 * 60 * 1000);
                             context.Settings.DestinationPattern = join(tempDir.FullName, "${basename}.${extension}");
                             context.Settings.ConversionType = ["PDF"];
                             await task.Execute();
@@ -68,8 +68,8 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                         "Checking whether an exception is thrown if no markdown-file exists in the workspace…",
                         async function()
                         {
-                            this.slow(1.2 * 1000);
-                            this.timeout(4.8 * 1000);
+                            this.slow(7.5 * 1000);
+                            this.timeout(15 * 1000);
                             await config.update(excludeKey, { "**/*.md": true }, ConfigurationTarget.Workspace);
                             await rejects(() => task.Execute(), MarkdownFileNotFoundException);
                             await config.update(excludeKey, undefined);
@@ -84,8 +84,8 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                         "Checking whether all documents in the folder are found…",
                         async function()
                         {
-                            this.slow(1.2 * 1000);
-                            this.timeout(4.8 * 1000);
+                            this.slow(7.5 * 1000);
+                            this.timeout(15 * 1000);
                             strictEqual((await task.GetDocuments()).length, 2);
                         });
                 });

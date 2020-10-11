@@ -135,15 +135,17 @@ export function ConverterPluginTests(): void
                         "Checking whether the plugin can be applied to the website…",
                         async function()
                         {
-                            this.slow(1 * 1000);
+                            this.slow(2 * 1000);
                             this.timeout(4 * 1000);
                             await doesNotReject(async () => ScrapeWebsite());
                         });
 
                     test(
                         "Checking whether the expected files have been generated…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(3 * 1000);
+                            this.timeout(6 * 1000);
                             await ScrapeWebsite();
                             ok(await pathExists(destinationDirectory.MakePath(websiteName)));
                             ok(await pathExists(destinationDirectory.MakePath(parse(websiteName).name, "css", basename(cssFile))));

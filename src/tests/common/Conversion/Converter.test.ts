@@ -139,8 +139,8 @@ export function ConverterTests(): void
                         "Checking whether the value represents the state of the converter correctly…",
                         async function()
                         {
-                            this.timeout(2 * 1000);
-                            this.slow(1 * 1000);
+                            this.timeout(3 * 1000);
+                            this.slow(1.5 * 1000);
                             ok(!converter.Disposed);
                             await converter.Initialize();
                             ok(!converter.Disposed);
