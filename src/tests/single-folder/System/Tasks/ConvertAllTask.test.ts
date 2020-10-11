@@ -2,7 +2,7 @@ import { ok, rejects, strictEqual } from "assert";
 import { TempDirectory } from "@manuth/temp-files";
 import { pathExists } from "fs-extra";
 import { join } from "upath";
-import { commands, ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
+import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
 import { extension } from "../../../../extension";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { ISettings } from "../../../../Properties/ISettings";
@@ -34,7 +34,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "ExecuteTask(Progress<IProgressState> progressReporter?, CancellationToken cancellationToken?, Progress<IConvertedFile> fileReporter?)",
+                "Execute",
                 () =>
                 {
                     let tempDir: TempDirectory;
@@ -59,7 +59,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                             this.timeout(1.1 * 60 * 1000);
                             context.Settings.DestinationPattern = join(tempDir.FullName, "${basename}.${extension}");
                             context.Settings.ConversionType = ["PDF"];
-                            await commands.executeCommand("markdownConverter.ConvertAll");
+                            await task.Execute();
                             ok(await pathExists(tempDir.MakePath("Test1.pdf")));
                             ok(await pathExists(tempDir.MakePath("Test2.pdf")));
                         });
@@ -77,7 +77,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "GetDocuments()",
+                "GetDocuments",
                 () =>
                 {
                     test(

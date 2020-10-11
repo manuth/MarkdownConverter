@@ -16,4 +16,12 @@ export class TestConvertAllTask extends ConvertAllTask
     {
         return super.GetDocuments();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public async ExecuteTask(): Promise<void>
+    {
+        return super.ExecuteTask();
+    }
 }

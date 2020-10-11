@@ -19,13 +19,18 @@ export function ConvertAllTaskTests(): void
                     task = new TestConvertAllTask(extension);
                 });
 
-            test(
-                "Checking whether all documents in the workspace are found…",
-                async function()
+            suite(
+                "GetDocuments",
+                () =>
                 {
-                    this.slow(3.75 * 1000);
-                    this.timeout(15 * 1000);
-                    strictEqual((await task.GetDocuments()).length, 4);
+                    test(
+                        "Checking whether all documents in the workspace are found…",
+                        async function()
+                        {
+                            this.slow(3.75 * 1000);
+                            this.timeout(15 * 1000);
+                            strictEqual((await task.GetDocuments()).length, 4);
+                        });
                 });
         });
 }
