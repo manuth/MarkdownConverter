@@ -419,7 +419,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether the `DestinationPatterh` is normalized correctly…",
+                        "Checking whether the `DestinationPattern` is normalized correctly…",
                         async function()
                         {
                             this.slow(1.25 * 1000);
