@@ -323,7 +323,7 @@ export class Converter
 
                     for (let filename of await promisify(glob)("**/*", { cwd: tempDir.FullName }))
                     {
-                        if (!(cancellationToken.isCancellationRequested ?? false))
+                        if (!(cancellationToken?.isCancellationRequested ?? false))
                         {
                             if (await pathExists(tempDir.MakePath(filename)))
                             {

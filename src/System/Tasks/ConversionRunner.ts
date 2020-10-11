@@ -126,7 +126,7 @@ export class ConversionRunner
                 {
                     while (workspaceFolder === null)
                     {
-                        if (!(cancellationToken.isCancellationRequested ?? false))
+                        if (!(cancellationToken?.isCancellationRequested ?? false))
                         {
                             this.lastChosenWorkspaceFolder = workspaceFolder = await (
                                 window.showInputBox(

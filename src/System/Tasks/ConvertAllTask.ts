@@ -98,7 +98,7 @@ export class ConvertAllTask extends ConversionTask
 
         for (let i = 0; i < documents.length; i++)
         {
-            if (!(cancellationToken.isCancellationRequested ?? false))
+            if (!(cancellationToken?.isCancellationRequested ?? false))
             {
                 let document = documents[i];
                 let progressState: IProgressState = {};
