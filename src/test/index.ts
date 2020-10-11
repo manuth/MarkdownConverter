@@ -5,8 +5,8 @@ import Mocha = require("mocha");
 import { createBrowserFetcher, executablePath } from "puppeteer-core";
 import { join, resolve } from "upath";
 import { extensions } from "vscode";
+import { extension } from "..";
 import { Constants } from "../Constants";
-import { extension } from "../extension";
 import { Extension } from "../System/Extensibility/Extension";
 
 /**

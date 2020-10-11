@@ -3,7 +3,7 @@ import { load } from "cheerio";
 import MarkdownIt = require("markdown-it");
 import anchor = require("markdown-it-anchor");
 import { TextDocument, window } from "vscode";
-import { extension } from "../../../../extension";
+import { extension } from "../../../..";
 import { ChainTask } from "../../../../System/Tasks/ChainTask";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 

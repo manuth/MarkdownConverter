@@ -1,4 +1,4 @@
-import { extension } from "../extension";
+import { extension } from "..";
 import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
 
 /**

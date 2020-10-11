@@ -9,7 +9,7 @@ let externalModules: string[] = [
 ];
 
 let entryPoints: string[] = [
-    join(sourceRoot, "extension.ts"),
+    join(sourceRoot, "index.ts"),
     join(sourceRoot, "test", "runTests.ts"),
     join(sourceRoot, "test", "index.ts"),
     join(sourceRoot, "test", "config.test.ts"),

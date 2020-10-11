@@ -15,8 +15,8 @@
   "engines": {
     "vscode": "^1.38.0"
   },
-  "main": "lib/extension.js",
-  "types": "lib/extension.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "directories": {
     "lib": "lib"
   },

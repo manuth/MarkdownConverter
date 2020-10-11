@@ -1,5 +1,5 @@
 import { strictEqual } from "assert";
-import { extension } from "../../../../extension";
+import { extension } from "../../../..";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 /**

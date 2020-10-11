@@ -3,7 +3,7 @@ import { TempDirectory } from "@manuth/temp-files";
 import { pathExists } from "fs-extra";
 import { join } from "upath";
 import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
-import { extension } from "../../../../extension";
+import { extension } from "../../../..";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ITestContext } from "../../../ITestContext";

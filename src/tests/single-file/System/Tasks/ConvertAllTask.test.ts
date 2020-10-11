@@ -1,5 +1,5 @@
 import { rejects } from "assert";
-import { extension } from "../../../../extension";
+import { extension } from "../../../..";
 import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolderException";
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 

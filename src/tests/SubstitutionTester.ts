@@ -1,6 +1,6 @@
 import { TextDocument } from "vscode";
+import { extension } from "..";
 import { Converter } from "../Conversion/Converter";
-import { extension } from "../extension";
 import { ConversionRunner } from "../System/Tasks/ConversionRunner";
 
 /**

@@ -1,7 +1,7 @@
 import { doesNotThrow, throws } from "assert";
 import { TempFile } from "@manuth/temp-files";
 import { TextDocument, Uri, window } from "vscode";
-import { extension } from "../../../../extension";
+import { extension } from "../../../..";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ConvertTask } from "../../../../System/Tasks/ConvertTask";

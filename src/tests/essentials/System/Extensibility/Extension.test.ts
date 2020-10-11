@@ -1,5 +1,5 @@
 import { doesNotThrow, notStrictEqual, ok } from "assert";
-import { extension } from "../../../../extension";
+import { extension } from "../../../..";
 
 /**
  * Registers tests for the `Extension` class.
