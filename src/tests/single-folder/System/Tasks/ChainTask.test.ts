@@ -16,16 +16,30 @@ export function ChainTaskTests(): void
         "ChainTask",
         () =>
         {
-            let task: ChainTask;
+            let task: TestChainTask;
+
+            /**
+             * Provides an implementation of the `ChainTask`-class for testing.
+             */
+            class TestChainTask extends ChainTask
+            {
+                /**
+                 * @inheritdoc
+                 */
+                public async ExecuteTask(): Promise<void>
+                {
+                    return super.ExecuteTask();
+                }
+            }
 
             suiteSetup(
                 () =>
                 {
-                    task = new ChainTask(extension);
+                    task = new TestChainTask(extension);
                 });
 
             suite(
-                "Execute",
+                "ExecuteTask",
                 () =>
                 {
                     let showInputBox: typeof window.showInputBox;
@@ -57,7 +71,7 @@ export function ChainTaskTests(): void
                                             resolve(document);
                                         };
 
-                                        task.Execute();
+                                        task.ExecuteTask();
                                     });
                             };
 
