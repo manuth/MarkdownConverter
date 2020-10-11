@@ -12,7 +12,7 @@ export class ConfigInterceptor<TSection extends any = any>
     /**
      * The target of the interception.
      */
-    private target: typeof workspace["getConfiguration"] = null;
+    private target: typeof workspace.getConfiguration = null;
 
     /**
      * The name of the intercepted section.
@@ -38,7 +38,7 @@ export class ConfigInterceptor<TSection extends any = any>
     /**
      * Gets the target of the interception.
      */
-    public get Target(): typeof workspace["getConfiguration"]
+    public get Target(): typeof workspace.getConfiguration
     {
         return this.target;
     }

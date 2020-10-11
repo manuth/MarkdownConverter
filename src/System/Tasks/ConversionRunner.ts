@@ -269,11 +269,9 @@ export class ConversionRunner
         }
         catch (exception)
         {
-            if (
-                exception instanceof Error &&
-                "path" in exception)
+            if ("path" in exception)
             {
-                throw new FileException(null, (exception as any)["path"]);
+                throw new FileException(null, exception.path);
             }
             else
             {

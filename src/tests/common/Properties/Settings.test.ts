@@ -48,7 +48,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         "Checking whether the conversion-types are resolved correctly…",
                         () =>
                         {
-                            context.Settings["ConversionType"] = ["HTML"] as Array<keyof typeof ConversionType>;
+                            context.Settings.ConversionType = ["HTML"] as Array<keyof typeof ConversionType>;
                             strictEqual(settings.ConversionType.length, 1);
                             strictEqual(settings.ConversionType[0], ConversionType.HTML);
                         });
@@ -62,7 +62,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         "Checking whether the locale-setting is loaded correctly…",
                         () =>
                         {
-                            context.Settings["Locale"] = "de";
+                            context.Settings.Locale = "de";
                             strictEqual(settings.Locale, "de");
                         });
 

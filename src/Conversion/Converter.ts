@@ -418,7 +418,7 @@ export class Converter
                     {
                         if ("path" in exception)
                         {
-                            throw new FileException(null, exception["path"]);
+                            throw new FileException(null, exception.path);
                         }
                         else
                         {
