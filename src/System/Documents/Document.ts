@@ -2,8 +2,8 @@ import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
 import { pathExists, readFile, statSync } from "fs-extra";
+import Handlebars = require("handlebars");
 import MarkdownIt = require("markdown-it");
-import { render } from "mustache";
 import { isAbsolute } from "upath";
 import { TextDocument } from "vscode";
 import { stringify } from "yamljs";
@@ -34,6 +34,11 @@ export class Document extends Renderable
      * The attributes of the document.
      */
     private attributes: { [key: string]: any } = {};
+
+    /**
+     * A component for rendering the document.
+     */
+    private renderer: typeof Handlebars = null;
 
     /**
      * The format to print the date.
@@ -324,6 +329,19 @@ export class Document extends Renderable
     }
 
     /**
+     * Gets a component for rendering the document.
+     */
+    protected get Renderer(): typeof Handlebars
+    {
+        if (this.renderer === null)
+        {
+            this.renderer = Handlebars.create();
+        }
+
+        return this.renderer;
+    }
+
+    /**
      * Renders the body of the document.
      *
      * @returns
@@ -374,7 +392,7 @@ export class Document extends Renderable
             content: await this.RenderText(content)
         };
 
-        return render(this.Template, view);
+        return this.Renderer.compile(this.Template)(view);
     }
 
     /**
@@ -402,7 +420,7 @@ export class Document extends Renderable
             view[key] = value;
         }
 
-        let renderedContent = render(content, view);
+        let renderedContent = this.Renderer.compile(content)(view);
         return this.parser.render(renderedContent);
     }
 }
