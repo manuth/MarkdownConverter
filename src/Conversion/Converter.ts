@@ -158,15 +158,13 @@ export class Converter
      */
     public async Initialize(progressReporter?: Progress<IProgressState>): Promise<void>
     {
-        progressReporter = progressReporter || { report() { } };
-
         if (this.Initialized || this.Disposed)
         {
             throw new Error("The converter cannot be re-initialized.");
         }
         else
         {
-            progressReporter.report(
+            progressReporter?.report(
                 {
                     message: Resources.Resources.Get("Progress.LaunchWebserver")
                 });
@@ -214,7 +212,7 @@ export class Converter
 
             let browserArguments = ["--disable-web-security"];
 
-            progressReporter.report(
+            progressReporter?.report(
                 {
                     message: Resources.Resources.Get("Progress.LaunchChromium")
                 });

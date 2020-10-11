@@ -113,7 +113,7 @@ export class ChainTask extends ConvertAllTask
                     let newFileName = join(parsedPath.dir, `${documentName}${parsedPath.ext}`);
                     renameSync(file.FileName, newFileName);
                     file.FileName = newFileName;
-                    fileReporter.report(file);
+                    fileReporter?.report(file);
                 }
             });
     }

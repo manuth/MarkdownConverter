@@ -182,12 +182,12 @@ export class ConversionRunner
                             await ensureDir(dirname(destinationPath));
                             await converter.Start(type, destinationPath, progressReporter, cancellationToken);
 
-                            progressReporter.report(
+                            progressReporter?.report(
                                 {
                                     message: format(Resources.Resources.Get("Progress.ConverterFinished"), ConversionType[type])
                                 });
 
-                            fileReporter.report(
+                            fileReporter?.report(
                                 {
                                     Type: type,
                                     FileName: destinationPath
