@@ -1,6 +1,7 @@
 import { ok, strictEqual, throws } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempFile } from "@manuth/temp-files";
+import { load } from "cheerio";
 import fm = require("front-matter");
 import { stat, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
@@ -190,6 +191,18 @@ export function DocumentTests(): void
                         {
                             document.Template = "hello{{content}}world";
                             ok(/^hello[\s\S]*world$/gm.test(await document.Render()));
+                        });
+
+                    test(
+                        "Checking whether curly braces can be escaped…",
+                        async () =>
+                        {
+                            let pattern = "{{test}}";
+                            document.Content = `\\${pattern}`;
+                            document.Attributes.test = "test-value";
+                            let content = await document.Render();
+                            console.log(content);
+                            ok(load(await document.Render())(`*:contains(${JSON.stringify(pattern)})`).length > 0);
                         });
                 });
 
