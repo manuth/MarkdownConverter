@@ -13,7 +13,7 @@
     "PNG"
   ],
   "engines": {
-    "vscode": "^1.38.0"
+    "vscode": "^1.50.0"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
