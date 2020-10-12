@@ -26,19 +26,9 @@ class Files
     public static SystemStyle = GetResourcePath("css", "styles.css");
 
     /**
-     * Gets the path to the default style.
-     */
-    public static DefaultStyle = GetResourcePath("css", "markdown.css");
-
-    /**
      * Gets the path to the highlight-style.
      */
     public static DefaultHighlight = GetResourcePath("css", "highlight.css");
-
-    /**
-     * Gets the path to the emoji-style.
-     */
-    public static EmojiStyle = GetResourcePath("css", "emoji.css");
 
     /**
      * Gets the path to the system-template.
