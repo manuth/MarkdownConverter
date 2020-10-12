@@ -12,11 +12,28 @@
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
+            "preLaunchTask": "Build",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/**/*.js"
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Extension Debug",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}"
             ],
-            "preLaunchTask": "Watch Debug",
-            "postDebugTask": "Stop Debug"
+            "preLaunchTask": "Build Debug",
+            "postDebugTask": "Debug Cleanup",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -26,11 +43,34 @@
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}"
             ],
+            "preLaunchTask": "Build Release",
+            "postDebugTask": "Debug Cleanup",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/**/*.js"
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
+        },
+        {
+            "type": "extensionHost",
+            "request": "launch",
+            "name": "Launch Essential Tests",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "${workspaceFolder}/src/test/single-folder",
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/lib/test"
             ],
-            "preLaunchTask": "Watch Release",
-            "postDebugTask": "Stop Release"
+            "env": {
+                "TEST_SUITE": "essentials"
+            },
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "Build",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -38,16 +78,20 @@
             "name": "Launch Common Tests",
             "runtimeExecutable": "${execPath}",
             "args": [
+                "${workspaceFolder}/src/test/single-folder",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test"
+                "--extensionTestsPath=${workspaceFolder}/lib/test"
             ],
             "env": {
                 "TEST_SUITE": "common"
             },
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "Build",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ],
-            "preLaunchTask": "Debug"
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -55,17 +99,20 @@
             "name": "Launch Tests for Single-File Mode",
             "runtimeExecutable": "${execPath}",
             "args": [
+                "${workspaceFolder}/src/test/single-file/Test.md",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
-                "${workspaceFolder}/MarkdownConverter/src/test/single-file/Test.md"
+                "--extensionTestsPath=${workspaceFolder}/lib/test"
             ],
             "env": {
                 "TEST_SUITE": "single-file"
             },
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "Build",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ],
-            "preLaunchTask": "Debug"
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -73,17 +120,20 @@
             "name": "Launch Tests for the Single-Folder Mode",
             "runtimeExecutable": "${execPath}",
             "args": [
+                "${workspaceFolder}/src/test/single-folder",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
-                "${workspaceFolder}/MarkdownConverter/src/test/single-folder"
+                "--extensionTestsPath=${workspaceFolder}/lib/test"
             ],
             "env": {
                 "TEST_SUITE": "single-folder"
             },
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "Build",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ],
-            "preLaunchTask": "Debug"
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
         },
         {
             "type": "extensionHost",
@@ -91,17 +141,20 @@
             "name": "Launch Tests for the Workspace Mode",
             "runtimeExecutable": "${execPath}",
             "args": [
+                "${workspaceFolder}/src/test/workspace/workspace.code-workspace",
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/MarkdownConverter/lib/test",
-                "${workspaceFolder}/MarkdownConverter/src/test/workspace/workspace.code-workspace"
+                "--extensionTestsPath=${workspaceFolder}/lib/test"
             ],
             "env": {
                 "TEST_SUITE": "workspace"
             },
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "Build",
+            "sourceMaps": true,
             "outFiles": [
-                "${workspaceFolder}/MarkdownConverter/lib/test/**/*.js"
-            ],
-            "preLaunchTask": "Debug"
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ]
         }
     ]
 }

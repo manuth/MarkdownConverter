@@ -3,69 +3,76 @@ kind: pipeline
 type: docker
 
 steps:
-- name: install
-  image: node
-  commands:
-  - npm install
-- name: lint
-  image: node
-  commands:
-  - npm run lint
-- name: build
-  image: node
-  commands:
-  - npm run build
-- name: test
-  image: manuth/vscode-test-runner
-  commands:
-  - xvfb-run npm run test
-- name: build extension
-  image: node
-  commands:
-  - npx vsce package
-  when:
-    event:
-    - tag
-- name: release notes
-  image: ubuntu
-  commands:
-  - cp -f CHANGELOG.md ReleaseNotes.md
-  - sed -i '0,/## .* v[0-9.]*/{ /## .* v[0-9.]*/P ; d } ; /## .* v[0-9.]*/,$d' ReleaseNotes.md
-  - cp -f ReleaseNotes.md ReleaseTitle.md
-  - sed -i '2,$d ; s/## \(.* v[0-9.]*\)/\1/' ReleaseTitle.md
-  when:
-    event:
-    - tag
-- name: publish
-  image: plugins/github-release
-  settings:
-    api_key:
-      from_secret: github_token
-    files:
-      - "*.vsix"
-    title: ReleaseTitle.md
-    note: ReleaseNotes.md
-  when:
-    event:
-    - tag
-- name: publish extension
-  image: node
-  environment:
-    ACCESS_TOKEN:
-      from_secret: azure_token
-  commands:
-  - npx vsce publish --pat $ACCESS_TOKEN
-  when:
-    event:
-    - tag
+  - name: install
+    image: node
+    commands:
+      - npm install --unsafe-perm
+  - name: build
+    image: node
+    commands:
+      - npm run build-debug
+  - name: lint
+    image: node
+    commands:
+      - npm run lint
+  - name: test
+    image: manuth/vscode-test-runner
+    commands:
+      - xvfb-run npm run test -- --disable-gpu --headless
+  - name: publish extension
+    image: node:lts
+    environment:
+      ACCESS_TOKEN:
+        from_secret: azure_token
+    commands:
+    - npx vsce publish --no-yarn --pat $ACCESS_TOKEN
+    when:
+      event:
+      - tag
+      ref:
+        - refs/tags/v[0-9].[0-9].[0-9]
+  - name: prepare release
+    image: node:lts
+    commands:
+      - npx vsce --no-yarn package
+      - npm install escape-string-regexp
+      - node -e "console.log(require('escape-string-regexp')('${DRONE_TAG}'))" > TagName.txt
+    when:
+      event:
+        - tag
+  - name: prepare release notes
+    image: ubuntu
+    commands:
+      - export TagName=$$(cat TagName.txt)
+      - export TagHeading="/## \(.* \($${TagName}\|[$${TagName}]\)\)\$/"
+      - export HeadingPattern='/## \(.* \(v[0-9.]*\|\[.*\]\)\)/'
+      - cp -f CHANGELOG.md ReleaseNotes.md
+      - sed -i "0,$${TagHeading}{ $${TagHeading}P ; d } ; $${HeadingPattern},\$d" ReleaseNotes.md
+      - cp -f ReleaseNotes.md ReleaseTitle.md
+      - sed -i "2,\$d ; s$${HeadingPattern}\\\\1/" ReleaseTitle.md
+    when:
+      event:
+        - tag
+  - name: publish release
+    image: plugins/github-release
+    commands: []
+    settings:
+      api_key:
+        from_secret: github_publish_token
+      files:
+        - "*.tgz"
+      title: ReleaseTitle.md
+      note: ReleaseNotes.md
+    when:
+      event:
+        - tag
 
 trigger:
   ref:
-  - refs/heads/master
-  - refs/heads/dev
-  - refs/pull/**
-  - refs/tags/**
+    - refs/heads/**
+    - refs/pull/**
+    - refs/tags/**
   event:
-  - push
-  - pull_request
-  - tag
+    - push
+    - pull_request
+    - tag

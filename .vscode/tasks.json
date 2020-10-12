@@ -4,21 +4,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Debug",
+            "label": "Clean",
             "type": "npm",
-            "script": "build",
-            "group": "build",
-            "problemMatcher": "$tsc"
+            "script": "clean",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "never"
+            }
         },
         {
-            "label": "Release",
-            "type": "npm",
-            "script": "build-release",
-            "group": "build",
-            "problemMatcher": "$tsc"
-        },
-        {
-            "label": "Watch Debug",
+            "label": "Build",
             "type": "npm",
             "script": "watch",
             "group": {
@@ -29,57 +24,96 @@
             "isBackground": true,
             "presentation": {
                 "reveal": "never"
-            }
-        },
-        {
-            "label": "Watch Release",
-            "type": "npm",
-            "script": "watch-release",
-            "group": "build",
-            "problemMatcher": "$tsc-watch",
-            "isBackground": true,
-            "presentation": {
-                "reveal": "never"
-            }
-        },
-        {
-            "label": "Stop Debug",
-            "type": "npm",
-            "script": "stop",
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "never"
-            }
-        },
-        {
-            "label": "Stop Release",
-            "type": "npm",
-            "script": "stop-release",
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "never"
-            }
+            },
+            "dependsOn": [
+                "Kill Running Tasks"
+            ]
         },
         {
             "label": "Rebuild",
             "type": "npm",
             "script": "rebuild",
-            "problemMatcher": "$tsc"
+            "group": "build",
+            "problemMatcher": "$tsc",
+            "presentation": {
+                "reveal": "never"
+            },
+            "dependsOn": [
+                "Kill Running Tasks"
+            ]
+        },
+        {
+            "label": "Build Debug",
+            "type": "npm",
+            "script": "build-debug",
+            "group": "build",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Kill Running Tasks",
+                "Clean"
+            ]
+        },
+        {
+            "label": "Rebuild Debug",
+            "type": "npm",
+            "script": "rebuild",
+            "group": "build",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Kill Running Tasks"
+            ]
+        },
+        {
+            "label": "Build Release",
+            "type": "npm",
+            "script": "build-release",
+            "group": "build",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Kill Running Tasks",
+                "Clean"
+            ]
         },
         {
             "label": "Rebuild Release",
             "type": "npm",
             "script": "rebuild-release",
-            "problemMatcher": "$tsc"
+            "group": "build",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Kill Running Tasks"
+            ]
         },
         {
             "label": "Lint",
             "type": "npm",
-            "script": "lint",
-            "problemMatcher": "$tslint5",
+            "script": "lint-ide",
+            "group": "build",
+            "problemMatcher": "$eslint-stylish",
             "presentation": {
                 "reveal": "never"
             }
+        },
+        {
+            "label": "Debug Cleanup",
+            "dependsOn": [
+                "Clean",
+                "Build"
+            ]
+        },
+        {
+            "label": "Kill Running Tasks",
+            "type": "shell",
+            "command": "echo ${input:terminate}",
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "terminate",
+            "type": "command",
+            "command": "workbench.action.tasks.terminate",
+            "args": "terminateAll"
         }
     ]
 }

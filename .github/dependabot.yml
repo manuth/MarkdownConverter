@@ -1,0 +1,8 @@
+version: 2
+
+updates:
+  - directory: /
+    package-ecosystem: npm
+    target-branch: dev
+    schedule:
+      timezone: 05:00 UTC

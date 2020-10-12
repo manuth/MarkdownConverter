@@ -1,6 +1,0 @@
-suite(
-    "System",
-    () =>
-    {
-        require("./Tasks");
-    });

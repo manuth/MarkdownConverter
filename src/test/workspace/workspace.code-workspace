@@ -1,0 +1,19 @@
+{
+    "folders": [
+        {
+            "path": "./workspace-folder-1"
+        },
+        {
+            "path": "./workspace-folder-2"
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/CVS": true,
+            "**/.DS_Store": true
+        }
+    }
+}
