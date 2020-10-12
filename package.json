@@ -442,6 +442,12 @@
           "type": "string",
           "default": null
         },
+        "markdownConverter.Document.Design.DefaultStyles": {
+          "title": "%Config.Document.Design.DefaultStyles%",
+          "markdownDescription": "%Config.Document.Design.DefaultStyles.Description%",
+          "type": "boolean",
+          "default": true
+        },
         "markdownConverter.Document.Design.HighlightStyle": {
           "title": "%Config.Document.Design.HighlightStyle%",
           "markdownDescription": "%Config.Document.Design.HighlightStyle.Description%",

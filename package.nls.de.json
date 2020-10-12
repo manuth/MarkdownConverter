@@ -67,6 +67,8 @@
     "Config.Document.FooterTemplate.Description": "Die Inhalt der Fußzeile.",
     "Config.Document.Design.Template": "Vorlage",
     "Config.Document.Design.Template.Description": "Der Pfad zur Vorlage des Dokuments.\n\n***Note:***  \n  - `{{{styles}}}` wird durch die CSS-Styles ersetzt.\n  - `{{{content}}}` wird durch den Inhalt des Dokuments ersetzt.",
+    "Config.Document.Design.DefaultStyles": "Standard Styles",
+    "Config.Document.Design.DefaultStyles.Description": "Ermöglicht die Deaktivierung der Standard-Styles.",
     "Config.Document.Design.HighlightStyle": "highlight.js-Style",
     "Config.Document.Design.HighlightStyle.Description": "Der zu nutzende highligh.js-style.",
     "Config.Document.Design.StyleSheets": "Style-Sheets",

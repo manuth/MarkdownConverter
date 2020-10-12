@@ -117,6 +117,11 @@ export interface ISettings
     ["Document.Design.Template"]?: string;
 
     /**
+     * A value indicating whether the default styles should be included.
+     */
+    ["Document.Design.DefaultStyles"]?: string;
+
+    /**
      * The `highlight.js`-style to apply.
      */
     ["Document.Design.HighlightStyle"]?: string;

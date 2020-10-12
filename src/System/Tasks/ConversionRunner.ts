@@ -294,6 +294,11 @@ export class ConversionRunner
             }
         }
 
+        if (Settings.Default.DefaultStylesEnabled)
+        {
+            converter.Document.StyleSheets.push(Resources.Files.Get("SystemStyle"));
+        }
+
         if (Settings.Default.SystemParserEnabled)
         {
             let mdExtensions = new MarkdownContributions(this.Extension.Context.extensionPath);

@@ -186,6 +186,14 @@ export class Settings
     }
 
     /**
+     * Gets a value indicating whether default styles should be included.
+     */
+    public get DefaultStylesEnabled(): boolean
+    {
+        return this.GetConfigEntry("Document.Design.DefaultStyles");
+    }
+
+    /**
      * Gets the settings for the table of contents of the document.
      */
     public get TocSettings(): TocSettings

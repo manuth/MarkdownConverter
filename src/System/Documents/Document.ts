@@ -7,7 +7,6 @@ import MarkdownIt = require("markdown-it");
 import { isAbsolute } from "upath";
 import { TextDocument } from "vscode";
 import { stringify } from "yamljs";
-import { Resources } from "../../Properties/Resources";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { FileException } from "../IO/FileException";
 import { YAMLException } from "../YAML/YAMLException";
@@ -99,9 +98,7 @@ export class Document extends Renderable
     /**
      * The stylesheets of the document.
      */
-    private styleSheets: string[] = [
-        Resources.Files.Get("SystemStyle")
-    ];
+    private styleSheets: string[] = [];
 
     /**
      * The ecma-scripts of the document.

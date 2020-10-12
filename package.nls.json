@@ -67,6 +67,8 @@
     "Config.Document.FooterTemplate.Description": "The default footer.",
     "Config.Document.Design.Template": "Template",
     "Config.Document.Design.Template.Description": "The path to the template of the document.\n\n***Note:***  \n  - `{{{styles}}}`'s replaced by the css-styles\n  - `{{{content}}}`'s replaced by the body of the document.",
+    "Config.Document.Design.DefaultStyles": "Default Styles",
+    "Config.Document.Design.DefaultStyles.Description": "Allows you to disable the default styles.",
     "Config.Document.Design.HighlightStyle": "highlight.js-Style",
     "Config.Document.Design.HighlightStyle.Description": "The highlight.js-style to use.",
     "Config.Document.Design.StyleSheets": "Style-Sheets",
