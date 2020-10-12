@@ -120,6 +120,7 @@ export class Extension
     public async Activate(): Promise<unknown>
     {
         return {
+            extension: this,
             extendMarkdownIt: (md: any) =>
             {
                 this.vsCodeParser = md;

@@ -12,7 +12,7 @@ let entryPoints: string[] = [
     join(sourceRoot, "index.ts"),
     join(sourceRoot, "test", "runTests.ts"),
     join(sourceRoot, "test", "index.ts"),
-    join(sourceRoot, "test", "config.test.ts"),
+    join(sourceRoot, "test", "essentials.test.ts"),
     join(sourceRoot, "test", "common.test.ts"),
     join(sourceRoot, "test", "single-file.test.ts"),
     join(sourceRoot, "test", "single-folder.test.ts"),
@@ -56,9 +56,11 @@ let config: Configuration = {
     },
     plugins: [
         new WatchIgnorePlugin(
-            [
-                /\.d\.ts$/
-            ])
+            {
+                paths: [
+                    /\.d\.ts$/
+                ]
+            })
     ],
     module: {
         rules: [

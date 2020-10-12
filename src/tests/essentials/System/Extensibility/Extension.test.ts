@@ -1,5 +1,6 @@
 import { doesNotThrow, notStrictEqual, ok } from "assert";
-import { extension } from "../../../..";
+import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
+import { TestConstants } from "../../../TestConstants";
 
 /**
  * Registers tests for the `Extension` class.
@@ -10,6 +11,14 @@ export function ExtensionTests(): void
         "Extension",
         () =>
         {
+            let extension: MarkdownConverterExtension;
+
+            suiteSetup(
+                () =>
+                {
+                    extension = TestConstants.Extension;
+                });
+
             suite(
                 "EnableSystemParser",
                 () =>

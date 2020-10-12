@@ -1,11 +1,11 @@
 import { doesNotThrow, throws } from "assert";
 import { TempFile } from "@manuth/temp-files";
 import { TextDocument, Uri, window } from "vscode";
-import { extension } from "../../../..";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ConvertTask } from "../../../../System/Tasks/ConvertTask";
 import { ITestContext } from "../../../ITestContext";
+import { TestConstants } from "../../../TestConstants";
 
 /**
  * Registers tests for the `ConvertTask` class.
@@ -47,7 +47,7 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
                         async () =>
                         {
                             testFile = new TempFile();
-                            task = new TestConvertTask(extension);
+                            task = new TestConvertTask(TestConstants.Extension);
                             await window.showTextDocument(Uri.file(testFile.FullName));
                         });
 

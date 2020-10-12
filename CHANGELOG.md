@@ -6,7 +6,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.0.2...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.0...dev)
+
+## MarkdownConverter v3.1.0
+  - Moved from `gulp` and `browserify` to `webpack`
+  - Moved from `mustache` to `handlebars` in order to allow curly braces to be escaped
+
+### Updated
+  - The development environment
+  - The directory structure for improving the development-experience
+  - The unit-tests
+  - All dependencies
+  - The conversion-process for better extensibility
+
+### Added
+  - Support for passing arguments to the `vscode-test` instance
+  - A component for intercepting vscode-settings
+  - Cancellation-support for all tasks
+  - A helper for formatting dates  
+    Dates can now be formatted with a custom format-string using this pattern: `{{ FormatDate CreationDate "dd. MMMM yyyy" }}`
+  - Support for setting the document-wide date-format using the `DateFormat` attribute
+  - Support for specifying custom date-formats using the `markdownConverter.DateFormats` option
+  - A `ChangeDate` attribute for determining the date of the last change of the markdown-file
+  - A `CurrentDate` attribute for determining the date of the conversion
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.0.2...v3.1.0)
 
 ## MarkdownConverter v3.0.2
   - Fix issue #42 reported by @damgot
