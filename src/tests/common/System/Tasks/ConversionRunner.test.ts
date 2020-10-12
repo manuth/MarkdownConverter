@@ -8,8 +8,8 @@ import MarkdownIt = require("markdown-it");
 import MultiRange from "multi-integer-range";
 import { dirname, join, resolve } from "upath";
 import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
-import { extension } from "../../../..";
 import { Converter } from "../../../../Conversion/Converter";
+import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
 import { ISettings } from "../../../../Properties/ISettings";
 import { Margin } from "../../../../System/Documents/Margin";
 import { PaperOrientation } from "../../../../System/Documents/PaperOrientation";
@@ -18,6 +18,7 @@ import { StandardizedPaperFormat } from "../../../../System/Documents/Standardiz
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
+import { TestConstants } from "../../../TestConstants";
 
 /**
  * Registers tests for the `ConversionRunner` class.
@@ -31,6 +32,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
         "ConversionRunner",
         () =>
         {
+            let extension: MarkdownConverterExtension;
             let mdFile: TempFile;
             let conversionRunner: TestConversionRunner;
             let config: WorkspaceConfiguration;
@@ -112,6 +114,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
             suiteSetup(
                 () =>
                 {
+                    extension = TestConstants.Extension;
+
                     mdFile = new TempFile(
                         {
                             Suffix: ".md"

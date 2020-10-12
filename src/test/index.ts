@@ -1,13 +1,11 @@
-import { Package } from "@manuth/package-json-editor";
 import { pathExists } from "fs-extra";
 import minimist = require("minimist");
 import Mocha = require("mocha");
 import { createBrowserFetcher, executablePath } from "puppeteer-core";
-import { join, resolve } from "upath";
+import { resolve } from "upath";
 import { extensions } from "vscode";
-import { extension } from "..";
-import { Constants } from "../Constants";
 import { Extension } from "../System/Extensibility/Extension";
+import { TestConstants } from "../tests/TestConstants";
 
 /**
  * The arguments passed by the user.
@@ -31,8 +29,7 @@ let args = minimist(
  */
 export async function run(): Promise<void>
 {
-    await extensions.getExtension(
-        new Extension(new Package(join(Constants.PackageDirectory, "package.json"))).FullName).activate();
+    await extensions.getExtension(new Extension(TestConstants.PackageMetadata).FullName).activate();
 
     let mocha = new Mocha(
         {
@@ -51,7 +48,7 @@ export async function run(): Promise<void>
             {
                 if (!await pathExists(executablePath()))
                 {
-                    await createBrowserFetcher().download(extension.ChromiumRevision);
+                    await createBrowserFetcher().download(TestConstants.Extension.ChromiumRevision);
                 }
 
                 mocha.run(

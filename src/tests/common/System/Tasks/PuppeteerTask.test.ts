@@ -3,8 +3,8 @@ import { pathExists, rename } from "fs-extra";
 import pkgUp = require("pkg-up");
 import { executablePath } from "puppeteer-core";
 import { basename, dirname, join, resolve } from "upath";
-import { extension } from "../../../..";
 import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask";
+import { TestConstants } from "../../../TestConstants";
 
 /**
  * Registers tests for the `PuppeteerTask` class.
@@ -70,7 +70,7 @@ export function PuppeteerTaskTests(): void
                         "Checking whether executing the task without puppeteer installed throws an exception…",
                         async () =>
                         {
-                            await rejects(() => new PuppeteerTaskTest(extension).Execute());
+                            await rejects(() => new PuppeteerTaskTest(TestConstants.Extension).Execute());
                         });
                 });
         });

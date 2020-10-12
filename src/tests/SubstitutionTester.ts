@@ -1,7 +1,7 @@
 import { TextDocument } from "vscode";
-import { extension } from "..";
 import { Converter } from "../Conversion/Converter";
 import { ConversionRunner } from "../System/Tasks/ConversionRunner";
+import { TestConstants } from "./TestConstants";
 
 /**
  * Provides the functionality to test the substitution of the `ConversionRunner`.
@@ -46,7 +46,7 @@ export class SubstitutionTester
 
                 try
                 {
-                    await new ConversionRunner(extension).Execute(this.TextDocument);
+                    await new ConversionRunner(TestConstants.Extension).Execute(this.TextDocument);
                     resolve(result);
                 }
                 catch (error)
