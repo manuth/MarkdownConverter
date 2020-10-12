@@ -19,11 +19,11 @@ steps:
     image: manuth/vscode-test-runner
     commands:
       - xvfb-run npm run test -- --disable-gpu --headless
-  - name: build release
+  - name: build package
     image: node
     commands:
-      - npm run rebuild-release
-  - name: test release
+      - npm run rebuild-debug
+  - name: test package
     image: manuth/vscode-test-runner
     commands:
       - xvfb-run npm run test -- --disable-gpu --headless
