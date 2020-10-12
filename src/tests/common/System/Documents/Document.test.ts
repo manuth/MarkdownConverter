@@ -7,6 +7,8 @@ import { stat, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import { TextDocument, workspace } from "vscode";
 import { stringify } from "yamljs";
+import { StyleSheet } from "../../../../System/Documents/Assets/StyleSheet";
+import { WebScript } from "../../../../System/Documents/Assets/WebScript";
 import { Document } from "../../../../System/Documents/Document";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
@@ -182,7 +184,7 @@ export function DocumentTests(): void
                         "Checking whether stylesheets are added to the rendered document…",
                         async () =>
                         {
-                            document.StyleSheets.push(styleSheet);
+                            document.StyleSheets.push(new StyleSheet(styleSheet));
 
                             ok(
                                 new RegExp(
@@ -194,7 +196,7 @@ export function DocumentTests(): void
                         "Checking whether scripts are added to the rendered document…",
                         async () =>
                         {
-                            document.Scripts.push(script);
+                            document.Scripts.push(new WebScript(script));
 
                             ok(
                                 new RegExp(

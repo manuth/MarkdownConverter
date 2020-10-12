@@ -1,15 +1,14 @@
 import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
-import { pathExists, readFile, statSync } from "fs-extra";
+import { statSync } from "fs-extra";
 import Handlebars = require("handlebars");
 import MarkdownIt = require("markdown-it");
-import { isAbsolute } from "upath";
 import { TextDocument } from "vscode";
 import { stringify } from "yamljs";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
-import { FileException } from "../IO/FileException";
 import { YAMLException } from "../YAML/YAMLException";
+import { Asset } from "./Assets/Asset";
 import { DocumentFragment } from "./DocumentFragment";
 import { Paper } from "./Paper";
 import { Renderable } from "./Renderable";
@@ -98,12 +97,12 @@ export class Document extends Renderable
     /**
      * The stylesheets of the document.
      */
-    private styleSheets: string[] = [];
+    private styleSheets: Asset[] = [];
 
     /**
      * The ecma-scripts of the document.
      */
-    private scripts: string[] = [];
+    private scripts: Asset[] = [];
 
     /**
      * The parser for parsing the markdown-content.
@@ -311,7 +310,7 @@ export class Document extends Renderable
     /**
      * Gets or sets the stylesheets of the document.
      */
-    public get StyleSheets(): string[]
+    public get StyleSheets(): Asset[]
     {
         return this.styleSheets;
     }
@@ -319,7 +318,7 @@ export class Document extends Renderable
     /**
      * @inheritdoc
      */
-    public set StyleSheets(value: string[])
+    public set StyleSheets(value: Asset[])
     {
         this.styleSheets = value;
     }
@@ -327,7 +326,7 @@ export class Document extends Renderable
     /**
      * Gets or sets the scripts of the document.
      */
-    public get Scripts(): string[]
+    public get Scripts(): Asset[]
     {
         return this.scripts;
     }
@@ -335,7 +334,7 @@ export class Document extends Renderable
     /**
      * @inheritdoc
      */
-    public set Scripts(value: string[])
+    public set Scripts(value: Asset[])
     {
         this.scripts = value;
     }
@@ -373,34 +372,12 @@ export class Document extends Renderable
 
         for (let styleSheet of this.StyleSheets)
         {
-            if (/.*:\/\//g.test(styleSheet) || !isAbsolute(styleSheet))
-            {
-                styleCode += dedent(`<link rel="stylesheet" type="text/css" href="${styleSheet}" />\n`);
-            }
-            else if (await pathExists(styleSheet))
-            {
-                styleCode += "<style>" + (await readFile(styleSheet)).toString() + "</style>\n";
-            }
-            else
-            {
-                throw new FileException(null, styleSheet);
-            }
+            styleCode += styleSheet.ToString();
         }
 
         for (let script of this.Scripts)
         {
-            if (/.*:\/\//g.test(script) || !isAbsolute(script))
-            {
-                scriptCode += dedent(`<script async="" src="${script}"charset="UTF-8"></script>\n`);
-            }
-            else if (await pathExists(script))
-            {
-                scriptCode += "<script>" + (await readFile(script)).toString() + "</script>\n";
-            }
-            else
-            {
-                throw new FileException(null, script);
-            }
+            scriptCode += script.ToString();
         }
 
         let content = this.Content;

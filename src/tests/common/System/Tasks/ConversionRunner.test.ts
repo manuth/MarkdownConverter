@@ -354,8 +354,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             }
 
                             strictEqual(converter.Document.Template, (await readFile(templateFile.FullName)).toString());
-                            ok(converter.Document.StyleSheets.filter((stylesheet) => stylesheet.includes(highlightStyle)).length > 0);
-                            ok(converter.Document.StyleSheets.includes(styleSheet.FullName));
+                            ok(converter.Document.StyleSheets.some((stylesheet) => stylesheet.Path.includes(highlightStyle)));
+                            ok(converter.Document.StyleSheets.some((entry) => entry.Path === styleSheet.FullName));
                             strictEqual(converter.Document.HeaderFooterEnabled, headerFooterEnabled);
                             strictEqual(converter.Document.Header.Content, headerTemplate);
                             strictEqual(converter.Document.Footer.Content, footerTemplate);

@@ -19,6 +19,8 @@ import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
 import { Utilities } from "../../Utilities";
+import { StyleSheet } from "../Documents/Assets/StyleSheet";
+import { WebScript } from "../Documents/Assets/WebScript";
 import { Document } from "../Documents/Document";
 import { EmojiType } from "../Documents/EmojiType";
 import { ListType } from "../Documents/ListType";
@@ -296,7 +298,7 @@ export class ConversionRunner
 
         if (Settings.Default.DefaultStylesEnabled)
         {
-            converter.Document.StyleSheets.push(Resources.Files.Get("SystemStyle"));
+            converter.Document.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle")));
         }
 
         if (Settings.Default.SystemParserEnabled)
@@ -305,12 +307,12 @@ export class ConversionRunner
 
             for (let styleSheet of mdExtensions.previewStyles)
             {
-                converter.Document.StyleSheets.push(styleSheet.fsPath);
+                converter.Document.StyleSheets.push(new StyleSheet(styleSheet.fsPath));
             }
 
             for (let script of mdExtensions.previewScripts)
             {
-                converter.Document.Scripts.push(script.fsPath);
+                converter.Document.Scripts.push(new WebScript(script.fsPath));
             }
         }
 
@@ -320,18 +322,19 @@ export class ConversionRunner
             {
                 if (!Settings.Default.SystemParserEnabled)
                 {
-                    converter.Document.StyleSheets.push(Resources.Files.Get("DefaultHighlight"));
+                    converter.Document.StyleSheets.push(new StyleSheet(Resources.Files.Get("DefaultHighlight")));
                 }
             }
             else
             {
-                converter.Document.StyleSheets.push(join(Resources.Files.Get("HighlightJSStylesDir"), Settings.Default.HighlightStyle + ".css"));
+                converter.Document.StyleSheets.push(
+                    new StyleSheet(join(Resources.Files.Get("HighlightJSStylesDir"), Settings.Default.HighlightStyle + ".css")));
             }
         }
 
         for (let styleSheet of Settings.Default.StyleSheets)
         {
-            converter.Document.StyleSheets.push(styleSheet);
+            converter.Document.StyleSheets.push(new StyleSheet(styleSheet));
         }
 
         return converter;
