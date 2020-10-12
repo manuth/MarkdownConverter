@@ -34,7 +34,12 @@ export interface ISettings
     /**
      * The date-format to apply inside the document.
      */
-    DateFormat?: string;
+    DefaultDateFormat?: string;
+
+    /**
+     * A set of custom date-formats.
+     */
+    DateFormats?: Record<string, string>;
 
     /**
      * The arguments to pass to chromium.

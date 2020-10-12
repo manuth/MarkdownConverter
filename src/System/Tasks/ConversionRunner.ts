@@ -223,6 +223,7 @@ export class ConversionRunner
      */
     protected async LoadConverter(documentRoot: string, document: TextDocument): Promise<Converter>
     {
+        let dateFormatKey = "DateFormat";
         let converter = new Converter(documentRoot, new Document(document, await this.LoadParser()));
         let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string;
         let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string;
@@ -230,7 +231,21 @@ export class ConversionRunner
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Attributes.Author = converter.Document.Attributes.Author || await Utilities.GetFullName();
         converter.Document.Locale = new CultureInfo(Settings.Default.Locale);
-        converter.Document.DateFormat = Settings.Default.DateFormat;
+
+        if (dateFormatKey in converter.Document.Attributes)
+        {
+            converter.Document.DefaultDateFormat = (converter.Document.Attributes["DateFormat"] as string) ?? null;
+        }
+        else
+        {
+            converter.Document.DefaultDateFormat = Settings.Default.DefaultDateFormat ?? null;
+        }
+
+        for (let key in Settings.Default.DateFormats)
+        {
+            converter.Document.DateFormats[key] = Settings.Default.DateFormats[key];
+        }
+
         converter.Document.Paper = Settings.Default.PaperFormat;
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
 

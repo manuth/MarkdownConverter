@@ -30,7 +30,6 @@
             "preLaunchTask": "Build Debug",
             "postDebugTask": "Debug Cleanup",
             "sourceMaps": true,
-            "stopOnEntry": true,
             "outFiles": [
                 "${workspaceFolder}/**/*.js",
                 "!**/node_modules/**"

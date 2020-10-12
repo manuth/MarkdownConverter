@@ -21,6 +21,11 @@ import { Renderable } from "./Renderable";
 export class Document extends Renderable
 {
     /**
+     * The attribute-key for overriding the default date-format.
+     */
+    private static readonly dateFormatKey = "DateFormat";
+
+    /**
      * The name of the file represented by this document.
      */
     private fileName: string;
@@ -43,7 +48,12 @@ export class Document extends Renderable
     /**
      * The format to print the date.
      */
-    private dateFormat = "Default";
+    private defaultDateFormat = "Default";
+
+    /**
+     * A set of custom date-formats.
+     */
+    private dateFormats: Record<string, string> = {};
 
     /**
      * The language to print values.
@@ -203,17 +213,33 @@ export class Document extends Renderable
     /**
      * Gets or sets the format to print the date.
      */
-    public get DateFormat(): string
+    public get DefaultDateFormat(): string
     {
-        return this.dateFormat;
+        return this.defaultDateFormat;
     }
 
     /**
      * @inheritdoc
      */
-    public set DateFormat(value: string)
+    public set DefaultDateFormat(value: string)
     {
-        this.dateFormat = value;
+        this.defaultDateFormat = value;
+    }
+
+    /**
+     * Gets or sets a collection of custom date-formats.
+     */
+    public get DateFormats(): Record<string, string>
+    {
+        return this.dateFormats;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public set DateFormats(value: Record<string, string>)
+    {
+        this.dateFormats = value;
     }
 
     /**
@@ -336,6 +362,13 @@ export class Document extends Renderable
         if (this.renderer === null)
         {
             this.renderer = Handlebars.create();
+
+            this.Renderer.registerHelper(
+                "FormatDate",
+                (value: any, format: string) =>
+                {
+                    return this.FormatDate(value, format);
+                });
         }
 
         return this.renderer;
@@ -407,6 +440,7 @@ export class Document extends Renderable
     protected async RenderText(content: string): Promise<string>
     {
         let view: Record<string, unknown> = {};
+        let dateHelpers: string[] = [];
 
         for (let key in this.Attributes)
         {
@@ -414,13 +448,51 @@ export class Document extends Renderable
 
             if (value instanceof Date)
             {
-                value = new DateTimeFormatter(this.Locale).Format(this.DateFormat, new Date(value));
+                dateHelpers.push(key);
+                this.Renderer.registerHelper(key, () => this.FormatDate(value as Date, this.DefaultDateFormat));
             }
 
             view[key] = value;
         }
 
         let renderedContent = this.Renderer.compile(content)(view);
+
+        for (let key of dateHelpers)
+        {
+            this.Renderer.unregisterHelper(key);
+        }
+
         return this.parser.render(renderedContent);
+    }
+
+    /**
+     * Formats the specified date-`value`.
+     *
+     * @param value
+     * The date to format.
+     *
+     * @param format
+     * The format to apply.
+     *
+     * @returns
+     * The formatted date.
+     */
+    protected FormatDate(value: string | Date, format?: string): string
+    {
+        if (format !== null)
+        {
+            format = format ?? this.DefaultDateFormat;
+        }
+
+        if (format)
+        {
+            return new DateTimeFormatter(this.Locale).Format(
+                (format in this.DateFormats) ? this.DateFormats[format] : format,
+                new Date(value));
+        }
+        else
+        {
+            return value.toString();
+        }
     }
 }

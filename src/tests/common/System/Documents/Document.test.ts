@@ -247,9 +247,37 @@ export function DocumentTests(): void
                                 if (attributes[key] instanceof Date)
                                 {
                                     (await document.Render()).includes(
-                                        new DateTimeFormatter(document.Locale).Format(document.DateFormat, attributes[key]));
+                                        new DateTimeFormatter(document.Locale).Format(document.DefaultDateFormat, attributes[key]));
                                 }
                             }
+                        });
+
+                    test(
+                        "Checking whether custom date-formats can be specified…",
+                        async () =>
+                        {
+                            let dateKey = "testDate";
+                            let testDate = new Date();
+                            let testFormatName = "myFormat";
+                            let testFormat = "d";
+                            document.DefaultDateFormat = testFormatName;
+                            document.Content = `{{ ${dateKey} }}`;
+                            document.Attributes[dateKey] = testDate;
+                            document.DateFormats[testFormatName] = testFormat;
+                            strictEqual(load(await document.Render())("body").text().trim(), `${testDate.getDate()}`);
+                        });
+
+                    test(
+                        "Checking whether dates can be formatted individually…",
+                        async () =>
+                        {
+                            let dateKey = "testDate";
+                            let testDate = new Date();
+                            let testFormat = "M";
+                            document.DefaultDateFormat = "d";
+                            document.Content = `{{ FormatDate ${dateKey} ${JSON.stringify(testFormat)} }}`;
+                            document.Attributes[dateKey] = testDate;
+                            strictEqual(load(await document.Render())("body").text().trim(), `${testDate.getMonth() + 1}`);
                         });
 
                     test(
@@ -257,7 +285,7 @@ export function DocumentTests(): void
                         async () =>
                         {
                             document.Content = content;
-                            document.DateFormat = "dddd";
+                            document.DefaultDateFormat = "dddd";
 
                             let englishContent: string;
                             let germanContent: string;

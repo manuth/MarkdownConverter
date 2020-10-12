@@ -85,9 +85,17 @@ export class Settings
     /**
      * Gets the format to localize dates inside the document.
      */
-    public get DateFormat(): string
+    public get DefaultDateFormat(): string
     {
-        return this.GetConfigEntry("DateFormat");
+        return this.GetConfigEntry("DefaultDateFormat");
+    }
+
+    /**
+     * Gets a set of custom date-formats.
+     */
+    public get DateFormats(): Record<string, string>
+    {
+        return this.GetConfigEntry("DateFormats");
     }
 
     /**

@@ -290,6 +290,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                             let locale = "en";
                             let dateFormat = "yyyy/MM/dd";
+                            let testFormatName = "year";
+                            let testFormat = "yyyy";
 
                             let paperFormat: Partial<StandardizedPaperFormat> = {
                                 Format: StandardizedFormatType.Tabloid,
@@ -313,7 +315,11 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             context.Settings.ConversionQuality = conversionQuality;
                             context.Settings["Document.Attributes"] = attributes;
                             context.Settings.Locale = locale;
-                            context.Settings.DateFormat = dateFormat;
+                            context.Settings.DefaultDateFormat = dateFormat;
+
+                            context.Settings.DateFormats = {
+                                [testFormatName]: testFormat
+                            };
 
                             context.Settings["Document.Paper.PaperFormat"] = {
                                 Format: StandardizedFormatType[paperFormat.Format] as any,
@@ -337,7 +343,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             }
 
                             strictEqual(converter.Document.Locale.Name, locale);
-                            strictEqual(converter.Document.DateFormat, dateFormat);
+                            strictEqual(converter.Document.DefaultDateFormat, dateFormat);
+                            strictEqual(converter.Document.DateFormats[testFormatName], testFormat);
                             strictEqual((converter.Document.Paper.Format as StandardizedPaperFormat).Format, paperFormat.Format);
                             strictEqual((converter.Document.Paper.Format as StandardizedPaperFormat).Orientation, paperFormat.Orientation);
 

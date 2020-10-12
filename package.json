@@ -217,9 +217,9 @@
             }
           ]
         },
-        "markdownConverter.DateFormat": {
-          "title": "%Config.DateFormat%",
-          "markdownDescription": "%Config.DateFormat.Description%",
+        "markdownConverter.DefaultDateFormat": {
+          "title": "%Config.DefaultDateFormat%",
+          "markdownDescription": "%Config.DefaultDateFormat.Description%",
           "default": "Default",
           "anyOf": [
             {
@@ -233,6 +233,16 @@
               "type": "string"
             }
           ]
+        },
+        "markdownConverter.DateFormats": {
+          "title": "%Config.DateFormats%",
+          "markdownDescription": "%Config.DateFormats.Description%",
+          "default": {},
+          "patternProperties": {
+            "^.*$": {
+              "type": "string"
+            }
+          }
         },
         "markdownConverter.ChromiumArgs": {
           "title": "%Config.ChromiumArgs%",
