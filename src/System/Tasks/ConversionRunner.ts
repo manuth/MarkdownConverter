@@ -18,7 +18,6 @@ import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
-import { Utilities } from "../../Utilities";
 import { StyleSheet } from "../Documents/Assets/StyleSheet";
 import { WebScript } from "../Documents/Assets/WebScript";
 import { Document } from "../Documents/Document";
@@ -231,7 +230,6 @@ export class ConversionRunner
         let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string;
         converter.Document.Quality = Settings.Default.ConversionQuality;
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
-        converter.Document.Attributes.Author = converter.Document.Attributes.Author || await Utilities.GetFullName();
         converter.Document.Locale = new CultureInfo(Settings.Default.Locale);
 
         if (dateFormatKey in converter.Document.Attributes)

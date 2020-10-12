@@ -6,6 +6,7 @@ import Handlebars = require("handlebars");
 import MarkdownIt = require("markdown-it");
 import { TextDocument } from "vscode";
 import { stringify } from "yamljs";
+import { Utilities } from "../../Utilities";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { YAMLException } from "../YAML/YAMLException";
 import { Asset } from "./Assets/Asset";
@@ -403,9 +404,10 @@ export class Document extends Renderable
     protected async RenderText(content: string): Promise<string>
     {
         let view: Record<string, unknown> = { ...this.Attributes };
-        let dateHelpers: string[] = [];
+        let tempHelpers: string[] = [];
         let creationDateKey = "CreationDate";
         let changeDateKey = "ChangeDate";
+        let authorKey = "Author";
 
         let dateResolver = (key: string): Date =>
         {
@@ -435,13 +437,18 @@ export class Document extends Renderable
             }
         }
 
+        if (!(authorKey in view))
+        {
+            view[authorKey] = await Utilities.GetFullName();
+        }
+
         for (let key in view)
         {
             let value = view[key];
 
             if (value instanceof Date)
             {
-                dateHelpers.push(key);
+                tempHelpers.push(key);
                 this.Renderer.registerHelper(key, () => this.FormatDate(value as Date, this.DefaultDateFormat));
             }
 
@@ -450,7 +457,7 @@ export class Document extends Renderable
 
         let renderedContent = this.Renderer.compile(content)(view);
 
-        for (let key of dateHelpers)
+        for (let key of tempHelpers)
         {
             this.Renderer.unregisterHelper(key);
         }
