@@ -130,7 +130,7 @@ export class Document extends Renderable
         if (!document.isUntitled)
         {
             this.fileName = document.fileName;
-            this.Attributes.CreationDate = statSync(document.fileName).ctime;
+            this.Attributes.CreationDate = statSync(document.fileName).birthtime;
         }
         else
         {
