@@ -126,18 +126,7 @@ export class Document extends Renderable
     {
         super();
         this.RawContent = document.getText();
-
-        if (!document.isUntitled)
-        {
-            this.fileName = document.fileName;
-            this.Attributes.CreationDate = statSync(document.fileName).birthtime;
-        }
-        else
-        {
-            this.fileName = null;
-            this.Attributes.CreationDate = new Date(Date.now());
-        }
-
+        this.fileName = document.isUntitled ? null : document.fileName;
         this.parser = parser;
     }
 
@@ -439,12 +428,39 @@ export class Document extends Renderable
      */
     protected async RenderText(content: string): Promise<string>
     {
-        let view: Record<string, unknown> = {};
+        let view: Record<string, unknown> = { ...this.Attributes };
         let dateHelpers: string[] = [];
+        let creationDateKey = "CreationDate";
 
-        for (let key in this.Attributes)
+        let dateResolver = (key: string): Date =>
         {
-            let value = this.Attributes[key];
+            if (this.FileName)
+            {
+                switch (key)
+                {
+                    case creationDateKey:
+                        return statSync(this.FileName).birthtime;
+                    default:
+                        return new Date();
+                }
+            }
+            else
+            {
+                return new Date();
+            }
+        };
+
+        for (let key of [creationDateKey])
+        {
+            if (!(key in view))
+            {
+                view[key] = dateResolver(key);
+            }
+        }
+
+        for (let key in view)
+        {
+            let value = view[key];
 
             if (value instanceof Date)
             {

@@ -86,7 +86,6 @@ export function DocumentTests(): void
 
                             document.Content = content;
                             strictEqual(document.FileName, textDocument.fileName);
-                            strictEqual(new Date(document.Attributes["CreationDate"] as any).getTime(), (await stat(tempFile.FullName)).ctime.getTime());
                             ok(!untitledDocument.FileName);
                         });
                 });
@@ -153,12 +152,28 @@ export function DocumentTests(): void
                 {
                     let styleSheet: string;
                     let script: string;
+                    let content: string;
 
                     suiteSetup(
                         () =>
                         {
                             styleSheet = "https://this.is.a/test.css";
                             script = "https://this.is.an/other.test.js";
+                            content = "";
+
+                            for (let key of Object.keys(attributes))
+                            {
+                                content += `{{${key}}}\n\n`;
+                            }
+                        });
+
+                    test(
+                        "Checking whether timestamps about the document are injected correctly…",
+                        async () =>
+                        {
+                            document.DefaultDateFormat = null;
+                            document.Content = "{{CreationDate}}";
+                            strictEqual(load(await document.Render())("body").text().trim(), `${(await stat(document.FileName)).birthtime}`);
                         });
 
                     test(
@@ -201,24 +216,6 @@ export function DocumentTests(): void
                             document.Content = `\\${pattern}`;
                             document.Attributes.test = "test-value";
                             ok(load(await document.Render())(`*:contains(${JSON.stringify(pattern)})`).length > 0);
-                        });
-                });
-
-            suite(
-                "RenderText",
-                () =>
-                {
-                    let content: string;
-
-                    suiteSetup(
-                        () =>
-                        {
-                            content = "";
-
-                            for (let key of Object.keys(attributes))
-                            {
-                                content += `{{${key}}}\n\n`;
-                            }
                         });
 
                     test(
