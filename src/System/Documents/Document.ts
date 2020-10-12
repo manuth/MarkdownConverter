@@ -407,6 +407,7 @@ export class Document extends Renderable
         let tempHelpers: string[] = [];
         let creationDateKey = "CreationDate";
         let changeDateKey = "ChangeDate";
+        let currentDateKey = "CurrentDate";
         let authorKey = "Author";
 
         let dateResolver = (key: string): Date =>
@@ -429,7 +430,7 @@ export class Document extends Renderable
             }
         };
 
-        for (let key of [creationDateKey, changeDateKey])
+        for (let key of [creationDateKey, changeDateKey, currentDateKey])
         {
             if (!(key in view))
             {
