@@ -56,9 +56,11 @@ let config: Configuration = {
     },
     plugins: [
         new WatchIgnorePlugin(
-            [
-                /\.d\.ts$/
-            ])
+            {
+                paths: [
+                    /\.d\.ts$/
+                ]
+            })
     ],
     module: {
         rules: [
