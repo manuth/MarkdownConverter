@@ -200,8 +200,6 @@ export function DocumentTests(): void
                             let pattern = "{{test}}";
                             document.Content = `\\${pattern}`;
                             document.Attributes.test = "test-value";
-                            let content = await document.Render();
-                            console.log(content);
                             ok(load(await document.Render())(`*:contains(${JSON.stringify(pattern)})`).length > 0);
                         });
                 });
