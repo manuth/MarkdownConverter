@@ -431,6 +431,7 @@ export class Document extends Renderable
         let view: Record<string, unknown> = { ...this.Attributes };
         let dateHelpers: string[] = [];
         let creationDateKey = "CreationDate";
+        let changeDateKey = "ChangeDate";
 
         let dateResolver = (key: string): Date =>
         {
@@ -440,6 +441,8 @@ export class Document extends Renderable
                 {
                     case creationDateKey:
                         return statSync(this.FileName).birthtime;
+                    case changeDateKey:
+                        return statSync(this.FileName).mtime;
                     default:
                         return new Date();
                 }
@@ -450,7 +453,7 @@ export class Document extends Renderable
             }
         };
 
-        for (let key of [creationDateKey])
+        for (let key of [creationDateKey, changeDateKey])
         {
             if (!(key in view))
             {

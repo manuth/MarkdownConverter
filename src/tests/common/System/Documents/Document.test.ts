@@ -174,6 +174,8 @@ export function DocumentTests(): void
                             document.DefaultDateFormat = null;
                             document.Content = "{{CreationDate}}";
                             strictEqual(load(await document.Render())("body").text().trim(), `${(await stat(document.FileName)).birthtime}`);
+                            document.Content = "{{ChangeDate}}";
+                            strictEqual(load(await document.Render())("body").text().trim(), `${(await stat(document.FileName)).mtime}`);
                         });
 
                     test(
