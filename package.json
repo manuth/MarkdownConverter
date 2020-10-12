@@ -131,7 +131,7 @@
     "webpack-cli": "^4.0.0"
   },
   "displayName": "Markdown Converter",
-  "icon": "MarkdownConverter/Resources/Icon.png",
+  "icon": "Resources/Icon.png",
   "markdownDescription": "A Markdown-converter for Visual Studio Code",
   "publisher": "manuth",
   "categories": [
