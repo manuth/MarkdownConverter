@@ -98,8 +98,8 @@ export function ChainTaskTests(): void
                         "Checking whether the user is prompted to input a document-name…",
                         async function()
                         {
-                            this.slow(5 * 1000);
-                            this.timeout(10 * 1000);
+                            this.slow(7.5 * 1000);
+                            this.timeout(15 * 1000);
                             await doesNotReject(() => RenameTester());
                         });
 
@@ -107,8 +107,8 @@ export function ChainTaskTests(): void
                         "Checking whether all documents are being chained together…",
                         async function()
                         {
-                            this.slow(5 * 1000);
-                            this.timeout(10 * 1000);
+                            this.slow(10 * 1000);
+                            this.timeout(20 * 1000);
                             let document: TextDocument;
                             await doesNotReject(
                                 async () =>
