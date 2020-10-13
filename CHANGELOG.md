@@ -6,7 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.1...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.2...dev)
+
+## MarkdownConverter v3.1.2
+### Added
+  - The webpack-configuration to the excluded files
+
+### Fixed
+  - Broken release-creation
+
+### Updated
+  - The conversion-process
+  - All dependencies
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.1...v3.1.2)
 
 ## MarkdownConverter v3.1.1
   - Fix broken Drone CI script
