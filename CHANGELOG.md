@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.0...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.1...dev)
+
+## MarkdownConverter v3.1.1
+  - Fix broken Drone CI script
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.0...v3.1.1)
 
 ## MarkdownConverter v3.1.0
   - Moved from `gulp` and `browserify` to `webpack`
