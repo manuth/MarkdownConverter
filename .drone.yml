@@ -34,7 +34,7 @@ steps:
   - name: prepare release
     image: node:lts
     commands:
-      - npx vsce --no-yarn package
+      - npx vsce package --no-yarn
       - npm install escape-string-regexp
       - node -e "console.log(require('escape-string-regexp')('${DRONE_TAG}'))" > TagName.txt
     when:
