@@ -1,6 +1,6 @@
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempDirectory } from "@manuth/temp-files";
-import { ensureDir, pathExists, readFile } from "fs-extra";
+import { pathExists, readFile } from "fs-extra";
 import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
@@ -180,7 +180,6 @@ export class ConversionRunner
                                 destinationPath = resolve(destinationPath);
                             }
 
-                            await ensureDir(dirname(destinationPath));
                             await converter.Start(type, destinationPath, progressReporter, cancellationToken);
 
                             progressReporter?.report(

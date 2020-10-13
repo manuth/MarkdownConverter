@@ -2,7 +2,7 @@ import { createServer, Server } from "http";
 import { resolve } from "url";
 import { promisify } from "util";
 import { TempDirectory } from "@manuth/temp-files";
-import { move, pathExists, remove, writeFile } from "fs-extra";
+import { ensureDir, move, pathExists, remove, writeFile } from "fs-extra";
 import getPort = require("get-port");
 import { glob } from "glob";
 import { Browser, launch, PDFOptions, ScreenshotOptions } from "puppeteer-core";
@@ -286,6 +286,8 @@ export class Converter
         }
         else
         {
+            await ensureDir(dirname(path));
+
             switch (conversionType)
             {
                 case ConversionType.HTML:
