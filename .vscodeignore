@@ -146,3 +146,6 @@ node_modules/highlightjs/!(styles)
 
 # Drone configuration
 .drone.yml
+
+# Webpack configuration
+webpack.config.ts
