@@ -252,7 +252,7 @@ export class Converter
         {
             await this.browser.close();
 
-            await new Promise(
+            await new Promise<void>(
                 (resolve) =>
                 {
                     this.WebServer.close(() => resolve());
