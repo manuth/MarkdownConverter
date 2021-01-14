@@ -20,11 +20,6 @@ import { Renderable } from "./Renderable";
 export class Document extends Renderable
 {
     /**
-     * The attribute-key for overriding the default date-format.
-     */
-    private static readonly dateFormatKey = "DateFormat";
-
-    /**
      * The name of the file represented by this document.
      */
     private fileName: string;
