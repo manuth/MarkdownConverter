@@ -272,7 +272,7 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the header of the document.
+     * Gets the header of the document.
      */
     public get Header(): DocumentFragment
     {
@@ -280,7 +280,7 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the footer of the document.
+     * Gets the footer of the document.
      */
     public get Footer(): DocumentFragment
     {
