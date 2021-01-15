@@ -1,10 +1,12 @@
 import { ok, strictEqual, throws } from "assert";
+import { parse } from "path";
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import fm = require("front-matter");
 import { stat, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
+import { Random } from "random-js";
 import { TextDocument, workspace } from "vscode";
 import { stringify } from "yamljs";
 import { StyleSheet } from "../../../../System/Documents/Assets/StyleSheet";
@@ -23,6 +25,7 @@ export function DocumentTests(): void
         "Document",
         () =>
         {
+            let random: Random;
             let content: string;
             let attributes: Record<string, any>;
             let rawContent: string;
@@ -36,6 +39,7 @@ export function DocumentTests(): void
             suiteSetup(
                 async () =>
                 {
+                    random = new Random();
                     content = "This is a test.";
 
                     attributes = {
@@ -91,6 +95,29 @@ export function DocumentTests(): void
                             document.Content = content;
                             strictEqual(document.FileName, textDocument.fileName);
                             ok(!untitledDocument.FileName);
+                        });
+
+                    test(
+                        "Checking whether the title is loaded from the document correctly…",
+                        () =>
+                        {
+                            strictEqual(document.Title, parse(textDocument.fileName).name);
+                            strictEqual(untitledDocument.Title, untitledTextDocument.uri.path);
+                        });
+                });
+
+            suite(
+                "Title",
+                () =>
+                {
+                    test(
+                        `Checking whether the \`${AttributeKey.Title}\`-key overrides the actual title…`,
+                        () =>
+                        {
+                            document.Attributes[AttributeKey.Title] = random.string(10);
+                            untitledDocument.Attributes[AttributeKey.Title] = random.string(10);
+                            strictEqual(document.Title, document.Attributes[AttributeKey.Title]);
+                            strictEqual(untitledDocument.Title, untitledDocument.Attributes[AttributeKey.Title]);
                         });
                 });
 
