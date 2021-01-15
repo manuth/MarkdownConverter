@@ -35,6 +35,8 @@
     "Config.Parser.Toc.ListType.Description": "Der Listen-Typ des Inhaltsverzeichnisses.\nKann entweder nummeriert (`ol`) oder nicht nummeriert (`ul`) sein.",
     "Config.Document.Attributes": "Attribute",
     "Config.Document.Attributes.Description": "Die Attribute des Dokuments.  \nSie können folgendermaßen in das Dokument eingefügt werden: `{{ AttributeName }}`.",
+    "Config.Document.Attributes.Title": "Title",
+    "Config.Document.Attributes.Title.Description": "Der Titel des Dokuments.",
     "Config.Document.Attributes.Author": "Autor",
     "Config.Document.Attributes.Author.Description": "Der Name des Autors des Dokuments.  \nLassen Sie diese Einstellung weg, um den vollständigen Namen des aktuellen Benutzers zu nutzen.",
     "Config.Document.Attributes.Company": "Firma",

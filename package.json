@@ -312,6 +312,11 @@
           "default": null,
           "additionalProperties": true,
           "properties": {
+            "Title": {
+              "title": "%Config.Document.Attributes.Title%",
+              "markdownDescription": "%Config.Document.Attributes.Title.Description%",
+              "type": "string"
+            },
             "Author": {
               "title": "%Config.Document.Attributes.Author%",
               "markdownDescription": "%Config.Document.Attributes.Author.Description%",

@@ -35,6 +35,8 @@
     "Config.Parser.Toc.ListType.Description": "The list-type of the table of contents.\nThe list can either be numbered (`ol`) or not numbered (`ul`).",
     "Config.Document.Attributes": "Attributes",
     "Config.Document.Attributes.Description": "The attributes of the document.  \nThey can be included into the document like this: `{{ AttributeName }}`",
+    "Config.Document.Attributes.Title": "Title",
+    "Config.Document.Attributes.Title.Description": "The title of the document.",
     "Config.Document.Attributes.Author": "Author",
     "Config.Document.Attributes.Author.Description": "The name of the author.\n\n***Note:***\nIf not defined the name of the current user will be used.",
     "Config.Document.Attributes.Company": "Company",

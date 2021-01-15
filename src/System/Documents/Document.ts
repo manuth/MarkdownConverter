@@ -1,3 +1,4 @@
+import { parse } from "path";
 import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
@@ -25,6 +26,11 @@ export class Document extends Renderable
      * The name of the file represented by this document.
      */
     private fileName: string;
+
+    /**
+     * The title of the document.
+     */
+    private title: string;
 
     /**
      * The quality of the document.
@@ -128,7 +134,20 @@ export class Document extends Renderable
         this.RawContent = document.getText();
         this.fileName = document.isUntitled ? null : document.fileName;
         this.parser = parser;
-        this.Meta.Content = "";
+
+        if (document.isUntitled)
+        {
+            this.fileName = null;
+            this.title = document.uri.fsPath;
+        }
+        else
+        {
+            this.fileName = document.fileName;
+            this.title = parse(this.FileName).name;
+        }
+
+        this.Meta.Content = dedent(`
+            <title>{{{ Title }}}</title>`);
     }
 
     /**
@@ -137,6 +156,14 @@ export class Document extends Renderable
     public get FileName(): string
     {
         return this.fileName;
+    }
+
+    /**
+     * Gets the title of the document.
+     */
+    public get Title(): string
+    {
+        return (this.Attributes[AttributeKey.Title] as string) ?? this.title;
     }
 
     /**
@@ -417,6 +444,18 @@ export class Document extends Renderable
         let view: Record<string, unknown> = { ...this.Attributes };
         let tempHelpers: string[] = [];
 
+        let dateKeys = [
+            AttributeKey.CreationDate,
+            AttributeKey.ChangeDate,
+            AttributeKey.CurrentDate
+        ];
+
+        let attributeKeys = [
+            ...dateKeys,
+            AttributeKey.Title,
+            AttributeKey.Author
+        ];
+
         let dateResolver = (key: string): Date =>
         {
             if (this.FileName)
@@ -437,11 +476,23 @@ export class Document extends Renderable
             }
         };
 
-        for (let key of [AttributeKey.CreationDate, AttributeKey.ChangeDate, AttributeKey.CurrentDate])
+        for (let key of attributeKeys)
         {
-            if (!(key in view))
+            if (dateKeys.includes(key))
             {
                 view[key] = dateResolver(key);
+            }
+            else
+            {
+                switch (key)
+                {
+                    case AttributeKey.Title:
+                        view[key] = this.Title;
+                        break;
+                    case AttributeKey.Author:
+                        view[key] = await Utilities.GetFullName();
+                        break;
+                }
             }
         }
 

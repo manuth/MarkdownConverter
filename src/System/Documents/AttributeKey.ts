@@ -4,6 +4,11 @@
 export enum AttributeKey
 {
     /**
+     * Indicates the title of the document.
+     */
+    Title = "Title",
+
+    /**
      * Indicates the author of the document.
      */
     Author = "Author",
