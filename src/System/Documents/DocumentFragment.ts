@@ -63,15 +63,12 @@ export class DocumentFragment extends Renderable
     }
 
     /**
-     * Renders a text.
-     *
-     * @param text
-     * The text to render.
+     * Renders the component.
      *
      * @returns
      * The rendered text.
      */
-    protected async RenderText(text: string): Promise<string>
+    public async Render(): Promise<string>
     {
         let view: Record<string, unknown> = { ...this.Document.Attributes };
         let tempHelpers: string[] = [];
@@ -142,7 +139,7 @@ export class DocumentFragment extends Renderable
             }
         }
 
-        let result = this.Renderer.compile(text)(view);
+        let result = this.Renderer.compile(this.Content)(view);
 
         for (let key of tempHelpers)
         {

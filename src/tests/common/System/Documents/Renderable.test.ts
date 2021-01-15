@@ -18,46 +18,23 @@ export function RenderableTests(): void
                 /**
                  * @inheritdoc
                  *
-                 * @param text
-                 * The text to render.
-                 *
                  * @returns
                  * The rendered text.
                  */
-                public async RenderText(text: string): Promise<string>
+                public async Render(): Promise<string>
                 {
-                    return text;
-                }
-
-                /**
-                 * Renders a text using a custom renderer.
-                 *
-                 * @param renderer
-                 * The renderer to render the text.
-                 *
-                 * @param text
-                 * The text to render.
-                 *
-                 * @returns
-                 * The rendered text.
-                 */
-                public async RenderTextBy(renderer: Renderable, text: string): Promise<string>
-                {
-                    return super.RenderTextBy(renderer, text);
+                    return this.Content;
                 }
             }
 
             let verifier: string;
-            let otherVerifier: string;
             let text: string;
             let renderer: TestRenderable;
-            let otherRenderer: Renderable;
 
             suiteSetup(
                 () =>
                 {
                     verifier = "rendered: ";
-                    otherVerifier = "other rendered: ";
                     text = "hello world";
 
                     renderer = new class extends TestRenderable
@@ -65,32 +42,12 @@ export function RenderableTests(): void
                         /**
                          * @inheritdoc
                          *
-                         * @param text
-                         * The text to render.
-                         *
                          * @returns
                          * The rendered text.
                          */
-                        public async RenderText(text: string): Promise<string>
+                        public async Render(): Promise<string>
                         {
-                            return verifier + text;
-                        }
-                    }(text);
-
-                    otherRenderer = new class extends TestRenderable
-                    {
-                        /**
-                         * @inheritdoc
-                         *
-                         * @param text
-                         * The text to render.
-                         *
-                         * @returns
-                         * The rendered text.
-                         */
-                        public async RenderText(text: string): Promise<string>
-                        {
-                            return otherVerifier + text;
+                            return verifier + this.Content;
                         }
                     }(text);
                 });
@@ -115,22 +72,10 @@ export function RenderableTests(): void
                 () =>
                 {
                     test(
-                        "Checking whether text can be renderer…",
+                        "Checking whether text can be rendered…",
                         async () =>
                         {
                             strictEqual(await renderer.Render(), verifier + text);
-                        });
-                });
-
-            suite(
-                "RenderTextBy",
-                () =>
-                {
-                    test(
-                        "Checking whether text can be rendered by another Renderable…",
-                        async () =>
-                        {
-                            strictEqual(await renderer.RenderTextBy(otherRenderer, renderer.Content), otherVerifier + text);
                         });
                 });
         });

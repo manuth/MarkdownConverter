@@ -428,20 +428,4 @@ export class Document extends Renderable
 
         return this.Body.Renderer.compile(this.Template)(view);
     }
-
-    /**
-     * Renders content of the document.
-     *
-     * @param content
-     * The content which is to be rendered.
-     *
-     * @returns
-     * The rendered text.
-     */
-    protected async RenderText(content: string): Promise<string>
-    {
-        let body = new DocumentFragment(this);
-        body.Content = content;
-        return this.parser.render(await body.Render());
-    }
 }

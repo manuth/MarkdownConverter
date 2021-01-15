@@ -71,7 +71,7 @@ export function DocumentFragmentTests(): void
                 });
 
             suite(
-                "RenderText",
+                "Render",
                 () =>
                 {
                     let content: string;
