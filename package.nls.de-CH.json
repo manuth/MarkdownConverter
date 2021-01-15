@@ -61,6 +61,8 @@
     "Config.Document.Paper.Margin.Left.Description": "Der Abstand zum linken Rand.  \nErlaubte Masseinheiten sind: `mm`, `cm`, `in`, `px`. Keine Masseinheit bedeutet `px`",
     "Config.Document.HeaderFooterEnabled": "Kopf- und Fusszeilen aktivieren",
     "Config.Document.HeaderFooterEnabled.Description": "Diese Option definiert, ob Kopf- und Fusszeilen zum Dokument hinzugefügt werden sollen.\n\n***Note:*** \nScript-tags werden in Kopf- und Fusszeilen nicht unterstützt.",
+    "Config.Document.MetaTemplate": "Metadaten-Vorlage",
+    "Config.Document.MetaTemplate.Description": "Der Inhalt der Metadaten oder der Pfad zur Metadaten-Vorlage.",
     "Config.Document.HeaderTemplate": "Kopfzeilen-Vorlage",
     "Config.Document.HeaderTemplate.Description": "Der Inhalt der Kopfzeile oder der Pfad zur Kopfzeilen-Vorlage.  \nDie Seiten-Nummer oder die Anzahl der Seiten können mit Hilfe der dafür vorgesehenen CSS-Klassen `pageNumber` und `totalPages` eingefügt werden.",
     "Config.Document.FooterTemplate": "Fusszeile",

@@ -61,6 +61,8 @@
     "Config.Document.Paper.Margin.Left.Description": "The left margin.  \nValid units are: `mm`, `cm`, `in`, `px`. No unit means `px`",
     "Config.Document.HeaderFooterEnabled": "Enable Headers and Footers",
     "Config.Document.HeaderFooterEnabled.Description": "This option enables the rendering of headers and footers.\n\nNote:\nScript-tags are not supported inside the header and the footer.",
+    "Config.Document.MetaTemplate": "Metadata-Template",
+    "Config.Document.MetaTemplate.Description": "The content of the metadata-section or the path to the metadata-template.",
     "Config.Document.HeaderTemplate": "Header-Template",
     "Config.Document.HeaderTemplate.Description": "The content of the header or the path to the header-template.  \nYou can insert the page-number and the total amount of pages by using the CSS-classes `pageNumber` and `totalPages`.",
     "Config.Document.FooterTemplate": "Footer",

@@ -225,6 +225,7 @@ export class ConversionRunner
     {
         let dateFormatKey = "DateFormat";
         let converter = new Converter(documentRoot, new Document(document, await this.LoadParser()));
+        let metaTemplate = converter.Document.Attributes["MetaTemplate"] as string ?? Settings.Default.MetaTemplate;
         let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string ?? Settings.Default.HeaderTemplate;
         let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string ?? Settings.Default.FooterTemplate;
         converter.Document.Quality = Settings.Default.ConversionQuality;
@@ -246,6 +247,7 @@ export class ConversionRunner
         }
 
         converter.Document.Paper = Settings.Default.PaperFormat;
+        converter.Document.Meta.Content = await converter.LoadFragment(metaTemplate) ?? converter.Document.Meta.Content;
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
         converter.Document.Header.Content = await converter.LoadFragment(headerTemplate) ?? converter.Document.Header.Content;
         converter.Document.Footer.Content = await converter.LoadFragment(footerTemplate) ?? converter.Document.Footer.Content;

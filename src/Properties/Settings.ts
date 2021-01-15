@@ -186,6 +186,14 @@ export class Settings
     }
 
     /**
+     * Gets the metadata-section of the document.
+     */
+    public get MetaTemplate(): string
+    {
+        return this.GetConfigEntry("Document.MetaTemplate");
+    }
+
+    /**
      * Gets a value indicating whether default styles should be included.
      */
     public get DefaultStylesEnabled(): boolean

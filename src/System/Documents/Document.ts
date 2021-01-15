@@ -77,6 +77,11 @@ export class Document extends Renderable
     private footer: DocumentFragment = new DocumentFragment(this);
 
     /**
+     * The metadata-section of the document.
+     */
+    private meta: DocumentFragment = new DocumentFragment(this);
+
+    /**
      * The template to use for the RenderBody-process.
      */
     private template: string = dedent(`
@@ -84,6 +89,7 @@ export class Document extends Renderable
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+                {{{meta}}}
                 {{{styles}}}
             </head>
             <body class="markdown-body">
@@ -122,6 +128,7 @@ export class Document extends Renderable
         this.RawContent = document.getText();
         this.fileName = document.isUntitled ? null : document.fileName;
         this.parser = parser;
+        this.Meta.Content = "";
     }
 
     /**
@@ -290,6 +297,14 @@ export class Document extends Renderable
     }
 
     /**
+     * Gets the metadata-section of the document.
+     */
+    public get Meta(): DocumentFragment
+    {
+        return this.meta;
+    }
+
+    /**
      * Gets or sets the template to use for the RenderBody-process.
      */
     public get Template(): string
@@ -379,6 +394,7 @@ export class Document extends Renderable
         }
 
         let view = {
+            meta: await this.Meta.Render(),
             styles: styleCode,
             scripts: scriptCode,
             content: await this.RenderText(this.Content)
