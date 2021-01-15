@@ -46,6 +46,14 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                     testFile.Dispose();
                                 });
 
+                            setup(
+                                () =>
+                                {
+                                    context.Settings.ConversionType = [
+                                        "PDF"
+                                    ];
+                                });
+
                             test(
                                 "Checking whether the user is prompted to specify the ${workspaceFolder}-path if the file is untitled and no workspace is opened…",
                                 async function()
