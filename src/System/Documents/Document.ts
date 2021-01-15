@@ -471,7 +471,7 @@ export class Document extends Renderable
     {
         if (format !== null)
         {
-            format = format ?? this.DefaultDateFormat;
+            format ??= this.DefaultDateFormat;
         }
 
         if (format)
