@@ -52,7 +52,7 @@ export abstract class Asset
             schemeIncluded = false;
         }
 
-        if (schemeIncluded || !isAbsolute(this.Path))
+        if (!isAbsolute(this.Path) && schemeIncluded)
         {
             return this.GetReferenceSource();
         }
@@ -64,8 +64,6 @@ export abstract class Asset
         {
             throw new FileException(null, this.Path);
         }
-
-        return "";
     }
 
     /**
