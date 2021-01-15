@@ -496,11 +496,6 @@ export class Document extends Renderable
             }
         }
 
-        if (!(AttributeKey.Author in view))
-        {
-            view[AttributeKey.Author] = await Utilities.GetFullName();
-        }
-
         for (let key in view)
         {
             let value = view[key];
