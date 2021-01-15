@@ -56,5 +56,5 @@ export abstract class Task<TExtension extends Extension = Extension>
      * @param cancellationToken
      * A component for handling cancellation-requests.
      */
-    public abstract async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken): Promise<void>;
+    public abstract Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken): Promise<void>;
 }

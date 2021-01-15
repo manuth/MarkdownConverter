@@ -10,7 +10,9 @@ import { Utilities } from "../../Utilities";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { YAMLException } from "../YAML/YAMLException";
 import { Asset } from "./Assets/Asset";
+import { AttributeKey } from "./AttributeKey";
 import { DocumentFragment } from "./DocumentFragment";
+import { HelperKey } from "./HelperKey";
 import { Paper } from "./Paper";
 import { Renderable } from "./Renderable";
 
@@ -345,7 +347,7 @@ export class Document extends Renderable
             this.renderer = Handlebars.create();
 
             this.Renderer.registerHelper(
-                "FormatDate",
+                HelperKey.FormatDate,
                 (value: any, format: string) =>
                 {
                     return this.FormatDate(value, format);
@@ -400,10 +402,6 @@ export class Document extends Renderable
     {
         let view: Record<string, unknown> = { ...this.Attributes };
         let tempHelpers: string[] = [];
-        let creationDateKey = "CreationDate";
-        let changeDateKey = "ChangeDate";
-        let currentDateKey = "CurrentDate";
-        let authorKey = "Author";
 
         let dateResolver = (key: string): Date =>
         {
@@ -411,9 +409,9 @@ export class Document extends Renderable
             {
                 switch (key)
                 {
-                    case creationDateKey:
+                    case AttributeKey.CreationDate:
                         return statSync(this.FileName).birthtime;
-                    case changeDateKey:
+                    case AttributeKey.ChangeDate:
                         return statSync(this.FileName).mtime;
                     default:
                         return new Date();
@@ -425,7 +423,7 @@ export class Document extends Renderable
             }
         };
 
-        for (let key of [creationDateKey, changeDateKey, currentDateKey])
+        for (let key of [AttributeKey.CreationDate, AttributeKey.ChangeDate, AttributeKey.CurrentDate])
         {
             if (!(key in view))
             {
@@ -433,9 +431,9 @@ export class Document extends Renderable
             }
         }
 
-        if (!(authorKey in view))
+        if (!(AttributeKey.Author in view))
         {
-            view[authorKey] = await Utilities.GetFullName();
+            view[AttributeKey.Author] = await Utilities.GetFullName();
         }
 
         for (let key in view)

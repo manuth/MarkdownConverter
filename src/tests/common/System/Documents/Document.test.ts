@@ -9,7 +9,9 @@ import { TextDocument, workspace } from "vscode";
 import { stringify } from "yamljs";
 import { StyleSheet } from "../../../../System/Documents/Assets/StyleSheet";
 import { WebScript } from "../../../../System/Documents/Assets/WebScript";
+import { AttributeKey } from "../../../../System/Documents/AttributeKey";
 import { Document } from "../../../../System/Documents/Document";
+import { HelperKey } from "../../../../System/Documents/HelperKey";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
 /**
@@ -174,9 +176,9 @@ export function DocumentTests(): void
                         async () =>
                         {
                             document.DefaultDateFormat = null;
-                            document.Content = "{{CreationDate}}";
+                            document.Content = `{{${AttributeKey.CreationDate}}}`;
                             strictEqual(load(await document.Render())("body").text().trim(), `${(await stat(document.FileName)).birthtime}`);
-                            document.Content = "{{ChangeDate}}";
+                            document.Content = `{{${AttributeKey.ChangeDate}}}`;
                             strictEqual(load(await document.Render())("body").text().trim(), `${(await stat(document.FileName)).mtime}`);
                         });
 
@@ -276,7 +278,7 @@ export function DocumentTests(): void
                             let testDate = new Date();
                             let testFormat = "M";
                             document.DefaultDateFormat = "d";
-                            document.Content = `{{ FormatDate ${dateKey} ${JSON.stringify(testFormat)} }}`;
+                            document.Content = `{{ ${HelperKey.FormatDate} ${dateKey} ${JSON.stringify(testFormat)} }}`;
                             document.Attributes[dateKey] = testDate;
                             strictEqual(load(await document.Render())("body").text().trim(), `${testDate.getMonth() + 1}`);
                         });

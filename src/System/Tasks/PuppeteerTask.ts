@@ -67,5 +67,5 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
      * @param fileReporter
      * A component for reporting converted files.
      */
-    protected abstract async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>;
+    protected abstract ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>;
 }

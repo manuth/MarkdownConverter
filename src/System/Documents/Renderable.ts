@@ -72,5 +72,5 @@ export abstract class Renderable
      * @returns
      * The rendered text.
      */
-    protected abstract async RenderText(text: string): Promise<string>;
+    protected abstract RenderText(text: string): Promise<string>;
 }
