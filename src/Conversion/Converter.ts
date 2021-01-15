@@ -129,9 +129,10 @@ export class Converter
      */
     protected get WebDocumentName(): string
     {
-        return ((this.Document.FileName && this.DocumentRoot) ?
-            relative(this.DocumentRoot, this.Document.FileName) :
-            "index") + ".html";
+        return (
+            (this.Document.FileName && this.DocumentRoot) ?
+                relative(this.DocumentRoot, this.Document.FileName) :
+                "index") + ".html";
     }
 
     /**
