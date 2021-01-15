@@ -151,7 +151,7 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the name of the file represented by this document.
+     * Gets the name of the file represented by this document.
      */
     public get FileName(): string
     {
