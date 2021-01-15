@@ -58,6 +58,11 @@ export class Document extends Renderable
     private paper: Paper = new Paper();
 
     /**
+     * The body of the document.
+     */
+    private body: DocumentFragment = new DocumentFragment(this);
+
+    /**
      * A value indicating whether headers and footers are enabled.
      */
     private headerFooterEnabled = false;
@@ -157,6 +162,14 @@ export class Document extends Renderable
     }
 
     /**
+     * Gets the body of the document.
+     */
+    protected get Body(): DocumentFragment
+    {
+        return this.body;
+    }
+
+    /**
      * Gets or sets the raw version of the content.
      */
     public get RawContent(): string
@@ -183,6 +196,22 @@ export class Document extends Renderable
         {
             throw new YAMLException(exception);
         }
+    }
+
+    /**
+     * Gets or sets the content of the component.
+     */
+    public get Content(): string
+    {
+        return this.Body.Content;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public set Content(value: string)
+    {
+        this.Body.Content = value;
     }
 
     /**
@@ -394,10 +423,10 @@ export class Document extends Renderable
             meta: await this.Meta.Render(),
             styles: styleCode,
             scripts: scriptCode,
-            content: await this.RenderText(this.Content)
+            content: await this.Body.Render()
         };
 
-        return new DocumentFragment(this).Renderer.compile(this.Template)(view);
+        return this.Body.Renderer.compile(this.Template)(view);
     }
 
     /**
