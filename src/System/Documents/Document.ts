@@ -378,12 +378,10 @@ export class Document extends Renderable
             scriptCode += script.ToString();
         }
 
-        let content = this.Content;
-
         let view = {
             styles: styleCode,
             scripts: scriptCode,
-            content: await this.RenderText(content)
+            content: await this.RenderText(this.Content)
         };
 
         return this.Renderer.compile(this.Template)(view);
@@ -445,8 +443,6 @@ export class Document extends Renderable
                 tempHelpers.push(key);
                 this.Renderer.registerHelper(key, () => this.FormatDate(value as Date, this.DefaultDateFormat));
             }
-
-            view[key] = value;
         }
 
         let renderedContent = this.Renderer.compile(content)(view);
