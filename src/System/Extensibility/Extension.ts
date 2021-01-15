@@ -3,7 +3,7 @@ import { CultureInfo } from "@manuth/resource-manager";
 import MarkdownIt = require("markdown-it");
 import format = require("string-template");
 import { dirname } from "upath";
-import { commands, env, ProgressLocation, Uri, ViewColumn, window, workspace } from "vscode";
+import { commands, env, ProgressLocation, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";
 
@@ -144,7 +144,11 @@ export class Extension
         if (!this.VSCodeParser)
         {
             await window.showTextDocument(
-                await workspace.openTextDocument(Uri.parse("untitled:.md")),
+                await workspace.openTextDocument(
+                    {
+                        language: "md",
+                        content: ""
+                    }),
                 {
                     viewColumn: ViewColumn.Beside,
                     preview: true
