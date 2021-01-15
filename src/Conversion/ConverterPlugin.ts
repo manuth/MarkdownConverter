@@ -1,6 +1,7 @@
 import { Browser, launch } from "puppeteer-core";
 import { join, parse } from "upath";
 import { encode } from "utf8";
+import { Settings } from "../Properties/Settings";
 import { Converter } from "./Converter";
 
 /**
@@ -65,7 +66,9 @@ export class ConverterPlugin
         registerAction("beforeStart",
             async ({ options }) =>
             {
-                let browserArguments = ["--disable-web-security"];
+                let browserArguments: string[] = [
+                    ...Settings.Default.ChromiumArgs
+                ];
 
                 try
                 {
@@ -76,7 +79,10 @@ export class ConverterPlugin
                 catch
                 {
                     browser = await launch({
-                        args: browserArguments.concat(["--no-sandbox"])
+                        args: [
+                            ...browserArguments,
+                            "--no-sandbox"
+                        ]
                     });
                 }
 
