@@ -165,6 +165,10 @@ export class Converter
         }
         else
         {
+            let browserArguments: string[] = [
+                ...Settings.Default.ChromiumArgs
+            ];
+
             progressReporter?.report(
                 {
                     message: Resources.Resources.Get("Progress.LaunchWebserver")
@@ -211,8 +215,6 @@ export class Converter
 
             this.webServer.listen(this.portNumber, "localhost");
 
-            let browserArguments = ["--disable-web-security"];
-
             progressReporter?.report(
                 {
                     message: Resources.Resources.Get("Progress.LaunchChromium")
@@ -223,8 +225,7 @@ export class Converter
                 this.browser = await launch(
                     {
                         args: [
-                            ...browserArguments,
-                            ...Settings.Default.ChromiumArgs
+                            ...browserArguments
                         ]
                     });
             }
@@ -234,7 +235,6 @@ export class Converter
                     {
                         args: [
                             ...browserArguments,
-                            ...Settings.Default.ChromiumArgs,
                             "--no-sandbox"
                         ]
                     });
