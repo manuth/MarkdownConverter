@@ -2,18 +2,13 @@ import { parse } from "path";
 import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
-import { statSync } from "fs-extra";
-import Handlebars = require("handlebars");
 import MarkdownIt = require("markdown-it");
 import { TextDocument } from "vscode";
 import { stringify } from "yamljs";
-import { Utilities } from "../../Utilities";
-import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
 import { YAMLException } from "../YAML/YAMLException";
 import { Asset } from "./Assets/Asset";
 import { AttributeKey } from "./AttributeKey";
 import { DocumentFragment } from "./DocumentFragment";
-import { HelperKey } from "./HelperKey";
 import { Paper } from "./Paper";
 import { Renderable } from "./Renderable";
 
@@ -41,11 +36,6 @@ export class Document extends Renderable
      * The attributes of the document.
      */
     private attributes: { [key: string]: any } = {};
-
-    /**
-     * A component for rendering the document.
-     */
-    private renderer: typeof Handlebars = null;
 
     /**
      * The format to print the date.
@@ -380,26 +370,6 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets a component for rendering the document.
-     */
-    protected get Renderer(): typeof Handlebars
-    {
-        if (this.renderer === null)
-        {
-            this.renderer = Handlebars.create();
-
-            this.Renderer.registerHelper(
-                HelperKey.FormatDate,
-                (value: any, format: string) =>
-                {
-                    return this.FormatDate(value, format);
-                });
-        }
-
-        return this.renderer;
-    }
-
-    /**
      * Renders the body of the document.
      *
      * @returns
@@ -427,7 +397,7 @@ export class Document extends Renderable
             content: await this.RenderText(this.Content)
         };
 
-        return this.Renderer.compile(this.Template)(view);
+        return new DocumentFragment(this).Renderer.compile(this.Template)(view);
     }
 
     /**
@@ -441,110 +411,8 @@ export class Document extends Renderable
      */
     protected async RenderText(content: string): Promise<string>
     {
-        let view: Record<string, unknown> = { ...this.Attributes };
-        let tempHelpers: string[] = [];
-
-        let dateKeys = [
-            AttributeKey.CreationDate,
-            AttributeKey.ChangeDate,
-            AttributeKey.CurrentDate
-        ];
-
-        let attributeKeys = [
-            ...dateKeys,
-            AttributeKey.Title,
-            AttributeKey.Author
-        ];
-
-        let dateResolver = (key: string): Date =>
-        {
-            if (this.FileName)
-            {
-                switch (key)
-                {
-                    case AttributeKey.CreationDate:
-                        return statSync(this.FileName).birthtime;
-                    case AttributeKey.ChangeDate:
-                        return statSync(this.FileName).mtime;
-                    default:
-                        return new Date();
-                }
-            }
-            else
-            {
-                return new Date();
-            }
-        };
-
-        for (let key of attributeKeys)
-        {
-            if (dateKeys.includes(key))
-            {
-                view[key] = dateResolver(key);
-            }
-            else
-            {
-                switch (key)
-                {
-                    case AttributeKey.Title:
-                        view[key] = this.Title;
-                        break;
-                    case AttributeKey.Author:
-                        view[key] = await Utilities.GetFullName();
-                        break;
-                }
-            }
-        }
-
-        for (let key in view)
-        {
-            let value = view[key];
-
-            if (value instanceof Date)
-            {
-                tempHelpers.push(key);
-                this.Renderer.registerHelper(key, () => this.FormatDate(value as Date, this.DefaultDateFormat));
-            }
-        }
-
-        let renderedContent = this.Renderer.compile(content)(view);
-
-        for (let key of tempHelpers)
-        {
-            this.Renderer.unregisterHelper(key);
-        }
-
-        return this.parser.render(renderedContent);
-    }
-
-    /**
-     * Formats the specified date-`value`.
-     *
-     * @param value
-     * The date to format.
-     *
-     * @param format
-     * The format to apply.
-     *
-     * @returns
-     * The formatted date.
-     */
-    protected FormatDate(value: string | Date, format?: string): string
-    {
-        if (format !== null)
-        {
-            format ??= this.DefaultDateFormat;
-        }
-
-        if (format)
-        {
-            return new DateTimeFormatter(this.Locale).Format(
-                (format in this.DateFormats) ? this.DateFormats[format] : format,
-                new Date(value));
-        }
-        else
-        {
-            return value.toString();
-        }
+        let body = new DocumentFragment(this);
+        body.Content = content;
+        return this.parser.render(await body.Render());
     }
 }
