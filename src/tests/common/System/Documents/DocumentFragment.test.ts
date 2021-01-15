@@ -59,7 +59,7 @@ export function DocumentFragmentTests(): void
                 });
 
             suite(
-                "constructorW",
+                "constructor",
                 () =>
                 {
                     test(
