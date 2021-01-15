@@ -1,6 +1,6 @@
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempDirectory } from "@manuth/temp-files";
-import { pathExists, readFile } from "fs-extra";
+import { readFile } from "fs-extra";
 import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
@@ -225,8 +225,8 @@ export class ConversionRunner
     {
         let dateFormatKey = "DateFormat";
         let converter = new Converter(documentRoot, new Document(document, await this.LoadParser()));
-        let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string;
-        let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string;
+        let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string ?? Settings.Default.HeaderTemplate;
+        let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string ?? Settings.Default.FooterTemplate;
         converter.Document.Quality = Settings.Default.ConversionQuality;
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Locale = new CultureInfo(Settings.Default.Locale);
@@ -247,28 +247,8 @@ export class ConversionRunner
 
         converter.Document.Paper = Settings.Default.PaperFormat;
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
-
-        if (
-            headerTemplate &&
-            await pathExists(resolve(converter.DocumentRoot, headerTemplate)))
-        {
-            converter.Document.Header.Content = (await readFile(headerTemplate)).toString();
-        }
-        else
-        {
-            converter.Document.Header.Content = Settings.Default.HeaderTemplate;
-        }
-
-        if (
-            footerTemplate &&
-            await pathExists(resolve(converter.DocumentRoot, footerTemplate)))
-        {
-            converter.Document.Footer.Content = (await readFile(footerTemplate)).toString();
-        }
-        else
-        {
-            converter.Document.Footer.Content = Settings.Default.FooterTemplate;
-        }
+        converter.Document.Header.Content = await converter.LoadFragment(headerTemplate) ?? converter.Document.Header.Content;
+        converter.Document.Footer.Content = await converter.LoadFragment(footerTemplate) ?? converter.Document.Footer.Content;
 
         try
         {

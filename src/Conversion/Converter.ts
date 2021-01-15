@@ -2,7 +2,7 @@ import { createServer, Server } from "http";
 import { resolve } from "url";
 import { promisify } from "util";
 import { TempDirectory } from "@manuth/temp-files";
-import { ensureDir, move, pathExists, remove, writeFile } from "fs-extra";
+import { ensureDir, move, pathExists, readFile, remove, writeFile } from "fs-extra";
 import getPort = require("get-port");
 import { glob } from "glob";
 import { Browser, launch, PDFOptions, ScreenshotOptions } from "puppeteer-core";
@@ -430,6 +430,32 @@ export class Converter
                     }
                     break;
             }
+        }
+    }
+
+    /**
+     * Loads the content of a fragment.
+     *
+     * @param source
+     * Either the path to a file to load the source from or the source of the fragment.
+     *
+     * @returns
+     * The content of the fragment.
+     */
+    public async LoadFragment(source: string): Promise<string>
+    {
+        let fileName: string;
+
+        if (
+            source &&
+            await pathExists(
+                (fileName = resolve(this.DocumentRoot, source))))
+        {
+            return (await readFile(fileName)).toString();
+        }
+        else
+        {
+            return source;
         }
     }
 }
