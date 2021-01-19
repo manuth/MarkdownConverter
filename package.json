@@ -60,7 +60,7 @@
     "get-port": "^5.1.1",
     "glob": "^7.1.6",
     "handlebars": "^4.7.6",
-    "highlight.js": "^10.2.1",
+    "highlight.js": "^10.4.1",
     "highlightjs": "^9.12.0",
     "lodash.clonedeep": "^4.5.0",
     "markdown-it": "^11.0.1",
