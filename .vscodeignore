@@ -124,6 +124,8 @@ tsconfig.*.json
 
 # Unit-Tests and debug-files
 [Ll]ib/!(index.js)
+[Ll]ib/test/
+[Ll]ib/tests/
 
 # Unused node-modules
 node_modules/!(highlightjs)
