@@ -26,7 +26,7 @@ export function ChainTaskTests(): void
                 /**
                  * @inheritdoc
                  */
-                public async ExecuteTask(): Promise<void>
+                public override async ExecuteTask(): Promise<void>
                 {
                     return super.ExecuteTask();
                 }
@@ -77,7 +77,7 @@ export function ChainTaskTests(): void
 
                             RenameTester = async () =>
                             {
-                                let renameTask = new Promise(
+                                let renameTask = new Promise<void>(
                                     (resolve) =>
                                     {
                                         inputBoxResolver = resolve;

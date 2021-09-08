@@ -35,7 +35,7 @@ export function ConverterTests(): void
                 /**
                  * @inheritdoc
                  */
-                public get WebServer(): Server
+                public override get WebServer(): Server
                 {
                     return super.WebServer;
                 }
@@ -43,7 +43,7 @@ export function ConverterTests(): void
                 /**
                  * @inheritdoc
                  */
-                public get Browser(): Browser
+                public override get Browser(): Browser
                 {
                     return super.Browser;
                 }

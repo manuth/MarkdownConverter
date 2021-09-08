@@ -34,7 +34,7 @@ export class FileException extends IOException
     /**
      * @inheritdoc
      */
-    public get Message(): string
+    public override get Message(): string
     {
         return super.Message || format(Resources.Resources.Get("FileException"), this.Path);
     }

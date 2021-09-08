@@ -20,7 +20,7 @@ export class OperationCancelledException extends Exception
     /**
      * @inheritdoc
      */
-    public get Message(): string
+    public override get Message(): string
     {
         return super.Message || Resources.Resources.Get("OperationCancelledException");
     }

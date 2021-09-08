@@ -99,7 +99,7 @@ export class MarkdownConverterExtension extends Extension
      * @returns
      * The extension-body.
      */
-    public async Activate(): Promise<unknown>
+    public override async Activate(): Promise<unknown>
     {
         this.Context.subscriptions.push(
             commands.registerCommand("markdownConverter.Convert", async () => this.ExecuteTask(new ConvertTask(this))),
@@ -115,7 +115,7 @@ export class MarkdownConverterExtension extends Extension
      * @param task
      * The task to execute.
      */
-    protected async ExecuteTaskInternal(task: PuppeteerTask): Promise<void>
+    protected override async ExecuteTaskInternal(task: PuppeteerTask): Promise<void>
     {
         try
         {

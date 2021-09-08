@@ -94,7 +94,7 @@ export class YAMLException extends Exception
     /**
      * @inheritdoc
      */
-    public get Message(): string
+    public override get Message(): string
     {
         return super.Message || format(Resources.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
     }

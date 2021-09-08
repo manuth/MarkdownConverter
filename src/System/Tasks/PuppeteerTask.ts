@@ -26,7 +26,7 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
     /**
      * Gets or sets the extension this task belongs to.
      */
-    public get Extension(): MarkdownConverterExtension
+    public override get Extension(): MarkdownConverterExtension
     {
         return super.Extension;
     }

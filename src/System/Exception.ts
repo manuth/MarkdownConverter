@@ -65,7 +65,7 @@ export class Exception extends Error
     /**
      * @inheritdoc
      */
-    public get message(): string
+    public override get message(): string
     {
         return this.Message;
     }
@@ -84,7 +84,7 @@ export class Exception extends Error
      * @returns
      * A string representing this object.
      */
-    public toString(): string
+    public override toString(): string
     {
         return this.Message;
     }

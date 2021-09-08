@@ -37,7 +37,7 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
                          * @returns
                          * The best matching markdown-document.
                          */
-                        public GetMarkdownDocument(): TextDocument
+                        public override GetMarkdownDocument(): TextDocument
                         {
                             return super.GetMarkdownDocument();
                         }

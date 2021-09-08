@@ -36,7 +36,7 @@ export class ConvertAllTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    public get Cancellable(): boolean
+    public override get Cancellable(): boolean
     {
         return true;
     }
@@ -53,7 +53,7 @@ export class ConvertAllTask extends ConversionTask
      * @param fileReporter
      * A component for reporting converted files.
      */
-    public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
+    public override async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         if ((await this.GetDocuments()).length === 0)
         {

@@ -29,7 +29,7 @@ export class ChainTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    public get Title(): string
+    public override get Title(): string
     {
         return Resources.Resources.Get<string>("TaskTitle.Chain");
     }
@@ -37,7 +37,7 @@ export class ChainTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    public get Cancellable(): boolean
+    public override get Cancellable(): boolean
     {
         return false;
     }
@@ -54,7 +54,7 @@ export class ChainTask extends ConvertAllTask
      * @param fileReporter
      * A component for reporting converted files.
      */
-    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
+    protected override async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         let document: TextDocument;
         let documentName: string;

@@ -117,7 +117,7 @@
     "rimraf": "^3.0.2",
     "ts-loader": "^8.0.5",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.3",
+    "typescript": "^4.4.2",
     "vsce": "^1.81.1",
     "vscode-test": "^1.4.0",
     "webpack": "^5.1.0",

@@ -45,7 +45,7 @@ export function RenderableTests(): void
                          * @returns
                          * The rendered text.
                          */
-                        public async Render(): Promise<string>
+                        public override async Render(): Promise<string>
                         {
                             return verifier + this.Content;
                         }

@@ -201,7 +201,7 @@ export class Document extends Renderable
     /**
      * Gets or sets the content of the component.
      */
-    public get Content(): string
+    public override get Content(): string
     {
         return this.Body.Content;
     }
@@ -209,7 +209,7 @@ export class Document extends Renderable
     /**
      * @inheritdoc
      */
-    public set Content(value: string)
+    public override set Content(value: string)
     {
         this.Body.Content = value;
     }

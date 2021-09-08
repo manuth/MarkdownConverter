@@ -12,7 +12,7 @@ export class TestConvertAllTask extends ConvertAllTask
      * @returns
      * All markdown-documents of the workspace.
      */
-    public async GetDocuments(): Promise<TextDocument[]>
+    public override async GetDocuments(): Promise<TextDocument[]>
     {
         return super.GetDocuments();
     }
@@ -20,7 +20,7 @@ export class TestConvertAllTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    public async ExecuteTask(): Promise<void>
+    public override async ExecuteTask(): Promise<void>
     {
         return super.ExecuteTask();
     }
