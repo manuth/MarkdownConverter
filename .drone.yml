@@ -41,13 +41,13 @@ steps:
       event:
         - tag
   - name: prepare release notes
-    image: ubuntu
+    image: alpine
     commands:
       - export TagName=$$(cat TagName.txt)
       - export TagHeading="/## \(.* \($${TagName}\|[$${TagName}]\)\)\$/"
       - export HeadingPattern='/## \(.* \(v[0-9.]*\|\[.*\]\)\)/'
       - cp -f CHANGELOG.md ReleaseNotes.md
-      - sed -i "0,$${TagHeading}{ $${TagHeading}P ; d } ; $${HeadingPattern},\$d" ReleaseNotes.md
+      - sed -i "1,$${TagHeading}{ $${TagHeading}P ; d } ; $${HeadingPattern},\$d" ReleaseNotes.md
       - cp -f ReleaseNotes.md ReleaseTitle.md
       - sed -i "2,\$d ; s$${HeadingPattern}\\\\1/" ReleaseTitle.md
     when:
