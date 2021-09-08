@@ -9,32 +9,51 @@ steps:
       - npm install --unsafe-perm
   - name: build
     image: node
+    depends_on:
+      - install
     commands:
       - npm run build-debug
   - name: lint
     image: node
+    depends_on:
+      - install
     commands:
       - npm run lint
   - name: test
     image: manuth/vscode-test-runner
+    depends_on:
+      - build
     commands:
       - xvfb-run npm run test -- --disable-gpu --headless
+  - name: create extension
+    image: node
+    depends_on:
+      - lint
+      - test
+    commands:
+      - npx vsce package --no-yarn
+    when:
+      event:
+        - tag
   - name: publish extension
     image: node:lts
+    depends_on:
+      - create extension
     environment:
       ACCESS_TOKEN:
         from_secret: azure_token
     commands:
-    - npx vsce publish --no-yarn --pat $ACCESS_TOKEN
+      - npx vsce publish --no-yarn --pat $ACCESS_TOKEN
     when:
       event:
-      - tag
+        - tag
       ref:
         - refs/tags/v[0-9]*.[0-9]*.[0-9]*
   - name: prepare release
     image: node:lts
+    depends_on:
+      - create extension
     commands:
-      - npx vsce package --no-yarn
       - npm install @stdlib/utils-escape-regexp-string --no-save
       - node -e "console.log(require('@stdlib/utils-escape-regexp-string')('${DRONE_TAG}'))" > .tagName.txt
     when:
@@ -42,6 +61,8 @@ steps:
         - tag
   - name: prepare release notes
     image: alpine
+    depends_on:
+      - prepare release
     commands:
       - export TagName=$$(cat .tagName.txt)
       - export TagHeading="/## \(.* \($${TagName}\|\[$${TagName}\]\)\)\$/"
@@ -55,6 +76,8 @@ steps:
         - tag
   - name: publish release
     image: plugins/github-release
+    depends_on:
+      - prepare release notes
     commands: []
     settings:
       api_key:
