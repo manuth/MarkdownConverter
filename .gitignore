@@ -117,3 +117,8 @@ dist
 
 # Local Chromium Instance
 .local-chromium
+
+# Temporary release-assets
+.tagName.txt
+.releaseNotes.md
+.releaseTitle.md
