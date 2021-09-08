@@ -35,8 +35,8 @@ steps:
     image: node:lts
     commands:
       - npx vsce package --no-yarn
-      - npm install escape-string-regexp --no-save
-      - node -e "console.log(require('escape-string-regexp')('${DRONE_TAG}'))" > TagName.txt
+      - npm install @stdlib/utils-escape-regexp-string --no-save
+      - node -e "console.log(require('@stdlib/utils-escape-regexp-string')('${DRONE_TAG}'))" > TagName.txt
     when:
       event:
         - tag
@@ -44,7 +44,7 @@ steps:
     image: alpine
     commands:
       - export TagName=$$(cat TagName.txt)
-      - export TagHeading="/## \(.* \($${TagName}\|[$${TagName}]\)\)\$/"
+      - export TagHeading="/## \(.* \($${TagName}\|\[$${TagName}\]\)\)\$/"
       - export HeadingPattern='/## \(.* \(v[0-9.]*\|\[.*\]\)\)/'
       - cp -f CHANGELOG.md ReleaseNotes.md
       - sed -i "1,$${TagHeading}{ $${TagHeading}P ; d } ; $${HeadingPattern},\$d" ReleaseNotes.md
