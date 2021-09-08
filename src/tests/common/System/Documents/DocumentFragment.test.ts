@@ -5,7 +5,7 @@ import { load } from "cheerio";
 import { stat, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import { TextDocument, workspace } from "vscode";
-import { stringify } from "yamljs";
+import YAML = require("yamljs");
 import { AttributeKey } from "../../../../System/Documents/AttributeKey";
 import { Document } from "../../../../System/Documents/Document";
 import { DocumentFragment } from "../../../../System/Documents/DocumentFragment";
@@ -39,7 +39,7 @@ export function DocumentFragmentTests(): void
                         date: new Date("1291-08-01")
                     };
 
-                    let rawContent = `---\n${stringify(attributes).trim()}\n---\n${content}`;
+                    let rawContent = `---\n${YAML.stringify(attributes).trim()}\n---\n${content}`;
                     await writeFile(tempFile.FullName, rawContent);
                     textDocument = await workspace.openTextDocument(tempFile.FullName);
                 });

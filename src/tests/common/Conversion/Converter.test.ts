@@ -3,7 +3,7 @@ import { Server } from "http";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
-import { Browser, launch, Page } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import { changeExt } from "upath";
 import { TextDocument, workspace } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
@@ -43,7 +43,7 @@ export function ConverterTests(): void
                 /**
                  * @inheritdoc
                  */
-                public override get Browser(): Browser
+                public override get Browser(): puppeteer.Browser
                 {
                     return super.Browser;
                 }
@@ -153,13 +153,13 @@ export function ConverterTests(): void
                 "URL",
                 () =>
                 {
-                    let browser: Browser;
-                    let page: Page;
+                    let browser: puppeteer.Browser;
+                    let page: puppeteer.Page;
 
                     suiteSetup(
                         async () =>
                         {
-                            browser = await launch(
+                            browser = await puppeteer.launch(
                                 {
                                     args: [
                                         "--no-sandbox"
@@ -260,7 +260,7 @@ export function ConverterTests(): void
                 "Dispose",
                 () =>
                 {
-                    let browser: Browser;
+                    let browser: puppeteer.Browser;
                     let webServer: Server;
 
                     setup(

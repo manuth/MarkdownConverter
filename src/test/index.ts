@@ -1,7 +1,7 @@
 import { pathExists } from "fs-extra";
 import minimist = require("minimist");
 import Mocha = require("mocha");
-import { createBrowserFetcher, executablePath } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import { resolve } from "upath";
 import { extensions } from "vscode";
 import { Extension } from "../System/Extensibility/Extension";
@@ -46,9 +46,9 @@ export async function run(): Promise<void>
 
             try
             {
-                if (!await pathExists(executablePath()))
+                if (!await pathExists(puppeteer.executablePath()))
                 {
-                    await createBrowserFetcher().download(TestConstants.Extension.ChromiumRevision);
+                    await puppeteer.createBrowserFetcher().download(TestConstants.Extension.ChromiumRevision);
                 }
 
                 mocha.run(

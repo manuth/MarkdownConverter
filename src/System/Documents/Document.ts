@@ -4,7 +4,7 @@ import dedent = require("dedent");
 import fm = require("front-matter");
 import MarkdownIt = require("markdown-it");
 import { TextDocument } from "vscode";
-import { stringify } from "yamljs";
+import YAML = require("yamljs");
 import { YAMLException } from "../YAML/YAMLException";
 import { Asset } from "./Assets/Asset";
 import { AttributeKey } from "./AttributeKey";
@@ -176,7 +176,7 @@ export class Document extends Renderable
     {
         return (
             "---\n" +
-            stringify(this.Attributes).trim() + "\n" +
+            YAML.stringify(this.Attributes).trim() + "\n" +
             "---\n" +
             this.Content);
     }

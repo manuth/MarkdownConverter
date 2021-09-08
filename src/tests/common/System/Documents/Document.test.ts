@@ -6,7 +6,7 @@ import { writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import { Random } from "random-js";
 import { TextDocument, workspace } from "vscode";
-import { stringify } from "yamljs";
+import YAML = require("yamljs");
 import { StyleSheet } from "../../../../System/Documents/Assets/StyleSheet";
 import { WebScript } from "../../../../System/Documents/Assets/WebScript";
 import { AttributeKey } from "../../../../System/Documents/AttributeKey";
@@ -43,7 +43,7 @@ export function DocumentTests(): void
                         date: new Date("1291-08-01")
                     };
 
-                    rawContent = `---\n${stringify(attributes).trim()}\n---\n${content}`;
+                    rawContent = `---\n${YAML.stringify(attributes).trim()}\n---\n${content}`;
 
                     tempFile = new TempFile(
                         {
@@ -152,7 +152,7 @@ export function DocumentTests(): void
                         "Checking whether the raw content is parsed correctly…",
                         () =>
                         {
-                            document.RawContent = `---\n${stringify(attributes)}---\n${content}`;
+                            document.RawContent = `---\n${YAML.stringify(attributes)}---\n${content}`;
                             strictEqual(document.Content, content);
 
                             for (let key of Object.keys(attributes))

@@ -1,4 +1,4 @@
-import { Browser, launch } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import { join, parse } from "upath";
 import { encode } from "utf8";
 import { Settings } from "../Properties/Settings";
@@ -58,7 +58,7 @@ export class ConverterPlugin
      */
     public apply(registerAction: (name: string, callback: (options: any) => any) => void): void
     {
-        let browser: Browser;
+        let browser: puppeteer.Browser;
         let occupiedFilenames: string[];
         let subdirectories: { [extension: string]: string };
         let defaultFilename: string;
@@ -72,13 +72,13 @@ export class ConverterPlugin
 
                 try
                 {
-                    browser = await launch({
+                    browser = await puppeteer.launch({
                         args: browserArguments
                     });
                 }
                 catch
                 {
-                    browser = await launch({
+                    browser = await puppeteer.launch({
                         args: [
                             ...browserArguments,
                             "--no-sandbox"

@@ -1,7 +1,7 @@
 import { rejects } from "assert";
 import { pathExists, rename } from "fs-extra";
 import pkgUp = require("pkg-up");
-import { executablePath } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import { basename, dirname, join, resolve } from "upath";
 import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask";
 import { TestConstants } from "../../../TestConstants";
@@ -42,11 +42,11 @@ export function PuppeteerTaskTests(): void
             suiteSetup(
                 async () =>
                 {
-                    let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: executablePath() }));
+                    let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: puppeteer.executablePath() }));
                     puppeteerPath = resolve(puppeteerProjectRoot, ".local-chromium");
                     tempPuppeteerPath = join(dirname(puppeteerPath), basename(puppeteerPath) + "_");
 
-                    if (await pathExists(executablePath()))
+                    if (await pathExists(puppeteer.executablePath()))
                     {
                         await rename(puppeteerPath, tempPuppeteerPath);
                         moved = true;

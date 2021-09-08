@@ -5,7 +5,7 @@ import { TempDirectory } from "@manuth/temp-files";
 import { ensureDir, move, pathExists, readFile, remove, writeFile } from "fs-extra";
 import getPort = require("get-port");
 import { glob } from "glob";
-import { Browser, launch, PDFOptions, ScreenshotOptions } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import serveHandler = require("serve-handler");
 import { basename, dirname, join, normalize, relative } from "upath";
 import { CancellationToken, Progress } from "vscode";
@@ -47,7 +47,7 @@ export class Converter
     /**
      * The browser which is used to perform the conversion.
      */
-    private browser: Browser;
+    private browser: puppeteer.Browser;
 
     /**
      * A value indicating whether the converter has been initialized.
@@ -146,7 +146,7 @@ export class Converter
     /**
      * Gets the browser which is used to perform the conversion.
      */
-    protected get Browser(): Browser
+    protected get Browser(): puppeteer.Browser
     {
         return this.Initialized ? this.browser : null;
     }
@@ -222,7 +222,7 @@ export class Converter
 
             try
             {
-                this.browser = await launch(
+                this.browser = await puppeteer.launch(
                     {
                         args: [
                             ...browserArguments
@@ -231,7 +231,7 @@ export class Converter
             }
             catch
             {
-                this.browser = await launch(
+                this.browser = await puppeteer.launch(
                     {
                         args: [
                             ...browserArguments,
@@ -364,7 +364,7 @@ export class Converter
                                         }
                                     </style>`;
 
-                                let pdfOptions: PDFOptions = {
+                                let pdfOptions: puppeteer.PDFOptions = {
                                     margin: {
                                         top: this.Document.Paper.Margin.Top,
                                         right: this.Document.Paper.Margin.Right,
@@ -392,7 +392,7 @@ export class Converter
                                 await page.pdf(pdfOptions);
                                 break;
                             default:
-                                let screenshotOptions: ScreenshotOptions = {
+                                let screenshotOptions: puppeteer.ScreenshotOptions = {
                                     fullPage: true,
                                     path
                                 };
