@@ -31,7 +31,7 @@ steps:
       - lint
       - test
     commands:
-      - npx vsce package --no-yarn
+      - npx vsce package
     when:
       event:
         - tag
@@ -43,7 +43,7 @@ steps:
       ACCESS_TOKEN:
         from_secret: azure_token
     commands:
-      - npx vsce publish --no-yarn --pat $ACCESS_TOKEN
+      - npx vsce publish --pat $ACCESS_TOKEN
     when:
       event:
         - tag
