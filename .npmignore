@@ -149,3 +149,8 @@ node_modules/highlightjs/!(styles)
 
 # Webpack configuration
 webpack.config.ts
+
+# Temporary release-assets
+.tagName.txt
+.releaseNotes.md
+.releaseTitle.md
