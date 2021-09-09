@@ -9,6 +9,7 @@ import { YAMLException } from "../YAML/YAMLException";
 import { Asset } from "./Assets/Asset";
 import { AttributeKey } from "./AttributeKey";
 import { DocumentFragment } from "./DocumentFragment";
+import { MarkdownFragment } from "./MarkdownFragment";
 import { Paper } from "./Paper";
 import { Renderable } from "./Renderable";
 
@@ -60,7 +61,7 @@ export class Document extends Renderable
     /**
      * The body of the document.
      */
-    private body: DocumentFragment = new DocumentFragment(this);
+    private body: DocumentFragment = new MarkdownFragment(this);
 
     /**
      * A value indicating whether headers and footers are enabled.
@@ -396,6 +397,14 @@ export class Document extends Renderable
     public set Scripts(value: Asset[])
     {
         this.scripts = value;
+    }
+
+    /**
+     * Gets the parser of the document.
+     */
+    public get Parser(): MarkdownIt
+    {
+        return this.parser;
     }
 
     /**
