@@ -1,5 +1,5 @@
 # MarkdownConverter
-A markdown-converter for [Visual Studio Code][VSCode]
+A markdown-converter for [vscode][vscode]
 
 ## What's `MarkdownConverter`?
 > MarkdownConverter is a Visual Studio Code-extension which allows you to export your Markdown-file as PDF-, HTML or Image-files.  
@@ -127,5 +127,5 @@ This is a list of the most important settings. To see all of them, install the e
     A set of stylesheets to include in your document.
 
 <!--- References -->
-[VSCode]: https://code.visualstudio.com/
+[vscode]: https://github.com/microsoft/vscode
 [Handlebars]: https://handlebarsjs.com/
