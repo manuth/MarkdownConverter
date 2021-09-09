@@ -3,13 +3,13 @@ import { env } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { ISettings } from "../../../Properties/ISettings";
 import { Settings } from "../../../Properties/Settings";
-import { CustomPaperFormat } from "../../../System/Documents/CustomPaperFormat";
+import { CustomPageFormat } from "../../../System/Documents/CustomPageFormat";
 import { EmojiType } from "../../../System/Documents/EmojiType";
 import { ListType } from "../../../System/Documents/ListType";
 import { Margin } from "../../../System/Documents/Margin";
-import { PaperOrientation } from "../../../System/Documents/PaperOrientation";
+import { PageOrientation } from "../../../System/Documents/PageOrientation";
 import { StandardizedFormatType } from "../../../System/Documents/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../../../System/Documents/StandardizedPaperFormat";
+import { StandardizedPageFormat } from "../../../System/Documents/StandardizedPageFormat";
 import { ITestContext } from "../../ITestContext";
 
 /**
@@ -135,8 +135,8 @@ export function SettingTests(context: ITestContext<ISettings>): void
                             };
 
                             context.Settings["Document.Paper.PaperFormat"] = customFormat;
-                            let paperFormat = settings.PaperFormat.Format as CustomPaperFormat;
-                            ok(settings.PaperFormat.Format instanceof CustomPaperFormat);
+                            let paperFormat = settings.PaperFormat.Format as CustomPageFormat;
+                            ok(settings.PaperFormat.Format instanceof CustomPageFormat);
                             strictEqual(paperFormat.Width, customFormat.Width);
                             strictEqual(paperFormat.Height, customFormat.Height);
                             checkMargin(settings.PaperFormat.Margin);
@@ -150,13 +150,13 @@ export function SettingTests(context: ITestContext<ISettings>): void
                                 Width: undefined as string,
                                 Height: undefined as string,
                                 Format: "A5" as keyof typeof StandardizedFormatType,
-                                Orientation: "Landscape" as keyof typeof PaperOrientation
+                                Orientation: "Landscape" as keyof typeof PageOrientation
                             };
 
-                            let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
-                            ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
+                            let paperFormat = settings.PaperFormat.Format as StandardizedPageFormat;
+                            ok(settings.PaperFormat.Format instanceof StandardizedPageFormat);
                             strictEqual(paperFormat.Format, StandardizedFormatType.A5);
-                            strictEqual(paperFormat.Orientation, PaperOrientation.Landscape);
+                            strictEqual(paperFormat.Orientation, PageOrientation.Landscape);
                             checkMargin(settings.PaperFormat.Margin);
                         });
 
@@ -165,10 +165,10 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             context.Clear();
-                            let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
-                            ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
+                            let paperFormat = settings.PaperFormat.Format as StandardizedPageFormat;
+                            ok(settings.PaperFormat.Format instanceof StandardizedPageFormat);
                             strictEqual(paperFormat.Format, StandardizedFormatType.A4);
-                            strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
+                            strictEqual(paperFormat.Orientation, PageOrientation.Portrait);
                             checkMargin(settings.PaperFormat.Margin);
                         });
                 });

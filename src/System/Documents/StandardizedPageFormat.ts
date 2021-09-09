@@ -1,33 +1,33 @@
 import { PDFFormat, PDFOptions } from "puppeteer-core";
-import { PaperFormat } from "./PaperFormat";
-import { PaperOrientation } from "./PaperOrientation";
+import { PageFormat } from "./PageFormat";
+import { PageOrientation } from "./PageOrientation";
 import { StandardizedFormatType } from "./StandardizedFormatType";
 
 /**
- * Represents a standardized format of a paper.
+ * Represents a standardized format of a page.
  */
-export class StandardizedPaperFormat extends PaperFormat
+export class StandardizedPageFormat extends PageFormat
 {
     /**
-     * The format of the paper.
+     * The format of the page.
      */
     private format: StandardizedFormatType;
 
     /**
      * The orientation of the paper.
      */
-    private orientation: PaperOrientation;
+    private orientation: PageOrientation;
 
     /**
-     * Initializes a new instance of the `StandardizedPaperFormat` class.
+     * Initializes a new instance of the `StandardizedPageFormat` class.
      *
      * @param format
-     * The orientation of the paper.
+     * The orientation of the page.
      *
      * @param orientation
-     * The orientation of the paper.
+     * The orientation of the page.
      */
-    public constructor(format: StandardizedFormatType = StandardizedFormatType.A4, orientation: PaperOrientation = PaperOrientation.Portrait)
+    public constructor(format: StandardizedFormatType = StandardizedFormatType.A4, orientation: PageOrientation = PageOrientation.Portrait)
     {
         super();
         this.format = format;
@@ -35,7 +35,7 @@ export class StandardizedPaperFormat extends PaperFormat
     }
 
     /**
-     * Gets or sets the format of the paper.
+     * Gets or sets the format of the page.
      */
     public get Format(): StandardizedFormatType
     {
@@ -51,9 +51,9 @@ export class StandardizedPaperFormat extends PaperFormat
     }
 
     /**
-     * Gets or sets the orientation of the paper.
+     * Gets or sets the orientation of the page.
      */
-    public get Orientation(): PaperOrientation
+    public get Orientation(): PageOrientation
     {
         return this.orientation;
     }
@@ -61,7 +61,7 @@ export class StandardizedPaperFormat extends PaperFormat
     /**
      * @inheritdoc
      */
-    public set Orientation(value: PaperOrientation)
+    public set Orientation(value: PageOrientation)
     {
         this.orientation = value;
     }
@@ -73,7 +73,7 @@ export class StandardizedPaperFormat extends PaperFormat
     {
         return {
             format: StandardizedFormatType[this.Format] as PDFFormat,
-            landscape: this.Orientation === PaperOrientation.Landscape
+            landscape: this.Orientation === PageOrientation.Landscape
         };
     }
 }

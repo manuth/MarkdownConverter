@@ -1,14 +1,14 @@
 import { MultiRange } from "multi-integer-range";
 import { env, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType";
-import { CustomPaperFormat } from "../System/Documents/CustomPaperFormat";
+import { CustomPageFormat } from "../System/Documents/CustomPageFormat";
 import { EmojiType } from "../System/Documents/EmojiType";
 import { ListType } from "../System/Documents/ListType";
 import { Margin } from "../System/Documents/Margin";
+import { PageOrientation } from "../System/Documents/PageOrientation";
 import { Paper } from "../System/Documents/Paper";
-import { PaperOrientation } from "../System/Documents/PaperOrientation";
 import { StandardizedFormatType } from "../System/Documents/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../System/Documents/StandardizedPaperFormat";
+import { StandardizedPageFormat } from "../System/Documents/StandardizedPageFormat";
 import { TocSettings } from "../System/Documents/TocSettings";
 
 /**
@@ -138,13 +138,13 @@ export class Settings
             this.config.has(widthKey) &&
             this.config.has(heightKey))
         {
-            paper.Format = new CustomPaperFormat(this.GetConfigEntry(widthKey), this.GetConfigEntry(heightKey));
+            paper.Format = new CustomPageFormat(this.GetConfigEntry(widthKey), this.GetConfigEntry(heightKey));
         }
         else
         {
-            let format = new StandardizedPaperFormat();
+            let format = new StandardizedPageFormat();
             format.Format = StandardizedFormatType[this.GetConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`)];
-            format.Orientation = PaperOrientation[this.GetConfigEntry<keyof typeof PaperOrientation>(`${formatKey}.Orientation`, PaperOrientation[PaperOrientation.Portrait] as any)];
+            format.Orientation = PageOrientation[this.GetConfigEntry<keyof typeof PageOrientation>(`${formatKey}.Orientation`, PageOrientation[PageOrientation.Portrait] as any)];
             paper.Format = format;
         }
 

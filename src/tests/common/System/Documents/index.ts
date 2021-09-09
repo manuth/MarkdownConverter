@@ -1,4 +1,4 @@
-import { CustomPaperFormatTests } from "./CustomPaperFormat.test";
+import { CustomPaperFormatTests } from "./CustomPageFormat.test";
 import { DocumentTests as DocumentClassTests } from "./Document.test";
 import { DocumentFragmentTests } from "./DocumentFragment.test";
 import { MarginTests } from "./Margin.test";

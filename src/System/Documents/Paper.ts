@@ -1,6 +1,6 @@
 import { Margin } from "./Margin";
-import { PaperFormat } from "./PaperFormat";
-import { StandardizedPaperFormat } from "./StandardizedPaperFormat";
+import { PageFormat } from "./PageFormat";
+import { StandardizedPageFormat } from "./StandardizedPageFormat";
 
 /**
  * Represents a document-layout.
@@ -15,7 +15,7 @@ export class Paper
     /**
      * The format of the paper.
      */
-    private format: PaperFormat = new StandardizedPaperFormat();
+    private format: PageFormat = new StandardizedPageFormat();
 
     /**
      * Initializes a new instance of the `Paper` class.
@@ -26,7 +26,7 @@ export class Paper
      * @param margin
      * Either the margin of the paper or `null` to use a default margin.
      */
-    public constructor(format?: PaperFormat, margin?: Margin)
+    public constructor(format?: PageFormat, margin?: Margin)
     {
         if (format)
         {
@@ -58,7 +58,7 @@ export class Paper
     /**
      * Gets or sets the format of the paper.
      */
-    public get Format(): PaperFormat
+    public get Format(): PageFormat
     {
         return this.format;
     }
@@ -66,7 +66,7 @@ export class Paper
     /**
      * @inheritdoc
      */
-    public set Format(value: PaperFormat)
+    public set Format(value: PageFormat)
     {
         this.format = value;
     }

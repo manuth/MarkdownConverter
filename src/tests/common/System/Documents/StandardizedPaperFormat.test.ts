@@ -1,7 +1,7 @@
 import { strictEqual } from "assert";
-import { PaperOrientation } from "../../../../System/Documents/PaperOrientation";
+import { PageOrientation } from "../../../../System/Documents/PageOrientation";
 import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../../../../System/Documents/StandardizedPaperFormat";
+import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat";
 
 /**
  * Registers tests for the `StandardizedPaperFormat` class.
@@ -13,20 +13,20 @@ export function StandardizedPaperFormatTests(): void
         () =>
         {
             let format: StandardizedFormatType;
-            let orientation: PaperOrientation;
-            let paperFormat: StandardizedPaperFormat;
+            let orientation: PageOrientation;
+            let paperFormat: StandardizedPageFormat;
 
             suiteSetup(
                 () =>
                 {
                     format = StandardizedFormatType.A3;
-                    orientation = PaperOrientation.Portrait;
+                    orientation = PageOrientation.Portrait;
                 });
 
             setup(
                 () =>
                 {
-                    paperFormat = new StandardizedPaperFormat(format, orientation);
+                    paperFormat = new StandardizedPageFormat(format, orientation);
                 });
 
             suite(
@@ -37,13 +37,13 @@ export function StandardizedPaperFormatTests(): void
                         "Checking whether the values are set correctly…",
                         () =>
                         {
-                            let paperFormat = new StandardizedPaperFormat();
+                            let paperFormat = new StandardizedPageFormat();
                             strictEqual(paperFormat.Format, StandardizedFormatType.A4);
-                            strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
-                            paperFormat = new StandardizedPaperFormat(format);
+                            strictEqual(paperFormat.Orientation, PageOrientation.Portrait);
+                            paperFormat = new StandardizedPageFormat(format);
                             strictEqual(paperFormat.Format, format);
-                            strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
-                            paperFormat = new StandardizedPaperFormat(format, orientation);
+                            strictEqual(paperFormat.Orientation, PageOrientation.Portrait);
+                            paperFormat = new StandardizedPageFormat(format, orientation);
                             strictEqual(paperFormat.Format, format);
                             strictEqual(paperFormat.Orientation, orientation);
                         });

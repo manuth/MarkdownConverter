@@ -1,18 +1,18 @@
 import { strictEqual } from "assert";
-import { CustomPaperFormat } from "../../../../System/Documents/CustomPaperFormat";
+import { CustomPageFormat } from "../../../../System/Documents/CustomPageFormat";
 
 /**
- * Registers tests for the `CustomPaperFormat` class.
+ * Registers tests for the `CustomPageFormat` class.
  */
 export function CustomPaperFormatTests(): void
 {
     suite(
-        "CustomPaperFormat",
+        "CustomPageFormat",
         () =>
         {
             let width: string;
             let height: string;
-            let format: CustomPaperFormat;
+            let format: CustomPageFormat;
 
             suiteSetup(
                 () =>
@@ -24,7 +24,7 @@ export function CustomPaperFormatTests(): void
             setup(
                 () =>
                 {
-                    format = new CustomPaperFormat(width, height);
+                    format = new CustomPageFormat(width, height);
                 });
 
             suite(

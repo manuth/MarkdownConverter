@@ -12,9 +12,9 @@ import { Converter } from "../../../../Conversion/Converter";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
 import { ISettings } from "../../../../Properties/ISettings";
 import { Margin } from "../../../../System/Documents/Margin";
-import { PaperOrientation } from "../../../../System/Documents/PaperOrientation";
+import { PageOrientation } from "../../../../System/Documents/PageOrientation";
 import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../../../../System/Documents/StandardizedPaperFormat";
+import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
@@ -297,9 +297,9 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             let testFormatName = "year";
                             let testFormat = "yyyy";
 
-                            let paperFormat: Partial<StandardizedPaperFormat> = {
+                            let paperFormat: Partial<StandardizedPageFormat> = {
                                 Format: StandardizedFormatType.Tabloid,
-                                Orientation: PaperOrientation.Landscape
+                                Orientation: PageOrientation.Landscape
                             };
 
                             let margin: Partial<Margin> = {
@@ -327,7 +327,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                             context.Settings["Document.Paper.PaperFormat"] = {
                                 Format: StandardizedFormatType[paperFormat.Format] as any,
-                                Orientation: PaperOrientation[paperFormat.Orientation] as any
+                                Orientation: PageOrientation[paperFormat.Orientation] as any
                             };
 
                             context.Settings["Document.Paper.Margin"] = margin;
@@ -349,8 +349,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             strictEqual(converter.Document.Locale.Name, locale);
                             strictEqual(converter.Document.DefaultDateFormat, dateFormat);
                             strictEqual(converter.Document.DateFormats[testFormatName], testFormat);
-                            strictEqual((converter.Document.Paper.Format as StandardizedPaperFormat).Format, paperFormat.Format);
-                            strictEqual((converter.Document.Paper.Format as StandardizedPaperFormat).Orientation, paperFormat.Orientation);
+                            strictEqual((converter.Document.Paper.Format as StandardizedPageFormat).Format, paperFormat.Format);
+                            strictEqual((converter.Document.Paper.Format as StandardizedPageFormat).Orientation, paperFormat.Orientation);
 
                             for (let key of Object.keys(margin) as Array<keyof typeof margin>)
                             {
