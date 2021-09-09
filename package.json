@@ -48,7 +48,8 @@
     "lint": "npm run lint-base -- --ext .js,.jsx,.ts,.tsx .eslintrc.js webpack.config.ts ./src",
     "lint-ide": "npm run lint || exit 0",
     "test": "node ./lib/test/runTests",
-    "prepare": "npm run rebuild"
+    "prepare": "npm run patchTypeScript && npm run rebuild",
+    "patchTypeScript": "ts-patch install && ts-patch --persist"
   },
   "dependencies": {
     "@manuth/package-json-editor": "^1.4.2",
@@ -101,6 +102,7 @@
     "@types/serve-handler": "^6.1.0",
     "@types/string-template": "^1.0.2",
     "@types/transliteration": "^1.6.1",
+    "@types/ts-nameof": "^4.2.1",
     "@types/twemoji": "^12.1.1",
     "@types/utf8": "^2.1.6",
     "@types/vscode": "^1.50.0",
@@ -116,7 +118,9 @@
     "random-js": "^2.1.0",
     "rimraf": "^3.0.2",
     "ts-loader": "^8.0.5",
+    "ts-nameof": "^5.0.0",
     "ts-node": "^9.0.0",
+    "ts-patch": "^1.4.4",
     "typescript": "^4.4.2",
     "vsce": "^1.81.1",
     "vscode-test": "^1.4.0",
