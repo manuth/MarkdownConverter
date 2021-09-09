@@ -35,10 +35,24 @@ steps:
     when:
       event:
         - tag
-  - name: publish extension
+  - name: publish extension to ovsx marketplace
     image: node
     depends_on:
       - create extension
+    environment:
+      ACCESS_TOKEN:
+        from_secret: ovsx_token
+    commands:
+      - npx ovsx publish --pat $ACCESS_TOKEN
+    when:
+      event:
+        - tag
+      ref:
+        - refs/tags/v[0-9]*.[0-9]*.[0-9]*
+  - name: publish extension to vscode marketplace
+    image: node
+    depends_on:
+      - publish extension to ovsx marketplace
     environment:
       ACCESS_TOKEN:
         from_secret: azure_token
