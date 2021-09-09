@@ -51,18 +51,26 @@ export async function run(): Promise<void>
                     await puppeteer.createBrowserFetcher().download(TestConstants.Extension.ChromiumRevision);
                 }
 
-                mocha.run(
-                    (failures) =>
-                    {
-                        if (failures > 0)
+                try
+                {
+                    mocha.run(
+                        (failures) =>
                         {
-                            reject(new Error(`${failures} test${failures > 1 ? "s" : ""} failed.`));
-                        }
-                        else
-                        {
-                            solve();
-                        }
-                    });
+                            if (failures > 0)
+                            {
+                                reject(new Error(`${failures} test${failures > 1 ? "s" : ""} failed.`));
+                            }
+                            else
+                            {
+                                solve();
+                            }
+                        });
+                }
+                catch (exception)
+                {
+                    console.error(exception);
+                    reject(exception);
+                }
             }
             catch (exception)
             {
