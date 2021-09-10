@@ -16,6 +16,14 @@
                 "type": "raw"
             }
         ],
-        "target": "ES6"
+        "target": "ES6",
+        "paths": {
+            "markdown-it-anchor": [
+                "./node_modules/@types/markdown-it-anchor"
+            ],
+            "highlight.js": [
+                "./node_modules/@types/highlight.js"
+            ]
+        }
     }
 }
