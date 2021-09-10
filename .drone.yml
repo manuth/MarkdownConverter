@@ -24,7 +24,7 @@ steps:
     depends_on:
       - build
     commands:
-      - xvfb-run npm run test -- --disable-gpu --headless
+      - xvfb-run npm run test
   - name: create extension
     image: node
     depends_on:
