@@ -30,8 +30,7 @@ export function ConverterPluginTests(): void
             suiteSetup(
                 async function()
                 {
-                    this.slow(0.85 * 1000);
-                    this.timeout(3.4 * 1000);
+                    this.timeout(10 * 1000);
 
                     let parser = new MarkdownIt(
                         {
