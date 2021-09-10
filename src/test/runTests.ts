@@ -8,6 +8,7 @@ import { TestOptions } from "vscode-test/out/runTest";
 (async function main()
 {
     let sandbox = createSandbox();
+    let errorMessageCount = 0;
     let environmentPath = resolve(__dirname, "..", "..", "src", "test");
     let commonArgs = process.argv.slice(2);
     let singleFolderPath = resolve(environmentPath, "single-folder");
@@ -41,6 +42,10 @@ import { TestOptions } from "vscode-test/out/runTest";
                 if (!/^\[\d*:\d*\/\d*\.\d*:ERROR:.*\(\d*\)\]/.test(message))
                 {
                     method(message, ...optionalParams);
+                }
+                else
+                {
+                    errorMessageCount++;
                 }
             });
     }
@@ -121,5 +126,7 @@ import { TestOptions } from "vscode-test/out/runTest";
         {
             await remove(tempSettingsPath);
         }
+
+        console.log(`Filtered ${errorMessageCount} unnecessary error-message${errorMessageCount === 1 ? "" : "s"}`);
     }
 })();
