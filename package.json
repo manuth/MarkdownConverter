@@ -123,9 +123,9 @@
     "ts-node": "^10.2.1",
     "ts-patch": "^1.4.4",
     "typescript": "^4.4.2",
-    "vsce": "^1.97.0",
+    "vsce": "^1.99.0",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.52.0",
+    "webpack": "^5.52.1",
     "webpack-cli": "^4.8.0"
   },
   "displayName": "Markdown Converter",
