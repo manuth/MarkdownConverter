@@ -1,4 +1,4 @@
-import { ObjectResource, Resource } from "@manuth/resource-manager";
+import { Resource } from "@manuth/resource-manager";
 import { workspace } from "vscode";
 import { ConfigurationSection } from "./ConfigurationSection";
 import { ITestContext } from "./ITestContext";
@@ -80,7 +80,7 @@ export class ConfigInterceptor<TSection extends any = any>
      */
     public get SettingManager(): Resource
     {
-        return new ObjectResource(this.Settings);
+        return new Resource(this.Settings);
     }
 
     /**

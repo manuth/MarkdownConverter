@@ -1,4 +1,4 @@
-import { CultureInfo, IResourceManager, MustacheResourceManager, ObjectResource, ResourceManager } from "@manuth/resource-manager";
+import { CultureInfo, IResourceManager, MustacheResourceManager, Resource, ResourceManager } from "@manuth/resource-manager";
 
 /**
  * Represents the resources of the module.
@@ -11,8 +11,8 @@ export class Resources
     private static resources: IResourceManager = new MustacheResourceManager(
         new ResourceManager(
             [
-                new ObjectResource(require("../../Resources/MarkdownConverter.json")),
-                new ObjectResource(require("../../Resources/MarkdownConverter.de.json"), new CultureInfo("de"))
+                new Resource(require("../../Resources/MarkdownConverter.json")),
+                new Resource(require("../../Resources/MarkdownConverter.de.json"), new CultureInfo("de"))
             ]));
 
     /**
@@ -20,7 +20,7 @@ export class Resources
      */
     private static files = new ResourceManager(
         [
-            new ObjectResource(require("./Files"))
+            new Resource(require("./Files"))
         ]);
 
     /**

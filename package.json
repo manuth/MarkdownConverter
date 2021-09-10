@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@manuth/package-json-editor": "^1.4.2",
-    "@manuth/resource-manager": "^1.2.1",
+    "@manuth/resource-manager": "^2.0.2",
     "@manuth/temp-files": "^2.0.0",
     "dedent": "^0.7.0",
     "es6-template-string": "^1.2.0",
