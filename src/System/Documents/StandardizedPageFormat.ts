@@ -1,4 +1,4 @@
-import { PDFFormat, PDFOptions } from "puppeteer-core";
+import { PaperFormat, PDFOptions } from "puppeteer-core";
 import { PageFormat } from "./PageFormat";
 import { PageOrientation } from "./PageOrientation";
 import { StandardizedFormatType } from "./StandardizedFormatType";
@@ -72,7 +72,7 @@ export class StandardizedPageFormat extends PageFormat
     public get PDFOptions(): Partial<PDFOptions>
     {
         return {
-            format: StandardizedFormatType[this.Format] as PDFFormat,
+            format: this.Format as PaperFormat,
             landscape: this.Orientation === PageOrientation.Landscape
         };
     }

@@ -45,7 +45,7 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
      */
     public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
-        if (await pathExists(puppeteer.executablePath()))
+        if (await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
         {
             await this.ExecuteTask(progressReporter, cancellationToken, fileReporter);
         }

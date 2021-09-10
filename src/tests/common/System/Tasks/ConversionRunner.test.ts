@@ -296,11 +296,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             let dateFormat = "yyyy/MM/dd";
                             let testFormatName = "year";
                             let testFormat = "yyyy";
-
-                            let paperFormat: Partial<StandardizedPageFormat> = {
-                                Format: StandardizedFormatType.Tabloid,
-                                Orientation: PageOrientation.Landscape
-                            };
+                            let format = nameof(StandardizedFormatType.Tabloid);
+                            let orientation = nameof(PageOrientation.Landscape);
 
                             let margin: Partial<Margin> = {
                                 Top: "29cm",
@@ -326,8 +323,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             };
 
                             context.Settings["Document.Paper.PaperFormat"] = {
-                                Format: StandardizedFormatType[paperFormat.Format] as any,
-                                Orientation: PageOrientation[paperFormat.Orientation] as any
+                                Format: format,
+                                Orientation: orientation
                             };
 
                             context.Settings["Document.Paper.Margin"] = margin;
@@ -349,8 +346,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             strictEqual(converter.Document.Locale.Name, locale);
                             strictEqual(converter.Document.DefaultDateFormat, dateFormat);
                             strictEqual(converter.Document.DateFormats[testFormatName], testFormat);
-                            strictEqual((converter.Document.Paper.Format as StandardizedPageFormat).Format, paperFormat.Format);
-                            strictEqual((converter.Document.Paper.Format as StandardizedPageFormat).Orientation, paperFormat.Orientation);
+                            strictEqual((converter.Document.Paper.Format as StandardizedPageFormat).Format, StandardizedFormatType[format as keyof typeof StandardizedFormatType]);
+                            strictEqual((converter.Document.Paper.Format as StandardizedPageFormat).Orientation, PageOrientation[orientation as keyof typeof PageOrientation]);
 
                             for (let key of Object.keys(margin) as Array<keyof typeof margin>)
                             {

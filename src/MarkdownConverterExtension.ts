@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 import { Package } from "@manuth/package-json-editor";
 import { mkdirp, pathExists } from "fs-extra";
-import { createBrowserFetcher, executablePath } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
 import format = require("string-template");
 import { join, resolve } from "upath";
@@ -197,7 +197,7 @@ export class MarkdownConverterExtension extends Extension
                                 try
                                 {
                                     let progress = 0;
-                                    let browserFetcher = createBrowserFetcher();
+                                    let browserFetcher = (puppeteer as unknown as puppeteer.PuppeteerNode).createBrowserFetcher({});
 
                                     await browserFetcher.download(
                                         revision,
@@ -227,7 +227,7 @@ export class MarkdownConverterExtension extends Extension
                             }));
                     }
                     while (
-                        !await pathExists(executablePath()) &&
+                        !await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()) &&
                         !success &&
                         await (window.showWarningMessage(
                             Resources.Resources.Get("UpdateFailed"),

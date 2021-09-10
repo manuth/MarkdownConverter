@@ -42,11 +42,11 @@ export function PuppeteerTaskTests(): void
             suiteSetup(
                 async () =>
                 {
-                    let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: puppeteer.executablePath() }));
+                    let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: (puppeteer as unknown as puppeteer.PuppeteerNode).executablePath() }));
                     puppeteerPath = resolve(puppeteerProjectRoot, ".local-chromium");
                     tempPuppeteerPath = join(dirname(puppeteerPath), basename(puppeteerPath) + "_");
 
-                    if (await pathExists(puppeteer.executablePath()))
+                    if (await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
                     {
                         await rename(puppeteerPath, tempPuppeteerPath);
                         moved = true;

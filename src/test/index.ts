@@ -46,9 +46,9 @@ export async function run(): Promise<void>
 
             try
             {
-                if (!await pathExists(puppeteer.executablePath()))
+                if (!await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
                 {
-                    await puppeteer.createBrowserFetcher().download(TestConstants.Extension.ChromiumRevision);
+                    await (puppeteer as unknown as puppeteer.PuppeteerNode).createBrowserFetcher({}).download(TestConstants.Extension.ChromiumRevision);
                 }
 
                 try

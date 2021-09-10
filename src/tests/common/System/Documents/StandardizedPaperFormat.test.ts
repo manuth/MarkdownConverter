@@ -57,7 +57,7 @@ export function StandardizedPaperFormatTests(): void
                         "Checking whether the puppeteer-options are generated correctly…",
                         () =>
                         {
-                            strictEqual(paperFormat.PDFOptions.format, "A3");
+                            strictEqual(paperFormat.PDFOptions.format, StandardizedFormatType.A3);
                             strictEqual(paperFormat.PDFOptions.landscape, false);
                         });
                 });
