@@ -1,11 +1,13 @@
 import { join } from "path";
 import { pathExists, remove } from "fs-extra";
+import { createSandbox } from "sinon";
 import { resolve } from "upath";
 import { runTests } from "vscode-test";
 import { TestOptions } from "vscode-test/out/runTest";
 
 (async function main()
 {
+    let sandbox = createSandbox();
     let environmentPath = resolve(__dirname, "..", "..", "src", "test");
     let commonArgs = process.argv.slice(2);
     let singleFolderPath = resolve(environmentPath, "single-folder");
@@ -19,6 +21,28 @@ import { TestOptions } from "vscode-test/out/runTest";
     if (await pathExists(tempSettingsPath))
     {
         await remove(tempSettingsPath);
+    }
+
+    for (
+        let key of [
+            "log",
+            "error"
+        ] as Array<keyof Console>)
+    {
+        let expectation = sandbox.mock(console).expects(key);
+        expectation.atLeast(0);
+
+        expectation.callsFake(
+            (message: any, ...optionalParams: any[]) =>
+            {
+                let method = expectation.wrappedMethod;
+                method = method.bind(console);
+
+                if (!/^\[\d*:\d*\/\d*\.\d*:ERROR:.*\(\d*\)\]/.test(message))
+                {
+                    method(message, ...optionalParams);
+                }
+            });
     }
 
     try
@@ -91,6 +115,8 @@ import { TestOptions } from "vscode-test/out/runTest";
     }
     finally
     {
+        sandbox.restore();
+
         if (await pathExists(tempSettingsPath))
         {
             await remove(tempSettingsPath);
