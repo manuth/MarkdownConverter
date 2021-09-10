@@ -1,4 +1,5 @@
 import { createServer, Server } from "http";
+import { resolve } from "path";
 import { URL } from "url";
 import { promisify } from "util";
 import { TempDirectory } from "@manuth/temp-files";
@@ -449,7 +450,7 @@ export class Converter
         if (
             source &&
             await pathExists(
-                (fileName = new URL(source, this.DocumentRoot).href)))
+                (fileName = resolve(this.DocumentRoot, source))))
         {
             return (await readFile(fileName)).toString();
         }
