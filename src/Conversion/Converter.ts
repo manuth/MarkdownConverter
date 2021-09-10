@@ -1,5 +1,5 @@
 import { createServer, Server } from "http";
-import { resolve } from "url";
+import { URL } from "url";
 import { promisify } from "util";
 import { TempDirectory } from "@manuth/temp-files";
 import { ensureDir, move, pathExists, readFile, remove, writeFile } from "fs-extra";
@@ -112,7 +112,7 @@ export class Converter
     public get URL(): string
     {
         return this.Initialized ?
-            (resolve(`http://localhost:${this.PortNumber}/`, this.WebDocumentName)) :
+            (new URL(this.WebDocumentName, `http://localhost:${this.PortNumber}/`).href) :
             null;
     }
 
@@ -449,7 +449,7 @@ export class Converter
         if (
             source &&
             await pathExists(
-                (fileName = resolve(this.DocumentRoot, source))))
+                (fileName = new URL(source, this.DocumentRoot).href)))
         {
             return (await readFile(fileName)).toString();
         }
