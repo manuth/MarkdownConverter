@@ -16,7 +16,7 @@
     "Config.DefaultDateFormat": "Datums-Format",
     "Config.DefaultDateFormat.Description": "Die standardmäßige Format-Struktur, mit der Datums-Werte ausgegeben werden sollen.  \nSiehe: <https://msdn.microsoft.com/de-de/library/8kb3ddd4(v=vs.110).aspx>",
     "Config.DateFormats": "Datums-Formate",
-    "Config.DateFormats.Description": "Eine Sammlung von Namen mit dazugehörigen Datums-Formaten.",
+    "Config.DateFormats.Description": "Eine Sammlung von Namen mit dazugehörigen Datums-Formaten.  \nSiehe: <https://msdn.microsoft.com/de-de/library/8kb3ddd4(v=vs.110).aspx>",
     "Config.ChromiumArgs": "Chromium-Arguments",
     "Config.ChromiumArgs.Description": "Befehlszeilen-Argumente, die an Chromium weitergegeben werden sollen.\n\nDiese Funktion kann hilfreich sein, um Argumente wie `--no-sandbox` oder `--disable-gpu` weiterzugeben.",
     "Config.Parser.SystemParserEnabled": "System-Parser",

@@ -16,7 +16,7 @@
     "Config.DefaultDateFormat": "Default Date-Format",
     "Config.DefaultDateFormat.Description": "The default format-pattern or name of a date-format to print dates.  \nSee: <https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx>",
     "Config.DateFormats": "Date-Formats",
-    "Config.DateFormats.Description": "A set of names and and their associated custom date-format.",
+    "Config.DateFormats.Description": "A set of names and and their associated custom date-format.  \nSee: <https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx>",
     "Config.ChromiumArgs": "Chromium-Arguments",
     "Config.ChromiumArgs.Description": "A set of arguments to pass to chromium.\n\nThis feature might be useful if you want to pass arguments such as `--no-sandbox` to chromium.",
     "Config.Parser.SystemParserEnabled": "System-Parser",
