@@ -126,8 +126,8 @@ tsconfig.*.json
 [Ll]ib/tests/
 
 # Unused node-modules
-node_modules/!(highlightjs)
-node_modules/highlightjs/!(styles)
+node_modules/!(highlight.js)
+node_modules/highlight.js/!(styles)
 
 # Visual Studio Code-Environment
 .vscode/

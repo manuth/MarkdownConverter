@@ -38,7 +38,7 @@ class Files
     /**
      * Gets the path to the highlight.js styles-directory.
      */
-    public static HighlightJSStylesDir = join(Constants.PackageDirectory, "node_modules", "highlightjs", "styles");
+    public static HighlightJSStylesDir = join(Constants.PackageDirectory, "node_modules", "highlight.js", "styles");
 }
 
 export = Files;
