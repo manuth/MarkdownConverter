@@ -8,6 +8,7 @@ import getPort = require("get-port");
 import { glob } from "glob";
 import puppeteer = require("puppeteer-core");
 import serveHandler = require("serve-handler");
+import { transliterate } from "transliteration";
 import { basename, dirname, join, normalize, relative } from "upath";
 import { CancellationToken, Progress } from "vscode";
 import websiteScraper = require("website-scraper");
@@ -132,7 +133,7 @@ export class Converter
     {
         return (
             (this.Document.FileName && this.DocumentRoot) ?
-                relative(this.DocumentRoot, this.Document.FileName) :
+                transliterate(relative(this.DocumentRoot, this.Document.FileName)) :
                 "index") + ".html";
     }
 
