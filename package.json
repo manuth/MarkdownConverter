@@ -201,6 +201,7 @@
           "title": "%Config.Locale%",
           "markdownDescription": "%Config.Locale.Description%",
           "default": null,
+          "type": "string",
           "anyOf": [
             {
               "type": "string"
@@ -214,6 +215,7 @@
           "title": "%Config.DefaultDateFormat%",
           "markdownDescription": "%Config.DefaultDateFormat.Description%",
           "default": "Default",
+          "type": "string",
           "anyOf": [
             {
               "type": "string",
@@ -231,11 +233,13 @@
           "title": "%Config.DateFormats%",
           "markdownDescription": "%Config.DateFormats.Description%",
           "default": {},
+          "type": "object",
           "patternProperties": {
             "^.*$": {
               "type": "string"
             }
-          }
+          },
+          "additionalProperties": false
         },
         "markdownConverter.ChromiumArgs": {
           "title": "%Config.ChromiumArgs%",
@@ -304,21 +308,24 @@
           "markdownDescription": "%Config.Document.Attributes.Description%",
           "type": "object",
           "default": null,
-          "additionalProperties": true,
-          "properties": {
-            "Title": {
+          "additionalProperties": false,
+          "patternProperties": {
+            "^Title$": {
               "title": "%Config.Document.Attributes.Title%",
               "markdownDescription": "%Config.Document.Attributes.Title.Description%",
               "type": "string"
             },
-            "Author": {
+            "^Author$": {
               "title": "%Config.Document.Attributes.Author%",
               "markdownDescription": "%Config.Document.Attributes.Author.Description%",
               "type": "string"
             },
-            "Company": {
+            "^Company$": {
               "title": "%Config.Document.Attributes.Company%",
               "markdownDescription": "%Config.Document.Attributes.Company.Description%",
+              "type": "string"
+            },
+            "^.*$": {
               "type": "string"
             }
           }
@@ -327,11 +334,51 @@
           "title": "%Config.Document.Paper.PaperFormat%",
           "markdownDescription": "%Config.Document.Paper.PaperFormat.Description%",
           "type": "object",
-          "default": {
-            "Format": "A4"
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "Format": {
+              "title": "%Config.Document.Paper.PaperFormat.Format%",
+              "markdownDescription": "%Config.Document.Paper.PaperFormat.Format.Description%",
+              "type": "string",
+              "enum": [
+                "A3",
+                "A4",
+                "A5",
+                "Legal",
+                "Letter",
+                "Tabloid"
+              ]
+            },
+            "Orientation": {
+              "title": "%Config.Document.Paper.PaperFormat.Orientation%",
+              "markdownDescription": "%Config.Document.Paper.PaperFormat.Orientation.Description%",
+              "type": "string",
+              "enum": [
+                "Portrait",
+                "Landscape"
+              ]
+            },
+            "Width": {
+              "title": "%Config.Document.Paper.PaperFormat.Width%",
+              "markdownDescription": "%Config.Document.Paper.PaperFormat.Width.Description%",
+              "type": "string",
+              "default": "21cm"
+            },
+            "Height": {
+              "title": "%Config.Document.Paper.PaperFormat.Height%",
+              "markdownDescription": "%Config.Document.Paper.PaperFormat.Height.Description%",
+              "type": "string",
+              "default": "29.7cm"
+            }
           },
           "oneOf": [
             {
+              "type": "object",
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
               "additionalProperties": false,
               "required": [
                 "Format"
@@ -341,6 +388,7 @@
                   "title": "%Config.Document.Paper.PaperFormat.Format%",
                   "markdownDescription": "%Config.Document.Paper.PaperFormat.Format.Description%",
                   "type": "string",
+                  "default": "A4",
                   "enum": [
                     "A3",
                     "A4",
@@ -362,6 +410,7 @@
               }
             },
             {
+              "type": "object",
               "additionalProperties": false,
               "required": [
                 "Width",
@@ -370,11 +419,15 @@
               "properties": {
                 "Width": {
                   "title": "%Config.Document.Paper.PaperFormat.Width%",
-                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Width.Description%"
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Width.Description%",
+                  "type": "string",
+                  "default": "21cm"
                 },
                 "Height": {
                   "title": "%Config.Document.Paper.PaperFormat.Height%",
-                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Height.Description%"
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Height.Description%",
+                  "type": "string",
+                  "default": "29.7cm"
                 }
               }
             }
@@ -428,18 +481,21 @@
           "title": "%Config.Document.HeaderTemplate%",
           "markdownDescription": "%Config.Document.HeaderTemplate.Description%",
           "type": "string",
-          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">{{ Author }}</div><div style=\"text-align: center; \"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right\">{{ Company }}</div>"
+          "editPresentation": "multilineText",
+          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">\n    {{ Author }}\n</div>\n<div style=\"text-align: center; \">\n    <span class=\"pageNumber\"></span>\n    /\n    <span class=\"totalPages\"></span>\n</div>\n<div style=\"margin-left: auto; margin-right: 1cm; text-align: right\">\n    {{ Company }}\n</div>"
         },
         "markdownConverter.Document.FooterTemplate": {
           "title": "%Config.Document.FooterTemplate%",
           "markdownDescription": "%Config.Document.FooterTemplate.Description%",
           "type": "string",
-          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \"></div><div stlyle=\"text-align: center; \">{{ CreationDate }}</div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right; \"></div>"
+          "editPresentation": "multilineText",
+          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">\n</div>\n<div stlyle=\"text-align: center; \">\n    {{ CreationDate }}\n</div>\n<div style=\"margin-left: auto; margin-right: 1cm; text-align: right; \">\n</div>"
         },
         "markdownConverter.Document.MetaTemplate": {
           "title": "%Config.Document.MetaTemplate%",
           "markdownDescription": "%Config.Document.MetaTemplate.Description%",
           "type": "string",
+          "editPresentation": "multilineText",
           "default": null
         },
         "markdownConverter.Document.Design.Template": {
@@ -457,6 +513,7 @@
         "markdownConverter.Document.Design.HighlightStyle": {
           "title": "%Config.Document.Design.HighlightStyle%",
           "markdownDescription": "%Config.Document.Design.HighlightStyle.Description%",
+          "type": "string",
           "default": "Default",
           "anyOf": [
             {
