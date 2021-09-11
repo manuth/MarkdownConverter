@@ -3,9 +3,11 @@ import { resolve } from "path";
 import { URL } from "url";
 import { promisify } from "util";
 import { TempDirectory } from "@manuth/temp-files";
+import dedent = require("dedent");
 import { ensureDir, move, pathExists, readFile, remove, writeFile } from "fs-extra";
 import getPort = require("get-port");
 import { glob } from "glob";
+import MarkdownIt = require("markdown-it");
 import puppeteer = require("puppeteer-core");
 import serveHandler = require("serve-handler");
 import { transliterate } from "transliteration";
@@ -14,6 +16,7 @@ import { CancellationToken, Progress } from "vscode";
 import websiteScraper = require("website-scraper");
 import { Resources } from "../Properties/Resources";
 import { Settings } from "../Properties/Settings";
+import { StyleSheet } from "../System/Documents/Assets/StyleSheet";
 import { Document } from "../System/Documents/Document";
 import { FileException } from "../System/IO/FileException";
 import { OperationCancelledException } from "../System/OperationCancelledException";
@@ -183,10 +186,31 @@ export class Converter
                 {
                     if (normalize(join(this.DocumentRoot, request.url)) === normalize(join(this.DocumentRoot, this.WebDocumentName)))
                     {
-                        let content = await this.Document.Render();
-                        response.writeHead(200);
-                        response.write(content);
-                        response.end();
+                        try
+                        {
+                            let content = await this.Document.Render();
+                            response.writeHead(200);
+                            response.write(content);
+                        }
+                        catch (exception)
+                        {
+                            let errorDocument = new Document(new MarkdownIt());
+                            errorDocument.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle")));
+
+                            errorDocument.Content = dedent(
+                                `
+                                    # An Error Occurred While Converting the Document
+                                    ~~~
+                                    ${exception}
+                                    ~~~`);
+
+                            response.writeHead(500);
+                            response.write(await errorDocument.Render());
+                        }
+                        finally
+                        {
+                            response.end();
+                        }
                     }
                     else
                     {
