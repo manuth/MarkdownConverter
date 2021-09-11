@@ -1,7 +1,7 @@
 import { ok, strictEqual } from "assert";
 import { EOL } from "os";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
-import { load } from "cheerio";
+import { Cheerio, CheerioAPI, load, Node } from "cheerio";
 import dedent = require("dedent");
 import { readFile, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
@@ -89,7 +89,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
              * @returns
              * The result of the selection.
              */
-            async function Select(body: string, selector: string): Promise<cheerio.Cheerio>
+            async function Select(body: string, selector: string): Promise<Cheerio<Node>>
             {
                 return load(body)(selector);
             }
@@ -171,8 +171,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         {
                             this.slow(2.5 * 1000);
                             this.timeout(10 * 1000);
-                            let firstResult: cheerio.Cheerio;
-                            let secondResult: cheerio.Cheerio;
+                            let firstResult: Cheerio<Node>;
+                            let secondResult: Cheerio<Node>;
                             await commands.executeCommand("workbench.action.files.revert");
                             context.Settings[systemParserOption] = false;
                             await config.update(lineBreakOption, true, ConfigurationTarget.Workspace);
@@ -257,7 +257,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         {
                             this.slow(5.5 * 1000);
                             this.timeout(22 * 1000);
-                            let result: cheerio.Root;
+                            let result: CheerioAPI;
                             let content = "**:sparkles:**";
                             context.Settings["Parser.EmojiType"] = "None";
                             result = load((await conversionRunner.LoadParser()).render(content));
