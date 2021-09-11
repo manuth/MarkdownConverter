@@ -53,7 +53,7 @@ export function DocumentFragmentTests(): void
             setup(
                 () =>
                 {
-                    document = new Document(textDocument, new MarkdownIt());
+                    document = new Document(new MarkdownIt(), textDocument);
                     fragment = new DocumentFragment(document);
                 });
 

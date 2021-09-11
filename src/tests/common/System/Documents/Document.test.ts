@@ -71,8 +71,8 @@ export function DocumentTests(): void
             setup(
                 () =>
                 {
-                    document = new Document(textDocument, parser);
-                    untitledDocument = new Document(untitledTextDocument, parser);
+                    document = new Document(parser, textDocument);
+                    untitledDocument = new Document(parser, untitledTextDocument);
                 });
 
             suite(

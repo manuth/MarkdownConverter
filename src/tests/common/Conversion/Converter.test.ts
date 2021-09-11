@@ -69,7 +69,7 @@ export function ConverterTests(): void
 
                     await writeFile(tempFile.FullName, "This is a test");
                     textDocument = await workspace.openTextDocument(tempFile.FullName);
-                    document = new Document(textDocument, parser);
+                    document = new Document(parser, textDocument);
                 });
 
             suiteTeardown(

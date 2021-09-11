@@ -64,8 +64,8 @@ export function ConverterPluginTests(): void
                     converter = new Converter(
                         tempDirectory.FullName,
                         new Document(
-                            await workspace.openTextDocument(mdFile),
-                            parser
+                            parser,
+                            await workspace.openTextDocument(mdFile)
                         ));
 
                     await converter.Initialize();

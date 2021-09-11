@@ -21,7 +21,7 @@ export class Document extends Renderable
     /**
      * The name of the file represented by this document.
      */
-    private fileName: string;
+    private fileName: string = null;
 
     /**
      * The title of the document.
@@ -118,29 +118,37 @@ export class Document extends Renderable
     /**
      * Initializes a new instance of the Document class with a file-path and a configuration.
      *
-     * @param document
-     * The `TextDocument` to load the info from.
-     *
      * @param parser
      * The parser for rendering the document.
+     *
+     * @param document
+     * The `TextDocument` to load the info from.
      */
-    public constructor(document: TextDocument, parser: MarkdownIt)
+    public constructor(parser: MarkdownIt, document?: TextDocument)
     {
         super();
-        this.RawContent = document.getText();
-        this.fileName = document.isUntitled ? null : document.fileName;
-        this.parser = parser;
 
-        if (document.isUntitled)
+        if (document)
         {
-            this.fileName = null;
-            this.title = document.uri.fsPath;
+            this.RawContent = document.getText();
+            this.fileName = document.isUntitled ? null : document.fileName;
+
+            if (document.isUntitled)
+            {
+                this.title = document.uri.fsPath;
+            }
+            else
+            {
+                this.fileName = document.fileName;
+                this.title = parse(this.FileName).name;
+            }
         }
         else
         {
-            this.fileName = document.fileName;
-            this.title = parse(this.FileName).name;
+            this.title = "Untitled";
         }
+
+        this.parser = parser;
 
         this.Meta.Content = dedent(`
             <title>{{{ Title }}}</title>`);

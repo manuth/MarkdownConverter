@@ -224,7 +224,7 @@ export class ConversionRunner
     protected async LoadConverter(documentRoot: string, document: TextDocument): Promise<Converter>
     {
         let dateFormatKey = "DateFormat";
-        let converter = new Converter(documentRoot, new Document(document, await this.LoadParser()));
+        let converter = new Converter(documentRoot, new Document(await this.LoadParser(), document));
         let metaTemplate = converter.Document.Attributes["MetaTemplate"] as string ?? Settings.Default.MetaTemplate;
         let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string ?? Settings.Default.HeaderTemplate;
         let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string ?? Settings.Default.FooterTemplate;
