@@ -50,7 +50,7 @@
     "Config.Document.Paper.PaperFormat.Width": "Width",
     "Config.Document.Paper.PaperFormat.Width.Description": "The width of the paper.  \nValid units are: `mm`, `cm`, `in`, `px`. No unit means `px`.",
     "Config.Document.Paper.PaperFormat.Height": "Height",
-    "Config.Document.Paper.PaperFormat.Height.Description": "The height of the paper.  \nValid units are: `mm', `cm`, `in`, `px`. No unit means `px`.",
+    "Config.Document.Paper.PaperFormat.Height.Description": "The height of the paper.  \nValid units are: `mm`, `cm`, `in`, `px`. No unit means `px`.",
     "Config.Document.Paper.Margin": "Margin",
     "Config.Document.Paper.Margin.Description": "The margin of the paper.",
     "Config.Document.Paper.Margin.Top": "Top",
