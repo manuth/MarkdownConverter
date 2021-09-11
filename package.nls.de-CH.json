@@ -28,7 +28,7 @@
     "Config.Parser.Toc.Class": "CSS-Klasse",
     "Config.Parser.Toc.Class.Description": "Die CSS-Klasse des Inhaltsverzeichnisses.",
     "Config.Parser.Toc.Levels": "Überschrift-Stufen",
-    "Config.Parser.Toc.Levels.Description": "Die Überschrift-Stufen, welche im Inhaltsverzeichnis eingeblendet werden sollen.\n\n***Beispiele:*** \n`\"2-6\"` oder `\"2, 3, 4, 5, 6\"`.",
+    "Config.Parser.Toc.Levels.Description": "Die Überschrift-Stufen, welche im Inhaltsverzeichnis eingeblendet werden sollen.\n\n***Beispiele:*** \n`\"2-6\"` oder `\"1, 3, 5-\"`.",
     "Config.Parser.Toc.Indicator": "Indikator",
     "Config.Parser.Toc.Indicator.Description": "Der Reguläre Ausdruck, welcher durch das Inhaltsverzeichnis ersetzt werden soll.",
     "Config.Parser.Toc.ListType": "Listen-Typ",

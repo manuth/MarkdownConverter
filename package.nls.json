@@ -28,7 +28,7 @@
     "Config.Parser.Toc.Class": "CSS-Class",
     "Config.Parser.Toc.Class.Description": "The css-class of the table of contents.",
     "Config.Parser.Toc.Levels": "Heading-Levels",
-    "Config.Parser.Toc.Levels.Description": "The heading-levels to include into the table of contents.\n\n***Examples:***\n`\"2-6\"`, `\"2, 3, 4, 5, 6\"`.",
+    "Config.Parser.Toc.Levels.Description": "The heading-levels to include into the table of contents.\n\n***Examples:***\n`\"2-6\"`, `\"1, 3, 5-\"`.",
     "Config.Parser.Toc.Indicator": "Indicator",
     "Config.Parser.Toc.Indicator.Description": "The RegExp that is to be replaced by the table of contents.",
     "Config.Parser.Toc.ListType": "List-Type",
