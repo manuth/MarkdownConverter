@@ -98,6 +98,8 @@ If you use a specific date-format repeatedly you might want to specify a custom 
 ## Settings
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
 
+  - `markdownConverter.ChromiumArgs`:  
+    Allows you to pass specific arguments to chromium for the conversion (such as `--no-sandbox` or `--disable-gpu`).
   - `markdownConverter.DestinationPattern`:  
     Allows you to specify a pattern for resolving the destination-path. Following variables are substituted:
     - `${workspaceFolder}`: Either the path to the `workspace` or the directory which contains the document.
@@ -111,8 +113,6 @@ This is a list of the most important settings. To see all of them, install the e
     The date-format to apply to all dates by default.
   - `markdownConverter.DateFormats`:  
     A set of names and their corresponding custom date-format.
-  - `markdownConverter.ChromiumArgs`:  
-    Allows you to pass specific arguments to chromium for the conversion (such as `--no-sandbox` or `--disable-gpu`).
   - `markdownConverter.Parser.SystemParserEnabled`:  
     This setting allows you to enable or disable the usage of `vscode`s internal markdown-parser. Using the internal markdown-parser might be very useful to you as it grants you access to all markdown-plugin extensions installed to your vscode.
   - `markdownConverter.Parser.Toc.Enabled`:  

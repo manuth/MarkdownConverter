@@ -164,6 +164,15 @@
           "type": "string",
           "default": null
         },
+        "markdownConverter.ChromiumArgs": {
+          "title": "%Config.ChromiumArgs%",
+          "markdownDescription": "%Config.ChromiumArgs.Description%",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
         "markdownConverter.DestinationPattern": {
           "title": "%Config.DestinationPattern%",
           "markdownDescription": "%Config.DestinationPattern.Description%",
@@ -246,15 +255,6 @@
             }
           },
           "additionalProperties": false
-        },
-        "markdownConverter.ChromiumArgs": {
-          "title": "%Config.ChromiumArgs%",
-          "markdownDescription": "%Config.ChromiumArgs.Description%",
-          "type": "array",
-          "default": [],
-          "items": {
-            "type": "string"
-          }
         },
         "markdownConverter.Parser.SystemParserEnabled": {
           "title": "%Config.Parser.SystemParserEnabled%",
