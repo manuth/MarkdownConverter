@@ -281,22 +281,34 @@ export class ConversionRunner
 
         if (Settings.Default.DefaultStylesEnabled)
         {
-            converter.Document.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle")));
+            converter.Document.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle"), InsertionType.Include));
         }
 
         if (Settings.Default.SystemParserEnabled)
         {
             let mdExtensions = new MarkdownContributions(this.Extension.Context.extensionPath);
 
-            for (let styleSheet of mdExtensions.previewStyles)
-            {
-                converter.Document.StyleSheets.push(new StyleSheet(styleSheet.fsPath));
-            }
+            this.LoadAssets(
+                Object.fromEntries(
+                    mdExtensions.previewStyles.map<[string, InsertionType]>(
+                        (item) =>
+                        {
+                            return [item.fsPath, InsertionType.Default];
+                        })),
+                converter.Document.StyleSheets,
+                (path, insertionType) => new StyleSheet(path, insertionType),
+                Settings.Default.StyleSheetInsertion);
 
-            for (let script of mdExtensions.previewScripts)
-            {
-                converter.Document.Scripts.push(new WebScript(script.fsPath));
-            }
+            this.LoadAssets(
+                Object.fromEntries(
+                    mdExtensions.previewScripts.map<[string, InsertionType]>(
+                        (item) =>
+                        {
+                            return [item.fsPath, InsertionType.Default];
+                        })),
+                        converter.Document.Scripts,
+                        (path, insertionType) => new WebScript(path, insertionType),
+                        Settings.Default.ScriptInsertion);
         }
 
         if (Settings.Default.HighlightStyle !== "None")
