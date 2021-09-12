@@ -143,8 +143,8 @@ export class Settings
         else
         {
             let format = new StandardizedPageFormat();
-            format.Format = StandardizedFormatType[this.GetConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`)];
-            format.Orientation = PageOrientation[this.GetConfigEntry<keyof typeof PageOrientation>(`${formatKey}.Orientation`, PageOrientation[PageOrientation.Portrait] as any)];
+            format.Format = StandardizedFormatType[this.GetConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`, nameof(StandardizedFormatType.A4) as keyof typeof StandardizedFormatType)];
+            format.Orientation = PageOrientation[this.GetConfigEntry<keyof typeof PageOrientation>(`${formatKey}.Orientation`, PageOrientation[PageOrientation.Portrait] as keyof typeof PageOrientation)];
             paper.Format = format;
         }
 
