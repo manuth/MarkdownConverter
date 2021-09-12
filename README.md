@@ -42,7 +42,8 @@ Normally, `MarkdownConverter` will refuse to convert files which aren't recogniz
 If you don't like this behavior, you might want to set `markdownConverter.IgnoreLanguageMode` to `true`.
 
 ## Variable Substitution
-Before the conversion, the markdown-file is preprocessed using [`Handlebars`][Handlebars]. Variables (such as `{{ Author }}`) are automatically replaced with the corresponding attribute-value.
+Before the conversion, the markdown-file is preprocessed using [`Handlebars`][Handlebars]. Variables (such as `{{ Author }}`) are automatically replaced with the corresponding attribute-value.  
+While attribute-names wrapped in 2 braces are HTML-escaped, attribute-names wrapped in 3 braces (for example `{{{ Content }}}`) aren't escaped allowing it to contain HTML-code.
 
 ***Example:***
 ```md
