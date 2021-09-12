@@ -1,6 +1,7 @@
 import dedent = require("dedent");
 import { readFileSync } from "fs-extra";
 import { Asset } from "./Asset";
+import { InsertionType } from "./InsertionType";
 
 /**
  * Represents a stylesheet.
@@ -12,10 +13,13 @@ export class StyleSheet extends Asset
      *
      * @param path
      * The path to the asset.
+     *
+     * @param insertionType
+     * The type of the insertion of the stylesheet.
      */
-    public constructor(path: string)
+    public constructor(path: string, insertionType?: InsertionType)
     {
-        super(path);
+        super(path, insertionType);
     }
 
     /**
