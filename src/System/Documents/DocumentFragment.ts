@@ -140,7 +140,7 @@ export class DocumentFragment extends Renderable
             }
         }
 
-        let result = this.Renderer.compile(this.Content)(view);
+        let result = this.RenderTemplate(this.Content, view);
 
         for (let key of tempHelpers)
         {
@@ -148,6 +148,23 @@ export class DocumentFragment extends Renderable
         }
 
         return result;
+    }
+
+    /**
+     * Renders the specified {@link content `content`} with the specified {@link view `view`}.
+     *
+     * @param content
+     * The content to render.
+     *
+     * @param view
+     * The attributes to use for rendering.
+     *
+     * @returns
+     * The rendered representation of the specified {@link content `content`}.
+     */
+    protected async RenderTemplate(content: string, view: Record<string, unknown>): Promise<string>
+    {
+        return this.Renderer.compile(content)(view);
     }
 
     /**
