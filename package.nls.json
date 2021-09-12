@@ -3,6 +3,8 @@
     "Command.ConvertAll": "Convert all Documents",
     "Command.Chain": "Chain all Documents",
     "Config": "MarkdownConverter-Options",
+    "Config.BrowserType": "Browser-Type",
+    "Config.BrowserType.Description": "The type of the browser to use.",
     "Config.ChromiumExecutablePath": "Chromium-Path",
     "Config.ChromiumExecutablePath.Description": "Either the path to the Chromium-installation to use or `\"\"` for letting MarkdownConverter download a Chrome-installation.",
     "Config.ChromiumArgs": "Chromium-Arguments",

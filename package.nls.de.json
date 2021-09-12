@@ -3,6 +3,8 @@
     "Command.ConvertAll": "Alle Dokumente konvertieren",
     "Command.Chain": "Alle Dokumente verketten",
     "Config": "MarkdownConverter-Einstellungen",
+    "Config.BrowserType": "Browser-Typ",
+    "Config.BrowserType.Description": "Der Typ des zu nutzenden Browsers.",
     "Config.ChromiumExecutablePath": "Chromium-Pfad",
     "Config.ChromiumExecutablePath.Description": "Der Pfad zur zu nutzenden Chromium-Installation oder `\"\"`, um MarkdownConverter ein Chrome herunterladen zu lassen.",
     "Config.ChromiumArgs": "Chromium-Arguments",
