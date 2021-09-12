@@ -12,7 +12,7 @@
     "Config.IgnoreLanguageMode": "Sprache ignorieren",
     "Config.IgnoreLanguageMode.Description": "`true`, um die aktuell geöffnete Datei zu konvertieren, auch wenn für das aktuelle Dokument nicht Markdown als Sprache festgelegt ist; sonst `false`.",
     "Config.ConversionQuality": "Qualität",
-    "Config.ConversionQuality.Description": "Die Qualität der gerenderten Dateien.",
+    "Config.ConversionQuality.Description": "Die Qualität von konvertierten JPEG-Dateien.",
     "Config.ConversionType": "Ausgabe-Typ",
     "Config.ConversionType.Description": "Eine oder mehr Datei-Typen, zu welchen die Markdown-Datei umgewandelt werden soll.",
     "Config.Locale": "Sprache",
