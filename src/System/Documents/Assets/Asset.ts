@@ -60,8 +60,8 @@ export abstract class Asset
 
         try
         {
-            Uri.parse(this.Path, true);
-            schemeIncluded = !isAbsolute(this.Path);
+            Uri.parse(this.URL, true);
+            schemeIncluded = !isAbsolute(this.URL);
         }
         catch
         {
@@ -72,7 +72,7 @@ export abstract class Asset
         {
             return AssetPathType.Link;
         }
-        else if (isAbsolute(this.Path))
+        else if (isAbsolute(this.URL))
         {
             return AssetPathType.AbsolutePath;
         }

@@ -42,6 +42,6 @@ export class StyleSheet extends Asset
      */
     protected GetReferenceSource(): string
     {
-        return `<link rel="stylesheet" type="text/css" href="${this.Path}" />\n`;
+        return `<link rel="stylesheet" type="text/css" href="${this.URL}" />\n`;
     }
 }
