@@ -483,19 +483,73 @@
           "type": "boolean",
           "default": true
         },
+        "markdownConverter.Document.HeaderContent": {
+          "title": "%Config.Document.HeaderContent%",
+          "markdownDescription": "%Config.Document.HeaderContent.Description%",
+          "type": "object",
+          "default": {
+            "Left": "{{ Author }}",
+            "Center": "{{ CreationDate }}",
+            "Right": "{{ Company }}"
+          },
+          "additionalProperties": false,
+          "properties": {
+            "Left": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Left%",
+              "type": "string",
+              "default": "{{ Author }}"
+            },
+            "Center": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Center%",
+              "type": "string",
+              "default": "{{ CreationDate }}"
+            },
+            "Right": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Right%",
+              "type": "string",
+              "default": "{{ Company }}"
+            }
+          }
+        },
         "markdownConverter.Document.HeaderTemplate": {
           "title": "%Config.Document.HeaderTemplate%",
           "markdownDescription": "%Config.Document.HeaderTemplate.Description%",
           "type": "string",
           "editPresentation": "multilineText",
-          "default": "<div style=\"position: relative; margin-left: 1cm; margin-right: 1cm; width: 100%; \">\n    <div style=\"float: left; text-align: left; \">\n        {{ Author }}\n    </div>    \n    <div style=\"position: absolute; left: 0; right: 0; text-align: center; \">\n        {{ CreationDate }}\n    </div>\n    <div style=\"float: right; text-align: right; \">\n        {{ Company }}\n    </div>\n</div>"
+          "default": "<div style=\"position: relative; margin-left: 1cm; margin-right: 1cm; width: 100%; \">\n    <div style=\"float: left; text-align: left; \">\n        {{{ Left }}}\n    </div>\n    <div style=\"position: absolute; left: 0; right: 0; text-align: center; \">\n        {{{ Center }}}\n    </div>\n    <div style=\"float: right; text-align: right; \">\n        {{{ Right }}}\n    </div>\n</div>"
+        },
+        "markdownConverter.Document.FooterContent": {
+          "title": "%Config.Document.FooterContent%",
+          "markdownDescription": "%Config.Document.FooterContent.Description%",
+          "type": "object",
+          "default": {
+            "Center": "<span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span>"
+          },
+          "additionalProperties": false,
+          "properties": {
+            "Left": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Left%",
+              "type": "string",
+              "default": "{{ Author }}"
+            },
+            "Center": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Center%",
+              "type": "string",
+              "default": "{{ CreationDate }}"
+            },
+            "Right": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Right%",
+              "type": "string",
+              "default": "{{ Company }}"
+            }
+          }
         },
         "markdownConverter.Document.FooterTemplate": {
           "title": "%Config.Document.FooterTemplate%",
           "markdownDescription": "%Config.Document.FooterTemplate.Description%",
           "type": "string",
           "editPresentation": "multilineText",
-          "default": "<div style=\"position: relative; margin-left: 1cm; margin-right: 1cm; width: 100%; \">\n    <div style=\"float: left; text-align: left; \">\n    </div>\n    <div style=\"position: absolute; left: 0; right: 0; text-align: center; \">\n        <span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span>\n    </div>\n    <div style=\"float: right; text-align: right; \">\n    </div>\n</div>"
+          "default": "<div style=\"position: relative; margin-left: 1cm; margin-right: 1cm; width: 100%; \">\n    <div style=\"float: left; text-align: left; \">\n        {{{ Left }}}\n    </div>\n    <div style=\"position: absolute; left: 0; right: 0; text-align: center; \">\n        {{{ Center }}}\n    </div>\n    <div style=\"float: right; text-align: right; \">\n        {{{ Right }}}\n    </div>\n</div>"
         },
         "markdownConverter.Document.MetaTemplate": {
           "title": "%Config.Document.MetaTemplate%",

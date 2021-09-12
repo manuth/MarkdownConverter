@@ -12,6 +12,7 @@ import { Paper } from "../System/Documents/Paper";
 import { StandardizedFormatType } from "../System/Documents/StandardizedFormatType";
 import { StandardizedPageFormat } from "../System/Documents/StandardizedPageFormat";
 import { TocSettings } from "../System/Documents/TocSettings";
+import { IRunningBlockContent } from "./IRunningBlockContent";
 
 /**
  * Provides access to settings.
@@ -180,11 +181,27 @@ export class Settings
     }
 
     /**
+     * Gets the content of the different sections of the header.
+     */
+    public get HeaderContent(): IRunningBlockContent
+    {
+        return this.GetConfigEntry("Document.HeaderContent");
+    }
+
+    /**
      * Gets the header of the document.
      */
     public get HeaderTemplate(): string
     {
         return this.GetConfigEntry("Document.HeaderTemplate");
+    }
+
+    /**
+     * Gets the content of the different sections of the footer.
+     */
+    public get FooterContent(): IRunningBlockContent
+    {
+        return this.GetConfigEntry("Document.FooterContent");
     }
 
     /**

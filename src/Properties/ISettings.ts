@@ -2,6 +2,7 @@ import { ConversionType } from "../Conversion/ConversionType";
 import { AssetURLType } from "../System/Documents/Assets/AssetURLType";
 import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { EmojiType } from "../System/Documents/EmojiType";
+import { IRunningBlockContent } from "./IRunningBlockContent";
 
 /**
  * Represents the raw vscode-settings.
@@ -109,9 +110,19 @@ export interface ISettings
     ["Document.HeaderFooterEnabled"]?: boolean;
 
     /**
+     * The content of the different sections of the header.
+     */
+    ["Document.HeaderContent"]?: IRunningBlockContent;
+
+    /**
      * The template of the header.
      */
     ["Document.HeaderTemplate"]?: string;
+
+    /**
+     * The content of the different sections of the footer.
+     */
+    ["Document.FooterContent"]?: IRunningBlockContent;
 
     /**
      * The template of the footer.

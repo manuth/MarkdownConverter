@@ -12,6 +12,7 @@ import { DocumentFragment } from "./DocumentFragment";
 import { MarkdownFragment } from "./MarkdownFragment";
 import { Paper } from "./Paper";
 import { Renderable } from "./Renderable";
+import { RunningBlock } from "./RunningBlock";
 
 /**
  * Represents a document.
@@ -71,12 +72,12 @@ export class Document extends Renderable
     /**
      * The header of the document.
      */
-    private header: DocumentFragment = new DocumentFragment(this);
+    private header: RunningBlock = new RunningBlock(this);
 
     /**
      * The footer of the document.
      */
-    private footer: DocumentFragment = new DocumentFragment(this);
+    private footer: RunningBlock = new RunningBlock(this);
 
     /**
      * The metadata-section of the document.
@@ -339,7 +340,7 @@ export class Document extends Renderable
     /**
      * Gets the header of the document.
      */
-    public get Header(): DocumentFragment
+    public get Header(): RunningBlock
     {
         return this.header;
     }
@@ -347,7 +348,7 @@ export class Document extends Renderable
     /**
      * Gets the footer of the document.
      */
-    public get Footer(): DocumentFragment
+    public get Footer(): RunningBlock
     {
         return this.footer;
     }
