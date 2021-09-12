@@ -3,6 +3,7 @@ import { isAbsolute } from "upath";
 import { Uri } from "vscode";
 import { FileException } from "../../IO/FileException";
 import { AssetPathType } from "./AssetPathType";
+import { InsertionType } from "./InsertionType";
 
 /**
  * Represents an asset.
@@ -15,14 +16,23 @@ export abstract class Asset
     private path: string;
 
     /**
+     * The type of the insertion of the asset.
+     */
+    private insertionType: InsertionType;
+
+    /**
      * Initializes a new instance of the `Asset` class.
      *
      * @param path
      * The path to the asset.
+     *
+     * @param insertionType
+     * The type of the insertion of the asset.
      */
-    public constructor(path: string)
+    public constructor(path: string, insertionType?: InsertionType)
     {
         this.path = path;
+        this.insertionType = insertionType ?? InsertionType.Default;
     }
 
     /**
@@ -65,6 +75,22 @@ export abstract class Asset
     }
 
     /**
+     * Gets or sets the type of the insertion of the asset.
+     */
+    public get InsertionType(): InsertionType
+    {
+        return this.insertionType;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public set InsertionType(value: InsertionType)
+    {
+        this.insertionType = value;
+    }
+
+    /**
      * The source-code of this asset.
      *
      * @returns
@@ -72,9 +98,9 @@ export abstract class Asset
      */
     public ToString(): string
     {
-        switch (this.PathType)
+        switch (this.GetInsertionType())
         {
-            case AssetPathType.Link:
+            case InsertionType.Link:
                 return this.GetReferenceSource();
 
             default:
@@ -98,6 +124,30 @@ export abstract class Asset
     public toString(): string
     {
         return this.ToString();
+    }
+
+    /**
+     * Gets the type of the insertion of the asset.
+     *
+     * @returns
+     * The type of the insertion of the asset.
+     */
+    protected GetInsertionType(): InsertionType
+    {
+        if (this.InsertionType !== InsertionType.Default)
+        {
+            return this.InsertionType;
+        }
+        else
+        {
+            switch (this.PathType)
+            {
+                case AssetPathType.Link:
+                    return InsertionType.Link;
+                default:
+                    return InsertionType.Include;
+            }
+        }
     }
 
     /**
