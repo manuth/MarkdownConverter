@@ -2,6 +2,7 @@ import { pathExistsSync } from "fs-extra";
 import { isAbsolute } from "upath";
 import { Uri } from "vscode";
 import { FileException } from "../../IO/FileException";
+import { AssetPathType } from "./AssetPathType";
 
 /**
  * Represents an asset.
@@ -33,12 +34,9 @@ export abstract class Asset
     }
 
     /**
-     * The source-code of this asset.
-     *
-     * @returns
-     * A string representing this asset.
+     * Gets the type of the path of the asset.
      */
-    public ToString(): string
+    public get PathType(): AssetPathType
     {
         let schemeIncluded: boolean;
 
@@ -52,17 +50,42 @@ export abstract class Asset
             schemeIncluded = false;
         }
 
-        if (!isAbsolute(this.Path) && schemeIncluded)
+        if (schemeIncluded)
         {
-            return this.GetReferenceSource();
+            return AssetPathType.Link;
         }
-        else if (pathExistsSync(this.Path))
+        else if (isAbsolute(this.Path))
         {
-            return this.GetSource();
+            return AssetPathType.AbsolutePath;
         }
         else
         {
-            throw new FileException(null, this.Path);
+            return AssetPathType.RelativePath;
+        }
+    }
+
+    /**
+     * The source-code of this asset.
+     *
+     * @returns
+     * A string representing this asset.
+     */
+    public ToString(): string
+    {
+        switch (this.PathType)
+        {
+            case AssetPathType.Link:
+                return this.GetReferenceSource();
+
+            default:
+                if (pathExistsSync(this.Path))
+                {
+                    return this.GetSource();
+                }
+                else
+                {
+                    throw new FileException(null, this.Path);
+                }
         }
     }
 
