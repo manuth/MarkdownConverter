@@ -95,6 +95,7 @@ export class DocumentFragment extends Renderable
                         return statSync(this.Document.FileName).birthtime;
                     case AttributeKey.ChangeDate:
                         return statSync(this.Document.FileName).mtime;
+                    case AttributeKey.CurrentDate:
                     default:
                         return new Date();
                 }
