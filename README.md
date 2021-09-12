@@ -10,6 +10,7 @@ A markdown-converter for [vscode][vscode]
     - [Date-Formatting](#date-formatting)
       - [Custom Date-Formats](#custom-date-formats)
   - [Headers and Footers](#headers-and-footers)
+  - [Including Table of Contents](#including-table-of-contents)
   - [Settings](#settings)
 
 ## What is `MarkdownConverter`?
@@ -132,6 +133,26 @@ You can set the content of these sections using the `markdownConverter.Document.
 ```
 
 If you'd like to have more control on how your headers and footers look like, you might want to adjust the `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate` options.
+
+## Including Table of Contents
+The `MarkdownConverter` provides the functionality to create a table of contents at runtime.  
+Set the `markdownConverter.Parser.Toc.Enabled` to `true` to enable the creation of a table of contents.
+
+By default, the `markdown-it-table-of-contents` plugin looks for a line starting with `[[toc]]` and replaces it with a table of contents. You might want to set the `markdownConverter.Parser.Toc.Indicator` to a custom regular expression if you want to have something else replaced with the table of contents.
+
+You can set the class of the table of contents list by setting the `markdownConverter.Parser.Toc.Class`. The `markdownConverter.Parser.Toc.ListType` allows you to set whether the table of contents should be rendered as a numbered list (`ol` => ordered list) or an unordered list (`ul`).
+
+Furthermore, the `markdownConverter.Parser.Toc.Levels` allows you to choose which levels to include in the table of contents.
+
+```json
+{
+  "markdownConverter.Parser.Toc.Enabled": true,
+  "markdownConverter.Parser.Toc.Indicator": "\\[\\[\\s*MyToc\\s*\\]\\]",
+  "markdownConverter.Parser.Toc.Class": "toc",
+  "markdownConverter.Parser.Toc.ListType": "ol",
+  "markdownConverter.Parser.Toc.Levels": "2-6"
+}
+```
 
 ## Settings
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
