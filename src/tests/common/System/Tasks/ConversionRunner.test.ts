@@ -6,11 +6,13 @@ import dedent = require("dedent");
 import { readFile, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import MultiRange from "multi-integer-range";
+import { Random } from "random-js";
 import { dirname, join, resolve } from "upath";
 import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Converter } from "../../../../Conversion/Converter";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
 import { ISettings } from "../../../../Properties/ISettings";
+import { InsertionType } from "../../../../System/Documents/Assets/InsertionType";
 import { Margin } from "../../../../System/Documents/Margin";
 import { PageOrientation } from "../../../../System/Documents/PageOrientation";
 import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
@@ -32,6 +34,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
         "ConversionRunner",
         () =>
         {
+            let random: Random;
             let extension: MarkdownConverterExtension;
             let mdFile: TempFile;
             let conversionRunner: TestConversionRunner;
@@ -114,6 +117,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
             suiteSetup(
                 () =>
                 {
+                    random = new Random();
                     extension = TestConstants.Extension;
 
                     mdFile = new TempFile(
@@ -306,10 +310,16 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 Right: "1m"
                             };
 
+                            let insertionTypes = [
+                                nameof(InsertionType.Default),
+                                nameof(InsertionType.Include),
+                                nameof(InsertionType.Link)
+                            ] as Array<keyof typeof InsertionType>;
+
                             let templateFile = new TempFile();
                             let highlightStyle = "agate";
-                            let styleSheet = new TempFile();
-                            let script = new TempFile();
+                            let styleSheet: [TempFile, keyof typeof InsertionType] = [new TempFile(), random.pick(insertionTypes)];
+                            let script: [TempFile, keyof typeof InsertionType] = [new TempFile(), random.pick(insertionTypes)];
                             let headerFooterEnabled = false;
                             let headerTemplate = "Hello";
                             let footerTemplate = "World";
@@ -331,8 +341,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             context.Settings["Document.Paper.Margin"] = margin;
                             context.Settings["Document.Design.Template"] = templateFile.FullName;
                             context.Settings["Document.Design.HighlightStyle"] = highlightStyle;
-                            context.Settings["Document.Design.StyleSheets"] = [styleSheet.FullName];
-                            context.Settings["Document.Design.Scripts"] = [script.FullName];
+                            context.Settings["Document.Design.StyleSheets"] = { [styleSheet[0].FullName]: styleSheet[1] };
+                            context.Settings["Document.Design.Scripts"] = { [script[0].FullName]: script[1] };
                             context.Settings["Document.HeaderFooterEnabled"] = headerFooterEnabled;
                             context.Settings["Document.HeaderTemplate"] = headerTemplate;
                             context.Settings["Document.FooterTemplate"] = footerTemplate;
@@ -358,14 +368,14 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                             strictEqual(converter.Document.Template, (await readFile(templateFile.FullName)).toString());
                             ok(converter.Document.StyleSheets.some((stylesheet) => stylesheet.Path.includes(highlightStyle)));
-                            ok(converter.Document.StyleSheets.some((entry) => entry.Path === styleSheet.FullName));
-                            ok(converter.Document.Scripts.some((entry) => entry.Path === script.FullName));
+                            ok(converter.Document.StyleSheets.some((entry) => entry.Path === styleSheet[0].FullName && entry.InsertionType === InsertionType[styleSheet[1]]));
+                            ok(converter.Document.Scripts.some((entry) => entry.Path === script[0].FullName && entry.InsertionType === InsertionType[script[1]]));
                             strictEqual(converter.Document.HeaderFooterEnabled, headerFooterEnabled);
                             strictEqual(converter.Document.Header.Content, headerTemplate);
                             strictEqual(converter.Document.Footer.Content, footerTemplate);
 
-                            styleSheet.Dispose();
-                            script.Dispose();
+                            styleSheet[0].Dispose();
+                            script[0].Dispose();
                             templateFile.Dispose();
                             workspaceRoot.Dispose();
                         });

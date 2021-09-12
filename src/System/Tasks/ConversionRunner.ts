@@ -18,6 +18,9 @@ import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
+import { Asset } from "../Documents/Assets/Asset";
+import { AssetURLType } from "../Documents/Assets/AssetURLType";
+import { InsertionType } from "../Documents/Assets/InsertionType";
 import { StyleSheet } from "../Documents/Assets/StyleSheet";
 import { WebScript } from "../Documents/Assets/WebScript";
 import { Document } from "../Documents/Document";
@@ -28,6 +31,7 @@ import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
 import { FileException } from "../IO/FileException";
 import { PatternResolver } from "../IO/PatternResolver";
 import { OperationCancelledException } from "../OperationCancelledException";
+import { AssetLoader } from "./AssetLoader";
 import { IProgressState } from "./IProgressState";
 
 /**
@@ -283,21 +287,33 @@ export class ConversionRunner
 
         if (Settings.Default.DefaultStylesEnabled)
         {
-            converter.Document.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle")));
+            converter.Document.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle"), InsertionType.Include));
         }
 
         if (Settings.Default.SystemParserEnabled)
         {
             let mdExtensions = new MarkdownContributions(this.Extension.Context.extensionPath);
+            let assets: Asset[] = [];
 
-            for (let styleSheet of mdExtensions.previewStyles)
+            for (let uri of mdExtensions.previewStyles)
             {
-                converter.Document.StyleSheets.push(new StyleSheet(styleSheet.fsPath));
+                let styleSheet = new StyleSheet(uri.fsPath);
+                assets.push(styleSheet);
+                converter.Document.StyleSheets.push(styleSheet);
             }
 
-            for (let script of mdExtensions.previewScripts)
+            for (let uri of mdExtensions.previewScripts)
             {
-                converter.Document.Scripts.push(new WebScript(script.fsPath));
+                let script = new WebScript(uri.fsPath);
+                assets.push(script);
+                converter.Document.Scripts.push(script);
+            }
+
+            for (let asset of assets)
+            {
+                asset.InsertionType = asset.URLType === AssetURLType.Link ?
+                    InsertionType.Link :
+                    InsertionType.Include;
             }
         }
 
@@ -317,17 +333,51 @@ export class ConversionRunner
             }
         }
 
-        for (let styleSheet of Settings.Default.StyleSheets)
-        {
-            converter.Document.StyleSheets.push(new StyleSheet(styleSheet));
-        }
+        this.LoadAssets(
+            Settings.Default.StyleSheets,
+            converter.Document.StyleSheets,
+            (path, insertionType) => new StyleSheet(path, insertionType),
+            Settings.Default.StyleSheetInsertion);
 
-        for (let script of Settings.Default.Scripts)
-        {
-            converter.Document.Scripts.push(new WebScript(script));
-        }
+        this.LoadAssets(
+            Settings.Default.Scripts,
+            converter.Document.Scripts,
+            (path, insertionType) => new WebScript(path, insertionType),
+            Settings.Default.ScriptInsertion);
 
         return converter;
+    }
+
+    /**
+     * Adds the assets from the specified {@link source `source`} to the {@link target `target`}.
+     *
+     * @param source
+     * The assets to load.
+     *
+     * @param target
+     * The asset-list to add the {@link source `source`}-assets to.
+     *
+     * @param loader
+     * A component for loading assets.
+     *
+     * @param insertionTypes
+     * The insertion-types to use based on the paths of the assets.
+     */
+    protected LoadAssets(source: Record<string, InsertionType>, target: Asset[], loader: AssetLoader, insertionTypes: Record<AssetURLType, InsertionType>): void
+    {
+        for (let entry of Object.entries(source))
+        {
+            let asset = loader(entry[0], entry[1]);
+
+            if (
+                asset.InsertionType === InsertionType.Default &&
+                asset.URLType in insertionTypes)
+            {
+                asset.InsertionType = insertionTypes[asset.URLType];
+            }
+
+            target.push(asset);
+        }
     }
 
     /**

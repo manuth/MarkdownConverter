@@ -2,6 +2,8 @@ import { pathExistsSync } from "fs-extra";
 import { isAbsolute } from "upath";
 import { Uri } from "vscode";
 import { FileException } from "../../IO/FileException";
+import { AssetURLType } from "./AssetURLType";
+import { InsertionType } from "./InsertionType";
 
 /**
  * Represents an asset.
@@ -9,19 +11,36 @@ import { FileException } from "../../IO/FileException";
 export abstract class Asset
 {
     /**
-     * The path to the asset.
+     * The url to the asset.
      */
-    private path: string;
+    private url: string;
+
+    /**
+     * The type of the insertion of the asset.
+     */
+    private insertionType: InsertionType;
 
     /**
      * Initializes a new instance of the `Asset` class.
      *
      * @param path
      * The path to the asset.
+     *
+     * @param insertionType
+     * The type of the insertion of the asset.
      */
-    public constructor(path: string)
+    public constructor(path: string, insertionType?: InsertionType)
     {
-        this.path = path;
+        this.url = path;
+        this.insertionType = insertionType ?? InsertionType.Default;
+    }
+
+    /**
+     * Gets the url to the asset.
+     */
+    public get URL(): string
+    {
+        return this.url;
     }
 
     /**
@@ -29,7 +48,54 @@ export abstract class Asset
      */
     public get Path(): string
     {
-        return this.path;
+        return this.URLType === AssetURLType.Link ? Uri.parse(this.URL).fsPath : this.URL;
+    }
+
+    /**
+     * Gets the type of the url of the asset.
+     */
+    public get URLType(): AssetURLType
+    {
+        let schemeIncluded: boolean;
+
+        try
+        {
+            Uri.parse(this.URL, true);
+            schemeIncluded = !isAbsolute(this.URL);
+        }
+        catch
+        {
+            schemeIncluded = false;
+        }
+
+        if (schemeIncluded)
+        {
+            return AssetURLType.Link;
+        }
+        else if (isAbsolute(this.URL))
+        {
+            return AssetURLType.AbsolutePath;
+        }
+        else
+        {
+            return AssetURLType.RelativePath;
+        }
+    }
+
+    /**
+     * Gets or sets the type of the insertion of the asset.
+     */
+    public get InsertionType(): InsertionType
+    {
+        return this.insertionType;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public set InsertionType(value: InsertionType)
+    {
+        this.insertionType = value;
     }
 
     /**
@@ -40,29 +106,20 @@ export abstract class Asset
      */
     public ToString(): string
     {
-        let schemeIncluded: boolean;
+        switch (this.GetInsertionType())
+        {
+            case InsertionType.Link:
+                return this.GetReferenceSource();
 
-        try
-        {
-            Uri.parse(this.Path, true);
-            schemeIncluded = true;
-        }
-        catch
-        {
-            schemeIncluded = false;
-        }
-
-        if (!isAbsolute(this.Path) && schemeIncluded)
-        {
-            return this.GetReferenceSource();
-        }
-        else if (pathExistsSync(this.Path))
-        {
-            return this.GetSource();
-        }
-        else
-        {
-            throw new FileException(null, this.Path);
+            default:
+                if (pathExistsSync(this.Path))
+                {
+                    return this.GetSource();
+                }
+                else
+                {
+                    throw new FileException(null, this.Path);
+                }
         }
     }
 
@@ -75,6 +132,30 @@ export abstract class Asset
     public toString(): string
     {
         return this.ToString();
+    }
+
+    /**
+     * Gets the type of the insertion of the asset.
+     *
+     * @returns
+     * The type of the insertion of the asset.
+     */
+    protected GetInsertionType(): InsertionType
+    {
+        if (this.InsertionType !== InsertionType.Default)
+        {
+            return this.InsertionType;
+        }
+        else
+        {
+            switch (this.URLType)
+            {
+                case AssetURLType.Link:
+                    return InsertionType.Link;
+                default:
+                    return InsertionType.Include;
+            }
+        }
     }
 
     /**

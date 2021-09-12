@@ -1,3 +1,4 @@
+import { AssetTests } from "./Assets";
 import { CustomPaperFormatTests } from "./CustomPageFormat.test";
 import { DocumentTests as DocumentClassTests } from "./Document.test";
 import { DocumentFragmentTests } from "./DocumentFragment.test";
@@ -17,6 +18,7 @@ export function DocumentTests(): void
         "Documents",
         () =>
         {
+            AssetTests();
             SlugifierTests();
             RenderableTests();
             DocumentFragmentTests();

@@ -1,6 +1,7 @@
 import dedent = require("dedent");
 import { readFileSync } from "fs-extra";
 import { Asset } from "./Asset";
+import { InsertionType } from "./InsertionType";
 
 /**
  * Represents a web-script.
@@ -12,10 +13,13 @@ export class WebScript extends Asset
      *
      * @param path
      * The path to the asset.
+     *
+     * @param insertionType
+     * The type of the insertion of the script.
      */
-    public constructor(path: string)
+    public constructor(path: string, insertionType?: InsertionType)
     {
-        super(path);
+        super(path, insertionType);
     }
 
     /**
@@ -38,6 +42,6 @@ export class WebScript extends Asset
      */
     protected GetReferenceSource(): string
     {
-        return `<script async="" src="${this.Path}" charset="UTF-8"></script>\n`;
+        return `<script async src="${this.URL}" charset="UTF-8"></script>\n`;
     }
 }
