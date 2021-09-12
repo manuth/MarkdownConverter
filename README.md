@@ -1,7 +1,17 @@
 # MarkdownConverter
 A markdown-converter for [vscode][vscode]
 
-## What's `MarkdownConverter`?
+## Table of Contents
+- [MarkdownConverter](#markdownconverter)
+  - [Table of Contents](#table-of-contents)
+  - [What is `MarkdownConverter`?](#what-is-markdownconverter)
+  - [Usage](#usage)
+  - [Variable Substitution](#variable-substitution)
+    - [Date-Formatting](#date-formatting)
+      - [Custom Date-Formats](#custom-date-formats)
+  - [Settings](#settings)
+
+## What is `MarkdownConverter`?
 > MarkdownConverter is a Visual Studio Code-extension which allows you to export your Markdown-file as PDF-, HTML or Image-files.  
 > It provides many features, such as DateTime-Formatting, configuring your own CSS-styles, setting Headers and Footers, FrontMatter and much more.
 
@@ -56,7 +66,7 @@ Following attributes are predefined and may be overridden by the document-attrib
     The assumed name of the author according to `GIT_AUTHOR_NAME`, `GIT_COMMITER_NAME`, `HGUSER`, `C9_USER`, `git`, `wmic` or `osascript`
   * Attributes declared inside the vscode-settings (see [Settings](#settings))
 
-## Date-Formatting
+### Date-Formatting
 `Date`-attributes are being formatted by default. `MarkdownConverter` allows you to customize the format of every individual date.
 
 You can format an individual date by using the `FormatDate`-helper like this:
@@ -79,7 +89,7 @@ DateFormat: dd mmmm yyyy
 The current date is {{ CurrentDate }}
 ```
 
-### Custom Date-Formats
+#### Custom Date-Formats
 There are two predefined date-formats, namely `Default` and `FullDate`, which represent date-formats for your current locale.
 
 If you use a specific date-format repeatedly you might want to specify a custom date-format using the `markdownConverter.DateFormats` setting (see [Settings](#settings)):
