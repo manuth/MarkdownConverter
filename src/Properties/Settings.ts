@@ -1,6 +1,7 @@
 import { MultiRange } from "multi-integer-range";
 import { env, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType";
+import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { CustomPageFormat } from "../System/Documents/CustomPageFormat";
 import { EmojiType } from "../System/Documents/EmojiType";
 import { ListType } from "../System/Documents/ListType";
@@ -248,17 +249,17 @@ export class Settings
     /**
      * Gets the stylesheets to add to the document.
      */
-    public get StyleSheets(): string[]
+    public get StyleSheets(): Record<string, InsertionType>
     {
-        return this.GetConfigEntry("Document.Design.StyleSheets");
+        return this.LoadAssets("Document.Design.StyleSheets");
     }
 
     /**
      * Gets the scripts to add to the document.
      */
-    public get Scripts(): string[]
+    public get Scripts(): Record<string, InsertionType>
     {
-        return this.GetConfigEntry("Document.Design.Scripts");
+        return this.LoadAssets("Document.Design.Scripts");
     }
 
     /**
@@ -284,5 +285,24 @@ export class Settings
     protected GetConfigEntry<T>(key: string, defaultValue?: T): T
     {
         return this.config.get<T>(key, defaultValue);
+    }
+
+    /**
+     * Loads assets from the configuration with the specified {@link key `key`}.
+     *
+     * @param key
+     * The key of the entry to load the assets from.
+     *
+     * @returns
+     * The assets loaded from the configuration with the specified {@link key `key`}.
+     */
+    protected LoadAssets(key: string): Record<string, InsertionType>
+    {
+        return Object.fromEntries(
+            Object.entries(this.GetConfigEntry(key)).map(
+                (entry) =>
+                {
+                    return [entry[0], InsertionType[entry[1] as keyof typeof InsertionType]];
+                }));
     }
 }

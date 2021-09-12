@@ -311,12 +311,12 @@ export class ConversionRunner
             }
         }
 
-        for (let styleSheet of Settings.Default.StyleSheets)
+        for (let styleSheet of Object.keys(Settings.Default.StyleSheets))
         {
             converter.Document.StyleSheets.push(new StyleSheet(styleSheet));
         }
 
-        for (let script of Settings.Default.Scripts)
+        for (let script of Object.keys(Settings.Default.Scripts))
         {
             converter.Document.Scripts.push(new WebScript(script));
         }

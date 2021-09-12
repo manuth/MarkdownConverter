@@ -531,19 +531,47 @@
         "markdownConverter.Document.Design.StyleSheets": {
           "title": "%Config.Document.Design.StyleSheets%",
           "markdownDescription": "%Config.Document.Design.StyleSheets.Description%",
-          "type": "array",
-          "default": [],
-          "items": {
-            "type": "string"
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "type": "string",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
           }
         },
         "markdownConverter.Document.Design.Scripts": {
           "title": "%Config.Document.Design.Scripts%",
           "markdownDescription": "%Config.Document.Design.Scripts.Description%",
-          "type": "array",
-          "default": [],
-          "items": {
-            "type": "string"
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "type": "string",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
           }
         }
       }

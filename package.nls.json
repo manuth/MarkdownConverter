@@ -75,8 +75,11 @@
     "Config.Document.Design.DefaultStyles.Description": "Allows you to disable the default styles.",
     "Config.Document.Design.HighlightStyle": "highlight.js-Style",
     "Config.Document.Design.HighlightStyle.Description": "The highlight.js-style to use.",
+    "Config.Document.Design.InsertionType.Default": "Let MarkdownConverter decide.",
+    "Config.Document.Design.InsertionType.Link": "Add a link which refers to the asset.",
+    "Config.Document.Design.InsertionType.Include": "Copy the full source of the asset into the document.",
     "Config.Document.Design.StyleSheets": "Stylesheets",
-    "Config.Document.Design.StyleSheets.Description": "Stylesheets to include in the document.  \nFiles can be specified using file-paths or URIs.",
+    "Config.Document.Design.StyleSheets.Description": "Stylesheets to include in the document and their corresponding insertion behavior.  \nFiles can be specified using file-paths or URIs.",
     "Config.Document.Design.Scripts": "Javascript Files",
-    "Config.Document.Design.Scripts.Description": "Javascript files, to include in the document.  \nFiles can be specified using file-paths or URIs."
+    "Config.Document.Design.Scripts.Description": "Javascript files, to include in the document and their corresponding insertion behavior.  \nFiles can be specified using file-paths or URIs."
 }

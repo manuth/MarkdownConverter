@@ -1,4 +1,5 @@
 import { ConversionType } from "../Conversion/ConversionType";
+import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { EmojiType } from "../System/Documents/EmojiType";
 
 /**
@@ -129,10 +130,10 @@ export interface ISettings
     /**
      * The stylesheets to add to the document.
      */
-    ["Document.Design.StyleSheets"]?: string[];
+    ["Document.Design.StyleSheets"]?: Record<string, keyof typeof InsertionType>;
 
     /**
      * The javascript files to add to the document.
      */
-    ["Document.Design.Scripts"]?: string[];
+    ["Document.Design.Scripts"]?: Record<string, keyof typeof InsertionType>;
 }
