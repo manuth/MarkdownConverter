@@ -529,18 +529,16 @@
           "properties": {
             "Left": {
               "markdownDescription": "%Config.Document.RunningBlocks.Left%",
-              "type": "string",
-              "default": "{{ Author }}"
+              "type": "string"
             },
             "Center": {
               "markdownDescription": "%Config.Document.RunningBlocks.Center%",
               "type": "string",
-              "default": "{{ CreationDate }}"
+              "default": "<span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span>"
             },
             "Right": {
               "markdownDescription": "%Config.Document.RunningBlocks.Right%",
-              "type": "string",
-              "default": "{{ Company }}"
+              "type": "string"
             }
           }
         },
