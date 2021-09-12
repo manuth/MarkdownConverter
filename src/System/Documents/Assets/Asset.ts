@@ -11,9 +11,9 @@ import { InsertionType } from "./InsertionType";
 export abstract class Asset
 {
     /**
-     * The path to the asset.
+     * The url to the asset.
      */
-    private path: string;
+    private url: string;
 
     /**
      * The type of the insertion of the asset.
@@ -31,8 +31,16 @@ export abstract class Asset
      */
     public constructor(path: string, insertionType?: InsertionType)
     {
-        this.path = path;
+        this.url = path;
         this.insertionType = insertionType ?? InsertionType.Default;
+    }
+
+    /**
+     * Gets the url to the asset.
+     */
+    public get URL(): string
+    {
+        return this.url;
     }
 
     /**
@@ -40,7 +48,7 @@ export abstract class Asset
      */
     public get Path(): string
     {
-        return this.path;
+        return this.PathType === AssetPathType.Link ? Uri.parse(this.URL).fsPath : this.URL;
     }
 
     /**
