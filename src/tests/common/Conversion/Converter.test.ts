@@ -84,6 +84,7 @@ export function ConverterTests(): void
                 async () =>
                 {
                     converter = new TestConverter(tempDir.FullName, document);
+                    converter.ChromiumExecutablePath = null;
                     initializedConverter = new TestConverter(tempDir.FullName, document);
                     await initializedConverter.Initialize();
                 });
@@ -203,6 +204,22 @@ export function ConverterTests(): void
                             document.Content = "This is a test";
                             response = await page.reload();
                             strictEqual(await response.text(), await document.Render());
+                        });
+                });
+
+            suite(
+                "BrowserOptions",
+                () =>
+                {
+                    test(
+                        "Checking whether the Chromium Executable-Path is included only if specified…",
+                        () =>
+                        {
+                            let executablePathOption = nameof<puppeteer.LaunchOptions>((options) => options.executablePath);
+                            converter.ChromiumExecutablePath = null;
+                            ok(!(executablePathOption in converter.BrowserOptions));
+                            converter.ChromiumExecutablePath = "hello world";
+                            ok(executablePathOption in converter.BrowserOptions);
                         });
                 });
 
