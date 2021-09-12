@@ -79,7 +79,7 @@ The current date is {{ CurrentDate }}
 ### Custom Date-Formats
 There are two predefined date-formats, namely `Default` and `FullDate`, which represent date-formats for your current locale.
 
-If you use a specific date-format repeatedly you might want to specify a custom date-format using the `markdownConverter.DateFormats` setting (see [Settings][#settings]):
+If you use a specific date-format repeatedly you might want to specify a custom date-format using the `markdownConverter.DateFormats` setting (see [Settings](#settings)):
 
 ***settings.json***
 ```jsonc
