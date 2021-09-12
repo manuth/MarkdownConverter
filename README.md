@@ -9,6 +9,7 @@ A markdown-converter for [vscode][vscode]
   - [Variable Substitution](#variable-substitution)
     - [Date-Formatting](#date-formatting)
       - [Custom Date-Formats](#custom-date-formats)
+  - [Headers and Footers](#headers-and-footers)
   - [Settings](#settings)
 
 ## What is `MarkdownConverter`?
@@ -111,6 +112,26 @@ If you use a specific date-format repeatedly you might want to specify a custom 
 ```
 {{ FormatDate CurrentDate "iso" }}
 ```
+
+## Headers and Footers
+The `markdownConverter.Document.HeaderFooterEnabled`-setting allows you to enable or disable headers or footers. By default, the header and footer contains three sections: The left, the right and the centered section.
+
+You can set the content of these sections using the `markdownConverter.Document.HeaderContent` and `markdownConverter.Document.FooterContent` options:
+
+```json
+{
+  "markdownConverter.Document.HeaderContent": {
+    "Left": "{{ Company }}",
+    "Center": "{{ Author }}",
+    "Right": "{{ FormatDate CurrentDate \"hh:mm:ss\" }}"
+  },
+  "markdownConverter.Document.FooterContent": {
+    "Center": "<span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span>"
+  }
+}
+```
+
+If you'd like to have more control on how your headers and footers look like, you might want to adjust the `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate` options.
 
 ## Settings
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
