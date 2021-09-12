@@ -158,6 +158,20 @@
     "configuration": {
       "title": "%Config%",
       "properties": {
+        "markdownConverter.BrowserType": {
+          "title": "%Config.BrowserType%",
+          "markdownDescription": "%Config.BrowserType.Description%",
+          "type": "string",
+          "default": null,
+          "markdownEnumDescriptions": [
+            "Indicates a Chromium browser",
+            "Indicates a Firefox browser"
+          ],
+          "enum": [
+            "chrome",
+            "firefox"
+          ]
+        },
         "markdownConverter.ChromiumExecutablePath": {
           "title": "%Config.ChromiumExecutablePath%",
           "markdownDescription": "%Config.ChromiumExecutablePath.Description%",
