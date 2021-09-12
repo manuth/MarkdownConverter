@@ -75,6 +75,8 @@
     "Config.Document.Design.DefaultStyles.Description": "Allows you to disable the default styles.",
     "Config.Document.Design.HighlightStyle": "highlight.js-Style",
     "Config.Document.Design.HighlightStyle.Description": "The highlight.js-style to use.",
-    "Config.Document.Design.StyleSheets": "Style-Sheets",
-    "Config.Document.Design.StyleSheets.Description": "Stylesheets to include in the document.  \nThey can either be a local path or an URI."
+    "Config.Document.Design.StyleSheets": "Stylesheets",
+    "Config.Document.Design.StyleSheets.Description": "Stylesheets to include in the document.  \nFiles can be specified using file-paths or URIs.",
+    "Config.Document.Design.Scripts": "Javascript Files",
+    "Config.Document.Design.Scripts.Description": "Javascript files, to include in the document.  \nFiles can be specified using file-paths or URIs."
 }

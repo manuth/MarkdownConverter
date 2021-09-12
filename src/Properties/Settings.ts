@@ -246,11 +246,19 @@ export class Settings
     }
 
     /**
-     * Gets the stylesheets of the document.
+     * Gets the stylesheets to add to the document.
      */
     public get StyleSheets(): string[]
     {
         return this.GetConfigEntry("Document.Design.StyleSheets");
+    }
+
+    /**
+     * Gets the scripts to add to the document.
+     */
+    public get Scripts(): string[]
+    {
+        return this.GetConfigEntry("Document.Design.Scripts");
     }
 
     /**

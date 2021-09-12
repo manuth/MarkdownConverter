@@ -309,6 +309,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             let templateFile = new TempFile();
                             let highlightStyle = "agate";
                             let styleSheet = new TempFile();
+                            let script = new TempFile();
                             let headerFooterEnabled = false;
                             let headerTemplate = "Hello";
                             let footerTemplate = "World";
@@ -331,6 +332,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             context.Settings["Document.Design.Template"] = templateFile.FullName;
                             context.Settings["Document.Design.HighlightStyle"] = highlightStyle;
                             context.Settings["Document.Design.StyleSheets"] = [styleSheet.FullName];
+                            context.Settings["Document.Design.Scripts"] = [script.FullName];
                             context.Settings["Document.HeaderFooterEnabled"] = headerFooterEnabled;
                             context.Settings["Document.HeaderTemplate"] = headerTemplate;
                             context.Settings["Document.FooterTemplate"] = footerTemplate;
@@ -357,11 +359,13 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             strictEqual(converter.Document.Template, (await readFile(templateFile.FullName)).toString());
                             ok(converter.Document.StyleSheets.some((stylesheet) => stylesheet.Path.includes(highlightStyle)));
                             ok(converter.Document.StyleSheets.some((entry) => entry.Path === styleSheet.FullName));
+                            ok(converter.Document.Scripts.some((entry) => entry.Path === script.FullName));
                             strictEqual(converter.Document.HeaderFooterEnabled, headerFooterEnabled);
                             strictEqual(converter.Document.Header.Content, headerTemplate);
                             strictEqual(converter.Document.Footer.Content, footerTemplate);
 
                             styleSheet.Dispose();
+                            script.Dispose();
                             templateFile.Dispose();
                             workspaceRoot.Dispose();
                         });
