@@ -252,6 +252,19 @@ export class ConversionRunner
         converter.Document.Header.Content = await converter.LoadFragment(headerTemplate) ?? converter.Document.Header.Content;
         converter.Document.Footer.Content = await converter.LoadFragment(footerTemplate) ?? converter.Document.Footer.Content;
 
+        for (
+            let runningBlockEntry of [
+                [converter.Document.Header, Settings.Default.HeaderContent],
+                [converter.Document.Footer, Settings.Default.FooterContent]
+            ])
+        {
+            let runningBlock = runningBlockEntry[0];
+            let content = runningBlockEntry[1];
+            runningBlock.Left = content?.Left ?? "";
+            runningBlock.Center = content?.Center ?? "";
+            runningBlock.Right = content?.Right ?? "";
+        }
+
         try
         {
             if (Settings.Default.Template)
