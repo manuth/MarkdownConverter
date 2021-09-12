@@ -92,12 +92,12 @@ export class Document extends Renderable
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-                {{{meta}}}
-                {{{styles}}}
+                {{{ meta }}}
+                {{{ styles }}}
             </head>
             <body class="markdown-body">
-                {{{content}}}
-                {{{scripts}}}
+                {{{ content }}}
+                {{{ scripts }}}
             </body>
         </html>`);
 
