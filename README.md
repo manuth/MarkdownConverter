@@ -36,9 +36,12 @@ Before the conversion, the markdown-file is preprocessed using [`Handlebars`][Ha
 ---
 Title: "Test"
 Author: "John Doe"
+Content: "This is an <b>important</b> message"
 ---
 
 ## {{ Title }}
+{{{ Content }}}
+
 This page was written by {{ Author }}
 ```
 
