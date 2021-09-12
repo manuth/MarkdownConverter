@@ -316,6 +316,11 @@ export class ConversionRunner
             converter.Document.StyleSheets.push(new StyleSheet(styleSheet));
         }
 
+        for (let script of Settings.Default.Scripts)
+        {
+            converter.Document.Scripts.push(new WebScript(script));
+        }
+
         return converter;
     }
 
