@@ -158,6 +158,12 @@
     "configuration": {
       "title": "%Config%",
       "properties": {
+        "markdownConverter.ChromiumExecutablePath": {
+          "title": "%Config.ChromiumExecutablePath%",
+          "markdownDescription": "%Config.ChromiumExecutablePath.Description%",
+          "type": "string",
+          "default": null
+        },
         "markdownConverter.DestinationPattern": {
           "title": "%Config.DestinationPattern%",
           "markdownDescription": "%Config.DestinationPattern.Description%",

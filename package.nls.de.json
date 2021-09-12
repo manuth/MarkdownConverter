@@ -3,6 +3,8 @@
     "Command.ConvertAll": "Alle Dokumente konvertieren",
     "Command.Chain": "Alle Dokumente verketten",
     "Config": "MarkdownConverter-Einstellungen",
+    "Config.ChromiumExecutablePath": "Chromium-Pfad",
+    "Config.ChromiumExecutablePath.Description": "Der Pfad zur zu nutzenden Chromium-Installation oder `\"\"`, um MarkdownConverter ein Chrome herunterladen zu lassen.",
     "Config.DestinationPattern": "Ziel-Muster",
     "Config.DestinationPattern.Description": "Das Muster zum Erzeugen des Ziel-Pfads.\n\nFolgende Variablen können verwendet werden:\n\n* `${workspaceFolder}`:  \nEntweder der Pfad des `workspace`s oder des Ordners in dem sich das Dokument befindet.\n* `${dirname}`:  \nDer relative Pfad vom `${workspaceFolder}` zum Ordner des Dokuments.\n* `${filename}`:  \nDer Name der Dokument-Datei.\n* `${basename}`:  \nDer Name der Dokument-Datei ohne Datei-Erweiterung.\n* `${extension}`:  \nDie Datei-Erweiterung des Ziel-Datentyps.",
     "Config.IgnoreLanguageMode": "Sprache ignorieren",
