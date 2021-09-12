@@ -11,6 +11,7 @@ import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, Wo
 import { Converter } from "../../../../Conversion/Converter";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
 import { ISettings } from "../../../../Properties/ISettings";
+import { InsertionType } from "../../../../System/Documents/Assets/InsertionType";
 import { Margin } from "../../../../System/Documents/Margin";
 import { PageOrientation } from "../../../../System/Documents/PageOrientation";
 import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
@@ -331,8 +332,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             context.Settings["Document.Paper.Margin"] = margin;
                             context.Settings["Document.Design.Template"] = templateFile.FullName;
                             context.Settings["Document.Design.HighlightStyle"] = highlightStyle;
-                            context.Settings["Document.Design.StyleSheets"] = [styleSheet.FullName];
-                            context.Settings["Document.Design.Scripts"] = [script.FullName];
+                            context.Settings["Document.Design.StyleSheets"] = { [styleSheet.FullName]: nameof(InsertionType.Default) as keyof typeof InsertionType };
+                            context.Settings["Document.Design.Scripts"] = { [script.FullName]: nameof(InsertionType.Default) as keyof typeof InsertionType };
                             context.Settings["Document.HeaderFooterEnabled"] = headerFooterEnabled;
                             context.Settings["Document.HeaderTemplate"] = headerTemplate;
                             context.Settings["Document.FooterTemplate"] = footerTemplate;
