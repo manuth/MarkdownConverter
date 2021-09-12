@@ -76,5 +76,5 @@
     "Config.Document.Design.HighlightStyle": "highlight.js-Style",
     "Config.Document.Design.HighlightStyle.Description": "Der zu nutzende highligh.js-style.",
     "Config.Document.Design.StyleSheets": "Style-Sheets",
-    "Config.Document.Design.StyleSheets.Description": "StyleSheets, welche in das Dokument eingebettet werden sollen."
+    "Config.Document.Design.StyleSheets.Description": "StyleSheets, welche in das Dokument eingebettet werden sollen.  \nDateien können als Pfad oder als URL angegeben werden."
 }
