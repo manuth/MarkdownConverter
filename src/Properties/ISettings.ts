@@ -7,6 +7,11 @@ import { EmojiType } from "../System/Documents/EmojiType";
 export interface ISettings
 {
     /**
+     * The path to the chromium-installation to use.
+     */
+    ChromiumExecutablePath?: string;
+
+    /**
      * The arguments to pass to chromium.
      */
     ChromiumArgs?: string[];
