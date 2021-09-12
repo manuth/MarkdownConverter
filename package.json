@@ -162,7 +162,7 @@
           "title": "%Config.BrowserType%",
           "markdownDescription": "%Config.BrowserType.Description%",
           "type": "string",
-          "default": null,
+          "default": "chrome",
           "markdownEnumDescriptions": [
             "Indicates a Chromium browser",
             "Indicates a Firefox browser"
