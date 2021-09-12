@@ -287,28 +287,28 @@ export class ConversionRunner
         if (Settings.Default.SystemParserEnabled)
         {
             let mdExtensions = new MarkdownContributions(this.Extension.Context.extensionPath);
+            let assets: Asset[] = [];
 
-            this.LoadAssets(
-                Object.fromEntries(
-                    mdExtensions.previewStyles.map<[string, InsertionType]>(
-                        (item) =>
-                        {
-                            return [item.fsPath, InsertionType.Default];
-                        })),
-                converter.Document.StyleSheets,
-                (path, insertionType) => new StyleSheet(path, insertionType),
-                Settings.Default.StyleSheetInsertion);
+            for (let uri of mdExtensions.previewStyles)
+            {
+                let styleSheet = new StyleSheet(uri.fsPath);
+                assets.push(styleSheet);
+                converter.Document.StyleSheets.push(styleSheet);
+            }
 
-            this.LoadAssets(
-                Object.fromEntries(
-                    mdExtensions.previewScripts.map<[string, InsertionType]>(
-                        (item) =>
-                        {
-                            return [item.fsPath, InsertionType.Default];
-                        })),
-                        converter.Document.Scripts,
-                        (path, insertionType) => new WebScript(path, insertionType),
-                        Settings.Default.ScriptInsertion);
+            for (let uri of mdExtensions.previewScripts)
+            {
+                let script = new WebScript(uri.fsPath);
+                assets.push(script);
+                converter.Document.Scripts.push(script);
+            }
+
+            for (let asset of assets)
+            {
+                asset.InsertionType = asset.PathType === AssetPathType.Link ?
+                    InsertionType.Link :
+                    InsertionType.Include;
+            }
         }
 
         if (Settings.Default.HighlightStyle !== "None")
