@@ -130,4 +130,9 @@ export interface ISettings
      * The stylesheets to add to the document.
      */
     ["Document.Design.StyleSheets"]?: string[];
+
+    /**
+     * The javascript files to add to the document.
+     */
+    ["Document.Design.Scripts"]?: string[];
 }

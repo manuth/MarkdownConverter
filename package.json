@@ -536,6 +536,15 @@
           "items": {
             "type": "string"
           }
+        },
+        "markdownConverter.Document.Design.Scripts": {
+          "title": "%Config.Document.Design.Scripts%",
+          "markdownDescription": "%Config.Document.Design.Scripts.Description%",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

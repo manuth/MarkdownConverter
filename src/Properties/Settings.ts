@@ -254,6 +254,14 @@ export class Settings
     }
 
     /**
+     * Gets the scripts to add to the document.
+     */
+    public get Scripts(): string[]
+    {
+        return this.GetConfigEntry("Document.Design.Scripts");
+    }
+
+    /**
      * Gets the configuration.
      */
     private get config(): WorkspaceConfiguration
