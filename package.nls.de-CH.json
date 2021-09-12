@@ -74,7 +74,7 @@
     "Config.Document.Design.DefaultStyles": "Standard Styles",
     "Config.Document.Design.DefaultStyles.Description": "Ermöglicht die Deaktivierung der Standard-Styles.",
     "Config.Document.Design.HighlightStyle": "highlight.js-Style",
-    "Config.Document.Design.HighlightStyle.Description": "Der zu nutzende highlight.js-style.\n\n***Note:***  \nDer Wert kann auch `true` sein, um den Style von VS Code zu nutzen, oder false, um highlight.js zu deaktivieren.",
+    "Config.Document.Design.HighlightStyle.Description": "Der zu nutzende highlight.js-style.",
     "Config.Document.Design.StyleSheets": "Style-Sheets",
     "Config.Document.Design.StyleSheets.Description": "StyleSheets, welche in das Dokument eingebettet werden sollen.  \nDateien können als Pfad oder als URL angegeben werden.",
     "Config.Document.Design.Scripts": "Javascript-Dateien",
