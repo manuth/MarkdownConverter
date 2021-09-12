@@ -1,7 +1,7 @@
 import { MultiRange } from "multi-integer-range";
 import { env, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType";
-import { AssetPathType } from "../System/Documents/Assets/AssetPathType";
+import { AssetURLType } from "../System/Documents/Assets/AssetURLType";
 import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { CustomPageFormat } from "../System/Documents/CustomPageFormat";
 import { EmojiType } from "../System/Documents/EmojiType";
@@ -250,7 +250,7 @@ export class Settings
     /**
      * Gets the insertion-types to use for stylesheets based on their path.
      */
-    public get StyleSheetInsertion(): Record<AssetPathType, InsertionType>
+    public get StyleSheetInsertion(): Record<AssetURLType, InsertionType>
     {
         return this.LoadInsertionTypes("Document.Design.StyleSheetInsertion");
     }
@@ -266,7 +266,7 @@ export class Settings
     /**
      * Gets the insertion-types to use for scripts based on their path.
      */
-    public get ScriptInsertion(): Record<AssetPathType, InsertionType>
+    public get ScriptInsertion(): Record<AssetURLType, InsertionType>
     {
         return this.LoadInsertionTypes("Document.Design.ScriptInsertion");
     }
@@ -313,13 +313,13 @@ export class Settings
      * @returns
      * The insertion-types loaded from the configuration with the specified {@link key `key`}.
      */
-    protected LoadInsertionTypes(key: string): Record<AssetPathType, InsertionType>
+    protected LoadInsertionTypes(key: string): Record<AssetURLType, InsertionType>
     {
-        let result = {} as Record<AssetPathType, InsertionType>;
+        let result = {} as Record<AssetURLType, InsertionType>;
 
         for (let entry of Object.entries(this.GetConfigEntry(key)))
         {
-            result[AssetPathType[entry[0] as keyof typeof AssetPathType]] = InsertionType[entry[1] as keyof typeof InsertionType];
+            result[AssetURLType[entry[0] as keyof typeof AssetURLType]] = InsertionType[entry[1] as keyof typeof InsertionType];
         }
 
         return result;

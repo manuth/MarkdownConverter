@@ -19,7 +19,7 @@ import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
 import { Asset } from "../Documents/Assets/Asset";
-import { AssetPathType } from "../Documents/Assets/AssetPathType";
+import { AssetURLType } from "../Documents/Assets/AssetURLType";
 import { InsertionType } from "../Documents/Assets/InsertionType";
 import { StyleSheet } from "../Documents/Assets/StyleSheet";
 import { WebScript } from "../Documents/Assets/WebScript";
@@ -305,7 +305,7 @@ export class ConversionRunner
 
             for (let asset of assets)
             {
-                asset.InsertionType = asset.PathType === AssetPathType.Link ?
+                asset.InsertionType = asset.URLType === AssetURLType.Link ?
                     InsertionType.Link :
                     InsertionType.Include;
             }
@@ -357,7 +357,7 @@ export class ConversionRunner
      * @param insertionTypes
      * The insertion-types to use based on the paths of the assets.
      */
-    protected LoadAssets(source: Record<string, InsertionType>, target: Asset[], loader: AssetLoader, insertionTypes: Record<AssetPathType, InsertionType>): void
+    protected LoadAssets(source: Record<string, InsertionType>, target: Asset[], loader: AssetLoader, insertionTypes: Record<AssetURLType, InsertionType>): void
     {
         for (let entry of Object.entries(source))
         {
@@ -365,9 +365,9 @@ export class ConversionRunner
 
             if (
                 asset.InsertionType === InsertionType.Default &&
-                asset.PathType in insertionTypes)
+                asset.URLType in insertionTypes)
             {
-                asset.InsertionType = insertionTypes[asset.PathType];
+                asset.InsertionType = insertionTypes[asset.URLType];
             }
 
             target.push(asset);

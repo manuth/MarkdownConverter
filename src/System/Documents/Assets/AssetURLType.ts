@@ -1,7 +1,7 @@
 /**
- * Represents the type of an asset-path.
+ * Represents the type of an asset-url.
  */
-export enum AssetPathType
+export enum AssetURLType
 {
     /**
      * Indicates a link.

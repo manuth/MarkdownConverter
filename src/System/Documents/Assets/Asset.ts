@@ -2,7 +2,7 @@ import { pathExistsSync } from "fs-extra";
 import { isAbsolute } from "upath";
 import { Uri } from "vscode";
 import { FileException } from "../../IO/FileException";
-import { AssetPathType } from "./AssetPathType";
+import { AssetURLType } from "./AssetURLType";
 import { InsertionType } from "./InsertionType";
 
 /**
@@ -48,13 +48,13 @@ export abstract class Asset
      */
     public get Path(): string
     {
-        return this.PathType === AssetPathType.Link ? Uri.parse(this.URL).fsPath : this.URL;
+        return this.URLType === AssetURLType.Link ? Uri.parse(this.URL).fsPath : this.URL;
     }
 
     /**
-     * Gets the type of the path of the asset.
+     * Gets the type of the url of the asset.
      */
-    public get PathType(): AssetPathType
+    public get URLType(): AssetURLType
     {
         let schemeIncluded: boolean;
 
@@ -70,15 +70,15 @@ export abstract class Asset
 
         if (schemeIncluded)
         {
-            return AssetPathType.Link;
+            return AssetURLType.Link;
         }
         else if (isAbsolute(this.URL))
         {
-            return AssetPathType.AbsolutePath;
+            return AssetURLType.AbsolutePath;
         }
         else
         {
-            return AssetPathType.RelativePath;
+            return AssetURLType.RelativePath;
         }
     }
 
@@ -148,9 +148,9 @@ export abstract class Asset
         }
         else
         {
-            switch (this.PathType)
+            switch (this.URLType)
             {
-                case AssetPathType.Link:
+                case AssetURLType.Link:
                     return InsertionType.Link;
                 default:
                     return InsertionType.Include;
