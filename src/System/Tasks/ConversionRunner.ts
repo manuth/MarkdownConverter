@@ -19,6 +19,7 @@ import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
 import { Asset } from "../Documents/Assets/Asset";
+import { AssetPathType } from "../Documents/Assets/AssetPathType";
 import { InsertionType } from "../Documents/Assets/InsertionType";
 import { StyleSheet } from "../Documents/Assets/StyleSheet";
 import { WebScript } from "../Documents/Assets/WebScript";
@@ -317,12 +318,14 @@ export class ConversionRunner
         this.LoadAssets(
             Settings.Default.StyleSheets,
             converter.Document.StyleSheets,
-            (path, insertionType) => new StyleSheet(path, insertionType));
+            (path, insertionType) => new StyleSheet(path, insertionType),
+            Settings.Default.StyleSheetInsertion);
 
         this.LoadAssets(
             Settings.Default.Scripts,
             converter.Document.Scripts,
-            (path, insertionType) => new WebScript(path, insertionType));
+            (path, insertionType) => new WebScript(path, insertionType),
+            Settings.Default.ScriptInsertion);
 
         return converter;
     }
@@ -338,12 +341,24 @@ export class ConversionRunner
      *
      * @param loader
      * A component for loading assets.
+     *
+     * @param insertionTypes
+     * The insertion-types to use based on the paths of the assets.
      */
-    protected LoadAssets(source: Record<string, InsertionType>, target: Asset[], loader: AssetLoader): void
+    protected LoadAssets(source: Record<string, InsertionType>, target: Asset[], loader: AssetLoader, insertionTypes: Record<AssetPathType, InsertionType>): void
     {
         for (let entry of Object.entries(source))
         {
-            target.push(loader(entry[0], entry[1]));
+            let asset = loader(entry[0], entry[1]);
+
+            if (
+                asset.InsertionType === InsertionType.Default &&
+                asset.PathType in insertionTypes)
+            {
+                asset.InsertionType = insertionTypes[asset.PathType];
+            }
+
+            target.push(asset);
         }
     }
 
