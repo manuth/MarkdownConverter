@@ -7,6 +7,16 @@ import { EmojiType } from "../System/Documents/EmojiType";
 export interface ISettings
 {
     /**
+     * The path to the chromium-installation to use.
+     */
+    ChromiumExecutablePath?: string;
+
+    /**
+     * The arguments to pass to chromium.
+     */
+    ChromiumArgs?: string[];
+
+    /**
      * The pattern for creating the destination-path.
      */
     DestinationPattern?: string;
@@ -40,11 +50,6 @@ export interface ISettings
      * A set of custom date-formats.
      */
     DateFormats?: Record<string, string>;
-
-    /**
-     * The arguments to pass to chromium.
-     */
-    ChromiumArgs?: string[];
 
     /**
      * A value indicating whether the parser of `vscode` should be used.

@@ -3,6 +3,7 @@ import puppeteer = require("puppeteer-core");
 import { CancellationToken, Progress } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
+import { Settings } from "../../Properties/Settings";
 import { ChromiumNotFoundException } from "./ChromiumNotFoundException";
 import { IProgressState } from "./IProgressState";
 import { Task } from "./Task";
@@ -45,7 +46,10 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
      */
     public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
-        if (await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
+        if (
+            await pathExists(
+                Settings.Default.ChromiumExecutablePath ??
+                (puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
         {
             await this.ExecuteTask(progressReporter, cancellationToken, fileReporter);
         }

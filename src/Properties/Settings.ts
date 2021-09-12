@@ -35,6 +35,22 @@ export class Settings
     }
 
     /**
+     * Gets the path to the chromium-installation to use.
+     */
+    public get ChromiumExecutablePath(): string
+    {
+        return this.GetConfigEntry("ChromiumExecutablePath");
+    }
+
+    /**
+     * Gets the arguments to pass to chromium.
+     */
+    public get ChromiumArgs(): string[]
+    {
+        return this.GetConfigEntry("ChromiumArgs");
+    }
+
+    /**
      * Gets the path to save the destination-files to.
      */
     public get DestinationPattern(): string
@@ -96,14 +112,6 @@ export class Settings
     public get DateFormats(): Record<string, string>
     {
         return this.GetConfigEntry("DateFormats");
-    }
-
-    /**
-     * Gets the arguments to pass to chromium.
-     */
-    public get ChromiumArgs(): string[]
-    {
-        return this.GetConfigEntry("ChromiumArgs");
     }
 
     /**

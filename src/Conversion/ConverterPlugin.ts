@@ -73,12 +73,14 @@ export class ConverterPlugin
                 try
                 {
                     browser = await puppeteer.launch({
+                        ...this.Converter.BrowserOptions,
                         args: browserArguments
                     });
                 }
                 catch
                 {
                     browser = await puppeteer.launch({
+                        ...this.Converter.BrowserOptions,
                         args: [
                             ...browserArguments,
                             "--no-sandbox"
