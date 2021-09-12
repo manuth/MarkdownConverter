@@ -1,8 +1,8 @@
 import { strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
+import { load } from "cheerio";
 import { writeFile } from "fs-extra";
 import { Random } from "random-js";
-import { load } from "yamljs";
 import { WebScript } from "../../../../../System/Documents/Assets/WebScript";
 
 /**
