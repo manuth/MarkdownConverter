@@ -1,6 +1,7 @@
 import { MultiRange } from "multi-integer-range";
 import { env, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType";
+import { AssetPathType } from "../System/Documents/Assets/AssetPathType";
 import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { CustomPageFormat } from "../System/Documents/CustomPageFormat";
 import { EmojiType } from "../System/Documents/EmojiType";
@@ -247,11 +248,27 @@ export class Settings
     }
 
     /**
+     * Gets the insertion-types to use for stylesheets based on their path.
+     */
+    public get StyleSheetInsertion(): Record<AssetPathType, InsertionType>
+    {
+        return this.LoadInsertionTypes("Document.Design.StyleSheetInsertion");
+    }
+
+    /**
      * Gets the stylesheets to add to the document.
      */
     public get StyleSheets(): Record<string, InsertionType>
     {
         return this.LoadAssets("Document.Design.StyleSheets");
+    }
+
+    /**
+     * Gets the insertion-types to use for scripts based on their path.
+     */
+    public get ScriptInsertion(): Record<AssetPathType, InsertionType>
+    {
+        return this.LoadInsertionTypes("Document.Design.ScriptInsertion");
     }
 
     /**
@@ -285,6 +302,27 @@ export class Settings
     protected GetConfigEntry<T>(key: string, defaultValue?: T): T
     {
         return this.config.get<T>(key, defaultValue);
+    }
+
+    /**
+     * Loads insertion-types from the configuration with the specified {@link key `key`}.
+     *
+     * @param key
+     * The key of the entry to load the insertion-types from.
+     *
+     * @returns
+     * The insertion-types loaded from the configuration with the specified {@link key `key`}.
+     */
+    protected LoadInsertionTypes(key: string): Record<AssetPathType, InsertionType>
+    {
+        let result = {} as Record<AssetPathType, InsertionType>;
+
+        for (let entry of Object.entries(this.GetConfigEntry(key)))
+        {
+            result[AssetPathType[entry[0] as keyof typeof AssetPathType]] = InsertionType[entry[1] as keyof typeof InsertionType];
+        }
+
+        return result;
     }
 
     /**

@@ -1,4 +1,5 @@
 import { ConversionType } from "../Conversion/ConversionType";
+import { AssetPathType } from "../System/Documents/Assets/AssetPathType";
 import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { EmojiType } from "../System/Documents/EmojiType";
 
@@ -128,9 +129,19 @@ export interface ISettings
     ["Document.Design.HighlightStyle"]?: string;
 
     /**
+     * The insertion-types to use for stylesheets based on their path.
+     */
+    ["Document.Design.StyleSheetInsertion"]?: Record<keyof typeof AssetPathType, keyof typeof InsertionType>;
+
+    /**
      * The stylesheets to add to the document.
      */
     ["Document.Design.StyleSheets"]?: Record<string, keyof typeof InsertionType>;
+
+    /**
+     * The insertion-types to use for scripts based on their path.
+     */
+    ["Document.Design.ScriptInsertion"]?: Record<keyof typeof AssetPathType, keyof typeof InsertionType>;
 
     /**
      * The javascript files to add to the document.
