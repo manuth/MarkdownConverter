@@ -42,6 +42,6 @@ export class WebScript extends Asset
      */
     protected GetReferenceSource(): string
     {
-        return `<script async="" src="${this.URL}"charset="UTF-8"></script>\n`;
+        return `<script async="" src="${this.URL}" charset="UTF-8"></script>\n`;
     }
 }

@@ -460,7 +460,7 @@ export class ConversionRunner
                             `title=":${token[id].markup}:" ` +
                             `alt=":${token[id].markup}:" ` +
                             `src="https://github.githubassets.com/images/icons/emoji/unicode/${twemoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
-                            'align="absmiddle" />';
+                            'style="vertical-align: middle; " />';
                 }
             };
         }
