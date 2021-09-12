@@ -339,7 +339,7 @@ export class Document extends Renderable
     /**
      * Gets the header of the document.
      */
-    public get Header(): DocumentFragment
+    public get Header(): RunningBlock
     {
         return this.header;
     }
@@ -347,7 +347,7 @@ export class Document extends Renderable
     /**
      * Gets the footer of the document.
      */
-    public get Footer(): DocumentFragment
+    public get Footer(): RunningBlock
     {
         return this.footer;
     }
