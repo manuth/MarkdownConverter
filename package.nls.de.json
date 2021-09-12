@@ -91,7 +91,7 @@
     "Config.Document.Design.InsertionType.Link": "Die Datei verlinken.",
     "Config.Document.Design.InsertionType.Include": "Den Inhalt der Datei in das Dokument einfügen.",
     "Config.Document.Design.StyleSheetInsertion": "Stylesheet Einfüge-Logik",
-    "Config.Document.Design.StyleSheetInsertion.Description": "Die Einfüge-Logik aufgrund der Art des Pfades der Stylesheets
+    "Config.Document.Design.StyleSheetInsertion.Description": "Die Einfüge-Logik aufgrund der Art des Pfades der Stylesheets.",
     "Config.Document.Design.StyleSheets": "Style-Sheets",
     "Config.Document.Design.StyleSheets.Description": "StyleSheets, welche in das Dokument eingebettet werden sollen und die dazugehörige Logik zum Einfügen.  \nDateien können als Pfad oder als URL angegeben werden.",
     "Config.Document.Design.ScriptInsertion": "Javascript Einfüge-Logik",
