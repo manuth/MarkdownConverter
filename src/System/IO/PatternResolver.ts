@@ -1,5 +1,4 @@
 import template = require("es6-template-string");
-import format = require("string-template");
 import { dirname, parse, relative } from "upath";
 import { Progress, TextDocument } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
@@ -117,11 +116,6 @@ export class PatternResolver
         let extension: string;
         let context: IPatternContext;
         let parsedPath = parse(document.fileName);
-
-        this.Reporter?.report(
-            {
-                message: format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
-            });
 
         switch (type)
         {

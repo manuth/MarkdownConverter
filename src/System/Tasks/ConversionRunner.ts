@@ -167,6 +167,11 @@ export class ConversionRunner
                     tasks.push(
                         (async () =>
                         {
+                            progressReporter?.report(
+                                {
+                                    message: format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
+                                });
+
                             let destinationPath = patternResolver.Resolve(documentRoot, document, type, workspaceFolder);
 
                             if (
