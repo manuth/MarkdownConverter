@@ -11,6 +11,7 @@ import { ConversionType } from "./Conversion/ConversionType";
 import { IConvertedFile } from "./Conversion/IConvertedFile";
 import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
 import { Resources } from "./Properties/Resources";
+import { Settings } from "./Properties/Settings";
 import { Extension } from "./System/Extensibility/Extension";
 import { FileException } from "./System/IO/FileException";
 import { NoWorkspaceFolderException } from "./System/NoWorkspaceFolderException";
@@ -170,7 +171,23 @@ export class MarkdownConverterExtension extends Extension
         {
             if (exception instanceof ChromiumNotFoundException)
             {
-                if (
+                if (Settings.Default.ChromiumExecutablePath)
+                {
+                    do
+                    {
+                        if (await pathExists(Settings.Default.ChromiumExecutablePath))
+                        {
+                            return this.ExecuteTaskInternal(task);
+                        }
+                    }
+                    while (
+                        !await pathExists(Settings.Default.ChromiumExecutablePath) &&
+                        await (window.showWarningMessage(
+                            Resources.Resources.Get("CustomBrowserNotFound"),
+                            Resources.Resources.Get("Yes"),
+                            Resources.Resources.Get("No"))) === Resources.Resources.Get("Yes"));
+                }
+                else if (
                     await (window.showInformationMessage(
                         Resources.Resources.Get("UpdateMessage"),
                         Resources.Resources.Get("Yes"),

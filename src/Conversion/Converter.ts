@@ -149,6 +149,21 @@ export class Converter
     }
 
     /**
+     * Gets the options for launching the browser.
+     */
+    public get BrowserOptions(): puppeteer.LaunchOptions
+    {
+        return {
+            ...(
+                Settings.Default.ChromiumExecutablePath ?
+                    {
+                        executablePath: Settings.Default.ChromiumExecutablePath
+                    } :
+                    {})
+        };
+    }
+
+    /**
      * Gets the browser which is used to perform the conversion.
      */
     protected get Browser(): puppeteer.Browser
@@ -250,6 +265,7 @@ export class Converter
             {
                 this.browser = await puppeteer.launch(
                     {
+                        ...this.BrowserOptions,
                         args: [
                             ...browserArguments
                         ]
@@ -259,6 +275,7 @@ export class Converter
             {
                 this.browser = await puppeteer.launch(
                     {
+                        ...this.BrowserOptions,
                         args: [
                             ...browserArguments,
                             "--no-sandbox"
