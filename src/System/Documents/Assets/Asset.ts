@@ -53,7 +53,7 @@ export abstract class Asset
         try
         {
             Uri.parse(this.Path, true);
-            schemeIncluded = true;
+            schemeIncluded = !isAbsolute(this.Path);
         }
         catch
         {
