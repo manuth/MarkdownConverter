@@ -1,4 +1,4 @@
-import { strictEqual } from "assert";
+import { ok, strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import { writeFile } from "fs-extra";
@@ -78,7 +78,7 @@ export function WebScriptTests(): void
                         () =>
                         {
                             let linkTag = load(webScript.GetReferenceSource())("script");
-                            strictEqual(linkTag.attr("async"), "");
+                            ok(linkTag.attr("async"));
                             strictEqual(linkTag.attr("src"), webScript.URL);
                             strictEqual(linkTag.attr("charset"), "UTF-8");
                         });
