@@ -18,6 +18,8 @@ import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
+import { Asset } from "../Documents/Assets/Asset";
+import { InsertionType } from "../Documents/Assets/InsertionType";
 import { StyleSheet } from "../Documents/Assets/StyleSheet";
 import { WebScript } from "../Documents/Assets/WebScript";
 import { Document } from "../Documents/Document";
@@ -28,6 +30,7 @@ import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
 import { FileException } from "../IO/FileException";
 import { PatternResolver } from "../IO/PatternResolver";
 import { OperationCancelledException } from "../OperationCancelledException";
+import { AssetLoader } from "./AssetLoader";
 import { IProgressState } from "./IProgressState";
 
 /**
@@ -311,17 +314,37 @@ export class ConversionRunner
             }
         }
 
-        for (let styleSheet of Object.keys(Settings.Default.StyleSheets))
-        {
-            converter.Document.StyleSheets.push(new StyleSheet(styleSheet));
-        }
+        this.LoadAssets(
+            Settings.Default.StyleSheets,
+            converter.Document.StyleSheets,
+            (path, insertionType) => new StyleSheet(path, insertionType));
 
-        for (let script of Object.keys(Settings.Default.Scripts))
-        {
-            converter.Document.Scripts.push(new WebScript(script));
-        }
+        this.LoadAssets(
+            Settings.Default.Scripts,
+            converter.Document.Scripts,
+            (path, insertionType) => new WebScript(path, insertionType));
 
         return converter;
+    }
+
+    /**
+     * Adds the assets from the specified {@link source `source`} to the {@link target `target`}.
+     *
+     * @param source
+     * The assets to load.
+     *
+     * @param target
+     * The asset-list to add the {@link source `source`}-assets to.
+     *
+     * @param loader
+     * A component for loading assets.
+     */
+    protected LoadAssets(source: Record<string, InsertionType>, target: Asset[], loader: AssetLoader): void
+    {
+        for (let entry of Object.entries(source))
+        {
+            target.push(loader(entry[0], entry[1]));
+        }
     }
 
     /**
