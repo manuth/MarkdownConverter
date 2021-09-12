@@ -37,7 +37,7 @@ export class Settings
     /**
      * Gets the path to the chromium-installation to use.
      */
-    public get ChromiumExecutablePath(): string[]
+    public get ChromiumExecutablePath(): string
     {
         return this.GetConfigEntry("ChromiumExecutablePath");
     }
