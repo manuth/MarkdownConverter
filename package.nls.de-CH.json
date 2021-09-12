@@ -75,11 +75,18 @@
     "Config.Document.Design.DefaultStyles.Description": "Ermöglicht die Deaktivierung der Standard-Styles.",
     "Config.Document.Design.HighlightStyle": "highlight.js-Style",
     "Config.Document.Design.HighlightStyle.Description": "Der zu nutzende highligh.js-style.\n\n***Note:***  \nDer Wert kann auch `true` sein, um den Style von VS Code zu nutzen, oder false, um highlight.js zu deaktivieren.",
+    "Config.Document.Design.AssetPathType.Link": "Dateien, die als Link angegeben wurden.",
+    "Config.Document.Design.AssetPathType.RelativePath": "Dateien, die als relativer Pfad angegeben wurden.",
+    "Config.Document.Design.AssetPathType.AbsolutePath": "Dateien, die als absoluter Pfad angegeben wurden.",
     "Config.Document.Design.InsertionType.Default": "Lass MarkdownConverter entscheiden.",
     "Config.Document.Design.InsertionType.Link": "Die Datei verlinken.",
     "Config.Document.Design.InsertionType.Include": "Den Inhalt der Datei in das Dokument einfügen.",
+    "Config.Document.Design.StyleSheetInsertion": "Stylesheet Einfüge-Logik",
+    "Config.Document.Design.StyleSheetInsertion.Description": "Die Einfüge-Logik aufgrund der Art des Pfades der Stylesheets.",
     "Config.Document.Design.StyleSheets": "Style-Sheets",
     "Config.Document.Design.StyleSheets.Description": "StyleSheets, welche in das Dokument eingebettet werden sollen.  \nDateien können als Pfad oder als URL angegeben werden.",
+    "Config.Document.Design.ScriptInsertion": "Javascript Einfüge-Logik",
+    "Config.Document.Design.ScriptInsertion.Description": "Die Einfüge-Logik aufgrund der Art des Pfades der Javascript-Dateien.",
     "Config.Document.Design.Scripts": "Javascript-Dateien",
     "Config.Document.Design.Scripts.Description": "Javascript-Dateien, welche in das Dokument eingebettet werden sollen.  \nDateien können als Pfad oder als URL angegeben werden."
 }

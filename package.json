@@ -528,6 +528,59 @@
             }
           ]
         },
+        "markdownConverter.Document.Design.StyleSheetInsertion": {
+          "title": "%Config.Document.Design.StyleSheetInsertion%",
+          "markdownDescription": "%Config.Document.Design.StyleSheetInsertion.Description%",
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "Link": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.Link%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "RelativePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.RelativePath%",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "AbsolutePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.AbsolutePath%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
+          }
+        },
         "markdownConverter.Document.Design.StyleSheets": {
           "title": "%Config.Document.Design.StyleSheets%",
           "markdownDescription": "%Config.Document.Design.StyleSheets.Description%",
@@ -537,6 +590,59 @@
           "patternProperties": {
             "^.*$": {
               "type": "string",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
+          }
+        },
+        "markdownConverter.Document.Design.ScriptInsertion": {
+          "title": "%Config.Document.Design.ScriptInsertion%",
+          "markdownDescription": "%Config.Document.Design.ScriptInsertion.Description%",
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "Link": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.Link%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "RelativePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.RelativePath%",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "AbsolutePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.AbsolutePath%",
               "default": "Default",
               "enumDescriptions": [
                 "%Config.Document.Design.InsertionType.Default%",
