@@ -150,8 +150,9 @@ export class Document extends Renderable
 
         this.parser = parser;
 
-        this.Meta.Content = dedent(`
-            <title>{{{ Title }}}</title>`);
+        this.Meta.Content = dedent(
+            `
+                <title>{{{ Title }}}</title>`);
     }
 
     /**
