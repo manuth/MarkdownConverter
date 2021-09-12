@@ -16,7 +16,7 @@ export function TaskTests(context: ITestContext<ISettings>): void
         "Tasks",
         () =>
         {
-            PuppeteerTaskTests();
+            PuppeteerTaskTests(context);
             ConversionRunnerTests(context);
             ConvertTaskTests(context);
         });
