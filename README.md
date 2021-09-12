@@ -38,6 +38,9 @@ A markdown-converter for [vscode][vscode]
     - `Markdown: Chain all Documents` (`Markdown: Alle Dokumente verketten`) or `mcad` (`madv` in German) for short 
  4. Press enter and wait for the process to finish
 
+Normally, `MarkdownConverter` will refuse to convert files which aren't recognized as markdown-files.  
+If you don't like this behavior, you might want to set `markdownConverter.IgnoreLanguageMode` to `true`.
+
 ## Variable Substitution
 Before the conversion, the markdown-file is preprocessed using [`Handlebars`][Handlebars]. Variables (such as `{{ Author }}`) are automatically replaced with the corresponding attribute-value.
 
