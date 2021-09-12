@@ -228,6 +228,7 @@ export class ConversionRunner
         let metaTemplate = converter.Document.Attributes["MetaTemplate"] as string ?? Settings.Default.MetaTemplate;
         let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string ?? Settings.Default.HeaderTemplate;
         let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string ?? Settings.Default.FooterTemplate;
+        converter.ChromiumExecutablePath = Settings.Default.ChromiumExecutablePath ?? converter.ChromiumExecutablePath;
         converter.Document.Quality = Settings.Default.ConversionQuality;
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Locale = new CultureInfo(Settings.Default.Locale);

@@ -50,6 +50,11 @@ export class Converter
     private portNumber: number;
 
     /**
+     * The path to the chromium-browser to use for the conversion.
+     */
+    private chromiumExecutablePath: string = null;
+
+    /**
      * The browser which is used to perform the conversion.
      */
     private browser: puppeteer.Browser;
@@ -149,15 +154,31 @@ export class Converter
     }
 
     /**
+     * Gets or sets the path to the chromium-browser to use for the conversion.
+     */
+    public get ChromiumExecutablePath(): string
+    {
+        return this.chromiumExecutablePath;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public set ChromiumExecutablePath(value: string)
+    {
+        this.chromiumExecutablePath = value;
+    }
+
+    /**
      * Gets the options for launching the browser.
      */
     public get BrowserOptions(): puppeteer.LaunchOptions
     {
         return {
             ...(
-                Settings.Default.ChromiumExecutablePath ?
+                this.ChromiumExecutablePath ?
                     {
-                        executablePath: Settings.Default.ChromiumExecutablePath
+                        executablePath: this.ChromiumExecutablePath
                     } :
                     {})
         };
