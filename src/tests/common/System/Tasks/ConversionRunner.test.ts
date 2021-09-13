@@ -367,9 +367,9 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             }
 
                             strictEqual(converter.Document.Template, (await readFile(templateFile.FullName)).toString());
-                            ok(converter.Document.StyleSheets.some((stylesheet) => stylesheet.Path.includes(highlightStyle)));
-                            ok(converter.Document.StyleSheets.some((entry) => entry.Path === styleSheet[0].FullName && entry.InsertionType === InsertionType[styleSheet[1]]));
-                            ok(converter.Document.Scripts.some((entry) => entry.Path === script[0].FullName && entry.InsertionType === InsertionType[script[1]]));
+                            ok(converter.Document.StyleSheets.some((stylesheet) => stylesheet.URL.includes(highlightStyle)));
+                            ok(converter.Document.StyleSheets.some((entry) => entry.URL === styleSheet[0].FullName && entry.InsertionType === InsertionType[styleSheet[1]]));
+                            ok(converter.Document.Scripts.some((entry) => entry.URL === script[0].FullName && entry.InsertionType === InsertionType[script[1]]));
                             strictEqual(converter.Document.HeaderFooterEnabled, headerFooterEnabled);
                             strictEqual(converter.Document.Header.Content, headerTemplate);
                             strictEqual(converter.Document.Footer.Content, footerTemplate);

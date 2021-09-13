@@ -104,7 +104,7 @@ export function AssetTests(): void
                         "Checking whether the values are set correctly…",
                         () =>
                         {
-                            strictEqual(asset.Path, file.FullName);
+                            strictEqual(asset.URL, file.FullName);
 
                             strictEqual(
                                 new AssetTest(absolutePath, insertionType).InsertionType,
@@ -116,18 +116,6 @@ export function AssetTests(): void
                         () =>
                         {
                             strictEqual(asset.InsertionType, InsertionType.Default);
-                        });
-                });
-
-            suite(
-                "Path",
-                () =>
-                {
-                    test(
-                        "Checking whether the path uf URLs is returned…",
-                        () =>
-                        {
-                            strictEqual(new AssetTest(`file:${absolutePath}`).Path.toUpperCase(), absolutePath.toUpperCase());
                         });
                 });
 
