@@ -104,7 +104,7 @@ export abstract class Asset
      * @returns
      * A string representing this asset.
      */
-    public ToString(): string
+    public async Render(): Promise<string>
     {
         switch (this.GetInsertionType())
         {
@@ -121,17 +121,6 @@ export abstract class Asset
                     throw new FileException(null, this.Path);
                 }
         }
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @returns
-     * A string representing this asset.
-     */
-    public toString(): string
-    {
-        return this.ToString();
     }
 
     /**

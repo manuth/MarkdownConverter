@@ -161,15 +161,15 @@ export function AssetTests(): void
                 });
 
             suite(
-                "ToString",
+                "Render",
                 () =>
                 {
                     test(
                         "Checking whether assets are generated according to their insertion-type…",
-                        () =>
+                        async () =>
                         {
-                            strictEqual(new AssetTest(link, InsertionType.Include).ToString(), inlineSource);
-                            strictEqual(new AssetTest(link, InsertionType.Link).ToString(), referenceSource);
+                            strictEqual(await new AssetTest(link, InsertionType.Include).Render(), inlineSource);
+                            strictEqual(await new AssetTest(link, InsertionType.Link).Render(), referenceSource);
                         });
                 });
         });

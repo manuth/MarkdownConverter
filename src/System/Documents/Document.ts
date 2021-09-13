@@ -430,12 +430,12 @@ export class Document extends Renderable
 
         for (let styleSheet of this.StyleSheets)
         {
-            styleCode += styleSheet.ToString();
+            styleCode += await styleSheet.Render();
         }
 
         for (let script of this.Scripts)
         {
-            scriptCode += script.ToString();
+            scriptCode += await script.Render();
         }
 
         let view = {
