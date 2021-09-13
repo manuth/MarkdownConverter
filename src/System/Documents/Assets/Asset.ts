@@ -1,4 +1,4 @@
-import { pathExistsSync, readFile } from "fs-extra";
+import { readFile } from "fs-extra";
 import getUri = require("get-uri");
 import { isAbsolute } from "upath";
 import { Uri } from "vscode";
@@ -110,16 +110,8 @@ export abstract class Asset
         {
             case InsertionType.Link:
                 return this.GetReferenceSource();
-
             default:
-                if (pathExistsSync(this.Path))
-                {
-                    return this.GetSource();
-                }
-                else
-                {
-                    throw new FileException(null, this.Path);
-                }
+                return this.GetSource();
         }
     }
 
