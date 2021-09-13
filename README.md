@@ -210,6 +210,8 @@ By default, `MarkdownConverter` will include assets located at absolute and rela
 ## Settings
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
 
+  - `markdownConverter.ChromiumExecutablePath`:  
+    Normally, `MarkdownConverter` will download a copy of Chromium. This option allows you to choose a custom chromium-installation instead.
   - `markdownConverter.ChromiumArgs`:  
     Allows you to pass specific arguments to chromium for the conversion (such as `--no-sandbox` or `--disable-gpu`).
   - `markdownConverter.DestinationPattern`:  
@@ -229,6 +231,8 @@ This is a list of the most important settings. To see all of them, install the e
     This setting allows you to enable or disable the usage of `vscode`s internal markdown-parser. Using the internal markdown-parser might be very useful to you as it grants you access to all markdown-plugin extensions installed to your vscode.
   - `markdownConverter.Parser.Toc.Enabled`:  
     Allows you to automatically include a table-of-contents for your document in your converted files.
+  - `markdownConverter.Parser.Toc.Indicator`:  
+    The regular expression to replace with the table of contents.
   - `markdownConverter.Document.Attributes`:  
     Using this setting you can specify default attributes which are applied to all your documents.
   - `markdownConverter.HeaderTemplate` and `markdownConverter.FooterTemplate`:  
