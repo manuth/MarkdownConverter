@@ -1,7 +1,7 @@
-import { pathExistsSync } from "fs-extra";
+import { pathExistsSync, readFile } from "fs-extra";
+import getUri = require("get-uri");
 import { isAbsolute } from "upath";
 import { Uri } from "vscode";
-import { FileException } from "../../IO/FileException";
 import { AssetURLType } from "./AssetURLType";
 import { InsertionType } from "./InsertionType";
 
@@ -162,4 +162,59 @@ export abstract class Asset
      * The reference-expression of the asset.
      */
     protected abstract GetReferenceSource(): Promise<string>;
+
+    /**
+     * Reads the content of the asset.
+     *
+     * @returns
+     * The content of the asset.
+     */
+    protected async ReadFile(): Promise<string>
+    {
+        if (this.URLType === AssetURLType.Link)
+        {
+            return new Promise(
+                (resolve, reject) =>
+                {
+                    getUri(
+                        this.URL,
+                        (error, result) =>
+                        {
+                            if (error)
+                            {
+                                reject(error);
+                            }
+                            else
+                            {
+                                let content = "";
+
+                                result.on(
+                                    "error",
+                                    (error) =>
+                                    {
+                                        reject(error);
+                                    });
+
+                                result.on(
+                                    "data",
+                                    (data) =>
+                                    {
+                                        content += `${data}`;
+                                    });
+
+                                result.on(
+                                    "end",
+                                    () =>
+                                    {
+                                        resolve(content);
+                                    });
+                            }
+                        });
+                });
+        }
+        else
+        {
+            return (await readFile(this.URL)).toString();
+        }
+    }
 }
