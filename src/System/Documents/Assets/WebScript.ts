@@ -1,5 +1,4 @@
 import dedent = require("dedent");
-import { readFileSync } from "fs-extra";
 import { Asset } from "./Asset";
 import { InsertionType } from "./InsertionType";
 
@@ -31,7 +30,7 @@ export class WebScript extends Asset
     protected async GetSource(): Promise<string>
     {
         return dedent(`
-            <script>${readFileSync(this.Path).toString()}</script>`) + "\n";
+            <script>${await this.ReadFile()}</script>`) + "\n";
     }
 
     /**
