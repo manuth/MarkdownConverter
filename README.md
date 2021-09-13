@@ -12,6 +12,8 @@ A markdown-converter for [vscode][vscode]
   - [Headers and Footers](#headers-and-footers)
   - [Including Table of Contents](#including-table-of-contents)
   - [Third Party Markdown Extensions](#third-party-markdown-extensions)
+  - [CSS and JavaScript Assets](#css-and-javascript-assets)
+    - [Insertion](#insertion)
   - [Settings](#settings)
 
 ## What is `MarkdownConverter`?
@@ -157,6 +159,53 @@ Furthermore, the `markdownConverter.Parser.Toc.Levels` allows you to choose whic
 
 ## Third Party Markdown Extensions
 If you want to use third party markdown-extensions in your documents (such as the [Markdown Preview Mermaid Support], [Markdown Footnote] or [Markdown Emoji]), you might want to install the extensions of your choice and enable the `markdownConverter.Parser.SystemParserEnabled` setting which makes `MarkdownConverter` use VSCode's built-in `markdown-it` parser with all markdown extensions enabled.
+
+## CSS and JavaScript Assets
+`MarkdownConverter` allows you to pass stylesheets and JavaScript-files which are added to the document.
+
+Use the `markdownConverter.Document.Design.StyleSheets` and the `markdownConverter.Document.Design.Scripts` options for adding stylesheets and scripts.
+
+You can choose the way to insert the stylesheet or script for each asset individually.
+
+  * `Link` means adding a link to the asset
+  * `Include` will copy the content of the asset into the document
+  * `Default` will inherit the default behavior
+
+```json
+{
+  "markdownConverter.Document.Design.StyleSheets": {
+    "./css/styles.css": "Default",
+    "/home/scott/styles.css": "Link",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css": "Include"
+  },
+  "markdownConverter.Document.Design.Scripts": {
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js": "Default"
+  }
+}
+```
+
+### Insertion
+Basically, there are two ways on how to add an asset to the document.
+You can either add a link to the asset or have its content copied to the document.
+
+You can choose how to treat assets by default based on their paths using the `markdownConverter.Document.Design.StyleInsertion` and the `markdownConverter.Document.Design.ScriptInsertion` options.
+
+```json
+{
+  "markdownConverter.Document.Design.StyleInsertion": {
+    "Link": "Link",
+    "AbsolutePath": "Link",
+    "RelativePath": "Include"
+  },
+  "markdownConverter.Document.Design.ScriptInsertion": {
+    "Link": "Include",
+    "AbsolutePath": "Include",
+    "RelativePath": "Default"
+  }
+}
+```
+
+By default, `MarkdownConverter` will include assets located at absolute and relative paths and add links to assets located at URLs.
 
 ## Settings
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
