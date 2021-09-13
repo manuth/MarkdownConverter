@@ -44,14 +44,6 @@ export abstract class Asset
     }
 
     /**
-     * Gets the path to the asset.
-     */
-    public get Path(): string
-    {
-        return this.URLType === AssetURLType.Link ? Uri.parse(this.URL).fsPath : this.URL;
-    }
-
-    /**
      * Gets the type of the url of the asset.
      */
     public get URLType(): AssetURLType
