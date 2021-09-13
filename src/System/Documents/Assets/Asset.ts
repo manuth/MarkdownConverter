@@ -153,7 +153,7 @@ export abstract class Asset
      * @returns
      * The inline-source of the asset.
      */
-    protected abstract GetSource(): string;
+    protected abstract GetSource(): Promise<string>;
 
     /**
      * Gets the reference-expression of the asset.
@@ -161,5 +161,5 @@ export abstract class Asset
      * @returns
      * The reference-expression of the asset.
      */
-    protected abstract GetReferenceSource(): string;
+    protected abstract GetReferenceSource(): Promise<string>;
 }

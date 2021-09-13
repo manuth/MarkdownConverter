@@ -28,7 +28,7 @@ export class StyleSheet extends Asset
      * @returns
      * The inline-source of the asset.
      */
-    protected GetSource(): string
+    protected async GetSource(): Promise<string>
     {
         return dedent(`
             <style>${readFileSync(this.Path).toString()}</style>`) + "\n";
@@ -40,7 +40,7 @@ export class StyleSheet extends Asset
      * @returns
      * The reference-expression of the asset.
      */
-    protected GetReferenceSource(): string
+    protected async GetReferenceSource(): Promise<string>
     {
         return `<link rel="stylesheet" type="text/css" href="${this.URL}" />\n`;
     }

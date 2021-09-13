@@ -28,7 +28,7 @@ export class WebScript extends Asset
      * @returns
      * The inline-source of the asset.
      */
-    protected GetSource(): string
+    protected async GetSource(): Promise<string>
     {
         return dedent(`
             <script>${readFileSync(this.Path).toString()}</script>`) + "\n";
@@ -40,7 +40,7 @@ export class WebScript extends Asset
      * @returns
      * The reference-expression of the asset.
      */
-    protected GetReferenceSource(): string
+    protected async GetReferenceSource(): Promise<string>
     {
         return `<script async src="${this.URL}" charset="UTF-8"></script>\n`;
     }

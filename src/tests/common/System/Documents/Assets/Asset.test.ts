@@ -36,7 +36,7 @@ export function AssetTests(): void
                  * @returns
                  * The inline-source of the asset.
                  */
-                protected GetSource(): string
+                protected async GetSource(): Promise<string>
                 {
                     return inlineSource;
                 }
@@ -47,7 +47,7 @@ export function AssetTests(): void
                  * @returns
                  * The reference-expression of the asset.
                  */
-                protected GetReferenceSource(): string
+                protected async GetReferenceSource(): Promise<string>
                 {
                     return referenceSource;
                 }

@@ -25,7 +25,7 @@ export function WebScriptTests(): void
                  * @returns
                  * The inline-source of the asset.
                  */
-                public override GetSource(): string
+                public override async GetSource(): Promise<string>
                 {
                     return super.GetSource();
                 }
@@ -36,7 +36,7 @@ export function WebScriptTests(): void
                  * @returns
                  * The reference-expression of the asset.
                  */
-                public override GetReferenceSource(): string
+                public override async GetReferenceSource(): Promise<string>
                 {
                     return super.GetReferenceSource();
                 }
@@ -63,9 +63,9 @@ export function WebScriptTests(): void
                 {
                     test(
                         "Checking whether the source is created correctly…",
-                        () =>
+                        async () =>
                         {
-                            strictEqual(load(webScript.GetSource())("script").html(), content);
+                            strictEqual(load(await webScript.GetSource())("script").html(), content);
                         });
                 });
 
@@ -75,9 +75,9 @@ export function WebScriptTests(): void
                 {
                     test(
                         "Checking whether the source containing a reference to the stylesheet is created correctly…",
-                        () =>
+                        async () =>
                         {
-                            let linkTag = load(webScript.GetReferenceSource())("script");
+                            let linkTag = load(await webScript.GetReferenceSource())("script");
                             ok(linkTag.attr("async"));
                             strictEqual(linkTag.attr("src"), webScript.URL);
                             strictEqual(linkTag.attr("charset"), "UTF-8");

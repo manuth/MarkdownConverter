@@ -25,7 +25,7 @@ export function StyleSheetTests(): void
                  * @returns
                  * The inline-source of the asset.
                  */
-                public override GetSource(): string
+                public override async GetSource(): Promise<string>
                 {
                     return super.GetSource();
                 }
@@ -36,7 +36,7 @@ export function StyleSheetTests(): void
                  * @returns
                  * The reference-expression of the asset.
                  */
-                public override GetReferenceSource(): string
+                public override async GetReferenceSource(): Promise<string>
                 {
                     return super.GetReferenceSource();
                 }
@@ -63,9 +63,9 @@ export function StyleSheetTests(): void
                 {
                     test(
                         "Checking whether the source is created correctly…",
-                        () =>
+                        async () =>
                         {
-                            strictEqual(load(styleSheet.GetSource())("style").html(), content);
+                            strictEqual(load(await styleSheet.GetSource())("style").html(), content);
                         });
                 });
 
@@ -75,9 +75,9 @@ export function StyleSheetTests(): void
                 {
                     test(
                         "Checking whether the source containing a reference to the stylesheet is created correctly…",
-                        () =>
+                        async () =>
                         {
-                            let linkTag = load(styleSheet.GetReferenceSource())("link");
+                            let linkTag = load(await styleSheet.GetReferenceSource())("link");
                             strictEqual(linkTag.attr("rel"), "stylesheet");
                             strictEqual(linkTag.attr("type"), "text/css");
                             strictEqual(linkTag.attr("href"), styleSheet.URL);
