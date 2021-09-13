@@ -11,6 +11,7 @@ A markdown-converter for [vscode][vscode]
       - [Custom Date-Formats](#custom-date-formats)
   - [Headers and Footers](#headers-and-footers)
   - [Including Table of Contents](#including-table-of-contents)
+  - [Third Party Markdown Extensions](#third-party-markdown-extensions)
   - [Settings](#settings)
 
 ## What is `MarkdownConverter`?
@@ -154,6 +155,9 @@ Furthermore, the `markdownConverter.Parser.Toc.Levels` allows you to choose whic
 }
 ```
 
+## Third Party Markdown Extensions
+If you want to use third party markdown-extensions in your documents (such as the [Markdown Preview Mermaid Support], [Markdown Footnote] or [Markdown Emoji]), you might want to install the extensions of your choice and enable the `markdownConverter.Parser.SystemParserEnabled` setting which makes `MarkdownConverter` use VSCode's built-in `markdown-it` parser with all markdown extensions enabled.
+
 ## Settings
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
 
@@ -188,3 +192,6 @@ This is a list of the most important settings. To see all of them, install the e
 <!--- References -->
 [vscode]: https://github.com/microsoft/vscode
 [Handlebars]: https://handlebarsjs.com/
+[Markdown Preview Mermaid Support]: https://github.com/shd101wyy/vscode-markdown-preview-enhanced
+[Markdown Footnote]: https://marketplace.visualstudio.com/items?itemName=houkanshan.vscode-markdown-footnote
+[Markdown Emoji]: https://marketplace.visualstudio.com/items?itemName=bierner.markdown-emoji
