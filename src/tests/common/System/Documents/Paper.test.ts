@@ -11,11 +11,11 @@ import { StandardizedPageFormat } from "../../../../System/Documents/Standardize
 export function PaperTests(): void
 {
     suite(
-        "Paper",
+        nameof(Paper),
         () =>
         {
             suite(
-                "constructor",
+                nameof(Paper.constructor),
                 () =>
                 {
                     test(

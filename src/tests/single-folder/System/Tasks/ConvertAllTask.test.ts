@@ -4,9 +4,9 @@ import { pathExists } from "fs-extra";
 import { join } from "upath";
 import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
 import { extension } from "../../../..";
+import { ConversionType } from "../../../../Conversion/ConversionType";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { ISettings } from "../../../../Properties/ISettings";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { ITestContext } from "../../../ITestContext";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
@@ -20,7 +20,7 @@ import { TestConvertAllTask } from "../../../TestConvertAllTask";
 export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "ConvertAllTask",
+        nameof(ConvertAllTask),
         () =>
         {
             let excludeKey: string;
@@ -36,7 +36,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "Execute",
+                nameof<TestConvertAllTask>((task) => task.Execute),
                 () =>
                 {
                     let tempDir: TempDirectory;
@@ -60,7 +60,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                             this.slow(0.5 * 60 * 1000);
                             this.timeout(1 * 60 * 1000);
                             context.Settings.DestinationPattern = join(tempDir.FullName, "${basename}.${extension}");
-                            context.Settings.ConversionType = ["PDF"];
+                            context.Settings.ConversionType = [nameof(ConversionType.PDF)] as Array<keyof typeof ConversionType>;
                             await task.Execute();
                             ok(await pathExists(tempDir.MakePath("Test1.pdf")));
                             ok(await pathExists(tempDir.MakePath("Test2.pdf")));
@@ -79,7 +79,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "GetDocuments",
+                nameof<TestConvertAllTask>((task) => task.GetDocuments),
                 () =>
                 {
                     test(

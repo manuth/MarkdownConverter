@@ -11,7 +11,7 @@ import { InsertionType } from "../../../../../System/Documents/Assets/InsertionT
 export function AssetTests(): void
 {
     suite(
-        "Asset",
+        nameof(Asset),
         () =>
         {
             /**
@@ -97,7 +97,7 @@ export function AssetTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(Asset.constructor),
                 () =>
                 {
                     test(
@@ -120,7 +120,7 @@ export function AssetTests(): void
                 });
 
             suite(
-                "URLType",
+                nameof<AssetTest>((asset) => asset.URLType),
                 () =>
                 {
                     test(
@@ -134,7 +134,7 @@ export function AssetTests(): void
                 });
 
             suite(
-                "GetInsertionType",
+                nameof<AssetTest>((asset) => asset.GetInsertionType),
                 () =>
                 {
                     test(
@@ -149,7 +149,7 @@ export function AssetTests(): void
                 });
 
             suite(
-                "Render",
+                nameof<AssetTest>((asset) => asset.Render),
                 () =>
                 {
                     test(

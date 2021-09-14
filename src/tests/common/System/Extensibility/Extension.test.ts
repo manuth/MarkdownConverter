@@ -10,7 +10,7 @@ import { Extension } from "../../../../System/Extensibility/Extension";
 export function ExtensionTests(): void
 {
     suite(
-        "Extension",
+        nameof(Extension),
         () =>
         {
             let extension: Extension;
@@ -22,7 +22,7 @@ export function ExtensionTests(): void
                 });
 
             suite(
-                "Author",
+                nameof<Extension>((extension) => extension.Author),
                 () =>
                 {
                     test(
@@ -34,7 +34,7 @@ export function ExtensionTests(): void
                 });
 
             suite(
-                "Name",
+                nameof<Extension>((extension) => extension.Name),
                 () =>
                 {
                     test(
@@ -46,7 +46,7 @@ export function ExtensionTests(): void
                 });
 
             suite(
-                "FullName",
+                nameof<Extension>((extension) => extension.FullName),
                 () =>
                 {
                     test(

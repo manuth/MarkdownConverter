@@ -9,7 +9,7 @@ import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 export function ConvertAllTaskTests(): void
 {
     suite(
-        "ConvertAllTask",
+        nameof(ConvertAllTask),
         () =>
         {
             let task: ConvertAllTask;
@@ -21,7 +21,7 @@ export function ConvertAllTaskTests(): void
                 });
 
             suite(
-                "Execute",
+                nameof<ConvertAllTask>((task) => task.Execute),
                 () =>
                 {
                     test(

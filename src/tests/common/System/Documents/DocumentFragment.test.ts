@@ -18,7 +18,7 @@ import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeForm
 export function DocumentFragmentTests(): void
 {
     suite(
-        "DocumentFragment",
+        nameof(DocumentFragment),
         () =>
         {
             let tempFile: TempFile;
@@ -58,7 +58,7 @@ export function DocumentFragmentTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(DocumentFragment.constructor),
                 () =>
                 {
                     test(
@@ -71,7 +71,7 @@ export function DocumentFragmentTests(): void
                 });
 
             suite(
-                "Render",
+                nameof<DocumentFragment>((fragment) => fragment.Render),
                 () =>
                 {
                     let content: string;
@@ -125,7 +125,7 @@ export function DocumentFragmentTests(): void
                         });
 
                     test(
-                        "Checking whether date-attributes are formatted using the `DateTimeFormatter`…",
+                        `Checking whether date-attributes are formatted using the \`${nameof(DateTimeFormatter)}\`…`,
                         async () =>
                         {
                             fragment.Content = content;

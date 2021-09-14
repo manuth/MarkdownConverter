@@ -11,7 +11,7 @@ import { WebScript } from "../../../../../System/Documents/Assets/WebScript";
 export function WebScriptTests(): void
 {
     suite(
-        "WebScript",
+        nameof(WebScript),
         () =>
         {
             /**
@@ -58,7 +58,7 @@ export function WebScriptTests(): void
                 });
 
             suite(
-                "GetSource",
+                nameof<WebScriptTest>((script) => script.GetSource),
                 async () =>
                 {
                     test(
@@ -70,7 +70,7 @@ export function WebScriptTests(): void
                 });
 
             suite(
-                "GetReferenceSource",
+                nameof<WebScriptTest>((script) => script.GetReferenceSource),
                 () =>
                 {
                     test(

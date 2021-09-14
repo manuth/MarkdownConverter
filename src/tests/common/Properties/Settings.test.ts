@@ -21,7 +21,7 @@ import { ITestContext } from "../../ITestContext";
 export function SettingTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "Settings",
+        nameof(Settings),
         () =>
         {
             let settings: Settings;
@@ -33,7 +33,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "ConversionType",
+                nameof<Settings>((settings) => settings.ConversionType),
                 () =>
                 {
                     test(
@@ -52,14 +52,14 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         {
                             this.slow(1 * 1000);
                             this.timeout(2 * 1000);
-                            context.Settings.ConversionType = ["HTML"] as Array<keyof typeof ConversionType>;
+                            context.Settings.ConversionType = [nameof(ConversionType.HTML)] as Array<keyof typeof ConversionType>;
                             strictEqual(settings.ConversionType.length, 1);
                             strictEqual(settings.ConversionType[0], ConversionType.HTML);
                         });
                 });
 
             suite(
-                "Locale",
+                nameof<Settings>((settings) => settings.Locale),
                 () =>
                 {
                     test(
@@ -84,20 +84,20 @@ export function SettingTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "EmojiType",
+                nameof<Settings>((settings) => settings.EmojiType),
                 () =>
                 {
                     test(
                         "Checking whether the emoji-type is resolved correctly…",
                         () =>
                         {
-                            context.Settings["Parser.EmojiType"] = "Native";
+                            context.Settings["Parser.EmojiType"] = nameof(EmojiType.Native) as keyof typeof EmojiType;
                             strictEqual(settings.EmojiType, EmojiType.Native);
                         });
                 });
 
             suite(
-                "PaperFormat",
+                nameof<Settings>((settings) => settings.PaperFormat),
                 () =>
                 {
                     let checkMargin: (margin: Margin) => void;
@@ -149,8 +149,8 @@ export function SettingTests(context: ITestContext<ISettings>): void
                             context.Settings["Document.Paper.PaperFormat"] = {
                                 Width: undefined as string,
                                 Height: undefined as string,
-                                Format: "A5" as keyof typeof StandardizedFormatType,
-                                Orientation: "Landscape" as keyof typeof PageOrientation
+                                Format: nameof(StandardizedFormatType.A5) as keyof typeof StandardizedFormatType,
+                                Orientation: nameof(PageOrientation.Landscape) as keyof typeof PageOrientation
                             };
 
                             let paperFormat = settings.PaperFormat.Format as StandardizedPageFormat;
@@ -174,11 +174,11 @@ export function SettingTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "TocSettings",
+                nameof<Settings>((settings) => settings.TocSettings),
                 () =>
                 {
                     test(
-                        "Checking whether the `Toc`-settings equals null if toc is disabled…",
+                        `Checking whether the \`${nameof<Settings>((s) => s.TocSettings)}\` equal to \`null\` if the toc is disabled…`,
                         () =>
                         {
                             context.Settings["Parser.Toc.Enabled"] = false;
@@ -186,7 +186,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether the `ListType`-option is parsed correctly…",
+                        `Checking whether the \`${nameof(ListType)}\`-option is parsed correctly…`,
                         () =>
                         {
                             context.Settings["Parser.Toc.Enabled"] = true;

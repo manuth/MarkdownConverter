@@ -18,7 +18,7 @@ import { Document } from "../../../../System/Documents/Document";
 export function DocumentTests(): void
 {
     suite(
-        "Document",
+        nameof(Document),
         () =>
         {
             let random: Random;
@@ -76,7 +76,7 @@ export function DocumentTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(Document.constructor),
                 () =>
                 {
                     test(
@@ -103,7 +103,7 @@ export function DocumentTests(): void
                 });
 
             suite(
-                "Title",
+                nameof<Document>((document) => document.Title),
                 () =>
                 {
                     test(
@@ -118,7 +118,7 @@ export function DocumentTests(): void
                 });
 
             suite(
-                "RawContent",
+                nameof<Document>((document) => document.RawContent),
                 () =>
                 {
                     let originalContent: string;
@@ -174,7 +174,7 @@ export function DocumentTests(): void
                 });
 
             suite(
-                "Render",
+                nameof<Document>((document) => document.Render),
                 () =>
                 {
                     let styleSheet: string;
@@ -212,7 +212,7 @@ export function DocumentTests(): void
                         });
 
                     test(
-                        "Checking whether Document.Template is applied using Handlebars…",
+                        `Checking whether \`${nameof(Document)}.${nameof<Document>((d) => d.Template)}\` is applied using Handlebars…`,
                         async () =>
                         {
                             document.Template = "hello{{content}}world";

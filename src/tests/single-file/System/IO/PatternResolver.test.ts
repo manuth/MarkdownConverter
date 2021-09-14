@@ -4,6 +4,7 @@ import { Func } from "mocha";
 import { dirname } from "upath";
 import { TextDocument, Uri, workspace } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
+import { IPatternContext } from "../../../../System/IO/IPatternContext";
 import { PatternResolver } from "../../../../System/IO/PatternResolver";
 
 /**
@@ -12,7 +13,7 @@ import { PatternResolver } from "../../../../System/IO/PatternResolver";
 export function PatternResolverTests(): void
 {
     suite(
-        "PatternResolver",
+        nameof(PatternResolver),
         () =>
         {
             let testFile: TempFile;
@@ -28,21 +29,21 @@ export function PatternResolverTests(): void
                 });
 
             suite(
-                "Resolve",
+                nameof<PatternResolver>((resolver) => resolver.Resolve),
                 () =>
                 {
                     let tests: Array<[string, (pattern: string) => string, (result: string) => ReturnType<Func>]> = [
                         [
-                            "workspaceFolder",
-                            (pattern) => `Checking whether the ${pattern} resolves to the destination-folder…`,
+                            nameof<IPatternContext>((context) => context.workspaceFolder),
+                            (pattern) => `Checking whether the \`${pattern}\` resolves to the destination-folder…`,
                             (result) =>
                             {
                                 strictEqual(result, dirname(testFile.FullName));
                             }
                         ],
                         [
-                            "dirname",
-                            (pattern) => `Checking whether ${pattern} is empty…`,
+                            nameof<IPatternContext>((context) => context.dirname),
+                            (pattern) => `Checking whether \`${pattern}\` is empty…`,
                             (result) =>
                             {
                                 ok(/^\.?$/.test(result));

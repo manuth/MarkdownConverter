@@ -11,7 +11,7 @@ import { ConfigInterceptor } from "../ConfigInterceptor";
 export function ConfigInterceptorTests(): void
 {
     suite(
-        "ConfigInterceptor",
+        nameof(ConfigInterceptor),
         () =>
         {
             let config: WorkspaceConfiguration;
@@ -25,7 +25,7 @@ export function ConfigInterceptorTests(): void
                 {
                     this.timeout(10 * 1000);
                     config = workspace.getConfiguration(Settings.ConfigKey, workspace.workspaceFolders[0].uri);
-                    key = "ConversionType";
+                    key = nameof<ISettings>((settings) => settings.ConversionType) as keyof ISettings;
                     originalSetting = [ConversionType[ConversionType.JPEG]] as any;
                     interceptedSetting = [ConversionType[ConversionType.HTML]] as any;
                     await config.update(key, originalSetting, ConfigurationTarget.Workspace);
@@ -48,7 +48,7 @@ export function ConfigInterceptorTests(): void
                 });
 
             suite(
-                "Initialize",
+                nameof<ConfigInterceptor>((interceptor) => interceptor.Initialize),
                 () =>
                 {
                     test(

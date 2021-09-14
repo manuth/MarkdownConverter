@@ -9,7 +9,7 @@ import { TocSettings } from "../../../../System/Documents/TocSettings";
 export function TocSettingTests(): void
 {
     suite(
-        "TocSettings",
+        nameof(TocSettings),
         () =>
         {
             let className: string;
@@ -34,7 +34,7 @@ export function TocSettingTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(TocSettings.constructor),
                 () =>
                 {
                     test(

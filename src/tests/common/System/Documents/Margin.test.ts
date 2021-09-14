@@ -7,7 +7,7 @@ import { Margin } from "../../../../System/Documents/Margin";
 export function MarginTests(): void
 {
     suite(
-        "Margin",
+        nameof(Margin),
         () =>
         {
             let testValue1: string;
@@ -25,7 +25,7 @@ export function MarginTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(Margin.constructor),
                 () =>
                 {
                     test(

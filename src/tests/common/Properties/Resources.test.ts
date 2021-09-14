@@ -8,11 +8,11 @@ import { Resources } from "../../../Properties/Resources";
 export function ResourceTests(): void
 {
     suite(
-        "Resources",
+        nameof(Resources),
         () =>
         {
             suite(
-                "Culture",
+                nameof(Resources.Culture),
                 () =>
                 {
                     let originalLocale: CultureInfo;
@@ -36,7 +36,7 @@ export function ResourceTests(): void
                         });
 
                     test(
-                        "Checking whether setting the `Culture` affects all resources…",
+                        `Checking whether setting the \`${nameof(Resources.Culture)}\` affects all resources…`,
                         () =>
                         {
                             let culture = new CultureInfo("zh-Hans-CN");

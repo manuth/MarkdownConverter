@@ -16,7 +16,7 @@ import { Document } from "../../../System/Documents/Document";
 export function ConverterTests(): void
 {
     suite(
-        "Converter",
+        nameof(Converter),
         () =>
         {
             let converter: TestConverter;
@@ -90,7 +90,7 @@ export function ConverterTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(Converter.constructor),
                 () =>
                 {
                     test(
@@ -104,7 +104,7 @@ export function ConverterTests(): void
                 });
 
             suite(
-                "Initialized",
+                nameof<Converter>((converter) => converter.Initialized),
                 () =>
                 {
                     test(
@@ -133,7 +133,7 @@ export function ConverterTests(): void
                 });
 
             suite(
-                "Disposed",
+                nameof<Converter>((converter) => converter.Disposed),
                 () =>
                 {
                     test(
@@ -151,7 +151,7 @@ export function ConverterTests(): void
                 });
 
             suite(
-                "URL",
+                nameof<Converter>((converter) => converter.URL),
                 () =>
                 {
                     let browser: puppeteer.Browser;
@@ -177,14 +177,14 @@ export function ConverterTests(): void
                         });
 
                     test(
-                        "Checking whether the `URL` property equals `null` before the initialization…",
+                        `Checking whether the \`${nameof<Converter>((c) => c.URL)}\` property equals \`${null}\` before the initialization…`,
                         () =>
                         {
                             strictEqual(converter.URL, null);
                         });
 
                     test(
-                        "Checking whether the rendered document is served under the `URL` after the initialization…",
+                        `Checking whether the rendered document is served under the \`${nameof<Converter>((c) => c.URL)}\` after the initialization…`,
                         async function()
                         {
                             this.timeout(10 * 1000);
@@ -208,7 +208,7 @@ export function ConverterTests(): void
                 });
 
             suite(
-                "BrowserOptions",
+                nameof<Converter>((converter) => converter.BrowserOptions),
                 () =>
                 {
                     test(
@@ -224,7 +224,7 @@ export function ConverterTests(): void
                 });
 
             suite(
-                "Initialize",
+                nameof<Converter>((converter) => converter.Initialize),
                 () =>
                 {
                     test(
@@ -274,7 +274,7 @@ export function ConverterTests(): void
                 });
 
             suite(
-                "Dispose",
+                nameof<Converter>((converter) => converter.Dispose),
                 () =>
                 {
                     let browser: puppeteer.Browser;
@@ -304,7 +304,7 @@ export function ConverterTests(): void
                 });
 
             suite(
-                "Start",
+                nameof<Converter>((converter) => converter.Start),
                 () =>
                 {
                     test(

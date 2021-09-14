@@ -8,7 +8,7 @@ import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeForm
 export function DateTimeFormatterTests(): void
 {
     suite(
-        "DateTimeFormatter",
+        nameof(DateTimeFormatter),
         () =>
         {
             let formatter: DateTimeFormatter;
@@ -22,11 +22,11 @@ export function DateTimeFormatterTests(): void
                 });
 
             suite(
-                "Locale",
+                nameof<DateTimeFormatter>((formatter) => formatter.Locale),
                 () =>
                 {
                     test(
-                        "Checking whether the `Locale` affects the formatted dates…",
+                        `Checking whether the \`${nameof<DateTimeFormatter>((f) => f.Locale)}\` affects the formatted dates…`,
                         () =>
                         {
                             formatter.Locale = new CultureInfo("en");
@@ -37,7 +37,7 @@ export function DateTimeFormatterTests(): void
                 });
 
             suite(
-                "Format",
+                nameof<DateTimeFormatter>((formatter) => formatter.Format),
                 () =>
                 {
                     let originalLocale: CultureInfo;

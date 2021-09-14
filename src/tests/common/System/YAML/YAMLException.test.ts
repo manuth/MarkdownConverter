@@ -13,7 +13,7 @@ import { YAMLException } from "../../../../System/YAML/YAMLException";
 export function YAMLExceptionTests(): void
 {
     suite(
-        "YAMLException",
+        nameof(YAMLException),
         () =>
         {
             let yamlError: any;
@@ -37,7 +37,7 @@ export function YAMLExceptionTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(YAMLException.constructor),
                 () =>
                 {
                     test(
@@ -70,7 +70,7 @@ export function YAMLExceptionTests(): void
                 });
 
             suite(
-                "Message",
+                nameof<YAMLException>((exception) => exception.Message),
                 () =>
                 {
                     let originalLocale: CultureInfo;

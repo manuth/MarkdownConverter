@@ -142,7 +142,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "LoadParser",
+                nameof<TestConversionRunner>((runner) => runner.LoadParser),
                 () =>
                 {
                     let parser: MarkdownIt;
@@ -278,7 +278,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "LoadConverter",
+                nameof<TestConversionRunner>((runner) => runner.LoadConverter),
                 () =>
                 {
                     test(
@@ -414,7 +414,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "Execute",
+                nameof<TestConversionRunner>((runner) => runner.Execute),
                 () =>
                 {
                     let testFile: TempFile;
@@ -441,7 +441,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether the `DestinationPattern` is normalized correctly…",
+                        `Checking whether the \`${nameof<Settings>((s) => s.DestinationPattern)}\` is normalized correctly…`,
                         async function()
                         {
                             this.slow(4 * 1000);

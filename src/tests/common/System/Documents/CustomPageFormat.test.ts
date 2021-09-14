@@ -7,7 +7,7 @@ import { CustomPageFormat } from "../../../../System/Documents/CustomPageFormat"
 export function CustomPaperFormatTests(): void
 {
     suite(
-        "CustomPageFormat",
+        nameof(CustomPageFormat),
         () =>
         {
             let width: string;
@@ -28,7 +28,7 @@ export function CustomPaperFormatTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(CustomPageFormat.constructor),
                 () =>
                 {
                     test(
@@ -41,7 +41,7 @@ export function CustomPaperFormatTests(): void
                 });
 
             suite(
-                "PDFOptions",
+                nameof<CustomPageFormat>((format) => format.PDFOptions),
                 () =>
                 {
                     test(

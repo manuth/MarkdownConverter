@@ -13,7 +13,7 @@ import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 export function ChainTaskTests(): void
 {
     suite(
-        "ChainTask",
+        nameof(ChainTask),
         () =>
         {
             let task: TestChainTask;
@@ -39,7 +39,7 @@ export function ChainTaskTests(): void
                 });
 
             suite(
-                "ExecuteTask",
+                nameof<TestChainTask>((task) => task.ExecuteTask),
                 () =>
                 {
                     let showInputBox: typeof window.showInputBox;

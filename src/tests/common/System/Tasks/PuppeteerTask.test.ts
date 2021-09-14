@@ -18,7 +18,7 @@ import { TestConstants } from "../../../TestConstants";
 export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "PuppeteerTask",
+        nameof(PuppeteerTask),
         () =>
         {
             let puppeteerPath: string;
@@ -69,7 +69,7 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
                 });
 
             suite(
-                "Execute",
+                nameof<PuppeteerTaskTest>((task) => task.Execute),
                 () =>
                 {
                     test(

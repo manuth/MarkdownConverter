@@ -3,6 +3,7 @@ import { TempFile } from "@manuth/temp-files";
 import { TextDocument, Uri, window } from "vscode";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { ISettings } from "../../../../Properties/ISettings";
+import { Settings } from "../../../../Properties/Settings";
 import { ConvertTask } from "../../../../System/Tasks/ConvertTask";
 import { ITestContext } from "../../../ITestContext";
 import { TestConstants } from "../../../TestConstants";
@@ -16,32 +17,32 @@ import { TestConstants } from "../../../TestConstants";
 export function ConvertTaskTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "ConvertTask",
+        nameof(ConvertTask),
         () =>
         {
+            /**
+             * Provides an implementation of the {@link ConvertTask `ConvertTask`} class for testing.
+             */
+            class TestConvertTask extends ConvertTask
+            {
+                /**
+                 * @inheritdoc
+                 *
+                 * @returns
+                 * The best matching markdown-document.
+                 */
+                public override GetMarkdownDocument(): TextDocument
+                {
+                    return super.GetMarkdownDocument();
+                }
+            }
+
             suite(
-                "GetMarkdownDocument",
+                nameof<TestConvertTask>((task) => task.GetMarkdownDocument),
                 () =>
                 {
                     let testFile: TempFile;
                     let task: TestConvertTask;
-
-                    /**
-                     * Provides an implementation of the `ConvertTask` class for testing.
-                     */
-                    class TestConvertTask extends ConvertTask
-                    {
-                        /**
-                         * @inheritdoc
-                         *
-                         * @returns
-                         * The best matching markdown-document.
-                         */
-                        public override GetMarkdownDocument(): TextDocument
-                        {
-                            return super.GetMarkdownDocument();
-                        }
-                    }
 
                     suiteSetup(
                         async () =>
@@ -71,7 +72,7 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether no exception is thrown if `IgnoreLanguageMode` is enabled…",
+                        `Checking whether no exception is thrown if \`${nameof<Settings>((s) => s.IgnoreLanguageMode)}\` is enabled…`,
                         async function()
                         {
                             this.slow(80);

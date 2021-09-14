@@ -1,6 +1,5 @@
 import { strictEqual } from "assert";
 import { extension } from "../../../..";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
@@ -10,7 +9,7 @@ import { TestConvertAllTask } from "../../../TestConvertAllTask";
 export function ConvertAllTaskTests(): void
 {
     suite(
-        "ConvertAllTask",
+        nameof(ConvertAllTask),
         () =>
         {
             let task: TestConvertAllTask;
@@ -22,7 +21,7 @@ export function ConvertAllTaskTests(): void
                 });
 
             suite(
-                "GetDocuments",
+                nameof<TestConvertAllTask>((task) => task.GetDocuments),
                 () =>
                 {
                     test(

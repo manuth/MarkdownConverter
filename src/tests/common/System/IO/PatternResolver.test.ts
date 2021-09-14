@@ -5,6 +5,7 @@ import { Random } from "random-js";
 import { dirname, parse } from "upath";
 import { TextDocument, Uri, workspace } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
+import { IPatternContext } from "../../../../System/IO/IPatternContext";
 import { PatternResolver } from "../../../../System/IO/PatternResolver";
 
 /**
@@ -24,11 +25,11 @@ export function PatternResolverTests(): void
             let incorrectVariable = "testVariable";
 
             let variableNames = [
-                "basename",
-                "extension",
-                "filename",
-                "dirname",
-                "workspaceFolder"
+                nameof<IPatternContext>((context) => context.basename),
+                nameof<IPatternContext>((context) => context.extension),
+                nameof<IPatternContext>((context) => context.filename),
+                nameof<IPatternContext>((context) => context.dirname),
+                nameof<IPatternContext>((context) => context.workspaceFolder)
             ];
 
             suiteSetup(
@@ -42,7 +43,7 @@ export function PatternResolverTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(PatternResolver.constructor),
                 () =>
                 {
                     test(
@@ -54,7 +55,7 @@ export function PatternResolverTests(): void
                 });
 
             test(
-                "Variables",
+                nameof<PatternResolver>((resolver) => resolver.Variables),
                 () =>
                 {
                     test(
@@ -78,28 +79,28 @@ export function PatternResolverTests(): void
                 });
 
             suite(
-                "Resolve",
+                nameof<PatternResolver>((resolver) => resolver.Resolve),
                 () =>
                 {
                     let tests: Array<[string, (result: string) => ReturnType<Func>]>;
 
                     tests = [
                         [
-                            "basename",
+                            nameof<IPatternContext>((context) => context.basename),
                             (result) =>
                             {
                                 strictEqual(result, parse(testFile.FullName).name);
                             }
                         ],
                         [
-                            "extension",
+                            nameof<IPatternContext>((context) => context.extension),
                             (result) =>
                             {
                                 strictEqual(result, extension);
                             }
                         ],
                         [
-                            "filename",
+                            nameof<IPatternContext>((context) => context.filename),
                             (result) =>
                             {
                                 strictEqual(result, parse(testFile.FullName).name);

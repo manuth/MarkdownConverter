@@ -9,7 +9,7 @@ import { StandardizedPageFormat } from "../../../../System/Documents/Standardize
 export function StandardizedPageFormatTests(): void
 {
     suite(
-        "StandardizedPageFormat",
+        nameof(StandardizedPageFormat),
         () =>
         {
             let format: StandardizedFormatType;
@@ -30,7 +30,7 @@ export function StandardizedPageFormatTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(StandardizedPageFormat.constructor),
                 () =>
                 {
                     test(
@@ -50,7 +50,7 @@ export function StandardizedPageFormatTests(): void
                 });
 
             suite(
-                "PDFOptions",
+                nameof<StandardizedPageFormat>((format) => format.PDFOptions),
                 () =>
                 {
                     test(

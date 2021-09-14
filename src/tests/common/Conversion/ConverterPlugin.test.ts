@@ -16,7 +16,7 @@ import { Document } from "../../../System/Documents/Document";
 export function ConverterPluginTests(): void
 {
     suite(
-        "ConverterPlugin",
+        nameof(ConverterPlugin),
         () =>
         {
             let plugin: ConverterPlugin;
@@ -111,7 +111,7 @@ export function ConverterPluginTests(): void
             }
 
             suite(
-                "constructor",
+                nameof(ConverterPlugin.constructor),
                 () =>
                 {
                     test(
@@ -127,7 +127,7 @@ export function ConverterPluginTests(): void
                 });
 
             suite(
-                "apply",
+                nameof<ConverterPlugin>((plugin) => plugin.apply),
                 () =>
                 {
                     test(

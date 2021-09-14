@@ -7,7 +7,7 @@ import { Slugifier } from "../../../../System/Documents/Slugifier";
 export function SlugifierTests(): void
 {
     suite(
-        "Slugifier",
+        nameof(Slugifier),
         () =>
         {
             let slugifier: Slugifier;
@@ -28,7 +28,7 @@ export function SlugifierTests(): void
                 });
 
             suite(
-                "CreateSlug",
+                nameof<Slugifier>((slugifier) => slugifier.CreateSlug),
                 () =>
                 {
                     test(
@@ -48,7 +48,7 @@ export function SlugifierTests(): void
                 });
 
             suite(
-                "Reset",
+                nameof<Slugifier>((slugifier) => slugifier.Reset),
                 () =>
                 {
                     test(

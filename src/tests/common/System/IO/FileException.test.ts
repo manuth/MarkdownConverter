@@ -9,7 +9,7 @@ import { FileException } from "../../../../System/IO/FileException";
 export function FileExceptionTests(): void
 {
     suite(
-        "FileException",
+        nameof(FileException),
         () =>
         {
             let exception: FileException;
@@ -21,7 +21,7 @@ export function FileExceptionTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(FileException.constructor),
                 () =>
                 {
                     test(
@@ -36,7 +36,7 @@ export function FileExceptionTests(): void
                 });
 
             suite(
-                "Message",
+                nameof<FileException>((exception) => exception.Message),
                 () =>
                 {
                     let originalLocale: CultureInfo;

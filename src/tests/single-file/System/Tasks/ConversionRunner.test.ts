@@ -2,8 +2,9 @@ import { strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
 import { resolve } from "upath";
 import { window, workspace } from "vscode";
+import { ConversionType } from "../../../../Conversion/ConversionType";
 import { ISettings } from "../../../../Properties/ISettings";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Settings } from "../../../../Properties/Settings";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
@@ -17,15 +18,15 @@ import { SubstitutionTester } from "../../../SubstitutionTester";
 export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "ConversionRunner",
+        nameof(ConversionRunner),
         () =>
         {
             suite(
-                "Execute",
+                nameof<ConversionRunner>((runner) => runner.Execute),
                 () =>
                 {
                     suite(
-                        "Checking whether the `DestinationPattern` is substituted correctly…",
+                        `Checking whether the \`${nameof<Settings>((s) => s.DestinationPattern)}\` is substituted correctly…`,
                         () =>
                         {
                             let testFile: TempFile;
@@ -52,8 +53,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 () =>
                                 {
                                     context.Settings.ConversionType = [
-                                        "PDF"
-                                    ];
+                                        nameof(ConversionType.PDF)
+                                    ] as Array<keyof typeof ConversionType>;
                                 });
 
                             test(

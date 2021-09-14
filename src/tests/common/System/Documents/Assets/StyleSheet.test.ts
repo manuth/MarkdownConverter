@@ -11,7 +11,7 @@ import { StyleSheet } from "../../../../../System/Documents/Assets/StyleSheet";
 export function StyleSheetTests(): void
 {
     suite(
-        "StyleSheet",
+        nameof(StyleSheet),
         () =>
         {
             /**
@@ -58,7 +58,7 @@ export function StyleSheetTests(): void
                 });
 
             suite(
-                "GetSource",
+                nameof<StyleSheetTest>((stylesheet) => stylesheet.GetSource),
                 async () =>
                 {
                     test(
@@ -70,7 +70,7 @@ export function StyleSheetTests(): void
                 });
 
             suite(
-                "GetReferenceSource",
+                nameof<StyleSheetTest>((stylesheet) => stylesheet.GetReferenceSource),
                 () =>
                 {
                     test(

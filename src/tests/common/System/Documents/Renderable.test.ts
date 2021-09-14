@@ -7,7 +7,7 @@ import { Renderable } from "../../../../System/Documents/Renderable";
 export function RenderableTests(): void
 {
     suite(
-        "Renderable",
+        nameof(Renderable),
         () =>
         {
             /**
@@ -53,7 +53,7 @@ export function RenderableTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(Renderable.constructor),
                 () =>
                 {
                     test(
@@ -68,7 +68,7 @@ export function RenderableTests(): void
                 });
 
             suite(
-                "Render",
+                nameof<Renderable>((renderable) => renderable.Render),
                 () =>
                 {
                     test(

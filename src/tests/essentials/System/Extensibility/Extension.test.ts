@@ -1,6 +1,4 @@
 import { doesNotThrow, notStrictEqual, ok } from "assert";
-import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Extension } from "../../../../System/Extensibility/Extension";
 import { TestConstants } from "../../../TestConstants";
 
@@ -10,10 +8,10 @@ import { TestConstants } from "../../../TestConstants";
 export function ExtensionTests(): void
 {
     suite(
-        "Extension",
+        nameof(Extension),
         () =>
         {
-            let extension: MarkdownConverterExtension;
+            let extension: Extension;
 
             suiteSetup(
                 () =>
@@ -22,7 +20,7 @@ export function ExtensionTests(): void
                 });
 
             suite(
-                "EnableSystemParser",
+                nameof<Extension>((extension) => extension.EnableSystemParser),
                 () =>
                 {
                     test(

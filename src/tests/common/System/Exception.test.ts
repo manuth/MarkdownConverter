@@ -7,7 +7,7 @@ import { Exception } from "../../../System/Exception";
 export function ExceptionTests(): void
 {
     suite(
-        "Exception",
+        nameof(Exception),
         () =>
         {
             let exception: Exception;
@@ -20,7 +20,7 @@ export function ExceptionTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(Exception.constructor),
                 () =>
                 {
                     test(
