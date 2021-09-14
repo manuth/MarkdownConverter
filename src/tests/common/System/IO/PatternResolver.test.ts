@@ -14,7 +14,7 @@ import { PatternResolver } from "../../../../System/IO/PatternResolver";
 export function PatternResolverTests(): void
 {
     suite(
-        "PatternResolver",
+        nameof(PatternResolver),
         () =>
         {
             let random: Random;
