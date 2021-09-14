@@ -373,6 +373,18 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             let headerTemplate = "Hello";
                             let footerTemplate = "World";
 
+                            let headerContent: IRunningBlockContent = {
+                                Left: random.string(10),
+                                Right: random.string(15),
+                                Center: random.string(20)
+                            };
+
+                            let footerContent: IRunningBlockContent = {
+                                Left: random.string(9),
+                                Right: random.string(14),
+                                Center: random.string(19)
+                            };
+
                             context.Settings.ConversionQuality = conversionQuality;
                             context.Settings["Document.Attributes"] = attributes;
                             context.Settings.Locale = locale;
@@ -393,6 +405,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             context.Settings["Document.Design.StyleSheets"] = { [styleSheet[0].FullName]: styleSheet[1] };
                             context.Settings["Document.Design.Scripts"] = { [script[0].FullName]: script[1] };
                             context.Settings["Document.HeaderFooterEnabled"] = headerFooterEnabled;
+                            context.Settings["Document.HeaderContent"] = headerContent;
+                            context.Settings["Document.FooterContent"] = footerContent;
                             context.Settings["Document.HeaderTemplate"] = headerTemplate;
                             context.Settings["Document.FooterTemplate"] = footerTemplate;
 
@@ -421,7 +435,13 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             ok(converter.Document.Scripts.some((entry) => entry.URL === script[0].FullName && entry.InsertionType === InsertionType[script[1]]));
                             strictEqual(converter.Document.HeaderFooterEnabled, headerFooterEnabled);
                             strictEqual(converter.Document.Header.Content, headerTemplate);
+                            strictEqual(converter.Document.Header.Left, headerContent.Left);
+                            strictEqual(converter.Document.Header.Right, headerContent.Right);
+                            strictEqual(converter.Document.Header.Center, headerContent.Center);
                             strictEqual(converter.Document.Footer.Content, footerTemplate);
+                            strictEqual(converter.Document.Footer.Left, footerContent.Left);
+                            strictEqual(converter.Document.Footer.Right, footerContent.Right);
+                            strictEqual(converter.Document.Footer.Center, footerContent.Center);
 
                             styleSheet[0].Dispose();
                             script[0].Dispose();
