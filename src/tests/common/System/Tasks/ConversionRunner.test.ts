@@ -450,15 +450,18 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether the header- and footer-template are loaded from a file according to the attributes…",
+                        "Checking whether the metadata-, the header- and the footer-template are loaded from a file according to the attributes…",
                         async function()
                         {
                             this.slow(3 * 1000);
                             this.timeout(12 * 1000);
+                            let metaData = random.string(30);
                             let header = "This is a header";
                             let footer = "This is a footer";
+                            let metaTemplate = new TempFile();
                             let headerTemplate = new TempFile();
                             let footerTemplate = new TempFile();
+                            await writeFile(metaTemplate.FullName, metaData);
                             await writeFile(headerTemplate.FullName, header);
                             await writeFile(footerTemplate.FullName, footer);
 
@@ -467,6 +470,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 dedent(
                                     `
                                     ---
+                                    ${AttributeKey.MetaTemplate}: ${metaTemplate.FullName}
                                     ${AttributeKey.HeaderTemplate}: ${headerTemplate.FullName}
                                     ${AttributeKey.FooterTemplate}: ${footerTemplate.FullName}
                                     ---`));
@@ -475,8 +479,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 dirname(mdFile.FullName),
                                 await workspace.openTextDocument(mdFile.FullName));
 
+                            strictEqual(converter.Document.Meta.Content, metaData);
                             strictEqual(converter.Document.Header.Content, header);
                             strictEqual(converter.Document.Footer.Content, footer);
+                            metaTemplate.Dispose();
                             headerTemplate.Dispose();
                             footerTemplate.Dispose();
                         });
