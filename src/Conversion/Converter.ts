@@ -16,6 +16,7 @@ import { CancellationToken, Progress } from "vscode";
 import websiteScraper = require("website-scraper");
 import { Resources } from "../Properties/Resources";
 import { Settings } from "../Properties/Settings";
+import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { StyleSheet } from "../System/Documents/Assets/StyleSheet";
 import { Document } from "../System/Documents/Document";
 import { FileException } from "../System/IO/FileException";
@@ -248,7 +249,7 @@ export class Converter
                         catch (exception)
                         {
                             let errorDocument = new Document(new MarkdownIt());
-                            errorDocument.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle")));
+                            errorDocument.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle"), InsertionType.Include));
 
                             errorDocument.Content = dedent(
                                 `
