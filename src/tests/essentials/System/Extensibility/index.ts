@@ -5,5 +5,10 @@ import { ExtensionTests } from "./Extension.test";
  */
 export function ExtensibilityTests(): void
 {
-    ExtensionTests();
+    suite(
+        "Extensibility",
+        () =>
+        {
+            ExtensionTests();
+        });
 }

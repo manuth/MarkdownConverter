@@ -5,5 +5,10 @@ import { PatternResolverTests } from "./PatternResolver.test";
  */
 export function IOTests(): void
 {
-    PatternResolverTests();
+    suite(
+        "IO",
+        () =>
+        {
+            PatternResolverTests();
+        });
 }
