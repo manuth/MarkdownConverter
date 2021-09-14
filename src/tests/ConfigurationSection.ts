@@ -9,11 +9,6 @@ import { ConfigInterceptor } from "./ConfigInterceptor";
 export class ConfigurationSection implements WorkspaceConfiguration
 {
     /**
-     * The key of this section.
-     */
-    private section: string;
-
-    /**
      * The scope of this section.
      */
     private scope: ConfigurationScope;
@@ -43,7 +38,6 @@ export class ConfigurationSection implements WorkspaceConfiguration
     public constructor(interceptor: ConfigInterceptor, section?: string, scope?: ConfigurationScope)
     {
         this.interceptor = interceptor;
-        this.section = section;
         this.scope = scope;
         this.target = this.interceptor.Target(section, scope);
     }
