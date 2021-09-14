@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { ISettings } from "../../../Properties/ISettings";
 import { ITestContext } from "../../ITestContext";
 import { DocumentTests } from "./Documents";
@@ -17,7 +18,7 @@ import { YAMLTests } from "./YAML";
 export function SystemTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "System",
+        basename(__dirname),
         () =>
         {
             ExceptionTests();

@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { PatternResolverTests } from "./PatternResolver.test";
 
 /**
@@ -6,7 +7,7 @@ import { PatternResolverTests } from "./PatternResolver.test";
 export function IOTests(): void
 {
     suite(
-        "IO",
+        basename(__dirname),
         () =>
         {
             PatternResolverTests();

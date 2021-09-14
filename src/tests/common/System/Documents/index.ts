@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { AssetTests } from "./Assets";
 import { CustomPaperFormatTests } from "./CustomPageFormat.test";
 import { DocumentTests as DocumentClassTests } from "./Document.test";
@@ -15,7 +16,7 @@ import { TocSettingTests } from "./TocSettings.test";
 export function DocumentTests(): void
 {
     suite(
-        "Documents",
+        basename(__dirname),
         () =>
         {
             AssetTests();

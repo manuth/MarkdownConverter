@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { DateTimeFormatterTests } from "./DateTimeFormatter.test";
 
 /**
@@ -6,7 +7,7 @@ import { DateTimeFormatterTests } from "./DateTimeFormatter.test";
 export function GlobalizationTests(): void
 {
     suite(
-        "Globalization",
+        basename(__dirname),
         () =>
         {
             DateTimeFormatterTests();

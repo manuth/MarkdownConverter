@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ITestContext } from "../../../ITestContext";
 import { ChainTaskTests } from "./ChainTask.test";
@@ -12,7 +13,7 @@ import { ConvertAllTaskTests } from "./ConvertAllTask.test";
 export function TaskTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "Tasks",
+        basename(__dirname),
         () =>
         {
             ConvertAllTaskTests(context);

@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { AssetTests as AssetClassTests } from "./Asset.test";
 import { StyleSheetTests } from "./StyleSheet.test";
 import { WebScriptTests } from "./WebScript.test";
@@ -8,7 +9,7 @@ import { WebScriptTests } from "./WebScript.test";
 export function AssetTests(): void
 {
     suite(
-        "Assets",
+        basename(__dirname),
         () =>
         {
             AssetClassTests();

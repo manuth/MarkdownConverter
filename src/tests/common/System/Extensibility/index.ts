@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { ExtensionTests } from "./Extension.test";
 
 /**
@@ -6,7 +7,7 @@ import { ExtensionTests } from "./Extension.test";
 export function ExtensibilityTests(): void
 {
     suite(
-        "Extensibility",
+        basename(__dirname),
         () =>
         {
             ExtensionTests();

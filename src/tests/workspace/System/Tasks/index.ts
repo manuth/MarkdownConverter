@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { ConvertAllTaskTests } from "./ConvertAllTask.test";
 
 /**
@@ -6,7 +7,7 @@ import { ConvertAllTaskTests } from "./ConvertAllTask.test";
 export function TaskTests(): void
 {
     suite(
-        "Tasks",
+        basename(__dirname),
         () =>
         {
             ConvertAllTaskTests();
