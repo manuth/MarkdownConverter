@@ -30,6 +30,12 @@ export class Settings
     private static defaultInstance: Settings = new Settings();
 
     /**
+     * Initializes a new instance of the {@link Settings `Settings`} class.
+     */
+    public constructor()
+    { }
+
+    /**
      * Gets a default instance of the {@link Settings `Settings`} class.
      */
     public static get Default(): Settings
