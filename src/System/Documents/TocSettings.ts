@@ -17,7 +17,7 @@ export class TocSettings
     private levels: MultiRange;
 
     /**
-     * The RegExp to be replace with the table of contents.
+     * The RegExp to replace with the table of contents.
      */
     private indicator: RegExp;
 
@@ -36,7 +36,7 @@ export class TocSettings
      * The levels to display inside the toc.
      *
      * @param indicator
-     * A RegExp which should be replaced by the toc inside the document.
+     * The RegExp to replace with the table of contents.
      *
      * @param listType
      * The list-type of the toc.
