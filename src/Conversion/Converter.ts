@@ -221,16 +221,7 @@ export class Converter
             this.webServer = createServer(
                 async (request, response) =>
                 {
-                    let headers: Array<[string, string]> = [
-                        [
-                            "Access-Control-Allow-Origin",
-                            "*"
-                        ],
-                        [
-                            "Access-Control-Allow-Headers",
-                            "Origin, X-Requested-With, Content-Type, Accept, Range"
-                        ]
-                    ];
+                    let headers: Array<[string, string]> = [];
 
                     if (normalize(join(this.DocumentRoot, request.url)) === normalize(join(this.DocumentRoot, this.WebDocumentName)))
                     {
