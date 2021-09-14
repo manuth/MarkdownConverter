@@ -1,5 +1,5 @@
 import { ok, strictEqual, throws } from "assert";
-import { TempFile } from "@manuth/temp-files";
+import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { Func } from "mocha";
 import { Random } from "random-js";
 import { dirname, parse } from "upath";
@@ -19,6 +19,7 @@ export function PatternResolverTests(): void
         {
             let random: Random;
             let testFile: TempFile;
+            let testDir: TempDirectory;
             let document: TextDocument;
             let conversionType: ConversionType;
             let extension: string;
@@ -37,6 +38,7 @@ export function PatternResolverTests(): void
                 {
                     random = new Random();
                     testFile = new TempFile();
+                    testDir = new TempDirectory();
                     document = await workspace.openTextDocument(Uri.file(testFile.FullName));
                     conversionType = ConversionType.JPEG;
                     extension = "jpg";
@@ -46,6 +48,7 @@ export function PatternResolverTests(): void
                 () =>
                 {
                     testFile.Dispose();
+                    testDir.Dispose();
                 });
 
             suite(
@@ -111,6 +114,13 @@ export function PatternResolverTests(): void
                             {
                                 strictEqual(result, parse(testFile.FullName).name);
                             }
+                        ],
+                        [
+                            nameof<IPatternContext>((context) => context.workspaceFolder),
+                            (result) =>
+                            {
+                                strictEqual(result, testDir.FullName);
+                            }
                         ]
                     ];
 
@@ -126,7 +136,8 @@ export function PatternResolverTests(): void
                                     new PatternResolver(`\${${patternTest[0]}}`).Resolve(
                                         dirname(testFile.FullName),
                                         document,
-                                        conversionType));
+                                        conversionType,
+                                        testDir.FullName));
                             });
                     }
                 });
