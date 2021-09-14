@@ -30,7 +30,7 @@ export interface ISettings
     IgnoreLanguageMode?: boolean;
 
     /**
-     * The quality to use for creating `.png`-files.
+     * The quality to use for creating `.jpg`-files.
      */
     ConversionQuality?: number;
 

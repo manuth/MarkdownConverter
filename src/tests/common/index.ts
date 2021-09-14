@@ -5,7 +5,7 @@ import { PropertyTests } from "./Properties";
 import { SystemTests } from "./System";
 
 /**
- * Regisrers common tests.
+ * Registers common tests.
  *
  * @param context
  * The test-context.

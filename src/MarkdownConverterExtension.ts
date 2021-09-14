@@ -79,7 +79,7 @@ export class MarkdownConverterExtension extends Extension
     }
 
     /**
-     * Gets context of the of the extension.
+     * Gets the context of the extension.
      */
     public get Context(): ExtensionContext
     {

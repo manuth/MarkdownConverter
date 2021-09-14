@@ -107,7 +107,7 @@ export function DocumentTests(): void
                 () =>
                 {
                     test(
-                        `Checking whether the \`${AttributeKey.Title}\`-key overrides the actual title…`,
+                        `Checking whether the \`${AttributeKey.Title}\`-attribute overrides the actual title…`,
                         () =>
                         {
                             document.Attributes[AttributeKey.Title] = random.string(10);

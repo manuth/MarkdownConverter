@@ -1,10 +1,10 @@
 /**
- * Represents an Exception
+ * Represents an exception.
  */
 export class Exception extends Error
 {
     /**
-     * A collection of key/value pairs that provide additional user-defined information about the exception.
+     * A collection of additional user-defined information about the exception.
      */
     private data: any[];
 
@@ -25,7 +25,7 @@ export class Exception extends Error
      * The error message that explains the reason for the exception.
      *
      * @param innerException
-     * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
+     * The exception that is the cause of the current exception, or `null` if no inner exception is specified.
      */
     public constructor(message?: string, innerException?: Exception)
     {
@@ -39,7 +39,7 @@ export class Exception extends Error
     }
 
     /**
-     * Gets a collection of key/value pairs that provide additional user-defined information about the exception.
+     * Gets a collection of additional user-defined information about the exception.
      */
     public get Data(): any[]
     {

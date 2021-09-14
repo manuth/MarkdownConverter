@@ -6,7 +6,7 @@ import { MarginTests } from "./Margin.test";
 import { PaperTests } from "./Paper.test";
 import { RenderableTests } from "./Renderable.test";
 import { SlugifierTests } from "./Slugifier.test";
-import { StandardizedPaperFormatTests } from "./StandardizedPaperFormat.test";
+import { StandardizedPageFormatTests } from "./StandardizedPageFormat.test";
 import { TocSettingTests } from "./TocSettings.test";
 
 /**
@@ -22,7 +22,7 @@ export function DocumentTests(): void
             SlugifierTests();
             RenderableTests();
             DocumentFragmentTests();
-            StandardizedPaperFormatTests();
+            StandardizedPageFormatTests();
             CustomPaperFormatTests();
             MarginTests();
             PaperTests();

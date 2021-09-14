@@ -8,7 +8,7 @@ import { ConversionTask } from "./ConversionTask";
 import { IProgressState } from "./IProgressState";
 
 /**
- * Represens a task for converting the currently opened document.
+ * Represents a task for converting the currently opened document.
  */
 export class ConvertTask extends ConversionTask
 {
@@ -49,7 +49,7 @@ export class ConvertTask extends ConversionTask
     }
 
     /**
-     * Tries to find a markdown-file.
+     * Tries to find a file to convert.
      *
      * @returns
      * The best matching markdown-document.

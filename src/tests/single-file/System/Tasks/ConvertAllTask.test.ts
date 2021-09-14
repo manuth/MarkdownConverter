@@ -25,7 +25,7 @@ export function ConvertAllTaskTests(): void
                 () =>
                 {
                     test(
-                        "Checking whether an exception occurrs if no workspace-folder is opened…",
+                        "Checking whether an exception occurs if no workspace-folder is opened…",
                         async () =>
                         {
                             await rejects(() => task.Execute(), NoWorkspaceFolderException);

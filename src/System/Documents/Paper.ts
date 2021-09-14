@@ -8,7 +8,7 @@ import { StandardizedPageFormat } from "./StandardizedPageFormat";
 export class Paper
 {
     /**
-     * The margin.
+     * The margin of the paper.
      */
     private margin: Margin = new Margin("1cm");
 
@@ -40,7 +40,7 @@ export class Paper
     }
 
     /**
-     * Gets or sets the margin.
+     * Gets or sets the margin of the paper.
      */
     public get Margin(): Margin
     {

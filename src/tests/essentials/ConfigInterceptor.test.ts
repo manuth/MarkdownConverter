@@ -86,7 +86,7 @@ export function ConfigInterceptorTests(): void
                 });
 
             test(
-                "Checking whether default values are returned if the absence of a seciton is simulated…",
+                "Checking whether default values are returned if the absence of a section is simulated…",
                 () =>
                 {
                     (interceptor.Settings as any)[key] = undefined;
@@ -97,7 +97,7 @@ export function ConfigInterceptorTests(): void
                 });
 
             test(
-                "Checking whether variable-inception is intercepted, too…",
+                "Checking whether variable-inspections are intercepted, too…",
                 async () =>
                 {
                     let result = workspace.getConfiguration(Settings.ConfigKey).inspect(key);

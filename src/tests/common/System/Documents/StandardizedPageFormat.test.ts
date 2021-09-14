@@ -4,12 +4,12 @@ import { StandardizedFormatType } from "../../../../System/Documents/Standardize
 import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat";
 
 /**
- * Registers tests for the `StandardizedPaperFormat` class.
+ * Registers tests for the `StandardizedPageFormat` class.
  */
-export function StandardizedPaperFormatTests(): void
+export function StandardizedPageFormatTests(): void
 {
     suite(
-        "StandardizedPaperFormat",
+        "StandardizedPageFormat",
         () =>
         {
             let format: StandardizedFormatType;

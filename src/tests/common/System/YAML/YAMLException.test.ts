@@ -4,7 +4,7 @@ import dedent = require("dedent");
 import fm = require("front-matter");
 import { Resources } from "../../../../Properties/Resources";
 import { Exception } from "../../../../System/Exception";
-import { IMark } from "../../../../System/YAML/IMark";
+import { IMarker } from "../../../../System/YAML/IMarker";
 import { YAMLException } from "../../../../System/YAML/YAMLException";
 
 /**
@@ -47,7 +47,7 @@ export function YAMLExceptionTests(): void
                             let exception = new YAMLException(yamlError);
                             ok(exception.Name);
                             ok(exception.Message);
-                            ok(exception.Mark);
+                            ok(exception.Marker);
                             ok(exception.Reason);
                         });
 
@@ -57,13 +57,13 @@ export function YAMLExceptionTests(): void
                         {
                             let name = "name";
                             let reason = "reason";
-                            let mark: IMark = new Object() as any;
+                            let marker: IMarker = new Object() as any;
                             let message = "message";
                             let innerException = new Exception();
-                            let exception = new YAMLException(name, reason, mark, message, innerException);
+                            let exception = new YAMLException(name, reason, marker, message, innerException);
                             strictEqual(exception.Name, name);
                             strictEqual(exception.Message, message);
-                            strictEqual(exception.Mark, mark);
+                            strictEqual(exception.Marker, marker);
                             strictEqual(exception.Reason, reason);
                             strictEqual(exception.InnerException, innerException);
                         });

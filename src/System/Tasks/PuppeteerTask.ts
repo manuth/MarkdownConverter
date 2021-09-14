@@ -9,7 +9,7 @@ import { IProgressState } from "./IProgressState";
 import { Task } from "./Task";
 
 /**
- * Represents a task which depends on
+ * Represents a task which depends on `puppeteer`.
  */
 export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
 {

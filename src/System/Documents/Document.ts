@@ -117,7 +117,7 @@ export class Document extends Renderable
     private parser: MarkdownIt;
 
     /**
-     * Initializes a new instance of the Document class with a file-path and a configuration.
+     * Initializes a new instance of the Document class.
      *
      * @param parser
      * The parser for rendering the document.
@@ -210,7 +210,7 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the content of the component.
+     * Gets or sets the content of the document.
      */
     public override get Content(): string
     {
@@ -258,7 +258,7 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the format to print the date.
+     * Gets or sets the the default date-format.
      */
     public get DefaultDateFormat(): string
     {
@@ -362,7 +362,7 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the template to use for the RenderBody-process.
+     * Gets or sets the template to use for the Render-method.
      */
     public get Template(): string
     {

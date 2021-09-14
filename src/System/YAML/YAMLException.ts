@@ -1,7 +1,7 @@
 import format = require("string-template");
 import { Resources } from "../../Properties/Resources";
 import { Exception } from "../Exception";
-import { IMark } from "./IMark";
+import { IMarker } from "./IMarker";
 
 /**
  * Represents a YAML-exception.
@@ -14,9 +14,9 @@ export class YAMLException extends Exception
     private reason: string;
 
     /**
-     * The mark of the exception.
+     * The marker of the exception.
      */
-    private mark: IMark;
+    private marker: IMarker;
 
     /**
      * Initializes a new instance of the YAMLException class.
@@ -35,16 +35,16 @@ export class YAMLException extends Exception
      * @param reason
      * The reason for the exception.
      *
-     * @param mark
-     * The mark of the position that caused the exception.
+     * @param marker
+     * The marker of the position that caused the exception.
      *
      * @param message
      * Either the error message that explains the reason for the exception or `null` to use the default message.
      *
      * @param innerException
-     * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
+     * The exception that is the cause of the current exception, or `null` if no inner exception is specified.
      */
-    public constructor(name: string, reason: string, mark: any, message: string, innerException?: Exception);
+    public constructor(name: string, reason: string, marker: any, message: string, innerException?: Exception);
 
     /**
      * Initializes a new instance of the YAMLException class with a name, a reason, a mark and a message.
@@ -55,8 +55,8 @@ export class YAMLException extends Exception
      * @param reason
      * The reason for the exception.
      *
-     * @param mark
-     * The mark of the position that caused the exception.
+     * @param marker
+     * The marker of the position that caused the exception.
      *
      * @param message
      * Either the error message that explains the reason for the exception or `null` to use the default message.
@@ -64,7 +64,7 @@ export class YAMLException extends Exception
      * @param innerException
      * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
      */
-    public constructor(name: string | any, reason?: string, mark?: IMark, message?: string, innerException?: Exception)
+    public constructor(name: string | any, reason?: string, marker?: IMarker, message?: string, innerException?: Exception)
     {
         super(...(arguments.length === 1 ? [null, name] : [message, innerException]));
 
@@ -73,13 +73,13 @@ export class YAMLException extends Exception
             let exception = name;
             this.name = exception.name;
             this.reason = exception.reason;
-            this.mark = exception.mark;
+            this.marker = exception.mark;
         }
         else
         {
             this.name = name;
             this.reason = reason;
-            this.mark = mark;
+            this.marker = marker;
         }
     }
 
@@ -96,15 +96,15 @@ export class YAMLException extends Exception
      */
     public override get Message(): string
     {
-        return super.Message || format(Resources.Resources.Get("YAMLException"), this.Mark.line + 1, this.Mark.column + 1);
+        return super.Message || format(Resources.Resources.Get("YAMLException"), this.Marker.line + 1, this.Marker.column + 1);
     }
 
     /**
      * Gets the mark of the exception.
      */
-    public get Mark(): IMark
+    public get Marker(): IMarker
     {
-        return this.mark;
+        return this.marker;
     }
 
     /**

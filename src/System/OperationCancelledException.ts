@@ -2,7 +2,7 @@ import { Resources } from "../Properties/Resources";
 import { Exception } from "./Exception";
 
 /**
- * Represents an exception that ocurrs on an operation-cancellation.
+ * Represents an exception that occurs on an operation-cancellation.
  */
 export class OperationCancelledException extends Exception
 {

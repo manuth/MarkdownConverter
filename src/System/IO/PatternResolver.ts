@@ -110,6 +110,7 @@ export class PatternResolver
      * The path to the current workspace.
      *
      * @returns
+     * The resolved pattern.
      */
     public Resolve(documentRoot: string, document: TextDocument, type: ConversionType, workspaceRoot?: string): string
     {

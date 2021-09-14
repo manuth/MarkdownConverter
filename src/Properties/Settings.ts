@@ -54,7 +54,7 @@ export class Settings
     }
 
     /**
-     * Gets the path to save the destination-files to.
+     * Gets a pattern for determining the path to save the destination-files to.
      */
     public get DestinationPattern(): string
     {
@@ -70,7 +70,7 @@ export class Settings
     }
 
     /**
-     * Gets the quality of the pictures produced by MarkdownConverter.
+     * Gets the quality of the `.jpg`-pictures produced by MarkdownConverter.
      */
     public get ConversionQuality(): number
     {
@@ -102,7 +102,7 @@ export class Settings
     }
 
     /**
-     * Gets the format to localize dates inside the document.
+     * Gets the default date-format for the document.
      */
     public get DefaultDateFormat(): string
     {
@@ -189,7 +189,7 @@ export class Settings
     }
 
     /**
-     * Gets the header of the document.
+     * Gets the template of the header of the document.
      */
     public get HeaderTemplate(): string
     {
@@ -205,7 +205,7 @@ export class Settings
     }
 
     /**
-     * Gets the footer of the document.
+     * Gets the template of the footer of the document.
      */
     public get FooterTemplate(): string
     {
@@ -213,7 +213,7 @@ export class Settings
     }
 
     /**
-     * Gets the metadata-section of the document.
+     * Gets the template of the metadata-section of the document.
      */
     public get MetaTemplate(): string
     {

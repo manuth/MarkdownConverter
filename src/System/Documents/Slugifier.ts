@@ -6,7 +6,7 @@ import { slugify } from "transliteration";
 export class Slugifier
 {
     /**
-     * The already generated slugs.
+     * The slugs that were generated so far.
      */
     private slugs: string[] = [];
 
@@ -18,7 +18,7 @@ export class Slugifier
     }
 
     /**
-     * Gets or sets the already generated slugs.
+     * Gets or sets the slugs that were generated so far.
      */
     protected get Slugs(): string[]
     {
@@ -34,13 +34,13 @@ export class Slugifier
     }
 
     /**
-     * Slugifies a text.
+     * Creates a slug for the specified text.
      *
      * @param text
-     * The text that is to be slugified.
+     * The text to create a slug for.
      *
      * @returns
-     * The slugified text.
+     * The slug for the specified text.
      */
     public CreateSlug(text: string): string
     {
@@ -67,13 +67,13 @@ export class Slugifier
     }
 
     /**
-     * Slugifies a text.
+     * Creates a slug for the specified text.
      *
      * @param text
-     * The text that is to be slugified.
+     * The text to create a slug for.
      *
      * @returns
-     * The slugified text.
+     * The slug for the specified text.
      */
     protected Slugify(text: string): string
     {

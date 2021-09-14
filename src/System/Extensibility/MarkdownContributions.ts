@@ -2,7 +2,7 @@ import { join } from "upath";
 import { Extension, extensions, Uri } from "vscode";
 
 /**
- * Provides the functionality to load markdown-conributions.
+ * Provides the functionality to load markdown-contributions.
  *
  * For more information see the original code:
  * https://github.com/Microsoft/vscode/blob/4be0f0723091ae10b14ba20b334847d607bb7d55/extensions/markdown-language-features/src/markdownExtensions.ts
@@ -96,7 +96,7 @@ export class MarkdownContributions
      * The path to the resource.
      *
      * @returns
-     * The path to the resource.
+     * The uri to the resource.
      */
     private static ResolveExtensionResource(extension: Extension<any>, resourcePath: string): Uri
     {
@@ -113,7 +113,7 @@ export class MarkdownContributions
      * The paths to the resources.
      *
      * @returns
-     * The path to the resources.
+     * The uri to the resources.
      */
     private static ResolveExtensionResources(extension: Extension<any>, resourcePaths: string[]): Uri[]
     {
@@ -187,7 +187,7 @@ export class MarkdownContributions
      * Loads a markdown-it plugin.
      *
      * @param extension
-     * The extension of to load the plug-in from.
+     * The extension to load the plug-in from.
      *
      * @param contributes
      * The contributions of the extension.

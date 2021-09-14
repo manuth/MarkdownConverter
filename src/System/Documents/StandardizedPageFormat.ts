@@ -22,7 +22,7 @@ export class StandardizedPageFormat extends PageFormat
      * Initializes a new instance of the `StandardizedPageFormat` class.
      *
      * @param format
-     * The orientation of the page.
+     * The format of the page.
      *
      * @param orientation
      * The orientation of the page.

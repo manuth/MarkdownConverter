@@ -1,7 +1,7 @@
 import { ExtensionTests } from "./Extension.test";
 
 /**
- * Registers tests for extensiblity-components.
+ * Registers tests for extensibility-components.
  */
 export function ExtensibilityTests(): void
 {

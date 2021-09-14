@@ -148,7 +148,7 @@ export abstract class Asset
     protected abstract GetReferenceSource(): Promise<string>;
 
     /**
-     * Reads the content of the asset.
+     * Reads the content from the asset.
      *
      * @returns
      * The content of the asset.

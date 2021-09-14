@@ -82,7 +82,7 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        `Checking whether specifying an inexistent \`${nameof<ISettings>((s) => s.ChromiumExecutablePath)}\` is specified…`,
+                        `Checking whether specifying an inexistent \`${nameof<ISettings>((s) => s.ChromiumExecutablePath)}\` is throws an exception…`,
                         async () =>
                         {
                             context.Settings.ChromiumExecutablePath = "hello world";

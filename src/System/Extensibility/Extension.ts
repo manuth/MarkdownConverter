@@ -13,27 +13,17 @@ import { Task } from "../Tasks/Task";
 export class Extension
 {
     /**
-     * The path to the extension-manifest.
-     */
-    private extensionManifestPath: string;
-
-    /**
-     * The path to the root of the extension.
-     */
-    private extensionRoot: string;
-
-    /**
      * The meta-data of the extension.
      */
     private metaData: Package;
 
     /**
-     * The parser provided by `Visual Studio Code`
+     * The parser provided by `vscode`.
      */
     private vsCodeParser: MarkdownIt;
 
     /**
-     * A promise for waiting for the system-parser to be fixed.
+     * A Promise for waiting for the system-parser to be fixed.
      */
     private systemParserFixPromise: Promise<void>;
 
@@ -51,8 +41,6 @@ export class Extension
     public constructor(extensionPackage: Package)
     {
         this.metaData = extensionPackage;
-        this.extensionManifestPath = extensionPackage.FileName;
-        this.extensionRoot = dirname(this.extensionManifestPath);
 
         this.systemParserFixPromise = new Promise(
             (resolve) =>
@@ -68,7 +56,7 @@ export class Extension
      */
     public get ExtensionRoot(): string
     {
-        return this.extensionRoot;
+        return dirname(this.MetaData.FileName);
     }
 
     /**

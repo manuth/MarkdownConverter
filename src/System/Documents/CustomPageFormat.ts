@@ -7,12 +7,12 @@ import { PageFormat } from "./PageFormat";
 export class CustomPageFormat extends PageFormat
 {
     /**
-     * The width.
+     * The width of the page.
      */
     private width: string;
 
     /**
-     * The height.
+     * The height of the page.
      */
     private height: string;
 
@@ -33,7 +33,7 @@ export class CustomPageFormat extends PageFormat
     }
 
     /**
-     * Gets or sets the width.
+     * Gets or sets the width of the page.
      */
     public get Width(): string
     {
@@ -49,7 +49,7 @@ export class CustomPageFormat extends PageFormat
     }
 
     /**
-     * Gets or sets the height.
+     * Gets or sets the height of the page.
      */
     public get Height(): string
     {

@@ -12,12 +12,12 @@ export class TocSettings
     private class: string;
 
     /**
-     * Heading-levels which are to be include.
+     * The levels of the headings to include in the table of contents.
      */
     private levels: MultiRange;
 
     /**
-     * The RegExp that is to be replaced with the table of contents.
+     * The RegExp to be replace with the table of contents.
      */
     private indicator: RegExp;
 
@@ -27,7 +27,7 @@ export class TocSettings
     private listType: ListType;
 
     /**
-     * Initializes a new instance of the `TocSettingsClass`.
+     * Initializes a new instance of the `TocSettings` class.
      *
      * @param className
      * The css-class of the toc-container.
@@ -36,7 +36,7 @@ export class TocSettings
      * The levels to display inside the toc.
      *
      * @param indicator
-     * A regexp which should be replaced by the toc inside the document.
+     * A RegExp which should be replaced by the toc inside the document.
      *
      * @param listType
      * The list-type of the toc.
@@ -66,7 +66,7 @@ export class TocSettings
     }
 
     /**
-     * Gets or sets the heading-levels which are to be included.
+     * Gets or sets the levels of the headings to include in the table of contents.
      */
     public get Levels(): MultiRange
     {
@@ -82,7 +82,7 @@ export class TocSettings
     }
 
     /**
-     * Gets or sets the RegExp that is to be replaced with the table of contents.
+     * Gets or sets the RegExp to be replace with the table of contents.
      */
     public get Indicator(): RegExp
     {

@@ -143,7 +143,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether a correct standardized paper-format is loaded if either width or height is not specified…",
+                        "Checking whether a correct standardized paper-format is loaded if neither width or height is specified…",
                         () =>
                         {
                             context.Settings["Document.Paper.PaperFormat"] = {

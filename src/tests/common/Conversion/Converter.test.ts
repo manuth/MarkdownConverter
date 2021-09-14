@@ -194,7 +194,7 @@ export function ConverterTests(): void
                         });
 
                     test(
-                        "Checking whether changed to the document take affect immediately…",
+                        "Checking whether changes made to the document take affect immediately…",
                         async function()
                         {
                             this.timeout(10 * 1000);
@@ -308,7 +308,7 @@ export function ConverterTests(): void
                 () =>
                 {
                     test(
-                        "Checking whether the method raises an error when executed before initialization…",
+                        "Checking whether the method raises an error if executed before initialization…",
                         async () =>
                         {
                             await rejects(() => converter.Start(ConversionType.HTML, outFile.FullName));

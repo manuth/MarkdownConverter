@@ -13,7 +13,7 @@ import { Renderable } from "./Renderable";
 export class DocumentFragment extends Renderable
 {
     /**
-     * A component for rendering the document.
+     * A component for rendering the fragment.
      */
     private renderer: typeof Handlebars = null;
 
@@ -23,7 +23,7 @@ export class DocumentFragment extends Renderable
     private document: Document;
 
     /**
-     * Initializes a new instance of the `Document` class.
+     * Initializes a new instance of the `DocumentFragment` class.
      *
      * @param document
      * The document this fragment belongs to.
@@ -35,7 +35,7 @@ export class DocumentFragment extends Renderable
     }
 
     /**
-     * Gets a component for rendering the document.
+     * Gets a component for rendering the fragment.
      */
     public get Renderer(): typeof Handlebars
     {
@@ -63,7 +63,7 @@ export class DocumentFragment extends Renderable
     }
 
     /**
-     * Renders the component.
+     * Renders the fragment.
      *
      * @returns
      * The rendered text.

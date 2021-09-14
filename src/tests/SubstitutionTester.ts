@@ -9,7 +9,7 @@ import { TestConstants } from "./TestConstants";
 export class SubstitutionTester
 {
     /**
-     * The document whose name is to be tested.
+     * The document to test the substitution for.
      */
     public TextDocument: TextDocument;
 
@@ -17,7 +17,7 @@ export class SubstitutionTester
      * Initializes a new instance of the `SubstitutionTester`.
      *
      * @param textDocument
-     * The text-document whose name is to be tested.
+     * The text-document to test the substitution for.
      */
     public constructor(textDocument: TextDocument)
     {

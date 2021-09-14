@@ -70,7 +70,7 @@ export class Converter
     private disposed = false;
 
     /**
-     * Initializes a new instance of the Constructor class with a filepath.
+     * Initializes a new instance of the Converter class.
      *
      * @param documentRoot
      * The root of the document-context.

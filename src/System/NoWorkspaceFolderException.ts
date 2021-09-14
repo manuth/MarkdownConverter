@@ -2,7 +2,7 @@ import { Resources } from "../Properties/Resources";
 import { Exception } from "./Exception";
 
 /**
- * Occurs when no workspace-folder is opened.
+ * Represents an exception which occurs when no workspace-folder is opened.
  */
 export class NoWorkspaceFolderException extends Exception
 {
