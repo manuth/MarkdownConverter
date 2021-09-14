@@ -220,11 +220,28 @@ export class Converter
             this.webServer = createServer(
                 async (request, response) =>
                 {
+                    let headers: Array<[string, string]> = [
+                        [
+                            "Access-Control-Allow-Origin",
+                            "*"
+                        ],
+                        [
+                            "Access-Control-Allow-Headers",
+                            "Origin, X-Requested-With, Content-Type, Accept, Range"
+                        ]
+                    ];
+
                     if (normalize(join(this.DocumentRoot, request.url)) === normalize(join(this.DocumentRoot, this.WebDocumentName)))
                     {
                         try
                         {
                             let content = await this.Document.Render();
+
+                            for (let header of headers)
+                            {
+                                response.setHeader(header[0], header[1]);
+                            }
+
                             response.writeHead(200);
                             response.write(content);
                         }
@@ -258,16 +275,14 @@ export class Converter
                                 headers: [
                                     {
                                         source: "**/*.*",
-                                        headers: [
+                                        headers: headers.map(
+                                            (header) =>
                                             {
-                                                key: "Access-Control-Allow-Origin",
-                                                value: "*"
-                                            },
-                                            {
-                                                key: "Access-Control-Allow-Headers",
-                                                value: "Origin, X-Requested-With, Content-Type, Accept, Range"
-                                            }
-                                        ]
+                                                return {
+                                                    key: header[0],
+                                                    value: header[1]
+                                                };
+                                            })
                                     }
                                 ],
                                 cleanUrls: false
