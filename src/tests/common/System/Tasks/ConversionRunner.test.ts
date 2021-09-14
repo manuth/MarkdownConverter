@@ -31,7 +31,7 @@ import { TestConstants } from "../../../TestConstants";
 export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "ConversionRunner",
+        nameof(ConversionRunner),
         () =>
         {
             let random: Random;
