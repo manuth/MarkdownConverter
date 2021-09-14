@@ -191,24 +191,18 @@ export function DocumentTests(): void
                         "Checking whether stylesheets are added to the rendered document…",
                         async () =>
                         {
-                            document.StyleSheets.push(new StyleSheet(styleSheet));
-
-                            ok(
-                                new RegExp(
-                                    `<link.*?type="text/css".*?href="${styleSheet}".*?/>`,
-                                    "g").test(await document.Render()));
+                            let asset = new StyleSheet(styleSheet);
+                            document.StyleSheets.push(asset);
+                            ok((await document.Render()).includes(await asset.Render()));
                         });
 
                     test(
                         "Checking whether scripts are added to the rendered document…",
                         async () =>
                         {
-                            document.Scripts.push(new WebScript(script));
-
-                            ok(
-                                new RegExp(
-                                    `<script.*?src="${script}".*?>.*?</script>`,
-                                    "g").test(await document.Render()));
+                            let asset = new WebScript(script);
+                            document.Scripts.push(asset);
+                            ok((await document.Render()).includes(await asset.Render()));
                         });
 
                     test(
