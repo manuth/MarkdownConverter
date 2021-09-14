@@ -4,7 +4,7 @@ import { createSandbox } from "sinon";
 import { resolve } from "upath";
 import { runTests } from "vscode-test";
 import { TestOptions } from "vscode-test/out/runTest";
-import { TestConstants } from "../tests/TestConstants";
+import { SuiteVarName } from "./SuiteVarName";
 
 (async function main()
 {
@@ -70,7 +70,7 @@ import { TestConstants } from "../tests/TestConstants";
             return {
                 ...commonOptions,
                 extensionTestsEnv: {
-                    [TestConstants.SuiteVarName]: suiteName
+                    [SuiteVarName]: suiteName
                 },
                 launchArgs: [
                     fileSystemPath,

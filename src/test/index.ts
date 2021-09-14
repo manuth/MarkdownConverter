@@ -6,6 +6,7 @@ import { resolve } from "upath";
 import { extensions } from "vscode";
 import { Extension } from "../System/Extensibility/Extension";
 import { TestConstants } from "../tests/TestConstants";
+import { SuiteVarName } from "./SuiteVarName";
 
 let suiteArgName = "suite";
 
@@ -22,7 +23,7 @@ let args = minimist(
             [suiteArgName]: "s"
         },
         default: {
-            [suiteArgName]: process.env[TestConstants.SuiteVarName] || "common"
+            [suiteArgName]: process.env[SuiteVarName] || "common"
         }
     });
 

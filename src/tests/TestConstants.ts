@@ -33,12 +33,4 @@ export class TestConstants
     {
         return extensions.getExtension(new Extension(this.PackageMetadata).FullName).exports.extension;
     }
-
-    /**
-     * Gets the name of the suite-variable.
-     */
-    public static get SuiteVarName(): string
-    {
-        return "TEST_SUITE";
-    }
 }
