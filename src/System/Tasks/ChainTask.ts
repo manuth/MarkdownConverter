@@ -57,7 +57,7 @@ export class ChainTask extends ConvertAllTask
     protected override async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         let document: TextDocument;
-        let documentName: string;
+        let documentName: string = null;
         let documents: TextDocument[] = [];
         let contents: string[];
 
