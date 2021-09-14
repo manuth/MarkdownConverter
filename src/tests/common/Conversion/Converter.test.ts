@@ -1,14 +1,19 @@
-import { doesNotReject, ok, rejects, strictEqual } from "assert";
+import { doesNotReject, notStrictEqual, ok, rejects, strictEqual } from "assert";
 import { Server } from "http";
+import { relative } from "path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import puppeteer = require("puppeteer-core");
-import { changeExt } from "upath";
-import { TextDocument, workspace } from "vscode";
+import { Random } from "random-js";
+import { createSandbox, SinonSandbox } from "sinon";
+import { changeExt, normalize } from "upath";
+import { Progress, TextDocument, workspace } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { Converter } from "../../../Conversion/Converter";
+import { Settings } from "../../../Properties/Settings";
 import { Document } from "../../../System/Documents/Document";
+import { IProgressState } from "../../../System/Tasks/IProgressState";
 
 /**
  * Registers tests for the {@link Converter `Converter`} class.
@@ -19,9 +24,12 @@ export function ConverterTests(): void
         nameof(Converter),
         () =>
         {
+            let sandbox: SinonSandbox;
+            let random: Random;
             let converter: TestConverter;
             let initializedConverter: TestConverter;
             let document: Document;
+            let initialized: boolean;
             let tempDir: TempDirectory;
             let tempFile: TempFile;
             let outFile: TempFile;
@@ -32,6 +40,22 @@ export function ConverterTests(): void
              */
             class TestConverter extends Converter
             {
+                /**
+                 * @inheritdoc
+                 */
+                public override get Initialized(): boolean
+                {
+                    return initialized ?? super.Initialized;
+                }
+
+                /**
+                 * @inheritdoc
+                 */
+                public override get WebDocumentName(): string
+                {
+                    return super.WebDocumentName;
+                }
+
                 /**
                  * @inheritdoc
                  */
@@ -83,10 +107,28 @@ export function ConverterTests(): void
             setup(
                 async () =>
                 {
+                    sandbox = createSandbox();
+                    random = new Random();
                     converter = new TestConverter(tempDir.FullName, document);
-                    converter.ChromiumExecutablePath = null;
+                    initialized = null;
                     initializedConverter = new TestConverter(tempDir.FullName, document);
                     await initializedConverter.Initialize();
+                });
+
+            teardown(
+                async function()
+                {
+                    this.timeout(5 * 1000);
+                    sandbox.restore();
+                    initialized = null;
+
+                    for (let entry of [converter, initializedConverter])
+                    {
+                        if (entry.Initialized)
+                        {
+                            await entry.Dispose();
+                        }
+                    }
                 });
 
             suite(
@@ -104,111 +146,87 @@ export function ConverterTests(): void
                 });
 
             suite(
-                nameof<Converter>((converter) => converter.Initialized),
+                nameof<TestConverter>((converter) => converter.URL),
                 () =>
                 {
                     test(
-                        `Checking whether the value is initially \`${false}\`…`,
+                        `Checking whether the \`${nameof<TestConverter>((c) => c.URL)}\` property equals \`${null}\` if \`${nameof<TestConverter>((c) => c.Initialized)} is \`${false}\`…`,
                         () =>
                         {
-                            ok(!converter.Initialized);
+                            initialized = false;
+                            strictEqual(initializedConverter.URL, null);
                         });
 
                     test(
-                        `Checking whether the value is \`${true}\` after the initialization…`,
-                        async () =>
-                        {
-                            ok(initializedConverter.Initialized);
-                        });
-
-                    test(
-                        `Checking whether the value is \`${false}\` after a disposal…`,
+                        `Checking whether the the \`${nameof<TestConverter>((c) => c.URL)}\` returns the expected value if \`${nameof<TestConverter>((c) => c.Initialized)} is \`${true}\`…`,
                         async function()
                         {
-                            this.timeout(2 * 1000);
-                            this.slow(1 * 1000);
-                            await initializedConverter.Dispose();
-                            ok(!converter.Initialized);
+                            initialized = true;
+                            let url = new URL(initializedConverter.URL);
+                            strictEqual(url.hostname, "localhost");
+                            strictEqual(parseInt(url.port), initializedConverter.PortNumber);
+                            strictEqual(normalize(`./${url.pathname}`), normalize(initializedConverter.WebDocumentName));
                         });
                 });
 
             suite(
-                nameof<Converter>((converter) => converter.Disposed),
+                nameof<TestConverter>((converter) => converter.PortNumber),
                 () =>
                 {
                     test(
-                        "Checking whether the value represents the state of the converter correctly…",
-                        async function()
-                        {
-                            this.timeout(3 * 1000);
-                            this.slow(1.5 * 1000);
-                            ok(!converter.Disposed);
-                            await converter.Initialize();
-                            ok(!converter.Disposed);
-                            await converter.Dispose();
-                            ok(converter.Disposed);
-                        });
-                });
-
-            suite(
-                nameof<Converter>((converter) => converter.URL),
-                () =>
-                {
-                    let browser: puppeteer.Browser;
-                    let page: puppeteer.Page;
-
-                    suiteSetup(
-                        async () =>
-                        {
-                            browser = await puppeteer.launch(
-                                {
-                                    args: [
-                                        "--no-sandbox"
-                                    ]
-                                });
-
-                            page = await browser.newPage();
-                        });
-
-                    suiteTeardown(
-                        async () =>
-                        {
-                            await browser.close();
-                        });
-
-                    test(
-                        `Checking whether the \`${nameof<Converter>((c) => c.URL)}\` property equals \`${null}\` before the initialization…`,
+                        `Checking whether ${null} is returned if \`${nameof<TestConverter>((c) => c.Initialized)}\` is \`${false}\`…`,
                         () =>
                         {
-                            strictEqual(converter.URL, null);
+                            initialized = false;
+                            strictEqual(initializedConverter.PortNumber, null);
                         });
 
                     test(
-                        `Checking whether the rendered document is served under the \`${nameof<Converter>((c) => c.URL)}\` after the initialization…`,
-                        async function()
+                        `Checking whether a port-number is returned if \`${nameof<TestConverter>((c) => c.Initialized)}\` is \`${true}\`…`,
+                        () =>
                         {
-                            this.timeout(10 * 1000);
-                            this.slow(5 * 1000);
-                            let response = await page.goto(initializedConverter.URL);
-                            strictEqual(await response.text(), await document.Render());
-                        });
-
-                    test(
-                        "Checking whether changes made to the document take affect immediately…",
-                        async function()
-                        {
-                            this.timeout(10 * 1000);
-                            this.slow(5 * 1000);
-                            let response = await page.goto(initializedConverter.URL);
-                            strictEqual(await response.text(), await document.Render());
-                            document.Content = "This is a test";
-                            response = await page.reload();
-                            strictEqual(await response.text(), await document.Render());
+                            initialized = true;
+                            ok(typeof initializedConverter.PortNumber === "number");
                         });
                 });
 
             suite(
-                nameof<Converter>((converter) => converter.BrowserOptions),
+                nameof<TestConverter>((converter) => converter.WebDocumentName),
+                () =>
+                {
+                    let indexFileName = "index.html";
+                    let fileNameProperty = nameof.full<TestConverter>((c) => c.Document.FileName);
+                    let documentRootProperty = nameof<TestConverter>((c) => c.DocumentRoot);
+
+                    test(
+                        `Checking whether \`${indexFileName}\` is returned, if either \`${fileNameProperty}\` or \`${documentRootProperty}\` are \`${undefined}\`…`,
+                        () =>
+                        {
+                            sandbox.replaceGetter(converter.Document, "FileName", () => undefined);
+                            strictEqual(converter.WebDocumentName, indexFileName);
+                            sandbox.restore();
+                            sandbox.replaceGetter(converter, "DocumentRoot", () => undefined);
+                            strictEqual(converter.WebDocumentName, indexFileName);
+                        });
+                });
+
+            suite(
+                nameof<TestConverter>((converter) => converter.WebServer),
+                () =>
+                {
+                    test(
+                        "Checking whether the web-server is returned only if the converter has been initialized…",
+                        () =>
+                        {
+                            initialized = false;
+                            strictEqual(initializedConverter.WebServer, null);
+                            initialized = true;
+                            notStrictEqual(initializedConverter.WebServer, null);
+                        });
+                });
+
+            suite(
+                nameof<TestConverter>((converter) => converter.BrowserOptions),
                 () =>
                 {
                     test(
@@ -224,9 +242,42 @@ export function ConverterTests(): void
                 });
 
             suite(
+                nameof<TestConverter>((converter) => converter.Browser),
+                () =>
+                {
+                    test(
+                        "Checking whether the browser is returned only if the converter has been initialized…",
+                        () =>
+                        {
+                            initialized = false;
+                            strictEqual(initializedConverter.Browser, null);
+                            initialized = true;
+                            notStrictEqual(initializedConverter.Browser, null);
+                        });
+                });
+
+            suite(
                 nameof<Converter>((converter) => converter.Initialize),
                 () =>
                 {
+                    let browser: puppeteer.Browser;
+                    let page: puppeteer.Page;
+                    let noSandboxArg = "--no-sandbox";
+
+                    setup(
+                        async () =>
+                        {
+                            browser = await puppeteer.launch();
+                            page = await browser.newPage();
+                        });
+
+                    teardown(
+                        async function()
+                        {
+                            await page.close();
+                            await browser.close();
+                        });
+
                     test(
                         "Checking whether the converter can be initialized…",
                         async function()
@@ -236,40 +287,161 @@ export function ConverterTests(): void
                             await doesNotReject(() => converter.Initialize());
                         });
 
-                    suite(
-                        "Uninitialized Converter State Tests",
+                    test(
+                        "Checking whether trying to initialize a converter multiple times throws an error…",
+                        async () =>
+                        {
+                            await rejects(() => initializedConverter.Initialize());
+                        });
+
+                    test(
+                        "Checking whether the state of the converter is set correctly after the initialization…",
                         () =>
                         {
-                            test(
-                                `Checking whether uninitialized components are equal to \`${null}\`…`,
+                            ok(initializedConverter.Initialized);
+                        });
+
+                    test(
+                        "Checking whether at least one message is reported during the initialization…",
+                        async () =>
+                        {
+                            let reportCount = 0;
+
+                            let reporter: Progress<IProgressState> = {
+                                report()
+                                {
+                                    reportCount++;
+                                }
+                            };
+
+                            await converter.Initialize(reporter);
+                            ok(reportCount > 0);
+                        });
+
+                    test(
+                        `Checking whether the configured \`${nameof<Settings>((s) => s.ChromiumArgs)}\` are passed to puppeteer…`,
+                        async () =>
+                        {
+                            let args: string[];
+
+                            sandbox.replace(
+                                puppeteer,
+                                "launch",
+                                async (options) =>
+                                {
+                                    args = options.args;
+                                    return browser;
+                                });
+
+                            await converter.Initialize();
+
+                            ok(
+                                Settings.Default.ChromiumArgs.every(
+                                    (argument) =>
+                                    {
+                                        args.includes(argument);
+                                    }));
+                        });
+
+                    test(
+                        `Checking whether \`${noSandboxArg}\` is passed if launching \`puppeteer\` fails…`,
+                        async () =>
+                        {
+                            let launchedDefault = false;
+                            let launchedWithNoSandboxArg = false;
+
+                            sandbox.replace(
+                                puppeteer,
+                                "launch",
+                                async (options) =>
+                                {
+                                    if (options.args?.includes(noSandboxArg))
+                                    {
+                                        launchedWithNoSandboxArg = true;
+                                        return browser;
+                                    }
+                                    else
+                                    {
+                                        launchedDefault = true;
+                                        throw new Error();
+                                    }
+                                });
+
+                            await converter.Initialize();
+                            ok(launchedDefault);
+                            ok(launchedWithNoSandboxArg);
+                        });
+
+                    test(
+                        "Checking whether all required members are initialized during the initialization…",
+                        async () =>
+                        {
+                            strictEqual(converter.URL, null);
+                            strictEqual(converter.PortNumber, null);
+                            strictEqual(converter.WebServer, null);
+                            strictEqual(converter.Browser, null);
+                            await converter.Initialize();
+                            ok(typeof converter.URL === "string");
+                            ok(typeof converter.PortNumber === "number");
+                            ok(converter.WebServer);
+                            ok(converter.Browser);
+                        });
+
+                    test(
+                        `Checking whether a website is served at the port indicated by the \`${nameof<Converter>((c) => c.PortNumber)}\`-property…`,
+                        async function()
+                        {
+                            await doesNotReject(
                                 async () =>
                                 {
-                                    strictEqual(converter.URL, null);
-                                    strictEqual(converter.PortNumber, null);
-                                    strictEqual(converter.WebServer, null);
-                                    strictEqual(converter.Browser, null);
+                                    return page.goto(`http://localhost:${initializedConverter.PortNumber}`);
                                 });
                         });
 
-                    suite(
-                        "Initialized Converter State Tests",
-                        () =>
+                    test(
+                        "Checking whether files inside the document-root are served…",
+                        async () =>
                         {
-                            setup(
-                                async () =>
+                            let tempFile = new TempFile(
                                 {
-                                    await converter.Initialize();
+                                    Directory: tempDir.FullName,
+                                    Suffix: ".txt"
                                 });
 
-                            test(
-                                "Checking whether all properties are initialized…",
+                            let url = new URL(relative(tempDir.FullName, tempFile.FullName), initializedConverter.URL);
+                            let content = random.string(10);
+                            await writeFile(tempFile.FullName, content);
+                            let response = await page.goto(url.toString());
+                            strictEqual(await response.text(), content);
+                            tempFile.Dispose();
+                        });
+
+                    test(
+                        `Checking whether a rendered version of the document is served at the URL indicated by the \`${nameof<Converter>((c) => c.URL)}\`-property…`,
+                        async () =>
+                        {
+                            let response = await page.goto(initializedConverter.URL);
+                            strictEqual(response.status(), 200);
+                            strictEqual(await response.text(), await initializedConverter.Document.Render());
+                        });
+
+                    test(
+                        "Checking whether an error message is printed if the document couldn't be rendered for some reason…",
+                        async () =>
+                        {
+                            let message = random.string(50);
+
+                            sandbox.replace(
+                                initializedConverter.Document,
+                                "Render",
                                 () =>
                                 {
-                                    ok(converter.URL);
-                                    ok(converter.PortNumber);
-                                    ok(converter.WebServer);
-                                    ok(converter.Browser);
+                                    throw new Error(message);
                                 });
+
+                            let response = await page.goto(initializedConverter.URL);
+                            strictEqual(response.status(), 500);
+                            ok((await response.text()).includes(message));
                         });
                 });
 
@@ -283,9 +455,18 @@ export function ConverterTests(): void
                     setup(
                         async () =>
                         {
-                            browser = initializedConverter.Browser;
-                            webServer = initializedConverter.WebServer;
-                            await initializedConverter.Dispose();
+                            await converter.Initialize();
+                            browser = converter.Browser;
+                            webServer = converter.WebServer;
+                            await converter.Dispose();
+                        });
+
+                    test(
+                        "Checking whether the state of the converter is set correctly after the disposal…",
+                        () =>
+                        {
+                            strictEqual(converter.Initialized, false);
+                            strictEqual(converter.Disposed, true);
                         });
 
                     test(
@@ -308,7 +489,7 @@ export function ConverterTests(): void
                 () =>
                 {
                     test(
-                        "Checking whether the method raises an error if executed before initialization…",
+                        "Checking whether the method raises an error if the converter hasn't been initialized…",
                         async () =>
                         {
                             await rejects(() => converter.Start(ConversionType.HTML, outFile.FullName));
@@ -319,6 +500,25 @@ export function ConverterTests(): void
                         async () =>
                         {
                             await doesNotReject(() => initializedConverter.Start(ConversionType.HTML, outFile.FullName));
+                        });
+
+                    test(
+                        "Checking whether messages are reported during the conversion…",
+                        async () =>
+                        {
+                            let reportCount = 0;
+
+                            await initializedConverter.Start(
+                                ConversionType.HTML,
+                                outFile.FullName,
+                                {
+                                    report()
+                                    {
+                                        reportCount++;
+                                    }
+                                });
+
+                            ok(reportCount > 0);
                         });
 
                     test(
