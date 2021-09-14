@@ -14,7 +14,7 @@ export class FileException extends IOException
     public Path: string;
 
     /**
-     * Initializes a new instance of the FileException.
+     * Initializes a new instance of the {@link FileException `FileException`}.
      *
      * @param message
      * Either the error message that explains the reason for the exception or `null` to use the default message.

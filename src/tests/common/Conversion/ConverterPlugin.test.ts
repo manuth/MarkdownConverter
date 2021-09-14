@@ -11,7 +11,7 @@ import { ConverterPlugin } from "../../../Conversion/ConverterPlugin";
 import { Document } from "../../../System/Documents/Document";
 
 /**
- * Registers tests for the `ConverterPlugin` class.
+ * Registers tests for the {@link ConverterPlugin `ConverterPlugin`} class.
  */
 export function ConverterPluginTests(): void
 {

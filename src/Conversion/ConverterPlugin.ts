@@ -20,7 +20,7 @@ export class ConverterPlugin
     private websiteName: string;
 
     /**
-     * Initializes a new instance of the `FilenamePlugin` class.
+     * Initializes a new instance of the {@link ConverterPlugin `ConverterPlugin`} class.
      *
      * @param converter
      * The converter this plugin belongs to.

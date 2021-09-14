@@ -8,7 +8,7 @@ import { InsertionType } from "./InsertionType";
 export class StyleSheet extends Asset
 {
     /**
-     * Initializes a new instance of the `StyleSheet` class.
+     * Initializes a new instance of the {@link StyleSheet `StyleSheet`} class.
      *
      * @param path
      * The path to the asset.

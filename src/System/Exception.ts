@@ -14,12 +14,12 @@ export class Exception extends Error
     private exceptionMessage: string;
 
     /**
-     * The Exception instance that caused the current exception.
+     * The {@link Exception `Exception`} instance that caused the current exception.
      */
     private innerException: Exception = null;
 
     /**
-     * Initializes a new instance of the `Exception`.
+     * Initializes a new instance of the {@link Exception `Exception`}.
      *
      * @param message
      * The error message that explains the reason for the exception.
@@ -47,7 +47,7 @@ export class Exception extends Error
     }
 
     /**
-     * Gets the Exception instance that caused the current exception.
+     * Gets the {@link Exception `Exception`} instance that caused the current exception.
      */
     public get InnerException(): Exception
     {

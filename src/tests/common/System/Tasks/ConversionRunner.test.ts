@@ -23,7 +23,7 @@ import { SubstitutionTester } from "../../../SubstitutionTester";
 import { TestConstants } from "../../../TestConstants";
 
 /**
- * Registers tests for the `ConversionRunner` class.
+ * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.
  *
  * @param context
  * The test-context.
@@ -47,7 +47,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
             const newLineSelector = "br";
 
             /**
-             * Provides an implementation of the `ConversionRunner` class for testing.
+             * Provides an implementation of the {@link ConversionRunner `ConversionRunner`} class for testing.
              */
             class TestConversionRunner extends ConversionRunner
             {

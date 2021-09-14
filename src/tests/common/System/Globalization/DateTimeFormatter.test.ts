@@ -3,7 +3,7 @@ import { CultureInfo } from "@manuth/resource-manager";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
 /**
- * Registers tests for the `DateTimeFormatter` class.
+ * Registers tests for the {@link DateTimeFormatter `DateTimeFormatter`} class.
  */
 export function DateTimeFormatterTests(): void
 {

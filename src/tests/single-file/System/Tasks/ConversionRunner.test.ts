@@ -3,11 +3,13 @@ import { TempFile } from "@manuth/temp-files";
 import { resolve } from "upath";
 import { window, workspace } from "vscode";
 import { ISettings } from "../../../../Properties/ISettings";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
 
 /**
- * Registers tests for the `ConversionRunner` class.
+ * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.
  *
  * @param context
  * The test-context.

@@ -8,7 +8,7 @@ import { IMarker } from "../../../../System/YAML/IMarker";
 import { YAMLException } from "../../../../System/YAML/YAMLException";
 
 /**
- * Registers tests for the `YAMLException` class.
+ * Registers tests for the {@link YAMLException `YAMLException`} class.
  */
 export function YAMLExceptionTests(): void
 {

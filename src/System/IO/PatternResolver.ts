@@ -27,7 +27,7 @@ export class PatternResolver
     private variables: Array<string | number | symbol>;
 
     /**
-     * Initializes a new instance of the `PatternResolver` class.
+     * Initializes a new instance of the {@link PatternResolver `PatternResolver`} class.
      *
      * @param pattern
      * The pattern to resolve.

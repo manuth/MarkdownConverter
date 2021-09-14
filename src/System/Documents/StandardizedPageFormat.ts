@@ -19,7 +19,7 @@ export class StandardizedPageFormat extends PageFormat
     private orientation: PageOrientation;
 
     /**
-     * Initializes a new instance of the `StandardizedPageFormat` class.
+     * Initializes a new instance of the {@link StandardizedPageFormat `StandardizedPageFormat`} class.
      *
      * @param format
      * The format of the page.

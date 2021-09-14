@@ -2,7 +2,7 @@ import { ok, strictEqual } from "assert";
 import { Exception } from "../../../System/Exception";
 
 /**
- * Registers tests for the `Exception` class.
+ * Registers tests for the {@link Exception `Exception`} class.
  */
 export function ExceptionTests(): void
 {

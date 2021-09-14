@@ -8,7 +8,7 @@ import { ITestContext } from "../../../ITestContext";
 import { TestConstants } from "../../../TestConstants";
 
 /**
- * Registers tests for the `ConvertTask` class.
+ * Registers tests for the {@link ConvertTask `ConvertTask`} class.
  *
  * @param context
  * The test-context.

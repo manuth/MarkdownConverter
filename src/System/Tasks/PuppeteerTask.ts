@@ -14,7 +14,7 @@ import { Task } from "./Task";
 export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
 {
     /**
-     * Initializes a new instance of the `PuppeteerTask` class.
+     * Initializes a new instance of the {@link PuppeteerTask `PuppeteerTask`} class.
      *
      * @param extension
      * The extension this task belongs to.

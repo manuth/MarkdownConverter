@@ -17,7 +17,7 @@ export class CustomPageFormat extends PageFormat
     private height: string;
 
     /**
-     * Initializes a new instance of the `CustomPageFormat` class.
+     * Initializes a new instance of the {@link CustomPageFormat `CustomPageFormat`} class.
      *
      * @param width
      * The width.

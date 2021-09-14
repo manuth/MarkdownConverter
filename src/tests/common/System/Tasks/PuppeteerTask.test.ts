@@ -10,7 +10,7 @@ import { ITestContext } from "../../../ITestContext";
 import { TestConstants } from "../../../TestConstants";
 
 /**
- * Registers tests for the `PuppeteerTask` class.
+ * Registers tests for the {@link PuppeteerTask `PuppeteerTask`} class.
  *
  * @param context
  * The test-context.
@@ -26,7 +26,7 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
             let tempPuppeteerPath: string;
 
             /**
-             * Provides an implementation of the `PuppeteerTask` for testing.
+             * Provides an implementation of the {@link PuppeteerTask `PuppeteerTask`} for testing.
              */
             class PuppeteerTaskTest extends PuppeteerTask
             {

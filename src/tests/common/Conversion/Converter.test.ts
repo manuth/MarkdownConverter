@@ -11,7 +11,7 @@ import { Converter } from "../../../Conversion/Converter";
 import { Document } from "../../../System/Documents/Document";
 
 /**
- * Registers tests for the `Converter` class.
+ * Registers tests for the {@link Converter `Converter`} class.
  */
 export function ConverterTests(): void
 {
@@ -28,7 +28,7 @@ export function ConverterTests(): void
             let textDocument: TextDocument;
 
             /**
-             * Provides an implementation of the `Converter` class for testing.
+             * Provides an implementation of the {@link Converter `Converter`} class for testing.
              */
             class TestConverter extends Converter
             {

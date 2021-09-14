@@ -25,12 +25,12 @@ export class Settings
     public static readonly ConfigKey = "markdownConverter";
 
     /**
-     * A default instance of the `Settings` class.
+     * A default instance of the {@link Settings `Settings`} class.
      */
     private static defaultInstance: Settings = new Settings();
 
     /**
-     * Gets a default instance of the `Settings` class.
+     * Gets a default instance of the {@link Settings `Settings`} class.
      */
     public static get Default(): Settings
     {
@@ -315,6 +315,9 @@ export class Settings
     /**
      * Determines the value of a configuration entry.
      *
+     * @template T
+     * The type of the entry to get.
+     *
      * @param key
      * The key of the entry.
      *
@@ -322,7 +325,7 @@ export class Settings
      * The default value to return.
      *
      * @returns
-     * The value of the configuration with the specified `key`.
+     * The value of the configuration with the specified {@link key `key`}.
      */
     protected GetConfigEntry<T>(key: string, defaultValue?: T): T
     {

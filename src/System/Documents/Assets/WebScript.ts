@@ -8,7 +8,7 @@ import { InsertionType } from "./InsertionType";
 export class WebScript extends Asset
 {
     /**
-     * Initializes a new instance of the `WebScript` class.
+     * Initializes a new instance of the {@link WebScript `WebScript`} class.
      *
      * @param path
      * The path to the asset.

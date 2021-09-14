@@ -7,7 +7,7 @@ import { FileNotFoundException } from "./System/IO/FileNotFoundException";
 export class MarkdownFileNotFoundException extends FileNotFoundException
 {
     /**
-     * Initializes a new instance of the MarkdownFileNotFoundException class.
+     * Initializes a new instance of the {@link MarkdownFileNotFoundException `MarkdownFileNotFoundException`} class.
      */
     public constructor()
     {

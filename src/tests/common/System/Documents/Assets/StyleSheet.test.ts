@@ -6,7 +6,7 @@ import { Random } from "random-js";
 import { StyleSheet } from "../../../../../System/Documents/Assets/StyleSheet";
 
 /**
- * Registers tests for the `StyleSheet` class.
+ * Registers tests for the {@link StyleSheet `StyleSheet`} class.
  */
 export function StyleSheetTests(): void
 {

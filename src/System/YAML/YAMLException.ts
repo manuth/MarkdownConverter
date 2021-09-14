@@ -19,7 +19,7 @@ export class YAMLException extends Exception
     private marker: IMarker;
 
     /**
-     * Initializes a new instance of the YAMLException class.
+     * Initializes a new instance of the {@link YAMLException `YAMLException`} class.
      *
      * @param exception
      * The exception to copy the values from.
@@ -27,7 +27,7 @@ export class YAMLException extends Exception
     public constructor(exception: any);
 
     /**
-     * Initializes a new instance of the YAMLException class with a name, a reason, a mark and a message.
+     * Initializes a new instance of the {@link YAMLException `YAMLException`} class with a name, a reason, a mark and a message.
      *
      * @param name
      * The name of the exception.
@@ -47,7 +47,7 @@ export class YAMLException extends Exception
     public constructor(name: string, reason: string, marker: any, message: string, innerException?: Exception);
 
     /**
-     * Initializes a new instance of the YAMLException class with a name, a reason, a mark and a message.
+     * Initializes a new instance of the {@link YAMLException `YAMLException`} class with a name, a reason, a mark and a message.
      *
      * @param name
      * The name of the exception.

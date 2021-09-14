@@ -18,7 +18,7 @@ export class Paper
     private format: PageFormat = new StandardizedPageFormat();
 
     /**
-     * Initializes a new instance of the `Paper` class.
+     * Initializes a new instance of the {@link Paper `Paper`} class.
      *
      * @param format
      * Either the format of the paper or `null` to use the default format.

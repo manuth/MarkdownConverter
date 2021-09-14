@@ -98,18 +98,24 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Gets the value at the specified `section`.
+     * Gets the value at the specified {@link section `section`}.
+     *
+     * @template T
+     * The type of the section to get.
      *
      * @param section
      * The section of the value to get.
      *
      * @returns
-     * The value of the specified `section`.
+     * The value of the specified {@link section `section`}.
      */
     public get<T>(section: string): T;
 
     /**
-     * Gets the value at the specified `section`.
+     * Gets the value at the specified {@link section `section`}.
+     *
+     * @template T
+     * The type of the section to get.
      *
      * @param section
      * The section of the value to get.
@@ -118,12 +124,12 @@ export class ConfigurationSection implements WorkspaceConfiguration
      * The default value to apply.
      *
      * @returns
-     * The value of the specified `section`.
+     * The value of the specified {@link section `section`}.
      */
     public get<T>(section: string, defaultValue: T): T;
 
     /**
-     * Gets the value at the specified `section`.
+     * Gets the value at the specified {@link section `section`}.
      *
      * @param section
      * The section of the value to get.
@@ -132,7 +138,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
      * The default value to apply.
      *
      * @returns
-     * The value of the specified `section`.
+     * The value of the specified {@link section `section`}.
      */
     public get(section: string, defaultValue?: any): any
     {
@@ -169,7 +175,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Checks whether the specified `section` exists.
+     * Checks whether the specified {@link section `section`} exists.
      *
      * @param section
      * The section to check.
@@ -184,6 +190,9 @@ export class ConfigurationSection implements WorkspaceConfiguration
 
     /**
      * @inheritdoc
+     *
+     * @template T
+     * The type of the section to get.
      *
      * @param section
      * The section to inspect.
@@ -215,7 +224,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Updates the configuration at the specified `section`.
+     * Updates the configuration at the specified {@link section `section`}.
      *
      * @param section
      * The section to update.
@@ -235,13 +244,13 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Gets the interception for the specified `section`.
+     * Gets the interception for the specified {@link section `section`}.
      *
      * @param section
      * The section to get the interception for.
      *
      * @returns
-     * The intercepted value for the specified `section`.
+     * The intercepted value for the specified {@link section `section`}.
      */
     public GetInterception(section: string): any
     {
@@ -273,13 +282,13 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Determines whether an interception for the specified `section` exists.
+     * Determines whether an interception for the specified {@link section `section`} exists.
      *
      * @param section
      * The section to check.
      *
      * @returns
-     * A value indicating whether an interception for the specified `section` exists.
+     * A value indicating whether an interception for the specified {@link section `section`} exists.
      */
     public HasInterception(section: string): boolean
     {
@@ -295,7 +304,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Gets the key of the specified `section` relative to the intercepted section.
+     * Gets the key of the specified {@link section `section`} relative to the intercepted section.
      *
      * @param section
      * The section of the key to get.
@@ -326,13 +335,13 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Determines the key of the specified `section`.
+     * Determines the key of the specified {@link section `section`}.
      *
      * @param section
      * The section of the key to get.
      *
      * @returns
-     * The key of the specified `section`.
+     * The key of the specified {@link section `section`}.
      */
     protected GetKey(section: string): string
     {

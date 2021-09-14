@@ -85,7 +85,7 @@ export class Document extends Renderable
     private meta: DocumentFragment = new DocumentFragment(this);
 
     /**
-     * The template to use for the RenderBody-process.
+     * The template to use for the {@link Render `Render`}-method.
      */
     private template: string = dedent(`
         <!DOCTYPE html>
@@ -117,13 +117,13 @@ export class Document extends Renderable
     private parser: MarkdownIt;
 
     /**
-     * Initializes a new instance of the Document class.
+     * Initializes a new instance of the {@link Document `Document`} class.
      *
      * @param parser
      * The parser for rendering the document.
      *
      * @param document
-     * The `TextDocument` to load the info from.
+     * The {@link TextDocument `TextDocument`} to load the info from.
      */
     public constructor(parser: MarkdownIt, document?: TextDocument)
     {
@@ -362,7 +362,7 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the template to use for the Render-method.
+     * Gets or sets the template to use for the {@link Render `Render`}-method.
      */
     public get Template(): string
     {

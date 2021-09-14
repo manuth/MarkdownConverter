@@ -70,7 +70,7 @@ export class Converter
     private disposed = false;
 
     /**
-     * Initializes a new instance of the Converter class.
+     * Initializes a new instance of the {@link Converter `Converter`} class.
      *
      * @param documentRoot
      * The root of the document-context.
@@ -93,7 +93,7 @@ export class Converter
     }
 
     /**
-     * Gets the document which is converted by this `Converter`.
+     * Gets the document which is converted by this {@link Converter `Converter`}.
      */
     public get Document(): Document
     {

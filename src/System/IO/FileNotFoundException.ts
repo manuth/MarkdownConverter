@@ -8,7 +8,7 @@ import { FileException } from "./FileException";
 export class FileNotFoundException extends FileException
 {
     /**
-     * Initializes a new instance of the FileNotFoundException class.
+     * Initializes a new instance of the {@link FileNotFoundException `FileNotFoundException`} class.
      *
      * @param message
      * Either the error message that explains the reason for the exception or `null` to use the default message.

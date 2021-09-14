@@ -13,7 +13,7 @@ import { HelperKey } from "../../../../System/Documents/HelperKey";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
 /**
- * Registers tests for the `DocumentFragment` class.
+ * Registers tests for the {@link DocumentFragment `DocumentFragment`} class.
  */
 export function DocumentFragmentTests(): void
 {

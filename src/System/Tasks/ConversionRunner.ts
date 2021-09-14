@@ -35,7 +35,7 @@ import { AssetLoader } from "./AssetLoader";
 import { IProgressState } from "./IProgressState";
 
 /**
- * Provides the functionality to load settings and run a `Converter`.
+ * Provides the functionality to load settings and run a {@link Converter `Converter`}.
  */
 export class ConversionRunner
 {
@@ -50,7 +50,7 @@ export class ConversionRunner
     private lastChosenWorkspaceFolder: string;
 
     /**
-     * Initializes a new instance of the `ConversionRunner` class.
+     * Initializes a new instance of the {@link ConversionRunner `ConversionRunner`} class.
      *
      * @param extension
      * The extension the runner belongs to.
@@ -77,7 +77,7 @@ export class ConversionRunner
     }
 
     /**
-     * Executes the underlying `Converter`.
+     * Executes the underlying {@link Converter `Converter`}.
      *
      * @param document
      * The document to convert.

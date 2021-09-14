@@ -1,5 +1,8 @@
 /**
  * Represents a test-context.
+ *
+ * @template TSection
+ * The type of the intercepted settings-section.
  */
 export interface ITestContext<TSection extends any = any>
 {

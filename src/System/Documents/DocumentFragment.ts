@@ -23,7 +23,7 @@ export class DocumentFragment extends Renderable
     private document: Document;
 
     /**
-     * Initializes a new instance of the `DocumentFragment` class.
+     * Initializes a new instance of the  {@link DocumentFragment `DocumentFragment`} class.
      *
      * @param document
      * The document this fragment belongs to.
@@ -168,7 +168,7 @@ export class DocumentFragment extends Renderable
     }
 
     /**
-     * Formats the specified date-`value`.
+     * Formats the specified date-{@link value `value`} with the specified {@link format `format`}.
      *
      * @param value
      * The date to format.

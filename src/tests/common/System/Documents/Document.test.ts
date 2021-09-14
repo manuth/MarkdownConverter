@@ -13,7 +13,7 @@ import { AttributeKey } from "../../../../System/Documents/AttributeKey";
 import { Document } from "../../../../System/Documents/Document";
 
 /**
- * Registers tests for the `Document` class.
+ * Registers tests for the {@link Document `Document`} class.
  */
 export function DocumentTests(): void
 {

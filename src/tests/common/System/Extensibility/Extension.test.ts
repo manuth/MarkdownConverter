@@ -5,7 +5,7 @@ import { Constants } from "../../../../Constants";
 import { Extension } from "../../../../System/Extensibility/Extension";
 
 /**
- * Registers tests for the `Extension` class.
+ * Registers tests for the {@link Extension `Extension`} class.
  */
 export function ExtensionTests(): void
 {

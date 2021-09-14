@@ -2,7 +2,7 @@ import { strictEqual } from "assert";
 import { CustomPageFormat } from "../../../../System/Documents/CustomPageFormat";
 
 /**
- * Registers tests for the `CustomPageFormat` class.
+ * Registers tests for the {@link CustomPageFormat `CustomPageFormat`} class.
  */
 export function CustomPaperFormatTests(): void
 {

@@ -16,7 +16,7 @@ import { IProgressState } from "./IProgressState";
 export class ChainTask extends ConvertAllTask
 {
     /**
-     * Initializes a new instance of the `ChainTask` class.
+     * Initializes a new instance of the {@link ChainTask `ChainTask`} class.
      *
      * @param extension
      * The extension the task belongs to.

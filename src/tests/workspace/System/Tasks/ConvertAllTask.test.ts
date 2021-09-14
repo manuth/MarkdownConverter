@@ -1,9 +1,11 @@
 import { strictEqual } from "assert";
 import { extension } from "../../../..";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 /**
- * Registers tests for the `ConvertAllTask` class.
+ * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.
  */
 export function ConvertAllTaskTests(): void
 {

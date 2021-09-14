@@ -6,11 +6,13 @@ import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
 import { extension } from "../../../..";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { ISettings } from "../../../../Properties/ISettings";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { ITestContext } from "../../../ITestContext";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 /**
- * Registers tests for the `ConvertAllTask` class.
+ * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.
  *
  * @param context
  * The test-context.

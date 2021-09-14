@@ -4,7 +4,7 @@ import { Resources } from "../../../../Properties/Resources";
 import { FileException } from "../../../../System/IO/FileException";
 
 /**
- * Registers tests for the `FileException` class.
+ * Registers tests for the {@link FileException `FileException`} class.
  */
 export function FileExceptionTests(): void
 {

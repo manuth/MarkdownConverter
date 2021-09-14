@@ -2,7 +2,7 @@ import { notStrictEqual, strictEqual } from "assert";
 import { Slugifier } from "../../../../System/Documents/Slugifier";
 
 /**
- * Registers tests for the `Slugifier` class.
+ * Registers tests for the {@link Slugifier `Slugifier`} class.
  */
 export function SlugifierTests(): void
 {

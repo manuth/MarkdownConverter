@@ -39,7 +39,7 @@ export class MarkdownConverterExtension extends Extension
     private fileReporter: Progress<IConvertedFile>;
 
     /**
-     * Initializes a new instance of the `MarkdownConverterExtension` class.
+     * Initializes a new instance of the {@link MarkdownConverterExtension `MarkdownConverterExtension`} class.
      *
      * @param context
      * The context of the extension.

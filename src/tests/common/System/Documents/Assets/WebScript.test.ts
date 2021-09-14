@@ -6,7 +6,7 @@ import { Random } from "random-js";
 import { WebScript } from "../../../../../System/Documents/Assets/WebScript";
 
 /**
- * Register tests for the `WebScript` class.
+ * Register tests for the {@link WebScript `WebScript`} class.
  */
 export function WebScriptTests(): void
 {

@@ -6,7 +6,7 @@ import { Settings } from "../../Properties/Settings";
 import { ConfigInterceptor } from "../ConfigInterceptor";
 
 /**
- * Registers tests for the `ConfigInterceptor` class.
+ * Registers tests for the {@link ConfigInterceptor `ConfigInterceptor`} class.
  */
 export function ConfigInterceptorTests(): void
 {

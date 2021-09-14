@@ -17,7 +17,7 @@ export class TocSettings
     private levels: MultiRange;
 
     /**
-     * The RegExp to replace with the table of contents.
+     * The {@link RegExp `RegExp`} to replace with the table of contents.
      */
     private indicator: RegExp;
 
@@ -27,7 +27,7 @@ export class TocSettings
     private listType: ListType;
 
     /**
-     * Initializes a new instance of the `TocSettings` class.
+     * Initializes a new instance of the {@link TocSettings `TocSettings`} class.
      *
      * @param className
      * The css-class of the toc-container.
@@ -36,7 +36,7 @@ export class TocSettings
      * The levels to display inside the toc.
      *
      * @param indicator
-     * The RegExp to replace with the table of contents.
+     * The {@link RegExp `RegExp`} to replace with the table of contents.
      *
      * @param listType
      * The list-type of the toc.
@@ -82,7 +82,7 @@ export class TocSettings
     }
 
     /**
-     * Gets or sets the RegExp to be replace with the table of contents.
+     * Gets or sets the {@link RegExp `RegExp`} to be replace with the table of contents.
      */
     public get Indicator(): RegExp
     {

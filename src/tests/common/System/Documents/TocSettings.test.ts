@@ -4,7 +4,7 @@ import { ListType } from "../../../../System/Documents/ListType";
 import { TocSettings } from "../../../../System/Documents/TocSettings";
 
 /**
- * Registers tests for the `TocSettings` class.
+ * Registers tests for the {@link TocSettings `TocSettings`} class.
  */
 export function TocSettingTests(): void
 {

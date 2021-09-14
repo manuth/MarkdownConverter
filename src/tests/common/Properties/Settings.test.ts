@@ -13,7 +13,7 @@ import { StandardizedPageFormat } from "../../../System/Documents/StandardizedPa
 import { ITestContext } from "../../ITestContext";
 
 /**
- * Registers tests for the `Settings` class.
+ * Registers tests for the {@link Settings `Settings`} class.
  *
  * @param context
  * The test-context.

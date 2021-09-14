@@ -13,7 +13,7 @@ import { IProgressState } from "./IProgressState";
 export class ConvertTask extends ConversionTask
 {
     /**
-     * Initializes a new instance of the `ConvertTask` class.
+     * Initializes a new instance of the {@link ConvertTask `ConvertTask`} class.
      *
      * @param extension
      * The extension the task belongs to.

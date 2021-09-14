@@ -4,7 +4,7 @@ import { StandardizedFormatType } from "../../../../System/Documents/Standardize
 import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat";
 
 /**
- * Registers tests for the `StandardizedPageFormat` class.
+ * Registers tests for the {@link StandardizedPageFormat `StandardizedPageFormat`} class.
  */
 export function StandardizedPageFormatTests(): void
 {

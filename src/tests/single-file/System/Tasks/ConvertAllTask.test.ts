@@ -4,7 +4,7 @@ import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolder
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 
 /**
- * Registers tests for the `ConvertAllTask` class.
+ * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.
  */
 export function ConvertAllTaskTests(): void
 {

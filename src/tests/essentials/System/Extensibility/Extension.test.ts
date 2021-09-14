@@ -1,9 +1,11 @@
 import { doesNotThrow, notStrictEqual, ok } from "assert";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Extension } from "../../../../System/Extensibility/Extension";
 import { TestConstants } from "../../../TestConstants";
 
 /**
- * Registers tests for the `Extension` class.
+ * Registers tests for the {@link Extension `Extension`} class.
  */
 export function ExtensionTests(): void
 {

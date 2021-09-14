@@ -21,7 +21,7 @@ export abstract class Asset
     private insertionType: InsertionType;
 
     /**
-     * Initializes a new instance of the `Asset` class.
+     * Initializes a new instance of the {@link Asset `Asset`} class.
      *
      * @param path
      * The path to the asset.

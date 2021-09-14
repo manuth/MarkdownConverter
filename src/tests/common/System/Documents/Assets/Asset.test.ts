@@ -6,7 +6,7 @@ import { AssetURLType } from "../../../../../System/Documents/Assets/AssetURLTyp
 import { InsertionType } from "../../../../../System/Documents/Assets/InsertionType";
 
 /**
- * Registers tests for the `Asset` class.
+ * Registers tests for the {@link Asset `Asset`} class.
  */
 export function AssetTests(): void
 {

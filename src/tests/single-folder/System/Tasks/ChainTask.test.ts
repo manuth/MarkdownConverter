@@ -8,7 +8,7 @@ import { ChainTask } from "../../../../System/Tasks/ChainTask";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 
 /**
- * Registers tests for the `ChainTask` class.
+ * Registers tests for the {@link ChainTask `ChainTask`} class.
  */
 export function ChainTaskTests(): void
 {
@@ -19,7 +19,7 @@ export function ChainTaskTests(): void
             let task: TestChainTask;
 
             /**
-             * Provides an implementation of the `ChainTask`-class for testing.
+             * Provides an implementation of the {@link ChainTask `ChainTask`}-class for testing.
              */
             class TestChainTask extends ChainTask
             {

@@ -7,7 +7,7 @@ import { ConversionType } from "../../../../Conversion/ConversionType";
 import { PatternResolver } from "../../../../System/IO/PatternResolver";
 
 /**
- * Registers tests for the `PatternResolver` class.
+ * Registers tests for the {@link PatternResolver `PatternResolver`} class.
  */
 export function PatternResolverTests(): void
 {

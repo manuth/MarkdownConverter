@@ -23,7 +23,7 @@ export class Extension
     private vsCodeParser: MarkdownIt;
 
     /**
-     * A Promise for waiting for the system-parser to be fixed.
+     * A {@link Promise `Promise`} for waiting for the system-parser to be fixed.
      */
     private systemParserFixPromise: Promise<void>;
 
@@ -33,7 +33,7 @@ export class Extension
     private systemParserFixResolver: () => void;
 
     /**
-     * Initializes a new instance of the `Extension` class.
+     * Initializes a new instance of the {@link Extension `Extension`} class.
      *
      * @param extensionPackage
      * The package of the extension.

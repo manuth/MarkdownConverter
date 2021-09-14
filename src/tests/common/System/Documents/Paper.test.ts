@@ -6,7 +6,7 @@ import { StandardizedFormatType } from "../../../../System/Documents/Standardize
 import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat";
 
 /**
- * Registers tests for the `Paper` class.
+ * Registers tests for the {@link Paper `Paper`} class.
  */
 export function PaperTests(): void
 {

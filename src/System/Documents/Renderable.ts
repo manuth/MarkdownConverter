@@ -9,7 +9,7 @@ export abstract class Renderable
     private content: string;
 
     /**
-     * Initializes a new instance of the `Renderable` class.
+     * Initializes a new instance of the {@link Renderable `Renderable`} class.
      *
      * @param content
      * The content of the renderable component.

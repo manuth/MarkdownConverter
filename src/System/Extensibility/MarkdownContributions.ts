@@ -40,7 +40,7 @@ export class MarkdownContributions
     private loaded = false;
 
     /**
-     * Initializes a new instance of the `MarkdownContributions` class.
+     * Initializes a new instance of the {@link MarkdownContributions `MarkdownContributions`} class.
      *
      * @param extensionPath
      * The path to the extension.

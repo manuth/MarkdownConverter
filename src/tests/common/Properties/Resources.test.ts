@@ -3,7 +3,7 @@ import { CultureInfo } from "@manuth/resource-manager";
 import { Resources } from "../../../Properties/Resources";
 
 /**
- * Registers tests for the `Resources` class.
+ * Registers tests for the {@link Resources `Resources`} class.
  */
 export function ResourceTests(): void
 {

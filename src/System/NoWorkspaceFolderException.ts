@@ -7,7 +7,7 @@ import { Exception } from "./Exception";
 export class NoWorkspaceFolderException extends Exception
 {
     /**
-     * Initializes a new instance of the MarkdownFileNotFoundException class.
+     * Initializes a new instance of the {@link NoWorkspaceFolderException `NoWorkspaceFolderException`} class.
      */
     public constructor()
     {

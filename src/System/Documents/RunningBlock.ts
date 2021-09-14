@@ -22,7 +22,7 @@ export class RunningBlock extends DocumentFragment
     private center = new DocumentFragment(this.Document);
 
     /**
-     * Initializes a new instance of the `RunningBlock` class.
+     * Initializes a new instance of the {@link RunningBlock `RunningBlock`} class.
      *
      * @param document
      * The document this fragment belongs to.
@@ -87,7 +87,7 @@ export class RunningBlock extends DocumentFragment
      * The content to render.
      *
      * @param view
-     * The attributes to use for rendering.
+     * The attributes to use for rendering the {@link content `content`}.
      *
      * @returns
      * The rendered representation of the specified {@link content `content`}.

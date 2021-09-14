@@ -7,7 +7,7 @@ import { DocumentFragment } from "./DocumentFragment";
 export class MarkdownFragment extends DocumentFragment
 {
     /**
-     * Initializes a new instance of the `MarkdownFragment` class.
+     * Initializes a new instance of the {@link MarkdownFragment `MarkdownFragment`} class.
      *
      * @param document
      * The document this fragment belongs to.

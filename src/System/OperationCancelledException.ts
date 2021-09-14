@@ -7,7 +7,7 @@ import { Exception } from "./Exception";
 export class OperationCancelledException extends Exception
 {
     /**
-     * Initializes a new instance of the `OperationCancelledException` class.
+     * Initializes a new instance of the {@link OperationCancelledException `OperationCancelledException`} class.
      *
      * @param message
      * Either the error message that explains the reason for the exception or `null` to use the default message.

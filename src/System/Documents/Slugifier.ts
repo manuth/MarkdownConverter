@@ -11,7 +11,7 @@ export class Slugifier
     private slugs: string[] = [];
 
     /**
-     * Initializes a new instance of the `Slugifier` class.
+     * Initializes a new instance of the {@link Slugifier `Slugifier`} class.
      */
     public constructor()
     {
@@ -34,13 +34,13 @@ export class Slugifier
     }
 
     /**
-     * Creates a slug for the specified text.
+     * Creates a slug for the specified {@link text `text`}.
      *
      * @param text
      * The text to create a slug for.
      *
      * @returns
-     * The slug for the specified text.
+     * The slug for the specified {@link text `text`}.
      */
     public CreateSlug(text: string): string
     {
@@ -67,13 +67,13 @@ export class Slugifier
     }
 
     /**
-     * Creates a slug for the specified text.
+     * Creates a slug for the specified {@link text `text`}.
      *
      * @param text
      * The text to create a slug for.
      *
      * @returns
-     * The slug for the specified text.
+     * The slug for the specified {@link text `text`}.
      */
     protected Slugify(text: string): string
     {

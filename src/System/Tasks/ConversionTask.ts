@@ -13,7 +13,7 @@ export abstract class ConversionTask extends PuppeteerTask
     private conversionRunner: ConversionRunner;
 
     /**
-     * Initializes a new instance of the `ConversionTask` class.
+     * Initializes a new instance of the {@link ConversionTask `ConversionTask`} class.
      *
      * @param extension
      * The extension the task belongs to.

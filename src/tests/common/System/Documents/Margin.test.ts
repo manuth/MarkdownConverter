@@ -2,7 +2,7 @@ import { strictEqual } from "assert";
 import { Margin } from "../../../../System/Documents/Margin";
 
 /**
- * Registers tests for the `Margin` class.
+ * Registers tests for the {@link Margin `Margin`} class.
  */
 export function MarginTests(): void
 {

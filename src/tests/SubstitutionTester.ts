@@ -4,7 +4,7 @@ import { ConversionRunner } from "../System/Tasks/ConversionRunner";
 import { TestConstants } from "./TestConstants";
 
 /**
- * Provides the functionality to test the substitution of the `ConversionRunner`.
+ * Provides the functionality to test the substitution of the {@link ConversionRunner `ConversionRunner`}.
  */
 export class SubstitutionTester
 {
@@ -14,7 +14,7 @@ export class SubstitutionTester
     public TextDocument: TextDocument;
 
     /**
-     * Initializes a new instance of the `SubstitutionTester`.
+     * Initializes a new instance of the {@link SubstitutionTester `SubstitutionTester`}.
      *
      * @param textDocument
      * The text-document to test the substitution for.

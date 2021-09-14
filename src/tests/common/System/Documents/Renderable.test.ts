@@ -2,7 +2,7 @@ import { strictEqual } from "assert";
 import { Renderable } from "../../../../System/Documents/Renderable";
 
 /**
- * Registers tests for the `Renderable` class.
+ * Registers tests for the {@link Renderable `Renderable`} class.
  */
 export function RenderableTests(): void
 {
@@ -11,7 +11,7 @@ export function RenderableTests(): void
         () =>
         {
             /**
-             * Provides an implementation of the `Renderable` class for testing.
+             * Provides an implementation of the {@link Renderable `Renderable`} class for testing.
              */
             class TestRenderable extends Renderable
             {

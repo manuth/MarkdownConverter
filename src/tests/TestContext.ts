@@ -3,6 +3,9 @@ import { ITestContext } from "./ITestContext";
 
 /**
  * Represents a test-context.
+ *
+ * @template TSection
+ * The type of the intercepted settings-section.
  */
 export class TestContext<TSection extends any = any> implements ITestContext<TSection>
 {
@@ -12,7 +15,7 @@ export class TestContext<TSection extends any = any> implements ITestContext<TSe
     private interceptor: ConfigInterceptor<TSection>;
 
     /**
-     * Initializes a new instance of the `TextContext`.
+     * Initializes a new instance of the {@link TextContext `TextContext`}.
      *
      * @param interceptor
      * The config-interceptor of this context.
