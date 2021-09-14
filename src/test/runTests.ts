@@ -53,65 +53,44 @@ import { TestConstants } from "../tests/TestConstants";
 
     try
     {
-        await runTests(
-            {
+        /**
+         * Creates test-options for the suite with the specified {@link suiteName `suiteName`}.
+         *
+         * @param suiteName
+         * The name of the suite to create options for.
+         *
+         * @param fileSystemPath
+         * The name of the file or directory to open.
+         *
+         * @returns
+         * The test-options for the suite with the specified {@link suiteName `suiteName`}.
+         */
+        function CreateOptions(suiteName: string, fileSystemPath: string): TestOptions
+        {
+            return {
                 ...commonOptions,
                 extensionTestsEnv: {
-                    [TestConstants.SuiteVarName]: "essentials"
+                    [TestConstants.SuiteVarName]: suiteName
                 },
                 launchArgs: [
-                    singleFolderPath,
+                    fileSystemPath,
                     ...commonArgs
                 ]
-            });
+            };
+        }
 
-        await runTests(
-            {
-                ...commonOptions,
-                extensionTestsEnv: {
-                    [TestConstants.SuiteVarName]: "common"
-                },
-                launchArgs: [
-                    singleFolderPath,
-                    ...commonArgs
-                ]
-            });
+        let optionCollection = [
+            CreateOptions("essentials", singleFolderPath),
+            CreateOptions("common", singleFolderPath),
+            CreateOptions("single-file", resolve(environmentPath, "single-file", "Test.md")),
+            CreateOptions("single-folder", singleFolderPath),
+            CreateOptions("workspace", resolve(environmentPath, "workspace", "workspace.code-workspace"))
+        ];
 
-        await runTests(
-            {
-                ...commonOptions,
-                extensionTestsEnv: {
-                    [TestConstants.SuiteVarName]: "single-file"
-                },
-                launchArgs: [
-                    resolve(environmentPath, "single-file", "Test.md"),
-                    ...commonArgs
-                ]
-            });
-
-        await runTests(
-            {
-                ...commonOptions,
-                extensionTestsEnv: {
-                    [TestConstants.SuiteVarName]: "single-folder"
-                },
-                launchArgs: [
-                    singleFolderPath,
-                    ...commonArgs
-                ]
-            });
-
-        await runTests(
-            {
-                ...commonOptions,
-                extensionTestsEnv: {
-                    [TestConstants.SuiteVarName]: "workspace"
-                },
-                launchArgs: [
-                    resolve(environmentPath, "workspace", "workspace.code-workspace"),
-                    ...commonArgs
-                ]
-            });
+        for (let options of optionCollection)
+        {
+            await runTests(options);
+        }
     }
     catch (exception)
     {
