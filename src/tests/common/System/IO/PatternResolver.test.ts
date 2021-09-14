@@ -42,6 +42,12 @@ export function PatternResolverTests(): void
                     extension = "jpg";
                 });
 
+            suiteTeardown(
+                () =>
+                {
+                    testFile.Dispose();
+                });
+
             suite(
                 nameof(PatternResolver.constructor),
                 () =>
