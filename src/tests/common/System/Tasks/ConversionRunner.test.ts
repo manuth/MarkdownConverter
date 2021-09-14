@@ -318,7 +318,11 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                             context.Settings[emojiTypeOption] = "GitHub";
                             result = load((await conversionRunner.LoadParser()).render(content));
-                            strictEqual(result("b img").length + result("strong img").length, 1);
+
+                            strictEqual(
+                                result("b img").length +
+                                result("strong img").length,
+                                1);
                         });
                 });
 
@@ -471,7 +475,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         {
                             testFile = new TempFile(
                                 {
-                                    Suffix: ".mkdwn"
+                                    Suffix: ".md"
                                 });
 
                             tempDir = new TempDirectory();
