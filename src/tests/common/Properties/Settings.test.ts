@@ -178,7 +178,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                 () =>
                 {
                     test(
-                        `Checking whether the \`${nameof<Settings>((s) => s.TocSettings)}\` equal to \`null\` if the toc is disabled…`,
+                        `Checking whether the \`${nameof<Settings>((s) => s.TocSettings)}\` equal to \`${null}\` if the toc is disabled…`,
                         () =>
                         {
                             context.Settings["Parser.Toc.Enabled"] = false;
