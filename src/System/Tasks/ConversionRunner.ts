@@ -1,6 +1,6 @@
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempDirectory } from "@manuth/temp-files";
-import { readFile } from "fs-extra";
+import { pathExists, readFile } from "fs-extra";
 import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
@@ -258,10 +258,10 @@ export class ConversionRunner
         }
 
         converter.Document.Paper = Settings.Default.PaperFormat;
-        converter.Document.Meta.Content = await converter.LoadFragment(metaTemplate) ?? converter.Document.Meta.Content;
+        converter.Document.Meta.Content = await this.LoadFragment(converter, metaTemplate) ?? converter.Document.Meta.Content;
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
-        converter.Document.Header.Content = await converter.LoadFragment(headerTemplate) ?? converter.Document.Header.Content;
-        converter.Document.Footer.Content = await converter.LoadFragment(footerTemplate) ?? converter.Document.Footer.Content;
+        converter.Document.Header.Content = await this.LoadFragment(converter, headerTemplate) ?? converter.Document.Header.Content;
+        converter.Document.Footer.Content = await this.LoadFragment(converter, footerTemplate) ?? converter.Document.Footer.Content;
 
         for (
             let runningBlockEntry of [
@@ -486,5 +486,34 @@ export class ConversionRunner
         }
 
         return parser;
+    }
+
+    /**
+     * Loads the content of a fragment.
+     *
+     * @param converter
+     * The converter to load the fragment for.
+     *
+     * @param source
+     * Either the path to a file to load the source from or the source of the fragment.
+     *
+     * @returns
+     * The content of the fragment.
+     */
+    protected async LoadFragment(converter: Converter, source: string): Promise<string>
+    {
+        let fileName: string;
+
+        if (
+            source &&
+            await pathExists(
+                (fileName = resolve(converter.DocumentRoot, source))))
+        {
+            return (await readFile(fileName)).toString();
+        }
+        else
+        {
+            return source;
+        }
     }
 }
