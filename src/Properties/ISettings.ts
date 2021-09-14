@@ -130,6 +130,11 @@ export interface ISettings
     ["Document.FooterTemplate"]?: string;
 
     /**
+     * The template of the metadata-section.
+     */
+    ["Document.MetaTemplate"]?: string;
+
+    /**
      * The template of the document.
      */
     ["Document.Design.Template"]?: string;
