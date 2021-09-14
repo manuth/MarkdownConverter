@@ -131,7 +131,7 @@ export function ConverterPluginTests(): void
                 () =>
                 {
                     test(
-                        "Checking whether the plugin can be applied to the website…",
+                        "Checking whether the plugin can be applied to the website-scraper…",
                         async function()
                         {
                             this.slow(2 * 1000);
@@ -140,7 +140,7 @@ export function ConverterPluginTests(): void
                         });
 
                     test(
-                        "Checking whether the expected files have been generated…",
+                        "Checking whether the expected files are generated…",
                         async function()
                         {
                             this.slow(3 * 1000);
