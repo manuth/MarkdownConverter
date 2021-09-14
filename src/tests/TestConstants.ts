@@ -15,7 +15,7 @@ export class TestConstants
      */
     public static get PackageFileName(): string
     {
-        return join(Constants.PackageDirectory, "package.json");
+        return join(Constants.PackageDirectory, Package.FileName);
     }
 
     /**
@@ -32,5 +32,13 @@ export class TestConstants
     public static get Extension(): MarkdownConverterExtension
     {
         return extensions.getExtension(new Extension(this.PackageMetadata).FullName).exports.extension;
+    }
+
+    /**
+     * Gets the name of the suite-variable.
+     */
+    public static get SuiteVarName(): string
+    {
+        return "TEST_SUITE";
     }
 }

@@ -1,8 +1,7 @@
 import { strictEqual } from "assert";
 import { Package } from "@manuth/package-json-editor";
-import { resolve } from "upath";
-import { Constants } from "../../../../Constants";
 import { Extension } from "../../../../System/Extensibility/Extension";
+import { TestConstants } from "../../../TestConstants";
 
 /**
  * Registers tests for the {@link Extension `Extension`} class.
@@ -14,11 +13,13 @@ export function ExtensionTests(): void
         () =>
         {
             let extension: Extension;
+            let npmPackage: Package;
 
             setup(
                 () =>
                 {
-                    extension = new Extension(new Package(resolve(Constants.PackageDirectory, "package.json")));
+                    npmPackage = TestConstants.PackageMetadata;
+                    extension = new Extension(npmPackage);
                 });
 
             suite(
@@ -29,7 +30,7 @@ export function ExtensionTests(): void
                         "Checking whether the author is resolved correctly…",
                         () =>
                         {
-                            strictEqual(extension.Author, "manuth");
+                            strictEqual(extension.Author, npmPackage.AdditionalProperties.Get("publisher"));
                         });
                 });
 
@@ -41,7 +42,7 @@ export function ExtensionTests(): void
                         "Checking whether the extension-name is resolved correctly…",
                         () =>
                         {
-                            strictEqual(extension.Name, "markdown-converter");
+                            strictEqual(extension.Name, npmPackage.Name);
                         });
                 });
 
@@ -53,7 +54,7 @@ export function ExtensionTests(): void
                         "Checking whether the full extension-name is resolved correctly…",
                         () =>
                         {
-                            strictEqual(extension.FullName, "manuth.markdown-converter");
+                            strictEqual(extension.FullName, `${extension.Author}.${extension.Name}`);
                         });
                 });
         });

@@ -21,6 +21,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
         nameof(ConversionRunner),
         () =>
         {
+            let workspaceFolderPattern = "${workspaceFolder}";
+
             suite(
                 nameof<ConversionRunner>((runner) => runner.Execute),
                 () =>
@@ -58,7 +60,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 });
 
                             test(
-                                "Checking whether the user is prompted to specify the ${workspaceFolder}-path if the file is untitled and no workspace is opened…",
+                                `Checking whether the user is prompted to specify the \`${workspaceFolderPattern}\`-path if the file is untitled and no workspace is opened…`,
                                 async function()
                                 {
                                     this.slow(5 * 1000);
@@ -71,7 +73,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                         return inputWorkspaceName;
                                     };
 
-                                    context.Settings.DestinationPattern = "${workspaceFolder}";
+                                    context.Settings.DestinationPattern = workspaceFolderPattern;
                                     strictEqual(await untitledSubstitutionTester.Test(), resolve(inputWorkspaceName));
                                     context.Settings.DestinationPattern = "./Test";
                                     strictEqual(await untitledSubstitutionTester.Test(), resolve(inputWorkspaceName, context.Settings.DestinationPattern));

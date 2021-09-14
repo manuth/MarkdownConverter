@@ -23,6 +23,7 @@ import { AssetURLType } from "../Documents/Assets/AssetURLType";
 import { InsertionType } from "../Documents/Assets/InsertionType";
 import { StyleSheet } from "../Documents/Assets/StyleSheet";
 import { WebScript } from "../Documents/Assets/WebScript";
+import { AttributeKey } from "../Documents/AttributeKey";
 import { Document } from "../Documents/Document";
 import { EmojiType } from "../Documents/EmojiType";
 import { ListType } from "../Documents/ListType";
@@ -234,9 +235,9 @@ export class ConversionRunner
     {
         let dateFormatKey = "DateFormat";
         let converter = new Converter(documentRoot, new Document(await this.LoadParser(), document));
-        let metaTemplate = converter.Document.Attributes["MetaTemplate"] as string ?? Settings.Default.MetaTemplate;
-        let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string ?? Settings.Default.HeaderTemplate;
-        let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string ?? Settings.Default.FooterTemplate;
+        let metaTemplate = converter.Document.Attributes[AttributeKey.MetaTemplate] as string ?? Settings.Default.MetaTemplate;
+        let headerTemplate = converter.Document.Attributes[AttributeKey.HeaderTemplate] as string ?? Settings.Default.HeaderTemplate;
+        let footerTemplate = converter.Document.Attributes[AttributeKey.FooterTemplate] as string ?? Settings.Default.FooterTemplate;
         converter.ChromiumExecutablePath = Settings.Default.ChromiumExecutablePath ?? converter.ChromiumExecutablePath;
         converter.Document.Quality = Settings.Default.ConversionQuality;
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
@@ -244,7 +245,7 @@ export class ConversionRunner
 
         if (dateFormatKey in converter.Document.Attributes)
         {
-            converter.Document.DefaultDateFormat = (converter.Document.Attributes["DateFormat"] as string) ?? null;
+            converter.Document.DefaultDateFormat = (converter.Document.Attributes[AttributeKey.DateFormat] as string) ?? null;
         }
         else
         {

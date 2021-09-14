@@ -14,6 +14,11 @@ export enum AttributeKey
     Author = "Author",
 
     /**
+     * Indicates the default date-format of the document.
+     */
+    DateFormat = "DateFormat",
+
+    /**
      * Indicates the date of the creation of the document.
      */
     CreationDate = "CreationDate",
@@ -26,5 +31,20 @@ export enum AttributeKey
     /**
      * Indicates the current date.
      */
-    CurrentDate = "CurrentDate"
+    CurrentDate = "CurrentDate",
+
+    /**
+     * Indicates the template for the metadata-section.
+     */
+    MetaTemplate = "MetaTemplate",
+
+    /**
+     * Indicates the template of the header.
+     */
+    HeaderTemplate = "HeaderTemplate",
+
+    /**
+     * Indicates the template of the footer.
+     */
+    FooterTemplate = "FooterTemplate"
 }

@@ -4,6 +4,7 @@ import { createSandbox } from "sinon";
 import { resolve } from "upath";
 import { runTests } from "vscode-test";
 import { TestOptions } from "vscode-test/out/runTest";
+import { TestConstants } from "../tests/TestConstants";
 
 (async function main()
 {
@@ -56,7 +57,7 @@ import { TestOptions } from "vscode-test/out/runTest";
             {
                 ...commonOptions,
                 extensionTestsEnv: {
-                    TEST_SUITE: "essentials"
+                    [TestConstants.SuiteVarName]: "essentials"
                 },
                 launchArgs: [
                     singleFolderPath,
@@ -68,7 +69,7 @@ import { TestOptions } from "vscode-test/out/runTest";
             {
                 ...commonOptions,
                 extensionTestsEnv: {
-                    TEST_SUITE: "common"
+                    [TestConstants.SuiteVarName]: "common"
                 },
                 launchArgs: [
                     singleFolderPath,
@@ -80,7 +81,7 @@ import { TestOptions } from "vscode-test/out/runTest";
             {
                 ...commonOptions,
                 extensionTestsEnv: {
-                    TEST_SUITE: "single-file"
+                    [TestConstants.SuiteVarName]: "single-file"
                 },
                 launchArgs: [
                     resolve(environmentPath, "single-file", "Test.md"),
@@ -92,7 +93,7 @@ import { TestOptions } from "vscode-test/out/runTest";
             {
                 ...commonOptions,
                 extensionTestsEnv: {
-                    TEST_SUITE: "single-folder"
+                    [TestConstants.SuiteVarName]: "single-folder"
                 },
                 launchArgs: [
                     singleFolderPath,
@@ -104,7 +105,7 @@ import { TestOptions } from "vscode-test/out/runTest";
             {
                 ...commonOptions,
                 extensionTestsEnv: {
-                    TEST_SUITE: "workspace"
+                    [TestConstants.SuiteVarName]: "workspace"
                 },
                 launchArgs: [
                     resolve(environmentPath, "workspace", "workspace.code-workspace"),

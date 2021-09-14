@@ -46,7 +46,7 @@ export class MarkdownConverterExtension extends Extension
      */
     public constructor(context: ExtensionContext)
     {
-        super(new Package(join(Constants.PackageDirectory, "package.json")));
+        super(new Package(join(Constants.PackageDirectory, Package.FileName)));
         this.context = context;
 
         this.fileReporter = {

@@ -7,6 +7,8 @@ import { extensions } from "vscode";
 import { Extension } from "../System/Extensibility/Extension";
 import { TestConstants } from "../tests/TestConstants";
 
+let suiteArgName = "suite";
+
 /**
  * The arguments passed by the user.
  */
@@ -14,13 +16,13 @@ let args = minimist(
     process.argv.slice(2),
     {
         string: [
-            "suite"
+            suiteArgName
         ],
         alias: {
-            suite: "s"
+            [suiteArgName]: "s"
         },
         default: {
-            suite: process.env["TEST_SUITE"] || "common"
+            [suiteArgName]: process.env[TestConstants.SuiteVarName] || "common"
         }
     });
 
@@ -42,7 +44,7 @@ export async function run(): Promise<void>
         async (solve, reject) =>
         {
             let testDirectory = resolve(__dirname, "..", "..", "lib", "test");
-            mocha.addFile(resolve(testDirectory, `${args["suite"]}.test.js`));
+            mocha.addFile(resolve(testDirectory, `${args[suiteArgName]}.test.js`));
 
             try
             {

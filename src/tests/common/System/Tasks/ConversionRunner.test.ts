@@ -4,8 +4,10 @@ import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { Cheerio, CheerioAPI, load, Node } from "cheerio";
 import dedent = require("dedent");
 import { readFile, writeFile } from "fs-extra";
+import kebabCase = require("lodash.kebabcase");
 import MarkdownIt = require("markdown-it");
 import MultiRange from "multi-integer-range";
+import { randexp } from "randexp";
 import { Random } from "random-js";
 import { dirname, join, resolve } from "upath";
 import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
@@ -41,6 +43,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
             let config: WorkspaceConfiguration;
             let lineBreakOption = "markdown.preview.breaks";
             let systemParserOption = "Parser.SystemParserEnabled" as const;
+            let fullSystemParserOption = `markdownConverter.${systemParserOption}`;
+            let emojiTypeOption = "Parser.EmojiType" as const;
             const line1Text = "Hello";
             const line2Text = "World";
             const text = `${line1Text}${EOL}${line2Text}`;
@@ -155,7 +159,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether the system-parser is used if `markdownConverter.Parser.SystemParserEnabled` is set to true…",
+                        `Checking whether the system-parser is used if \`${fullSystemParserOption}\` is set to \`${true}\`…`,
                         async function()
                         {
                             this.slow(6.5 * 1000);
@@ -170,7 +174,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether the system-parser is disabled if `markdownConverter.Parser.SystemParserEnabled` is set to false…",
+                        `Checking whether the system-parser is disabled if \`${fullSystemParserOption}\` is set to \`${false}\`…`,
                         async function()
                         {
                             this.slow(2.5 * 1000);
@@ -201,8 +205,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                     # ${headerText}`);
 
                             let result = load(parser.render(content));
-                            strictEqual(result("#test").length, 1);
-                            strictEqual(result("#test-2").length, 1);
+                            strictEqual(result(`#${kebabCase(headerText)}`).length, 1);
+                            strictEqual(result(`#${kebabCase(`${headerText}2`)}`).length, 1);
                         });
 
                     test(
@@ -221,7 +225,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             let content = dedent(
                                 `
                                     # Table of Contents
-                                    [[toc-test]]
+                                    ${randexp(indicator)}
     
                                     # ${excludedHeading}
                                     ## ${includedHeading}`);
@@ -256,14 +260,14 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether emojis are rendered according to the `Parser.EmojiType`-setting…",
+                        `Checking whether emojis are rendered according to the \`${emojiTypeOption}\`-setting…`,
                         async function()
                         {
                             this.slow(5.5 * 1000);
                             this.timeout(22 * 1000);
                             let result: CheerioAPI;
                             let content = "**:sparkles:**";
-                            context.Settings["Parser.EmojiType"] = "None";
+                            context.Settings[emojiTypeOption] = "None";
                             result = load((await conversionRunner.LoadParser()).render(content));
 
                             strictEqual(
@@ -271,7 +275,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 result("strong:contains(':sparkles:')").length,
                                 1);
 
-                            context.Settings["Parser.EmojiType"] = "GitHub";
+                            context.Settings[emojiTypeOption] = "GitHub";
                             result = load((await conversionRunner.LoadParser()).render(content));
                             strictEqual(result("b img").length + result("strong img").length, 1);
                         });
@@ -398,8 +402,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 dedent(
                                     `
                                     ---
-                                    HeaderTemplate: ${headerTemplate.FullName}
-                                    FooterTemplate: ${footerTemplate.FullName}
+                                    ${AttributeKey.HeaderTemplate}: ${headerTemplate.FullName}
+                                    ${AttributeKey.FooterTemplate}: ${footerTemplate.FullName}
                                     ---`));
 
                             let converter = await new TestConversionRunner(extension).LoadConverter(

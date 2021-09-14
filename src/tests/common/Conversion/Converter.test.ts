@@ -108,21 +108,21 @@ export function ConverterTests(): void
                 () =>
                 {
                     test(
-                        "Checking whether the value is initially `false`…",
+                        `Checking whether the value is initially \`${false}\`…`,
                         () =>
                         {
                             ok(!converter.Initialized);
                         });
 
                     test(
-                        "Checking whether the value is `true` after the initialization…",
+                        `Checking whether the value is \`${true}\` after the initialization…`,
                         async () =>
                         {
                             ok(initializedConverter.Initialized);
                         });
 
                     test(
-                        "Checking whether the value is `false` after a disposal…",
+                        `Checking whether the value is \`${false}\` after a disposal…`,
                         async function()
                         {
                             this.timeout(2 * 1000);
@@ -241,7 +241,7 @@ export function ConverterTests(): void
                         () =>
                         {
                             test(
-                                "Checking whether uninitialized components are equal to `null`…",
+                                `Checking whether uninitialized components are equal to \`${null}\`…`,
                                 async () =>
                                 {
                                     strictEqual(converter.URL, null);
