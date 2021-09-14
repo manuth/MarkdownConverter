@@ -43,6 +43,7 @@ export function PaperTests(): void
 
                             let formatPaper = new Paper(paperFormat);
                             deepStrictEqual(formatPaper.Margin, defaultPaper.Margin);
+                            strictEqual(formatPaper.Format, paperFormat);
                         });
                 });
         });
