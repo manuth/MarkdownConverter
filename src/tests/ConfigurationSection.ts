@@ -236,7 +236,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
      * The target to save the configuration to.
      *
      * @param overrideInLanguage
-     * A value indicating whether the configuration should be stored in a language-overried.
+     * A value indicating whether the configuration should be stored in a language-override.
      */
     public async update(section: string, value: any, configurationTarget?: boolean | ConfigurationTarget, overrideInLanguage?: boolean): Promise<void>
     {

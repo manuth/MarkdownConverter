@@ -91,7 +91,7 @@ export abstract class Asset
     }
 
     /**
-     * The source-code of this asset.
+     * Renders the asset.
      *
      * @returns
      * A string representing this asset.
