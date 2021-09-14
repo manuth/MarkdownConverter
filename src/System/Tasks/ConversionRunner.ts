@@ -9,7 +9,7 @@ import checkbox = require("markdown-it-checkbox");
 import emoji = require("markdown-it-emoji");
 import toc = require("markdown-it-table-of-contents");
 import format = require("string-template");
-import twemoji = require("twemoji");
+import { convert, parse } from "twemoji";
 import { dirname, isAbsolute, join, resolve } from "upath";
 import { CancellationToken, Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
@@ -473,13 +473,13 @@ export class ConversionRunner
                     case EmojiType.Native:
                         return token[id].content;
                     case EmojiType.Twitter:
-                        return twemoji.parse(token[id].content);
+                        return parse(token[id].content);
                     case EmojiType.GitHub:
                         return "<img " +
                             'class="emoji" ' +
                             `title=":${token[id].markup}:" ` +
                             `alt=":${token[id].markup}:" ` +
-                            `src="https://github.githubassets.com/images/icons/emoji/unicode/${twemoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
+                            `src="https://github.githubassets.com/images/icons/emoji/unicode/${convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
                             'style="vertical-align: middle; " />';
                 }
             };
