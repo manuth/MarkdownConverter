@@ -14,8 +14,7 @@ export class Slugifier
      * Initializes a new instance of the {@link Slugifier `Slugifier`} class.
      */
     public constructor()
-    {
-    }
+    { }
 
     /**
      * Gets or sets the slugs that were generated so far.

@@ -63,7 +63,8 @@ export class ConverterPlugin
         let subdirectories: { [extension: string]: string };
         let defaultFilename: string;
 
-        registerAction("beforeStart",
+        registerAction(
+            "beforeStart",
             async ({ options }) =>
             {
                 let browserArguments: string[] = [
@@ -93,7 +94,8 @@ export class ConverterPlugin
                 defaultFilename = this.WebsiteName || options.defaultFilename;
             });
 
-        registerAction("afterResponse",
+        registerAction(
+            "afterResponse",
             async ({ response }) =>
             {
                 if (response.request.href === this.Converter.URL)
@@ -121,23 +123,25 @@ export class ConverterPlugin
                     }
                 }
             });
-        registerAction("generateFilename", ({ resource }) =>
-        {
-            let result: string;
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
-            let filename: string = require("website-scraper/lib/filename-generator/by-type")(resource, { subdirectories, defaultFilename }, occupiedFilenames);
-
-            if (filename === "index.html")
+        registerAction(
+            "generateFilename",
+            ({ resource }) =>
             {
-                result = filename = this.WebsiteName;
-            }
-            else
-            {
-                result = join(parse(defaultFilename).name, filename);
-            }
+                let result: string;
+                // eslint-disable-next-line @typescript-eslint/no-var-requires
+                let filename: string = require("website-scraper/lib/filename-generator/by-type")(resource, { subdirectories, defaultFilename }, occupiedFilenames);
 
-            occupiedFilenames.push(filename);
-            return { filename: result };
-        });
+                if (filename === "index.html")
+                {
+                    result = filename = this.WebsiteName;
+                }
+                else
+                {
+                    result = join(parse(defaultFilename).name, filename);
+                }
+
+                occupiedFilenames.push(filename);
+                return { filename: result };
+            });
     }
 }
