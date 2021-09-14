@@ -14,7 +14,9 @@ import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, Wo
 import { Converter } from "../../../../Conversion/Converter";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
 import { ISettings } from "../../../../Properties/ISettings";
+import { Settings } from "../../../../Properties/Settings";
 import { InsertionType } from "../../../../System/Documents/Assets/InsertionType";
+import { AttributeKey } from "../../../../System/Documents/AttributeKey";
 import { Margin } from "../../../../System/Documents/Margin";
 import { PageOrientation } from "../../../../System/Documents/PageOrientation";
 import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
