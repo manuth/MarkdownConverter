@@ -13,6 +13,7 @@ import { dirname, join, resolve } from "upath";
 import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Converter } from "../../../../Conversion/Converter";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
+import { IRunningBlockContent } from "../../../../Properties/IRunningBlockContent";
 import { ISettings } from "../../../../Properties/ISettings";
 import { Settings } from "../../../../Properties/Settings";
 import { InsertionType } from "../../../../System/Documents/Assets/InsertionType";
