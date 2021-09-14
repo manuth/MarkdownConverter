@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { readFile } from "fs-extra";
 import getUri = require("get-uri");
 import { isAbsolute } from "upath";
@@ -10,6 +11,11 @@ import { InsertionType } from "./InsertionType";
  */
 export abstract class Asset
 {
+    /**
+     * The path to the root of the document of this asset.
+     */
+    private docRoot: string = null;
+
     /**
      * The url to the asset.
      */
@@ -28,11 +34,15 @@ export abstract class Asset
      *
      * @param insertionType
      * The type of the insertion of the asset.
+     *
+     * @param docRoot
+     * The path to the root of the document of this asset.
      */
-    public constructor(path: string, insertionType?: InsertionType)
+    public constructor(path: string, insertionType?: InsertionType, docRoot?: string)
     {
         this.url = path;
         this.insertionType = insertionType ?? InsertionType.Default;
+        this.docRoot = docRoot;
     }
 
     /**
@@ -88,6 +98,14 @@ export abstract class Asset
     public set InsertionType(value: InsertionType)
     {
         this.insertionType = value;
+    }
+
+    /**
+     * Gets the path to the root of the document of this asset.
+     */
+    protected get DocRoot(): string
+    {
+        return this.docRoot;
     }
 
     /**
@@ -198,7 +216,7 @@ export abstract class Asset
         }
         else
         {
-            return (await readFile(this.URL)).toString();
+            return (await readFile(resolve(this.DocRoot ?? "", this.URL))).toString();
         }
     }
 }

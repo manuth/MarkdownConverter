@@ -15,10 +15,13 @@ export class WebScript extends Asset
      *
      * @param insertionType
      * The type of the insertion of the script.
+     *
+     * @param docRoot
+     * The path to the root of the document of this asset.
      */
-    public constructor(path: string, insertionType?: InsertionType)
+    public constructor(path: string, insertionType?: InsertionType, docRoot?: string)
     {
-        super(path, insertionType);
+        super(path, insertionType, docRoot);
     }
 
     /**

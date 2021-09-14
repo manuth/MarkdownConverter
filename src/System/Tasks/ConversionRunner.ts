@@ -350,13 +350,13 @@ export class ConversionRunner
         this.LoadAssets(
             Settings.Default.StyleSheets,
             converter.Document.StyleSheets,
-            (path, insertionType) => new StyleSheet(path, insertionType),
+            (path, insertionType) => new StyleSheet(path, insertionType, converter.DocumentRoot),
             Settings.Default.StyleSheetInsertion);
 
         this.LoadAssets(
             Settings.Default.Scripts,
             converter.Document.Scripts,
-            (path, insertionType) => new WebScript(path, insertionType),
+            (path, insertionType) => new WebScript(path, insertionType, converter.DocumentRoot),
             Settings.Default.ScriptInsertion);
 
         return converter;
