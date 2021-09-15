@@ -1,6 +1,7 @@
 import { basename } from "path";
 import { ISettings } from "../../../Properties/ISettings";
 import { ITestContext } from "../../ITestContext";
+import { FilesTests } from "./Files.test";
 import { ResourceTests } from "./Resources.test";
 import { SettingTests } from "./Settings.test";
 
@@ -17,6 +18,7 @@ export function PropertyTests(context: ITestContext<ISettings>): void
         () =>
         {
             SettingTests(context);
+            FilesTests();
             ResourceTests();
         });
 }
