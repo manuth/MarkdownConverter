@@ -20,7 +20,7 @@ export function StandardizedPageFormatTests(): void
                 () =>
                 {
                     format = StandardizedFormatType.A3;
-                    orientation = PageOrientation.Portrait;
+                    orientation = PageOrientation.Landscape;
                 });
 
             setup(
