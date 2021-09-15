@@ -44,7 +44,7 @@
     "Config.Document.Attributes.Company": "Firma",
     "Config.Document.Attributes.Company.Description": "Der Name der Firma des Dokuments.",
     "Config.Document.Paper.PaperFormat": "Papier",
-    "Config.Document.Paper.PaperFormat.Description": "Die Dimensionen des gerenderten Dokuments.  \nEntweder die Hähe und Breite des Papiers oder ein vordefiniertes Format.",
+    "Config.Document.Paper.PaperFormat.Description": "Die Dimensionen des gerenderten Dokuments.  \nEntweder die Höhe und Breite des Papiers oder ein vordefiniertes Format.",
     "Config.Document.Paper.PaperFormat.Format": "Papier-Format",
     "Config.Document.Paper.PaperFormat.Format.Description": "Das Papier-Format des Dokuments.",
     "Config.Document.Paper.PaperFormat.Orientation": "Seiten-Ausrichtung",

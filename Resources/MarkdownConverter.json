@@ -8,7 +8,7 @@
     "OperationCancelledException": "The operation has been cancelled.",
     "FileException": "Couldn't access \"{0}\".",
     "MarkdownFileException": "Couldn't find a markdown-file.",
-    "YAMLException": "The YAML-block is malformatted. Line {0}, column {1}.",
+    "YAMLException": "The YAML-block is malformed. Line {0}, column {1}.",
     "UnsupportedPlatformException": "This feature is not supported by your platform!",
     "NoWorkspaceFolderException": "No workspace-folder is opened!",
     "CustomBrowserNotFound": "The configured chromium-path does not exist. You might want to review this setting.\nDo you want to retry?",
