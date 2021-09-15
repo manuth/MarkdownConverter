@@ -1,3 +1,4 @@
+import { createSandbox } from "sinon";
 import { TextDocument } from "vscode";
 import { Converter } from "../Conversion/Converter";
 import { ConversionRunner } from "../System/Tasks/ConversionRunner";
@@ -35,23 +36,30 @@ export class SubstitutionTester
         return new Promise<string>(
             async (resolve, reject) =>
             {
-                let originalStart = Converter.prototype.Start;
                 let result: string;
-
-                Converter.prototype.Start = async (type, path) =>
-                {
-                    result = path;
-                    Converter.prototype.Start = originalStart;
-                };
+                let sandbox = createSandbox();
 
                 try
                 {
+                    sandbox.replace(
+                        Converter.prototype,
+                        "Start",
+                        async (type, path) =>
+                        {
+                            result = path;
+                            sandbox.restore();
+                        });
+
                     await new ConversionRunner(TestConstants.Extension).Execute(this.TextDocument);
                     resolve(result);
                 }
-                catch (error)
+                catch (exception)
                 {
-                    reject(error);
+                    reject(exception);
+                }
+                finally
+                {
+                    sandbox.restore();
                 }
             });
     }
