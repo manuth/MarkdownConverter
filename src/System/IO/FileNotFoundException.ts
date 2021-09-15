@@ -22,11 +22,14 @@ export class FileNotFoundException extends FileException
      */
     public constructor(path: string, message?: string, innerException?: Exception)
     {
-        if (arguments.length === 1)
-        {
-            message = format(Resources.Resources.Get("FileNotFoundException"), path);
-        }
-
         super(message, path, innerException);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public override get Message(): string
+    {
+        return super.Message || format(Resources.Resources.Get("FileNotFoundException"), this.Path);
     }
 }
