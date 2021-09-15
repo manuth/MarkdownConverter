@@ -1,5 +1,6 @@
 import { basename } from "path";
 import { FileExceptionTests } from "./FileException.test";
+import { FileNotFoundExceptionTests } from "./FileNotFoundException.test";
 import { PatternResolverTests } from "./PatternResolver.test";
 
 /**
@@ -12,6 +13,7 @@ export function IOTests(): void
         () =>
         {
             FileExceptionTests();
+            FileNotFoundExceptionTests();
             PatternResolverTests();
         });
 }
