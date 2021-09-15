@@ -7,17 +7,17 @@ import { DocumentFragment } from "./DocumentFragment";
 export class RunningBlock extends DocumentFragment
 {
     /**
-     * The content of the left part of the running block.
+     * The left part of the running block.
      */
     private left = new DocumentFragment(this.Document);
 
     /**
-     * The content of the right part of the running block.
+     * The right part of the running block.
      */
     private right = new DocumentFragment(this.Document);
 
     /**
-     * The content of the center part of the running block.
+     * The center part of the running block.
      */
     private center = new DocumentFragment(this.Document);
 
@@ -37,7 +37,7 @@ export class RunningBlock extends DocumentFragment
      */
     public get Left(): string
     {
-        return this.left.Content;
+        return this.LeftSection.Content;
     }
 
     /**
@@ -45,7 +45,7 @@ export class RunningBlock extends DocumentFragment
      */
     public set Left(value: string)
     {
-        this.left.Content = value;
+        this.LeftSection.Content = value;
     }
 
     /**
@@ -53,7 +53,7 @@ export class RunningBlock extends DocumentFragment
      */
     public get Right(): string
     {
-        return this.right.Content;
+        return this.RightSection.Content;
     }
 
     /**
@@ -61,7 +61,7 @@ export class RunningBlock extends DocumentFragment
      */
     public set Right(value: string)
     {
-        this.right.Content = value;
+        this.RightSection.Content = value;
     }
 
     /**
@@ -78,6 +78,30 @@ export class RunningBlock extends DocumentFragment
     public set Center(value: string)
     {
         this.center.Content = value;
+    }
+
+    /**
+     * Gets the content of the left part of the running block.
+     */
+    protected get LeftSection(): DocumentFragment
+    {
+        return this.left;
+    }
+
+    /**
+     * Gets the content of the right part of the running block.
+     */
+    protected get RightSection(): DocumentFragment
+    {
+        return this.right;
+    }
+
+    /**
+     * Gets the center part of the running block.
+     */
+    protected get CenterSection(): DocumentFragment
+    {
+        return this.center;
     }
 
     /**
@@ -98,9 +122,9 @@ export class RunningBlock extends DocumentFragment
             content,
             {
                 ...view,
-                Left: await this.left.Render(),
-                Right: await this.right.Render(),
-                Center: await this.center.Render()
+                Left: await this.LeftSection.Render(),
+                Right: await this.RightSection.Render(),
+                Center: await this.CenterSection.Render()
             });
     }
 }
