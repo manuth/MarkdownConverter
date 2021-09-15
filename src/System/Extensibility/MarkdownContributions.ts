@@ -148,7 +148,7 @@ export class MarkdownContributions
      * @param extension
      * The extension to load the contributions from.
      */
-     protected TryLoadPreviewStyles(contributes: any, extension: Extension<any>): void
+    protected TryLoadPreviewStyles(contributes: any, extension: Extension<any>): void
     {
         let styles = contributes["markdown.previewStyles"];
 
