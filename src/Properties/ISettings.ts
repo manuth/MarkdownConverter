@@ -2,6 +2,7 @@ import { ConversionType } from "../Conversion/ConversionType";
 import { AssetURLType } from "../System/Documents/Assets/AssetURLType";
 import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { EmojiType } from "../System/Documents/EmojiType";
+import { Margin } from "../System/Documents/Margin";
 import { IRunningBlockContent } from "./IRunningBlockContent";
 
 /**
@@ -102,7 +103,7 @@ export interface ISettings
     /**
      * The margin of the paper.
      */
-    ["Document.Paper.Margin"]?: Record<string, string>;
+    ["Document.Paper.Margin"]?: Partial<Record<keyof Margin, string>>;
 
     /**
      * A value indicating whether headers and footers are enabled.
@@ -152,7 +153,7 @@ export interface ISettings
     /**
      * The insertion-types to use for stylesheets based on their path.
      */
-    ["Document.Design.StyleSheetInsertion"]?: Record<keyof typeof AssetURLType, keyof typeof InsertionType>;
+    ["Document.Design.StyleSheetInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
 
     /**
      * The stylesheets to add to the document.
@@ -162,7 +163,7 @@ export interface ISettings
     /**
      * The insertion-types to use for scripts based on their path.
      */
-    ["Document.Design.ScriptInsertion"]?: Record<keyof typeof AssetURLType, keyof typeof InsertionType>;
+    ["Document.Design.ScriptInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
 
     /**
      * The javascript files to add to the document.
