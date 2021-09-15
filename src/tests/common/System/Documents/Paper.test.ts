@@ -22,9 +22,9 @@ export function PaperTests(): void
                         "Checking whether the values are set correctly…",
                         () =>
                         {
-                            let defaultPaper = new Paper();
                             let margin = new Margin("10cm");
                             let paperFormat = new StandardizedPageFormat(StandardizedFormatType.A5);
+                            let defaultPaper = new Paper();
                             strictEqual(defaultPaper.Margin.Top, "1cm");
                             strictEqual(defaultPaper.Margin.Right, defaultPaper.Margin.Top);
                             strictEqual(defaultPaper.Margin.Bottom, defaultPaper.Margin.Right);
