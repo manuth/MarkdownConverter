@@ -4,6 +4,7 @@
     "UncaughtException": "Ein unerwarteter Fehler ist aufgetreten",
     "OperationCancelledException": "Der Vorgang wurde abgebrochen.",
     "FileException": "Auf die Datei \"{0}\" konnte nicht zugegriffen werden.",
+    "FileNotFoundException": "Die Datei \"{0}\" konnte nicht gefunden werden.",
     "MarkdownFileException": "Es konnte keine Markdown-Datei gefunden werden.",
     "YAMLException": "Fehler: Der YAML-Block ist nicht richtig formatiert. Zeile {0}, Spalte {1}.",
     "UnsupportedPlatformException": "Diese Funktion wird von Ihrer Platform nicht unterstützt!",

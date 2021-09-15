@@ -1,4 +1,5 @@
 import format = require("string-template");
+import { Resources } from "../../Properties/Resources";
 import { Exception } from "../Exception";
 import { FileException } from "./FileException";
 
@@ -24,7 +25,7 @@ export class FileNotFoundException extends FileException
         if (arguments.length === 1)
         {
             path = message;
-            message = format("The file {0} couldn't be found.", path);
+            message = format(Resources.Resources.Get("FileNotFoundException"), path);
         }
 
         super(message, path, innerException);
