@@ -4,6 +4,7 @@ import { CustomPaperFormatTests } from "./CustomPageFormat.test";
 import { DocumentTests as DocumentClassTests } from "./Document.test";
 import { DocumentFragmentTests } from "./DocumentFragment.test";
 import { MarginTests } from "./Margin.test";
+import { MarkdownFragmentTests } from "./MarkdownFragment.test";
 import { PaperTests } from "./Paper.test";
 import { RenderableTests } from "./Renderable.test";
 import { SlugifierTests } from "./Slugifier.test";
@@ -23,6 +24,7 @@ export function DocumentTests(): void
             SlugifierTests();
             RenderableTests();
             DocumentFragmentTests();
+            MarkdownFragmentTests();
             StandardizedPageFormatTests();
             CustomPaperFormatTests();
             MarginTests();

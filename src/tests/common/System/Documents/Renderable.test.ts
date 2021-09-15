@@ -27,31 +27,6 @@ export function RenderableTests(): void
                 }
             }
 
-            let verifier: string;
-            let text: string;
-            let renderer: TestRenderable;
-
-            suiteSetup(
-                () =>
-                {
-                    verifier = "rendered: ";
-                    text = "hello world";
-
-                    renderer = new class extends TestRenderable
-                    {
-                        /**
-                         * @inheritdoc
-                         *
-                         * @returns
-                         * The rendered text.
-                         */
-                        public override async Render(): Promise<string>
-                        {
-                            return verifier + this.Content;
-                        }
-                    }(text);
-                });
-
             suite(
                 nameof(Renderable.constructor),
                 () =>
@@ -64,18 +39,6 @@ export function RenderableTests(): void
                             strictEqual(renderer.Content, "");
                             renderer = new TestRenderable("hello");
                             strictEqual(renderer.Content, "hello");
-                        });
-                });
-
-            suite(
-                nameof<Renderable>((renderable) => renderable.Render),
-                () =>
-                {
-                    test(
-                        "Checking whether text can be rendered…",
-                        async () =>
-                        {
-                            strictEqual(await renderer.Render(), verifier + text);
                         });
                 });
         });
