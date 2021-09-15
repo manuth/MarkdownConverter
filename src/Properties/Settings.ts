@@ -251,7 +251,6 @@ export class Settings
             let levels = this.GetConfigEntry<string>("Parser.Toc.Levels");
             let indicator = new RegExp(this.GetConfigEntry("Parser.Toc.Indicator"), "im");
             let listType = this.GetConfigEntry<string>("Parser.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
-
             return new TocSettings($class, new MultiRange(levels), indicator, listType);
         }
         else
