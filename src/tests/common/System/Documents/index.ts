@@ -7,6 +7,7 @@ import { MarginTests } from "./Margin.test";
 import { MarkdownFragmentTests } from "./MarkdownFragment.test";
 import { PaperTests } from "./Paper.test";
 import { RenderableTests } from "./Renderable.test";
+import { RunningBLockTests as RunningBlockTests } from "./RunningBlock.test";
 import { SlugifierTests } from "./Slugifier.test";
 import { StandardizedPageFormatTests } from "./StandardizedPageFormat.test";
 import { TocSettingTests } from "./TocSettings.test";
@@ -25,6 +26,7 @@ export function DocumentTests(): void
             RenderableTests();
             DocumentFragmentTests();
             MarkdownFragmentTests();
+            RunningBlockTests();
             StandardizedPageFormatTests();
             CustomPaperFormatTests();
             MarginTests();
