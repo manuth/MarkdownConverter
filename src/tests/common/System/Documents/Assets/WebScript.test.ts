@@ -78,7 +78,7 @@ export function WebScriptTests(): void
                         async () =>
                         {
                             let linkTag = load(await webScript.GetReferenceSource())("script");
-                            ok(linkTag.attr("async"));
+                            ok(linkTag.is("[async]"));
                             strictEqual(linkTag.attr("src"), webScript.URL);
                             strictEqual(linkTag.attr("charset"), "UTF-8");
                         });
