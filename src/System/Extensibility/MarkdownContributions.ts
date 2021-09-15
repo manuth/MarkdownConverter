@@ -60,7 +60,7 @@ export class MarkdownContributions
      * @returns
      * The uri to the resource.
      */
-    private static ResolveExtensionResource(extension: Extension<any>, resourcePath: string): Uri
+    protected static ResolveExtensionResource(extension: Extension<any>, resourcePath: string): Uri
     {
         return Uri.file(join(extension.extensionPath, resourcePath)).with({ scheme: "vscode-resource" });
     }
@@ -77,7 +77,7 @@ export class MarkdownContributions
      * @returns
      * The uri to the resources.
      */
-    private static ResolveExtensionResources(extension: Extension<any>, resourcePaths: string[]): Uri[]
+    protected static ResolveExtensionResources(extension: Extension<any>, resourcePaths: string[]): Uri[]
     {
         let result: Uri[] = [];
 
@@ -97,7 +97,7 @@ export class MarkdownContributions
     /**
      * Loads all contributions.
      */
-    private async Load(): Promise<void>
+    protected async Load(): Promise<void>
     {
         if (this.loaded)
         {
@@ -129,7 +129,7 @@ export class MarkdownContributions
      * @param extension
      * The extension to load the contributions from.
      */
-    private LoadScripts(contributes: any, extension: Extension<any>): void
+    protected LoadScripts(contributes: any, extension: Extension<any>): void
     {
         let scripts = contributes["markdown.previewScripts"];
 
@@ -148,7 +148,7 @@ export class MarkdownContributions
      * @param extension
      * The extension to load the contributions from.
      */
-    private TryLoadPreviewStyles(contributes: any, extension: Extension<any>): void
+     protected TryLoadPreviewStyles(contributes: any, extension: Extension<any>): void
     {
         let styles = contributes["markdown.previewStyles"];
 
