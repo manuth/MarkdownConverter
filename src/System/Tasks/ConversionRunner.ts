@@ -306,17 +306,17 @@ export class ConversionRunner
 
         if (Settings.Default.SystemParserEnabled)
         {
-            let mdExtensions = new MarkdownContributions(this.Extension.Context.extensionPath);
+            let mdExtensions = new MarkdownContributions();
             let assets: Asset[] = [];
 
-            for (let uri of mdExtensions.previewStyles)
+            for (let uri of mdExtensions.PreviewStyles)
             {
                 let styleSheet = new StyleSheet(uri.fsPath);
                 assets.push(styleSheet);
                 converter.Document.StyleSheets.push(styleSheet);
             }
 
-            for (let uri of mdExtensions.previewScripts)
+            for (let uri of mdExtensions.PreviewScripts)
             {
                 let script = new WebScript(uri.fsPath);
                 assets.push(script);

@@ -33,7 +33,7 @@ export class MarkdownContributions
     /**
      * Gets the provided scripts.
      */
-    public get previewScripts(): Uri[]
+    public get PreviewScripts(): Uri[]
     {
         this.Load();
         return this.scripts;
@@ -42,7 +42,7 @@ export class MarkdownContributions
     /**
      * Gets the provided styles.
      */
-    public get previewStyles(): Uri[]
+    public get PreviewStyles(): Uri[]
     {
         this.Load();
         return this.styles;
@@ -104,20 +104,20 @@ export class MarkdownContributions
             return;
         }
 
-        this.loaded = true;
-
-        for (const extension of extensions.all)
+        for (let extension of extensions.all)
         {
-            const contributes = extension.packageJSON?.contributes;
+            let contributes = extension.packageJSON?.contributes;
 
             if (!contributes)
             {
                 continue;
             }
 
-            this.tryLoadPreviewStyles(contributes, extension);
+            this.TryLoadPreviewStyles(contributes, extension);
             this.LoadScripts(contributes, extension);
         }
+
+        this.loaded = true;
     }
 
     /**
@@ -148,7 +148,7 @@ export class MarkdownContributions
      * @param extension
      * The extension to load the contributions from.
      */
-    private tryLoadPreviewStyles(contributes: any, extension: Extension<any>): void
+    private TryLoadPreviewStyles(contributes: any, extension: Extension<any>): void
     {
         let styles = contributes["markdown.previewStyles"];
 
