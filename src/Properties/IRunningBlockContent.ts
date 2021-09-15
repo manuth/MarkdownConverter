@@ -9,15 +9,15 @@ export interface IRunningBlockContent
     /**
      * The content of the left part.
      */
-    Left: string;
+    Left?: string;
 
     /**
      * The content of the center part.
      */
-    Center: string;
+    Center?: string;
 
     /**
      * The content of the right part.
      */
-    Right: string;
+    Right?: string;
 }
