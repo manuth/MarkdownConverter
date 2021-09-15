@@ -1,8 +1,10 @@
 import { ok, strictEqual, throws } from "assert";
 import { parse } from "path";
 import { TempFile } from "@manuth/temp-files";
+import { load } from "cheerio";
 import fm = require("front-matter");
 import { writeFile } from "fs-extra";
+import { create } from "handlebars";
 import MarkdownIt = require("markdown-it");
 import { Random } from "random-js";
 import { TextDocument, workspace } from "vscode";
@@ -11,6 +13,7 @@ import { StyleSheet } from "../../../../System/Documents/Assets/StyleSheet";
 import { WebScript } from "../../../../System/Documents/Assets/WebScript";
 import { AttributeKey } from "../../../../System/Documents/AttributeKey";
 import { Document } from "../../../../System/Documents/Document";
+import { DocumentFragment } from "../../../../System/Documents/DocumentFragment";
 
 /**
  * Registers tests for the {@link Document `Document`} class.
@@ -29,8 +32,22 @@ export function DocumentTests(): void
             let parser: MarkdownIt;
             let textDocument: TextDocument;
             let untitledTextDocument: TextDocument;
-            let document: Document;
-            let untitledDocument: Document;
+            let document: TestDocument;
+            let untitledDocument: TestDocument;
+
+            /**
+             * Provides an implementation of the {@link Document `Document`} class for
+             */
+            class TestDocument extends Document
+            {
+                /**
+                 * @inheritdoc
+                 */
+                public override get Body(): DocumentFragment
+                {
+                    return super.Body;
+                }
+            }
 
             suiteSetup(
                 async () =>
@@ -71,14 +88,16 @@ export function DocumentTests(): void
             setup(
                 () =>
                 {
-                    document = new Document(parser, textDocument);
-                    untitledDocument = new Document(parser, untitledTextDocument);
+                    document = new TestDocument(parser, textDocument);
+                    untitledDocument = new TestDocument(parser, untitledTextDocument);
                 });
 
             suite(
                 nameof(Document.constructor),
                 () =>
                 {
+                    let untitledName = "Untitled";
+
                     test(
                         "Checking whether the properties are set correctly…",
                         async () =>
@@ -100,10 +119,26 @@ export function DocumentTests(): void
                             strictEqual(document.Title, parse(textDocument.fileName).name);
                             strictEqual(untitledDocument.Title, untitledTextDocument.uri.path);
                         });
+
+                    test(
+                        `Checking whether the title of the document is set to \`${untitledName}\` if no document is passed…`,
+                        () =>
+                        {
+                            strictEqual(new Document(new MarkdownIt()).Title, untitledName);
+                        });
+
+                    test(
+                        "Checking whether the initialized meta-template includes the document-title…",
+                        async () =>
+                        {
+                            let rendered = await document.Meta.Render();
+                            let cheerio = load(rendered);
+                            strictEqual(cheerio("title").text(), document.Title);
+                        });
                 });
 
             suite(
-                nameof<Document>((document) => document.Title),
+                nameof<TestDocument>((document) => document.Title),
                 () =>
                 {
                     test(
@@ -118,7 +153,7 @@ export function DocumentTests(): void
                 });
 
             suite(
-                nameof<Document>((document) => document.RawContent),
+                nameof<TestDocument>((document) => document.RawContent),
                 () =>
                 {
                     let originalContent: string;
@@ -174,7 +209,92 @@ export function DocumentTests(): void
                 });
 
             suite(
-                nameof<Document>((document) => document.Render),
+                nameof<TestDocument>((document) => document.Content),
+                () =>
+                {
+                    test(
+                        `Checking whether the \`${nameof<TestDocument>((d) => d.Content)}\` gets and sets the content from the \`${nameof<TestDocument>((d) => d.Body)}\`-fragment…`,
+                        () =>
+                        {
+                            let content = random.string(10);
+                            document.Content = content;
+                            strictEqual(document.Body.Content, content);
+                            strictEqual(document.Content, document.Body.Content);
+                        });
+                });
+
+            suite(
+                nameof<TestDocument>((document) => document.Template),
+                () =>
+                {
+                    let mockedView: Record<string, unknown>;
+                    let sections: string[];
+                    let tagNames: string[];
+                    let calledSections: string[];
+
+                    suiteSetup(
+                        () =>
+                        {
+                            sections = [
+                                "meta",
+                                "styles",
+                                "content",
+                                "scripts"
+                            ];
+                        });
+
+                    setup(
+                        () =>
+                        {
+                            mockedView = {};
+                            tagNames = [];
+                            calledSections = [];
+
+                            for (let section of sections)
+                            {
+                                Object.defineProperty(
+                                    mockedView,
+                                    section,
+                                    {
+                                        get: () =>
+                                        {
+                                            calledSections.push(section);
+                                            tagNames.push(section);
+                                            return `<${section} />`;
+                                        }
+                                    });
+                            }
+                        });
+
+                    test(
+                        "Checking whether the template includes all expected content-sections…",
+                        () =>
+                        {
+                            create().compile(document.Template)(mockedView);
+
+                            ok(
+                                sections.every(
+                                    (section) =>
+                                    {
+                                        return calledSections.includes(section);
+                                    }));
+                        });
+
+                    test(
+                        "Checking whether HTMl-characters inside the content-sections aren't escaped…",
+                        () =>
+                        {
+                            let result = create().compile(document.Template)(mockedView);
+
+                            for (let section of calledSections)
+                            {
+                                load(result).root().has(section);
+                            }
+                        });
+                });
+
+            suite(
+                nameof<TestDocument>((document) => document.Render),
                 () =>
                 {
                     let styleSheet: string;
@@ -206,11 +326,28 @@ export function DocumentTests(): void
                         });
 
                     test(
-                        `Checking whether \`${nameof(Document)}.${nameof<Document>((d) => d.Template)}\` is applied using Handlebars…`,
+                        "Checking whether the metadata-section is added to the rendered document…",
                         async () =>
                         {
-                            document.Template = "hello{{content}}world";
-                            ok(/^hello[\s\S]*world$/gm.test(await document.Render()));
+                            ok((await document.Render()).includes(await document.Meta.Render()));
+                        });
+
+                    test(
+                        "Checking whether the actual contents of the document are present…",
+                        async () =>
+                        {
+                            ok((await document.Render()).includes(await document.Body.Render()));
+                        });
+
+                    test(
+                        `Checking whether \`${nameof(Document)}.${nameof<TestDocument>((d) => d.Template)}\` is applied using Handlebars…`,
+                        async () =>
+                        {
+                            let template = "hello{{content}}world";
+                            let content = await document.Body.Render();
+                            let rendered = create().compile(template)({ content });
+                            document.Template = template;
+                            strictEqual(await document.Render(), rendered);
                         });
 
                     test(
