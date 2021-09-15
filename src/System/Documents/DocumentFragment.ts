@@ -136,7 +136,17 @@ export class DocumentFragment extends Renderable
             if (value instanceof Date)
             {
                 tempHelpers.push(key);
-                this.Renderer.registerHelper(key, () => this.FormatDate(value as Date, this.Document.DefaultDateFormat));
+
+                this.Renderer.registerHelper(
+                    key,
+                    (format?: string) =>
+                    {
+                        return this.FormatDate(
+                            value as Date,
+                            typeof format === "string" ?
+                                format :
+                                this.Document.DefaultDateFormat);
+                    });
             }
         }
 
