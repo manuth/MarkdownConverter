@@ -173,14 +173,6 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets the body of the document.
-     */
-    protected get Body(): DocumentFragment
-    {
-        return this.body;
-    }
-
-    /**
      * Gets or sets the raw version of the content.
      */
     public get RawContent(): string
@@ -415,6 +407,14 @@ export class Document extends Renderable
     public get Parser(): MarkdownIt
     {
         return this.parser;
+    }
+
+    /**
+     * Gets the body of the document.
+     */
+    protected get Body(): DocumentFragment
+    {
+        return this.body;
     }
 
     /**
