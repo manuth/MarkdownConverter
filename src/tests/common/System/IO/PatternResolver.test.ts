@@ -140,6 +140,15 @@ export function PatternResolverTests(): void
                                         testDir.FullName));
                             });
                     }
+
+                    test(
+                        "Checking whether messages are reported while resolving the path…",
+                        () =>
+                        {
+                            let reportCounter = 0;
+                            new PatternResolver("", { report() { reportCounter++; } }).Resolve("", document, conversionType);
+                            ok(reportCounter > 0);
+                        });
                 });
         });
 }
