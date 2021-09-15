@@ -99,7 +99,7 @@ export class ChainTask extends ConvertAllTask
         document = await workspace.openTextDocument(
             {
                 language: "markdown",
-                content: contents.join(EOL + EOL)
+                content: contents.join(`${EOL}${EOL}<div style="page-break-after: always"></div>${EOL}${EOL}`)
             });
 
         return this.ConversionRunner.Execute(
