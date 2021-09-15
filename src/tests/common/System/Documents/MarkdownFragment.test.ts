@@ -39,9 +39,12 @@ export function MarkdownFragmentTests(): void
                         {
                             let text = random.string(10);
                             fragment.Content = `**${text}**`;
+                            let textSelector = `:contains("${text}")`;
                             let result = await fragment.Render();
 
-                            strictEqual(load(result)(`:contains("${text}")`).length, 1);
+                            strictEqual(
+                                load(result)(`b${textSelector},strong${textSelector}`).length,
+                                1);
                         });
                 });
         });
