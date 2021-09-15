@@ -1,8 +1,8 @@
 import { createSandbox } from "sinon";
 import { TextDocument } from "vscode";
 import { Converter } from "../Conversion/Converter";
+import { Settings } from "../Properties/Settings";
 import { ConversionRunner } from "../System/Tasks/ConversionRunner";
-import { TestConstants } from "./TestConstants";
 
 /**
  * Provides the functionality to test the substitution of the {@link ConversionRunner `ConversionRunner`}.
@@ -10,28 +10,42 @@ import { TestConstants } from "./TestConstants";
 export class SubstitutionTester
 {
     /**
-     * The document to test the substitution for.
+     * The conversion-runner to use for testing.
      */
-    public TextDocument: TextDocument;
+    private conversionRunner: ConversionRunner;
 
     /**
      * Initializes a new instance of the {@link SubstitutionTester `SubstitutionTester`}.
      *
-     * @param textDocument
-     * The text-document to test the substitution for.
+     * @param conversionRunner
+     * The conversion-runner to use for testing.
      */
-    public constructor(textDocument: TextDocument)
+    public constructor(conversionRunner: ConversionRunner)
     {
-        this.TextDocument = textDocument;
+        this.conversionRunner = conversionRunner;
+    }
+
+    /**
+     * Gets the conversion-runner to use for testing.
+     */
+    public get ConversionRunner(): ConversionRunner
+    {
+        return this.conversionRunner;
     }
 
     /**
      * Tests the current substitution-settings.
      *
+     * @param document
+     * The document to rename.
+     *
+     * @param pattern
+     * The pattern to test.
+     *
      * @returns
      * The result of the substitution.
      */
-    public async Test(): Promise<string>
+    public async Test(document: TextDocument, pattern: string): Promise<string>
     {
         return new Promise<string>(
             async (resolve, reject) =>
@@ -50,7 +64,8 @@ export class SubstitutionTester
                             sandbox.restore();
                         });
 
-                    await new ConversionRunner(TestConstants.Extension).Execute(this.TextDocument);
+                    sandbox.replaceGetter(Settings.Default, "DestinationPattern", () => pattern);
+                    await this.ConversionRunner.Execute(document);
                     resolve(result);
                 }
                 catch (exception)

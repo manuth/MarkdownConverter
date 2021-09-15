@@ -9,7 +9,7 @@ import MarkdownIt = require("markdown-it");
 import MultiRange from "multi-integer-range";
 import { randexp } from "randexp";
 import { Random } from "random-js";
-import { dirname, join, resolve } from "upath";
+import { dirname, resolve } from "upath";
 import { commands, ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
 import { Converter } from "../../../../Conversion/Converter";
 import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
@@ -43,6 +43,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
             let extension: MarkdownConverterExtension;
             let mdFile: TempFile;
             let conversionRunner: TestConversionRunner;
+            let testFile: TempFile;
+            let document: TextDocument;
             let config: WorkspaceConfiguration;
             let lineBreakOption = "markdown.preview.breaks";
             let systemParserOption = "Parser.SystemParserEnabled" as const;
@@ -181,10 +183,17 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                 });
 
             setup(
-                () =>
+                async () =>
                 {
                     context.Settings[systemParserOption] = true;
                     conversionRunner = new TestConversionRunner(extension);
+
+                    testFile = new TempFile(
+                        {
+                            Suffix: ".md"
+                        });
+
+                    document = await workspace.openTextDocument(Uri.file(testFile.FullName));
                 });
 
             suite(
@@ -506,7 +515,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 });
 
                             tempDir = new TempDirectory();
-                            substitutionTester = new SubstitutionTester(await workspace.openTextDocument(Uri.file(testFile.FullName)));
+                            substitutionTester = new SubstitutionTester(conversionRunner);
                         });
 
                     suiteTeardown(
@@ -522,8 +531,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         {
                             this.slow(4 * 1000);
                             this.timeout(8 * 1000);
-                            context.Settings.DestinationPattern = join(tempDir.FullName, "/./test/.././///./.");
-                            strictEqual(resolve(Uri.file(await substitutionTester.Test()).fsPath), resolve(Uri.file(tempDir.FullName).fsPath));
+
+                            strictEqual(
+                                resolve(Uri.file(await substitutionTester.Test(document, `${tempDir.FullName}/./test/.././///./.`)).fsPath),
+                                resolve(Uri.file(tempDir.FullName).fsPath));
                         });
                 });
         });

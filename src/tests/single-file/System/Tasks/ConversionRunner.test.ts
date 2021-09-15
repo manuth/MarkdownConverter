@@ -1,13 +1,14 @@
 import { strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
 import { resolve } from "upath";
-import { window, workspace } from "vscode";
+import { TextDocument, window, workspace } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { ISettings } from "../../../../Properties/ISettings";
 import { Settings } from "../../../../Properties/Settings";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
+import { TestConstants } from "../../../TestConstants";
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.
@@ -32,7 +33,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             let testFile: TempFile;
-                            let untitledSubstitutionTester: SubstitutionTester;
+                            let untitledDocument: TextDocument;
+                            let substitutionTester: SubstitutionTester;
 
                             suiteSetup(
                                 async () =>
@@ -42,7 +44,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                             Suffix: ".md"
                                         });
 
-                                    untitledSubstitutionTester = new SubstitutionTester(await workspace.openTextDocument());
+                                    untitledDocument = await workspace.openTextDocument();
+                                    substitutionTester = new SubstitutionTester(new ConversionRunner(TestConstants.Extension));
                                 });
 
                             suiteTeardown(
@@ -73,10 +76,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                         return inputWorkspaceName;
                                     };
 
-                                    context.Settings.DestinationPattern = workspaceFolderPattern;
-                                    strictEqual(await untitledSubstitutionTester.Test(), resolve(inputWorkspaceName));
-                                    context.Settings.DestinationPattern = "./Test";
-                                    strictEqual(await untitledSubstitutionTester.Test(), resolve(inputWorkspaceName, context.Settings.DestinationPattern));
+                                    strictEqual(await substitutionTester.Test(untitledDocument, workspaceFolderPattern), resolve(inputWorkspaceName));
+                                    strictEqual(await substitutionTester.Test(untitledDocument, "./Test"), resolve(inputWorkspaceName, context.Settings.DestinationPattern));
                                     window.showInputBox = original;
                                 });
                         });
