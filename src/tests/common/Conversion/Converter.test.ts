@@ -553,6 +553,13 @@ export function ConverterTests(): void
                                 }
                             }
                         });
+
+                    test(
+                        "Checking whether the conversion can be cancelled…",
+                        async () =>
+                        {
+                            await rejects(() => initializedConverter.Start(ConversionType.HTML, tempFile.FullName, null, { isCancellationRequested: true, onCancellationRequested: null }));
+                        });
                 });
         });
 }
