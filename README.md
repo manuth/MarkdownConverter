@@ -88,6 +88,16 @@ This is a test.
 This document has been created by {{ Author }} at {{ FormatDate ChangeDate "HH:mm:ss" }}
 ```
 
+Optionally, the `FormatDate` can be omitted:
+```md
+---
+Date: 01-08-1291
+---
+Date taken from an attribute: {{ Date "dddd" }}
+
+Predefined date: {{ CurrentDate "dddd" }}
+```
+
 You can override the default date-format for a document by adding a `DateFormat` attribute:
 
 ***Example:***
