@@ -165,7 +165,13 @@ export class Settings
             paper.Format = format;
         }
 
-        for (let side of (["Top", "Left", "Bottom", "Right"] as Array<keyof Margin>))
+        for (let side of (
+            [
+                nameof<Margin>((m) => m.Top),
+                nameof<Margin>((m) => m.Left),
+                nameof<Margin>((m) => m.Bottom),
+                nameof<Margin>((m) => m.Right)
+            ] as Array<keyof Margin>))
         {
             let configKey = `${paperKey}.Margin.` + side;
 
