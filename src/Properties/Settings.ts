@@ -286,7 +286,7 @@ export class Settings
     /**
      * Gets the insertion-types to use for stylesheets based on their path.
      */
-    public get StyleSheetInsertion(): Record<AssetURLType, InsertionType>
+    public get StyleSheetInsertion(): Partial<Record<AssetURLType, InsertionType>>
     {
         return this.LoadInsertionTypes("Document.Design.StyleSheetInsertion");
     }
@@ -302,7 +302,7 @@ export class Settings
     /**
      * Gets the insertion-types to use for scripts based on their path.
      */
-    public get ScriptInsertion(): Record<AssetURLType, InsertionType>
+    public get ScriptInsertion(): Partial<Record<AssetURLType, InsertionType>>
     {
         return this.LoadInsertionTypes("Document.Design.ScriptInsertion");
     }
@@ -352,7 +352,7 @@ export class Settings
      * @returns
      * The insertion-types loaded from the configuration with the specified {@link key `key`}.
      */
-    protected LoadInsertionTypes(key: string): Record<AssetURLType, InsertionType>
+    protected LoadInsertionTypes(key: string): Partial<Record<AssetURLType, InsertionType>>
     {
         let result = {} as Record<AssetURLType, InsertionType>;
 

@@ -377,7 +377,7 @@ export class ConversionRunner
      * @param insertionTypes
      * The insertion-types to use based on the paths of the assets.
      */
-    protected LoadAssets(source: Record<string, InsertionType>, target: Asset[], loader: AssetLoader, insertionTypes: Record<AssetURLType, InsertionType>): void
+    protected LoadAssets(source: Record<string, InsertionType>, target: Asset[], loader: AssetLoader, insertionTypes: Partial<Record<AssetURLType, InsertionType>>): void
     {
         for (let entry of Object.entries(source))
         {
