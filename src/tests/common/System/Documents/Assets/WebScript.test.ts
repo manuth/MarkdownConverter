@@ -43,6 +43,7 @@ export function WebScriptTests(): void
             }
 
             let random: Random;
+            let scriptTagName: string;
             let webScript: WebScriptTest;
             let tempFile: TempFile;
             let content: string;
@@ -51,6 +52,7 @@ export function WebScriptTests(): void
                 async () =>
                 {
                     random = new Random();
+                    scriptTagName = "script";
                     tempFile = new TempFile();
                     content = random.string(10);
                     await writeFile(tempFile.FullName, content);
@@ -65,7 +67,7 @@ export function WebScriptTests(): void
                         "Checking whether the source is created correctly…",
                         async () =>
                         {
-                            strictEqual(load(await webScript.GetSource())("script").html(), content);
+                            strictEqual(load(await webScript.GetSource())(scriptTagName).html(), content);
                         });
                 });
 
@@ -77,7 +79,7 @@ export function WebScriptTests(): void
                         "Checking whether the source containing a reference to the stylesheet is created correctly…",
                         async () =>
                         {
-                            let linkTag = load(await webScript.GetReferenceSource())("script");
+                            let linkTag = load(await webScript.GetReferenceSource())(scriptTagName);
                             ok(linkTag.is("[async]"));
                             strictEqual(linkTag.attr("src"), webScript.URL);
                             strictEqual(linkTag.attr("charset"), "UTF-8");
