@@ -57,8 +57,8 @@ export function StandardizedPageFormatTests(): void
                         "Checking whether the puppeteer-options are generated correctly…",
                         () =>
                         {
-                            strictEqual(paperFormat.PDFOptions.format, StandardizedFormatType.A3);
-                            strictEqual(paperFormat.PDFOptions.landscape, false);
+                            strictEqual(paperFormat.PDFOptions.format, format);
+                            strictEqual(paperFormat.PDFOptions.landscape, orientation === PageOrientation.Landscape);
                         });
                 });
         });
