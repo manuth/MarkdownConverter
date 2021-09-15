@@ -17,6 +17,6 @@ export function TaskTests(context: ITestContext<ISettings>): void
         () =>
         {
             ConvertAllTaskTests(context);
-            ChainTaskTests();
+            ChainTaskTests(context);
         });
 }
