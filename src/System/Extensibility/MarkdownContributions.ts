@@ -97,7 +97,7 @@ export class MarkdownContributions
     /**
      * Loads all contributions.
      */
-    protected async Load(): Promise<void>
+    protected Load(): void
     {
         if (this.loaded)
         {
@@ -113,7 +113,7 @@ export class MarkdownContributions
                 continue;
             }
 
-            this.TryLoadPreviewStyles(contributes, extension);
+            this.LoadStyles(contributes, extension);
             this.LoadScripts(contributes, extension);
         }
 
@@ -148,7 +148,7 @@ export class MarkdownContributions
      * @param extension
      * The extension to load the contributions from.
      */
-    protected TryLoadPreviewStyles(contributes: any, extension: Extension<any>): void
+    protected LoadStyles(contributes: any, extension: Extension<any>): void
     {
         let styles = contributes["markdown.previewStyles"];
 
