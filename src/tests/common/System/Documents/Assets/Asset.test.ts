@@ -1,6 +1,11 @@
-import { strictEqual } from "assert";
-import { TempFile } from "@manuth/temp-files";
+import { rejects, strictEqual } from "assert";
+import { createServer, Server } from "http";
+import { TempDirectory, TempFile } from "@manuth/temp-files";
+import { mkdirp, writeFile } from "fs-extra";
+import getPort = require("get-port");
 import { Random } from "random-js";
+import serveHandler = require("serve-handler");
+import { dirname, join } from "upath";
 import { Asset } from "../../../../../System/Documents/Assets/Asset";
 import { AssetURLType } from "../../../../../System/Documents/Assets/AssetURLType";
 import { InsertionType } from "../../../../../System/Documents/Assets/InsertionType";
@@ -28,6 +33,17 @@ export function AssetTests(): void
                 public override GetInsertionType(): InsertionType
                 {
                     return super.GetInsertionType();
+                }
+
+                /**
+                 * @inheritdoc
+                 *
+                 * @returns
+                 * The content of the asset.
+                 */
+                public override async ReadFile(): Promise<string>
+                {
+                    return super.ReadFile();
                 }
 
                 /**
@@ -158,6 +174,89 @@ export function AssetTests(): void
                         {
                             strictEqual(await new AssetTest(link, InsertionType.Include).Render(), inlineSource);
                             strictEqual(await new AssetTest(link, InsertionType.Link).Render(), referenceSource);
+                        });
+                });
+
+            suite(
+                nameof<AssetTest>((asset) => asset.ReadFile),
+                () =>
+                {
+                    let tempDir: TempDirectory;
+                    let relativePath: string;
+                    let host: string;
+                    let port: number;
+                    let server: Server;
+                    let content: string;
+
+                    suiteSetup(
+                        async () =>
+                        {
+                            tempDir = new TempDirectory();
+                            relativePath = join(random.string(10), random.string(10));
+                            host = "localhost";
+                            port = await getPort();
+
+                            server = createServer(
+                                async (request, response) =>
+                                {
+                                    serveHandler(
+                                        request,
+                                        response,
+                                        {
+                                            public: tempDir.FullName,
+                                            cleanUrls: false
+                                        });
+                                });
+
+                            server.listen(port, host);
+                        });
+
+                    setup(
+                        async () =>
+                        {
+                            let fileName = tempDir.MakePath(relativePath);
+                            await mkdirp(dirname(fileName));
+                            content = random.string(50);
+                            await writeFile(file.FullName, content);
+                            await writeFile(fileName, content);
+                        });
+
+                    suiteTeardown(
+                        () =>
+                        {
+                            tempDir.Dispose();
+                        });
+
+                    test(
+                        "Checking whether files specified with an absolute path can be read…",
+                        async () =>
+                        {
+                            strictEqual(await new AssetTest(file.FullName).ReadFile(), content);
+                        });
+
+                    test(
+                        "Checking whether files specified with a relative path can be read…",
+                        async () =>
+                        {
+                            strictEqual(
+                                await new AssetTest(relativePath, null, tempDir.FullName).ReadFile(),
+                                content);
+                        });
+
+                    test(
+                        "Checking whether files specified with a URL can be read…",
+                        async () =>
+                        {
+                            strictEqual(
+                                await new AssetTest(`http://${host}:${port}/${relativePath}`).ReadFile(),
+                                content);
+                        });
+
+                    test(
+                        "Checking whether errors while reading a file from an URL throws an exception…",
+                        async () =>
+                        {
+                            rejects(() => new AssetTest("https://localhorst/").ReadFile());
                         });
                 });
         });
