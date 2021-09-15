@@ -355,6 +355,10 @@ export class Converter
         {
             throw new Error("The converter must be initialized in order to use it.");
         }
+        else if (cancellationToken?.isCancellationRequested)
+        {
+            throw new OperationCancelledException();
+        }
         else
         {
             await ensureDir(dirname(path));
