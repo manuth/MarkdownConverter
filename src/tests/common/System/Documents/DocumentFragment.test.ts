@@ -4,6 +4,8 @@ import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import { stat, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
+import { Random } from "random-js";
+import { createSandbox, SinonSandbox } from "sinon";
 import { TextDocument, workspace } from "vscode";
 import YAML = require("yamljs");
 import { AttributeKey } from "../../../../System/Documents/AttributeKey";
@@ -11,6 +13,7 @@ import { Document } from "../../../../System/Documents/Document";
 import { DocumentFragment } from "../../../../System/Documents/DocumentFragment";
 import { HelperKey } from "../../../../System/Documents/HelperKey";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
+import { Utilities } from "../../../../Utilities";
 
 /**
  * Registers tests for the {@link DocumentFragment `DocumentFragment`} class.
@@ -21,8 +24,11 @@ export function DocumentFragmentTests(): void
         nameof(DocumentFragment),
         () =>
         {
+            let random: Random;
+            let sandbox: SinonSandbox;
             let tempFile: TempFile;
             let content: string;
+            let bodyTagName: string;
             let attributes: Record<string, any>;
             let textDocument: TextDocument;
             let document: Document;
@@ -31,8 +37,10 @@ export function DocumentFragmentTests(): void
             suiteSetup(
                 async () =>
                 {
+                    random = new Random();
                     tempFile = new TempFile();
                     content = "This is a test.";
+                    bodyTagName = "body";
 
                     attributes = {
                         hello: "world",
@@ -53,8 +61,15 @@ export function DocumentFragmentTests(): void
             setup(
                 () =>
                 {
+                    sandbox = createSandbox();
                     document = new Document(new MarkdownIt(), textDocument);
                     fragment = new DocumentFragment(document);
+                });
+
+            teardown(
+                () =>
+                {
+                    sandbox.restore();
                 });
 
             suite(
@@ -67,6 +82,39 @@ export function DocumentFragmentTests(): void
                         {
                             let documentFragment = new DocumentFragment(document);
                             strictEqual(documentFragment.Document, document);
+                        });
+                });
+
+            suite(
+                nameof<DocumentFragment>((fragment) => fragment.Renderer),
+                () =>
+                {
+                    test(
+                        `Checking whether the renderer contains a helper called \`${HelperKey.FormatDate}\` for formatting dates…`,
+                        () =>
+                        {
+                            let date = new Date();
+                            let format = "dddd";
+
+                            strictEqual(
+                                fragment.Renderer.compile(
+                                    `{{ ${HelperKey.FormatDate} ${nameof(date)} ${JSON.stringify(format)} }}`)({ date }),
+                                new DateTimeFormatter(fragment.Document.Locale).Format(format));
+                        });
+
+                    test(
+                        "Checking whether the locale of the document affects the date-format…",
+                        async () =>
+                        {
+                            let date = new Date();
+                            let pattern = `{{ ${HelperKey.FormatDate} ${nameof(date)} "dddd" }}`;
+                            let englishContent: string;
+                            let germanContent: string;
+                            document.Locale = new CultureInfo("en");
+                            englishContent = fragment.Renderer.compile(pattern)({ date });
+                            document.Locale = new CultureInfo("de");
+                            germanContent = fragment.Renderer.compile(pattern)({ date });
+                            ok(englishContent !== germanContent);
                         });
                 });
 
@@ -93,9 +141,9 @@ export function DocumentFragmentTests(): void
                         {
                             document.DefaultDateFormat = null;
                             fragment.Content = `{{${AttributeKey.CreationDate}}}`;
-                            strictEqual(load(await fragment.Render())("body").text().trim(), `${(await stat(document.FileName)).birthtime}`);
+                            strictEqual(await fragment.Render(), `${(await stat(document.FileName)).birthtime}`);
                             fragment.Content = `{{${AttributeKey.ChangeDate}}}`;
-                            strictEqual(load(await fragment.Render())("body").text().trim(), `${(await stat(document.FileName)).mtime}`);
+                            strictEqual(await fragment.Render(), `${(await stat(document.FileName)).mtime}`);
                         });
 
                     test(
@@ -125,6 +173,47 @@ export function DocumentFragmentTests(): void
                         });
 
                     test(
+                        "Checking whether the title of the document and the name of the author can be injected into the document…",
+                        async () =>
+                        {
+                            let name = random.string(10);
+
+                            sandbox.replace(
+                                Utilities,
+                                "GetFullName",
+                                async () =>
+                                {
+                                    return name;
+                                });
+
+                            fragment.Content = `{{ ${AttributeKey.Title} }}`;
+                            strictEqual(await fragment.Render(), document.Title);
+                            fragment.Content = `{{ ${AttributeKey.Author} }}`;
+                            strictEqual(await fragment.Render(), name);
+                        });
+
+                    test(
+                        "Checking whether pre-defined attributes can be overridden…",
+                        async () =>
+                        {
+                            let attributeKeys = [
+                                AttributeKey.Author,
+                                AttributeKey.ChangeDate,
+                                AttributeKey.CreationDate,
+                                AttributeKey.CurrentDate,
+                                AttributeKey.Title
+                            ];
+
+                            for (let key of attributeKeys)
+                            {
+                                let value = random.string(10);
+                                fragment.Content = `{{ ${key} }}`;
+                                document.Attributes[key] = value;
+                                strictEqual(await fragment.Render(), value);
+                            }
+                        });
+
+                    test(
                         `Checking whether date-attributes are formatted using the \`${nameof(DateTimeFormatter)}\`…`,
                         async () =>
                         {
@@ -141,7 +230,7 @@ export function DocumentFragmentTests(): void
                         });
 
                     test(
-                        "Checking whether custom date-formats can be specified…",
+                        "Checking whether custom date-formats are respected when formatting dates…",
                         async () =>
                         {
                             let dateKey = "testDate";
@@ -152,37 +241,26 @@ export function DocumentFragmentTests(): void
                             document.Content = `{{ ${dateKey} }}`;
                             document.Attributes[dateKey] = testDate;
                             document.DateFormats[testFormatName] = testFormat;
-                            strictEqual(load(await document.Render())("body").text().trim(), `${testDate.getDate()}`);
+                            strictEqual(load(await document.Render())(bodyTagName).text().trim(), `${testDate.getDate()}`);
                         });
 
                     test(
-                        "Checking whether dates can be formatted individually…",
+                        "Checking whether date-attributes can be formatted individually shorthand…",
                         async () =>
                         {
-                            let dateKey = "testDate";
-                            let testDate = new Date();
-                            let testFormat = "M";
-                            document.DefaultDateFormat = "d";
-                            fragment.Content = `{{ ${HelperKey.FormatDate} ${dateKey} ${JSON.stringify(testFormat)} }}`;
-                            document.Attributes[dateKey] = testDate;
-                            strictEqual(load(await fragment.Render())("body").text().trim(), `${testDate.getMonth() + 1}`);
-                        });
+                            let format = "dddd";
 
-                    test(
-                        "Checking whether the locale of the document affects the date-format…",
-                        async () =>
-                        {
-                            fragment.Content = content;
-                            document.DefaultDateFormat = "dddd";
+                            for (let key of Object.keys(attributes))
+                            {
+                                if (attributes[key] instanceof Date)
+                                {
+                                    fragment.Content = `{{ ${key} ${JSON.stringify(format)} }}`;
 
-                            let englishContent: string;
-                            let germanContent: string;
-
-                            document.Locale = new CultureInfo("en");
-                            englishContent = await fragment.Render();
-                            document.Locale = new CultureInfo("de");
-                            germanContent = await fragment.Render();
-                            ok(englishContent !== germanContent);
+                                    strictEqual(
+                                        await fragment.Render(),
+                                        new DateTimeFormatter(document.Locale).Format(format, attributes[key]));
+                                }
+                            }
                         });
                 });
         });
