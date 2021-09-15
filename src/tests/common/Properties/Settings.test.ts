@@ -1,8 +1,12 @@
 import { deepStrictEqual, ok, strictEqual } from "assert";
+import { Random } from "random-js";
+import { createSandbox, SinonSandbox } from "sinon";
 import { env } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { ISettings } from "../../../Properties/ISettings";
 import { Settings } from "../../../Properties/Settings";
+import { AssetURLType } from "../../../System/Documents/Assets/AssetURLType";
+import { InsertionType } from "../../../System/Documents/Assets/InsertionType";
 import { CustomPageFormat } from "../../../System/Documents/CustomPageFormat";
 import { EmojiType } from "../../../System/Documents/EmojiType";
 import { ListType } from "../../../System/Documents/ListType";
@@ -24,13 +28,123 @@ export function SettingTests(context: ITestContext<ISettings>): void
         nameof(Settings),
         () =>
         {
+            let random: Random;
+            let sandbox: SinonSandbox;
             let settings: Settings;
 
             suiteSetup(
                 () =>
                 {
-                    settings = Settings.Default;
+                    random = new Random();
+                    settings = new Settings();
                 });
+
+            setup(
+                () =>
+                {
+                    sandbox = createSandbox();
+                });
+
+            teardown(
+                () =>
+                {
+                    sandbox.restore();
+                });
+
+            /**
+             * Checks whether the settings resolved by the {@link settingResolver `settingResolver`} work correctly.
+             *
+             * @param settingName
+             * The name of the setting to check.
+             *
+             * @param settingResolver
+             * Resolves the settings to check.
+             */
+            function CheckInsertionTypes(settingName: keyof ISettings, settingResolver: () => Partial<Record<AssetURLType, InsertionType>>): void
+            {
+                let urlTypes = [
+                    AssetURLType.Link,
+                    AssetURLType.RelativePath,
+                    AssetURLType.AbsolutePath
+                ];
+
+                let insertionTypes = [
+                    InsertionType.Default,
+                    InsertionType.Link,
+                    InsertionType.Include
+                ];
+
+                let insertionTypeSettings: Map<AssetURLType, InsertionType> = new Map();
+                let configuredSettings: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>> = {};
+                context.Settings[settingName] = configuredSettings as never;
+
+                for (let urlType of urlTypes)
+                {
+                    if (random.bool())
+                    {
+                        let urlTypeName = AssetURLType[urlType] as keyof typeof AssetURLType;
+                        let insertionType = random.pick(insertionTypes);
+                        let insertionTypeName = InsertionType[insertionType] as keyof typeof InsertionType;
+                        insertionTypeSettings.set(urlType, insertionType);
+                        configuredSettings[urlTypeName] = insertionTypeName;
+                    }
+                }
+
+                for (let urlType of urlTypes)
+                {
+                    strictEqual(
+                        urlType in settingResolver(),
+                        insertionTypeSettings.has(urlType));
+
+                    if (insertionTypeSettings.has(urlType))
+                    {
+                        strictEqual(
+                            settingResolver()[urlType],
+                            insertionTypeSettings.get(urlType));
+                    }
+                }
+            }
+
+            /**
+             * Checks whether the settings resolved by the {@link settingResolver `settingResolver`} work correctly.
+             *
+             * @param settingName
+             * The name of the setting to check.
+             *
+             * @param settingResolver
+             * Resolves the settings to check.
+             */
+            function CheckAssets(settingName: keyof ISettings, settingResolver: () => Record<string, InsertionType>): void
+            {
+                let insertionTypes = [
+                    InsertionType.Default,
+                    InsertionType.Link,
+                    InsertionType.Include
+                ];
+
+                let assets: Map<string, InsertionType> = new Map();
+                let configuredSettings: Record<string, keyof typeof InsertionType> = {};
+                context.Settings[settingName] = configuredSettings as never;
+
+                for (let i = random.integer(1, 10); i > 0; i--)
+                {
+                    let fileName = random.string(i + 1);
+                    let insertionType = random.pick(insertionTypes);
+                    let insertionTypeName = InsertionType[insertionType] as keyof typeof InsertionType;
+                    assets.set(fileName, insertionType);
+                    configuredSettings[fileName] = insertionTypeName;
+                }
+
+                strictEqual(Object.keys(settingResolver()).length, assets.size);
+
+                for (let fileName of assets.keys())
+                {
+                    ok(fileName in settingResolver());
+                    strictEqual(
+                        settingResolver()[fileName],
+                        assets.get(fileName));
+                }
+            }
 
             suite(
                 nameof<Settings>((settings) => settings.ConversionType),
@@ -171,6 +285,48 @@ export function SettingTests(context: ITestContext<ISettings>): void
                             strictEqual(paperFormat.Orientation, PageOrientation.Portrait);
                             checkMargin(settings.PaperFormat.Margin);
                         });
+
+                    test(
+                        "Checking whether the default margin is left untouched if no value is set…",
+                        () =>
+                        {
+                            let setterCount = 0;
+                            let margin: Partial<Record<keyof Margin, string>> = {};
+
+                            let marginKeys = [
+                                nameof<Margin>((m) => m.Top),
+                                nameof<Margin>((m) => m.Left),
+                                nameof<Margin>((m) => m.Bottom),
+                                nameof<Margin>((m) => m.Right)
+                            ] as Array<keyof Margin>;
+
+                            context.Settings["Document.Paper.Margin"] = margin;
+
+                            for (let key of marginKeys)
+                            {
+                                sandbox.replaceSetter(
+                                    Margin.prototype,
+                                    key,
+                                    () =>
+                                    {
+                                        setterCount++;
+                                    });
+                            }
+
+                            (() => settings.PaperFormat)();
+                            strictEqual(setterCount, 0);
+
+                            for (let key of marginKeys)
+                            {
+                                if (random.bool())
+                                {
+                                    margin[key] = "1cm";
+                                }
+                            }
+
+                            (() => settings.PaperFormat)();
+                            strictEqual(setterCount, Object.keys(margin).length);
+                        });
                 });
 
             suite(
@@ -178,7 +334,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                 () =>
                 {
                     test(
-                        `Checking whether the \`${nameof<Settings>((s) => s.TocSettings)}\` equal to \`${null}\` if the toc is disabled…`,
+                        `Checking whether the \`${nameof<Settings>((s) => s.TocSettings)}\` are equal to \`${null}\` if the toc-setting is disabled…`,
                         () =>
                         {
                             context.Settings["Parser.Toc.Enabled"] = false;
@@ -194,6 +350,62 @@ export function SettingTests(context: ITestContext<ISettings>): void
                             strictEqual(settings.TocSettings.ListType, ListType.Unordered);
                             context.Settings["Parser.Toc.ListType"] = "ol";
                             strictEqual(settings.TocSettings.ListType, ListType.Ordered);
+                        });
+                });
+
+            suite(
+                nameof<Settings>((settings) => settings.StyleSheetInsertion),
+                () =>
+                {
+                    test(
+                        "Checking whether the style-insertion settings are interpreted correctly…",
+                        () =>
+                        {
+                            CheckInsertionTypes(
+                                "Document.Design.StyleSheetInsertion",
+                                () => settings.StyleSheetInsertion);
+                        });
+                });
+
+            suite(
+                nameof<Settings>((settings) => settings.StyleSheets),
+                () =>
+                {
+                    test(
+                        "Checking whether the stylesheets are interpreted correctly…",
+                        () =>
+                        {
+                            CheckAssets(
+                                "Document.Design.StyleSheets",
+                                () => settings.StyleSheets);
+                        });
+                });
+
+            suite(
+                nameof<Settings>((settings) => settings.ScriptInsertion),
+                () =>
+                {
+                    test(
+                        "Checking whether the script-insertion settings are interpreted correctly…",
+                        () =>
+                        {
+                            CheckInsertionTypes(
+                                "Document.Design.ScriptInsertion",
+                                () => settings.ScriptInsertion);
+                        });
+                });
+
+            suite(
+                nameof<Settings>((settings) => settings.Scripts),
+                () =>
+                {
+                    test(
+                        "Checking whether the scripts are interpreted correctly…",
+                        () =>
+                        {
+                            CheckAssets(
+                                "Document.Design.Scripts",
+                                () => settings.Scripts);
                         });
                 });
         });
