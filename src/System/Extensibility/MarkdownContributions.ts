@@ -10,11 +10,6 @@ import { Extension, extensions, Uri } from "vscode";
 export class MarkdownContributions
 {
     /**
-     * The path to the markdown-extension.
-     */
-    public readonly extensionPath: string;
-
-    /**
      * The provided scripts.
      */
     private readonly scripts: Uri[] = [];
@@ -25,30 +20,15 @@ export class MarkdownContributions
     private readonly styles: Uri[] = [];
 
     /**
-     * The roots of the markdown-preview.
-     */
-    private readonly resourceRoots: Uri[] = [];
-
-    /**
-     * The plugins of the markdown-preview.
-     */
-    private readonly plugins: Array<Thenable<(md: any) => any>> = [];
-
-    /**
      * A value indicating whether the contributions are loaded.
      */
     private loaded = false;
 
     /**
      * Initializes a new instance of the {@link MarkdownContributions `MarkdownContributions`} class.
-     *
-     * @param extensionPath
-     * The path to the extension.
      */
-    public constructor(extensionPath: string)
-    {
-        this.extensionPath = extensionPath;
-    }
+    public constructor()
+    { }
 
     /**
      * Gets the provided scripts.
@@ -66,24 +46,6 @@ export class MarkdownContributions
     {
         this.Load();
         return this.styles;
-    }
-
-    /**
-     * Gets the roots of the markdown-preview.
-     */
-    public get previewResourceRoots(): Uri[]
-    {
-        this.Load();
-        return this.resourceRoots;
-    }
-
-    /**
-     * Gets the plugins of the markdown-preview.
-     */
-    public get markdownItPlugins(): Array<Thenable<(md: any) => any>>
-    {
-        this.Load();
-        return this.plugins;
     }
 
     /**
@@ -155,12 +117,6 @@ export class MarkdownContributions
 
             this.tryLoadPreviewStyles(contributes, extension);
             this.LoadScripts(contributes, extension);
-            this.LoadMarkdownPlugins(extension, contributes);
-
-            if (contributes["markdown.previewScripts"] || contributes["markdown.previewStyles"])
-            {
-                this.resourceRoots.push(Uri.file(extension.extensionPath));
-            }
         }
     }
 
@@ -180,36 +136,6 @@ export class MarkdownContributions
         if (scripts instanceof Array)
         {
             this.scripts.push(...MarkdownContributions.ResolveExtensionResources(extension, scripts));
-        }
-    }
-
-    /**
-     * Loads a markdown-it plugin.
-     *
-     * @param extension
-     * The extension to load the plug-in from.
-     *
-     * @param contributes
-     * The contributions of the extension.
-     */
-    private LoadMarkdownPlugins(extension: Extension<any>, contributes: any): void
-    {
-        if (contributes["markdown.markdownItPlugins"])
-        {
-            this.plugins.push(extension.activate().then(
-                async () =>
-                {
-                    if (extension.exports?.extendMarkdownIt)
-                    {
-                        if (!extension.isActive)
-                        {
-                            await extension.activate();
-                        }
-
-                        return (md: any) => extension.exports.extendMarkdownIt(md);
-                    }
-                    return (md: any) => md;
-                }));
         }
     }
 
