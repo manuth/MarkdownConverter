@@ -77,7 +77,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                     };
 
                                     strictEqual(await substitutionTester.Test(untitledDocument, workspaceFolderPattern), resolve(inputWorkspaceName));
-                                    strictEqual(await substitutionTester.Test(untitledDocument, "./Test"), resolve(inputWorkspaceName, context.Settings.DestinationPattern));
+                                    let pattern = "./Test";
+                                    strictEqual(await substitutionTester.Test(untitledDocument, pattern), resolve(inputWorkspaceName, pattern));
                                     window.showInputBox = original;
                                 });
                         });
