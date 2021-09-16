@@ -95,29 +95,9 @@ export class ConversionRunner
             let tasks: Array<Promise<void>> = [];
             let converter: Converter;
             let tempDir: TempDirectory;
-            let workspaceFolder: string;
+            let workspaceFolder = this.GetWorkspacePath(document);
             let documentRoot: string;
-            let documentDirname = document.isUntitled ? null : dirname(document.fileName);
-            let currentWorkspace: WorkspaceFolder;
-
-            if (document.isUntitled)
-            {
-                if ((workspace.workspaceFolders || []).length === 1)
-                {
-                    currentWorkspace = workspace.workspaceFolders[0];
-                }
-                else
-                {
-                    currentWorkspace = null;
-                }
-            }
-            else
-            {
-                currentWorkspace = workspace.getWorkspaceFolder(document.uri);
-            }
-
             patternResolver = new PatternResolver(Settings.Default.DestinationPattern, progressReporter);
-            workspaceFolder = currentWorkspace?.uri.fsPath ?? documentDirname;
 
             if (workspaceFolder === null)
             {
@@ -212,6 +192,39 @@ export class ConversionRunner
         {
             throw new OperationCancelledException();
         }
+    }
+
+    /**
+     * Determines the path to the workspace of the specified {@link document `document`}.
+     *
+     * @param document
+     * The document to get the workspace-path for.
+     *
+     * @returns
+     * The path to the workspace of the specified {@link document `document`}.
+     */
+    protected GetWorkspacePath(document: TextDocument): string
+    {
+        let documentDirname = document.isUntitled ? null : dirname(document.fileName);
+        let currentWorkspace: WorkspaceFolder;
+
+        if (document.isUntitled)
+        {
+            if ((workspace.workspaceFolders || []).length === 1)
+            {
+                currentWorkspace = workspace.workspaceFolders[0];
+            }
+            else
+            {
+                currentWorkspace = null;
+            }
+        }
+        else
+        {
+            currentWorkspace = workspace.getWorkspaceFolder(document.uri);
+        }
+
+        return currentWorkspace?.uri.fsPath ?? documentDirname;
     }
 
     /**
