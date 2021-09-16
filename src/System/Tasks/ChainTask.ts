@@ -3,7 +3,7 @@ import fm = require("front-matter");
 import { renameSync } from "fs-extra";
 import format = require("string-template");
 import { join, parse } from "upath";
-import { CancellationToken, Progress, TextDocument, window, workspace } from "vscode";
+import { CancellationToken, commands, Progress, TextDocument, window, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
@@ -102,7 +102,7 @@ export class ChainTask extends ConvertAllTask
                 content: contents.join(`${EOL}${EOL}<div style="page-break-after: always"></div>${EOL}${EOL}`)
             });
 
-        return this.ConversionRunner.Execute(
+        await this.ConversionRunner.Execute(
             document,
             progressReporter,
             cancellationToken,
@@ -116,5 +116,8 @@ export class ChainTask extends ConvertAllTask
                     fileReporter?.report(file);
                 }
             });
+
+        await window.showTextDocument(document);
+        await commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
     }
 }
