@@ -206,6 +206,7 @@ export class ConversionRunner
 
             await Promise.all(tasks);
             await converter.Dispose();
+            tempDir?.Dispose();
         }
         else
         {
