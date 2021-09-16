@@ -30,6 +30,7 @@ import { ListType } from "../Documents/ListType";
 import { Slugifier } from "../Documents/Slugifier";
 import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
 import { FileException } from "../IO/FileException";
+import { IPatternContext } from "../IO/IPatternContext";
 import { PatternResolver } from "../IO/PatternResolver";
 import { OperationCancelledException } from "../OperationCancelledException";
 import { AssetLoader } from "./AssetLoader";
