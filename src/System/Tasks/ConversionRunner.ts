@@ -46,11 +46,6 @@ export class ConversionRunner
     private extension: MarkdownConverterExtension;
 
     /**
-     * The workspace-folder which has been chosen by the user.
-     */
-    private lastChosenWorkspaceFolder: string;
-
-    /**
      * Initializes a new instance of the {@link ConversionRunner `ConversionRunner`} class.
      *
      * @param extension
@@ -134,12 +129,11 @@ export class ConversionRunner
                     {
                         if (!(cancellationToken?.isCancellationRequested ?? false))
                         {
-                            this.lastChosenWorkspaceFolder = workspaceFolder = await (
+                            workspaceFolder = await (
                                 window.showInputBox(
                                     {
                                         ignoreFocusOut: true,
                                         prompt: Resources.Resources.Get("DestinationPath"),
-                                        value: this.lastChosenWorkspaceFolder || undefined,
                                         placeHolder: Resources.Resources.Get("DestinationPathExample")
                                     }));
                         }
