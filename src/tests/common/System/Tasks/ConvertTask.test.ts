@@ -49,7 +49,6 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
                         {
                             testFile = new TempFile();
                             task = new TestConvertTask(TestConstants.Extension);
-                            await window.showTextDocument(Uri.file(testFile.FullName));
                         });
 
                     suiteTeardown(
@@ -61,6 +60,7 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
                     setup(
                         async () =>
                         {
+                            await window.showTextDocument(Uri.file(testFile.FullName));
                             context.Settings.IgnoreLanguageMode = false;
                         });
 

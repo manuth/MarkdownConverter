@@ -21,5 +21,11 @@ export function CommonHooks(): ITestContext<ISettings>
             interceptor.Settings["Parser.SystemParserEnabled"] = false;
         });
 
+    teardown(
+        async () =>
+        {
+            await interceptor.Context.CloseEditors();
+        });
+
     return interceptor.Context;
 }
