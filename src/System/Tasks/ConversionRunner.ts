@@ -97,7 +97,6 @@ export class ConversionRunner
             let converter: Converter;
             let tempDir: TempDirectory;
             let workspaceFolder = this.GetWorkspacePath(document);
-            let documentRoot: string;
             patternResolver = new PatternResolver(Settings.Default.DestinationPattern, progressReporter);
 
             if (workspaceFolder === null)
@@ -123,21 +122,15 @@ export class ConversionRunner
                             throw new OperationCancelledException();
                         }
                     }
-
-                    documentRoot = workspaceFolder;
                 }
                 else
                 {
                     tempDir = new TempDirectory();
-                    documentRoot = tempDir.FullName;
+                    workspaceFolder = tempDir.FullName;
                 }
             }
-            else
-            {
-                documentRoot = workspaceFolder;
-            }
 
-            converter = await this.LoadConverter(documentRoot, document);
+            converter = await this.LoadConverter(workspaceFolder, document);
             await converter.Initialize(progressReporter);
 
             for (let type of Settings.Default.ConversionType)
@@ -152,7 +145,7 @@ export class ConversionRunner
                                     message: format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
                                 });
 
-                            let destinationPath = patternResolver.Resolve(documentRoot, document, type, workspaceFolder);
+                            let destinationPath = patternResolver.Resolve(workspaceFolder, document, type);
 
                             if (
                                 !isAbsolute(destinationPath) &&

@@ -66,8 +66,7 @@ export function PatternResolverTests(): void
                                     new PatternResolver(pattern).Resolve(
                                         dirname(testFile.FullName),
                                         document,
-                                        conversionType,
-                                        dirname(testFile.FullName)));
+                                        conversionType));
                             });
                     }
                 });

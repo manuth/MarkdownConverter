@@ -2,7 +2,7 @@ import { ok, strictEqual, throws } from "assert";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { Func } from "mocha";
 import { Random } from "random-js";
-import { dirname, parse } from "upath";
+import { parse } from "upath";
 import { TextDocument, Uri, workspace } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { IPatternContext } from "../../../../System/IO/IPatternContext";
@@ -134,10 +134,9 @@ export function PatternResolverTests(): void
 
                                 patternTest[1](
                                     new PatternResolver(`\${${patternTest[0]}}`).Resolve(
-                                        dirname(testFile.FullName),
+                                        testDir.FullName,
                                         document,
-                                        conversionType,
-                                        testDir.FullName));
+                                        conversionType));
                             });
                     }
 

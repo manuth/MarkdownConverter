@@ -97,8 +97,8 @@ export class PatternResolver
     /**
      * Resolves the pattern.
      *
-     * @param documentRoot
-     * The path to the folder containing the document.
+     * @param workspaceFolder
+     * The path to the current workspace.
      *
      * @param document
      * The document to create the destination-path for.
@@ -106,13 +106,10 @@ export class PatternResolver
      * @param type
      * The type of the file to create the filename for.
      *
-     * @param workspaceRoot
-     * The path to the current workspace.
-     *
      * @returns
      * The resolved pattern.
      */
-    public Resolve(documentRoot: string, document: TextDocument, type: ConversionType, workspaceRoot?: string): string
+    public Resolve(workspaceFolder: string, document: TextDocument, type: ConversionType): string
     {
         let extension: string;
         let context: IPatternContext;
@@ -139,8 +136,8 @@ export class PatternResolver
             filename: parsedPath.base,
             basename: parsedPath.name,
             extension,
-            dirname: document.isUntitled ? "." : relative(documentRoot, dirname(document.fileName)),
-            workspaceFolder: workspaceRoot
+            dirname: document.isUntitled ? "." : relative(workspaceFolder, dirname(document.fileName)),
+            workspaceFolder
         };
 
         this.Reporter?.report(
