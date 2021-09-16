@@ -41,7 +41,6 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
         {
             let random: Random;
             let extension: MarkdownConverterExtension;
-            let mdFile: TempFile;
             let conversionRunner: TestConversionRunner;
             let testFile: TempFile;
             let document: TextDocument;
@@ -167,19 +166,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                 {
                     random = new Random();
                     extension = TestConstants.Extension;
-
-                    mdFile = new TempFile(
-                        {
-                            Suffix: ".md"
-                        });
-
                     config = workspace.getConfiguration(undefined, workspace.workspaceFolders[0]);
-                });
-
-            suiteTeardown(
-                () =>
-                {
-                    mdFile.Dispose();
                 });
 
             setup(
@@ -475,19 +462,18 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             await writeFile(headerTemplate.FullName, header);
                             await writeFile(footerTemplate.FullName, footer);
 
-                            await writeFile(
-                                mdFile.FullName,
-                                dedent(
-                                    `
-                                    ---
-                                    ${AttributeKey.MetaTemplate}: ${metaTemplate.FullName}
-                                    ${AttributeKey.HeaderTemplate}: ${headerTemplate.FullName}
-                                    ${AttributeKey.FooterTemplate}: ${footerTemplate.FullName}
-                                    ---`));
-
                             let converter = await new TestConversionRunner(extension).LoadConverter(
-                                dirname(mdFile.FullName),
-                                await workspace.openTextDocument(mdFile.FullName));
+                                dirname(testFile.FullName),
+                                await workspace.openTextDocument(
+                                    {
+                                        content: dedent(
+                                            `
+                                                ---
+                                                ${AttributeKey.MetaTemplate}: ${metaTemplate.FullName}
+                                                ${AttributeKey.HeaderTemplate}: ${headerTemplate.FullName}
+                                                ${AttributeKey.FooterTemplate}: ${footerTemplate.FullName}
+                                                ---`)
+                                    }));
 
                             strictEqual(converter.Document.Meta.Content, metaData);
                             strictEqual(converter.Document.Header.Content, header);
