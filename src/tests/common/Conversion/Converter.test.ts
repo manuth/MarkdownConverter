@@ -267,7 +267,13 @@ export function ConverterTests(): void
                     setup(
                         async () =>
                         {
-                            browser = await puppeteer.launch();
+                            browser = await puppeteer.launch(
+                                {
+                                    args: [
+                                        noSandboxArg
+                                    ]
+                                });
+
                             page = await browser.newPage();
                         });
 
