@@ -35,7 +35,7 @@ export function MarkdownContributionTests(): void
                  */
                 public override Load(): void
                 {
-                    return super.Load();
+                    super.Load();
                 }
 
                 /**
