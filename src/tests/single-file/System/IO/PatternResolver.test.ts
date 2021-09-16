@@ -21,8 +21,9 @@ export function PatternResolverTests(): void
             let conversionType: ConversionType;
 
             suiteSetup(
-                async () =>
+                async function()
                 {
+                    this.timeout(5 * 1000);
                     testFile = new TempFile();
                     document = await workspace.openTextDocument(Uri.file(testFile.FullName));
                     conversionType = ConversionType.HTML;
