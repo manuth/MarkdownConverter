@@ -106,59 +106,19 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
             }
 
             /**
-             * Closes all editors.
-             */
-            async function CloseEditors(): Promise<void>
-            {
-                await commands.executeCommand("workbench.action.closeAllGroups");
-            }
-
-            /**
-             * Opens an untitled markdown-document.
-             */
-            async function OpenMarkdownDocument(): Promise<void>
-            {
-                await window.showTextDocument(Uri.parse("untitled:.md"));
-            }
-
-            /**
-             * Opens a preview for the currently opened markdown-file.
-             */
-            async function OpenPreview(): Promise<void>
-            {
-                await commands.executeCommand("markdown.showPreview");
-            }
-
-            /**
-             * Resets all changes made to the opened files.
-             */
-            async function ResetEditor(): Promise<void>
-            {
-                await commands.executeCommand("workbench.action.files.revert");
-            }
-
-            /**
-             * Moves the focus to the first editor.
-             */
-            async function FocusFirstEditor(): Promise<void>
-            {
-                await commands.executeCommand("workbench.action.focusFirstEditorGroup");
-            }
-
-            /**
              * Reloads the system-parser.
              */
             async function ReloadSystemParser(): Promise<void>
             {
-                await CloseEditors();
-                await OpenMarkdownDocument();
-                await OpenPreview();
-                await CloseEditors();
-                await OpenMarkdownDocument();
-                await ResetEditor();
-                await FocusFirstEditor();
+                await context.CloseEditors();
+                await context.OpenMarkdownDocument();
+                await context.OpenPreview();
+                await context.CloseEditors();
+                await context.OpenMarkdownDocument();
+                await context.ResetEditor();
+                await context.FocusFirstEditor();
                 await new Promise((resolve) => setTimeout(resolve, 100));
-                await OpenPreview();
+                await context.OpenPreview();
             }
 
             suiteSetup(
@@ -219,7 +179,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             this.timeout(10 * 1000);
                             let firstResult: Cheerio<Node>;
                             let secondResult: Cheerio<Node>;
-                            await ResetEditor();
+                            await context.ResetEditor();
                             context.Settings[systemParserOption] = false;
                             await config.update(lineBreakOption, true, ConfigurationTarget.Workspace);
                             firstResult = await Select((await conversionRunner.LoadParser()).render(text), newLineSelector);
