@@ -122,7 +122,7 @@ export class ConversionRunner
             if (workspaceFolder === null)
             {
                 if (
-                    patternResolver.Variables.includes("workspaceFolder") ||
+                    patternResolver.Variables.includes(nameof<IPatternContext>((c) => c.workspaceFolder)) ||
                     !isAbsolute(patternResolver.Pattern))
                 {
                     while (workspaceFolder === null)
@@ -175,7 +175,7 @@ export class ConversionRunner
 
                             if (
                                 !isAbsolute(destinationPath) &&
-                                !patternResolver.Variables.includes("workspaceFolder"))
+                                !patternResolver.Variables.includes(nameof<IPatternContext>((c) => c.workspaceFolder)))
                             {
                                 destinationPath = resolve(workspaceFolder, destinationPath);
                             }
