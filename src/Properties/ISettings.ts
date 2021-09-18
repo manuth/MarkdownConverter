@@ -143,7 +143,7 @@ export interface ISettings
     /**
      * A value indicating whether the default styles should be included.
      */
-    ["Document.Design.DefaultStyles"]?: string;
+    ["Document.Design.DefaultStyles"]?: boolean;
 
     /**
      * The `highlight.js`-style to apply.
