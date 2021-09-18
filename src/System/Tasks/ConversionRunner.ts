@@ -235,7 +235,6 @@ export class ConversionRunner
      */
     protected async LoadConverter(documentRoot: string, document: TextDocument): Promise<Converter>
     {
-        let dateFormatKey = "DateFormat";
         let converter = new Converter(documentRoot, new Document(await this.LoadParser(), document));
         let metaTemplate = converter.Document.Attributes[AttributeKey.MetaTemplate] as string ?? Settings.Default.MetaTemplate;
         let headerTemplate = converter.Document.Attributes[AttributeKey.HeaderTemplate] as string ?? Settings.Default.HeaderTemplate;
@@ -245,7 +244,7 @@ export class ConversionRunner
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Locale = new CultureInfo(Settings.Default.Locale);
 
-        if (dateFormatKey in converter.Document.Attributes)
+        if (AttributeKey.DateFormat in converter.Document.Attributes)
         {
             converter.Document.DefaultDateFormat = (converter.Document.Attributes[AttributeKey.DateFormat] as string) ?? null;
         }
