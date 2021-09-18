@@ -56,7 +56,9 @@ export class ConvertTask extends ConversionTask
      */
     protected GetMarkdownDocument(): TextDocument
     {
-        if (window.activeTextEditor && (window.activeTextEditor.document.languageId === "markdown" || Settings.Default.IgnoreLanguageMode))
+        if (
+            window.activeTextEditor &&
+            (window.activeTextEditor.document.languageId === "markdown" || Settings.Default.IgnoreLanguageMode))
         {
             return window.activeTextEditor.document;
         }
