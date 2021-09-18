@@ -104,7 +104,7 @@ export class Settings
      */
     public get Locale(): string
     {
-        return this.GetConfigEntry("Locale") || env.language;
+        return this.GetConfigEntry("Locale") ?? env.language;
     }
 
     /**

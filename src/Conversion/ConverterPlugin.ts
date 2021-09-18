@@ -91,7 +91,7 @@ export class ConverterPlugin
 
                 occupiedFilenames = [];
                 subdirectories = options.subdirectories;
-                defaultFilename = this.WebsiteName || options.defaultFilename;
+                defaultFilename = this.WebsiteName ?? options.defaultFilename;
             });
 
         registerAction(

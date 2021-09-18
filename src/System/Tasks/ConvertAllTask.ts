@@ -135,7 +135,7 @@ export class ConvertAllTask extends ConversionTask
         let documents: TextDocument[] = [];
         let filePatterns: string[] = [];
 
-        if ((workspace.workspaceFolders || []).length > 0)
+        if ((workspace.workspaceFolders ?? []).length > 0)
         {
             for (let extension of extensions.all)
             {

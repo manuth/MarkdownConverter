@@ -23,7 +23,7 @@ let args = minimist(
             [suiteArgName]: "s"
         },
         default: {
-            [suiteArgName]: process.env[SuiteVarName] || "common"
+            [suiteArgName]: process.env[SuiteVarName] ?? "common"
         }
     });
 

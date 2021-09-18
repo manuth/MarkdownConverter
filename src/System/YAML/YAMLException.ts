@@ -96,7 +96,7 @@ export class YAMLException extends Exception
      */
     public override get Message(): string
     {
-        return super.Message || format(Resources.Resources.Get("YAMLException"), this.Marker.line + 1, this.Marker.column + 1);
+        return super.Message ?? format(Resources.Resources.Get("YAMLException"), this.Marker.line + 1, this.Marker.column + 1);
     }
 
     /**

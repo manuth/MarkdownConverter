@@ -30,6 +30,6 @@ export class FileNotFoundException extends FileException
      */
     public override get Message(): string
     {
-        return super.Message || format(Resources.Resources.Get("FileNotFoundException"), this.Path);
+        return super.Message ?? format(Resources.Resources.Get("FileNotFoundException"), this.Path);
     }
 }

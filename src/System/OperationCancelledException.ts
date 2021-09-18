@@ -22,6 +22,6 @@ export class OperationCancelledException extends Exception
      */
     public override get Message(): string
     {
-        return super.Message || Resources.Resources.Get("OperationCancelledException");
+        return super.Message ?? Resources.Resources.Get("OperationCancelledException");
     }
 }

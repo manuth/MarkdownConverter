@@ -206,7 +206,7 @@ export class ConversionRunner
 
         if (document.isUntitled)
         {
-            if ((workspace.workspaceFolders || []).length === 1)
+            if ((workspace.workspaceFolders ?? []).length === 1)
             {
                 currentWorkspace = workspace.workspaceFolders[0];
             }
@@ -284,7 +284,7 @@ export class ConversionRunner
         {
             if (Settings.Default.Template)
             {
-                converter.Document.Template = (await readFile(resolve(documentRoot || ".", Settings.Default.Template))).toString();
+                converter.Document.Template = (await readFile(resolve(documentRoot ?? ".", Settings.Default.Template))).toString();
             }
             else if (Settings.Default.SystemParserEnabled)
             {
