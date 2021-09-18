@@ -16,6 +16,7 @@ import { ConversionType } from "../../Conversion/ConversionType";
 import { Converter } from "../../Conversion/Converter";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
+import { IRunningBlockContent } from "../../Properties/IRunningBlockContent";
 import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
 import { Asset } from "../Documents/Assets/Asset";
@@ -27,6 +28,7 @@ import { AttributeKey } from "../Documents/AttributeKey";
 import { Document } from "../Documents/Document";
 import { EmojiType } from "../Documents/EmojiType";
 import { ListType } from "../Documents/ListType";
+import { RunningBlock } from "../Documents/RunningBlock";
 import { Slugifier } from "../Documents/Slugifier";
 import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
 import { FileException } from "../IO/FileException";
@@ -265,16 +267,17 @@ export class ConversionRunner
         converter.Document.Footer.Content = await this.LoadFragment(converter, footerTemplate) ?? converter.Document.Footer.Content;
 
         for (
-            let runningBlockEntry of [
-                [converter.Document.Header, Settings.Default.HeaderContent],
-                [converter.Document.Footer, Settings.Default.FooterContent]
-            ])
+            let entry of [
+                [converter.Document.Header, AttributeKey.Header, Settings.Default.HeaderContent],
+                [converter.Document.Footer, AttributeKey.Footer, Settings.Default.FooterContent]
+            ] as Array<[RunningBlock, AttributeKey, IRunningBlockContent]>)
         {
-            let runningBlock = runningBlockEntry[0];
-            let content = runningBlockEntry[1];
-            runningBlock.Left = content?.Left ?? "";
-            runningBlock.Center = content?.Center ?? "";
-            runningBlock.Right = content?.Right ?? "";
+            let runningBlock = entry[0];
+            let attributeContent = converter.Document.Attributes[entry[1]] as IRunningBlockContent;
+            let settingContent = entry[2];
+            runningBlock.Left = attributeContent?.Left ?? settingContent?.Left ?? "";
+            runningBlock.Center = attributeContent?.Center ?? settingContent?.Center ?? "";
+            runningBlock.Right = attributeContent?.Right ?? settingContent?.Right ?? "";
         }
 
         try

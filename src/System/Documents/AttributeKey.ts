@@ -39,9 +39,19 @@ export enum AttributeKey
     MetaTemplate = "MetaTemplate",
 
     /**
+     * Indicates the content of the header.
+     */
+    Header = "Header",
+
+    /**
      * Indicates the template of the header.
      */
     HeaderTemplate = "HeaderTemplate",
+
+    /**
+     * Indicates the content of the footer.
+     */
+    Footer = "Footer",
 
     /**
      * Indicates the template of the footer.
