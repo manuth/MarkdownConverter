@@ -1,5 +1,7 @@
 import { strictEqual } from "assert";
+import { dirname, normalize } from "path";
 import { TempFile } from "@manuth/temp-files";
+import { createSandbox, SinonSandbox } from "sinon";
 import { resolve } from "upath";
 import { TextDocument, window, workspace } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
@@ -32,18 +34,21 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         `Checking whether the \`${nameof<Settings>((s) => s.DestinationPattern)}\` is substituted correctly…`,
                         () =>
                         {
-                            let testFile: TempFile;
+                            let sandbox: SinonSandbox;
+                            let tempFile: TempFile;
+                            let document: TextDocument;
                             let untitledDocument: TextDocument;
                             let substitutionTester: SubstitutionTester;
 
                             suiteSetup(
                                 async () =>
                                 {
-                                    testFile = new TempFile(
+                                    tempFile = new TempFile(
                                         {
                                             Suffix: ".md"
                                         });
 
+                                    document = await workspace.openTextDocument(tempFile.FullName);
                                     untitledDocument = await workspace.openTextDocument();
                                     substitutionTester = new SubstitutionTester(new ConversionRunner(TestConstants.Extension));
                                 });
@@ -51,15 +56,23 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             suiteTeardown(
                                 async () =>
                                 {
-                                    testFile.Dispose();
+                                    tempFile.Dispose();
                                 });
 
                             setup(
                                 () =>
                                 {
+                                    sandbox = createSandbox();
+
                                     context.Settings.ConversionType = [
                                         nameof(ConversionType.PDF)
                                     ] as Array<keyof typeof ConversionType>;
+                                });
+
+                            teardown(
+                                () =>
+                                {
+                                    sandbox.restore();
                                 });
 
                             test(
@@ -69,17 +82,19 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                     this.slow(5 * 1000);
                                     this.timeout(10 * 1000);
                                     let inputWorkspaceName = "This is a workspace-folder for testing";
-                                    let original = window.showInputBox;
-
-                                    window.showInputBox = async () =>
-                                    {
-                                        return inputWorkspaceName;
-                                    };
-
+                                    sandbox.replace(window, "showInputBox", async () => inputWorkspaceName);
                                     strictEqual(await substitutionTester.Test(untitledDocument, workspaceFolderPattern), resolve(inputWorkspaceName));
                                     let pattern = "./Test";
                                     strictEqual(await substitutionTester.Test(untitledDocument, pattern), resolve(inputWorkspaceName, pattern));
-                                    window.showInputBox = original;
+                                });
+
+                            test(
+                                `Checking whether the \`${workspaceFolderPattern}\` is replaced with the name of the directory containing the file…`,
+                                async () =>
+                                {
+                                    strictEqual(
+                                        normalize(await substitutionTester.Test(document, workspaceFolderPattern)),
+                                        normalize(dirname(tempFile.FullName)));
                                 });
                         });
                 });
