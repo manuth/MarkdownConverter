@@ -27,7 +27,7 @@ export class Settings
     /**
      * A default instance of the {@link Settings `Settings`} class.
      */
-    private static defaultInstance: Settings = new Settings();
+    private static defaultInstance: Settings = null;
 
     /**
      * Initializes a new instance of the {@link Settings `Settings`} class.
@@ -40,6 +40,11 @@ export class Settings
      */
     public static get Default(): Settings
     {
+        if (!this.defaultInstance)
+        {
+            this.defaultInstance = new Settings();
+        }
+
         return Settings.defaultInstance;
     }
 
