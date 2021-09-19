@@ -11,6 +11,7 @@ import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
 import { TestConstants } from "../../../TestConstants";
+import { TestConversionRunner } from "../../../TestConversionRunner";
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.
@@ -24,10 +25,28 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
         nameof(ConversionRunner),
         () =>
         {
+            let conversionRunner: TestConversionRunner;
+            let tempFile: TempFile;
+            let document: TextDocument;
+            let untitledDocument: TextDocument;
             let workspaceFolderPattern = "${workspaceFolder}";
 
+            suiteSetup(
+                async () =>
+                {
+                    conversionRunner = new TestConversionRunner(TestConstants.Extension);
+
+                    tempFile = new TempFile(
+                        {
+                            Suffix: ".md"
+                        });
+
+                    document = await workspace.openTextDocument(tempFile.FullName);
+                    untitledDocument = await workspace.openTextDocument();
+                });
+
             suite(
-                nameof<ConversionRunner>((runner) => runner.Execute),
+                nameof<TestConversionRunner>((runner) => runner.Execute),
                 () =>
                 {
                     suite(
@@ -35,22 +54,12 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             let sandbox: SinonSandbox;
-                            let tempFile: TempFile;
-                            let document: TextDocument;
-                            let untitledDocument: TextDocument;
                             let substitutionTester: SubstitutionTester;
 
                             suiteSetup(
                                 async () =>
                                 {
-                                    tempFile = new TempFile(
-                                        {
-                                            Suffix: ".md"
-                                        });
-
-                                    document = await workspace.openTextDocument(tempFile.FullName);
-                                    untitledDocument = await workspace.openTextDocument();
-                                    substitutionTester = new SubstitutionTester(new ConversionRunner(TestConstants.Extension));
+                                    substitutionTester = new SubstitutionTester(conversionRunner);
                                 });
 
                             suiteTeardown(
@@ -96,6 +105,25 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                         normalize(await substitutionTester.Test(document, workspaceFolderPattern)),
                                         normalize(dirname(tempFile.FullName)));
                                 });
+                        });
+                });
+
+            suite(
+                nameof<TestConversionRunner>((runner) => runner.GetWorkspacePath),
+                () =>
+                {
+                    test(
+                        "Checking whether the directory containing the document is returned if no workspace-folder is opened…",
+                        async () =>
+                        {
+                            strictEqual(conversionRunner.GetWorkspacePath(document), dirname(tempFile.FullName));
+                        });
+
+                    test(
+                        `Checking whether \`${null}\` is returned, if the document is untitled and no workspace-folder is opened…`,
+                        async () =>
+                        {
+                            strictEqual(conversionRunner.GetWorkspacePath(untitledDocument), null);
                         });
                 });
         });

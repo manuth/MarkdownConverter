@@ -1,4 +1,5 @@
 import { basename } from "path";
+import { ConversionRunnerTests } from "./ConversionRunner.test";
 import { ConvertAllTaskTests } from "./ConvertAllTask.test";
 
 /**
@@ -10,6 +11,7 @@ export function TaskTests(): void
         basename(__dirname),
         () =>
         {
+            ConversionRunnerTests();
             ConvertAllTaskTests();
         });
 }
