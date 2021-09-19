@@ -1,9 +1,9 @@
 import { strictEqual } from "assert";
-import { dirname, normalize } from "path";
+import { dirname } from "path";
 import { TempFile } from "@manuth/temp-files";
 import { createSandbox, SinonSandbox } from "sinon";
 import { resolve } from "upath";
-import { TextDocument, window, workspace } from "vscode";
+import { TextDocument, Uri, window, workspace } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { ISettings } from "../../../../Properties/ISettings";
 import { Settings } from "../../../../Properties/Settings";
@@ -102,8 +102,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 async () =>
                                 {
                                     strictEqual(
-                                        normalize(await substitutionTester.Test(document, workspaceFolderPattern)),
-                                        normalize(dirname(tempFile.FullName)));
+                                        Uri.file(await substitutionTester.Test(document, workspaceFolderPattern)).fsPath,
+                                        Uri.file(dirname(tempFile.FullName)).fsPath);
                                 });
                         });
                 });
@@ -116,7 +116,9 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         "Checking whether the directory containing the document is returned if no workspace-folder is opened…",
                         async () =>
                         {
-                            strictEqual(conversionRunner.GetWorkspacePath(document), dirname(tempFile.FullName));
+                            strictEqual(
+                                Uri.file(conversionRunner.GetWorkspacePath(document)).fsPath,
+                                Uri.file(dirname(tempFile.FullName)).fsPath);
                         });
 
                     test(

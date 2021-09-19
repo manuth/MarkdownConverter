@@ -584,6 +584,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             context.Settings["Document.MetaTemplate"] = settingValue;
                             context.Settings["Document.HeaderTemplate"] = settingValue;
                             context.Settings["Document.FooterTemplate"] = settingValue;
+                            context.Settings.DefaultDateFormat = settingValue;
 
                             let document = await workspace.openTextDocument(
                                 {
@@ -593,6 +594,15 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                             ${AttributeKey.MetaTemplate}: ${attributeValue}
                                             ${AttributeKey.HeaderTemplate}: ${attributeValue}
                                             ${AttributeKey.FooterTemplate}: ${attributeValue}
+                                            ${AttributeKey.DateFormat}: ${attributeValue}
+                                            ${AttributeKey.Header}:
+                                              ${nameof<IRunningBlockContent>((content) => content.Left)}: ${attributeValue}
+                                              ${nameof<IRunningBlockContent>((content) => content.Right)}: ${attributeValue}
+                                              ${nameof<IRunningBlockContent>((content) => content.Center)}: ${attributeValue}
+                                            ${AttributeKey.Footer}:
+                                              ${nameof<IRunningBlockContent>((content) => content.Left)}: ${attributeValue}
+                                              ${nameof<IRunningBlockContent>((content) => content.Right)}: ${attributeValue}
+                                              ${nameof<IRunningBlockContent>((content) => content.Center)}: ${attributeValue}
                                             ---`)
                                 });
 
@@ -607,6 +617,46 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 notStrictEqual(content, settingValue);
                                 strictEqual(content, attributeValue);
                             }
+
+                            for (
+                                let content of [
+                                    converter.Document.Header,
+                                    converter.Document.Footer
+                                ])
+                            {
+                                for (let section of [
+                                    content.Right,
+                                    content.Left,
+                                    content.Center
+                                ])
+                                {
+                                    notStrictEqual(section, settingValue);
+                                    strictEqual(section, attributeValue);
+                                }
+                            }
+                        });
+
+                    test(
+                        "Checking whether individual sections of the running-blocks can be overridden…",
+                        async () =>
+                        {
+                            let rightContent = random.string(10);
+                            let centerContent = random.string(15);
+                            context.Settings["Document.HeaderContent"] = { Right: rightContent };
+
+                            let document = await workspace.openTextDocument(
+                                {
+                                    content: dedent(
+                                        `
+                                            ---
+                                            ${AttributeKey.Header}:
+                                              ${nameof<IRunningBlockContent>((content) => content.Center)}: ${centerContent}
+                                            ---`)
+                                });
+
+                            let converter = await conversionRunner.LoadConverter(tempDir.FullName, document);
+                            strictEqual(converter.Document.Header.Right, rightContent);
+                            strictEqual(converter.Document.Header.Center, centerContent);
                         });
 
                     test(
