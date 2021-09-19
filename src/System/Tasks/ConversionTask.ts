@@ -1,11 +1,10 @@
 import { CancellationToken, Progress } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
-import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
-import { Exception } from "../Exception";
 import { ConversionRunner } from "./ConversionRunner";
 import { IProgressState } from "./IProgressState";
+import { NoConversionTypeException } from "./NoConversionTypeException";
 import { PuppeteerTask } from "./PuppeteerTask";
 
 /**
@@ -54,7 +53,7 @@ export abstract class ConversionTask extends PuppeteerTask
     {
         if (Settings.Default.ConversionType.length === 0)
         {
-            throw new Exception(Resources.Resources.Get("NoConversionType"));
+            throw new NoConversionTypeException();
         }
         else
         {
