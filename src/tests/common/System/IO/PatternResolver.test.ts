@@ -1,12 +1,14 @@
 import { ok, strictEqual, throws } from "assert";
+import { basename, dirname } from "path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
-import { Func } from "mocha";
+import rescape = require("@stdlib/utils-escape-regexp-string");
 import { Random } from "random-js";
-import { parse } from "upath";
+import { normalize, parse, relative } from "upath";
 import { TextDocument, Uri, workspace } from "vscode";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { IPatternContext } from "../../../../System/IO/IPatternContext";
 import { PatternResolver } from "../../../../System/IO/PatternResolver";
+import { IPatternTest } from "./IPatternTest";
 
 /**
  * Registers tests for the {@link PatternResolver `PatternResolver`} class.
@@ -18,8 +20,8 @@ export function PatternResolverTests(): void
         () =>
         {
             let random: Random;
-            let testFile: TempFile;
-            let testDir: TempDirectory;
+            let tempDir: TempDirectory;
+            let tempFile: TempFile;
             let document: TextDocument;
             let conversionType: ConversionType;
             let extension: string;
@@ -37,9 +39,14 @@ export function PatternResolverTests(): void
                 async () =>
                 {
                     random = new Random();
-                    testFile = new TempFile();
-                    testDir = new TempDirectory();
-                    document = await workspace.openTextDocument(Uri.file(testFile.FullName));
+                    tempDir = new TempDirectory();
+
+                    tempFile = new TempFile(
+                        {
+                            Directory: tempDir.MakePath("Test")
+                        });
+
+                    document = await workspace.openTextDocument(Uri.file(tempFile.FullName));
                     conversionType = ConversionType.JPEG;
                     extension = "jpg";
                 });
@@ -47,8 +54,8 @@ export function PatternResolverTests(): void
             suiteTeardown(
                 () =>
                 {
-                    testFile.Dispose();
-                    testDir.Dispose();
+                    tempFile.Dispose();
+                    tempDir.Dispose();
                 });
 
             suite(
@@ -91,52 +98,90 @@ export function PatternResolverTests(): void
                 nameof<PatternResolver>((resolver) => resolver.Resolve),
                 () =>
                 {
-                    let tests: Array<[string, (result: string) => ReturnType<Func>]>;
+                    let tests: IPatternTest[];
 
                     tests = [
-                        [
-                            nameof<IPatternContext>((context) => context.basename),
-                            (result) =>
+                        {
+                            VariableName: nameof<IPatternContext>((context) => context.filename),
+                            async Test(result)
                             {
-                                strictEqual(result, parse(testFile.FullName).name);
+                                strictEqual(result, parse(tempFile.FullName).name);
                             }
-                        ],
-                        [
-                            nameof<IPatternContext>((context) => context.extension),
-                            (result) =>
+                        },
+                        {
+                            VariableName: nameof<IPatternContext>((context) => context.basename),
+                            async Test(result)
+                            {
+                                strictEqual(result, parse(tempFile.FullName).name);
+                            }
+                        },
+                        {
+                            VariableName: nameof<IPatternContext>((context) => context.extension),
+                            async Test(result)
                             {
                                 strictEqual(result, extension);
                             }
-                        ],
-                        [
-                            nameof<IPatternContext>((context) => context.filename),
-                            (result) =>
+                        },
+                        {
+                            VariableName: nameof<IPatternContext>((context) => context.dirname),
+                            Message: (pattern) => `Checking whether \`${pattern}\` contains the path to the directory relative to the workspace-folder…`,
+                            async Test(result)
                             {
-                                strictEqual(result, parse(testFile.FullName).name);
+                                strictEqual(
+                                    normalize(relative(tempDir.MakePath(), dirname(tempFile.FullName))),
+                                    normalize(result));
                             }
-                        ],
-                        [
-                            nameof<IPatternContext>((context) => context.workspaceFolder),
-                            (result) =>
+                        },
+                        {
+                            VariableName: nameof<IPatternContext>((context) => context.dirname),
+                            get FileName()
                             {
-                                strictEqual(result, testDir.FullName);
+                                return tempDir.MakePath("Test.md");
+                            },
+                            Message: (pattern) => `Checking whether \`${pattern}\` is empty if the file is a direct child of the workspace-folder…`,
+                            async Test(result)
+                            {
+                                ok(/^\.?$/.test(result));
                             }
-                        ]
+                        },
+                        {
+                            VariableName: nameof<IPatternContext>((context) => context.workspaceFolder),
+                            async Test(result)
+                            {
+                                strictEqual(result, tempDir.FullName);
+                            }
+                        }
                     ];
 
                     for (let patternTest of tests)
                     {
-                        test(
-                            `Checking whether \`\${${patternTest[0]}}\` is substituted correctly…`,
-                            function()
-                            {
-                                patternTest[1] = patternTest[1].bind(this);
+                        let pattern = `\${${patternTest.VariableName}}`;
 
-                                patternTest[1](
-                                    new PatternResolver(`\${${patternTest[0]}}`).Resolve(
-                                        testDir.FullName,
-                                        document,
+                        test(
+                            patternTest.Message?.(pattern) ?? `Checking whether \`${pattern}\` is substituted correctly…`,
+                            async function()
+                            {
+                                let tempFile: TempFile = null;
+                                let tempDocument: TextDocument = null;
+
+                                if (patternTest.FileName)
+                                {
+                                    tempFile = new TempFile(
+                                        {
+                                            Directory: dirname(patternTest.FileName),
+                                            FileNamePattern: rescape(basename(patternTest.FileName))
+                                        });
+
+                                    tempDocument = await workspace.openTextDocument(tempFile.FullName);
+                                }
+
+                                await patternTest?.Test(
+                                    new PatternResolver(pattern).Resolve(
+                                        patternTest?.WorkspaceFolder ?? tempDir.FullName,
+                                        tempDocument ?? document,
                                         conversionType));
+
+                                tempFile?.Dispose();
                             });
                     }
 
