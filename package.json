@@ -318,7 +318,7 @@
           "title": "%Config.Document.Attributes%",
           "markdownDescription": "%Config.Document.Attributes.Description%",
           "type": "object",
-          "default": null,
+          "default": {},
           "additionalProperties": false,
           "patternProperties": {
             "^Title$": {
@@ -335,6 +335,28 @@
               "title": "%Config.Document.Attributes.Company%",
               "markdownDescription": "%Config.Document.Attributes.Company.Description%",
               "type": "string"
+            },
+            "^DateFormat$": {
+              "title": "%Config.DefaultDateFormat%",
+              "markdownDescription": "%Config.DefaultDateFormat.Description%",
+              "type": "string"
+            },
+            "^MetaTemplate$": {
+              "title": "%Config.Document.MetaTemplate%",
+              "markdownDescription": "%Config.Document.MetaTemplate.Description%",
+              "type": "string"
+            },
+            "^HeaderTemplate$": {
+              "title": "%Config.Document.HeaderTemplate%",
+              "markdownDescription": "%Config.Document.HeaderTemplate.Description%",
+              "type": "string",
+              "editPresentation": "multilineText"
+            },
+            "^FooterTemplate$": {
+              "title": "%Config.Document.FooterTemplate%",
+              "markdownDescription": "%Config.Document.FooterTemplate.Description%",
+              "type": "string",
+              "editPresentation": "multilineText"
             },
             "^.*$": {
               "type": "string"
