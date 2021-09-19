@@ -89,6 +89,7 @@
     "@manuth/eslint-plugin-typescript": "^3.2.5",
     "@manuth/tsconfig": "^2.0.3",
     "@manuth/typescript-eslint-plugin": "^1.4.2",
+    "@stdlib/utils-escape-regexp-string": "^0.0.7",
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^9.0.12",
     "@types/glob": "^7.1.4",
