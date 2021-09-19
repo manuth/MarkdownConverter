@@ -675,8 +675,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                     test(
                         "Checking whether assets are loaded correctly…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let tempFiles: TempFile[] = [];
 
                             let urlTypes = [
