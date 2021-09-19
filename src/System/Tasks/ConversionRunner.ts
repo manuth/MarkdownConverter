@@ -242,6 +242,7 @@ export class ConversionRunner
         let headerTemplate = converter.Document.Attributes[AttributeKey.HeaderTemplate] as string ?? Settings.Default.HeaderTemplate;
         let footerTemplate = converter.Document.Attributes[AttributeKey.FooterTemplate] as string ?? Settings.Default.FooterTemplate;
         converter.ChromiumExecutablePath = Settings.Default.ChromiumExecutablePath ?? converter.ChromiumExecutablePath;
+        converter.ChromiumArgs = Settings.Default.ChromiumArgs ?? converter.ChromiumArgs;
         converter.Document.Quality = Settings.Default.ConversionQuality;
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Locale = new CultureInfo(Settings.Default.Locale);

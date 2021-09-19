@@ -14,7 +14,6 @@ import { basename, dirname, join, normalize, relative } from "upath";
 import { CancellationToken, Progress } from "vscode";
 import websiteScraper = require("website-scraper");
 import { Resources } from "../Properties/Resources";
-import { Settings } from "../Properties/Settings";
 import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { StyleSheet } from "../System/Documents/Assets/StyleSheet";
 import { Document } from "../System/Documents/Document";
@@ -53,6 +52,11 @@ export class Converter
      * The path to the chromium-browser to use for the conversion.
      */
     private chromiumExecutablePath: string = null;
+
+    /**
+     * The arguments to path to the chromium-browser.
+     */
+    private chromiumArgs: string[] = [];
 
     /**
      * The browser which is used to perform the conversion.
@@ -170,6 +174,22 @@ export class Converter
     }
 
     /**
+     * Gets or sets the arguments to path to the chromium-browser.
+     */
+    public get ChromiumArgs(): string[]
+    {
+        return this.chromiumArgs;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public set ChromiumArgs(value: string[])
+    {
+        this.chromiumArgs = value;
+    }
+
+    /**
      * Gets the options for launching the browser.
      */
     public get BrowserOptions(): puppeteer.LaunchOptions
@@ -206,10 +226,6 @@ export class Converter
         }
         else
         {
-            let browserArguments: string[] = [
-                ...Settings.Default.ChromiumArgs
-            ];
-
             progressReporter?.report(
                 {
                     message: Resources.Resources.Get("Progress.LaunchWebserver")
@@ -294,7 +310,7 @@ export class Converter
                     {
                         ...this.BrowserOptions,
                         args: [
-                            ...browserArguments
+                            ...this.ChromiumArgs
                         ]
                     });
             }
@@ -304,7 +320,7 @@ export class Converter
                     {
                         ...this.BrowserOptions,
                         args: [
-                            ...browserArguments,
+                            ...this.ChromiumArgs,
                             "--no-sandbox"
                         ]
                     });

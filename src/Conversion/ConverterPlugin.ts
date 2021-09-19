@@ -1,7 +1,6 @@
 import puppeteer = require("puppeteer-core");
 import { join, parse } from "upath";
 import { encode } from "utf8";
-import { Settings } from "../Properties/Settings";
 import { Converter } from "./Converter";
 
 /**
@@ -68,7 +67,7 @@ export class ConverterPlugin
             async ({ options }) =>
             {
                 let browserArguments: string[] = [
-                    ...Settings.Default.ChromiumArgs
+                    ...this.Converter.ChromiumArgs
                 ];
 
                 try
