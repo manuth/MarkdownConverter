@@ -145,6 +145,18 @@ You can set the content of these sections using the `markdownConverter.Document.
 }
 ```
 
+The content of the individual header- and footer-sections can be overridden for an individual document using attributes:
+
+```md
+---
+Header:
+  Left: My Individual Company
+  Center: John Doe
+---
+# Test
+This is a test.
+```
+
 If you'd like to have more control on how your headers and footers look like, you might want to adjust the `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate` options.
 
 ## Including Table of Contents
