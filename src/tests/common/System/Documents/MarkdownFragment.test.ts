@@ -35,8 +35,10 @@ export function MarkdownFragmentTests(): void
                 {
                     test(
                         `Checking whether the \`${nameof(MarkdownFragment)}\` is rendered using \`${nameof(MarkdownIt)}\`…`,
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let text = random.string(10);
                             fragment.Content = `**${text}**`;
                             let textSelector = `:contains("${text}")`;

@@ -99,8 +99,11 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                             test(
                                 `Checking whether the \`${workspaceFolderPattern}\` is replaced with the name of the directory containing the file…`,
-                                async () =>
+                                async function()
                                 {
+                                    this.slow(2 * 1000);
+                                    this.timeout(4 * 1000);
+
                                     strictEqual(
                                         Uri.file(await substitutionTester.Test(document, workspaceFolderPattern)).fsPath,
                                         Uri.file(dirname(tempFile.FullName)).fsPath);

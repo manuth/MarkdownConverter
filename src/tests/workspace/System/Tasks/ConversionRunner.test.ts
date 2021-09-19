@@ -46,8 +46,11 @@ export function ConversionRunnerTests(): void
                 {
                     test(
                         "Checking whether the the path to the workspace-folder containing the file is returned…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
+
                             for (let uri of await workspace.findFiles("**/*"))
                             {
                                 let document = await workspace.openTextDocument(uri);

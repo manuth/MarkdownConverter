@@ -127,7 +127,6 @@ export function DateTimeFormatterTests(): void
                                 "Checking whether custom date-formats are processed correctly…",
                                 function()
                                 {
-                                    this.slow(200);
                                     strictEqual(formatter.Format("d", date), "1");
                                     strictEqual(formatter.Format("dd", date), "01");
                                     strictEqual(formatter.Format("d", twelveDays), "12");
@@ -193,7 +192,6 @@ export function DateTimeFormatterTests(): void
                                 "Checking whether localizable custom format strings are processed correctly…",
                                 function()
                                 {
-                                    this.slow(125);
                                     formatter.Locale = new CultureInfo("en");
                                     strictEqual(formatter.Format("ddd", date), "Wed");
                                     strictEqual(formatter.Format("dddd", date), "Wednesday");

@@ -288,8 +288,8 @@ export function ConverterTests(): void
                         "Checking whether the converter can be initialized…",
                         async function()
                         {
-                            this.timeout(4 * 1000);
                             this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             await doesNotReject(() => converter.Initialize());
                         });
 
@@ -309,8 +309,10 @@ export function ConverterTests(): void
 
                     test(
                         "Checking whether at least one message is reported during the initialization…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let reportCount = 0;
 
                             let reporter: Progress<IProgressState> = {
@@ -380,8 +382,10 @@ export function ConverterTests(): void
 
                     test(
                         "Checking whether all required members are initialized during the initialization…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             strictEqual(converter.URL, null);
                             strictEqual(converter.PortNumber, null);
                             strictEqual(converter.WebServer, null);
@@ -397,6 +401,9 @@ export function ConverterTests(): void
                         `Checking whether a website is served at the port indicated by the \`${nameof<Converter>((c) => c.PortNumber)}\`-property…`,
                         async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
+
                             await doesNotReject(
                                 async () =>
                                 {
@@ -406,8 +413,11 @@ export function ConverterTests(): void
 
                     test(
                         "Checking whether files inside the document-root are served…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
+
                             let tempFile = new TempFile(
                                 {
                                     Directory: tempDir.FullName,
@@ -424,8 +434,10 @@ export function ConverterTests(): void
 
                     test(
                         `Checking whether a rendered version of the document is served at the URL indicated by the \`${nameof<Converter>((c) => c.URL)}\`-property…`,
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let response = await page.goto(initializedConverter.URL);
                             strictEqual(response.status(), 200);
                             strictEqual(await response.text(), await initializedConverter.Document.Render());
@@ -433,8 +445,10 @@ export function ConverterTests(): void
 
                     test(
                         "Checking whether an error message is printed if the document couldn't be rendered for some reason…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let message = random.string(50);
 
                             sandbox.replace(
@@ -503,15 +517,19 @@ export function ConverterTests(): void
 
                     test(
                         "Checking whether the method can be executed after the initialization…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             await doesNotReject(() => initializedConverter.Start(ConversionType.HTML, outFile.FullName));
                         });
 
                     test(
                         "Checking whether messages are reported during the conversion…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let reportCount = 0;
 
                             await initializedConverter.Start(
@@ -531,7 +549,7 @@ export function ConverterTests(): void
                         "Checking whether files can be converted using the method…",
                         async function()
                         {
-                            this.slow(15 * 1000);
+                            this.slow(30 * 1000);
                             this.timeout(1 * 60 * 1000);
 
                             let conversionTypes = [

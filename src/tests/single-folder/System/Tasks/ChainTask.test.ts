@@ -111,16 +111,20 @@ export function ChainTaskTests(context: ITestContext<ISettings>): void
 
                     test(
                         "Checking whether the user is prompted to input a document-name…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(3 * 1000);
+                            this.timeout(6 * 1000);
                             await task.ExecuteTask(null, null, fileReporter);
                             ok(inputBoxExpectation.calledOnce);
                         });
 
                     test(
                         "Checking whether the progress is reported…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let reportCount = 0;
                             await task.ExecuteTask({ report: () => reportCount++ }, null, fileReporter);
                             ok(reportCount > 0);
@@ -128,8 +132,10 @@ export function ChainTaskTests(context: ITestContext<ISettings>): void
 
                     test(
                         "Checking whether a file with the desired name is created…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(3 * 1000);
+                            this.timeout(6 * 1000);
                             let files: IConvertedFile[] = [];
                             converterSandbox.restore();
 

@@ -114,8 +114,11 @@ export function RunningBLockTests(): void
                 {
                     test(
                         "Checking whether the sections are replaced with their rendered content…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(3.5 * 1000);
+                            this.timeout(7 * 1000);
+
                             for (let entry of keys)
                             {
                                 let value = random.string(10);
@@ -127,8 +130,11 @@ export function RunningBLockTests(): void
 
                     test(
                         "Checking whether the section-content cannot be overridden with document-attributes…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(3.5 * 1000);
+                            this.timeout(7 * 1000);
+
                             for (let entry of keys)
                             {
                                 let value = random.string(11);

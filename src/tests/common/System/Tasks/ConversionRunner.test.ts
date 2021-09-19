@@ -182,8 +182,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                     test(
                         "Checking whether messages are reported during the conversion…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(5 * 1000);
+                            this.timeout(10 * 1000);
                             let reportCount = 0;
 
                             await conversionRunner.Execute(
@@ -209,8 +211,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                     test(
                         `Checking whether the user is prompted to input a workspace-path if no proper workspace-folder is found and the destination-pattern contains \`${workspaceFolderPattern}\`…`,
-                        async () =>
+                        async function()
                         {
+                            this.slow(2.5 * 1000);
+                            this.timeout(5 * 1000);
                             sandbox.replace(conversionRunner, "GetWorkspacePath", () => null);
                             sandbox.replace(window, "showInputBox", async () => "example");
                             let spy = sandbox.spy(window);
@@ -220,8 +224,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                     test(
                         `Checking whether the user is prompted to input a workspace-path if no proper workspace-folder is found and the path specified in the \`${nameof<Settings>((s) => s.DestinationPattern)}\`-setting is relative…`,
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             sandbox.replace(conversionRunner, "GetWorkspacePath", () => null);
                             sandbox.replace(window, "showInputBox", async () => "example");
                             let spy = sandbox.spy(window);
@@ -231,15 +237,19 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                     test(
                         "Checking whether the destination-path is resolved…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             ok(isAbsolute(await substitutionTester.Test(textDocument, "this/is/a/test")));
                         });
 
                     test(
                         `Checking whether the destination-path is resolved to the workspace-folder if the destination-pattern is relative and doesn't contain \`${workspaceFolderPattern}\`…`,
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let path = "this/is/a/test";
                             sandbox.replace(conversionRunner, "GetWorkspacePath", () => tempDir.FullName);
 
@@ -250,8 +260,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                     test(
                         "Checking whether the converter is executed for each selected file-type…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let types = GetRandomConversionTypes();
                             context.Settings.ConversionType = types.map((type) => ConversionType[type] as keyof typeof ConversionType);
                             await conversionRunner.Execute(textDocument);
@@ -271,8 +283,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                     test(
                         "Checking whether all converted files are created once the method is resolved…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(7.5 * 1000);
+                            this.timeout(15 * 1000);
                             let types = GetRandomConversionTypes();
                             let files: IConvertedFile[] = [];
                             converterSandbox.restore();
@@ -323,8 +337,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         "Checking whether the settings are applied correctly…",
                         async function()
                         {
-                            this.slow(4.25 * 1000);
-                            this.timeout(17 * 1000);
+                            this.slow(7.5 * 1000);
+                            this.timeout(15 * 1000);
                             let chromiumPath = random.string(50);
                             let conversionQuality = 78;
 
@@ -465,7 +479,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         "Checking whether the metadata-, the header- and the footer-template are loaded from a file according to the attributes or the settings…",
                         async function()
                         {
-                            this.slow(3 * 1000);
+                            this.slow(6 * 1000);
                             this.timeout(12 * 1000);
                             let document: TextDocument;
                             let metaData = random.string(30);
@@ -762,8 +776,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         `Checking whether the system-parser is used if \`${fullSystemParserOption}\` is set to \`${true}\`…`,
                         async function()
                         {
-                            this.slow(6.5 * 1000);
-                            this.timeout(26 * 1000);
+                            this.slow(7.5 * 1000);
+                            this.timeout(15 * 1000);
                             context.Settings[systemParserOption] = true;
                             await config.update(lineBreakOption, true, ConfigurationTarget.Workspace);
                             await ReloadSystemParser();
@@ -808,7 +822,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         async function()
                         {
                             this.slow(2.5 * 1000);
-                            this.timeout(10 * 1000);
+                            this.timeout(5 * 1000);
                             let firstResult: Cheerio<Node>;
                             let secondResult: Cheerio<Node>;
                             await context.ResetEditor();
@@ -825,8 +839,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         "Checking whether anchors are created correctly…",
                         async function()
                         {
-                            this.slow(3 * 1000);
-                            this.timeout(12 * 1000);
+                            this.slow(5 * 1000);
+                            this.timeout(10 * 1000);
                             let headerText = "Test";
 
                             let content = dedent(
@@ -843,8 +857,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         "Checking whether the toc is applied according to the settings…",
                         async function()
                         {
-                            this.slow(3.5 * 1000);
-                            this.timeout(14 * 1000);
+                            this.slow(5 * 1000);
+                            this.timeout(10 * 1000);
                             let tocClass = "markdown-converter-toc-test";
                             let levels = new MultiRange([2]).toString();
                             let indicator = "\\[\\[\\s*toc-test\\s*\\]\\]";
@@ -876,7 +890,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         async function()
                         {
                             this.slow(2.5 * 1000);
-                            this.timeout(10 * 1000);
+                            this.timeout(5 * 1000);
 
                             let content = dedent(
                                 `
@@ -893,8 +907,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         `Checking whether emojis are rendered according to the \`${emojiTypeOption}\`-setting…`,
                         async function()
                         {
-                            this.slow(5.5 * 1000);
-                            this.timeout(22 * 1000);
+                            this.slow(7.5 * 1000);
+                            this.timeout(15 * 1000);
                             let result: CheerioAPI;
                             let content = "**:sparkles:**";
                             context.Settings[emojiTypeOption] = "None";

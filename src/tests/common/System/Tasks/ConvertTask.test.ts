@@ -75,7 +75,6 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
                         `Checking whether no exception is thrown if \`${nameof<Settings>((s) => s.IgnoreLanguageMode)}\` is enabled…`,
                         async function()
                         {
-                            this.slow(80);
                             context.Settings.IgnoreLanguageMode = true;
                             doesNotThrow(() => task.GetMarkdownDocument());
                         });

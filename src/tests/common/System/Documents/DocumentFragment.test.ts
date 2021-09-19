@@ -139,6 +139,8 @@ export function DocumentFragmentTests(): void
                         "Checking whether timestamps about the document are injected correctly…",
                         async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             document.DefaultDateFormat = null;
                             fragment.Content = `{{${AttributeKey.CreationDate}}}`;
                             strictEqual(await fragment.Render(), `${(await stat(document.FileName)).birthtime}`);
@@ -148,8 +150,10 @@ export function DocumentFragmentTests(): void
 
                     test(
                         "Checking whether curly braces can be escaped…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let key = "test";
                             let pattern = `{{${key}}}`;
                             fragment.Content = `\\${pattern}`;
@@ -159,8 +163,10 @@ export function DocumentFragmentTests(): void
 
                     test(
                         "Checking whether non-date attributes are substituted correctly…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             fragment.Content = content;
 
                             for (let key of Object.keys(attributes))
@@ -174,8 +180,10 @@ export function DocumentFragmentTests(): void
 
                     test(
                         "Checking whether the title of the document and the name of the author can be injected into the document…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let name = random.string(10);
 
                             sandbox.replace(
@@ -215,8 +223,10 @@ export function DocumentFragmentTests(): void
 
                     test(
                         `Checking whether date-attributes are formatted using the \`${nameof(DateTimeFormatter)}\`…`,
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             fragment.Content = content;
 
                             for (let key of Object.keys(attributes))
@@ -231,8 +241,10 @@ export function DocumentFragmentTests(): void
 
                     test(
                         "Checking whether custom date-formats are respected when formatting dates…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let dateKey = "testDate";
                             let testDate = new Date();
                             let testFormatName = "myFormat";
@@ -246,8 +258,10 @@ export function DocumentFragmentTests(): void
 
                     test(
                         "Checking whether date-attributes can be formatted individually shorthand…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let format = "dddd";
 
                             for (let key of Object.keys(attributes))

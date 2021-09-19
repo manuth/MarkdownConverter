@@ -129,8 +129,10 @@ export function DocumentTests(): void
 
                     test(
                         "Checking whether the initialized meta-template includes the document-title…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let rendered = await document.Meta.Render();
                             let cheerio = load(rendered);
                             strictEqual(cheerio("title").text(), document.Title);
@@ -306,8 +308,10 @@ export function DocumentTests(): void
 
                     test(
                         "Checking whether stylesheets are added to the rendered document…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let asset = new StyleSheet(styleSheet);
                             document.StyleSheets.push(asset);
                             ok((await document.Render()).includes(await asset.Render()));
@@ -315,8 +319,10 @@ export function DocumentTests(): void
 
                     test(
                         "Checking whether scripts are added to the rendered document…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let asset = new WebScript(script);
                             document.Scripts.push(asset);
                             ok((await document.Render()).includes(await asset.Render()));
@@ -324,22 +330,28 @@ export function DocumentTests(): void
 
                     test(
                         "Checking whether the metadata-section is added to the rendered document…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             ok((await document.Render()).includes(await document.Meta.Render()));
                         });
 
                     test(
                         "Checking whether the actual contents of the document are present…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             ok((await document.Render()).includes(await document.Body.Render()));
                         });
 
                     test(
                         `Checking whether \`${nameof(Document)}.${nameof<TestDocument>((d) => d.Template)}\` is applied using Handlebars…`,
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             let template = "hello{{content}}world";
                             let content = await document.Body.Render();
                             let rendered = create().compile(template)({ content });
@@ -349,8 +361,10 @@ export function DocumentTests(): void
 
                     test(
                         "Checking whether markdown is parsed when rendering the document…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             document.Content = "**important**";
                             ok((await document.Render()).includes(parser.renderInline(document.Content)));
                         });

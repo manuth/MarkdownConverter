@@ -2,6 +2,7 @@ import { ok, strictEqual, throws } from "assert";
 import { basename, dirname } from "path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import rescape = require("@stdlib/utils-escape-regexp-string");
+import { Context } from "mocha";
 import { Random } from "random-js";
 import { normalize, parse, relative } from "upath";
 import { TextDocument, Uri, workspace } from "vscode";
@@ -139,8 +140,10 @@ export function PatternResolverTests(): void
                                 return tempDir.MakePath("Test.md");
                             },
                             Message: (pattern) => `Checking whether \`${pattern}\` is empty if the file is a direct child of the workspace-folder…`,
-                            async Test(result)
+                            async Test(this: Context, result)
                             {
+                                this.slow(2 * 1000);
+                                this.timeout(4 * 1000);
                                 ok(/^\.?$/.test(result));
                             }
                         },
@@ -175,7 +178,10 @@ export function PatternResolverTests(): void
                                     tempDocument = await workspace.openTextDocument(tempFile.FullName);
                                 }
 
-                                await patternTest?.Test(
+                                let test = patternTest?.Test;
+                                test = test?.bind(this);
+
+                                await test?.(
                                     new PatternResolver(pattern).Resolve(
                                         patternTest?.WorkspaceFolder ?? tempDir.FullName,
                                         tempDocument ?? document,
