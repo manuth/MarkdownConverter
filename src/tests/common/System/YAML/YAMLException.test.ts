@@ -2,6 +2,7 @@ import { notStrictEqual, ok, strictEqual } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
+import { Random } from "random-js";
 import { Resources } from "../../../../Properties/Resources";
 import { Exception } from "../../../../System/Exception";
 import { IMarker } from "../../../../System/YAML/IMarker";
@@ -16,11 +17,14 @@ export function YAMLExceptionTests(): void
         nameof(YAMLException),
         () =>
         {
+            let random: Random;
             let yamlError: any;
 
             suiteSetup(
                 () =>
                 {
+                    random = new Random();
+
                     try
                     {
                         (fm as any)(
@@ -49,16 +53,17 @@ export function YAMLExceptionTests(): void
                             ok(exception.Message);
                             ok(exception.Marker);
                             ok(exception.Reason);
+                            strictEqual(exception.InnerException, yamlError);
                         });
 
                     test(
                         "Checking whether custom values can be passed…",
                         () =>
                         {
-                            let name = "name";
-                            let reason = "reason";
+                            let name = random.string(10);
+                            let reason = random.string(15);
                             let marker: IMarker = new Object() as any;
-                            let message = "message";
+                            let message = random.string(25);
                             let innerException = new Exception();
                             let exception = new YAMLException(name, reason, marker, message, innerException);
                             strictEqual(exception.Name, name);
