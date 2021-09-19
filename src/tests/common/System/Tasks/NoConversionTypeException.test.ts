@@ -16,16 +16,16 @@ export function NoConversionTypeExceptionTests(): void
             let random: Random;
             let exception: NoConversionTypeException;
 
-            setup(
-                () =>
-                {
-                    exception = new NoConversionTypeException();
-                });
-
             suiteSetup(
                 () =>
                 {
                     random = new Random();
+                });
+
+            setup(
+                () =>
+                {
+                    exception = new NoConversionTypeException();
                 });
 
             suite(
