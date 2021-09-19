@@ -11,7 +11,7 @@ export class Exception extends Error
     /**
      * The message of the exception.
      */
-    private exceptionMessage: string;
+    private exceptionMessage: string = null;
 
     /**
      * The {@link Exception `Exception`} instance that caused the current exception.
@@ -30,7 +30,11 @@ export class Exception extends Error
     public constructor(message?: string, innerException?: Exception)
     {
         super();
-        this.exceptionMessage = message;
+
+        if (message)
+        {
+            this.exceptionMessage = message;
+        }
 
         if (innerException)
         {
