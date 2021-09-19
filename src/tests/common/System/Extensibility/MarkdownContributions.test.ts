@@ -185,7 +185,7 @@ export function MarkdownContributionTests(): void
                 () =>
                 {
                     test(
-                        "Checking whether having invalid paths doesn't throw an exception…",
+                        "Checking invalid paths in extension-contributions throw an exception…",
                         () =>
                         {
                             mockedExtensions[0].packageJSON[contributionPropertyName][scriptContributionPoint] ??= [];
