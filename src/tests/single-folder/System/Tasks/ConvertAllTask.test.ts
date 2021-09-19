@@ -2,7 +2,7 @@ import { ok, rejects, strictEqual } from "assert";
 import { TempDirectory } from "@manuth/temp-files";
 import { pathExists } from "fs-extra";
 import { createSandbox, SinonSandbox } from "sinon";
-import { join, normalize } from "upath";
+import { normalize } from "upath";
 import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
 import { extension } from "../../../..";
 import { ConversionType } from "../../../../Conversion/ConversionType";
@@ -43,7 +43,6 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                 {
                     context.Settings.ConversionType = [ConversionType[ConversionType.HTML] as keyof typeof ConversionType];
                     sandbox = createSandbox();
-
                     sandbox.replace(task.ConversionRunner, "Execute", async () => null);
                 });
 
@@ -80,8 +79,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                             let expectedFiles = ["Test1.html", "Test2.html"];
                             let files: IConvertedFile[] = [];
                             sandbox.restore();
-
-                            context.Settings.DestinationPattern = join(tempDir.FullName, "${basename}.${extension}");
+                            context.Settings.DestinationPattern = tempDir.MakePath("${basename}.${extension}");
 
                             await task.Execute(
                                 null,
