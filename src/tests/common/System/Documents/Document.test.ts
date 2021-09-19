@@ -229,7 +229,6 @@ export function DocumentTests(): void
                 {
                     let mockedView: Record<string, unknown>;
                     let sections: string[];
-                    let tagNames: string[];
                     let calledSections: string[];
 
                     suiteSetup(
@@ -247,7 +246,6 @@ export function DocumentTests(): void
                         () =>
                         {
                             mockedView = {};
-                            tagNames = [];
                             calledSections = [];
 
                             for (let section of sections)
@@ -259,7 +257,6 @@ export function DocumentTests(): void
                                         get: () =>
                                         {
                                             calledSections.push(section);
-                                            tagNames.push(section);
                                             return `<${section} />`;
                                         }
                                     });
