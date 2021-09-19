@@ -5,6 +5,64 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## MarkdownConverter [Unreleased]
+Hello Everyone Who Still Sticks to MarkdownConverter!
+
+Thank you so much for being patient for such a long time.
+I finally managed it to fix all issues and add all features people asked for since the last version.
+
+This here is another new major version which introduces a few breaking changes.
+
+You can now control how assets are inserted, headers and footers are arranged correctly now.
+Also, you can now set the content of the header and footer's sections easily through the settings.
+
+### Fixed
+  - Broken asset-insertion  
+    This change fixes issue [#60](https://github.com/manuth/MarkdownConverter/issues/60) - Thanks to [@SjoerdV](https://github.com/SjoerdV) and [@malustewart](https://github.com/malustewart)
+  - Broken dependabot-settings
+  - Broken release-notes creation
+  - Drone pipeline-steps for multi-digit version-numbers
+  - Vulnerabilities in dependencies
+  - The Converter's handling of files containing accent letters  
+    This change fixes issue [#61](https://github.com/manuth/MarkdownConverter/issues/61) - Thanks to [@HughxDev](https://github.com/HughxDev) and [@damgot](https://github.com/damgot)
+  - The use of assets indicated with relative paths
+
+### Added
+  - The extension to the [Open VSX Registry](https://open-vsx.org/)
+  - Support for loading the `HeaderTemplate` and the `FooterTemplate` from files by specifying a file-path as `HeaderTemplate` and `FooterTemplate`-attributes or `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate` settings
+  - Support for specifying a metadata-template using the `MetaTemplate`-attribute or the `markdownConverter.Document.MetaTemplate`-setting
+  - Support for overriding the document-title using the `Title`-attribute  
+    This change fixes issue [#63](https://github.com/manuth/MarkdownConverter/issues/63) - Thanks to [@orschiro](https://github.com/orschiro)
+  - Support for parallel step-execution in drone-pipelines
+  - A workflow for merging dependabot-PRs automatically
+  - A workflow for analyzing the source-code
+  - Support for the `ts-nameof` plugin
+  - Support for printing error-messages to the converted document if an error occurred
+  - A setting `markdownConverter.Document.Design.Scripts` for adding scripts to the document
+  - Support for specifying a custom chromium executable-path using the `markdownConverter.ChromiumExecutablePath`-setting  
+    This change fixes issue [#74](https://github.com/manuth/MarkdownConverter/issues/74) - Thanks to [@tik9](https://github.com/tik9) and [@orgwem](https://github.com/orgwem)
+  - Support for specifying insertion-types for individual assets and specific link-types using the `markdownConverter.Document.Design.StyleSheetInsertion`, the `markdownConverter.Document.Design.StyleSheets`, the `markdownConverter.Document.Design.ScriptInsertion` and the `markdownConverter.Document.Design.Scripts` settings  
+    This change fixes issue [#75](https://github.com/manuth/MarkdownConverter/issues/75) - Thanks to [@richardy706](https://github.com/richardy706)
+  - Support for setting the content of individual header- and footer-sections using the `markdownConverter.Document.HeaderContent` and the `markdownConverter.Document.FooterContent` settings and the `Header` and the `Footer` attributes  
+    This change fixes issue [#57](https://github.com/manuth/MarkdownConverter/issues/57) - A huge thanks to [@GGillan](https://github.com/GGillan) for the suggestion
+  - Support for formatting date-values shorthand using code-snippets such as `{{ CurrentDate "HH:mm:ss" }}`
+  - An error-message if no conversion-type (the `markdownConverter.ConversionType`-setting) is selected
+  - Further paper-formats: `A0`, `A1`, `A2`, `A6` and `Ledger`
+
+### Updated
+  - Drone pipeline-steps to use smaller docker-images
+  - The chromium-revision to `901912`
+  - All dependencies
+  - Settings-schema for the better use in the settings-editor
+  - The placement of header- and footer-items  
+    This change fixes issue [#56](https://github.com/manuth/MarkdownConverter/issues/56) - Thanks to [@GGillan](https://github.com/GGillan)
+  - The descriptions of settings for better understanding
+  - The README for better understanding  
+    This change fixes [#68](https://github.com/manuth/MarkdownConverter/issues/68) - Thanks to [@RoneoOrg](https://github.com/RoneoOrg)
+  - The `ChainTask` to add page-breaks between each chained document
+
+### Removed
+  - Type-declarations (`.d.ts`-files) from release-builds
+
 
 [Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.2...dev)
 
