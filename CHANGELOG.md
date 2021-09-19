@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## MarkdownConverter [Unreleased]
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.0...dev)
+
+## MarkdownConverter v4.0.0
 Hello Everyone Who Still Sticks to MarkdownConverter!
 
 Thank you so much for being patient for such a long time.
@@ -63,8 +67,7 @@ Also, you can now set the content of the header and footer's sections easily thr
 ### Removed
   - Type-declarations (`.d.ts`-files) from release-builds
 
-
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.2...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v3.1.2...v4.0.0)
 
 ## MarkdownConverter v3.1.2
 ### Added
