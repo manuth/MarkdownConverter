@@ -31,6 +31,10 @@ export function SettingTests(context: ITestContext<ISettings>): void
             let random: Random;
             let sandbox: SinonSandbox;
             let settings: Settings;
+            let marginSetting = "Document.Paper.Margin" as const;
+            let paperFormatSetting = "Document.Paper.PaperFormat" as const;
+            let tocSetting = "Parser.Toc.Enabled" as const;
+            let tocTypeSetting = "Parser.Toc.ListType" as const;
 
             suiteSetup(
                 () =>
@@ -226,7 +230,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                                 Right: "20cm"
                             };
 
-                            context.Settings["Document.Paper.Margin"] = newMargin;
+                            context.Settings[marginSetting] = newMargin;
 
                             checkMargin = (margin: Margin) =>
                             {
@@ -248,7 +252,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                                 Orientation: undefined as string
                             };
 
-                            context.Settings["Document.Paper.PaperFormat"] = customFormat;
+                            context.Settings[paperFormatSetting] = customFormat;
                             let paperFormat = settings.PaperFormat.Format as CustomPageFormat;
                             ok(settings.PaperFormat.Format instanceof CustomPageFormat);
                             strictEqual(paperFormat.Width, customFormat.Width);
@@ -260,7 +264,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         "Checking whether a correct standardized paper-format is loaded if neither width or height is specified…",
                         () =>
                         {
-                            context.Settings["Document.Paper.PaperFormat"] = {
+                            context.Settings[paperFormatSetting] = {
                                 Width: undefined as string,
                                 Height: undefined as string,
                                 Format: nameof(StandardizedFormatType.A5) as keyof typeof StandardizedFormatType,
@@ -300,7 +304,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                                 nameof<Margin>((m) => m.Right)
                             ] as Array<keyof Margin>;
 
-                            context.Settings["Document.Paper.Margin"] = margin;
+                            context.Settings[marginSetting] = margin;
 
                             for (let key of marginKeys)
                             {
@@ -337,7 +341,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         `Checking whether the \`${nameof<Settings>((s) => s.TocSettings)}\` are equal to \`${null}\` if the toc-setting is disabled…`,
                         () =>
                         {
-                            context.Settings["Parser.Toc.Enabled"] = false;
+                            context.Settings[tocSetting] = false;
                             strictEqual(settings.TocSettings, null);
                         });
 
@@ -345,10 +349,10 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         `Checking whether the \`${nameof(ListType)}\`-option is parsed correctly…`,
                         () =>
                         {
-                            context.Settings["Parser.Toc.Enabled"] = true;
-                            context.Settings["Parser.Toc.ListType"] = "ul";
+                            context.Settings[tocSetting] = true;
+                            context.Settings[tocTypeSetting] = "ul";
                             strictEqual(settings.TocSettings.ListType, ListType.Unordered);
-                            context.Settings["Parser.Toc.ListType"] = "ol";
+                            context.Settings[tocTypeSetting] = "ol";
                             strictEqual(settings.TocSettings.ListType, ListType.Ordered);
                         });
                 });
