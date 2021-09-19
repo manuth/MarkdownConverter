@@ -15,6 +15,7 @@ export function ConfigInterceptorTests(): void
         () =>
         {
             let config: WorkspaceConfiguration;
+            let systemParserSetting = "Parser.SystemParserEnabled" as const;
             let key: keyof ISettings;
             let interceptor: ConfigInterceptor<ISettings>;
             let originalSetting: Array<keyof typeof ConversionType>;
@@ -126,10 +127,10 @@ export function ConfigInterceptorTests(): void
                         "Checking whether object-proxies are intercepted…",
                         () =>
                         {
-                            interceptor.Settings["Parser.SystemParserEnabled"] = true;
-                            strictEqual(workspace.getConfiguration(Settings.ConfigKey).Parser.SystemParserEnabled, true);
-                            interceptor.Settings["Parser.SystemParserEnabled"] = false;
-                            strictEqual(workspace.getConfiguration(Settings.ConfigKey).Parser.SystemParserEnabled, false);
+                            interceptor.Settings[systemParserSetting] = true;
+                            strictEqual(workspace.getConfiguration(Settings.ConfigKey).get(systemParserSetting), true);
+                            interceptor.Settings[systemParserSetting] = false;
+                            strictEqual(workspace.getConfiguration(Settings.ConfigKey).get(systemParserSetting), false);
                         });
                 });
         });
