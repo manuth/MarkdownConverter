@@ -5,6 +5,7 @@
     "OperationCancelledException": "Der Vorgang wurde abgebrochen.",
     "FileException": "Auf die Datei \"{0}\" konnte nicht zugegriffen werden.",
     "FileNotFoundException": "Die Datei \"{0}\" konnte nicht gefunden werden.",
+    "NoConversionType": "Es wurde kein zu konvertierender Datei-Typ ausgewählt. Bitte überprüfen Sie Ihre Einstellungen.",
     "MarkdownFileException": "Es konnte keine Markdown-Datei gefunden werden.",
     "YAMLException": "Fehler: Der YAML-Block ist nicht richtig formatiert. Zeile {0}, Spalte {1}.",
     "UnsupportedPlatformException": "Diese Funktion wird von Ihrer Platform nicht unterstützt!",

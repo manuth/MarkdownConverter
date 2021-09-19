@@ -1,5 +1,11 @@
+import { CancellationToken, Progress } from "vscode";
+import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
+import { Resources } from "../../Properties/Resources";
+import { Settings } from "../../Properties/Settings";
+import { Exception } from "../Exception";
 import { ConversionRunner } from "./ConversionRunner";
+import { IProgressState } from "./IProgressState";
 import { PuppeteerTask } from "./PuppeteerTask";
 
 /**
@@ -30,5 +36,29 @@ export abstract class ConversionTask extends PuppeteerTask
     public get ConversionRunner(): ConversionRunner
     {
         return this.conversionRunner;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
+     *
+     * @param fileReporter
+     * A component for reporting converted files.
+     */
+    public override async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
+    {
+        if (Settings.Default.ConversionType.length === 0)
+        {
+            throw new Exception(Resources.Resources.Get("NoConversionType"));
+        }
+        else
+        {
+            return super.Execute(progressReporter, cancellationToken, fileReporter);
+        }
     }
 }

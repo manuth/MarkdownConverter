@@ -9,19 +9,16 @@ import { commands, ExtensionContext, Progress, ProgressLocation, window } from "
 import { Constants } from "./Constants";
 import { ConversionType } from "./Conversion/ConversionType";
 import { IConvertedFile } from "./Conversion/IConvertedFile";
-import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
 import { Resources } from "./Properties/Resources";
 import { Settings } from "./Properties/Settings";
+import { Exception } from "./System/Exception";
 import { Extension } from "./System/Extensibility/Extension";
-import { FileException } from "./System/IO/FileException";
-import { NoWorkspaceFolderException } from "./System/NoWorkspaceFolderException";
 import { OperationCancelledException } from "./System/OperationCancelledException";
 import { ChainTask } from "./System/Tasks/ChainTask";
 import { ChromiumNotFoundException } from "./System/Tasks/ChromiumNotFoundException";
 import { ConvertAllTask } from "./System/Tasks/ConvertAllTask";
 import { ConvertTask } from "./System/Tasks/ConvertTask";
 import { PuppeteerTask } from "./System/Tasks/PuppeteerTask";
-import { YAMLException } from "./System/YAML/YAMLException";
 
 /**
  * Represents the `Markdown Converter` extension.
@@ -256,11 +253,7 @@ export class MarkdownConverterExtension extends Extension
             {
                 window.showInformationMessage(exception.Message);
             }
-            else if (
-                exception instanceof FileException ||
-                exception instanceof YAMLException ||
-                exception instanceof MarkdownFileNotFoundException ||
-                exception instanceof NoWorkspaceFolderException)
+            else if (exception instanceof Exception)
             {
                 window.showErrorMessage(exception.Message);
             }
