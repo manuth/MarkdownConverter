@@ -4,7 +4,7 @@ import { pathExists, readFile } from "fs-extra";
 import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
-import anchor = require("markdown-it-anchor");
+import anchor from "markdown-it-anchor";
 import checkbox = require("markdown-it-checkbox");
 import emoji = require("markdown-it-emoji");
 import toc = require("markdown-it-table-of-contents");
