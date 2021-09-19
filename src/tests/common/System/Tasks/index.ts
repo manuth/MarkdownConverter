@@ -2,6 +2,7 @@ import { basename } from "path";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ITestContext } from "../../../ITestContext";
 import { ConversionRunnerTests } from "./ConversionRunner.test";
+import { ConversionTaskTests } from "./ConversionTask.test";
 import { ConvertTaskTests } from "./ConvertTask.test";
 import { PuppeteerTaskTests } from "./PuppeteerTask.test";
 
@@ -19,6 +20,7 @@ export function TaskTests(context: ITestContext<ISettings>): void
         {
             PuppeteerTaskTests(context);
             ConversionRunnerTests(context);
+            ConversionTaskTests(context);
             ConvertTaskTests(context);
         });
 }
