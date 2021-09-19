@@ -15,26 +15,6 @@ export function ResourceTests(): void
                 nameof(Resources.Culture),
                 () =>
                 {
-                    let originalLocale: CultureInfo;
-
-                    suiteSetup(
-                        () =>
-                        {
-                            originalLocale = Resources.Culture;
-                        });
-
-                    teardown(
-                        () =>
-                        {
-                            Resources.Culture = originalLocale;
-                        });
-
-                    suiteTeardown(
-                        () =>
-                        {
-                            Resources.Culture = originalLocale;
-                        });
-
                     test(
                         `Checking whether setting the \`${nameof(Resources.Culture)}\` affects all resources…`,
                         () =>

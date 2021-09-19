@@ -46,20 +46,6 @@ export function FileNotFoundExceptionTests(): void
                 nameof<FileNotFoundException>((exception) => exception.Message),
                 () =>
                 {
-                    let originalLocale: CultureInfo;
-
-                    suiteSetup(
-                        () =>
-                        {
-                            originalLocale = Resources.Culture;
-                        });
-
-                    suiteTeardown(
-                        () =>
-                        {
-                            Resources.Culture = originalLocale;
-                        });
-
                     test(
                         "Checking whether a default message is set…",
                         () =>

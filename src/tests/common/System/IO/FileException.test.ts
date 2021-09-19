@@ -50,20 +50,6 @@ export function FileExceptionTests(): void
                 nameof<FileException>((exception) => exception.Message),
                 () =>
                 {
-                    let originalLocale: CultureInfo;
-
-                    suiteSetup(
-                        () =>
-                        {
-                            originalLocale = Resources.Culture;
-                        });
-
-                    suiteTeardown(
-                        () =>
-                        {
-                            Resources.Culture = originalLocale;
-                        });
-
                     setup(
                         () =>
                         {

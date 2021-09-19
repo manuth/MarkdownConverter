@@ -73,20 +73,6 @@ export function YAMLExceptionTests(): void
                 nameof<YAMLException>((exception) => exception.Message),
                 () =>
                 {
-                    let originalLocale: CultureInfo;
-
-                    suiteSetup(
-                        () =>
-                        {
-                            originalLocale = Resources.Culture;
-                        });
-
-                    suiteTeardown(
-                        () =>
-                        {
-                            Resources.Culture = originalLocale;
-                        });
-
                     test(
                         "Checking whether the message is localized…",
                         () =>
