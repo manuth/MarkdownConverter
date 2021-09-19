@@ -13,4 +13,12 @@ export class NoWorkspaceFolderException extends Exception
     {
         super(Resources.Resources.Get("NoWorkspaceFolderException"), null);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public override get Message(): string
+    {
+        return super.Message ?? Resources.Resources.Get("NoWorkspaceFolderException");
+    }
 }
