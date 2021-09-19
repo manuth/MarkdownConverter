@@ -1,7 +1,7 @@
 import { strictEqual } from "assert";
 import { dirname, normalize } from "path";
 import { TempFile } from "@manuth/temp-files";
-import { TextDocument, workspace } from "vscode";
+import { TextDocument, Uri, workspace } from "vscode";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 import { TestConstants } from "../../../TestConstants";
 import { TestConversionRunner } from "../../../TestConversionRunner";
@@ -71,7 +71,7 @@ export function ConversionRunnerTests(): void
                         {
                             strictEqual(
                                 normalize(conversionRunner.GetWorkspacePath(document)),
-                                normalize(dirname(tempFile.FullName)));
+                                normalize(Uri.file(dirname(tempFile.FullName)).fsPath));
                         });
                 });
         });
