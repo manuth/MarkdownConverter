@@ -24,7 +24,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
     private target: WorkspaceConfiguration;
 
     /**
-     * Initializes a new instance of the `ConfigurationSection` class.
+     * Initializes a new instance of the {@link ConfigurationSection `ConfigurationSection`} class.
      *
      * @param interceptor
      * The interceptor of this section.
