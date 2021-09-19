@@ -1,4 +1,4 @@
-import { ok, strictEqual } from "assert";
+import { strictEqual } from "assert";
 import { Exception } from "../../../System/Exception";
 
 /**
@@ -28,11 +28,11 @@ export function ExceptionTests(): void
                         () =>
                         {
                             exception = new Exception();
-                            ok(!exception.Message);
-                            ok(!exception.InnerException);
+                            strictEqual(exception.Message, null);
+                            strictEqual(exception.InnerException, null);
                             exception = new Exception("hello");
                             strictEqual(exception.Message, "hello");
-                            ok(!exception.InnerException);
+                            strictEqual(exception.InnerException, null);
                             exception = new Exception("hello", innerException);
                             strictEqual(exception.Message, "hello");
                             strictEqual(exception.InnerException, innerException);
