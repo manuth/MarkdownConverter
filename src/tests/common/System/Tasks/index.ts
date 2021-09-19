@@ -4,6 +4,7 @@ import { ITestContext } from "../../../ITestContext";
 import { ConversionRunnerTests } from "./ConversionRunner.test";
 import { ConversionTaskTests } from "./ConversionTask.test";
 import { ConvertTaskTests } from "./ConvertTask.test";
+import { NoConversionTypeExceptionTests } from "./NoConversionTypeException.test";
 import { PuppeteerTaskTests } from "./PuppeteerTask.test";
 
 /**
@@ -20,6 +21,7 @@ export function TaskTests(context: ITestContext<ISettings>): void
         {
             PuppeteerTaskTests(context);
             ConversionRunnerTests(context);
+            NoConversionTypeExceptionTests();
             ConversionTaskTests(context);
             ConvertTaskTests(context);
         });
