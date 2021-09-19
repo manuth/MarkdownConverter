@@ -5,6 +5,7 @@ import { ConversionRunnerTests } from "./ConversionRunner.test";
 import { ConversionTaskTests } from "./ConversionTask.test";
 import { ConvertTaskTests } from "./ConvertTask.test";
 import { NoConversionTypeExceptionTests } from "./NoConversionTypeException.test";
+import { OperationCancelledExceptionTests } from "./OperationCancelledException.test";
 import { PuppeteerTaskTests } from "./PuppeteerTask.test";
 
 /**
@@ -19,6 +20,7 @@ export function TaskTests(context: ITestContext<ISettings>): void
         basename(__dirname),
         () =>
         {
+            OperationCancelledExceptionTests();
             PuppeteerTaskTests(context);
             ConversionRunnerTests(context);
             NoConversionTypeExceptionTests();
