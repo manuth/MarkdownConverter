@@ -79,7 +79,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                             let expectedFiles = ["Test1.html", "Test2.html"];
                             let files: IConvertedFile[] = [];
                             sandbox.restore();
-                            context.Settings.DestinationPattern = tempDir.MakePath("${basename}.${extension}");
+                            context.Settings.DestinationPattern = normalize(tempDir.MakePath("${basename}.${extension}"));
 
                             await task.Execute(
                                 null,
