@@ -353,12 +353,17 @@
               "markdownDescription": "%Config.Document.Paper.PaperFormat.Format.Description%",
               "type": "string",
               "enum": [
+                "A0",
+                "A1",
+                "A2",
                 "A3",
                 "A4",
                 "A5",
+                "A6",
                 "Legal",
                 "Letter",
-                "Tabloid"
+                "Tabloid",
+                "Ledger"
               ]
             },
             "Orientation": {
@@ -401,12 +406,17 @@
                   "type": "string",
                   "default": "A4",
                   "enum": [
+                    "A0",
+                    "A1",
+                    "A2",
                     "A3",
                     "A4",
                     "A5",
+                    "A6",
                     "Legal",
                     "Letter",
-                    "Tabloid"
+                    "Tabloid",
+                    "Ledger"
                   ]
                 },
                 "Orientation": {
