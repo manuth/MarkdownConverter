@@ -1,7 +1,22 @@
 # MarkdownConverter
-A markdown-converter for [Visual Studio Code][VSCode]
+A markdown-converter for [vscode][vscode]
 
-## What's `MarkdownConverter`?
+## Table of Contents
+- [MarkdownConverter](#markdownconverter)
+  - [Table of Contents](#table-of-contents)
+  - [What is `MarkdownConverter`?](#what-is-markdownconverter)
+  - [Usage](#usage)
+  - [Variable Substitution](#variable-substitution)
+    - [Date-Formatting](#date-formatting)
+      - [Custom Date-Formats](#custom-date-formats)
+  - [Headers and Footers](#headers-and-footers)
+  - [Including Table of Contents](#including-table-of-contents)
+  - [Third Party Markdown Extensions](#third-party-markdown-extensions)
+  - [CSS and JavaScript Assets](#css-and-javascript-assets)
+    - [Insertion](#insertion)
+  - [Settings](#settings)
+
+## What is `MarkdownConverter`?
 > MarkdownConverter is a Visual Studio Code-extension which allows you to export your Markdown-file as PDF-, HTML or Image-files.  
 > It provides many features, such as DateTime-Formatting, configuring your own CSS-styles, setting Headers and Footers, FrontMatter and much more.
 
@@ -28,17 +43,24 @@ A markdown-converter for [Visual Studio Code][VSCode]
     - `Markdown: Chain all Documents` (`Markdown: Alle Dokumente verketten`) or `mcad` (`madv` in German) for short 
  4. Press enter and wait for the process to finish
 
+Normally, `MarkdownConverter` will refuse to convert files which aren't recognized as markdown-files.  
+If you don't like this behavior, you might want to set `markdownConverter.IgnoreLanguageMode` to `true`.
+
 ## Variable Substitution
-Before the conversion, the markdown-file is preprocessed using [`Handlebars`][Handlebars]. Variables (such as `{{ Author }}`) are automatically replaced with the corresponding attribute-value.
+Before the conversion, the markdown-file is preprocessed using [`Handlebars`][Handlebars]. Variables (such as `{{ Author }}`) are automatically replaced with the corresponding attribute-value.  
+While attribute-names wrapped in 2 braces are HTML-escaped, attribute-names wrapped in 3 braces (for example `{{{ Content }}}`) aren't escaped allowing it to contain HTML-code.
 
 ***Example:***
 ```md
 ---
 Title: "Test"
 Author: "John Doe"
+Content: "This is an <b>important</b> message"
 ---
 
 ## {{ Title }}
+{{{ Content }}}
+
 This page was written by {{ Author }}
 ```
 
@@ -53,7 +75,7 @@ Following attributes are predefined and may be overridden by the document-attrib
     The assumed name of the author according to `GIT_AUTHOR_NAME`, `GIT_COMMITER_NAME`, `HGUSER`, `C9_USER`, `git`, `wmic` or `osascript`
   * Attributes declared inside the vscode-settings (see [Settings](#settings))
 
-## Date-Formatting
+### Date-Formatting
 `Date`-attributes are being formatted by default. `MarkdownConverter` allows you to customize the format of every individual date.
 
 You can format an individual date by using the `FormatDate`-helper like this:
@@ -66,6 +88,16 @@ This is a test.
 This document has been created by {{ Author }} at {{ FormatDate ChangeDate "HH:mm:ss" }}
 ```
 
+Optionally, the `FormatDate` can be omitted:
+```md
+---
+Date: 01-08-1291
+---
+Date taken from an attribute: {{ Date "dddd" }}
+
+Predefined date: {{ CurrentDate "dddd" }}
+```
+
 You can override the default date-format for a document by adding a `DateFormat` attribute:
 
 ***Example:***
@@ -76,10 +108,10 @@ DateFormat: dd mmmm yyyy
 The current date is {{ CurrentDate }}
 ```
 
-### Custom Date-Formats
+#### Custom Date-Formats
 There are two predefined date-formats, namely `Default` and `FullDate`, which represent date-formats for your current locale.
 
-If you use a specific date-format repeatedly you might want to specify a custom date-format using the `markdownConverter.DateFormats` setting (see [Settings][#settings]):
+If you use a specific date-format repeatedly you might want to specify a custom date-format using the `markdownConverter.DateFormats` setting (see [Settings](#settings)):
 
 ***settings.json***
 ```jsonc
@@ -95,9 +127,115 @@ If you use a specific date-format repeatedly you might want to specify a custom 
 {{ FormatDate CurrentDate "iso" }}
 ```
 
+## Headers and Footers
+The `markdownConverter.Document.HeaderFooterEnabled`-setting allows you to enable or disable headers or footers. By default, the header and footer contains three sections: The left, the right and the centered section.
+
+You can set the content of these sections using the `markdownConverter.Document.HeaderContent` and `markdownConverter.Document.FooterContent` options:
+
+```json
+{
+  "markdownConverter.Document.HeaderContent": {
+    "Left": "{{ Company }}",
+    "Center": "{{ Author }}",
+    "Right": "{{ FormatDate CurrentDate \"hh:mm:ss\" }}"
+  },
+  "markdownConverter.Document.FooterContent": {
+    "Center": "<span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span>"
+  }
+}
+```
+
+The content of the individual header- and footer-sections can be overridden for an individual document using attributes:
+
+```md
+---
+Header:
+  Left: My Individual Company
+  Center: John Doe
+---
+# Test
+This is a test.
+```
+
+If you'd like to have more control on how your headers and footers look like, you might want to adjust the `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate` options.
+
+## Including Table of Contents
+The `MarkdownConverter` provides the functionality to create a table of contents at runtime.  
+Set the `markdownConverter.Parser.Toc.Enabled` to `true` to enable the creation of a table of contents.
+
+By default, the `markdown-it-table-of-contents` plugin looks for a line starting with `[[toc]]` and replaces it with a table of contents. You might want to set the `markdownConverter.Parser.Toc.Indicator` to a custom regular expression if you want to have something else replaced with the table of contents.
+
+You can set the class of the table of contents list by setting the `markdownConverter.Parser.Toc.Class`. The `markdownConverter.Parser.Toc.ListType` allows you to set whether the table of contents should be rendered as a numbered list (`ol` => ordered list) or an unordered list (`ul`).
+
+Furthermore, the `markdownConverter.Parser.Toc.Levels` allows you to choose which levels to include in the table of contents.
+
+```json
+{
+  "markdownConverter.Parser.Toc.Enabled": true,
+  "markdownConverter.Parser.Toc.Indicator": "\\[\\[\\s*MyToc\\s*\\]\\]",
+  "markdownConverter.Parser.Toc.Class": "toc",
+  "markdownConverter.Parser.Toc.ListType": "ol",
+  "markdownConverter.Parser.Toc.Levels": "2-6"
+}
+```
+
+## Third Party Markdown Extensions
+If you want to use third party markdown-extensions in your documents (such as the [Markdown Preview Mermaid Support], [Markdown Footnote] or [Markdown Emoji]), you might want to install the extensions of your choice and enable the `markdownConverter.Parser.SystemParserEnabled` setting which makes `MarkdownConverter` use VSCode's built-in `markdown-it` parser with all markdown extensions enabled.
+
+## CSS and JavaScript Assets
+`MarkdownConverter` allows you to pass stylesheets and JavaScript-files which are added to the document.
+
+Use the `markdownConverter.Document.Design.StyleSheets` and the `markdownConverter.Document.Design.Scripts` options for adding stylesheets and scripts.
+
+You can choose the way to insert the stylesheet or script for each asset individually.
+
+  * `Link` means adding a link to the asset
+  * `Include` will copy the content of the asset into the document
+  * `Default` will inherit the default behavior
+
+```json
+{
+  "markdownConverter.Document.Design.StyleSheets": {
+    "./css/styles.css": "Default",
+    "/home/scott/styles.css": "Link",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css": "Include"
+  },
+  "markdownConverter.Document.Design.Scripts": {
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js": "Default"
+  }
+}
+```
+
+### Insertion
+Basically, there are two ways on how to add an asset to the document.
+You can either add a link to the asset or have its content copied to the document.
+
+You can choose how to treat assets by default based on their paths using the `markdownConverter.Document.Design.StyleInsertion` and the `markdownConverter.Document.Design.ScriptInsertion` options.
+
+```json
+{
+  "markdownConverter.Document.Design.StyleInsertion": {
+    "Link": "Link",
+    "AbsolutePath": "Link",
+    "RelativePath": "Include"
+  },
+  "markdownConverter.Document.Design.ScriptInsertion": {
+    "Link": "Include",
+    "AbsolutePath": "Include",
+    "RelativePath": "Default"
+  }
+}
+```
+
+By default, `MarkdownConverter` will include assets located at absolute and relative paths and add links to assets located at URLs.
+
 ## Settings
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
 
+  - `markdownConverter.ChromiumExecutablePath`:  
+    Normally, `MarkdownConverter` will download a copy of Chromium. This option allows you to choose a custom chromium-installation instead.
+  - `markdownConverter.ChromiumArgs`:  
+    Allows you to pass specific arguments to chromium for the conversion (such as `--no-sandbox` or `--disable-gpu`).
   - `markdownConverter.DestinationPattern`:  
     Allows you to specify a pattern for resolving the destination-path. Following variables are substituted:
     - `${workspaceFolder}`: Either the path to the `workspace` or the directory which contains the document.
@@ -111,12 +249,12 @@ This is a list of the most important settings. To see all of them, install the e
     The date-format to apply to all dates by default.
   - `markdownConverter.DateFormats`:  
     A set of names and their corresponding custom date-format.
-  - `markdownConverter.ChromiumArgs`:  
-    Allows you to pass specific arguments to chromium for the conversion (such as `--no-sandbox` or `--disable-gpu`).
   - `markdownConverter.Parser.SystemParserEnabled`:  
     This setting allows you to enable or disable the usage of `vscode`s internal markdown-parser. Using the internal markdown-parser might be very useful to you as it grants you access to all markdown-plugin extensions installed to your vscode.
   - `markdownConverter.Parser.Toc.Enabled`:  
     Allows you to automatically include a table-of-contents for your document in your converted files.
+  - `markdownConverter.Parser.Toc.Indicator`:  
+    The regular expression to replace with the table of contents.
   - `markdownConverter.Document.Attributes`:  
     Using this setting you can specify default attributes which are applied to all your documents.
   - `markdownConverter.HeaderTemplate` and `markdownConverter.FooterTemplate`:  
@@ -127,5 +265,8 @@ This is a list of the most important settings. To see all of them, install the e
     A set of stylesheets to include in your document.
 
 <!--- References -->
-[VSCode]: https://code.visualstudio.com/
+[vscode]: https://github.com/microsoft/vscode
 [Handlebars]: https://handlebarsjs.com/
+[Markdown Preview Mermaid Support]: https://github.com/shd101wyy/vscode-markdown-preview-enhanced
+[Markdown Footnote]: https://marketplace.visualstudio.com/items?itemName=houkanshan.vscode-markdown-footnote
+[Markdown Emoji]: https://marketplace.visualstudio.com/items?itemName=bierner.markdown-emoji

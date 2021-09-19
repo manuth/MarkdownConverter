@@ -1,26 +1,30 @@
 import { ok, strictEqual, throws } from "assert";
-import { CultureInfo } from "@manuth/resource-manager";
+import { parse } from "path";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import fm = require("front-matter");
-import { stat, writeFile } from "fs-extra";
+import { writeFile } from "fs-extra";
+import { create } from "handlebars";
 import MarkdownIt = require("markdown-it");
+import { Random } from "random-js";
 import { TextDocument, workspace } from "vscode";
-import { stringify } from "yamljs";
+import YAML = require("yamljs");
 import { StyleSheet } from "../../../../System/Documents/Assets/StyleSheet";
 import { WebScript } from "../../../../System/Documents/Assets/WebScript";
+import { AttributeKey } from "../../../../System/Documents/AttributeKey";
 import { Document } from "../../../../System/Documents/Document";
-import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
+import { DocumentFragment } from "../../../../System/Documents/DocumentFragment";
 
 /**
- * Registers tests for the `Document` class.
+ * Registers tests for the {@link Document `Document`} class.
  */
 export function DocumentTests(): void
 {
     suite(
-        "Document",
+        nameof(Document),
         () =>
         {
+            let random: Random;
             let content: string;
             let attributes: Record<string, any>;
             let rawContent: string;
@@ -28,12 +32,27 @@ export function DocumentTests(): void
             let parser: MarkdownIt;
             let textDocument: TextDocument;
             let untitledTextDocument: TextDocument;
-            let document: Document;
-            let untitledDocument: Document;
+            let document: TestDocument;
+            let untitledDocument: TestDocument;
+
+            /**
+             * Provides an implementation of the {@link Document `Document`} class for
+             */
+            class TestDocument extends Document
+            {
+                /**
+                 * @inheritdoc
+                 */
+                public override get Body(): DocumentFragment
+                {
+                    return super.Body;
+                }
+            }
 
             suiteSetup(
                 async () =>
                 {
+                    random = new Random();
                     content = "This is a test.";
 
                     attributes = {
@@ -41,7 +60,7 @@ export function DocumentTests(): void
                         date: new Date("1291-08-01")
                     };
 
-                    rawContent = `---\n${stringify(attributes).trim()}\n---\n${content}`;
+                    rawContent = `---\n${YAML.stringify(attributes).trim()}\n---\n${content}`;
 
                     tempFile = new TempFile(
                         {
@@ -69,14 +88,16 @@ export function DocumentTests(): void
             setup(
                 () =>
                 {
-                    document = new Document(textDocument, parser);
-                    untitledDocument = new Document(untitledTextDocument, parser);
+                    document = new TestDocument(parser, textDocument);
+                    untitledDocument = new TestDocument(parser, untitledTextDocument);
                 });
 
             suite(
-                "constructor",
+                nameof(Document.constructor),
                 () =>
                 {
+                    let untitledName = "Untitled";
+
                     test(
                         "Checking whether the properties are set correctly…",
                         async () =>
@@ -90,10 +111,51 @@ export function DocumentTests(): void
                             strictEqual(document.FileName, textDocument.fileName);
                             ok(!untitledDocument.FileName);
                         });
+
+                    test(
+                        "Checking whether the title is loaded from the document correctly…",
+                        () =>
+                        {
+                            strictEqual(document.Title, parse(textDocument.fileName).name);
+                            strictEqual(untitledDocument.Title, untitledTextDocument.uri.path);
+                        });
+
+                    test(
+                        `Checking whether the title of the document is set to \`${untitledName}\` if no document is passed…`,
+                        () =>
+                        {
+                            strictEqual(new Document(new MarkdownIt()).Title, untitledName);
+                        });
+
+                    test(
+                        "Checking whether the initialized meta-template includes the document-title…",
+                        async function()
+                        {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
+                            let rendered = await document.Meta.Render();
+                            let cheerio = load(rendered);
+                            strictEqual(cheerio("title").text(), document.Title);
+                        });
                 });
 
             suite(
-                "RawContent",
+                nameof<TestDocument>((document) => document.Title),
+                () =>
+                {
+                    test(
+                        `Checking whether the \`${AttributeKey.Title}\`-attribute overrides the actual title…`,
+                        () =>
+                        {
+                            document.Attributes[AttributeKey.Title] = random.string(10);
+                            untitledDocument.Attributes[AttributeKey.Title] = random.string(10);
+                            strictEqual(document.Title, document.Attributes[AttributeKey.Title]);
+                            strictEqual(untitledDocument.Title, untitledDocument.Attributes[AttributeKey.Title]);
+                        });
+                });
+
+            suite(
+                nameof<TestDocument>((document) => document.RawContent),
                 () =>
                 {
                     let originalContent: string;
@@ -127,7 +189,7 @@ export function DocumentTests(): void
                         "Checking whether the raw content is parsed correctly…",
                         () =>
                         {
-                            document.RawContent = `---\n${stringify(attributes)}---\n${content}`;
+                            document.RawContent = `---\n${YAML.stringify(attributes)}---\n${content}`;
                             strictEqual(document.Content, content);
 
                             for (let key of Object.keys(attributes))
@@ -149,159 +211,160 @@ export function DocumentTests(): void
                 });
 
             suite(
-                "Render",
+                nameof<TestDocument>((document) => document.Content),
+                () =>
+                {
+                    test(
+                        `Checking whether the \`${nameof<TestDocument>((d) => d.Content)}\` gets and sets the content from the \`${nameof<TestDocument>((d) => d.Body)}\`-fragment…`,
+                        () =>
+                        {
+                            let content = random.string(10);
+                            document.Content = content;
+                            strictEqual(document.Body.Content, content);
+                            strictEqual(document.Content, document.Body.Content);
+                        });
+                });
+
+            suite(
+                nameof<TestDocument>((document) => document.Template),
+                () =>
+                {
+                    let mockedView: Record<string, unknown>;
+                    let sections: string[];
+                    let calledSections: string[];
+
+                    suiteSetup(
+                        () =>
+                        {
+                            sections = [
+                                "meta",
+                                "styles",
+                                "content",
+                                "scripts"
+                            ];
+                        });
+
+                    setup(
+                        () =>
+                        {
+                            mockedView = {};
+                            calledSections = [];
+
+                            for (let section of sections)
+                            {
+                                Object.defineProperty(
+                                    mockedView,
+                                    section,
+                                    {
+                                        get: () =>
+                                        {
+                                            calledSections.push(section);
+                                            return `<${section} />`;
+                                        }
+                                    });
+                            }
+                        });
+
+                    test(
+                        "Checking whether the template includes all expected content-sections…",
+                        () =>
+                        {
+                            create().compile(document.Template)(mockedView);
+
+                            ok(
+                                sections.every(
+                                    (section) =>
+                                    {
+                                        return calledSections.includes(section);
+                                    }));
+                        });
+
+                    test(
+                        "Checking whether HTMl-characters inside the content-sections aren't escaped…",
+                        () =>
+                        {
+                            let result = create().compile(document.Template)(mockedView);
+
+                            for (let section of calledSections)
+                            {
+                                load(result).root().has(section);
+                            }
+                        });
+                });
+
+            suite(
+                nameof<TestDocument>((document) => document.Render),
                 () =>
                 {
                     let styleSheet: string;
                     let script: string;
-                    let content: string;
 
                     suiteSetup(
                         () =>
                         {
                             styleSheet = "https://this.is.a/test.css";
                             script = "https://this.is.an/other.test.js";
-                            content = "";
-
-                            for (let key of Object.keys(attributes))
-                            {
-                                content += `{{${key}}}\n\n`;
-                            }
-                        });
-
-                    test(
-                        "Checking whether timestamps about the document are injected correctly…",
-                        async () =>
-                        {
-                            document.DefaultDateFormat = null;
-                            document.Content = "{{CreationDate}}";
-                            strictEqual(load(await document.Render())("body").text().trim(), `${(await stat(document.FileName)).birthtime}`);
-                            document.Content = "{{ChangeDate}}";
-                            strictEqual(load(await document.Render())("body").text().trim(), `${(await stat(document.FileName)).mtime}`);
                         });
 
                     test(
                         "Checking whether stylesheets are added to the rendered document…",
-                        async () =>
+                        async function()
                         {
-                            document.StyleSheets.push(new StyleSheet(styleSheet));
-
-                            ok(
-                                new RegExp(
-                                    `<link.*?type="text/css".*?href="${styleSheet}".*?/>`,
-                                    "g").test(await document.Render()));
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
+                            let asset = new StyleSheet(styleSheet);
+                            document.StyleSheets.push(asset);
+                            ok((await document.Render()).includes(await asset.Render()));
                         });
 
                     test(
                         "Checking whether scripts are added to the rendered document…",
-                        async () =>
+                        async function()
                         {
-                            document.Scripts.push(new WebScript(script));
-
-                            ok(
-                                new RegExp(
-                                    `<script.*?src="${script}".*?>.*?</script>`,
-                                    "g").test(await document.Render()));
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
+                            let asset = new WebScript(script);
+                            document.Scripts.push(asset);
+                            ok((await document.Render()).includes(await asset.Render()));
                         });
 
                     test(
-                        "Checking whether Document.Template is applied using Mustache…",
-                        async () =>
+                        "Checking whether the metadata-section is added to the rendered document…",
+                        async function()
                         {
-                            document.Template = "hello{{content}}world";
-                            ok(/^hello[\s\S]*world$/gm.test(await document.Render()));
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
+                            ok((await document.Render()).includes(await document.Meta.Render()));
                         });
 
                     test(
-                        "Checking whether curly braces can be escaped…",
-                        async () =>
+                        "Checking whether the actual contents of the document are present…",
+                        async function()
                         {
-                            let pattern = "{{test}}";
-                            document.Content = `\\${pattern}`;
-                            document.Attributes.test = "test-value";
-                            ok(load(await document.Render())(`*:contains(${JSON.stringify(pattern)})`).length > 0);
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
+                            ok((await document.Render()).includes(await document.Body.Render()));
                         });
 
                     test(
-                        "Checking whether non-date attributes are substituted correctly…",
-                        async () =>
+                        `Checking whether \`${nameof(Document)}.${nameof<TestDocument>((d) => d.Template)}\` is applied using Handlebars…`,
+                        async function()
                         {
-                            document.Content = content;
-
-                            for (let key of Object.keys(attributes))
-                            {
-                                if (!(attributes[key] instanceof Date))
-                                {
-                                    (await document.Render()).includes(attributes[key]);
-                                }
-                            }
-                        });
-
-                    test(
-                        "Checking whether date-attributes are formatted using the DateTimeFormatter…",
-                        async () =>
-                        {
-                            document.Content = content;
-
-                            for (let key of Object.keys(attributes))
-                            {
-                                if (attributes[key] instanceof Date)
-                                {
-                                    (await document.Render()).includes(
-                                        new DateTimeFormatter(document.Locale).Format(document.DefaultDateFormat, attributes[key]));
-                                }
-                            }
-                        });
-
-                    test(
-                        "Checking whether custom date-formats can be specified…",
-                        async () =>
-                        {
-                            let dateKey = "testDate";
-                            let testDate = new Date();
-                            let testFormatName = "myFormat";
-                            let testFormat = "d";
-                            document.DefaultDateFormat = testFormatName;
-                            document.Content = `{{ ${dateKey} }}`;
-                            document.Attributes[dateKey] = testDate;
-                            document.DateFormats[testFormatName] = testFormat;
-                            strictEqual(load(await document.Render())("body").text().trim(), `${testDate.getDate()}`);
-                        });
-
-                    test(
-                        "Checking whether dates can be formatted individually…",
-                        async () =>
-                        {
-                            let dateKey = "testDate";
-                            let testDate = new Date();
-                            let testFormat = "M";
-                            document.DefaultDateFormat = "d";
-                            document.Content = `{{ FormatDate ${dateKey} ${JSON.stringify(testFormat)} }}`;
-                            document.Attributes[dateKey] = testDate;
-                            strictEqual(load(await document.Render())("body").text().trim(), `${testDate.getMonth() + 1}`);
-                        });
-
-                    test(
-                        "Checking whether the locale of the document affects the date-format…",
-                        async () =>
-                        {
-                            document.Content = content;
-                            document.DefaultDateFormat = "dddd";
-
-                            let englishContent: string;
-                            let germanContent: string;
-
-                            document.Locale = new CultureInfo("en");
-                            englishContent = await document.Render();
-                            document.Locale = new CultureInfo("de");
-                            germanContent = await document.Render();
-                            ok(englishContent !== germanContent);
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
+                            let template = "hello{{content}}world";
+                            let content = await document.Body.Render();
+                            let rendered = create().compile(template)({ content });
+                            document.Template = template;
+                            strictEqual(await document.Render(), rendered);
                         });
 
                     test(
                         "Checking whether markdown is parsed when rendering the document…",
-                        async () =>
+                        async function()
                         {
+                            this.slow(2 * 1000);
+                            this.timeout(4 * 1000);
                             document.Content = "**important**";
                             ok((await document.Render()).includes(parser.renderInline(document.Content)));
                         });

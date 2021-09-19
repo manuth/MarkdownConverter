@@ -2,12 +2,12 @@ import { CultureInfo } from "@manuth/resource-manager";
 import { Resources } from "../../Properties/Resources";
 
 /**
- * Provides the functionallity to format a date.
+ * Provides the functionality to format a date.
  */
 export class DateTimeFormatter
 {
     /**
-     * The locale to format the date.
+     * The locale to format the date in.
      */
     private locale: CultureInfo = null;
 
@@ -17,10 +17,10 @@ export class DateTimeFormatter
     private pattern = /d{1,4}|f{1,7}|\.?F{1,7}|g{1,2}|h{1,2}|H{1,2}|m{1,2}|M{1,4}|s{1,2}|t{1,2}|y+|:|\/|o|\\.|'[^']*'|"[^"]*"|\\./g;
 
     /**
-     * Initializes a new instance of the DateTimeFormatter class with a locale and a resource-path.
+     * Initializes a new instance of the {@link DateTimeFormatter `DateTimeFormatter`} class.
      *
      * @param locale
-     * The locale to format the date.
+     * The locale to format the date in.
      */
     public constructor(locale?: CultureInfo)
     {
@@ -31,7 +31,7 @@ export class DateTimeFormatter
     }
 
     /**
-     * Gets or sets the locale to format the date.
+     * Gets or sets the locale to format the date in.
      */
     public get Locale(): CultureInfo
     {
@@ -204,11 +204,14 @@ export class DateTimeFormatter
     /**
      * Gets a date-time resource.
      *
+     * @template T
+     * The type of the resource to get.
+     *
      * @param name
      * The name of the resource to get.
      *
      * @returns
-     * The resource with the specified `name`.
+     * The date-time resource with the specified {@link name `name`}.
      */
     protected GetResource<T>(name: string): T
     {

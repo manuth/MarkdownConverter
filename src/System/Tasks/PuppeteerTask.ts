@@ -1,19 +1,20 @@
 import { pathExists } from "fs-extra";
-import { executablePath } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import { CancellationToken, Progress } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
+import { Settings } from "../../Properties/Settings";
 import { ChromiumNotFoundException } from "./ChromiumNotFoundException";
 import { IProgressState } from "./IProgressState";
 import { Task } from "./Task";
 
 /**
- * Represents a task which depends on
+ * Represents a task which depends on `puppeteer`.
  */
 export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
 {
     /**
-     * Initializes a new instance of the `PuppeteerTask` class.
+     * Initializes a new instance of the {@link PuppeteerTask `PuppeteerTask`} class.
      *
      * @param extension
      * The extension this task belongs to.
@@ -26,7 +27,7 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
     /**
      * Gets or sets the extension this task belongs to.
      */
-    public get Extension(): MarkdownConverterExtension
+    public override get Extension(): MarkdownConverterExtension
     {
         return super.Extension;
     }
@@ -45,7 +46,10 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
      */
     public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
-        if (await pathExists(executablePath()))
+        if (
+            await pathExists(
+                Settings.Default.ChromiumExecutablePath ??
+                (puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
         {
             await this.ExecuteTask(progressReporter, cancellationToken, fileReporter);
         }
@@ -67,5 +71,5 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
      * @param fileReporter
      * A component for reporting converted files.
      */
-    protected abstract async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>;
+    protected abstract ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>;
 }

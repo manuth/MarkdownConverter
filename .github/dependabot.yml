@@ -5,4 +5,5 @@ updates:
     package-ecosystem: npm
     target-branch: dev
     schedule:
-      timezone: 05:00 UTC
+      interval: daily
+      timezone: Europe/Zurich

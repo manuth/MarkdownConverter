@@ -1,36 +1,40 @@
 /**
- * Represents an Exception
+ * Represents an exception.
  */
 export class Exception extends Error
 {
     /**
-     * A collection of key/value pairs that provide additional user-defined information about the exception.
+     * A collection of additional user-defined information about the exception.
      */
     private data: any[];
 
     /**
      * The message of the exception.
      */
-    private exceptionMessage: string;
+    private exceptionMessage: string = null;
 
     /**
-     * The Exception instance that caused the current exception.
+     * The {@link Exception `Exception`} instance that caused the current exception.
      */
     private innerException: Exception = null;
 
     /**
-     * Initializes a new instance of the `Exception`.
+     * Initializes a new instance of the {@link Exception `Exception`}.
      *
      * @param message
      * The error message that explains the reason for the exception.
      *
      * @param innerException
-     * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
+     * The exception that is the cause of the current exception, or `null` if no inner exception is specified.
      */
     public constructor(message?: string, innerException?: Exception)
     {
         super();
-        this.exceptionMessage = message;
+
+        if (message)
+        {
+            this.exceptionMessage = message;
+        }
 
         if (innerException)
         {
@@ -39,7 +43,7 @@ export class Exception extends Error
     }
 
     /**
-     * Gets a collection of key/value pairs that provide additional user-defined information about the exception.
+     * Gets a collection of additional user-defined information about the exception.
      */
     public get Data(): any[]
     {
@@ -47,7 +51,7 @@ export class Exception extends Error
     }
 
     /**
-     * Gets the Exception instance that caused the current exception.
+     * Gets the {@link Exception `Exception`} instance that caused the current exception.
      */
     public get InnerException(): Exception
     {
@@ -65,7 +69,7 @@ export class Exception extends Error
     /**
      * @inheritdoc
      */
-    public get message(): string
+    public override get message(): string
     {
         return this.Message;
     }
@@ -84,7 +88,7 @@ export class Exception extends Error
      * @returns
      * A string representing this object.
      */
-    public toString(): string
+    public override toString(): string
     {
         return this.Message;
     }

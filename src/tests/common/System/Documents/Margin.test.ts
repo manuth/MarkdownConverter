@@ -2,12 +2,12 @@ import { strictEqual } from "assert";
 import { Margin } from "../../../../System/Documents/Margin";
 
 /**
- * Registers tests for the `Margin` class.
+ * Registers tests for the {@link Margin `Margin`} class.
  */
 export function MarginTests(): void
 {
     suite(
-        "Margin",
+        nameof(Margin),
         () =>
         {
             let testValue1: string;
@@ -25,7 +25,7 @@ export function MarginTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(Margin.constructor),
                 () =>
                 {
                     test(

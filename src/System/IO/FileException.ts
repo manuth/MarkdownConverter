@@ -14,7 +14,7 @@ export class FileException extends IOException
     public Path: string;
 
     /**
-     * Initializes a new instance of the FileException class with a message and a path.
+     * Initializes a new instance of the {@link FileException `FileException`}.
      *
      * @param message
      * Either the error message that explains the reason for the exception or `null` to use the default message.
@@ -23,7 +23,7 @@ export class FileException extends IOException
      * The path to the file which caused the exception.
      *
      * @param innerException
-     * The exception that is the cause of the current exception, or a `null` reference if no inner exception is specified.
+     * The exception that is the cause of the current exception, or `null` if no inner exception is specified.
      */
     public constructor(message?: string, path?: string, innerException?: Exception)
     {
@@ -34,8 +34,8 @@ export class FileException extends IOException
     /**
      * @inheritdoc
      */
-    public get Message(): string
+    public override get Message(): string
     {
-        return super.Message || format(Resources.Resources.Get("FileException"), this.Path);
+        return super.Message ?? format(Resources.Resources.Get("FileException"), this.Path);
     }
 }

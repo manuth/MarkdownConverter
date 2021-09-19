@@ -10,8 +10,17 @@
         "plugins": [
             {
                 "name": "@manuth/typescript-eslint-plugin"
+            },
+            {
+                "transform": "ts-nameof",
+                "type": "raw"
             }
         ],
-        "target": "ES6"
+        "target": "ES6",
+        "paths": {
+            "highlight.js": [
+                "./node_modules/@types/highlight.js"
+            ]
+        }
     }
 }

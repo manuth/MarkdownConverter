@@ -3,7 +3,7 @@ import fm = require("front-matter");
 import { renameSync } from "fs-extra";
 import format = require("string-template");
 import { join, parse } from "upath";
-import { CancellationToken, Progress, TextDocument, window, workspace } from "vscode";
+import { CancellationToken, commands, Progress, TextDocument, window, workspace } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Resources } from "../../Properties/Resources";
@@ -16,7 +16,7 @@ import { IProgressState } from "./IProgressState";
 export class ChainTask extends ConvertAllTask
 {
     /**
-     * Initializes a new instance of the `ChainTask` class.
+     * Initializes a new instance of the {@link ChainTask `ChainTask`} class.
      *
      * @param extension
      * The extension the task belongs to.
@@ -29,7 +29,7 @@ export class ChainTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    public get Title(): string
+    public override get Title(): string
     {
         return Resources.Resources.Get<string>("TaskTitle.Chain");
     }
@@ -37,7 +37,7 @@ export class ChainTask extends ConvertAllTask
     /**
      * @inheritdoc
      */
-    public get Cancellable(): boolean
+    public override get Cancellable(): boolean
     {
         return false;
     }
@@ -54,10 +54,10 @@ export class ChainTask extends ConvertAllTask
      * @param fileReporter
      * A component for reporting converted files.
      */
-    protected async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
+    protected override async ExecuteTask(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         let document: TextDocument;
-        let documentName: string;
+        let documentName: string = null;
         let documents: TextDocument[] = [];
         let contents: string[];
 
@@ -99,10 +99,10 @@ export class ChainTask extends ConvertAllTask
         document = await workspace.openTextDocument(
             {
                 language: "markdown",
-                content: contents.join(EOL + EOL)
+                content: contents.join(`${EOL}${EOL}<div style="page-break-after: always"></div>${EOL}${EOL}`)
             });
 
-        return this.ConversionRunner.Execute(
+        await this.ConversionRunner.Execute(
             document,
             progressReporter,
             cancellationToken,
@@ -116,5 +116,8 @@ export class ChainTask extends ConvertAllTask
                     fileReporter?.report(file);
                 }
             });
+
+        await window.showTextDocument(document);
+        await commands.executeCommand("workbench.action.revertAndCloseActiveEditor");
     }
 }

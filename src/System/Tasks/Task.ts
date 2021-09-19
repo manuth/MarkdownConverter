@@ -16,7 +16,7 @@ export abstract class Task<TExtension extends Extension = Extension>
     private extension: TExtension;
 
     /**
-     * Initializes a new instance of the `Task` class.
+     * Initializes a new instance of the {@link Task `Task`} class.
      *
      * @param extension
      * The extension this task belongs to.
@@ -56,5 +56,5 @@ export abstract class Task<TExtension extends Extension = Extension>
      * @param cancellationToken
      * A component for handling cancellation-requests.
      */
-    public abstract async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken): Promise<void>;
+    public abstract Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken): Promise<void>;
 }

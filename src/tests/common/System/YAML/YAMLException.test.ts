@@ -2,25 +2,29 @@ import { notStrictEqual, ok, strictEqual } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
+import { Random } from "random-js";
 import { Resources } from "../../../../Properties/Resources";
 import { Exception } from "../../../../System/Exception";
-import { IMark } from "../../../../System/YAML/IMark";
+import { IMarker } from "../../../../System/YAML/IMarker";
 import { YAMLException } from "../../../../System/YAML/YAMLException";
 
 /**
- * Registers tests for the `YAMLException` class.
+ * Registers tests for the {@link YAMLException `YAMLException`} class.
  */
 export function YAMLExceptionTests(): void
 {
     suite(
-        "YAMLException",
+        nameof(YAMLException),
         () =>
         {
+            let random: Random;
             let yamlError: any;
 
             suiteSetup(
                 () =>
                 {
+                    random = new Random();
+
                     try
                     {
                         (fm as any)(
@@ -37,7 +41,7 @@ export function YAMLExceptionTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(YAMLException.constructor),
                 () =>
                 {
                     test(
@@ -47,46 +51,33 @@ export function YAMLExceptionTests(): void
                             let exception = new YAMLException(yamlError);
                             ok(exception.Name);
                             ok(exception.Message);
-                            ok(exception.Mark);
+                            ok(exception.Marker);
                             ok(exception.Reason);
+                            strictEqual(exception.InnerException, yamlError);
                         });
 
                     test(
                         "Checking whether custom values can be passed…",
                         () =>
                         {
-                            let name = "name";
-                            let reason = "reason";
-                            let mark: IMark = new Object() as any;
-                            let message = "message";
+                            let name = random.string(10);
+                            let reason = random.string(15);
+                            let marker: IMarker = new Object() as any;
+                            let message = random.string(25);
                             let innerException = new Exception();
-                            let exception = new YAMLException(name, reason, mark, message, innerException);
+                            let exception = new YAMLException(name, reason, marker, message, innerException);
                             strictEqual(exception.Name, name);
                             strictEqual(exception.Message, message);
-                            strictEqual(exception.Mark, mark);
+                            strictEqual(exception.Marker, marker);
                             strictEqual(exception.Reason, reason);
                             strictEqual(exception.InnerException, innerException);
                         });
                 });
 
             suite(
-                "Message",
+                nameof<YAMLException>((exception) => exception.Message),
                 () =>
                 {
-                    let originalLocale: CultureInfo;
-
-                    suiteSetup(
-                        () =>
-                        {
-                            originalLocale = Resources.Culture;
-                        });
-
-                    suiteTeardown(
-                        () =>
-                        {
-                            Resources.Culture = originalLocale;
-                        });
-
                     test(
                         "Checking whether the message is localized…",
                         () =>

@@ -3,12 +3,12 @@ import { CultureInfo } from "@manuth/resource-manager";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
 
 /**
- * Registers tests for the `DateTimeFormatter` class.
+ * Registers tests for the {@link DateTimeFormatter `DateTimeFormatter`} class.
  */
 export function DateTimeFormatterTests(): void
 {
     suite(
-        "DateTimeFormatter",
+        nameof(DateTimeFormatter),
         () =>
         {
             let formatter: DateTimeFormatter;
@@ -22,11 +22,11 @@ export function DateTimeFormatterTests(): void
                 });
 
             suite(
-                "Locale",
+                nameof<DateTimeFormatter>((formatter) => formatter.Locale),
                 () =>
                 {
                     test(
-                        "Checking whether the `Locale` affects the formated dates…",
+                        `Checking whether the \`${nameof<DateTimeFormatter>((f) => f.Locale)}\` affects the formatted dates…`,
                         () =>
                         {
                             formatter.Locale = new CultureInfo("en");
@@ -37,7 +37,7 @@ export function DateTimeFormatterTests(): void
                 });
 
             suite(
-                "Format",
+                nameof<DateTimeFormatter>((formatter) => formatter.Format),
                 () =>
                 {
                     let originalLocale: CultureInfo;
@@ -88,46 +88,45 @@ export function DateTimeFormatterTests(): void
                         () =>
                         {
                             let twelveDays: Date;
-                            let zeroMiliSeconds: Date;
+                            let zeroMilliseconds: Date;
                             let beforeChrist: Date;
                             let elevenHours: Date;
                             let fourteenHours: Date;
                             let thirteenMinutes: Date;
                             let twelveMonths: Date;
                             let twentySeconds: Date;
-                            let oneYear: Date;
+                            let years: Date;
                             let minusOneYear: Date;
 
                             suiteSetup(
                                 () =>
                                 {
                                     twelveDays = new Date(date);
-                                    zeroMiliSeconds = new Date(date);
+                                    zeroMilliseconds = new Date(date);
                                     beforeChrist = new Date(date);
                                     elevenHours = new Date(date);
                                     fourteenHours = new Date(date);
                                     thirteenMinutes = new Date(date);
                                     twelveMonths = new Date(date);
                                     twentySeconds = new Date(date);
-                                    oneYear = new Date(date);
+                                    years = new Date(date);
                                     minusOneYear = new Date(date);
                                     twelveDays.setDate(12);
-                                    zeroMiliSeconds.setMilliseconds(0);
+                                    zeroMilliseconds.setMilliseconds(0);
                                     beforeChrist.setFullYear(-date.getFullYear());
                                     elevenHours.setHours(11);
                                     fourteenHours.setHours(14);
                                     thirteenMinutes.setMinutes(13);
                                     twelveMonths.setMonth(11);
                                     twentySeconds.setSeconds(20);
-                                    oneYear.setFullYear(1201);
+                                    years.setFullYear(1201);
                                     minusOneYear.setFullYear(-1);
                                 });
 
                             test(
-                                "Checking whether custom format strings are processed correctly…",
+                                "Checking whether custom date-formats are processed correctly…",
                                 function()
                                 {
-                                    this.slow(200);
                                     strictEqual(formatter.Format("d", date), "1");
                                     strictEqual(formatter.Format("dd", date), "01");
                                     strictEqual(formatter.Format("d", twelveDays), "12");
@@ -139,8 +138,8 @@ export function DateTimeFormatterTests(): void
                                     strictEqual(formatter.Format("fffff", date), "13800");
                                     strictEqual(formatter.Format("ffffff", date), "138000");
                                     strictEqual(formatter.Format("fffffff", date), "1380000");
-                                    strictEqual(formatter.Format("s.F", zeroMiliSeconds), "8");
-                                    strictEqual(formatter.Format("F", zeroMiliSeconds), "");
+                                    strictEqual(formatter.Format("s.F", zeroMilliseconds), "8");
+                                    strictEqual(formatter.Format("F", zeroMilliseconds), "");
                                     strictEqual(formatter.Format("F", date), "1");
                                     strictEqual(formatter.Format("FF", date), "13");
                                     strictEqual(formatter.Format("FFF", date), "138");
@@ -176,10 +175,10 @@ export function DateTimeFormatterTests(): void
                                     strictEqual(formatter.Format("yy", date), "91");
                                     strictEqual(formatter.Format("yyy", date), "291");
                                     strictEqual(formatter.Format("yyyy", date), "1291");
-                                    strictEqual(formatter.Format("y", oneYear), "1");
-                                    strictEqual(formatter.Format("yy", oneYear), "01");
-                                    strictEqual(formatter.Format("yyy", oneYear), "201");
-                                    strictEqual(formatter.Format("yyyy", oneYear), "1201");
+                                    strictEqual(formatter.Format("y", years), "1");
+                                    strictEqual(formatter.Format("yy", years), "01");
+                                    strictEqual(formatter.Format("yyy", years), "201");
+                                    strictEqual(formatter.Format("yyyy", years), "1201");
                                     strictEqual(formatter.Format("y", minusOneYear), "1");
                                     strictEqual(formatter.Format("yy", minusOneYear), "01");
                                     strictEqual(formatter.Format("yyy", minusOneYear), "001");
@@ -193,7 +192,6 @@ export function DateTimeFormatterTests(): void
                                 "Checking whether localizable custom format strings are processed correctly…",
                                 function()
                                 {
-                                    this.slow(125);
                                     formatter.Locale = new CultureInfo("en");
                                     strictEqual(formatter.Format("ddd", date), "Wed");
                                     strictEqual(formatter.Format("dddd", date), "Wednesday");

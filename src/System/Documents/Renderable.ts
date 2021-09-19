@@ -9,7 +9,7 @@ export abstract class Renderable
     private content: string;
 
     /**
-     * Initializes a new instance of the `Renderable` class.
+     * Initializes a new instance of the {@link Renderable `Renderable`} class.
      *
      * @param content
      * The content of the renderable component.
@@ -41,36 +41,5 @@ export abstract class Renderable
      * @returns
      * The rendered text.
      */
-    public async Render(): Promise<string>
-    {
-        return this.RenderText(this.Content);
-    }
-
-    /**
-     * Renders a text using a custom renderer.
-     *
-     * @param renderer
-     * The renderer to render the text.
-     *
-     * @param text
-     * The text to render.
-     *
-     * @returns
-     * The rendered text.
-     */
-    protected async RenderTextBy(renderer: Renderable, text: string): Promise<string>
-    {
-        return renderer.RenderText(text);
-    }
-
-    /**
-     * Renders a text.
-     *
-     * @param text
-     * The text to render.
-     *
-     * @returns
-     * The rendered text.
-     */
-    protected abstract async RenderText(text: string): Promise<string>;
+    public abstract Render(): Promise<string>;
 }

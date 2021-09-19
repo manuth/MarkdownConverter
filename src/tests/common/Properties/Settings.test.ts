@@ -1,19 +1,23 @@
 import { deepStrictEqual, ok, strictEqual } from "assert";
+import { Random } from "random-js";
+import { createSandbox, SinonSandbox } from "sinon";
 import { env } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { ISettings } from "../../../Properties/ISettings";
 import { Settings } from "../../../Properties/Settings";
-import { CustomPaperFormat } from "../../../System/Documents/CustomPaperFormat";
+import { AssetURLType } from "../../../System/Documents/Assets/AssetURLType";
+import { InsertionType } from "../../../System/Documents/Assets/InsertionType";
+import { CustomPageFormat } from "../../../System/Documents/CustomPageFormat";
 import { EmojiType } from "../../../System/Documents/EmojiType";
 import { ListType } from "../../../System/Documents/ListType";
 import { Margin } from "../../../System/Documents/Margin";
-import { PaperOrientation } from "../../../System/Documents/PaperOrientation";
+import { PageOrientation } from "../../../System/Documents/PageOrientation";
 import { StandardizedFormatType } from "../../../System/Documents/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../../../System/Documents/StandardizedPaperFormat";
+import { StandardizedPageFormat } from "../../../System/Documents/StandardizedPageFormat";
 import { ITestContext } from "../../ITestContext";
 
 /**
- * Registers tests for the `Settings` class.
+ * Registers tests for the {@link Settings `Settings`} class.
  *
  * @param context
  * The test-context.
@@ -21,83 +25,189 @@ import { ITestContext } from "../../ITestContext";
 export function SettingTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "Settings",
+        nameof(Settings),
         () =>
         {
+            let random: Random;
+            let sandbox: SinonSandbox;
             let settings: Settings;
+            let marginSetting = "Document.Paper.Margin" as const;
+            let paperFormatSetting = "Document.Paper.PaperFormat" as const;
+            let tocSetting = "Parser.Toc.Enabled" as const;
+            let tocTypeSetting = "Parser.Toc.ListType" as const;
 
             suiteSetup(
                 () =>
                 {
-                    settings = Settings.Default;
+                    random = new Random();
+                    settings = new Settings();
                 });
 
+            setup(
+                () =>
+                {
+                    sandbox = createSandbox();
+                });
+
+            teardown(
+                () =>
+                {
+                    sandbox.restore();
+                });
+
+            /**
+             * Checks whether the settings resolved by the {@link settingResolver `settingResolver`} work correctly.
+             *
+             * @param settingName
+             * The name of the setting to check.
+             *
+             * @param settingResolver
+             * Resolves the settings to check.
+             */
+            function CheckInsertionTypes(settingName: keyof ISettings, settingResolver: () => Partial<Record<AssetURLType, InsertionType>>): void
+            {
+                let urlTypes = [
+                    AssetURLType.Link,
+                    AssetURLType.RelativePath,
+                    AssetURLType.AbsolutePath
+                ];
+
+                let insertionTypes = [
+                    InsertionType.Default,
+                    InsertionType.Link,
+                    InsertionType.Include
+                ];
+
+                let insertionTypeSettings: Map<AssetURLType, InsertionType> = new Map();
+                let configuredSettings: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>> = {};
+                context.Settings[settingName] = configuredSettings as never;
+
+                for (let urlType of urlTypes)
+                {
+                    if (random.bool())
+                    {
+                        let urlTypeName = AssetURLType[urlType] as keyof typeof AssetURLType;
+                        let insertionType = random.pick(insertionTypes);
+                        let insertionTypeName = InsertionType[insertionType] as keyof typeof InsertionType;
+                        insertionTypeSettings.set(urlType, insertionType);
+                        configuredSettings[urlTypeName] = insertionTypeName;
+                    }
+                }
+
+                for (let urlType of urlTypes)
+                {
+                    strictEqual(
+                        urlType in settingResolver(),
+                        insertionTypeSettings.has(urlType));
+
+                    if (insertionTypeSettings.has(urlType))
+                    {
+                        strictEqual(
+                            settingResolver()[urlType],
+                            insertionTypeSettings.get(urlType));
+                    }
+                }
+            }
+
+            /**
+             * Checks whether the settings resolved by the {@link settingResolver `settingResolver`} work correctly.
+             *
+             * @param settingName
+             * The name of the setting to check.
+             *
+             * @param settingResolver
+             * Resolves the settings to check.
+             */
+            function CheckAssets(settingName: keyof ISettings, settingResolver: () => Record<string, InsertionType>): void
+            {
+                let insertionTypes = [
+                    InsertionType.Default,
+                    InsertionType.Link,
+                    InsertionType.Include
+                ];
+
+                let assets: Map<string, InsertionType> = new Map();
+                let configuredSettings: Record<string, keyof typeof InsertionType> = {};
+                context.Settings[settingName] = configuredSettings as never;
+
+                for (let i = random.integer(1, 10); i > 0; i--)
+                {
+                    let fileName = random.string(i + 1);
+                    let insertionType = random.pick(insertionTypes);
+                    let insertionTypeName = InsertionType[insertionType] as keyof typeof InsertionType;
+                    assets.set(fileName, insertionType);
+                    configuredSettings[fileName] = insertionTypeName;
+                }
+
+                strictEqual(Object.keys(settingResolver()).length, assets.size);
+
+                for (let fileName of assets.keys())
+                {
+                    ok(fileName in settingResolver());
+                    strictEqual(
+                        settingResolver()[fileName],
+                        assets.get(fileName));
+                }
+            }
+
             suite(
-                "ConversionType",
+                nameof<Settings>((settings) => settings.ConversionType),
                 () =>
                 {
                     test(
                         "Checking whether the default conversion-type is set correctly…",
-                        function()
+                        () =>
                         {
-                            this.slow(1 * 1000);
-                            this.timeout(2 * 1000);
                             context.Clear();
                             deepStrictEqual(settings.ConversionType, [ConversionType.PDF]);
                         });
 
                     test(
                         "Checking whether the conversion-types are resolved correctly…",
-                        function()
+                        () =>
                         {
-                            this.slow(1 * 1000);
-                            this.timeout(2 * 1000);
-                            context.Settings.ConversionType = ["HTML"] as Array<keyof typeof ConversionType>;
+                            context.Settings.ConversionType = [nameof(ConversionType.HTML)] as Array<keyof typeof ConversionType>;
                             strictEqual(settings.ConversionType.length, 1);
                             strictEqual(settings.ConversionType[0], ConversionType.HTML);
                         });
                 });
 
             suite(
-                "Locale",
+                nameof<Settings>((settings) => settings.Locale),
                 () =>
                 {
                     test(
                         "Checking whether the locale-setting is loaded correctly…",
-                        function()
+                        () =>
                         {
-                            this.slow(1 * 1000);
-                            this.timeout(2 * 1000);
                             context.Settings.Locale = "de";
                             strictEqual(settings.Locale, "de");
                         });
 
                     test(
                         "Checking whether the locale defaults to the locale of vscode…",
-                        function()
+                        () =>
                         {
-                            this.slow(1 * 1000);
-                            this.timeout(2 * 1000);
                             context.Clear();
                             strictEqual(settings.Locale, env.language);
                         });
                 });
 
             suite(
-                "EmojiType",
+                nameof<Settings>((settings) => settings.EmojiType),
                 () =>
                 {
                     test(
                         "Checking whether the emoji-type is resolved correctly…",
                         () =>
                         {
-                            context.Settings["Parser.EmojiType"] = "Native";
+                            context.Settings["Parser.EmojiType"] = nameof(EmojiType.Native) as keyof typeof EmojiType;
                             strictEqual(settings.EmojiType, EmojiType.Native);
                         });
                 });
 
             suite(
-                "PaperFormat",
+                nameof<Settings>((settings) => settings.PaperFormat),
                 () =>
                 {
                     let checkMargin: (margin: Margin) => void;
@@ -112,7 +222,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                                 Right: "20cm"
                             };
 
-                            context.Settings["Document.Paper.Margin"] = newMargin;
+                            context.Settings[marginSetting] = newMargin;
 
                             checkMargin = (margin: Margin) =>
                             {
@@ -134,29 +244,29 @@ export function SettingTests(context: ITestContext<ISettings>): void
                                 Orientation: undefined as string
                             };
 
-                            context.Settings["Document.Paper.PaperFormat"] = customFormat;
-                            let paperFormat = settings.PaperFormat.Format as CustomPaperFormat;
-                            ok(settings.PaperFormat.Format instanceof CustomPaperFormat);
+                            context.Settings[paperFormatSetting] = customFormat;
+                            let paperFormat = settings.PaperFormat.Format as CustomPageFormat;
+                            ok(settings.PaperFormat.Format instanceof CustomPageFormat);
                             strictEqual(paperFormat.Width, customFormat.Width);
                             strictEqual(paperFormat.Height, customFormat.Height);
                             checkMargin(settings.PaperFormat.Margin);
                         });
 
                     test(
-                        "Checking whether a correct standardized paper-format is loaded if either width or height is not specified…",
+                        "Checking whether a correct standardized paper-format is loaded if neither width or height is specified…",
                         () =>
                         {
-                            context.Settings["Document.Paper.PaperFormat"] = {
+                            context.Settings[paperFormatSetting] = {
                                 Width: undefined as string,
                                 Height: undefined as string,
-                                Format: "A5" as keyof typeof StandardizedFormatType,
-                                Orientation: "Landscape" as keyof typeof PaperOrientation
+                                Format: nameof(StandardizedFormatType.A5) as keyof typeof StandardizedFormatType,
+                                Orientation: nameof(PageOrientation.Landscape) as keyof typeof PageOrientation
                             };
 
-                            let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
-                            ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
+                            let paperFormat = settings.PaperFormat.Format as StandardizedPageFormat;
+                            ok(settings.PaperFormat.Format instanceof StandardizedPageFormat);
                             strictEqual(paperFormat.Format, StandardizedFormatType.A5);
-                            strictEqual(paperFormat.Orientation, PaperOrientation.Landscape);
+                            strictEqual(paperFormat.Orientation, PageOrientation.Landscape);
                             checkMargin(settings.PaperFormat.Margin);
                         });
 
@@ -165,35 +275,133 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             context.Clear();
-                            let paperFormat = settings.PaperFormat.Format as StandardizedPaperFormat;
-                            ok(settings.PaperFormat.Format instanceof StandardizedPaperFormat);
+                            let paperFormat = settings.PaperFormat.Format as StandardizedPageFormat;
+                            ok(settings.PaperFormat.Format instanceof StandardizedPageFormat);
                             strictEqual(paperFormat.Format, StandardizedFormatType.A4);
-                            strictEqual(paperFormat.Orientation, PaperOrientation.Portrait);
+                            strictEqual(paperFormat.Orientation, PageOrientation.Portrait);
                             checkMargin(settings.PaperFormat.Margin);
+                        });
+
+                    test(
+                        "Checking whether the default margin is left untouched if no value is set…",
+                        () =>
+                        {
+                            let setterCount = 0;
+                            let margin: Partial<Record<keyof Margin, string>> = {};
+
+                            let marginKeys = [
+                                nameof<Margin>((m) => m.Top),
+                                nameof<Margin>((m) => m.Left),
+                                nameof<Margin>((m) => m.Bottom),
+                                nameof<Margin>((m) => m.Right)
+                            ] as Array<keyof Margin>;
+
+                            context.Settings[marginSetting] = margin;
+
+                            for (let key of marginKeys)
+                            {
+                                sandbox.replaceSetter(
+                                    Margin.prototype,
+                                    key,
+                                    () =>
+                                    {
+                                        setterCount++;
+                                    });
+                            }
+
+                            (() => settings.PaperFormat)();
+                            strictEqual(setterCount, 0);
+
+                            for (let key of marginKeys)
+                            {
+                                if (random.bool())
+                                {
+                                    margin[key] = "1cm";
+                                }
+                            }
+
+                            (() => settings.PaperFormat)();
+                            strictEqual(setterCount, Object.keys(margin).length);
                         });
                 });
 
             suite(
-                "TocSettings",
+                nameof<Settings>((settings) => settings.TocSettings),
                 () =>
                 {
                     test(
-                        "Checking whether the `Toc`-settings equals null if toc is disabled…",
+                        `Checking whether the \`${nameof<Settings>((s) => s.TocSettings)}\` are equal to \`${null}\` if the toc-setting is disabled…`,
                         () =>
                         {
-                            context.Settings["Parser.Toc.Enabled"] = false;
+                            context.Settings[tocSetting] = false;
                             strictEqual(settings.TocSettings, null);
                         });
 
                     test(
-                        "Checking whether the `ListType`-option is parsed correctly…",
+                        `Checking whether the \`${nameof(ListType)}\`-option is parsed correctly…`,
                         () =>
                         {
-                            context.Settings["Parser.Toc.Enabled"] = true;
-                            context.Settings["Parser.Toc.ListType"] = "ul";
+                            context.Settings[tocSetting] = true;
+                            context.Settings[tocTypeSetting] = "ul";
                             strictEqual(settings.TocSettings.ListType, ListType.Unordered);
-                            context.Settings["Parser.Toc.ListType"] = "ol";
+                            context.Settings[tocTypeSetting] = "ol";
                             strictEqual(settings.TocSettings.ListType, ListType.Ordered);
+                        });
+                });
+
+            suite(
+                nameof<Settings>((settings) => settings.StyleSheetInsertion),
+                () =>
+                {
+                    test(
+                        "Checking whether the style-insertion settings are interpreted correctly…",
+                        () =>
+                        {
+                            CheckInsertionTypes(
+                                "Document.Design.StyleSheetInsertion",
+                                () => settings.StyleSheetInsertion);
+                        });
+                });
+
+            suite(
+                nameof<Settings>((settings) => settings.StyleSheets),
+                () =>
+                {
+                    test(
+                        "Checking whether the stylesheets are interpreted correctly…",
+                        () =>
+                        {
+                            CheckAssets(
+                                "Document.Design.StyleSheets",
+                                () => settings.StyleSheets);
+                        });
+                });
+
+            suite(
+                nameof<Settings>((settings) => settings.ScriptInsertion),
+                () =>
+                {
+                    test(
+                        "Checking whether the script-insertion settings are interpreted correctly…",
+                        () =>
+                        {
+                            CheckInsertionTypes(
+                                "Document.Design.ScriptInsertion",
+                                () => settings.ScriptInsertion);
+                        });
+                });
+
+            suite(
+                nameof<Settings>((settings) => settings.Scripts),
+                () =>
+                {
+                    test(
+                        "Checking whether the scripts are interpreted correctly…",
+                        () =>
+                        {
+                            CheckAssets(
+                                "Document.Design.Scripts",
+                                () => settings.Scripts);
                         });
                 });
         });

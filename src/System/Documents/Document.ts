@@ -1,18 +1,18 @@
+import { parse } from "path";
 import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
-import { statSync } from "fs-extra";
-import Handlebars = require("handlebars");
 import MarkdownIt = require("markdown-it");
 import { TextDocument } from "vscode";
-import { stringify } from "yamljs";
-import { Utilities } from "../../Utilities";
-import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
+import YAML = require("yamljs");
 import { YAMLException } from "../YAML/YAMLException";
 import { Asset } from "./Assets/Asset";
+import { AttributeKey } from "./AttributeKey";
 import { DocumentFragment } from "./DocumentFragment";
+import { MarkdownFragment } from "./MarkdownFragment";
 import { Paper } from "./Paper";
 import { Renderable } from "./Renderable";
+import { RunningBlock } from "./RunningBlock";
 
 /**
  * Represents a document.
@@ -20,14 +20,14 @@ import { Renderable } from "./Renderable";
 export class Document extends Renderable
 {
     /**
-     * The attribute-key for overriding the default date-format.
-     */
-    private static readonly dateFormatKey = "DateFormat";
-
-    /**
      * The name of the file represented by this document.
      */
-    private fileName: string;
+    private fileName: string = null;
+
+    /**
+     * The title of the document.
+     */
+    private title: string;
 
     /**
      * The quality of the document.
@@ -38,11 +38,6 @@ export class Document extends Renderable
      * The attributes of the document.
      */
     private attributes: { [key: string]: any } = {};
-
-    /**
-     * A component for rendering the document.
-     */
-    private renderer: typeof Handlebars = null;
 
     /**
      * The format to print the date.
@@ -65,6 +60,11 @@ export class Document extends Renderable
     private paper: Paper = new Paper();
 
     /**
+     * The body of the document.
+     */
+    private body: DocumentFragment = new MarkdownFragment(this);
+
+    /**
      * A value indicating whether headers and footers are enabled.
      */
     private headerFooterEnabled = false;
@@ -72,26 +72,32 @@ export class Document extends Renderable
     /**
      * The header of the document.
      */
-    private header: DocumentFragment = new DocumentFragment(this);
+    private header: RunningBlock = new RunningBlock(this);
 
     /**
      * The footer of the document.
      */
-    private footer: DocumentFragment = new DocumentFragment(this);
+    private footer: RunningBlock = new RunningBlock(this);
 
     /**
-     * The template to use for the RenderBody-process.
+     * The metadata-section of the document.
+     */
+    private meta: DocumentFragment = new DocumentFragment(this);
+
+    /**
+     * The template to use for the {@link Render `Render`}-method.
      */
     private template: string = dedent(`
         <!DOCTYPE html>
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-                {{{styles}}}
+                {{{ meta }}}
+                {{{ styles }}}
             </head>
             <body class="markdown-body">
-                {{{content}}}
-                {{{scripts}}}
+                {{{ content }}}
+                {{{ scripts }}}
             </body>
         </html>`);
 
@@ -111,28 +117,59 @@ export class Document extends Renderable
     private parser: MarkdownIt;
 
     /**
-     * Initializes a new instance of the Document class with a file-path and a configuration.
-     *
-     * @param document
-     * The `TextDocument` to load the info from.
+     * Initializes a new instance of the {@link Document `Document`} class.
      *
      * @param parser
      * The parser for rendering the document.
+     *
+     * @param document
+     * The {@link TextDocument `TextDocument`} to load the info from.
      */
-    public constructor(document: TextDocument, parser: MarkdownIt)
+    public constructor(parser: MarkdownIt, document?: TextDocument)
     {
         super();
-        this.RawContent = document.getText();
-        this.fileName = document.isUntitled ? null : document.fileName;
+
+        if (document)
+        {
+            this.RawContent = document.getText();
+            this.fileName = document.isUntitled ? null : document.fileName;
+
+            if (document.isUntitled)
+            {
+                this.title = document.uri.fsPath;
+            }
+            else
+            {
+                this.fileName = document.fileName;
+                this.title = parse(this.FileName).name;
+            }
+        }
+        else
+        {
+            this.title = "Untitled";
+        }
+
         this.parser = parser;
+
+        this.Meta.Content = dedent(
+            `
+                <title>{{{ Title }}}</title>`);
     }
 
     /**
-     * Gets or sets the name of the file represented by this document.
+     * Gets the name of the file represented by this document.
      */
     public get FileName(): string
     {
         return this.fileName;
+    }
+
+    /**
+     * Gets the title of the document.
+     */
+    public get Title(): string
+    {
+        return (this.Attributes[AttributeKey.Title] as string) ?? this.title;
     }
 
     /**
@@ -142,7 +179,7 @@ export class Document extends Renderable
     {
         return (
             "---\n" +
-            stringify(this.Attributes).trim() + "\n" +
+            YAML.stringify(this.Attributes).trim() + "\n" +
             "---\n" +
             this.Content);
     }
@@ -162,6 +199,22 @@ export class Document extends Renderable
         {
             throw new YAMLException(exception);
         }
+    }
+
+    /**
+     * Gets or sets the content of the document.
+     */
+    public override get Content(): string
+    {
+        return this.Body.Content;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public override set Content(value: string)
+    {
+        this.Body.Content = value;
     }
 
     /**
@@ -197,7 +250,7 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the format to print the date.
+     * Gets or sets the the default date-format.
      */
     public get DefaultDateFormat(): string
     {
@@ -277,23 +330,31 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets or sets the header of the document.
+     * Gets the header of the document.
      */
-    public get Header(): DocumentFragment
+    public get Header(): RunningBlock
     {
         return this.header;
     }
 
     /**
-     * Gets or sets the footer of the document.
+     * Gets the footer of the document.
      */
-    public get Footer(): DocumentFragment
+    public get Footer(): RunningBlock
     {
         return this.footer;
     }
 
     /**
-     * Gets or sets the template to use for the RenderBody-process.
+     * Gets the metadata-section of the document.
+     */
+    public get Meta(): DocumentFragment
+    {
+        return this.meta;
+    }
+
+    /**
+     * Gets or sets the template to use for the {@link Render `Render`}-method.
      */
     public get Template(): string
     {
@@ -341,23 +402,19 @@ export class Document extends Renderable
     }
 
     /**
-     * Gets a component for rendering the document.
+     * Gets the parser of the document.
      */
-    protected get Renderer(): typeof Handlebars
+    public get Parser(): MarkdownIt
     {
-        if (this.renderer === null)
-        {
-            this.renderer = Handlebars.create();
+        return this.parser;
+    }
 
-            this.Renderer.registerHelper(
-                "FormatDate",
-                (value: any, format: string) =>
-                {
-                    return this.FormatDate(value, format);
-                });
-        }
-
-        return this.renderer;
+    /**
+     * Gets the body of the document.
+     */
+    protected get Body(): DocumentFragment
+    {
+        return this.body;
     }
 
     /**
@@ -373,127 +430,21 @@ export class Document extends Renderable
 
         for (let styleSheet of this.StyleSheets)
         {
-            styleCode += styleSheet.ToString();
+            styleCode += await styleSheet.Render();
         }
 
         for (let script of this.Scripts)
         {
-            scriptCode += script.ToString();
+            scriptCode += await script.Render();
         }
-
-        let content = this.Content;
 
         let view = {
+            meta: await this.Meta.Render(),
             styles: styleCode,
             scripts: scriptCode,
-            content: await this.RenderText(content)
+            content: await this.Body.Render()
         };
 
-        return this.Renderer.compile(this.Template)(view);
-    }
-
-    /**
-     * Renders content of the document.
-     *
-     * @param content
-     * The content which is to be rendered.
-     *
-     * @returns
-     * The rendered text.
-     */
-    protected async RenderText(content: string): Promise<string>
-    {
-        let view: Record<string, unknown> = { ...this.Attributes };
-        let tempHelpers: string[] = [];
-        let creationDateKey = "CreationDate";
-        let changeDateKey = "ChangeDate";
-        let currentDateKey = "CurrentDate";
-        let authorKey = "Author";
-
-        let dateResolver = (key: string): Date =>
-        {
-            if (this.FileName)
-            {
-                switch (key)
-                {
-                    case creationDateKey:
-                        return statSync(this.FileName).birthtime;
-                    case changeDateKey:
-                        return statSync(this.FileName).mtime;
-                    default:
-                        return new Date();
-                }
-            }
-            else
-            {
-                return new Date();
-            }
-        };
-
-        for (let key of [creationDateKey, changeDateKey, currentDateKey])
-        {
-            if (!(key in view))
-            {
-                view[key] = dateResolver(key);
-            }
-        }
-
-        if (!(authorKey in view))
-        {
-            view[authorKey] = await Utilities.GetFullName();
-        }
-
-        for (let key in view)
-        {
-            let value = view[key];
-
-            if (value instanceof Date)
-            {
-                tempHelpers.push(key);
-                this.Renderer.registerHelper(key, () => this.FormatDate(value as Date, this.DefaultDateFormat));
-            }
-
-            view[key] = value;
-        }
-
-        let renderedContent = this.Renderer.compile(content)(view);
-
-        for (let key of tempHelpers)
-        {
-            this.Renderer.unregisterHelper(key);
-        }
-
-        return this.parser.render(renderedContent);
-    }
-
-    /**
-     * Formats the specified date-`value`.
-     *
-     * @param value
-     * The date to format.
-     *
-     * @param format
-     * The format to apply.
-     *
-     * @returns
-     * The formatted date.
-     */
-    protected FormatDate(value: string | Date, format?: string): string
-    {
-        if (format !== null)
-        {
-            format = format ?? this.DefaultDateFormat;
-        }
-
-        if (format)
-        {
-            return new DateTimeFormatter(this.Locale).Format(
-                (format in this.DateFormats) ? this.DateFormats[format] : format,
-                new Date(value));
-        }
-        else
-        {
-            return value.toString();
-        }
+        return this.Body.Renderer.compile(this.Template)(view);
     }
 }

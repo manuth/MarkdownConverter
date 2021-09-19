@@ -1,4 +1,4 @@
-import { ObjectResource, Resource } from "@manuth/resource-manager";
+import { Resource } from "@manuth/resource-manager";
 import { workspace } from "vscode";
 import { ConfigurationSection } from "./ConfigurationSection";
 import { ITestContext } from "./ITestContext";
@@ -6,6 +6,9 @@ import { TestContext } from "./TestContext";
 
 /**
  * Provides the functionality to intercept the vscode-configuration.
+ *
+ * @template TSection
+ * The type of the configuration in the section to intercept.
  */
 export class ConfigInterceptor<TSection extends any = any>
 {
@@ -25,7 +28,7 @@ export class ConfigInterceptor<TSection extends any = any>
     private settings: Partial<TSection> = {};
 
     /**
-     * Initializes a new instance of the `ConfigInterceptor` class.
+     * Initializes a new instance of the {@link ConfigInterceptor `ConfigInterceptor`} class.
      *
      * @param section
      * The name of the intercepted section.
@@ -80,7 +83,7 @@ export class ConfigInterceptor<TSection extends any = any>
      */
     public get SettingManager(): Resource
     {
-        return new ObjectResource(this.Settings);
+        return new Resource(this.Settings);
     }
 
     /**
@@ -133,7 +136,7 @@ export class ConfigInterceptor<TSection extends any = any>
     }
 
     /**
-     * Clears the specified `section`.
+     * Clears the specified {@link section `section`}.
      *
      * @param section
      * The fully qualified name of the section to clear.

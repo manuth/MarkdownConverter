@@ -9,60 +9,97 @@ steps:
       - npm install --unsafe-perm
   - name: build
     image: node
+    depends_on:
+      - install
     commands:
       - npm run build-debug
   - name: lint
     image: node
+    depends_on:
+      - install
     commands:
       - npm run lint
   - name: test
     image: manuth/vscode-test-runner
+    depends_on:
+      - build
     commands:
-      - xvfb-run npm run test -- --disable-gpu --headless
-  - name: publish extension
-    image: node:lts
+      - xvfb-run npm run test
+  - name: create extension
+    image: node
+    depends_on:
+      - lint
+      - test
+    commands:
+      - npx vsce package
+    when:
+      event:
+        - tag
+  - name: publish extension to ovsx marketplace
+    image: node
+    depends_on:
+      - create extension
+    environment:
+      ACCESS_TOKEN:
+        from_secret: ovsx_token
+    commands:
+      - npx ovsx publish --pat $ACCESS_TOKEN
+    when:
+      event:
+        - tag
+      ref:
+        - refs/tags/v[0-9]*.[0-9]*.[0-9]*
+  - name: publish extension to vscode marketplace
+    image: node
+    depends_on:
+      - publish extension to ovsx marketplace
     environment:
       ACCESS_TOKEN:
         from_secret: azure_token
     commands:
-    - npx vsce publish --no-yarn --pat $ACCESS_TOKEN
+      - npx vsce publish --pat $ACCESS_TOKEN
     when:
       event:
-      - tag
+        - tag
       ref:
-        - refs/tags/v[0-9].[0-9].[0-9]
+        - refs/tags/v[0-9]*.[0-9]*.[0-9]*
   - name: prepare release
-    image: node:lts
+    image: node
+    depends_on:
+      - create extension
     commands:
-      - npx vsce package --no-yarn
-      - npm install escape-string-regexp --no-save
-      - node -e "console.log(require('escape-string-regexp')('${DRONE_TAG}'))" > TagName.txt
+      - npm install @stdlib/utils-escape-regexp-string --no-save
+      - node -e "console.log(require('@stdlib/utils-escape-regexp-string')('${DRONE_TAG}'))" > .tagName.txt
     when:
       event:
         - tag
   - name: prepare release notes
-    image: ubuntu
+    image: alpine
+    depends_on:
+      - prepare release
     commands:
-      - export TagName=$$(cat TagName.txt)
-      - export TagHeading="/## \(.* \($${TagName}\|[$${TagName}]\)\)\$/"
+      - export TagName=$$(cat .tagName.txt)
+      - export TagHeading="/## \(.* \($${TagName}\|\[$${TagName}\]\)\)\$/"
       - export HeadingPattern='/## \(.* \(v[0-9.]*\|\[.*\]\)\)/'
-      - cp -f CHANGELOG.md ReleaseNotes.md
-      - sed -i "0,$${TagHeading}{ $${TagHeading}P ; d } ; $${HeadingPattern},\$d" ReleaseNotes.md
-      - cp -f ReleaseNotes.md ReleaseTitle.md
-      - sed -i "2,\$d ; s$${HeadingPattern}\\\\1/" ReleaseTitle.md
+      - cp -f CHANGELOG.md .releaseNotes.md
+      - sed -i "1,$${TagHeading}{ $${TagHeading}P ; d } ; $${HeadingPattern},\$d" .releaseNotes.md
+      - cp -f .releaseNotes.md .releaseTitle.md
+      - sed -i "2,\$d ; s$${HeadingPattern}\\\\1/" .releaseTitle.md
     when:
       event:
         - tag
   - name: publish release
     image: plugins/github-release
+    depends_on:
+      - prepare release notes
     commands: []
     settings:
       api_key:
         from_secret: github_publish_token
       files:
         - "*.vsix"
-      title: ReleaseTitle.md
-      note: ReleaseNotes.md
+      title: .releaseTitle.md
+      note: .releaseNotes.md
     when:
       event:
         - tag

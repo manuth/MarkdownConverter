@@ -9,11 +9,6 @@ import { ConfigInterceptor } from "./ConfigInterceptor";
 export class ConfigurationSection implements WorkspaceConfiguration
 {
     /**
-     * The key of this section.
-     */
-    private section: string;
-
-    /**
      * The scope of this section.
      */
     private scope: ConfigurationScope;
@@ -29,7 +24,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
     private target: WorkspaceConfiguration;
 
     /**
-     * Initializes a new instance of the `ConfigurationSection` class.
+     * Initializes a new instance of the {@link ConfigurationSection `ConfigurationSection`} class.
      *
      * @param interceptor
      * The interceptor of this section.
@@ -43,7 +38,6 @@ export class ConfigurationSection implements WorkspaceConfiguration
     public constructor(interceptor: ConfigInterceptor, section?: string, scope?: ConfigurationScope)
     {
         this.interceptor = interceptor;
-        this.section = section;
         this.scope = scope;
         this.target = this.interceptor.Target(section, scope);
     }
@@ -98,18 +92,24 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Gets the value at the specified `section`.
+     * Gets the value at the specified {@link section `section`}.
+     *
+     * @template T
+     * The type of the section to get.
      *
      * @param section
      * The section of the value to get.
      *
      * @returns
-     * The value of the specified `section`.
+     * The value of the specified {@link section `section`}.
      */
     public get<T>(section: string): T;
 
     /**
-     * Gets the value at the specified `section`.
+     * Gets the value at the specified {@link section `section`}.
+     *
+     * @template T
+     * The type of the section to get.
      *
      * @param section
      * The section of the value to get.
@@ -118,12 +118,12 @@ export class ConfigurationSection implements WorkspaceConfiguration
      * The default value to apply.
      *
      * @returns
-     * The value of the specified `section`.
+     * The value of the specified {@link section `section`}.
      */
     public get<T>(section: string, defaultValue: T): T;
 
     /**
-     * Gets the value at the specified `section`.
+     * Gets the value at the specified {@link section `section`}.
      *
      * @param section
      * The section of the value to get.
@@ -132,7 +132,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
      * The default value to apply.
      *
      * @returns
-     * The value of the specified `section`.
+     * The value of the specified {@link section `section`}.
      */
     public get(section: string, defaultValue?: any): any
     {
@@ -169,7 +169,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Checks whether the specified `section` exists.
+     * Checks whether the specified {@link section `section`} exists.
      *
      * @param section
      * The section to check.
@@ -184,6 +184,9 @@ export class ConfigurationSection implements WorkspaceConfiguration
 
     /**
      * @inheritdoc
+     *
+     * @template T
+     * The type of the section to get.
      *
      * @param section
      * The section to inspect.
@@ -215,7 +218,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Updates the configuration at the specified `section`.
+     * Updates the configuration at the specified {@link section `section`}.
      *
      * @param section
      * The section to update.
@@ -227,7 +230,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
      * The target to save the configuration to.
      *
      * @param overrideInLanguage
-     * A value indicating whether the configuration should be stored in a language-overried.
+     * A value indicating whether the configuration should be stored in a language-override.
      */
     public async update(section: string, value: any, configurationTarget?: boolean | ConfigurationTarget, overrideInLanguage?: boolean): Promise<void>
     {
@@ -235,13 +238,13 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Gets the interception for the specified `section`.
+     * Gets the interception for the specified {@link section `section`}.
      *
      * @param section
      * The section to get the interception for.
      *
      * @returns
-     * The intercepted value for the specified `section`.
+     * The intercepted value for the specified {@link section `section`}.
      */
     public GetInterception(section: string): any
     {
@@ -273,13 +276,13 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Determines whether an interception for the specified `section` exists.
+     * Determines whether an interception for the specified {@link section `section`} exists.
      *
      * @param section
      * The section to check.
      *
      * @returns
-     * A value indicating whether an interception for the specified `section` exists.
+     * A value indicating whether an interception for the specified {@link section `section`} exists.
      */
     public HasInterception(section: string): boolean
     {
@@ -295,7 +298,7 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Gets the key of the specified `section` relative to the intercepted section.
+     * Gets the key of the specified {@link section `section`} relative to the intercepted section.
      *
      * @param section
      * The section of the key to get.
@@ -326,13 +329,13 @@ export class ConfigurationSection implements WorkspaceConfiguration
     }
 
     /**
-     * Determines the key of the specified `section`.
+     * Determines the key of the specified {@link section `section`}.
      *
      * @param section
      * The section of the key to get.
      *
      * @returns
-     * The key of the specified `section`.
+     * The key of the specified {@link section `section`}.
      */
     protected GetKey(section: string): string
     {

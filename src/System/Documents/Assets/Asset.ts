@@ -1,7 +1,10 @@
-import { pathExistsSync } from "fs-extra";
+import { resolve } from "path";
+import { readFile } from "fs-extra";
+import getUri = require("get-uri");
 import { isAbsolute } from "upath";
 import { Uri } from "vscode";
-import { FileException } from "../../IO/FileException";
+import { AssetURLType } from "./AssetURLType";
+import { InsertionType } from "./InsertionType";
 
 /**
  * Represents an asset.
@@ -9,74 +12,141 @@ import { FileException } from "../../IO/FileException";
 export abstract class Asset
 {
     /**
-     * The path to the asset.
+     * The path to the root of the document of this asset.
      */
-    private path: string;
+    private docRoot: string = null;
 
     /**
-     * Initializes a new instance of the `Asset` class.
+     * The url to the asset.
+     */
+    private url: string;
+
+    /**
+     * The type of the insertion of the asset.
+     */
+    private insertionType: InsertionType;
+
+    /**
+     * Initializes a new instance of the {@link Asset `Asset`} class.
      *
      * @param path
      * The path to the asset.
-     */
-    public constructor(path: string)
-    {
-        this.path = path;
-    }
-
-    /**
-     * Gets the path to the asset.
-     */
-    public get Path(): string
-    {
-        return this.path;
-    }
-
-    /**
-     * The source-code of this asset.
      *
-     * @returns
-     * A string representing this asset.
+     * @param insertionType
+     * The type of the insertion of the asset.
+     *
+     * @param docRoot
+     * The path to the root of the document of this asset.
      */
-    public ToString(): string
+    public constructor(path: string, insertionType?: InsertionType, docRoot?: string)
+    {
+        this.url = path;
+        this.insertionType = insertionType ?? InsertionType.Default;
+        this.docRoot = docRoot;
+    }
+
+    /**
+     * Gets the url to the asset.
+     */
+    public get URL(): string
+    {
+        return this.url;
+    }
+
+    /**
+     * Gets the type of the url of the asset.
+     */
+    public get URLType(): AssetURLType
     {
         let schemeIncluded: boolean;
 
         try
         {
-            Uri.parse(this.Path, true);
-            schemeIncluded = true;
+            Uri.parse(this.URL, true);
+            schemeIncluded = !isAbsolute(this.URL);
         }
         catch
         {
             schemeIncluded = false;
         }
 
-        if (schemeIncluded || !isAbsolute(this.Path))
+        if (schemeIncluded)
         {
-            return this.GetReferenceSource();
+            return AssetURLType.Link;
         }
-        else if (pathExistsSync(this.Path))
+        else if (isAbsolute(this.URL))
         {
-            return this.GetSource();
+            return AssetURLType.AbsolutePath;
         }
         else
         {
-            throw new FileException(null, this.Path);
+            return AssetURLType.RelativePath;
         }
+    }
 
-        return "";
+    /**
+     * Gets or sets the type of the insertion of the asset.
+     */
+    public get InsertionType(): InsertionType
+    {
+        return this.insertionType;
     }
 
     /**
      * @inheritdoc
+     */
+    public set InsertionType(value: InsertionType)
+    {
+        this.insertionType = value;
+    }
+
+    /**
+     * Gets the path to the root of the document of this asset.
+     */
+    protected get DocRoot(): string
+    {
+        return this.docRoot;
+    }
+
+    /**
+     * Renders the asset.
      *
      * @returns
      * A string representing this asset.
      */
-    public toString(): string
+    public async Render(): Promise<string>
     {
-        return this.ToString();
+        switch (this.GetInsertionType())
+        {
+            case InsertionType.Link:
+                return this.GetReferenceSource();
+            default:
+                return this.GetSource();
+        }
+    }
+
+    /**
+     * Gets the type of the insertion of the asset.
+     *
+     * @returns
+     * The type of the insertion of the asset.
+     */
+    protected GetInsertionType(): InsertionType
+    {
+        if (this.InsertionType !== InsertionType.Default)
+        {
+            return this.InsertionType;
+        }
+        else
+        {
+            switch (this.URLType)
+            {
+                case AssetURLType.Link:
+                    return InsertionType.Link;
+                default:
+                    return InsertionType.Include;
+            }
+        }
     }
 
     /**
@@ -85,7 +155,7 @@ export abstract class Asset
      * @returns
      * The inline-source of the asset.
      */
-    protected abstract GetSource(): string;
+    protected abstract GetSource(): Promise<string>;
 
     /**
      * Gets the reference-expression of the asset.
@@ -93,5 +163,60 @@ export abstract class Asset
      * @returns
      * The reference-expression of the asset.
      */
-    protected abstract GetReferenceSource(): string;
+    protected abstract GetReferenceSource(): Promise<string>;
+
+    /**
+     * Reads the content from the asset.
+     *
+     * @returns
+     * The content of the asset.
+     */
+    protected async ReadFile(): Promise<string>
+    {
+        if (this.URLType === AssetURLType.Link)
+        {
+            return new Promise(
+                (resolve, reject) =>
+                {
+                    getUri(
+                        this.URL,
+                        (error, result) =>
+                        {
+                            if (error)
+                            {
+                                reject(error);
+                            }
+                            else
+                            {
+                                let content = "";
+
+                                result.on(
+                                    "error",
+                                    (error) =>
+                                    {
+                                        reject(error);
+                                    });
+
+                                result.on(
+                                    "data",
+                                    (data) =>
+                                    {
+                                        content += `${data}`;
+                                    });
+
+                                result.on(
+                                    "end",
+                                    () =>
+                                    {
+                                        resolve(content);
+                                    });
+                            }
+                        });
+                });
+        }
+        else
+        {
+            return (await readFile(resolve(this.DocRoot ?? "", this.URL))).toString();
+        }
+    }
 }

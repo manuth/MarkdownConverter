@@ -1,24 +1,26 @@
 import { notStrictEqual, strictEqual } from "assert";
+import kebabCase = require("lodash.kebabcase");
+import { Random } from "random-js";
 import { Slugifier } from "../../../../System/Documents/Slugifier";
 
 /**
- * Registers tests for the `Slugifier` class.
+ * Registers tests for the {@link Slugifier `Slugifier`} class.
  */
 export function SlugifierTests(): void
 {
     suite(
-        "Slugifier",
+        nameof(Slugifier),
         () =>
         {
+            let random: Random;
             let slugifier: Slugifier;
             let slug: string;
-            let expected: string;
 
             suiteSetup(
                 () =>
                 {
+                    random = new Random();
                     slug = "This Is a Test";
-                    expected = "this-is-a-test";
                 });
 
             setup(
@@ -28,14 +30,14 @@ export function SlugifierTests(): void
                 });
 
             suite(
-                "CreateSlug",
+                nameof<Slugifier>((slugifier) => slugifier.CreateSlug),
                 () =>
                 {
                     test(
                         "Checking whether slugs are created correctly…",
                         () =>
                         {
-                            strictEqual(slugifier.CreateSlug(slug), expected);
+                            strictEqual(slugifier.CreateSlug(slug), kebabCase(slug));
                         });
 
                     test(
@@ -43,12 +45,18 @@ export function SlugifierTests(): void
                         () =>
                         {
                             slugifier.CreateSlug(slug);
-                            strictEqual(slugifier.CreateSlug(slug), `${expected}-2`);
+
+                            let max = random.integer(2, 10);
+
+                            for (let i = 0; i < max; i++)
+                            {
+                                strictEqual(slugifier.CreateSlug(slug), kebabCase(`${slug}${i + 2}`));
+                            }
                         });
                 });
 
             suite(
-                "Reset",
+                nameof<Slugifier>((slugifier) => slugifier.Reset),
                 () =>
                 {
                     test(
@@ -56,9 +64,9 @@ export function SlugifierTests(): void
                         () =>
                         {
                             slugifier.CreateSlug(slug);
-                            notStrictEqual(slugifier.CreateSlug(slug), expected);
+                            notStrictEqual(slugifier.CreateSlug(slug), kebabCase(slug));
                             slugifier.Reset();
-                            strictEqual(slugifier.CreateSlug(slug), expected);
+                            strictEqual(slugifier.CreateSlug(slug), kebabCase(slug));
                         });
                 });
         });

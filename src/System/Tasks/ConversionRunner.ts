@@ -4,34 +4,42 @@ import { pathExists, readFile } from "fs-extra";
 import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
-import anchor = require("markdown-it-anchor");
+import anchor from "markdown-it-anchor";
 import checkbox = require("markdown-it-checkbox");
 import emoji = require("markdown-it-emoji");
 import toc = require("markdown-it-table-of-contents");
 import format = require("string-template");
-import twemoji = require("twemoji");
+import { convert, parse } from "twemoji";
 import { dirname, isAbsolute, join, resolve } from "upath";
 import { CancellationToken, Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Converter } from "../../Conversion/Converter";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
+import { IRunningBlockContent } from "../../Properties/IRunningBlockContent";
 import { Resources } from "../../Properties/Resources";
 import { Settings } from "../../Properties/Settings";
+import { Asset } from "../Documents/Assets/Asset";
+import { AssetURLType } from "../Documents/Assets/AssetURLType";
+import { InsertionType } from "../Documents/Assets/InsertionType";
 import { StyleSheet } from "../Documents/Assets/StyleSheet";
 import { WebScript } from "../Documents/Assets/WebScript";
+import { AttributeKey } from "../Documents/AttributeKey";
 import { Document } from "../Documents/Document";
 import { EmojiType } from "../Documents/EmojiType";
 import { ListType } from "../Documents/ListType";
+import { RunningBlock } from "../Documents/RunningBlock";
 import { Slugifier } from "../Documents/Slugifier";
 import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
 import { FileException } from "../IO/FileException";
+import { IPatternContext } from "../IO/IPatternContext";
 import { PatternResolver } from "../IO/PatternResolver";
 import { OperationCancelledException } from "../OperationCancelledException";
+import { AssetLoader } from "./AssetLoader";
 import { IProgressState } from "./IProgressState";
 
 /**
- * Provides the functionality to load settings and run a `Converter`.
+ * Provides the functionality to load settings and run a {@link Converter `Converter`}.
  */
 export class ConversionRunner
 {
@@ -41,12 +49,7 @@ export class ConversionRunner
     private extension: MarkdownConverterExtension;
 
     /**
-     * The workspace-folder which has been chosen by the user.
-     */
-    private lastChosenWorkspaceFolder: string;
-
-    /**
-     * Initializes a new instance of the `ConversionRunner` class.
+     * Initializes a new instance of the {@link ConversionRunner `ConversionRunner`} class.
      *
      * @param extension
      * The extension the runner belongs to.
@@ -57,7 +60,7 @@ export class ConversionRunner
     }
 
     /**
-     * Gets the extension the runner belongs to.
+     * Gets or sets the extension the runner belongs to.
      */
     public get Extension(): MarkdownConverterExtension
     {
@@ -65,7 +68,7 @@ export class ConversionRunner
     }
 
     /**
-     * Gets the extension the runner belongs to.
+     * @inheritdoc
      */
     public set Extension(value)
     {
@@ -73,7 +76,7 @@ export class ConversionRunner
     }
 
     /**
-     * Executes the underlying `Converter`.
+     * Executes the underlying {@link Converter `Converter`}.
      *
      * @param document
      * The document to convert.
@@ -95,46 +98,24 @@ export class ConversionRunner
             let tasks: Array<Promise<void>> = [];
             let converter: Converter;
             let tempDir: TempDirectory;
-            let workspaceFolder: string;
-            let documentRoot: string;
-            let documentDirname = document.isUntitled ? null : dirname(document.fileName);
-            let currentWorkspace: WorkspaceFolder;
-
-            if (document.isUntitled)
-            {
-                if ((workspace.workspaceFolders || []).length === 1)
-                {
-                    currentWorkspace = workspace.workspaceFolders[0];
-                }
-                else
-                {
-                    currentWorkspace = null;
-                }
-            }
-            else
-            {
-                currentWorkspace = workspace.getWorkspaceFolder(document.uri);
-            }
-
+            let workspaceFolder = this.GetWorkspacePath(document);
             patternResolver = new PatternResolver(Settings.Default.DestinationPattern, progressReporter);
-            workspaceFolder = currentWorkspace?.uri.fsPath ?? documentDirname;
 
             if (workspaceFolder === null)
             {
                 if (
-                    patternResolver.Variables.includes("workspaceFolder") ||
+                    patternResolver.Variables.includes(nameof<IPatternContext>((c) => c.workspaceFolder)) ||
                     !isAbsolute(patternResolver.Pattern))
                 {
                     while (workspaceFolder === null)
                     {
                         if (!(cancellationToken?.isCancellationRequested ?? false))
                         {
-                            this.lastChosenWorkspaceFolder = workspaceFolder = await (
+                            workspaceFolder = await (
                                 window.showInputBox(
                                     {
                                         ignoreFocusOut: true,
                                         prompt: Resources.Resources.Get("DestinationPath"),
-                                        value: this.lastChosenWorkspaceFolder || undefined,
                                         placeHolder: Resources.Resources.Get("DestinationPathExample")
                                     }));
                         }
@@ -143,21 +124,15 @@ export class ConversionRunner
                             throw new OperationCancelledException();
                         }
                     }
-
-                    documentRoot = workspaceFolder;
                 }
                 else
                 {
                     tempDir = new TempDirectory();
-                    documentRoot = tempDir.FullName;
+                    workspaceFolder = tempDir.FullName;
                 }
             }
-            else
-            {
-                documentRoot = workspaceFolder;
-            }
 
-            converter = await this.LoadConverter(documentRoot, document);
+            converter = await this.LoadConverter(workspaceFolder, document);
             await converter.Initialize(progressReporter);
 
             for (let type of Settings.Default.ConversionType)
@@ -167,11 +142,16 @@ export class ConversionRunner
                     tasks.push(
                         (async () =>
                         {
-                            let destinationPath = patternResolver.Resolve(documentRoot, document, type, workspaceFolder);
+                            progressReporter?.report(
+                                {
+                                    message: format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
+                                });
+
+                            let destinationPath = patternResolver.Resolve(workspaceFolder, document, type);
 
                             if (
                                 !isAbsolute(destinationPath) &&
-                                !patternResolver.Variables.includes("workspaceFolder"))
+                                !patternResolver.Variables.includes(nameof<IPatternContext>((c) => c.workspaceFolder)))
                             {
                                 destinationPath = resolve(workspaceFolder, destinationPath);
                             }
@@ -202,11 +182,45 @@ export class ConversionRunner
 
             await Promise.all(tasks);
             await converter.Dispose();
+            tempDir?.Dispose();
         }
         else
         {
             throw new OperationCancelledException();
         }
+    }
+
+    /**
+     * Determines the path to the workspace of the specified {@link document `document`}.
+     *
+     * @param document
+     * The document to get the workspace-path for.
+     *
+     * @returns
+     * The path to the workspace of the specified {@link document `document`}.
+     */
+    protected GetWorkspacePath(document: TextDocument): string
+    {
+        let documentDirname = document.isUntitled ? null : dirname(document.fileName);
+        let currentWorkspace: WorkspaceFolder;
+
+        if (document.isUntitled)
+        {
+            if ((workspace.workspaceFolders ?? []).length === 1)
+            {
+                currentWorkspace = workspace.workspaceFolders[0];
+            }
+            else
+            {
+                currentWorkspace = null;
+            }
+        }
+        else
+        {
+            currentWorkspace = workspace.getWorkspaceFolder(document.uri);
+        }
+
+        return currentWorkspace?.uri.fsPath ?? documentDirname;
     }
 
     /**
@@ -219,21 +233,23 @@ export class ConversionRunner
      * The document to convert.
      *
      * @returns
-     * A converter generated by the settings.
+     * A converter generated according to the settings.
      */
     protected async LoadConverter(documentRoot: string, document: TextDocument): Promise<Converter>
     {
-        let dateFormatKey = "DateFormat";
-        let converter = new Converter(documentRoot, new Document(document, await this.LoadParser()));
-        let headerTemplate = converter.Document.Attributes["HeaderTemplate"] as string;
-        let footerTemplate = converter.Document.Attributes["FooterTemplate"] as string;
+        let converter = new Converter(documentRoot, new Document(await this.LoadParser(), document));
+        let metaTemplate = converter.Document.Attributes[AttributeKey.MetaTemplate] as string ?? Settings.Default.MetaTemplate;
+        let headerTemplate = converter.Document.Attributes[AttributeKey.HeaderTemplate] as string ?? Settings.Default.HeaderTemplate;
+        let footerTemplate = converter.Document.Attributes[AttributeKey.FooterTemplate] as string ?? Settings.Default.FooterTemplate;
+        converter.ChromiumExecutablePath = Settings.Default.ChromiumExecutablePath ?? converter.ChromiumExecutablePath;
+        converter.ChromiumArgs = Settings.Default.ChromiumArgs ?? converter.ChromiumArgs;
         converter.Document.Quality = Settings.Default.ConversionQuality;
         Object.assign(converter.Document.Attributes, Settings.Default.Attributes);
         converter.Document.Locale = new CultureInfo(Settings.Default.Locale);
 
-        if (dateFormatKey in converter.Document.Attributes)
+        if (AttributeKey.DateFormat in converter.Document.Attributes)
         {
-            converter.Document.DefaultDateFormat = (converter.Document.Attributes["DateFormat"] as string) ?? null;
+            converter.Document.DefaultDateFormat = (converter.Document.Attributes[AttributeKey.DateFormat] as string) ?? null;
         }
         else
         {
@@ -246,35 +262,30 @@ export class ConversionRunner
         }
 
         converter.Document.Paper = Settings.Default.PaperFormat;
+        converter.Document.Meta.Content = await this.LoadFragment(converter, metaTemplate) ?? converter.Document.Meta.Content;
         converter.Document.HeaderFooterEnabled = Settings.Default.HeaderFooterEnabled;
+        converter.Document.Header.Content = await this.LoadFragment(converter, headerTemplate) ?? converter.Document.Header.Content;
+        converter.Document.Footer.Content = await this.LoadFragment(converter, footerTemplate) ?? converter.Document.Footer.Content;
 
-        if (
-            headerTemplate &&
-            await pathExists(resolve(converter.DocumentRoot, headerTemplate)))
+        for (
+            let entry of [
+                [converter.Document.Header, AttributeKey.Header, Settings.Default.HeaderContent],
+                [converter.Document.Footer, AttributeKey.Footer, Settings.Default.FooterContent]
+            ] as Array<[RunningBlock, AttributeKey, IRunningBlockContent]>)
         {
-            converter.Document.Header.Content = (await readFile(headerTemplate)).toString();
-        }
-        else
-        {
-            converter.Document.Header.Content = Settings.Default.HeaderTemplate;
-        }
-
-        if (
-            footerTemplate &&
-            await pathExists(resolve(converter.DocumentRoot, footerTemplate)))
-        {
-            converter.Document.Footer.Content = (await readFile(footerTemplate)).toString();
-        }
-        else
-        {
-            converter.Document.Footer.Content = Settings.Default.FooterTemplate;
+            let runningBlock = entry[0];
+            let attributeContent = converter.Document.Attributes[entry[1]] as IRunningBlockContent;
+            let settingContent = entry[2];
+            runningBlock.Left = attributeContent?.Left ?? settingContent?.Left ?? "";
+            runningBlock.Center = attributeContent?.Center ?? settingContent?.Center ?? "";
+            runningBlock.Right = attributeContent?.Right ?? settingContent?.Right ?? "";
         }
 
         try
         {
             if (Settings.Default.Template)
             {
-                converter.Document.Template = (await readFile(resolve(documentRoot || ".", Settings.Default.Template))).toString();
+                converter.Document.Template = (await readFile(resolve(documentRoot ?? ".", Settings.Default.Template))).toString();
             }
             else if (Settings.Default.SystemParserEnabled)
             {
@@ -295,21 +306,33 @@ export class ConversionRunner
 
         if (Settings.Default.DefaultStylesEnabled)
         {
-            converter.Document.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle")));
+            converter.Document.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle"), InsertionType.Include));
         }
 
         if (Settings.Default.SystemParserEnabled)
         {
-            let mdExtensions = new MarkdownContributions(this.Extension.Context.extensionPath);
+            let mdExtensions = new MarkdownContributions();
+            let assets: Asset[] = [];
 
-            for (let styleSheet of mdExtensions.previewStyles)
+            for (let uri of mdExtensions.PreviewStyles)
             {
-                converter.Document.StyleSheets.push(new StyleSheet(styleSheet.fsPath));
+                let styleSheet = new StyleSheet(uri.fsPath);
+                assets.push(styleSheet);
+                converter.Document.StyleSheets.push(styleSheet);
             }
 
-            for (let script of mdExtensions.previewScripts)
+            for (let uri of mdExtensions.PreviewScripts)
             {
-                converter.Document.Scripts.push(new WebScript(script.fsPath));
+                let script = new WebScript(uri.fsPath);
+                assets.push(script);
+                converter.Document.Scripts.push(script);
+            }
+
+            for (let asset of assets)
+            {
+                asset.InsertionType = asset.URLType === AssetURLType.Link ?
+                    InsertionType.Link :
+                    InsertionType.Include;
             }
         }
 
@@ -329,19 +352,58 @@ export class ConversionRunner
             }
         }
 
-        for (let styleSheet of Settings.Default.StyleSheets)
-        {
-            converter.Document.StyleSheets.push(new StyleSheet(styleSheet));
-        }
+        this.LoadAssets(
+            Settings.Default.StyleSheets,
+            converter.Document.StyleSheets,
+            (path, insertionType) => new StyleSheet(path, insertionType, converter.DocumentRoot),
+            Settings.Default.StyleSheetInsertion);
+
+        this.LoadAssets(
+            Settings.Default.Scripts,
+            converter.Document.Scripts,
+            (path, insertionType) => new WebScript(path, insertionType, converter.DocumentRoot),
+            Settings.Default.ScriptInsertion);
 
         return converter;
+    }
+
+    /**
+     * Adds the assets from the specified {@link source `source`} to the {@link target `target`}.
+     *
+     * @param source
+     * The assets to load.
+     *
+     * @param target
+     * The asset-list to add the {@link source `source`}-assets to.
+     *
+     * @param loader
+     * A component for loading assets.
+     *
+     * @param insertionTypes
+     * The insertion-types to use based on the paths of the assets.
+     */
+    protected LoadAssets(source: Record<string, InsertionType>, target: Asset[], loader: AssetLoader, insertionTypes: Partial<Record<AssetURLType, InsertionType>>): void
+    {
+        for (let entry of Object.entries(source))
+        {
+            let asset = loader(entry[0], entry[1]);
+
+            if (
+                asset.InsertionType === InsertionType.Default &&
+                asset.URLType in insertionTypes)
+            {
+                asset.InsertionType = insertionTypes[asset.URLType];
+            }
+
+            target.push(asset);
+        }
     }
 
     /**
      * Loads a parser according to the settings.
      *
      * @returns
-     * The parser.
+     * The markdown-parser.
      */
     protected async LoadParser(): Promise<MarkdownIt>
     {
@@ -416,18 +478,47 @@ export class ConversionRunner
                     case EmojiType.Native:
                         return token[id].content;
                     case EmojiType.Twitter:
-                        return twemoji.parse(token[id].content);
+                        return parse(token[id].content);
                     case EmojiType.GitHub:
                         return "<img " +
                             'class="emoji" ' +
                             `title=":${token[id].markup}:" ` +
                             `alt=":${token[id].markup}:" ` +
-                            `src="https://github.githubassets.com/images/icons/emoji/unicode/${twemoji.convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
-                            'align="absmiddle" />';
+                            `src="https://github.githubassets.com/images/icons/emoji/unicode/${convert.toCodePoint(token[id].content).toLowerCase()}.png" ` +
+                            'style="vertical-align: middle; " />';
                 }
             };
         }
 
         return parser;
+    }
+
+    /**
+     * Loads the content of a fragment.
+     *
+     * @param converter
+     * The converter to load the fragment for.
+     *
+     * @param source
+     * Either the path to a file to load the source from or the source of the fragment.
+     *
+     * @returns
+     * The content of the fragment.
+     */
+    protected async LoadFragment(converter: Converter, source: string): Promise<string>
+    {
+        let fileName: string;
+
+        if (
+            source &&
+            await pathExists(
+                (fileName = resolve(converter.DocumentRoot, source))))
+        {
+            return (await readFile(fileName)).toString();
+        }
+        else
+        {
+            return source;
+        }
     }
 }

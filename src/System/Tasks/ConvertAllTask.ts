@@ -15,7 +15,7 @@ import { IProgressState } from "./IProgressState";
 export class ConvertAllTask extends ConversionTask
 {
     /**
-     * Initializes a new instance of the `ConvertAllTask` class.
+     * Initializes a new instance of the {@link ConvertAllTask `ConvertAllTask`} class.
      *
      * @param extension
      * The extension the task belongs to.
@@ -36,7 +36,7 @@ export class ConvertAllTask extends ConversionTask
     /**
      * @inheritdoc
      */
-    public get Cancellable(): boolean
+    public override get Cancellable(): boolean
     {
         return true;
     }
@@ -53,7 +53,7 @@ export class ConvertAllTask extends ConversionTask
      * @param fileReporter
      * A component for reporting converted files.
      */
-    public async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
+    public override async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
     {
         if ((await this.GetDocuments()).length === 0)
         {
@@ -135,7 +135,7 @@ export class ConvertAllTask extends ConversionTask
         let documents: TextDocument[] = [];
         let filePatterns: string[] = [];
 
-        if ((workspace.workspaceFolders || []).length > 0)
+        if ((workspace.workspaceFolders ?? []).length > 0)
         {
             for (let extension of extensions.all)
             {

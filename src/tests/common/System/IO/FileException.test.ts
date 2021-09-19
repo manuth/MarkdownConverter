@@ -1,56 +1,59 @@
 import { notStrictEqual, ok, strictEqual } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
+import { Random } from "random-js";
 import { Resources } from "../../../../Properties/Resources";
 import { FileException } from "../../../../System/IO/FileException";
 
 /**
- * Registers tests for the `FileException` class.
+ * Registers tests for the {@link FileException `FileException`} class.
  */
 export function FileExceptionTests(): void
 {
     suite(
-        "FileException",
+        nameof(FileException),
         () =>
         {
+            let random: Random;
             let exception: FileException;
+            let message: string;
+            let path: string;
+
+            suiteSetup(
+                () =>
+                {
+                    random = new Random();
+                });
 
             setup(
                 () =>
                 {
-                    exception = new FileException();
+                    message = random.string(10);
+                    path = random.string(25);
+                    exception = new FileException(message, path);
                 });
 
             suite(
-                "constructor",
+                nameof(FileException.constructor),
                 () =>
                 {
                     test(
                         "Checking whether the values are assigned correctly…",
                         () =>
                         {
-                            let exception = new FileException("hello", "world");
                             ok(!exception.InnerException);
-                            strictEqual(exception.Message, "hello");
-                            strictEqual(exception.Path, "world");
+                            strictEqual(exception.Message, message);
+                            strictEqual(exception.Path, path);
                         });
                 });
 
             suite(
-                "Message",
+                nameof<FileException>((exception) => exception.Message),
                 () =>
                 {
-                    let originalLocale: CultureInfo;
-
-                    suiteSetup(
+                    setup(
                         () =>
                         {
-                            originalLocale = Resources.Culture;
-                        });
-
-                    suiteTeardown(
-                        () =>
-                        {
-                            Resources.Culture = originalLocale;
+                            exception = new FileException();
                         });
 
                     test(

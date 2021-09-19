@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { YAMLExceptionTests } from "./YAMLException.test";
 
 /**
@@ -6,7 +7,7 @@ import { YAMLExceptionTests } from "./YAMLException.test";
 export function YAMLTests(): void
 {
     suite(
-        "YAML",
+        basename(__dirname),
         () =>
         {
             YAMLExceptionTests();

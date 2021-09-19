@@ -2,15 +2,23 @@ import { Resources } from "../Properties/Resources";
 import { Exception } from "./Exception";
 
 /**
- * Occurs when no workspace-folder is opened.
+ * Represents an exception which occurs when no workspace-folder is opened.
  */
 export class NoWorkspaceFolderException extends Exception
 {
     /**
-     * Initializes a new instance of the MarkdownFileNotFoundException class.
+     * Initializes a new instance of the {@link NoWorkspaceFolderException `NoWorkspaceFolderException`} class.
      */
     public constructor()
     {
         super(Resources.Resources.Get("NoWorkspaceFolderException"), null);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public override get Message(): string
+    {
+        return super.Message ?? Resources.Resources.Get("NoWorkspaceFolderException");
     }
 }

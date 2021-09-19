@@ -1,7 +1,7 @@
 /**
  * Represents the position in a text.
  */
-export interface IMark
+export interface IMarker
 {
     /**
      * Gets or sets the name of the marker.

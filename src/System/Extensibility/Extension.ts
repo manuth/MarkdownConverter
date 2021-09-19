@@ -3,7 +3,7 @@ import { CultureInfo } from "@manuth/resource-manager";
 import MarkdownIt = require("markdown-it");
 import format = require("string-template");
 import { dirname } from "upath";
-import { commands, env, ProgressLocation, Uri, ViewColumn, window, workspace } from "vscode";
+import { commands, env, ProgressLocation, ViewColumn, window, workspace } from "vscode";
 import { Resources } from "../../Properties/Resources";
 import { Task } from "../Tasks/Task";
 
@@ -13,27 +13,17 @@ import { Task } from "../Tasks/Task";
 export class Extension
 {
     /**
-     * The path to the extension-manifest.
-     */
-    private extensionManifestPath: string;
-
-    /**
-     * The path to the root of the extension.
-     */
-    private extensionRoot: string;
-
-    /**
      * The meta-data of the extension.
      */
     private metaData: Package;
 
     /**
-     * The parser provided by `Visual Studio Code`
+     * The parser provided by `vscode`.
      */
     private vsCodeParser: MarkdownIt;
 
     /**
-     * A promise for waiting for the system-parser to be fixed.
+     * A {@link Promise `Promise`} for waiting for the system-parser to be fixed.
      */
     private systemParserFixPromise: Promise<void>;
 
@@ -43,7 +33,7 @@ export class Extension
     private systemParserFixResolver: () => void;
 
     /**
-     * Initializes a new instance of the `Extension` class.
+     * Initializes a new instance of the {@link Extension `Extension`} class.
      *
      * @param extensionPackage
      * The package of the extension.
@@ -51,8 +41,6 @@ export class Extension
     public constructor(extensionPackage: Package)
     {
         this.metaData = extensionPackage;
-        this.extensionManifestPath = extensionPackage.FileName;
-        this.extensionRoot = dirname(this.extensionManifestPath);
 
         this.systemParserFixPromise = new Promise(
             (resolve) =>
@@ -68,7 +56,7 @@ export class Extension
      */
     public get ExtensionRoot(): string
     {
-        return this.extensionRoot;
+        return dirname(this.MetaData.FileName);
     }
 
     /**
@@ -144,7 +132,11 @@ export class Extension
         if (!this.VSCodeParser)
         {
             await window.showTextDocument(
-                await workspace.openTextDocument(Uri.parse("untitled:.md")),
+                await workspace.openTextDocument(
+                    {
+                        language: "md",
+                        content: ""
+                    }),
                 {
                     viewColumn: ViewColumn.Beside,
                     preview: true

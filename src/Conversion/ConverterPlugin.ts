@@ -1,4 +1,4 @@
-import { Browser, launch } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import { join, parse } from "upath";
 import { encode } from "utf8";
 import { Converter } from "./Converter";
@@ -19,7 +19,7 @@ export class ConverterPlugin
     private websiteName: string;
 
     /**
-     * Initializes a new instance of the `FilenamePlugin` class.
+     * Initializes a new instance of the {@link ConverterPlugin `ConverterPlugin`} class.
      *
      * @param converter
      * The converter this plugin belongs to.
@@ -57,35 +57,44 @@ export class ConverterPlugin
      */
     public apply(registerAction: (name: string, callback: (options: any) => any) => void): void
     {
-        let browser: Browser;
+        let browser: puppeteer.Browser;
         let occupiedFilenames: string[];
         let subdirectories: { [extension: string]: string };
         let defaultFilename: string;
 
-        registerAction("beforeStart",
+        registerAction(
+            "beforeStart",
             async ({ options }) =>
             {
-                let browserArguments = ["--disable-web-security"];
+                let browserArguments: string[] = [
+                    ...this.Converter.ChromiumArgs
+                ];
 
                 try
                 {
-                    browser = await launch({
+                    browser = await puppeteer.launch({
+                        ...this.Converter.BrowserOptions,
                         args: browserArguments
                     });
                 }
                 catch
                 {
-                    browser = await launch({
-                        args: browserArguments.concat(["--no-sandbox"])
+                    browser = await puppeteer.launch({
+                        ...this.Converter.BrowserOptions,
+                        args: [
+                            ...browserArguments,
+                            "--no-sandbox"
+                        ]
                     });
                 }
 
                 occupiedFilenames = [];
                 subdirectories = options.subdirectories;
-                defaultFilename = this.WebsiteName || options.defaultFilename;
+                defaultFilename = this.WebsiteName ?? options.defaultFilename;
             });
 
-        registerAction("afterResponse",
+        registerAction(
+            "afterResponse",
             async ({ response }) =>
             {
                 if (response.request.href === this.Converter.URL)
@@ -113,23 +122,25 @@ export class ConverterPlugin
                     }
                 }
             });
-        registerAction("generateFilename", ({ resource }) =>
-        {
-            let result: string;
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
-            let filename: string = require("website-scraper/lib/filename-generator/by-type")(resource, { subdirectories, defaultFilename }, occupiedFilenames);
-
-            if (filename === "index.html")
+        registerAction(
+            "generateFilename",
+            ({ resource }) =>
             {
-                result = filename = this.WebsiteName;
-            }
-            else
-            {
-                result = join(parse(defaultFilename).name, filename);
-            }
+                let result: string;
+                // eslint-disable-next-line @typescript-eslint/no-var-requires
+                let filename: string = require("website-scraper/lib/filename-generator/by-type")(resource, { subdirectories, defaultFilename }, occupiedFilenames);
 
-            occupiedFilenames.push(filename);
-            return { filename: result };
-        });
+                if (filename === "index.html")
+                {
+                    result = filename = this.WebsiteName;
+                }
+                else
+                {
+                    result = join(parse(defaultFilename).name, filename);
+                }
+
+                occupiedFilenames.push(filename);
+                return { filename: result };
+            });
     }
 }

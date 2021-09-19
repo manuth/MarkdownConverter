@@ -2,7 +2,7 @@ import { exec } from "child_process";
 import { promisify } from "util";
 
 /**
- * Provides static methods.
+ * Provides utilities for the extension.
  */
 export class Utilities
 {

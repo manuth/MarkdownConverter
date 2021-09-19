@@ -1,15 +1,18 @@
 import { MultiRange } from "multi-integer-range";
 import { env, workspace, WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType";
-import { CustomPaperFormat } from "../System/Documents/CustomPaperFormat";
+import { AssetURLType } from "../System/Documents/Assets/AssetURLType";
+import { InsertionType } from "../System/Documents/Assets/InsertionType";
+import { CustomPageFormat } from "../System/Documents/CustomPageFormat";
 import { EmojiType } from "../System/Documents/EmojiType";
 import { ListType } from "../System/Documents/ListType";
 import { Margin } from "../System/Documents/Margin";
+import { PageOrientation } from "../System/Documents/PageOrientation";
 import { Paper } from "../System/Documents/Paper";
-import { PaperOrientation } from "../System/Documents/PaperOrientation";
 import { StandardizedFormatType } from "../System/Documents/StandardizedFormatType";
-import { StandardizedPaperFormat } from "../System/Documents/StandardizedPaperFormat";
+import { StandardizedPageFormat } from "../System/Documents/StandardizedPageFormat";
 import { TocSettings } from "../System/Documents/TocSettings";
+import { IRunningBlockContent } from "./IRunningBlockContent";
 
 /**
  * Provides access to settings.
@@ -22,20 +25,47 @@ export class Settings
     public static readonly ConfigKey = "markdownConverter";
 
     /**
-     * A default instance of the `Settings` class.
+     * A default instance of the {@link Settings `Settings`} class.
      */
-    private static defaultInstance: Settings = new Settings();
+    private static defaultInstance: Settings = null;
 
     /**
-     * Gets a default instance of the `Settings` class.
+     * Initializes a new instance of the {@link Settings `Settings`} class.
+     */
+    public constructor()
+    { }
+
+    /**
+     * Gets a default instance of the {@link Settings `Settings`} class.
      */
     public static get Default(): Settings
     {
+        if (!this.defaultInstance)
+        {
+            this.defaultInstance = new Settings();
+        }
+
         return Settings.defaultInstance;
     }
 
     /**
-     * Gets the path to save the destination-files to.
+     * Gets the path to the chromium-installation to use.
+     */
+    public get ChromiumExecutablePath(): string
+    {
+        return this.GetConfigEntry("ChromiumExecutablePath");
+    }
+
+    /**
+     * Gets the arguments to pass to chromium.
+     */
+    public get ChromiumArgs(): string[]
+    {
+        return this.GetConfigEntry("ChromiumArgs");
+    }
+
+    /**
+     * Gets a pattern for determining the path to save the destination-files to.
      */
     public get DestinationPattern(): string
     {
@@ -51,7 +81,7 @@ export class Settings
     }
 
     /**
-     * Gets the quality of the pictures produced by MarkdownConverter.
+     * Gets the quality of the `.jpg`-pictures produced by MarkdownConverter.
      */
     public get ConversionQuality(): number
     {
@@ -79,11 +109,11 @@ export class Settings
      */
     public get Locale(): string
     {
-        return this.GetConfigEntry("Locale") || env.language;
+        return this.GetConfigEntry("Locale") ?? env.language;
     }
 
     /**
-     * Gets the format to localize dates inside the document.
+     * Gets the default date-format for the document.
      */
     public get DefaultDateFormat(): string
     {
@@ -96,14 +126,6 @@ export class Settings
     public get DateFormats(): Record<string, string>
     {
         return this.GetConfigEntry("DateFormats");
-    }
-
-    /**
-     * Gets the arguments to pass to chromium.
-     */
-    public get ChromiumArgs(): string[]
-    {
-        return this.GetConfigEntry("ChromiumArgs");
     }
 
     /**
@@ -138,17 +160,23 @@ export class Settings
             this.config.has(widthKey) &&
             this.config.has(heightKey))
         {
-            paper.Format = new CustomPaperFormat(this.GetConfigEntry(widthKey), this.GetConfigEntry(heightKey));
+            paper.Format = new CustomPageFormat(this.GetConfigEntry(widthKey), this.GetConfigEntry(heightKey));
         }
         else
         {
-            let format = new StandardizedPaperFormat();
-            format.Format = StandardizedFormatType[this.GetConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`)];
-            format.Orientation = PaperOrientation[this.GetConfigEntry<keyof typeof PaperOrientation>(`${formatKey}.Orientation`, PaperOrientation[PaperOrientation.Portrait] as any)];
+            let format = new StandardizedPageFormat();
+            format.Format = StandardizedFormatType[this.GetConfigEntry<keyof typeof StandardizedFormatType>(`${formatKey}.Format`, nameof(StandardizedFormatType.A4) as keyof typeof StandardizedFormatType)];
+            format.Orientation = PageOrientation[this.GetConfigEntry<keyof typeof PageOrientation>(`${formatKey}.Orientation`, PageOrientation[PageOrientation.Portrait] as keyof typeof PageOrientation)];
             paper.Format = format;
         }
 
-        for (let side of (["Top", "Left", "Bottom", "Right"] as Array<keyof Margin>))
+        for (let side of (
+            [
+                nameof<Margin>((m) => m.Top),
+                nameof<Margin>((m) => m.Left),
+                nameof<Margin>((m) => m.Bottom),
+                nameof<Margin>((m) => m.Right)
+            ] as Array<keyof Margin>))
         {
             let configKey = `${paperKey}.Margin.` + side;
 
@@ -170,7 +198,15 @@ export class Settings
     }
 
     /**
-     * Gets the header of the document.
+     * Gets the content of the different sections of the header.
+     */
+    public get HeaderContent(): IRunningBlockContent
+    {
+        return this.GetConfigEntry("Document.HeaderContent");
+    }
+
+    /**
+     * Gets the template of the header of the document.
      */
     public get HeaderTemplate(): string
     {
@@ -178,11 +214,27 @@ export class Settings
     }
 
     /**
-     * Gets the footer of the document.
+     * Gets the content of the different sections of the footer.
+     */
+    public get FooterContent(): IRunningBlockContent
+    {
+        return this.GetConfigEntry("Document.FooterContent");
+    }
+
+    /**
+     * Gets the template of the footer of the document.
      */
     public get FooterTemplate(): string
     {
         return this.GetConfigEntry("Document.FooterTemplate");
+    }
+
+    /**
+     * Gets the template of the metadata-section of the document.
+     */
+    public get MetaTemplate(): string
+    {
+        return this.GetConfigEntry("Document.MetaTemplate");
     }
 
     /**
@@ -204,7 +256,6 @@ export class Settings
             let levels = this.GetConfigEntry<string>("Parser.Toc.Levels");
             let indicator = new RegExp(this.GetConfigEntry("Parser.Toc.Indicator"), "im");
             let listType = this.GetConfigEntry<string>("Parser.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
-
             return new TocSettings($class, new MultiRange(levels), indicator, listType);
         }
         else
@@ -238,11 +289,35 @@ export class Settings
     }
 
     /**
-     * Gets the stylesheets of the document.
+     * Gets the insertion-types to use for stylesheets based on their path.
      */
-    public get StyleSheets(): string[]
+    public get StyleSheetInsertion(): Partial<Record<AssetURLType, InsertionType>>
     {
-        return this.GetConfigEntry("Document.Design.StyleSheets");
+        return this.LoadInsertionTypes("Document.Design.StyleSheetInsertion");
+    }
+
+    /**
+     * Gets the stylesheets to add to the document.
+     */
+    public get StyleSheets(): Record<string, InsertionType>
+    {
+        return this.LoadAssets("Document.Design.StyleSheets");
+    }
+
+    /**
+     * Gets the insertion-types to use for scripts based on their path.
+     */
+    public get ScriptInsertion(): Partial<Record<AssetURLType, InsertionType>>
+    {
+        return this.LoadInsertionTypes("Document.Design.ScriptInsertion");
+    }
+
+    /**
+     * Gets the scripts to add to the document.
+     */
+    public get Scripts(): Record<string, InsertionType>
+    {
+        return this.LoadAssets("Document.Design.Scripts");
     }
 
     /**
@@ -256,6 +331,9 @@ export class Settings
     /**
      * Determines the value of a configuration entry.
      *
+     * @template T
+     * The type of the entry to get.
+     *
      * @param key
      * The key of the entry.
      *
@@ -263,10 +341,50 @@ export class Settings
      * The default value to return.
      *
      * @returns
-     * The value of the configuration with the specified `key`.
+     * The value of the configuration with the specified {@link key `key`}.
      */
     protected GetConfigEntry<T>(key: string, defaultValue?: T): T
     {
         return this.config.get<T>(key, defaultValue);
+    }
+
+    /**
+     * Loads insertion-types from the configuration with the specified {@link key `key`}.
+     *
+     * @param key
+     * The key of the entry to load the insertion-types from.
+     *
+     * @returns
+     * The insertion-types loaded from the configuration with the specified {@link key `key`}.
+     */
+    protected LoadInsertionTypes(key: string): Partial<Record<AssetURLType, InsertionType>>
+    {
+        let result = {} as Record<AssetURLType, InsertionType>;
+
+        for (let entry of Object.entries(this.GetConfigEntry(key)))
+        {
+            result[AssetURLType[entry[0] as keyof typeof AssetURLType]] = InsertionType[entry[1] as keyof typeof InsertionType];
+        }
+
+        return result;
+    }
+
+    /**
+     * Loads assets from the configuration with the specified {@link key `key`}.
+     *
+     * @param key
+     * The key of the entry to load the assets from.
+     *
+     * @returns
+     * The assets loaded from the configuration with the specified {@link key `key`}.
+     */
+    protected LoadAssets(key: string): Record<string, InsertionType>
+    {
+        return Object.fromEntries(
+            Object.entries(this.GetConfigEntry(key)).map(
+                (entry) =>
+                {
+                    return [entry[0], InsertionType[entry[1] as keyof typeof InsertionType]];
+                }));
     }
 }

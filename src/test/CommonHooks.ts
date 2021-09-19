@@ -1,4 +1,6 @@
+import { CultureInfo } from "@manuth/resource-manager";
 import { ISettings } from "../Properties/ISettings";
+import { Resources } from "../Properties/Resources";
 import { Settings } from "../Properties/Settings";
 import { ConfigInterceptor } from "../tests/ConfigInterceptor";
 import { ITestContext } from "../tests/ITestContext";
@@ -11,14 +13,23 @@ import { ITestContext } from "../tests/ITestContext";
  */
 export function CommonHooks(): ITestContext<ISettings>
 {
+    let originalCulture: CultureInfo;
     let interceptor = new ConfigInterceptor<ISettings>(Settings.ConfigKey);
     interceptor.Register();
 
     setup(
         () =>
         {
+            originalCulture = Resources.Resources.Locale;
             interceptor.Settings = {};
             interceptor.Settings["Parser.SystemParserEnabled"] = false;
+        });
+
+    teardown(
+        async () =>
+        {
+            Resources.Culture = originalCulture;
+            await interceptor.Context.CloseEditors();
         });
 
     return interceptor.Context;

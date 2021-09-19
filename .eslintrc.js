@@ -1,8 +1,9 @@
 const { join } = require("path");
+const ESLintPresets = require("@manuth/eslint-plugin-typescript");
 
 module.exports = {
     extends: [
-        "plugin:@manuth/typescript/recommended-requiring-type-checking"
+        `plugin:${ESLintPresets.PluginName}/${ESLintPresets.PresetName.RecommendedWithTypeChecking}`
     ],
     env: {
         node: true,

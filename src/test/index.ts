@@ -1,11 +1,14 @@
 import { pathExists } from "fs-extra";
 import minimist = require("minimist");
 import Mocha = require("mocha");
-import { createBrowserFetcher, executablePath } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import { resolve } from "upath";
 import { extensions } from "vscode";
 import { Extension } from "../System/Extensibility/Extension";
 import { TestConstants } from "../tests/TestConstants";
+import { SuiteVarName } from "./SuiteVarName";
+
+let suiteArgName = "suite";
 
 /**
  * The arguments passed by the user.
@@ -14,13 +17,13 @@ let args = minimist(
     process.argv.slice(2),
     {
         string: [
-            "suite"
+            suiteArgName
         ],
         alias: {
-            suite: "s"
+            [suiteArgName]: "s"
         },
         default: {
-            suite: process.env["TEST_SUITE"] || "common"
+            [suiteArgName]: process.env[SuiteVarName] ?? "common"
         }
     });
 
@@ -42,27 +45,35 @@ export async function run(): Promise<void>
         async (solve, reject) =>
         {
             let testDirectory = resolve(__dirname, "..", "..", "lib", "test");
-            mocha.addFile(resolve(testDirectory, `${args["suite"]}.test.js`));
+            mocha.addFile(resolve(testDirectory, `${args[suiteArgName]}.test.js`));
 
             try
             {
-                if (!await pathExists(executablePath()))
+                if (!await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
                 {
-                    await createBrowserFetcher().download(TestConstants.Extension.ChromiumRevision);
+                    await (puppeteer as unknown as puppeteer.PuppeteerNode).createBrowserFetcher({}).download(TestConstants.Extension.ChromiumRevision);
                 }
 
-                mocha.run(
-                    (failures) =>
-                    {
-                        if (failures > 0)
+                try
+                {
+                    mocha.run(
+                        (failures) =>
                         {
-                            reject(new Error(`${failures} test${failures > 1 ? "s" : ""} failed.`));
-                        }
-                        else
-                        {
-                            solve();
-                        }
-                    });
+                            if (failures > 0)
+                            {
+                                reject(new Error(`${failures} test${failures > 1 ? "s" : ""} failed.`));
+                            }
+                            else
+                            {
+                                solve();
+                            }
+                        });
+                }
+                catch (exception)
+                {
+                    console.error(exception);
+                    reject(exception);
+                }
             }
             catch (exception)
             {

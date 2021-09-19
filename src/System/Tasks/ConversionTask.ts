@@ -1,5 +1,10 @@
+import { CancellationToken, Progress } from "vscode";
+import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
+import { Settings } from "../../Properties/Settings";
 import { ConversionRunner } from "./ConversionRunner";
+import { IProgressState } from "./IProgressState";
+import { NoConversionTypeException } from "./NoConversionTypeException";
 import { PuppeteerTask } from "./PuppeteerTask";
 
 /**
@@ -13,7 +18,7 @@ export abstract class ConversionTask extends PuppeteerTask
     private conversionRunner: ConversionRunner;
 
     /**
-     * Initializes a new instance of the `ConversionTask` class.
+     * Initializes a new instance of the {@link ConversionTask `ConversionTask`} class.
      *
      * @param extension
      * The extension the task belongs to.
@@ -30,5 +35,29 @@ export abstract class ConversionTask extends PuppeteerTask
     public get ConversionRunner(): ConversionRunner
     {
         return this.conversionRunner;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param progressReporter
+     * A component for reporting progress.
+     *
+     * @param cancellationToken
+     * A component for handling cancellation-requests.
+     *
+     * @param fileReporter
+     * A component for reporting converted files.
+     */
+    public override async Execute(progressReporter?: Progress<IProgressState>, cancellationToken?: CancellationToken, fileReporter?: Progress<IConvertedFile>): Promise<void>
+    {
+        if (Settings.Default.ConversionType.length === 0)
+        {
+            throw new NoConversionTypeException();
+        }
+        else
+        {
+            return super.Execute(progressReporter, cancellationToken, fileReporter);
+        }
     }
 }

@@ -3,40 +3,20 @@ import { CultureInfo } from "@manuth/resource-manager";
 import { Resources } from "../../../Properties/Resources";
 
 /**
- * Registers tests for the `Resources` class.
+ * Registers tests for the {@link Resources `Resources`} class.
  */
 export function ResourceTests(): void
 {
     suite(
-        "Resources",
+        nameof(Resources),
         () =>
         {
             suite(
-                "Culture",
+                nameof(Resources.Culture),
                 () =>
                 {
-                    let originalLocale: CultureInfo;
-
-                    suiteSetup(
-                        () =>
-                        {
-                            originalLocale = Resources.Culture;
-                        });
-
-                    teardown(
-                        () =>
-                        {
-                            Resources.Culture = originalLocale;
-                        });
-
-                    suiteTeardown(
-                        () =>
-                        {
-                            Resources.Culture = originalLocale;
-                        });
-
                     test(
-                        "Checking whether setting the `Culture` affects all resources…",
+                        `Checking whether setting the \`${nameof(Resources.Culture)}\` affects all resources…`,
                         () =>
                         {
                             let culture = new CultureInfo("zh-Hans-CN");

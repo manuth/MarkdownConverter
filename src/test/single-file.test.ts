@@ -2,7 +2,7 @@ import { SingleFileTests } from "../tests/single-file";
 import { CommonHooks } from "./CommonHooks";
 
 suite(
-    "Test for Visual Studio Code in Single-File Mode",
+    "Tests for Visual Studio Code in Single-File Mode",
     () =>
     {
         let context = CommonHooks();

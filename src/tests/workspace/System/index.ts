@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { TaskTests } from "./Tasks";
 
 /**
@@ -6,7 +7,7 @@ import { TaskTests } from "./Tasks";
 export function SystemTests(): void
 {
     suite(
-        "System",
+        basename(__dirname),
         () =>
         {
             TaskTests();

@@ -1,7 +1,11 @@
+import { basename } from "path";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ITestContext } from "../../../ITestContext";
 import { ConversionRunnerTests } from "./ConversionRunner.test";
+import { ConversionTaskTests } from "./ConversionTask.test";
 import { ConvertTaskTests } from "./ConvertTask.test";
+import { NoConversionTypeExceptionTests } from "./NoConversionTypeException.test";
+import { OperationCancelledExceptionTests } from "./OperationCancelledException.test";
 import { PuppeteerTaskTests } from "./PuppeteerTask.test";
 
 /**
@@ -13,11 +17,14 @@ import { PuppeteerTaskTests } from "./PuppeteerTask.test";
 export function TaskTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "Tasks",
+        basename(__dirname),
         () =>
         {
-            PuppeteerTaskTests();
+            OperationCancelledExceptionTests();
+            PuppeteerTaskTests(context);
             ConversionRunnerTests(context);
+            NoConversionTypeExceptionTests();
+            ConversionTaskTests(context);
             ConvertTaskTests(context);
         });
 }

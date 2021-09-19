@@ -2,18 +2,13 @@ import { join } from "upath";
 import { Extension, extensions, Uri } from "vscode";
 
 /**
- * Provides the functionality to load markdown-conributions.
+ * Provides the functionality to load markdown-contributions.
  *
  * For more information see the original code:
  * https://github.com/Microsoft/vscode/blob/4be0f0723091ae10b14ba20b334847d607bb7d55/extensions/markdown-language-features/src/markdownExtensions.ts
  */
 export class MarkdownContributions
 {
-    /**
-     * The path to the markdown-extension.
-     */
-    public readonly extensionPath: string;
-
     /**
      * The provided scripts.
      */
@@ -25,35 +20,20 @@ export class MarkdownContributions
     private readonly styles: Uri[] = [];
 
     /**
-     * The roots of the markdown-preview.
-     */
-    private readonly resourceRoots: Uri[] = [];
-
-    /**
-     * The plugins of the markdown-preview.
-     */
-    private readonly plugins: Array<Thenable<(md: any) => any>> = [];
-
-    /**
      * A value indicating whether the contributions are loaded.
      */
     private loaded = false;
 
     /**
-     * Initializes a new instance of the `MarkdownContributions` class.
-     *
-     * @param extensionPath
-     * The path to the extension.
+     * Initializes a new instance of the {@link MarkdownContributions `MarkdownContributions`} class.
      */
-    public constructor(extensionPath: string)
-    {
-        this.extensionPath = extensionPath;
-    }
+    public constructor()
+    { }
 
     /**
      * Gets the provided scripts.
      */
-    public get previewScripts(): Uri[]
+    public get PreviewScripts(): Uri[]
     {
         this.Load();
         return this.scripts;
@@ -62,28 +42,10 @@ export class MarkdownContributions
     /**
      * Gets the provided styles.
      */
-    public get previewStyles(): Uri[]
+    public get PreviewStyles(): Uri[]
     {
         this.Load();
         return this.styles;
-    }
-
-    /**
-     * Gets the roots of the markdown-preview.
-     */
-    public get previewResourceRoots(): Uri[]
-    {
-        this.Load();
-        return this.resourceRoots;
-    }
-
-    /**
-     * Gets the plugins of the markdown-preview.
-     */
-    public get markdownItPlugins(): Array<Thenable<(md: any) => any>>
-    {
-        this.Load();
-        return this.plugins;
     }
 
     /**
@@ -96,9 +58,9 @@ export class MarkdownContributions
      * The path to the resource.
      *
      * @returns
-     * The path to the resource.
+     * The uri to the resource.
      */
-    private static ResolveExtensionResource(extension: Extension<any>, resourcePath: string): Uri
+    protected static ResolveExtensionResource(extension: Extension<any>, resourcePath: string): Uri
     {
         return Uri.file(join(extension.extensionPath, resourcePath)).with({ scheme: "vscode-resource" });
     }
@@ -113,9 +75,9 @@ export class MarkdownContributions
      * The paths to the resources.
      *
      * @returns
-     * The path to the resources.
+     * The uri to the resources.
      */
-    private static ResolveExtensionResources(extension: Extension<any>, resourcePaths: string[]): Uri[]
+    protected static ResolveExtensionResources(extension: Extension<any>, resourcePaths: string[]): Uri[]
     {
         let result: Uri[] = [];
 
@@ -135,33 +97,27 @@ export class MarkdownContributions
     /**
      * Loads all contributions.
      */
-    private async Load(): Promise<void>
+    protected Load(): void
     {
         if (this.loaded)
         {
             return;
         }
 
-        this.loaded = true;
-
-        for (const extension of extensions.all)
+        for (let extension of extensions.all)
         {
-            const contributes = extension.packageJSON?.contributes;
+            let contributes = extension.packageJSON?.contributes;
 
             if (!contributes)
             {
                 continue;
             }
 
-            this.tryLoadPreviewStyles(contributes, extension);
+            this.LoadStyles(contributes, extension);
             this.LoadScripts(contributes, extension);
-            this.LoadMarkdownPlugins(extension, contributes);
-
-            if (contributes["markdown.previewScripts"] || contributes["markdown.previewStyles"])
-            {
-                this.resourceRoots.push(Uri.file(extension.extensionPath));
-            }
         }
+
+        this.loaded = true;
     }
 
     /**
@@ -173,43 +129,13 @@ export class MarkdownContributions
      * @param extension
      * The extension to load the contributions from.
      */
-    private LoadScripts(contributes: any, extension: Extension<any>): void
+    protected LoadScripts(contributes: any, extension: Extension<any>): void
     {
         let scripts = contributes["markdown.previewScripts"];
 
         if (scripts instanceof Array)
         {
             this.scripts.push(...MarkdownContributions.ResolveExtensionResources(extension, scripts));
-        }
-    }
-
-    /**
-     * Loads a markdown-it plugin.
-     *
-     * @param extension
-     * The extension of to load the plug-in from.
-     *
-     * @param contributes
-     * The contributions of the extension.
-     */
-    private LoadMarkdownPlugins(extension: Extension<any>, contributes: any): void
-    {
-        if (contributes["markdown.markdownItPlugins"])
-        {
-            this.plugins.push(extension.activate().then(
-                async () =>
-                {
-                    if (extension.exports?.extendMarkdownIt)
-                    {
-                        if (!extension.isActive)
-                        {
-                            await extension.activate();
-                        }
-
-                        return (md: any) => extension.exports.extendMarkdownIt(md);
-                    }
-                    return (md: any) => md;
-                }));
         }
     }
 
@@ -222,7 +148,7 @@ export class MarkdownContributions
      * @param extension
      * The extension to load the contributions from.
      */
-    private tryLoadPreviewStyles(contributes: any, extension: Extension<any>): void
+    protected LoadStyles(contributes: any, extension: Extension<any>): void
     {
         let styles = contributes["markdown.previewStyles"];
 

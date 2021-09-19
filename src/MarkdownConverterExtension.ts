@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 import { Package } from "@manuth/package-json-editor";
 import { mkdirp, pathExists } from "fs-extra";
-import { createBrowserFetcher, executablePath } from "puppeteer-core";
+import puppeteer = require("puppeteer-core");
 import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
 import format = require("string-template");
 import { join, resolve } from "upath";
@@ -9,18 +9,17 @@ import { commands, ExtensionContext, Progress, ProgressLocation, window } from "
 import { Constants } from "./Constants";
 import { ConversionType } from "./Conversion/ConversionType";
 import { IConvertedFile } from "./Conversion/IConvertedFile";
-import { MarkdownFileNotFoundException } from "./MarkdownFileNotFoundException";
 import { Resources } from "./Properties/Resources";
+import { Settings } from "./Properties/Settings";
+import { Exception } from "./System/Exception";
 import { Extension } from "./System/Extensibility/Extension";
-import { FileException } from "./System/IO/FileException";
-import { NoWorkspaceFolderException } from "./System/NoWorkspaceFolderException";
 import { OperationCancelledException } from "./System/OperationCancelledException";
 import { ChainTask } from "./System/Tasks/ChainTask";
 import { ChromiumNotFoundException } from "./System/Tasks/ChromiumNotFoundException";
 import { ConvertAllTask } from "./System/Tasks/ConvertAllTask";
 import { ConvertTask } from "./System/Tasks/ConvertTask";
+import { IProgressState } from "./System/Tasks/IProgressState";
 import { PuppeteerTask } from "./System/Tasks/PuppeteerTask";
-import { YAMLException } from "./System/YAML/YAMLException";
 
 /**
  * Represents the `Markdown Converter` extension.
@@ -38,14 +37,14 @@ export class MarkdownConverterExtension extends Extension
     private fileReporter: Progress<IConvertedFile>;
 
     /**
-     * Initializes a new instance of the `MarkdownConverterExtension` class.
+     * Initializes a new instance of the {@link MarkdownConverterExtension `MarkdownConverterExtension`} class.
      *
      * @param context
      * The context of the extension.
      */
     public constructor(context: ExtensionContext)
     {
-        super(new Package(join(Constants.PackageDirectory, "package.json")));
+        super(new Package(join(Constants.PackageDirectory, Package.FileName)));
         this.context = context;
 
         this.fileReporter = {
@@ -78,7 +77,7 @@ export class MarkdownConverterExtension extends Extension
     }
 
     /**
-     * Gets context of the of the extension.
+     * Gets the context of the extension.
      */
     public get Context(): ExtensionContext
     {
@@ -99,7 +98,7 @@ export class MarkdownConverterExtension extends Extension
      * @returns
      * The extension-body.
      */
-    public async Activate(): Promise<unknown>
+    public override async Activate(): Promise<unknown>
     {
         this.Context.subscriptions.push(
             commands.registerCommand("markdownConverter.Convert", async () => this.ExecuteTask(new ConvertTask(this))),
@@ -115,7 +114,7 @@ export class MarkdownConverterExtension extends Extension
      * @param task
      * The task to execute.
      */
-    protected async ExecuteTaskInternal(task: PuppeteerTask): Promise<void>
+    protected override async ExecuteTaskInternal(task: PuppeteerTask): Promise<void>
     {
         try
         {
@@ -170,13 +169,28 @@ export class MarkdownConverterExtension extends Extension
         {
             if (exception instanceof ChromiumNotFoundException)
             {
-                if (
+                if (Settings.Default.ChromiumExecutablePath)
+                {
+                    do
+                    {
+                        if (await pathExists(Settings.Default.ChromiumExecutablePath))
+                        {
+                            return this.ExecuteTaskInternal(task);
+                        }
+                    }
+                    while (
+                        !await pathExists(Settings.Default.ChromiumExecutablePath) &&
+                        await (window.showWarningMessage(
+                            Resources.Resources.Get("CustomBrowserNotFound"),
+                            Resources.Resources.Get("Yes"),
+                            Resources.Resources.Get("No"))) === Resources.Resources.Get("Yes"));
+                }
+                else if (
                     await (window.showInformationMessage(
                         Resources.Resources.Get("UpdateMessage"),
                         Resources.Resources.Get("Yes"),
                         Resources.Resources.Get("No"))) === Resources.Resources.Get<string>("Yes"))
                 {
-                    let revision = this.ChromiumRevision;
                     let success = false;
                     let puppeteerPath = resolve(Constants.PackageDirectory, "node_modules", "puppeteer-core");
 
@@ -190,32 +204,13 @@ export class MarkdownConverterExtension extends Extension
                         await (window.withProgress(
                             {
                                 location: ProgressLocation.Notification,
-                                title: format(Resources.Resources.Get("UpdateRunning"), revision)
+                                title: format(Resources.Resources.Get("UpdateRunning"), this.ChromiumRevision)
                             },
                             async (reporter) =>
                             {
                                 try
                                 {
-                                    let progress = 0;
-                                    let browserFetcher = createBrowserFetcher();
-
-                                    await browserFetcher.download(
-                                        revision,
-                                        (downloadBytes, totalBytes) =>
-                                        {
-                                            let newProgress = Math.floor((downloadBytes / totalBytes) * 100);
-
-                                            if (newProgress > progress)
-                                            {
-                                                reporter.report(
-                                                    {
-                                                        increment: newProgress - progress
-                                                    });
-
-                                                progress = newProgress;
-                                            }
-                                        });
-
+                                    await this.DownloadUpdate(reporter);
                                     window.showInformationMessage(Resources.Resources.Get("UpdateSuccess"));
                                     success = true;
                                     return this.ExecuteTaskInternal(task);
@@ -227,7 +222,7 @@ export class MarkdownConverterExtension extends Extension
                             }));
                     }
                     while (
-                        !await pathExists(executablePath()) &&
+                        !await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()) &&
                         !success &&
                         await (window.showWarningMessage(
                             Resources.Resources.Get("UpdateFailed"),
@@ -239,11 +234,7 @@ export class MarkdownConverterExtension extends Extension
             {
                 window.showInformationMessage(exception.Message);
             }
-            else if (
-                exception instanceof FileException ||
-                exception instanceof YAMLException ||
-                exception instanceof MarkdownFileNotFoundException ||
-                exception instanceof NoWorkspaceFolderException)
+            else if (exception instanceof Exception)
             {
                 window.showErrorMessage(exception.Message);
             }
@@ -252,5 +243,34 @@ export class MarkdownConverterExtension extends Extension
                 throw exception;
             }
         }
+    }
+
+    /**
+     * Downloads an update.
+     *
+     * @param reporter
+     * A component for reporting progress.
+     */
+    protected async DownloadUpdate(reporter: Progress<IProgressState>): Promise<void>
+    {
+        let progress = 0;
+        let browserFetcher = (puppeteer as unknown as puppeteer.PuppeteerNode).createBrowserFetcher({});
+
+        await browserFetcher.download(
+            this.ChromiumRevision,
+            (downloadBytes, totalBytes) =>
+            {
+                let newProgress = Math.floor((downloadBytes / totalBytes) * 100);
+
+                if (newProgress > progress)
+                {
+                    reporter.report(
+                        {
+                            increment: newProgress - progress
+                        });
+
+                    progress = newProgress;
+                }
+            });
     }
 }

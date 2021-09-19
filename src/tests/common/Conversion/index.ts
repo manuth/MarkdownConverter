@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { ConverterTests } from "./Converter.test";
 import { ConverterPluginTests } from "./ConverterPlugin.test";
 
@@ -7,7 +8,7 @@ import { ConverterPluginTests } from "./ConverterPlugin.test";
 export function ConversionTests(): void
 {
     suite(
-        "Conversion",
+        basename(__dirname),
         () =>
         {
             ConverterPluginTests();

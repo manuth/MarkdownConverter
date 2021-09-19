@@ -8,12 +8,12 @@ import { ConversionTask } from "./ConversionTask";
 import { IProgressState } from "./IProgressState";
 
 /**
- * Represens a task for converting the currently opened document.
+ * Represents a task for converting the currently opened document.
  */
 export class ConvertTask extends ConversionTask
 {
     /**
-     * Initializes a new instance of the `ConvertTask` class.
+     * Initializes a new instance of the {@link ConvertTask `ConvertTask`} class.
      *
      * @param extension
      * The extension the task belongs to.
@@ -49,14 +49,16 @@ export class ConvertTask extends ConversionTask
     }
 
     /**
-     * Tries to find a markdown-file.
+     * Tries to find a file to convert.
      *
      * @returns
      * The best matching markdown-document.
      */
     protected GetMarkdownDocument(): TextDocument
     {
-        if (window.activeTextEditor && (window.activeTextEditor.document.languageId === "markdown" || Settings.Default.IgnoreLanguageMode))
+        if (
+            window.activeTextEditor &&
+            (window.activeTextEditor.document.languageId === "markdown" || Settings.Default.IgnoreLanguageMode))
         {
             return window.activeTextEditor.document;
         }

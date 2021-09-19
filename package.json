@@ -1,8 +1,8 @@
 {
   "name": "markdown-converter",
-  "version": "3.1.2",
+  "version": "4.0.0",
   "private": true,
-  "description": "A markdown-converter for Visual Studio Code",
+  "description": "A markdown-converter for vscode",
   "author": "Manuel Thalmann <m@nuth.ch> (https://nuth.ch)",
   "license": "MIT",
   "keywords": [
@@ -13,7 +13,7 @@
     "PNG"
   ],
   "engines": {
-    "vscode": "^1.50.0"
+    "vscode": "^1.60.0"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -48,87 +48,84 @@
     "lint": "npm run lint-base -- --ext .js,.jsx,.ts,.tsx .eslintrc.js webpack.config.ts ./src",
     "lint-ide": "npm run lint || exit 0",
     "test": "node ./lib/test/runTests",
-    "prepare": "npm run rebuild"
+    "prepare": "npm run patchTypeScript && npm run rebuild",
+    "patchTypeScript": "ts-patch install && ts-patch --persist"
   },
   "dependencies": {
-    "@manuth/resource-manager": "^1.2.1",
-    "@manuth/temp-files": "^2.0.0",
+    "@manuth/package-json-editor": "^2.2.3",
+    "@manuth/resource-manager": "^2.0.2",
+    "@manuth/temp-files": "^2.0.7",
+    "@types/markdown-it": "^12.2.1",
     "dedent": "^0.7.0",
     "es6-template-string": "^1.2.0",
     "front-matter": "^4.0.2",
-    "fs-extra": "^9.0.1",
+    "fs-extra": "^10.0.0",
     "get-port": "^5.1.1",
-    "glob": "^7.1.6",
-    "handlebars": "^4.7.6",
-    "highlight.js": "^10.2.1",
-    "highlightjs": "^9.12.0",
+    "get-uri": "^3.0.2",
+    "glob": "^7.1.7",
+    "handlebars": "^4.7.7",
+    "highlight.js": "^11.2.0",
     "lodash.clonedeep": "^4.5.0",
-    "markdown-it": "^11.0.1",
-    "markdown-it-anchor": "^6.0.0",
+    "markdown-it": "^12.2.0",
+    "markdown-it-anchor": "^8.3.1",
     "markdown-it-checkbox": "^1.1.0",
-    "markdown-it-emoji": "^1.4.0",
-    "markdown-it-table-of-contents": "^0.4.4",
-    "multi-integer-range": "^4.0.8",
+    "markdown-it-emoji": "^2.0.0",
+    "markdown-it-table-of-contents": "^0.5.2",
+    "multi-integer-range": "^4.0.9",
     "pkg-up": "^3.1.0",
-    "puppeteer-core": "^5.3.1",
+    "puppeteer-core": "^10.2.0",
     "serve-handler": "^6.1.3",
     "string-template": "^1.0.0",
-    "transliteration": "^2.1.11",
-    "twemoji": "^13.0.1",
+    "transliteration": "^2.2.0",
+    "twemoji": "^13.1.0",
+    "upath": "^2.0.1",
     "utf8": "^3.0.0",
     "website-scraper": "^4.2.3",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "@manuth/eslint-plugin-typescript": "^2.3.3",
-    "@manuth/package-json-editor": "^1.4.2",
-    "@manuth/tsconfig": "^1.2.4",
-    "@manuth/typescript-eslint-plugin": "^1.3.1",
-    "@types/cheerio": "^0.22.22",
+    "@manuth/eslint-plugin-typescript": "^3.2.5",
+    "@manuth/tsconfig": "^2.0.3",
+    "@manuth/typescript-eslint-plugin": "^1.4.2",
+    "@stdlib/utils-escape-regexp-string": "^0.0.7",
     "@types/dedent": "^0.7.0",
-    "@types/fs-extra": "^9.0.2",
-    "@types/glob": "^7.1.3",
+    "@types/fs-extra": "^9.0.12",
+    "@types/glob": "^7.1.4",
     "@types/highlight.js": "^9.12.4",
     "@types/lodash.clonedeep": "^4.5.6",
-    "@types/markdown-it": "10.0.2",
-    "@types/markdown-it-anchor": "^4.0.4",
-    "@types/markdown-it-emoji": "^1.4.0",
-    "@types/minimist": "^1.2.0",
-    "@types/mocha": "^8.0.3",
-    "@types/node": "^14.11.8",
-    "@types/puppeteer-core": "^2.0.0",
-    "@types/serve-handler": "^6.1.0",
+    "@types/lodash.kebabcase": "^4.1.6",
+    "@types/markdown-it-emoji": "^2.0.2",
+    "@types/minimist": "^1.2.2",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.9.4",
+    "@types/serve-handler": "^6.1.1",
+    "@types/sinon": "^10.0.2",
     "@types/string-template": "^1.0.2",
-    "@types/transliteration": "^1.6.1",
-    "@types/twemoji": "^12.1.1",
-    "@types/utf8": "^2.1.6",
-    "@types/vscode": "^1.50.0",
-    "@types/webpack": "^4.41.22",
-    "@types/website-scraper": "^1.2.5",
+    "@types/ts-nameof": "^4.2.1",
+    "@types/twemoji": "^12.1.2",
+    "@types/utf8": "^3.0.0",
+    "@types/vscode": "^1.60.0",
+    "@types/website-scraper": "^1.2.6",
     "@types/yamljs": "^0.2.31",
-    "@typescript-eslint/eslint-plugin": "^4.4.1",
-    "@typescript-eslint/eslint-plugin-tslint": "^4.4.1",
-    "@typescript-eslint/parser": "^4.4.1",
-    "cheerio": "^1.0.0-rc.3",
-    "eslint": "^7.11.0",
-    "eslint-plugin-deprecation": "^1.1.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^30.6.4",
-    "fancy-log": "^1.3.3",
+    "cheerio": "^1.0.0-rc.10",
+    "eslint": "^7.32.0",
     "json5-loader": "^4.0.1",
+    "lodash.kebabcase": "^4.1.1",
     "minimist": "^1.2.5",
-    "mocha": "^8.1.3",
+    "mocha": "^9.1.1",
+    "randexp": "^0.5.3",
     "random-js": "^2.1.0",
     "rimraf": "^3.0.2",
-    "ts-loader": "^8.0.5",
-    "ts-node": "^9.0.0",
-    "tslint": "^6.1.3",
-    "typescript": "^4.0.3",
-    "upath": "^2.0.0",
-    "vsce": "^1.81.1",
-    "vscode-test": "^1.4.0",
-    "webpack": "^5.1.0",
-    "webpack-cli": "^4.0.0"
+    "sinon": "^11.1.2",
+    "ts-loader": "^9.2.5",
+    "ts-nameof": "^5.0.0",
+    "ts-node": "^10.2.1",
+    "ts-patch": "^1.4.4",
+    "typescript": "^4.4.3",
+    "vsce": "^1.99.0",
+    "vscode-test": "^1.6.1",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0"
   },
   "displayName": "Markdown Converter",
   "icon": "Resources/Icon.png",
@@ -164,6 +161,21 @@
     "configuration": {
       "title": "%Config%",
       "properties": {
+        "markdownConverter.ChromiumExecutablePath": {
+          "title": "%Config.ChromiumExecutablePath%",
+          "markdownDescription": "%Config.ChromiumExecutablePath.Description%",
+          "type": "string",
+          "default": null
+        },
+        "markdownConverter.ChromiumArgs": {
+          "title": "%Config.ChromiumArgs%",
+          "markdownDescription": "%Config.ChromiumArgs.Description%",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
         "markdownConverter.DestinationPattern": {
           "title": "%Config.DestinationPattern%",
           "markdownDescription": "%Config.DestinationPattern.Description%",
@@ -207,6 +219,7 @@
           "title": "%Config.Locale%",
           "markdownDescription": "%Config.Locale.Description%",
           "default": null,
+          "type": "string",
           "anyOf": [
             {
               "type": "string"
@@ -220,6 +233,7 @@
           "title": "%Config.DefaultDateFormat%",
           "markdownDescription": "%Config.DefaultDateFormat.Description%",
           "default": "Default",
+          "type": "string",
           "anyOf": [
             {
               "type": "string",
@@ -237,20 +251,13 @@
           "title": "%Config.DateFormats%",
           "markdownDescription": "%Config.DateFormats.Description%",
           "default": {},
+          "type": "object",
           "patternProperties": {
             "^.*$": {
               "type": "string"
             }
-          }
-        },
-        "markdownConverter.ChromiumArgs": {
-          "title": "%Config.ChromiumArgs%",
-          "markdownDescription": "%Config.ChromiumArgs.Description%",
-          "type": "array",
-          "default": [],
-          "items": {
-            "type": "string"
-          }
+          },
+          "additionalProperties": false
         },
         "markdownConverter.Parser.SystemParserEnabled": {
           "title": "%Config.Parser.SystemParserEnabled%",
@@ -309,17 +316,47 @@
           "title": "%Config.Document.Attributes%",
           "markdownDescription": "%Config.Document.Attributes.Description%",
           "type": "object",
-          "default": null,
-          "additionalProperties": true,
-          "properties": {
-            "Author": {
+          "default": {},
+          "additionalProperties": false,
+          "patternProperties": {
+            "^Title$": {
+              "title": "%Config.Document.Attributes.Title%",
+              "markdownDescription": "%Config.Document.Attributes.Title.Description%",
+              "type": "string"
+            },
+            "^Author$": {
               "title": "%Config.Document.Attributes.Author%",
               "markdownDescription": "%Config.Document.Attributes.Author.Description%",
               "type": "string"
             },
-            "Company": {
+            "^Company$": {
               "title": "%Config.Document.Attributes.Company%",
               "markdownDescription": "%Config.Document.Attributes.Company.Description%",
+              "type": "string"
+            },
+            "^DateFormat$": {
+              "title": "%Config.DefaultDateFormat%",
+              "markdownDescription": "%Config.DefaultDateFormat.Description%",
+              "type": "string"
+            },
+            "^MetaTemplate$": {
+              "title": "%Config.Document.MetaTemplate%",
+              "markdownDescription": "%Config.Document.MetaTemplate.Description%",
+              "type": "string"
+            },
+            "^HeaderTemplate$": {
+              "title": "%Config.Document.HeaderTemplate%",
+              "markdownDescription": "%Config.Document.HeaderTemplate.Description%",
+              "type": "string",
+              "editPresentation": "multilineText"
+            },
+            "^FooterTemplate$": {
+              "title": "%Config.Document.FooterTemplate%",
+              "markdownDescription": "%Config.Document.FooterTemplate.Description%",
+              "type": "string",
+              "editPresentation": "multilineText"
+            },
+            "^.*$": {
               "type": "string"
             }
           }
@@ -328,11 +365,56 @@
           "title": "%Config.Document.Paper.PaperFormat%",
           "markdownDescription": "%Config.Document.Paper.PaperFormat.Description%",
           "type": "object",
-          "default": {
-            "Format": "A4"
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "Format": {
+              "title": "%Config.Document.Paper.PaperFormat.Format%",
+              "markdownDescription": "%Config.Document.Paper.PaperFormat.Format.Description%",
+              "type": "string",
+              "enum": [
+                "A0",
+                "A1",
+                "A2",
+                "A3",
+                "A4",
+                "A5",
+                "A6",
+                "Legal",
+                "Letter",
+                "Tabloid",
+                "Ledger"
+              ]
+            },
+            "Orientation": {
+              "title": "%Config.Document.Paper.PaperFormat.Orientation%",
+              "markdownDescription": "%Config.Document.Paper.PaperFormat.Orientation.Description%",
+              "type": "string",
+              "enum": [
+                "Portrait",
+                "Landscape"
+              ]
+            },
+            "Width": {
+              "title": "%Config.Document.Paper.PaperFormat.Width%",
+              "markdownDescription": "%Config.Document.Paper.PaperFormat.Width.Description%",
+              "type": "string",
+              "default": "21cm"
+            },
+            "Height": {
+              "title": "%Config.Document.Paper.PaperFormat.Height%",
+              "markdownDescription": "%Config.Document.Paper.PaperFormat.Height.Description%",
+              "type": "string",
+              "default": "29.7cm"
+            }
           },
           "oneOf": [
             {
+              "type": "object",
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
               "additionalProperties": false,
               "required": [
                 "Format"
@@ -342,13 +424,19 @@
                   "title": "%Config.Document.Paper.PaperFormat.Format%",
                   "markdownDescription": "%Config.Document.Paper.PaperFormat.Format.Description%",
                   "type": "string",
+                  "default": "A4",
                   "enum": [
+                    "A0",
+                    "A1",
+                    "A2",
                     "A3",
                     "A4",
                     "A5",
+                    "A6",
                     "Legal",
                     "Letter",
-                    "Tabloid"
+                    "Tabloid",
+                    "Ledger"
                   ]
                 },
                 "Orientation": {
@@ -363,6 +451,7 @@
               }
             },
             {
+              "type": "object",
               "additionalProperties": false,
               "required": [
                 "Width",
@@ -371,11 +460,15 @@
               "properties": {
                 "Width": {
                   "title": "%Config.Document.Paper.PaperFormat.Width%",
-                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Width.Description%"
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Width.Description%",
+                  "type": "string",
+                  "default": "21cm"
                 },
                 "Height": {
                   "title": "%Config.Document.Paper.PaperFormat.Height%",
-                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Height.Description%"
+                  "markdownDescription": "%Config.Document.Paper.PaperFormat.Height.Description%",
+                  "type": "string",
+                  "default": "29.7cm"
                 }
               }
             }
@@ -425,17 +518,78 @@
           "type": "boolean",
           "default": true
         },
+        "markdownConverter.Document.HeaderContent": {
+          "title": "%Config.Document.HeaderContent%",
+          "markdownDescription": "%Config.Document.HeaderContent.Description%",
+          "type": "object",
+          "default": {
+            "Left": "{{ Author }}",
+            "Center": "{{ CreationDate }}",
+            "Right": "{{ Company }}"
+          },
+          "additionalProperties": false,
+          "properties": {
+            "Left": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Left%",
+              "type": "string",
+              "default": "{{ Author }}"
+            },
+            "Center": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Center%",
+              "type": "string",
+              "default": "{{ CreationDate }}"
+            },
+            "Right": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Right%",
+              "type": "string",
+              "default": "{{ Company }}"
+            }
+          }
+        },
         "markdownConverter.Document.HeaderTemplate": {
           "title": "%Config.Document.HeaderTemplate%",
           "markdownDescription": "%Config.Document.HeaderTemplate.Description%",
           "type": "string",
-          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \">{{ Author }}</div><div style=\"text-align: center; \"><span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span></div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right\">{{ Company }}</div>"
+          "editPresentation": "multilineText",
+          "default": "<div style=\"position: relative; margin-left: 1cm; margin-right: 1cm; width: 100%; \">\n    <div style=\"float: left; text-align: left; \">\n        {{{ Left }}}\n    </div>\n    <div style=\"position: absolute; left: 0; right: 0; text-align: center; \">\n        {{{ Center }}}\n    </div>\n    <div style=\"float: right; text-align: right; \">\n        {{{ Right }}}\n    </div>\n</div>"
+        },
+        "markdownConverter.Document.FooterContent": {
+          "title": "%Config.Document.FooterContent%",
+          "markdownDescription": "%Config.Document.FooterContent.Description%",
+          "type": "object",
+          "default": {
+            "Center": "<span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span>"
+          },
+          "additionalProperties": false,
+          "properties": {
+            "Left": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Left%",
+              "type": "string"
+            },
+            "Center": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Center%",
+              "type": "string",
+              "default": "<span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span>"
+            },
+            "Right": {
+              "markdownDescription": "%Config.Document.RunningBlocks.Right%",
+              "type": "string"
+            }
+          }
         },
         "markdownConverter.Document.FooterTemplate": {
           "title": "%Config.Document.FooterTemplate%",
           "markdownDescription": "%Config.Document.FooterTemplate.Description%",
           "type": "string",
-          "default": "<div style=\"margin-left: 1cm; margin-right: auto; text-align: left; \"></div><div stlyle=\"text-align: center; \">{{ CreationDate }}</div><div style=\"margin-left: auto; margin-right: 1cm; text-align: right; \"></div>"
+          "editPresentation": "multilineText",
+          "default": "<div style=\"position: relative; margin-left: 1cm; margin-right: 1cm; width: 100%; \">\n    <div style=\"float: left; text-align: left; \">\n        {{{ Left }}}\n    </div>\n    <div style=\"position: absolute; left: 0; right: 0; text-align: center; \">\n        {{{ Center }}}\n    </div>\n    <div style=\"float: right; text-align: right; \">\n        {{{ Right }}}\n    </div>\n</div>"
+        },
+        "markdownConverter.Document.MetaTemplate": {
+          "title": "%Config.Document.MetaTemplate%",
+          "markdownDescription": "%Config.Document.MetaTemplate.Description%",
+          "type": "string",
+          "editPresentation": "multilineText",
+          "default": null
         },
         "markdownConverter.Document.Design.Template": {
           "title": "%Config.Document.Design.Template%",
@@ -452,6 +606,7 @@
         "markdownConverter.Document.Design.HighlightStyle": {
           "title": "%Config.Document.Design.HighlightStyle%",
           "markdownDescription": "%Config.Document.Design.HighlightStyle.Description%",
+          "type": "string",
           "default": "Default",
           "anyOf": [
             {
@@ -466,13 +621,156 @@
             }
           ]
         },
+        "markdownConverter.Document.Design.StyleSheetInsertion": {
+          "title": "%Config.Document.Design.StyleSheetInsertion%",
+          "markdownDescription": "%Config.Document.Design.StyleSheetInsertion.Description%",
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "Link": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.Link%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "RelativePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.RelativePath%",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "AbsolutePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.AbsolutePath%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
+          }
+        },
         "markdownConverter.Document.Design.StyleSheets": {
           "title": "%Config.Document.Design.StyleSheets%",
           "markdownDescription": "%Config.Document.Design.StyleSheets.Description%",
-          "type": "array",
-          "default": [],
-          "items": {
-            "type": "string"
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "type": "string",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
+          }
+        },
+        "markdownConverter.Document.Design.ScriptInsertion": {
+          "title": "%Config.Document.Design.ScriptInsertion%",
+          "markdownDescription": "%Config.Document.Design.ScriptInsertion.Description%",
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "Link": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.Link%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "RelativePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.RelativePath%",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "AbsolutePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.AbsolutePath%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
+          }
+        },
+        "markdownConverter.Document.Design.Scripts": {
+          "title": "%Config.Document.Design.Scripts%",
+          "markdownDescription": "%Config.Document.Design.Scripts.Description%",
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.*$": {
+              "type": "string",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
           }
         }
       }

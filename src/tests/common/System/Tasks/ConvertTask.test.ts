@@ -3,12 +3,13 @@ import { TempFile } from "@manuth/temp-files";
 import { TextDocument, Uri, window } from "vscode";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { ISettings } from "../../../../Properties/ISettings";
+import { Settings } from "../../../../Properties/Settings";
 import { ConvertTask } from "../../../../System/Tasks/ConvertTask";
 import { ITestContext } from "../../../ITestContext";
 import { TestConstants } from "../../../TestConstants";
 
 /**
- * Registers tests for the `ConvertTask` class.
+ * Registers tests for the {@link ConvertTask `ConvertTask`} class.
  *
  * @param context
  * The test-context.
@@ -16,39 +17,38 @@ import { TestConstants } from "../../../TestConstants";
 export function ConvertTaskTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "ConvertTask",
+        nameof(ConvertTask),
         () =>
         {
+            /**
+             * Provides an implementation of the {@link ConvertTask `ConvertTask`} class for testing.
+             */
+            class TestConvertTask extends ConvertTask
+            {
+                /**
+                 * @inheritdoc
+                 *
+                 * @returns
+                 * The best matching markdown-document.
+                 */
+                public override GetMarkdownDocument(): TextDocument
+                {
+                    return super.GetMarkdownDocument();
+                }
+            }
+
             suite(
-                "GetMarkdownDocument",
+                nameof<TestConvertTask>((task) => task.GetMarkdownDocument),
                 () =>
                 {
                     let testFile: TempFile;
                     let task: TestConvertTask;
-
-                    /**
-                     * Provides an implementation of the `ConvertTask` class for testing.
-                     */
-                    class TestConvertTask extends ConvertTask
-                    {
-                        /**
-                         * @inheritdoc
-                         *
-                         * @returns
-                         * The best matching markdown-document.
-                         */
-                        public GetMarkdownDocument(): TextDocument
-                        {
-                            return super.GetMarkdownDocument();
-                        }
-                    }
 
                     suiteSetup(
                         async () =>
                         {
                             testFile = new TempFile();
                             task = new TestConvertTask(TestConstants.Extension);
-                            await window.showTextDocument(Uri.file(testFile.FullName));
                         });
 
                     suiteTeardown(
@@ -60,6 +60,7 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
                     setup(
                         async () =>
                         {
+                            await window.showTextDocument(Uri.file(testFile.FullName));
                             context.Settings.IgnoreLanguageMode = false;
                         });
 
@@ -71,10 +72,9 @@ export function ConvertTaskTests(context: ITestContext<ISettings>): void
                         });
 
                     test(
-                        "Checking whether no exception is thrown if `IgnoreLanguageMode` is enabled…",
+                        `Checking whether no exception is thrown if \`${nameof<Settings>((s) => s.IgnoreLanguageMode)}\` is enabled…`,
                         async function()
                         {
-                            this.slow(80);
                             context.Settings.IgnoreLanguageMode = true;
                             doesNotThrow(() => task.GetMarkdownDocument());
                         });

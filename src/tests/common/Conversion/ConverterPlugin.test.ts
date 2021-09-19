@@ -11,12 +11,12 @@ import { ConverterPlugin } from "../../../Conversion/ConverterPlugin";
 import { Document } from "../../../System/Documents/Document";
 
 /**
- * Registers tests for the `ConverterPlugin` class.
+ * Registers tests for the {@link ConverterPlugin `ConverterPlugin`} class.
  */
 export function ConverterPluginTests(): void
 {
     suite(
-        "ConverterPlugin",
+        nameof(ConverterPlugin),
         () =>
         {
             let plugin: ConverterPlugin;
@@ -30,8 +30,7 @@ export function ConverterPluginTests(): void
             suiteSetup(
                 async function()
                 {
-                    this.slow(0.85 * 1000);
-                    this.timeout(3.4 * 1000);
+                    this.timeout(10 * 1000);
 
                     let parser = new MarkdownIt(
                         {
@@ -65,8 +64,8 @@ export function ConverterPluginTests(): void
                     converter = new Converter(
                         tempDirectory.FullName,
                         new Document(
-                            await workspace.openTextDocument(mdFile),
-                            parser
+                            parser,
+                            await workspace.openTextDocument(mdFile)
                         ));
 
                     await converter.Initialize();
@@ -112,7 +111,7 @@ export function ConverterPluginTests(): void
             }
 
             suite(
-                "constructor",
+                nameof(ConverterPlugin.constructor),
                 () =>
                 {
                     test(
@@ -128,11 +127,11 @@ export function ConverterPluginTests(): void
                 });
 
             suite(
-                "apply",
+                nameof<ConverterPlugin>((plugin) => plugin.apply),
                 () =>
                 {
                     test(
-                        "Checking whether the plugin can be applied to the website…",
+                        "Checking whether the plugin can be applied to the website-scraper…",
                         async function()
                         {
                             this.slow(2 * 1000);
@@ -141,7 +140,7 @@ export function ConverterPluginTests(): void
                         });
 
                     test(
-                        "Checking whether the expected files have been generated…",
+                        "Checking whether the expected files are generated…",
                         async function()
                         {
                             this.slow(3 * 1000);

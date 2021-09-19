@@ -1,5 +1,4 @@
 import template = require("es6-template-string");
-import format = require("string-template");
 import { dirname, parse, relative } from "upath";
 import { Progress, TextDocument } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";
@@ -28,7 +27,7 @@ export class PatternResolver
     private variables: Array<string | number | symbol>;
 
     /**
-     * Initializes a new instance of the `PatternResolver` class.
+     * Initializes a new instance of the {@link PatternResolver `PatternResolver`} class.
      *
      * @param pattern
      * The pattern to resolve.
@@ -98,8 +97,8 @@ export class PatternResolver
     /**
      * Resolves the pattern.
      *
-     * @param documentRoot
-     * The path to the folder containing the document.
+     * @param workspaceFolder
+     * The path to the current workspace.
      *
      * @param document
      * The document to create the destination-path for.
@@ -107,21 +106,14 @@ export class PatternResolver
      * @param type
      * The type of the file to create the filename for.
      *
-     * @param workspaceRoot
-     * The path to the current workspace.
-     *
      * @returns
+     * The resolved pattern.
      */
-    public Resolve(documentRoot: string, document: TextDocument, type: ConversionType, workspaceRoot?: string): string
+    public Resolve(workspaceFolder: string, document: TextDocument, type: ConversionType): string
     {
         let extension: string;
         let context: IPatternContext;
         let parsedPath = parse(document.fileName);
-
-        this.Reporter?.report(
-            {
-                message: format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
-            });
 
         switch (type)
         {
@@ -144,8 +136,8 @@ export class PatternResolver
             filename: parsedPath.base,
             basename: parsedPath.name,
             extension,
-            dirname: document.isUntitled ? "." : relative(documentRoot, dirname(document.fileName)),
-            workspaceFolder: workspaceRoot
+            dirname: document.isUntitled ? "." : relative(workspaceFolder, dirname(document.fileName)),
+            workspaceFolder
         };
 
         this.Reporter?.report(

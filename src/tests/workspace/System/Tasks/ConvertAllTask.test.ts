@@ -1,14 +1,15 @@
 import { strictEqual } from "assert";
 import { extension } from "../../../..";
+import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 /**
- * Registers tests for the `ConvertAllTask` class.
+ * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.
  */
 export function ConvertAllTaskTests(): void
 {
     suite(
-        "ConvertAllTask",
+        nameof(ConvertAllTask),
         () =>
         {
             let task: TestConvertAllTask;
@@ -20,7 +21,7 @@ export function ConvertAllTaskTests(): void
                 });
 
             suite(
-                "GetDocuments",
+                nameof<TestConvertAllTask>((task) => task.GetDocuments),
                 () =>
                 {
                     test(

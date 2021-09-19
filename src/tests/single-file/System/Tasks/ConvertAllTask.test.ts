@@ -4,12 +4,12 @@ import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolder
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 
 /**
- * Registers tests for the `ConvertAllTask` class.
+ * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.
  */
 export function ConvertAllTaskTests(): void
 {
     suite(
-        "ConvertAllTask",
+        nameof(ConvertAllTask),
         () =>
         {
             let task: ConvertAllTask;
@@ -21,11 +21,11 @@ export function ConvertAllTaskTests(): void
                 });
 
             suite(
-                "Execute",
+                nameof<ConvertAllTask>((task) => task.Execute),
                 () =>
                 {
                     test(
-                        "Checking whether an exception occurrs if no workspace-folder is opened…",
+                        "Checking whether an exception occurs if no workspace-folder is opened…",
                         async () =>
                         {
                             await rejects(() => task.Execute(), NoWorkspaceFolderException);

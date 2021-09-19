@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "extensionHost",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "name": "Launch Extension",
             "runtimeExecutable": "${execPath}",
@@ -20,7 +20,7 @@
             ]
         },
         {
-            "type": "extensionHost",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "name": "Launch Extension Debug",
             "runtimeExecutable": "${execPath}",
@@ -36,7 +36,7 @@
             ]
         },
         {
-            "type": "extensionHost",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "name": "Launch Extension Release",
             "runtimeExecutable": "${execPath}",
@@ -52,7 +52,7 @@
             ]
         },
         {
-            "type": "extensionHost",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "name": "Launch Essential Tests",
             "runtimeExecutable": "${execPath}",
@@ -73,7 +73,7 @@
             ]
         },
         {
-            "type": "extensionHost",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "name": "Launch Common Tests",
             "runtimeExecutable": "${execPath}",
@@ -94,7 +94,7 @@
             ]
         },
         {
-            "type": "extensionHost",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "name": "Launch Tests for Single-File Mode",
             "runtimeExecutable": "${execPath}",
@@ -115,7 +115,7 @@
             ]
         },
         {
-            "type": "extensionHost",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "name": "Launch Tests for the Single-Folder Mode",
             "runtimeExecutable": "${execPath}",
@@ -136,7 +136,7 @@
             ]
         },
         {
-            "type": "extensionHost",
+            "type": "pwa-extensionHost",
             "request": "launch",
             "name": "Launch Tests for the Workspace Mode",
             "runtimeExecutable": "${execPath}",

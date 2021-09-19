@@ -1,6 +1,6 @@
+import { basename } from "path";
 import { ISettings } from "../../../Properties/ISettings";
 import { ITestContext } from "../../ITestContext";
-import { IOTests } from "./IO";
 import { TaskTests } from "./Tasks";
 
 /**
@@ -12,10 +12,9 @@ import { TaskTests } from "./Tasks";
 export function SystemTests(context: ITestContext<ISettings>): void
 {
     suite(
-        "System",
+        basename(__dirname),
         () =>
         {
-            IOTests();
             TaskTests(context);
         });
 }

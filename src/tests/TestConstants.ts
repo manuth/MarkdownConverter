@@ -15,7 +15,7 @@ export class TestConstants
      */
     public static get PackageFileName(): string
     {
-        return join(Constants.PackageDirectory, "package.json");
+        return join(Constants.PackageDirectory, Package.FileName);
     }
 
     /**

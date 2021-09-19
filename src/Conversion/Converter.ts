@@ -1,17 +1,21 @@
 import { createServer, Server } from "http";
-import { resolve } from "url";
+import { URL } from "url";
 import { promisify } from "util";
 import { TempDirectory } from "@manuth/temp-files";
+import dedent = require("dedent");
 import { ensureDir, move, pathExists, remove, writeFile } from "fs-extra";
 import getPort = require("get-port");
 import { glob } from "glob";
-import { Browser, launch, PDFOptions, ScreenshotOptions } from "puppeteer-core";
+import MarkdownIt = require("markdown-it");
+import puppeteer = require("puppeteer-core");
 import serveHandler = require("serve-handler");
+import { transliterate } from "transliteration";
 import { basename, dirname, join, normalize, relative } from "upath";
 import { CancellationToken, Progress } from "vscode";
 import websiteScraper = require("website-scraper");
 import { Resources } from "../Properties/Resources";
-import { Settings } from "../Properties/Settings";
+import { InsertionType } from "../System/Documents/Assets/InsertionType";
+import { StyleSheet } from "../System/Documents/Assets/StyleSheet";
 import { Document } from "../System/Documents/Document";
 import { FileException } from "../System/IO/FileException";
 import { OperationCancelledException } from "../System/OperationCancelledException";
@@ -45,9 +49,19 @@ export class Converter
     private portNumber: number;
 
     /**
+     * The path to the chromium-browser to use for the conversion.
+     */
+    private chromiumExecutablePath: string = null;
+
+    /**
+     * The arguments to path to the chromium-browser.
+     */
+    private chromiumArgs: string[] = [];
+
+    /**
      * The browser which is used to perform the conversion.
      */
-    private browser: Browser;
+    private browser: puppeteer.Browser;
 
     /**
      * A value indicating whether the converter has been initialized.
@@ -60,7 +74,7 @@ export class Converter
     private disposed = false;
 
     /**
-     * Initializes a new instance of the Constructor class with a filepath.
+     * Initializes a new instance of the {@link Converter `Converter`} class.
      *
      * @param documentRoot
      * The root of the document-context.
@@ -83,7 +97,7 @@ export class Converter
     }
 
     /**
-     * Gets the document which is converted by this `Converter`.
+     * Gets the document which is converted by this {@link Converter `Converter`}.
      */
     public get Document(): Document
     {
@@ -112,7 +126,7 @@ export class Converter
     public get URL(): string
     {
         return this.Initialized ?
-            (resolve(`http://localhost:${this.PortNumber}/`, this.WebDocumentName)) :
+            (new URL(this.WebDocumentName, `http://localhost:${this.PortNumber}/`).href) :
             null;
     }
 
@@ -129,9 +143,10 @@ export class Converter
      */
     protected get WebDocumentName(): string
     {
-        return ((this.Document.FileName && this.DocumentRoot) ?
-            relative(this.DocumentRoot, this.Document.FileName) :
-            "index") + ".html";
+        return (
+            (this.Document.FileName && this.DocumentRoot) ?
+                transliterate(relative(this.DocumentRoot, this.Document.FileName)) :
+                "index") + ".html";
     }
 
     /**
@@ -143,9 +158,56 @@ export class Converter
     }
 
     /**
+     * Gets or sets the path to the chromium-browser to use for the conversion.
+     */
+    public get ChromiumExecutablePath(): string
+    {
+        return this.chromiumExecutablePath;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public set ChromiumExecutablePath(value: string)
+    {
+        this.chromiumExecutablePath = value;
+    }
+
+    /**
+     * Gets or sets the arguments to path to the chromium-browser.
+     */
+    public get ChromiumArgs(): string[]
+    {
+        return this.chromiumArgs;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public set ChromiumArgs(value: string[])
+    {
+        this.chromiumArgs = value;
+    }
+
+    /**
+     * Gets the options for launching the browser.
+     */
+    public get BrowserOptions(): puppeteer.LaunchOptions
+    {
+        return {
+            ...(
+                this.ChromiumExecutablePath ?
+                    {
+                        executablePath: this.ChromiumExecutablePath
+                    } :
+                    {})
+        };
+    }
+
+    /**
      * Gets the browser which is used to perform the conversion.
      */
-    protected get Browser(): Browser
+    protected get Browser(): puppeteer.Browser
     {
         return this.Initialized ? this.browser : null;
     }
@@ -174,12 +236,41 @@ export class Converter
             this.webServer = createServer(
                 async (request, response) =>
                 {
+                    let headers: Array<[string, string]> = [];
+
                     if (normalize(join(this.DocumentRoot, request.url)) === normalize(join(this.DocumentRoot, this.WebDocumentName)))
                     {
-                        let content = await this.Document.Render();
-                        response.writeHead(200);
-                        response.write(content);
-                        response.end();
+                        try
+                        {
+                            let content = await this.Document.Render();
+
+                            for (let header of headers)
+                            {
+                                response.setHeader(header[0], header[1]);
+                            }
+
+                            response.writeHead(200);
+                            response.write(content);
+                        }
+                        catch (exception)
+                        {
+                            let errorDocument = new Document(new MarkdownIt());
+                            errorDocument.StyleSheets.push(new StyleSheet(Resources.Files.Get("SystemStyle"), InsertionType.Include));
+
+                            errorDocument.Content = dedent(
+                                `
+                                    # An Error Occurred While Converting the Document
+                                    ~~~
+                                    ${exception}
+                                    ~~~`);
+
+                            response.writeHead(500);
+                            response.write(await errorDocument.Render());
+                        }
+                        finally
+                        {
+                            response.end();
+                        }
                     }
                     else
                     {
@@ -191,16 +282,14 @@ export class Converter
                                 headers: [
                                     {
                                         source: "**/*.*",
-                                        headers: [
+                                        headers: headers.map(
+                                            (header) =>
                                             {
-                                                key: "Access-Control-Allow-Origin",
-                                                value: "*"
-                                            },
-                                            {
-                                                key: "Access-Control-Allow-Headers",
-                                                value: "Origin, X-Requested-With, Content-Type, Accept, Range"
-                                            }
-                                        ]
+                                                return {
+                                                    key: header[0],
+                                                    value: header[1]
+                                                };
+                                            })
                                     }
                                 ],
                                 cleanUrls: false
@@ -210,8 +299,6 @@ export class Converter
 
             this.webServer.listen(this.portNumber, "localhost");
 
-            let browserArguments = ["--disable-web-security"];
-
             progressReporter?.report(
                 {
                     message: Resources.Resources.Get("Progress.LaunchChromium")
@@ -219,21 +306,21 @@ export class Converter
 
             try
             {
-                this.browser = await launch(
+                this.browser = await puppeteer.launch(
                     {
+                        ...this.BrowserOptions,
                         args: [
-                            ...browserArguments,
-                            ...Settings.Default.ChromiumArgs
+                            ...this.ChromiumArgs
                         ]
                     });
             }
             catch
             {
-                this.browser = await launch(
+                this.browser = await puppeteer.launch(
                     {
+                        ...this.BrowserOptions,
                         args: [
-                            ...browserArguments,
-                            ...Settings.Default.ChromiumArgs,
+                            ...this.ChromiumArgs,
                             "--no-sandbox"
                         ]
                     });
@@ -252,7 +339,7 @@ export class Converter
         {
             await this.browser.close();
 
-            await new Promise(
+            await new Promise<void>(
                 (resolve) =>
                 {
                     this.WebServer.close(() => resolve());
@@ -283,6 +370,10 @@ export class Converter
         if (!this.Initialized)
         {
             throw new Error("The converter must be initialized in order to use it.");
+        }
+        else if (cancellationToken?.isCancellationRequested)
+        {
+            throw new OperationCancelledException();
         }
         else
         {
@@ -363,7 +454,7 @@ export class Converter
                                         }
                                     </style>`;
 
-                                let pdfOptions: PDFOptions = {
+                                let pdfOptions: puppeteer.PDFOptions = {
                                     margin: {
                                         top: this.Document.Paper.Margin.Top,
                                         right: this.Document.Paper.Margin.Right,
@@ -391,7 +482,7 @@ export class Converter
                                 await page.pdf(pdfOptions);
                                 break;
                             default:
-                                let screenshotOptions: ScreenshotOptions = {
+                                let screenshotOptions: puppeteer.ScreenshotOptions = {
                                     fullPage: true,
                                     path
                                 };

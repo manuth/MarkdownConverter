@@ -1,8 +1,12 @@
+import { commands, Uri, window } from "vscode";
 import { ConfigInterceptor } from "./ConfigInterceptor";
 import { ITestContext } from "./ITestContext";
 
 /**
  * Represents a test-context.
+ *
+ * @template TSection
+ * The type of the intercepted settings-section.
  */
 export class TestContext<TSection extends any = any> implements ITestContext<TSection>
 {
@@ -12,7 +16,7 @@ export class TestContext<TSection extends any = any> implements ITestContext<TSe
     private interceptor: ConfigInterceptor<TSection>;
 
     /**
-     * Initializes a new instance of the `TextContext`.
+     * Initializes a new instance of the {@link TextContext `TextContext`}.
      *
      * @param interceptor
      * The config-interceptor of this context.
@@ -44,5 +48,53 @@ export class TestContext<TSection extends any = any> implements ITestContext<TSe
     public Clear(): void
     {
         this.interceptor.Clear();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public async CloseActiveEditor(): Promise<void>
+    {
+        await commands.executeCommand("workbench.action.closeActiveEditor");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public async CloseEditors(): Promise<void>
+    {
+        await commands.executeCommand("workbench.action.closeAllGroups");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public async OpenMarkdownDocument(): Promise<void>
+    {
+        await window.showTextDocument(Uri.parse("untitled:.md"));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public async OpenPreview(): Promise<void>
+    {
+        await commands.executeCommand("markdown.showPreview");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public async ResetEditor(): Promise<void>
+    {
+        await commands.executeCommand("workbench.action.files.revert");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public async FocusFirstEditor(): Promise<void>
+    {
+        await commands.executeCommand("workbench.action.focusFirstEditorGroup");
     }
 }

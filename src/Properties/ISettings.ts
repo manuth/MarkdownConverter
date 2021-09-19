@@ -1,11 +1,25 @@
 import { ConversionType } from "../Conversion/ConversionType";
+import { AssetURLType } from "../System/Documents/Assets/AssetURLType";
+import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { EmojiType } from "../System/Documents/EmojiType";
+import { Margin } from "../System/Documents/Margin";
+import { IRunningBlockContent } from "./IRunningBlockContent";
 
 /**
  * Represents the raw vscode-settings.
  */
 export interface ISettings
 {
+    /**
+     * The path to the chromium-installation to use.
+     */
+    ChromiumExecutablePath?: string;
+
+    /**
+     * The arguments to pass to chromium.
+     */
+    ChromiumArgs?: string[];
+
     /**
      * The pattern for creating the destination-path.
      */
@@ -17,7 +31,7 @@ export interface ISettings
     IgnoreLanguageMode?: boolean;
 
     /**
-     * The quality to use for creating `.png`-files.
+     * The quality to use for creating `.jpg`-files.
      */
     ConversionQuality?: number;
 
@@ -40,11 +54,6 @@ export interface ISettings
      * A set of custom date-formats.
      */
     DateFormats?: Record<string, string>;
-
-    /**
-     * The arguments to pass to chromium.
-     */
-    ChromiumArgs?: string[];
 
     /**
      * A value indicating whether the parser of `vscode` should be used.
@@ -94,7 +103,7 @@ export interface ISettings
     /**
      * The margin of the paper.
      */
-    ["Document.Paper.Margin"]?: Record<string, string>;
+    ["Document.Paper.Margin"]?: Partial<Record<keyof Margin, string>>;
 
     /**
      * A value indicating whether headers and footers are enabled.
@@ -102,14 +111,29 @@ export interface ISettings
     ["Document.HeaderFooterEnabled"]?: boolean;
 
     /**
+     * The content of the different sections of the header.
+     */
+    ["Document.HeaderContent"]?: IRunningBlockContent;
+
+    /**
      * The template of the header.
      */
     ["Document.HeaderTemplate"]?: string;
 
     /**
+     * The content of the different sections of the footer.
+     */
+    ["Document.FooterContent"]?: IRunningBlockContent;
+
+    /**
      * The template of the footer.
      */
     ["Document.FooterTemplate"]?: string;
+
+    /**
+     * The template of the metadata-section.
+     */
+    ["Document.MetaTemplate"]?: string;
 
     /**
      * The template of the document.
@@ -119,7 +143,7 @@ export interface ISettings
     /**
      * A value indicating whether the default styles should be included.
      */
-    ["Document.Design.DefaultStyles"]?: string;
+    ["Document.Design.DefaultStyles"]?: boolean;
 
     /**
      * The `highlight.js`-style to apply.
@@ -127,7 +151,22 @@ export interface ISettings
     ["Document.Design.HighlightStyle"]?: string;
 
     /**
+     * The insertion-types to use for stylesheets based on their path.
+     */
+    ["Document.Design.StyleSheetInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
+
+    /**
      * The stylesheets to add to the document.
      */
-    ["Document.Design.StyleSheets"]?: string[];
+    ["Document.Design.StyleSheets"]?: Record<string, keyof typeof InsertionType>;
+
+    /**
+     * The insertion-types to use for scripts based on their path.
+     */
+    ["Document.Design.ScriptInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
+
+    /**
+     * The javascript files to add to the document.
+     */
+    ["Document.Design.Scripts"]?: Record<string, keyof typeof InsertionType>;
 }

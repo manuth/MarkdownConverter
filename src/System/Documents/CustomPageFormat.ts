@@ -1,23 +1,23 @@
 import { PDFOptions } from "puppeteer-core";
-import { PaperFormat } from "./PaperFormat";
+import { PageFormat } from "./PageFormat";
 
 /**
- * Represents a custom paper-format.
+ * Represents a custom page-format.
  */
-export class CustomPaperFormat extends PaperFormat
+export class CustomPageFormat extends PageFormat
 {
     /**
-     * The width.
+     * The width of the page.
      */
     private width: string;
 
     /**
-     * The height.
+     * The height of the page.
      */
     private height: string;
 
     /**
-     * Initializes a new instance of the `CustomPaperFormat` class.
+     * Initializes a new instance of the {@link CustomPageFormat `CustomPageFormat`} class.
      *
      * @param width
      * The width.
@@ -33,7 +33,7 @@ export class CustomPaperFormat extends PaperFormat
     }
 
     /**
-     * Gets or sets the width.
+     * Gets or sets the width of the page.
      */
     public get Width(): string
     {
@@ -49,7 +49,7 @@ export class CustomPaperFormat extends PaperFormat
     }
 
     /**
-     * Gets or sets the height.
+     * Gets or sets the height of the page.
      */
     public get Height(): string
     {

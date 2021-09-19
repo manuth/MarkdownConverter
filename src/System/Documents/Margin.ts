@@ -24,7 +24,7 @@ export class Margin
     private left: string;
 
     /**
-     * Initializes a new instance of the Margin class.
+     * Initializes a new instance of the {@link Margin `Margin`} class.
      *
      * @param all
      * The margin to apply on all sides.
@@ -32,7 +32,7 @@ export class Margin
     public constructor(all: string);
 
     /**
-     * Initializes a new instance of the Margin class.
+     * Initializes a new instance of the {@link Margin `Margin`} class.
      *
      * @param vertical
      * The margin to apply vertically.
@@ -43,7 +43,7 @@ export class Margin
     public constructor(vertical: string, horizontal: string);
 
     /**
-     * Initializes a new instance of the Margin class.
+     * Initializes a new instance of the {@link Margin `Margin`} class.
      *
      * @param top
      * The top margin.
@@ -60,7 +60,7 @@ export class Margin
     public constructor(top: string, right: string, bottom: string, left: string);
 
     /**
-     * Initializes a new instance of the Margin class.
+     * Initializes a new instance of the {@link Margin `Margin`} class.
      *
      * @param top
      * The top margin.

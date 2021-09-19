@@ -4,12 +4,12 @@ import { ListType } from "../../../../System/Documents/ListType";
 import { TocSettings } from "../../../../System/Documents/TocSettings";
 
 /**
- * Registers tests for the `TocSettings` class.
+ * Registers tests for the {@link TocSettings `TocSettings`} class.
  */
 export function TocSettingTests(): void
 {
     suite(
-        "TocSettings",
+        nameof(TocSettings),
         () =>
         {
             let className: string;
@@ -34,7 +34,7 @@ export function TocSettingTests(): void
                 });
 
             suite(
-                "constructor",
+                nameof(TocSettings.constructor),
                 () =>
                 {
                     test(
