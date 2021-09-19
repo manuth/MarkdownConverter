@@ -36,6 +36,7 @@ import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
 import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
 import { TestConstants } from "../../../TestConstants";
+import { TestConversionRunner } from "../../../TestConversionRunner";
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.
@@ -67,71 +68,6 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
             const line2Text = "World";
             const text = `${line1Text}${EOL}${line2Text}`;
             const newLineSelector = "br";
-
-            /**
-             * Provides an implementation of the {@link ConversionRunner `ConversionRunner`} class for testing.
-             */
-            class TestConversionRunner extends ConversionRunner
-            {
-                /**
-                 * @inheritdoc
-                 *
-                 * @param document
-                 * The document to get the workspace-path for.
-                 *
-                 * @returns
-                 * The path to the workspace of the specified {@link document `document`}.
-                 */
-                public override GetWorkspacePath(document: TextDocument): string
-                {
-                    return super.GetWorkspacePath(document);
-                }
-
-                /**
-                 * @inheritdoc
-                 *
-                 * @param workspaceRoot
-                 * The path to the root of the workspace of the document.
-                 *
-                 * @param document
-                 * The document to convert.
-                 *
-                 * @returns
-                 * A converter generated according to the settings.
-                 */
-                public override LoadConverter(workspaceRoot: string, document: TextDocument): Promise<Converter>
-                {
-                    return super.LoadConverter(workspaceRoot, document);
-                }
-
-                /**
-                 * @inheritdoc
-                 *
-                 * @returns
-                 * The parser.
-                 */
-                public override LoadParser(): Promise<MarkdownIt>
-                {
-                    return super.LoadParser();
-                }
-
-                /**
-                 * @inheritdoc
-                 *
-                 * @param converter
-                 * The converter to load the fragment for.
-                 *
-                 * @param source
-                 * Either the path to a file to load the source from or the source of the fragment.
-                 *
-                 * @returns
-                 * The content of the fragment.
-                 */
-                public override async LoadFragment(converter: Converter, source: string): Promise<string>
-                {
-                    return super.LoadFragment(converter, source);
-                }
-            }
 
             /**
              * Selects DOM-elements from the destination-file.
