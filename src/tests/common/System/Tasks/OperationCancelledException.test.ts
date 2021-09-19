@@ -1,4 +1,4 @@
-import { ok, strictEqual } from "assert";
+import { notStrictEqual, ok, strictEqual } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import { Random } from "random-js";
 import { Resources } from "../../../../Properties/Resources";
@@ -65,7 +65,7 @@ export function OperationCancelledExceptionTests(): void
                             germanMessage = exception.Message;
                             Resources.Culture = new CultureInfo("en");
                             englishMessage = exception.Message;
-                            strictEqual(germanMessage, englishMessage);
+                            notStrictEqual(germanMessage, englishMessage);
                         });
                 });
         });
