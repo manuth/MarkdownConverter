@@ -1,6 +1,8 @@
-import dedent = require("dedent");
+import { load } from "cheerio";
 import { Asset } from "./Asset";
 import { InsertionType } from "./InsertionType";
+
+const scriptTagName = "script";
 
 /**
  * Represents a web-script.
@@ -32,8 +34,12 @@ export class WebScript extends Asset
      */
     protected async GetSource(): Promise<string>
     {
-        return dedent(`
-            <script>${await this.ReadFile()}</script>`) + "\n";
+        let document = load(
+            load(`<${scriptTagName}></${scriptTagName}>`)(scriptTagName).toArray()[0]);
+
+        let scriptTag = document(scriptTagName);
+        scriptTag.text(await this.ReadFile());
+        return `${document.html()}\n`;
     }
 
     /**
@@ -44,6 +50,12 @@ export class WebScript extends Asset
      */
     protected async GetReferenceSource(): Promise<string>
     {
-        return `<script async src="${this.URL}" charset="UTF-8"></script>\n`;
+        let document = load(
+            load(`<${scriptTagName} async></${scriptTagName}>`)(scriptTagName).toArray()[0]);
+
+        let scriptTag = document(scriptTagName);
+        scriptTag.attr("src", this.URL);
+        scriptTag.attr("charset", "UTF-8");
+        return `${document.html()}\n`;
     }
 }

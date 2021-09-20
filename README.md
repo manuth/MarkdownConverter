@@ -18,7 +18,7 @@ A markdown-converter for [vscode][vscode]
 
 ## What is `MarkdownConverter`?
 > MarkdownConverter is a Visual Studio Code-extension which allows you to export your Markdown-file as PDF-, HTML or Image-files.  
-> It provides many features, such as DateTime-Formatting, configuring your own CSS-styles, setting Headers and Footers, FrontMatter and much more.
+> It provides many features, such as DateTime-Formatting, configuring your own CSS-styles, custom JavaScript-files, setting Headers and Footers, FrontMatter and much more.
 
 ## Usage
  1. Set your desired conversion-types or skip this step to convert your markdown-file to `PDF`:
@@ -65,6 +65,8 @@ This page was written by {{ Author }}
 ```
 
 Following attributes are predefined and may be overridden by the document-attributes:
+  * `Title`  
+    Either the name of the document-file without extension or `Untitled`
   * `CreationDate`  
     A `Date`-value indicating the time of the creation of the markdown-file
   * `ChangeDate`  
@@ -98,7 +100,15 @@ Date taken from an attribute: {{ Date "dddd" }}
 Predefined date: {{ CurrentDate "dddd" }}
 ```
 
-You can override the default date-format for a document by adding a `DateFormat` attribute:
+By specifying the `markdownConverter.DefaultDateFormat`-setting, you can set the global default date-format which is applied to all documents by default:
+
+```json
+{
+  "markdownConverter.DefaultDateFormat": "dddd, dd. MMMM yyyy"
+}
+```
+
+You can override the default date-format for an individual document by adding a `DateFormat` attribute:
 
 ***Example:***
 ```md
@@ -137,7 +147,7 @@ You can set the content of these sections using the `markdownConverter.Document.
   "markdownConverter.Document.HeaderContent": {
     "Left": "{{ Company }}",
     "Center": "{{ Author }}",
-    "Right": "{{ FormatDate CurrentDate \"hh:mm:ss\" }}"
+    "Right": "{{ FormatDate CurrentDate \"HH:mm:ss\" }}"
   },
   "markdownConverter.Document.FooterContent": {
     "Center": "<span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span>"
@@ -233,7 +243,7 @@ By default, `MarkdownConverter` will include assets located at absolute and rela
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
 
   - `markdownConverter.ChromiumExecutablePath`:  
-    Normally, `MarkdownConverter` will download a copy of Chromium. This option allows you to choose a custom chromium-installation instead.
+    Normally, `MarkdownConverter` will download a copy of Chromium. This option allows you to choose a custom chromium-executable instead.
   - `markdownConverter.ChromiumArgs`:  
     Allows you to pass specific arguments to chromium for the conversion (such as `--no-sandbox` or `--disable-gpu`).
   - `markdownConverter.DestinationPattern`:  
@@ -257,11 +267,13 @@ This is a list of the most important settings. To see all of them, install the e
     The regular expression to replace with the table of contents.
   - `markdownConverter.Document.Attributes`:  
     Using this setting you can specify default attributes which are applied to all your documents.
-  - `markdownConverter.HeaderTemplate` and `markdownConverter.FooterTemplate`:  
-    The html-sourcecode of the header- and footer-section. Variable-substituion is supported here as well. Page-numbers and similar information can be included as described in the [puppeteer docs](https://github.com/puppeteer/puppeteer/blob/main/docs/api.md#pagepdfoptions).
-  - `markdownConverter.DefaultStyles`:  
+  - `markdownConverter.Document.HeaderContent` and `markdownConverter.Document.FooterContent`:  
+    Allows you to set the content of the different sections of the header and the footer.
+  - `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate`:  
+    The html-sourcecode of the header and footer. Variable-substituion is supported here as well. Page-numbers and similar information can be included as described in the [puppeteer docs](https://github.com/puppeteer/puppeteer/blob/main/docs/api.md#pagepdfoptions).
+  - `markdownConverter.Document.Design.DefaultStyles`:  
     Allows you to disable the default styles. This might be useful if you want to create your own stylesheet from scratch.
-  - `markdownConverter.StyleSheets`:  
+  - `markdownConverter.Document.Design.StyleSheets`:  
     A set of stylesheets to include in your document.
 
 <!--- References -->

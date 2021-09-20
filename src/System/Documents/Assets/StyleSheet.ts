@@ -1,6 +1,9 @@
-import dedent = require("dedent");
+import { load } from "cheerio";
 import { Asset } from "./Asset";
 import { InsertionType } from "./InsertionType";
+
+const styleTagName = "style";
+const linkTagName = "link";
 
 /**
  * Represents a stylesheet.
@@ -32,8 +35,12 @@ export class StyleSheet extends Asset
      */
     protected async GetSource(): Promise<string>
     {
-        return dedent(`
-            <style>${await this.ReadFile()}</style>`) + "\n";
+        let document = load(
+            load(`<${styleTagName}></${styleTagName}>`)(styleTagName).toArray()[0]);
+
+        let styleTag = document(styleTagName);
+        styleTag.text(await this.ReadFile());
+        return `${document.html()}\n`;
     }
 
     /**
@@ -44,6 +51,13 @@ export class StyleSheet extends Asset
      */
     protected async GetReferenceSource(): Promise<string>
     {
-        return `<link rel="stylesheet" type="text/css" href="${this.URL}" />\n`;
+        let document = load(
+            load(`<${linkTagName} />`)(linkTagName).toArray()[0]);
+
+        let linkTag = document(linkTagName);
+        linkTag.attr("rel", "stylesheet");
+        linkTag.attr("type", "text/css");
+        linkTag.attr("href", this.URL);
+        return `${document.html()}\n`;
     }
 }

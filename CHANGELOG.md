@@ -6,7 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.0...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.1...dev)
+
+## MarkdownConverter v4.0.1
+### Fixed
+  - Broken `Include`-insertion
+
+### Added
+  - A missing dependency
+
+### Updated
+  - The `README`-file
+  - All dependencies
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.0...v4.0.1)
 
 ## MarkdownConverter v4.0.0
 Hello Everyone Who Still Sticks to MarkdownConverter!
