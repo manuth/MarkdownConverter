@@ -65,6 +65,8 @@ This page was written by {{ Author }}
 ```
 
 Following attributes are predefined and may be overridden by the document-attributes:
+  * `Title`  
+    Either the name of the document-file without extension or `Untitled`
   * `CreationDate`  
     A `Date`-value indicating the time of the creation of the markdown-file
   * `ChangeDate`  
@@ -98,7 +100,15 @@ Date taken from an attribute: {{ Date "dddd" }}
 Predefined date: {{ CurrentDate "dddd" }}
 ```
 
-You can override the default date-format for a document by adding a `DateFormat` attribute:
+By specifying the `markdownConverter.DefaultDateFormat`-setting, you can set the global default date-format which is applied to all documents by default:
+
+```json
+{
+  "markdownConverter.DefaultDateFormat": "dddd, dd. MMMM yyyy"
+}
+```
+
+You can override the default date-format for an individual document by adding a `DateFormat` attribute:
 
 ***Example:***
 ```md
