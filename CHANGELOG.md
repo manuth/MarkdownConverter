@@ -5,10 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## MarkdownConverter [Unreleased]
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.2...dev)
+
+## MarkdownConverter v4.0.2
 ### Updated
   - The release-scripts to ignore non-zero exit-codes when publishing extensions
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.1...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.1...v4.0.2)
 
 ## MarkdownConverter v4.0.1
 ### Fixed
