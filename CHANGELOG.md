@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## MarkdownConverter [Unreleased]
+### Updated
+  - The release-scripts to ignore non-zero exit-codes when publishing extensions
 
 [Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.1...dev)
 
