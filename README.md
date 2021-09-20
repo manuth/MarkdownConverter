@@ -18,7 +18,7 @@ A markdown-converter for [vscode][vscode]
 
 ## What is `MarkdownConverter`?
 > MarkdownConverter is a Visual Studio Code-extension which allows you to export your Markdown-file as PDF-, HTML or Image-files.  
-> It provides many features, such as DateTime-Formatting, configuring your own CSS-styles, setting Headers and Footers, FrontMatter and much more.
+> It provides many features, such as DateTime-Formatting, configuring your own CSS-styles, custom JavaScript-files, setting Headers and Footers, FrontMatter and much more.
 
 ## Usage
  1. Set your desired conversion-types or skip this step to convert your markdown-file to `PDF`:
@@ -233,7 +233,7 @@ By default, `MarkdownConverter` will include assets located at absolute and rela
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
 
   - `markdownConverter.ChromiumExecutablePath`:  
-    Normally, `MarkdownConverter` will download a copy of Chromium. This option allows you to choose a custom chromium-installation instead.
+    Normally, `MarkdownConverter` will download a copy of Chromium. This option allows you to choose a custom chromium-executable instead.
   - `markdownConverter.ChromiumArgs`:  
     Allows you to pass specific arguments to chromium for the conversion (such as `--no-sandbox` or `--disable-gpu`).
   - `markdownConverter.DestinationPattern`:  
