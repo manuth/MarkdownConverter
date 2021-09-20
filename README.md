@@ -257,11 +257,11 @@ This is a list of the most important settings. To see all of them, install the e
     The regular expression to replace with the table of contents.
   - `markdownConverter.Document.Attributes`:  
     Using this setting you can specify default attributes which are applied to all your documents.
-  - `markdownConverter.HeaderTemplate` and `markdownConverter.FooterTemplate`:  
+  - `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate`:  
     The html-sourcecode of the header- and footer-section. Variable-substituion is supported here as well. Page-numbers and similar information can be included as described in the [puppeteer docs](https://github.com/puppeteer/puppeteer/blob/main/docs/api.md#pagepdfoptions).
-  - `markdownConverter.DefaultStyles`:  
+  - `markdownConverter.Document.Design.DefaultStyles`:  
     Allows you to disable the default styles. This might be useful if you want to create your own stylesheet from scratch.
-  - `markdownConverter.StyleSheets`:  
+  - `markdownConverter.Document.Design.StyleSheets`:  
     A set of stylesheets to include in your document.
 
 <!--- References -->
