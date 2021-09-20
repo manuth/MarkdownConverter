@@ -118,7 +118,7 @@
     "random-js": "^2.1.0",
     "rimraf": "^3.0.2",
     "sinon": "^11.1.2",
-    "ts-loader": "^9.2.5",
+    "ts-loader": "^9.2.6",
     "ts-nameof": "^5.0.0",
     "ts-node": "^10.2.1",
     "ts-patch": "^1.4.4",
