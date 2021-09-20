@@ -56,7 +56,7 @@ export class StyleSheet extends Asset
 
         let linkTag = document(linkTagName);
         linkTag.attr("rel", "stylesheet");
-        linkTag.attr("type", "type/css");
+        linkTag.attr("type", "text/css");
         linkTag.attr("href", this.URL);
         return `${document.html()}\n`;
     }
