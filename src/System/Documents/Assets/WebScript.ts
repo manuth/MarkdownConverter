@@ -34,7 +34,9 @@ export class WebScript extends Asset
      */
     protected async GetSource(): Promise<string>
     {
-        let document = load(load(`<${scriptTagName}></${scriptTagName}>`)(scriptTagName).toArray()[0]);
+        let document = load(
+            load(`<${scriptTagName}></${scriptTagName}>`)(scriptTagName).toArray()[0]);
+
         let scriptTag = document(scriptTagName);
         scriptTag.text(await this.ReadFile());
         return `${document.html()}\n`;
@@ -48,7 +50,9 @@ export class WebScript extends Asset
      */
     protected async GetReferenceSource(): Promise<string>
     {
-        let document = load(load(`<${scriptTagName} async></${scriptTagName}>`)(scriptTagName).toArray()[0]);
+        let document = load(
+            load(`<${scriptTagName} async></${scriptTagName}>`)(scriptTagName).toArray()[0]);
+
         let scriptTag = document(scriptTagName);
         scriptTag.attr("src", this.URL);
         scriptTag.attr("charset", "UTF-8");

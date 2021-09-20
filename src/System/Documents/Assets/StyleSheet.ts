@@ -35,7 +35,9 @@ export class StyleSheet extends Asset
      */
     protected async GetSource(): Promise<string>
     {
-        let document = load(load(`<${styleTagName}></${styleTagName}>`)(styleTagName).toArray()[0]);
+        let document = load(
+            load(`<${styleTagName}></${styleTagName}>`)(styleTagName).toArray()[0]);
+
         let styleTag = document(styleTagName);
         styleTag.text(await this.ReadFile());
         return `${document.html()}\n`;
@@ -49,7 +51,9 @@ export class StyleSheet extends Asset
      */
     protected async GetReferenceSource(): Promise<string>
     {
-        let document = load(load(`<${linkTagName} />`)(linkTagName).toArray()[0]);
+        let document = load(
+            load(`<${linkTagName} />`)(linkTagName).toArray()[0]);
+
         let linkTag = document(linkTagName);
         linkTag.attr("rel", "stylesheet");
         linkTag.attr("type", "type/css");
