@@ -147,7 +147,7 @@ You can set the content of these sections using the `markdownConverter.Document.
   "markdownConverter.Document.HeaderContent": {
     "Left": "{{ Company }}",
     "Center": "{{ Author }}",
-    "Right": "{{ FormatDate CurrentDate \"hh:mm:ss\" }}"
+    "Right": "{{ FormatDate CurrentDate \"HH:mm:ss\" }}"
   },
   "markdownConverter.Document.FooterContent": {
     "Center": "<span class=\"pageNumber\"></span>/<span class=\"totalPages\"></span>"
