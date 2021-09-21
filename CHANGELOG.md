@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## MarkdownConverter [Unreleased]
+### Fixed
+  - An error in the `Converter` class which prevented users from converting documents located at paths containing a space or documents with a space in their file-name
 
 [Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.2...dev)
 
