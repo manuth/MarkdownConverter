@@ -10,7 +10,7 @@ import MarkdownIt = require("markdown-it");
 import puppeteer = require("puppeteer-core");
 import serveHandler = require("serve-handler");
 import { transliterate } from "transliteration";
-import { basename, dirname, join, normalize, relative } from "upath";
+import { basename, dirname, join, relative } from "upath";
 import { CancellationToken, Progress } from "vscode";
 import websiteScraper = require("website-scraper");
 import { Resources } from "../Properties/Resources";
@@ -238,7 +238,7 @@ export class Converter
                 {
                     let headers: Array<[string, string]> = [];
 
-                    if (normalize(join(this.DocumentRoot, request.url)) === normalize(join(this.DocumentRoot, this.WebDocumentName)))
+                    if (new URL(request.url, `http://${request.headers.host}`).href === this.URL)
                     {
                         try
                         {

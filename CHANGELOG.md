@@ -6,7 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.2...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.3...dev)
+
+## MarkdownConverter v4.0.3
+### Fixed
+  - An error in the `Converter` class which prevented users from converting documents located at paths containing a space or documents with a space in their file-name
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.2...v4.0.3)
 
 ## MarkdownConverter v4.0.2
 ### Updated
