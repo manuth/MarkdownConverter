@@ -444,6 +444,58 @@ export function ConverterTests(): void
                         });
 
                     test(
+                        "Checking whether documents with a path containing a space or special literals are served correctly…",
+                        async function()
+                        {
+                            this.slow(5 * 1000);
+                            this.timeout(0 * 10 * 1000);
+                            let testSandbox = createSandbox();
+
+                            for (let specialName of [
+                                "ä",
+                                "hello world",
+                                "Pokémon",
+                                "My Favorite Pokémon"
+                            ])
+                            {
+                                /**
+                                 * Replaces the {@link Converter.DocumentRoot `Converter.DocumentRoot`}-property with the {@link specialName `specialName`}.
+                                 */
+                                function replaceDocumentRoot(): void
+                                {
+                                    testSandbox.replaceGetter(initializedConverter, "DocumentRoot", () => specialName);
+                                }
+
+                                /**
+                                 * Replaces the {@link Document.FileName `Document.FileName`}-property with the {@link specialName `specialName`}.
+                                 */
+                                function replaceFileName(): void
+                                {
+                                    testSandbox.replaceGetter(initializedConverter.Document, "FileName", () => specialName);
+                                }
+
+                                for (let injector of [
+                                    replaceDocumentRoot,
+                                    replaceFileName,
+                                    () =>
+                                    {
+                                        replaceDocumentRoot();
+                                        replaceFileName();
+                                    }
+                                ])
+                                {
+                                    let content = random.string(100);
+                                    injector();
+                                    testSandbox.replace(initializedConverter.Document, "Render", async () => content);
+                                    let response = await page.goto(initializedConverter.URL);
+                                    strictEqual(response.status(), 200);
+                                    strictEqual(await response.text(), await initializedConverter.Document.Render());
+                                    testSandbox.restore();
+                                }
+                            }
+                        });
+
+                    test(
                         "Checking whether an error message is printed if the document couldn't be rendered for some reason…",
                         async function()
                         {
