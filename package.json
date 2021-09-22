@@ -98,7 +98,7 @@
     "@types/markdown-it-emoji": "^2.0.2",
     "@types/minimist": "^1.2.2",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.9.4",
+    "@types/node": "^16.9.6",
     "@types/serve-handler": "^6.1.1",
     "@types/sinon": "^10.0.3",
     "@types/string-template": "^1.0.2",
