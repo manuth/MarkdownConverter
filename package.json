@@ -90,7 +90,7 @@
     "@manuth/typescript-eslint-plugin": "^1.4.2",
     "@stdlib/utils-escape-regexp-string": "^0.0.7",
     "@types/dedent": "^0.7.0",
-    "@types/fs-extra": "^9.0.12",
+    "@types/fs-extra": "^9.0.13",
     "@types/glob": "^7.1.4",
     "@types/highlight.js": "^9.12.4",
     "@types/lodash.clonedeep": "^4.5.6",
