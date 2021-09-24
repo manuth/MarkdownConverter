@@ -62,7 +62,7 @@
     "front-matter": "^4.0.2",
     "fs-extra": "^10.0.0",
     "get-port": "^5.1.1",
-    "get-uri": "^3.0.2",
+    "get-uri": "^4.0.0",
     "glob": "^7.1.7",
     "handlebars": "^4.7.7",
     "highlight.js": "^11.2.0",
