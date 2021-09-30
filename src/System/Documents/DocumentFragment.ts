@@ -68,7 +68,18 @@ export class DocumentFragment extends Renderable
      * @returns
      * The rendered text.
      */
-    public async Render(): Promise<string>
+    public override async Render(): Promise<string>
+    {
+        return super.Render();
+    }
+
+    /**
+     * Renders the fragment.
+     *
+     * @returns
+     * The rendered text.
+     */
+    protected async RenderContent(): Promise<string>
     {
         let view: Record<string, unknown> = { ...this.Document.Attributes };
         let tempHelpers: string[] = [];

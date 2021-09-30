@@ -41,5 +41,16 @@ export abstract class Renderable
      * @returns
      * The rendered text.
      */
-    public abstract Render(): Promise<string>;
+    public Render(): Promise<string>
+    {
+        return this.RenderContent();
+    }
+
+    /**
+     * Renders the component.
+     *
+     * @returns
+     * The rendered text.
+     */
+    protected abstract RenderContent(): Promise<string>;
 }

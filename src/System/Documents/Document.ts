@@ -425,7 +425,7 @@ export class Document extends Renderable
      * @returns
      * The rendered text.
      */
-    public async Render(): Promise<string>
+    protected async RenderContent(): Promise<string>
     {
         let styleCode = "";
         let scriptCode = "";
