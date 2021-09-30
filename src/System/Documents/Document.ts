@@ -1,4 +1,6 @@
+import * as fs from "fs";
 import { parse } from "path";
+import * as path from "path";
 import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
@@ -13,8 +15,6 @@ import { MarkdownFragment } from "./MarkdownFragment";
 import { Paper } from "./Paper";
 import { Renderable } from "./Renderable";
 import { RunningBlock } from "./RunningBlock";
-import * as path from 'path'
-import * as fs from 'fs'
 
 /**
  * Represents a document.
@@ -446,9 +446,16 @@ export class Document extends Renderable
             scripts: scriptCode,
             content: await this.Body.Render()
         };
-        let configToBase64 = true; //Needs to be an setting
+        let configToBase64 = true; // Needs to be an setting
         const imgTagRegex = /(<img[^>]+src=")([^"]+)("[^>]*>)/g; // Match '<img...src="..."...>'
 
+        /** Converts Relative path to absolute path
+         *
+         * @param resource a uri
+         * @param href the href
+         *
+         * @returns Absolute path
+         */
         function relToAbsPath(resource: Uri, href: string): string
         {
             if (!href || href.startsWith("http") || path.isAbsolute(href))
@@ -473,24 +480,28 @@ export class Document extends Renderable
                 {
                     return _;
                 }
-                this.fileName;
+
                 const imgSrc = relToAbsPath(Uri.file(this.fileName), p2);
 
                 try
                 {
                     let imgExt = path.extname(imgSrc).slice(1);
+
                     if (imgExt === "jpg")
                     {
                         imgExt = "jpeg";
-                    } else if (imgExt === "svg")
+                    }
+                    else if (imgExt === "svg")
                     {
                         imgExt += "+xml";
                     }
+
                     const file = fs
                         .readFileSync(imgSrc.replace(/%20/g, " "))
                         .toString("base64");
                     return `${p1}data:image/${imgExt};base64,${file}${p3}`;
-                } catch (e)
+                }
+                catch (e)
                 {
                     console.log(e);
                 }
