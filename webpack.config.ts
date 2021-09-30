@@ -74,7 +74,9 @@ export = (env: any, argv: any) =>
                             loader: "ts-loader",
                             options: {
                                 projectReferences: true,
-                                transpileOnly: argv.mode === "production"
+                                compilerOptions: {
+                                    outDir: resolve(__dirname, "lib", "temp")
+                                }
                             }
                         }
                     ]
