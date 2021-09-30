@@ -24,6 +24,23 @@ export function DocumentFragmentTests(): void
         nameof(DocumentFragment),
         () =>
         {
+            /**
+             * Provides an implementation of the {@link DocumentFragment `DocumentFragment`} class for testing.
+             */
+            class TestDocumentFragment extends DocumentFragment
+            {
+                /**
+                 * @inheritdoc
+                 *
+                 * @returns
+                 * The rendered text.
+                 */
+                public override RenderContent(): Promise<string>
+                {
+                    return super.RenderContent();
+                }
+            }
+
             let random: Random;
             let sandbox: SinonSandbox;
             let tempFile: TempFile;
@@ -32,7 +49,7 @@ export function DocumentFragmentTests(): void
             let attributes: Record<string, any>;
             let textDocument: TextDocument;
             let document: Document;
-            let fragment: DocumentFragment;
+            let fragment: TestDocumentFragment;
 
             suiteSetup(
                 async () =>
@@ -63,7 +80,7 @@ export function DocumentFragmentTests(): void
                 {
                     sandbox = createSandbox();
                     document = new Document(new MarkdownIt(), textDocument);
-                    fragment = new DocumentFragment(document);
+                    fragment = new TestDocumentFragment(document);
                 });
 
             teardown(
@@ -86,7 +103,7 @@ export function DocumentFragmentTests(): void
                 });
 
             suite(
-                nameof<DocumentFragment>((fragment) => fragment.Renderer),
+                nameof<TestDocumentFragment>((fragment) => fragment.Renderer),
                 () =>
                 {
                     test(
@@ -119,7 +136,7 @@ export function DocumentFragmentTests(): void
                 });
 
             suite(
-                nameof<DocumentFragment>((fragment) => fragment.Render),
+                nameof<TestDocumentFragment>((fragment) => fragment.RenderContent),
                 () =>
                 {
                     let content: string;
