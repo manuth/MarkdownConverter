@@ -169,4 +169,9 @@ export interface ISettings
      * The javascript files to add to the document.
      */
     ["Document.Design.Scripts"]?: Record<string, keyof typeof InsertionType>;
+
+    /**
+     * The insertion-types to use for pictures based on their path.
+     */
+    ["Document.Design.PictureInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
 }

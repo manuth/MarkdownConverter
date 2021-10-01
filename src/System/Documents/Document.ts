@@ -9,6 +9,8 @@ import { TextDocument, Uri } from "vscode";
 import YAML = require("yamljs");
 import { YAMLException } from "../YAML/YAMLException";
 import { Asset } from "./Assets/Asset";
+import { AssetURLType } from "./Assets/AssetURLType";
+import { InsertionType } from "./Assets/InsertionType";
 import { AttributeKey } from "./AttributeKey";
 import { DocumentFragment } from "./DocumentFragment";
 import { MarkdownFragment } from "./MarkdownFragment";
@@ -112,6 +114,11 @@ export class Document extends Renderable
      * The ecma-scripts of the document.
      */
     private scripts: Asset[] = [];
+
+    /**
+     * The {@link InsertionType `InsertionType`}s based on the asset-paths.
+     */
+    private pictureInsertionTypes: Map<AssetURLType, InsertionType> = new Map();
 
     /**
      * The parser for parsing the markdown-content.
@@ -401,6 +408,14 @@ export class Document extends Renderable
     public set Scripts(value: Asset[])
     {
         this.scripts = value;
+    }
+
+    /**
+     * Gets the {@link InsertionType `InsertionType`}s based on the url-types of the pictures.
+     */
+    public get PictureInsertionTypes(): Map<AssetURLType, InsertionType>
+    {
+        return this.pictureInsertionTypes;
     }
 
     /**

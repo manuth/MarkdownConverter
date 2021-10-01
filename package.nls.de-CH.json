@@ -90,6 +90,7 @@
     "Config.Document.Design.InsertionType.Default": "Lass MarkdownConverter entscheiden.",
     "Config.Document.Design.InsertionType.Link": "Die Datei verlinken.",
     "Config.Document.Design.InsertionType.Include": "Den Inhalt der Datei in das Dokument einfügen.",
+    "Config.Document.Design.InsertionType.IncludePicture": "Das Bild mit Hilfe der Base64-Codierung einfügen.",
     "Config.Document.Design.StyleSheetInsertion": "Stylesheet Einfüge-Logik",
     "Config.Document.Design.StyleSheetInsertion.Description": "Die Einfüge-Logik aufgrund der Art des Pfades der Stylesheets.",
     "Config.Document.Design.StyleSheets": "Style-Sheets",
@@ -97,5 +98,7 @@
     "Config.Document.Design.ScriptInsertion": "Javascript Einfüge-Logik",
     "Config.Document.Design.ScriptInsertion.Description": "Die Einfüge-Logik aufgrund der Art des Pfades der Javascript-Dateien.",
     "Config.Document.Design.Scripts": "Javascript-Dateien",
-    "Config.Document.Design.Scripts.Description": "Javascript-Dateien, welche in das Dokument eingebettet werden sollen.  \nDateien können als Pfad oder als URL angegeben werden."
+    "Config.Document.Design.Scripts.Description": "Javascript-Dateien, welche in das Dokument eingebettet werden sollen.  \nDateien können als Pfad oder als URL angegeben werden.",
+    "Config.Document.Design.PictureInsertion": "Bild Einfüge-Logik",
+    "Config.Document.Design.PictureInsertion.Description": "Die Einfüge-Logik aufgrund der Art des Pfades der Bild-Dateien."
 }

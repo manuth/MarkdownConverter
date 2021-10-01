@@ -773,6 +773,59 @@
               ]
             }
           }
+        },
+        "markdownConverter.Document.Design.PictureInsertion": {
+          "title": "%Config.Document.Design.PictureInsertion%",
+          "markdownDescription": "%Config.Document.Design.PictureInsertion.Description%",
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "Link": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.Link%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.IncludePicture%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "RelativePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.RelativePath%",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.IncludePicture%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "AbsolutePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.AbsolutePath%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.IncludePicture%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
+          }
         }
       }
     }
