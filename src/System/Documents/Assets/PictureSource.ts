@@ -43,7 +43,7 @@ export class PictureSource extends Asset
     /**
      * @inheritdoc
      */
-    public override get DocRoot(): string
+    protected override get DocRoot(): string
     {
         return this.Document.FileName ? dirname(this.Document.FileName) : null;
     }
