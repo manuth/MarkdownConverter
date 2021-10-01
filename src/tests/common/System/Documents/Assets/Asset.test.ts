@@ -186,6 +186,7 @@ export function AssetTests(): void
                     let host: string;
                     let port: number;
                     let server: Server;
+                    let localLink: string;
                     let content: string;
 
                     suiteSetup(
@@ -209,6 +210,22 @@ export function AssetTests(): void
                                 });
 
                             server.listen(port, host);
+
+                            /**
+                             * Gets the link pointing to the specified {@link path `path`}.
+                             *
+                             * @param path
+                             * The path to get the link for.
+                             *
+                             * @returns
+                             * The link for the specified {@link path `path`}.
+                             */
+                            function getLink(path: string): string
+                            {
+                                return `http://${host}:${port}/${path}`;
+                            }
+
+                            localLink = getLink(relativePath);
                         });
 
                     setup(
@@ -248,7 +265,7 @@ export function AssetTests(): void
                         async () =>
                         {
                             strictEqual(
-                                await new AssetTest(`http://${host}:${port}/${relativePath}`).ReadFile(),
+                                (await new AssetTest(localLink).ReadFile()).toString(),
                                 content);
                         });
 
