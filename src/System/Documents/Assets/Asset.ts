@@ -171,7 +171,7 @@ export abstract class Asset
      * @returns
      * The content of the asset.
      */
-    protected async ReadFile(): Promise<string>
+    protected async ReadFile(): Promise<Buffer>
     {
         if (this.URLType === AssetURLType.Link)
         {
@@ -188,7 +188,14 @@ export abstract class Asset
                             }
                             else
                             {
-                                let content = "";
+                                let buffers: Buffer[] = [];
+
+                                result.on(
+                                    "data",
+                                    (chunk) =>
+                                    {
+                                        buffers.push(Buffer.from(chunk));
+                                    });
 
                                 result.on(
                                     "error",
@@ -198,17 +205,10 @@ export abstract class Asset
                                     });
 
                                 result.on(
-                                    "data",
-                                    (data) =>
-                                    {
-                                        content += `${data}`;
-                                    });
-
-                                result.on(
                                     "end",
                                     () =>
                                     {
-                                        resolve(content);
+                                        resolve(Buffer.concat(buffers));
                                     });
                             }
                         });
@@ -216,7 +216,7 @@ export abstract class Asset
         }
         else
         {
-            return (await readFile(resolve(this.DocRoot ?? "", this.URL))).toString();
+            return readFile(resolve(this.DocRoot ?? "", this.URL));
         }
     }
 }

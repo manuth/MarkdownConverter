@@ -38,7 +38,7 @@ export class WebScript extends Asset
             load(`<${scriptTagName}></${scriptTagName}>`)(scriptTagName).toArray()[0]);
 
         let scriptTag = document(scriptTagName);
-        scriptTag.text(await this.ReadFile());
+        scriptTag.text((await this.ReadFile()).toString());
         return `${document.html()}\n`;
     }
 

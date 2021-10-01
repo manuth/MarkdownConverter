@@ -39,7 +39,7 @@ export class StyleSheet extends Asset
             load(`<${styleTagName}></${styleTagName}>`)(styleTagName).toArray()[0]);
 
         let styleTag = document(styleTagName);
-        styleTag.text(await this.ReadFile());
+        styleTag.text((await this.ReadFile()).toString());
         return `${document.html()}\n`;
     }
 

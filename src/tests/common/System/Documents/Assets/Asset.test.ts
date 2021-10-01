@@ -41,7 +41,7 @@ export function AssetTests(): void
                  * @returns
                  * The content of the asset.
                  */
-                public override async ReadFile(): Promise<string>
+                public override async ReadFile(): Promise<Buffer>
                 {
                     return super.ReadFile();
                 }
