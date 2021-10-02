@@ -1,11 +1,9 @@
-import * as fs from "fs";
 import { parse } from "path";
-import * as path from "path";
 import { CultureInfo } from "@manuth/resource-manager";
 import dedent = require("dedent");
 import fm = require("front-matter");
 import MarkdownIt = require("markdown-it");
-import { TextDocument, Uri } from "vscode";
+import { TextDocument } from "vscode";
 import YAML = require("yamljs");
 import { YAMLException } from "../YAML/YAMLException";
 import { Asset } from "./Assets/Asset";
@@ -461,69 +459,7 @@ export class Document extends Renderable
             scripts: scriptCode,
             content: await this.Body.Render()
         };
-        let configToBase64 = true; // Needs to be an setting
-        const imgTagRegex = /(<img[^>]+src=")([^"]+)("[^>]*>)/g; // Match '<img...src="..."...>'
 
-        /** Converts Relative path to absolute path
-         *
-         * @param resource a uri
-         * @param href the href
-         *
-         * @returns Absolute path
-         */
-        function relToAbsPath(resource: Uri, href: string): string
-        {
-            if (!href || href.startsWith("http") || path.isAbsolute(href))
-            {
-                return href;
-            }
-
-            // Otherwise look relative to the markdown file
-            return path.join(path.dirname(resource.fsPath), href);
-        }
-
-        if (configToBase64)
-        {
-            view.content = view.content.replace(imgTagRegex, (_, p1, p2, p3) =>
-            {
-                // _ is the string matcher by regex
-                // p1 is the first part e.g actual tag <img src="
-                // p2 is the second part e.g whatever is in the src
-                // p3 is the third part everything after the scr
-                // Guard clause against http and data sources of the <img> tag
-                if (p2.startsWith("http") || p2.startsWith("data:"))
-                {
-                    return _;
-                }
-
-                const imgSrc = relToAbsPath(Uri.file(this.fileName), p2);
-
-                try
-                {
-                    let imgExt = path.extname(imgSrc).slice(1);
-
-                    if (imgExt === "jpg")
-                    {
-                        imgExt = "jpeg";
-                    }
-                    else if (imgExt === "svg")
-                    {
-                        imgExt += "+xml";
-                    }
-
-                    const file = fs
-                        .readFileSync(imgSrc.replace(/%20/g, " "))
-                        .toString("base64");
-                    return `${p1}data:image/${imgExt};base64,${file}${p3}`;
-                }
-                catch (e)
-                {
-                    console.log(e);
-                }
-
-                return _;
-            });
-        }
         return this.Body.Renderer.compile(this.Template)(view);
     }
 }

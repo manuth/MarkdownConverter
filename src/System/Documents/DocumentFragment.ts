@@ -1,11 +1,16 @@
+import { load } from "cheerio";
 import { statSync } from "fs-extra";
 import Handlebars = require("handlebars");
 import { Utilities } from "../../Utilities";
 import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
+import { InsertionType } from "./Assets/InsertionType";
+import { PictureSource } from "./Assets/PictureSource";
 import { AttributeKey } from "./AttributeKey";
 import { Document } from "./Document";
 import { HelperKey } from "./HelperKey";
 import { Renderable } from "./Renderable";
+
+const sourceAttributeName = "src";
 
 /**
  * Represents a fragment of a document.
@@ -70,7 +75,19 @@ export class DocumentFragment extends Renderable
      */
     public override async Render(): Promise<string>
     {
-        return super.Render();
+        let $ = load(await super.Render(), undefined, false);
+
+        await Promise.all(
+            $("img").map(
+                (index, element) =>
+                {
+                    let link = $(element).attr(sourceAttributeName);
+                    let source = new PictureSource(this.Document, link);
+                    source.InsertionType = this.Document.PictureInsertionTypes.get(source.URLType) ?? InsertionType.Default;
+                    return (async () => $(element).attr(sourceAttributeName, await source.Render()))();
+                }));
+
+        return $.html();
     }
 
     /**
