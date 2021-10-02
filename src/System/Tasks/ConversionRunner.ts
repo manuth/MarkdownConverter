@@ -458,6 +458,15 @@ export class ConversionRunner
                 slugify: (heading) => tocSlugifier.CreateSlug(heading)
             });
 
+        parser.core.ruler.push(
+            "reset-MarkdownConverter-slugifier",
+            () =>
+            {
+                anchorSlugifier.Reset();
+                tocSlugifier.Reset();
+                return true;
+            });
+
         if (Settings.Default.TocSettings)
         {
             parser.use(

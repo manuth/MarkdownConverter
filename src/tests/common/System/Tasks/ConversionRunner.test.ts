@@ -885,9 +885,12 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                     # ${headerText}
                                     # ${headerText}`);
 
-                            let result = load(parser.render(content));
-                            strictEqual(result(`#${kebabCase(headerText)}`).length, 1);
-                            strictEqual(result(`#${kebabCase(`${headerText}2`)}`).length, 1);
+                            for (let i = 0; i < 2; i++)
+                            {
+                                let result = load(parser.render(content));
+                                strictEqual(result(`#${kebabCase(headerText)}`).length, 1);
+                                strictEqual(result(`#${kebabCase(`${headerText}2`)}`).length, 1);
+                            }
                         });
 
                     test(
