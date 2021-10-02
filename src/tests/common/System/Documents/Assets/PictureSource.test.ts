@@ -15,7 +15,7 @@ import { Document } from "../../../../../System/Documents/Document";
  */
 export function PictureSourceTests(): void
 {
-    suite.only(
+    suite(
         nameof(PictureSource),
         () =>
         {
