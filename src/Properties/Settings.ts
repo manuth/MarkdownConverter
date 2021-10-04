@@ -95,7 +95,7 @@ export class Settings
     public get ConversionType(): ConversionType[]
     {
         let types: ConversionType[] = [];
-        let conversionTypes = this.GetConfigEntry("ConversionType", [ConversionType[ConversionType.PDF] as any]);
+        let conversionTypes = this.GetConfigEntry("ConversionType", [ConversionType[ConversionType.PDF]] as Array<keyof typeof ConversionType>);
 
         for (let conversionType of conversionTypes)
         {

@@ -88,7 +88,7 @@ export interface ISettings
     /**
      * The list-type of the toc.
      */
-    ["Parser.Toc.ListType"]?: string;
+    ["Parser.Toc.ListType"]?: "ol" | "ul";
 
     /**
      * The attributes of the document.
