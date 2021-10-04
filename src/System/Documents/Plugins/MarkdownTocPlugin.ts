@@ -1,6 +1,6 @@
 import MarkdownIt = require("markdown-it");
 import toc = require("markdown-it-table-of-contents");
-import { Slugifier } from "./Slugifier";
+import { Slugifier } from "../Slugifier";
 
 /**
  * Registers a plugin for generating a table of contents.

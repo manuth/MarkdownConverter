@@ -1,6 +1,6 @@
 import MarkdownIt = require("markdown-it");
 import anchor from "markdown-it-anchor";
-import { Slugifier } from "./Slugifier";
+import { Slugifier } from "../Slugifier";
 
 /**
  * Registers a plugin for generating anchors.
