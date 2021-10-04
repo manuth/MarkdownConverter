@@ -1,7 +1,7 @@
 import { doesNotReject, rejects } from "assert";
 import { pathExists, rename } from "fs-extra";
 import pkgUp = require("pkg-up");
-import puppeteer = require("puppeteer-core");
+import * as puppeteer from "puppeteer-core";
 import { createSandbox, SinonSandbox } from "sinon";
 import { basename, dirname, join, resolve } from "upath";
 import { ISettings } from "../../../../Properties/ISettings";

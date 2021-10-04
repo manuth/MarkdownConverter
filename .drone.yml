@@ -43,7 +43,7 @@ steps:
       ACCESS_TOKEN:
         from_secret: ovsx_token
     commands:
-      - npx ovsx publish --pat $ACCESS_TOKEN || true
+      - npx ovsx publish --pat $ACCESS_TOKEN
     when:
       event:
         - tag
@@ -57,7 +57,7 @@ steps:
       ACCESS_TOKEN:
         from_secret: azure_token
     commands:
-      - npx vsce publish --pat $ACCESS_TOKEN || true
+      - npx vsce publish --pat $ACCESS_TOKEN
     when:
       event:
         - tag

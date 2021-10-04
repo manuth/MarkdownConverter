@@ -1,13 +1,20 @@
 import { ok, strictEqual } from "assert";
+import { createServer, Server } from "http";
+import { relative } from "path";
 import { CultureInfo } from "@manuth/resource-manager";
-import { TempFile } from "@manuth/temp-files";
+import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import { stat, writeFile } from "fs-extra";
+import getPort = require("get-port");
 import MarkdownIt = require("markdown-it");
+import parseDataUrl = require("parse-data-url");
 import { Random } from "random-js";
+import serveHandler = require("serve-handler");
 import { createSandbox, SinonSandbox } from "sinon";
 import { TextDocument, workspace } from "vscode";
 import YAML = require("yamljs");
+import { AssetURLType } from "../../../../System/Documents/Assets/AssetURLType";
+import { InsertionType } from "../../../../System/Documents/Assets/InsertionType";
 import { AttributeKey } from "../../../../System/Documents/AttributeKey";
 import { Document } from "../../../../System/Documents/Document";
 import { DocumentFragment } from "../../../../System/Documents/DocumentFragment";
@@ -24,6 +31,23 @@ export function DocumentFragmentTests(): void
         nameof(DocumentFragment),
         () =>
         {
+            /**
+             * Provides an implementation of the {@link DocumentFragment `DocumentFragment`} class for testing.
+             */
+            class TestDocumentFragment extends DocumentFragment
+            {
+                /**
+                 * @inheritdoc
+                 *
+                 * @returns
+                 * The rendered text.
+                 */
+                public override RenderContent(): Promise<string>
+                {
+                    return super.RenderContent();
+                }
+            }
+
             let random: Random;
             let sandbox: SinonSandbox;
             let tempFile: TempFile;
@@ -32,7 +56,7 @@ export function DocumentFragmentTests(): void
             let attributes: Record<string, any>;
             let textDocument: TextDocument;
             let document: Document;
-            let fragment: DocumentFragment;
+            let fragment: TestDocumentFragment;
 
             suiteSetup(
                 async () =>
@@ -63,7 +87,7 @@ export function DocumentFragmentTests(): void
                 {
                     sandbox = createSandbox();
                     document = new Document(new MarkdownIt(), textDocument);
-                    fragment = new DocumentFragment(document);
+                    fragment = new TestDocumentFragment(document);
                 });
 
             teardown(
@@ -86,7 +110,7 @@ export function DocumentFragmentTests(): void
                 });
 
             suite(
-                nameof<DocumentFragment>((fragment) => fragment.Renderer),
+                nameof<TestDocumentFragment>((fragment) => fragment.Renderer),
                 () =>
                 {
                     test(
@@ -119,7 +143,114 @@ export function DocumentFragmentTests(): void
                 });
 
             suite(
-                nameof<DocumentFragment>((fragment) => fragment.Render),
+                nameof<TestDocumentFragment>((fragment) => fragment.Render),
+                () =>
+                {
+                    let tempDir: TempDirectory;
+                    let tempFile: TempFile;
+                    let relativePath: string;
+                    let host: string;
+                    let port: number;
+                    let server: Server;
+                    let link: string;
+                    let content: string;
+
+                    suiteSetup(
+                        async () =>
+                        {
+                            tempDir = new TempDirectory();
+
+                            tempFile = new TempFile(
+                                {
+                                    Directory: tempDir.FullName,
+                                    Suffix: ".png"
+                                });
+
+                            await writeFile(tempFile.FullName, random.string(100));
+                            relativePath = relative(tempDir.FullName, tempFile.FullName);
+                            host = "localhost";
+                            port = await getPort();
+
+                            server = createServer(
+                                async (request, response) =>
+                                {
+                                    serveHandler(
+                                        request,
+                                        response,
+                                        {
+                                            public: tempDir.FullName,
+                                            cleanUrls: false
+                                        });
+                                });
+
+                            server.listen(port, host);
+                            link = `http://${host}:${port}/${relativePath}`;
+                        });
+
+                    suiteTeardown(
+                        () =>
+                        {
+                            server.close();
+                            tempFile.Dispose();
+                            tempDir.Dispose();
+                        });
+
+                    setup(
+                        () =>
+                        {
+                            content = "";
+
+                            sandbox.replace(
+                                fragment,
+                                "RenderContent",
+                                async () =>
+                                {
+                                    return content;
+                                });
+
+                            sandbox.replaceGetter(document, "FileName", () => tempDir.MakePath(".md"));
+                        });
+
+                    test(
+                        `Checking whether pictures are getting included using Base64-encoding according to the \`${nameof<DocumentFragment>((f) => f.Document)}\`'s \`${nameof<Document>((d) => d.PictureInsertionTypes)}\`-setting…`,
+                        async function()
+                        {
+                            let imgTagName = "img";
+                            let srcAttributeName = "src";
+
+                            for (let entry of [
+                                [
+                                    AssetURLType.AbsolutePath,
+                                    tempFile.FullName
+                                ],
+                                [
+                                    AssetURLType.RelativePath,
+                                    relativePath
+                                ],
+                                [
+                                    AssetURLType.Link,
+                                    link
+                                ]
+                            ] as Array<[AssetURLType, string]>)
+                            {
+                                content = `<${imgTagName} ${srcAttributeName}="${entry[1]}" />`;
+
+                                strictEqual(
+                                    load(await fragment.Render())(imgTagName).attr(srcAttributeName),
+                                    entry[1]);
+
+                                document.PictureInsertionTypes.set(entry[0], InsertionType.Include);
+                                let parsedDataURL = parseDataUrl(load(await fragment.Render())(imgTagName).attr(srcAttributeName));
+                                ok(parsedDataURL);
+                                ok(parsedDataURL.base64);
+                                ok(parsedDataURL.contentType);
+                                ok(parsedDataURL.toBuffer().length > 0);
+                            }
+                        });
+                });
+
+            suite(
+                nameof<TestDocumentFragment>((fragment) => fragment.RenderContent),
                 () =>
                 {
                     let content: string;

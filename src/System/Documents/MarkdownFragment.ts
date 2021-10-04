@@ -23,8 +23,8 @@ export class MarkdownFragment extends DocumentFragment
      * @returns
      * The rendered text.
      */
-    public override async Render(): Promise<string>
+    protected override async RenderContent(): Promise<string>
     {
-        return this.Document.Parser.render(await super.Render());
+        return this.Document.Parser.render(await super.RenderContent());
     }
 }

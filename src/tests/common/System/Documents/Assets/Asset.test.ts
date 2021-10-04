@@ -1,4 +1,4 @@
-import { rejects, strictEqual } from "assert";
+import { deepStrictEqual, rejects, strictEqual } from "assert";
 import { createServer, Server } from "http";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { mkdirp, writeFile } from "fs-extra";
@@ -41,7 +41,7 @@ export function AssetTests(): void
                  * @returns
                  * The content of the asset.
                  */
-                public override async ReadFile(): Promise<string>
+                public override async ReadFile(): Promise<Buffer>
                 {
                     return super.ReadFile();
                 }
@@ -183,16 +183,21 @@ export function AssetTests(): void
                 {
                     let tempDir: TempDirectory;
                     let relativePath: string;
+                    let binaryPath: string;
                     let host: string;
                     let port: number;
                     let server: Server;
+                    let localLink: string;
+                    let binaryLink: string;
                     let content: string;
+                    let binaryContent: Buffer;
 
                     suiteSetup(
                         async () =>
                         {
                             tempDir = new TempDirectory();
                             relativePath = join(random.string(10), random.string(10));
+                            binaryPath = join(random.string(11), random.string(10));
                             host = "localhost";
                             port = await getPort();
 
@@ -209,16 +214,55 @@ export function AssetTests(): void
                                 });
 
                             server.listen(port, host);
+
+                            /**
+                             * Gets the link pointing to the specified {@link path `path`}.
+                             *
+                             * @param path
+                             * The path to get the link for.
+                             *
+                             * @returns
+                             * The link for the specified {@link path `path`}.
+                             */
+                            function getLink(path: string): string
+                            {
+                                return `http://${host}:${port}/${path}`;
+                            }
+
+                            localLink = getLink(relativePath);
+                            binaryLink = getLink(binaryPath);
                         });
 
                     setup(
                         async () =>
                         {
-                            let fileName = tempDir.MakePath(relativePath);
-                            await mkdirp(dirname(fileName));
+                            let data = new Uint32Array(random.integer(0, 10));
+
+                            for (let i = 0; i < data.length; i++)
+                            {
+                                data[i] = random.uint32();
+                            }
+
                             content = random.string(50);
+                            binaryContent = Buffer.from(data);
+
+                            for (let fileEntry of [
+                                [
+                                    relativePath,
+                                    Buffer.from(content)
+                                ],
+                                [
+                                    binaryPath,
+                                    binaryContent
+                                ]
+                            ] as Array<[string, Buffer]>)
+                            {
+                                let fileName = tempDir.MakePath(fileEntry[0]);
+                                await mkdirp(dirname(fileName));
+                                await writeFile(fileName, fileEntry[1]);
+                            }
+
                             await writeFile(file.FullName, content);
-                            await writeFile(fileName, content);
                         });
 
                     suiteTeardown(
@@ -231,7 +275,7 @@ export function AssetTests(): void
                         "Checking whether files specified with an absolute path can be read…",
                         async () =>
                         {
-                            strictEqual(await new AssetTest(file.FullName).ReadFile(), content);
+                            strictEqual((await new AssetTest(file.FullName).ReadFile()).toString(), content);
                         });
 
                     test(
@@ -239,7 +283,7 @@ export function AssetTests(): void
                         async () =>
                         {
                             strictEqual(
-                                await new AssetTest(relativePath, null, tempDir.FullName).ReadFile(),
+                                (await new AssetTest(relativePath, null, tempDir.FullName).ReadFile()).toString(),
                                 content);
                         });
 
@@ -248,8 +292,17 @@ export function AssetTests(): void
                         async () =>
                         {
                             strictEqual(
-                                await new AssetTest(`http://${host}:${port}/${relativePath}`).ReadFile(),
+                                (await new AssetTest(localLink).ReadFile()).toString(),
                                 content);
+                        });
+
+                    test(
+                        "Checking whether binary files are read correctly…",
+                        async () =>
+                        {
+                            deepStrictEqual(
+                                (await new AssetTest(binaryLink).ReadFile()).toJSON(),
+                                binaryContent.toJSON());
                         });
 
                     test(

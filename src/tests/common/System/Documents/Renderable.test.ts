@@ -21,7 +21,7 @@ export function RenderableTests(): void
                  * @returns
                  * The rendered text.
                  */
-                public async Render(): Promise<string>
+                protected async RenderContent(): Promise<string>
                 {
                     return this.Content;
                 }

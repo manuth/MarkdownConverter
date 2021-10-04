@@ -405,10 +405,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 };
 
                                 context.Settings["Document.Paper.Margin"] = margin;
-                                context.Settings["Document.Design.Template"] = templateFile.FullName;
-                                context.Settings["Document.Design.HighlightStyle"] = highlightStyle;
-                                context.Settings["Document.Design.StyleSheets"] = { [styleSheet[0].FullName]: styleSheet[1] };
-                                context.Settings["Document.Design.Scripts"] = { [script[0].FullName]: script[1] };
+                                context.Settings["Document.Template"] = templateFile.FullName;
+                                context.Settings["Document.HighlightStyle"] = highlightStyle;
+                                context.Settings["Assets.StyleSheets"] = { [styleSheet[0].FullName]: styleSheet[1] };
+                                context.Settings["Assets.Scripts"] = { [script[0].FullName]: script[1] };
                                 context.Settings["Document.HeaderFooterEnabled"] = headerFooterEnabled;
                                 context.Settings["Document.HeaderContent"] = headerContent;
                                 context.Settings["Document.FooterContent"] = footerContent;
@@ -451,7 +451,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                                 for (let defaultStylesEnabled of [true, false])
                                 {
-                                    context.Settings["Document.Design.DefaultStyles"] = defaultStylesEnabled;
+                                    context.Settings["Document.DefaultStyles"] = defaultStylesEnabled;
                                     converter = await conversionRunner.LoadConverter(tempDir.FullName, textDocument);
 
                                     strictEqual(
@@ -700,13 +700,13 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                                 for (let entry of [
                                     [
-                                        nameof<ISettings>((s) => s["Document.Design.StyleSheets"]),
-                                        nameof<ISettings>((s) => s["Document.Design.StyleSheetInsertion"]),
+                                        nameof<ISettings>((s) => s["Assets.StyleSheets"]),
+                                        nameof<ISettings>((s) => s["Assets.StyleSheetInsertion"]),
                                         (document) => document.StyleSheets
                                     ],
                                     [
-                                        nameof<ISettings>((s) => s["Document.Design.Scripts"]),
-                                        nameof<ISettings>((s) => s["Document.Design.ScriptInsertion"]),
+                                        nameof<ISettings>((s) => s["Assets.Scripts"]),
+                                        nameof<ISettings>((s) => s["Assets.ScriptInsertion"]),
                                         (document) => document.Scripts
                                     ]
                                 ] as Array<[keyof ISettings, keyof ISettings, (document: Document) => Asset[]]>)
@@ -759,6 +759,41 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 }
                             }
                         });
+
+                    test(
+                        "Checking whether the insertion-logic of pictures is loaded correctly…",
+                        async () =>
+                        {
+                            let configuredInsertion: Map<AssetURLType, InsertionType> = new Map();
+                            let pictureInsertion: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>> = {};
+
+                            let urlTypes = [
+                                AssetURLType.Link,
+                                AssetURLType.RelativePath,
+                                AssetURLType.AbsolutePath
+                            ];
+
+                            let insertionTypes = [
+                                InsertionType.Default,
+                                InsertionType.Include,
+                                InsertionType.Link
+                            ];
+
+                            for (let urlType of urlTypes)
+                            {
+                                let insertionType = random.pick(insertionTypes);
+                                pictureInsertion[AssetURLType[urlType] as keyof typeof AssetURLType] = InsertionType[insertionType] as keyof typeof InsertionType;
+                                configuredInsertion.set(urlType, insertionType);
+                            }
+
+                            context.Settings["Assets.PictureInsertion"] = pictureInsertion;
+                            let document = (await conversionRunner.LoadConverter(tempDir.FullName, textDocument)).Document;
+
+                            for (let urlType of urlTypes)
+                            {
+                                strictEqual(document.PictureInsertionTypes.get(urlType), configuredInsertion.get(urlType));
+                            }
+                        });
                 });
 
             suite(
@@ -794,7 +829,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         async () =>
                         {
                             context.Settings[systemParserOption] = false;
-                            context.Settings["Document.Design.HighlightStyle"] = "None";
+                            context.Settings["Document.HighlightStyle"] = "None";
                             let converter = await conversionRunner.LoadConverter(tempDir.FullName, textDocument);
 
                             ok(
@@ -850,9 +885,12 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                     # ${headerText}
                                     # ${headerText}`);
 
-                            let result = load(parser.render(content));
-                            strictEqual(result(`#${kebabCase(headerText)}`).length, 1);
-                            strictEqual(result(`#${kebabCase(`${headerText}2`)}`).length, 1);
+                            for (let i = 0; i < 2; i++)
+                            {
+                                let result = load(parser.render(content));
+                                strictEqual(result(`#${kebabCase(headerText)}`).length, 1);
+                                strictEqual(result(`#${kebabCase(`${headerText}2`)}`).length, 1);
+                            }
                         });
 
                     test(
@@ -864,7 +902,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             let tocClass = "markdown-converter-toc-test";
                             let levels = new MultiRange([2]).toString();
                             let indicator = "\\[\\[\\s*toc-test\\s*\\]\\]";
-                            let listType = "ol";
+                            let listType = "ol" as const;
                             let excludedHeading = "Not Included";
                             let includedHeading = "Included";
 

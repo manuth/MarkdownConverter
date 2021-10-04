@@ -14,8 +14,25 @@ export function MarkdownFragmentTests(): void
         nameof(MarkdownFragment),
         () =>
         {
+            /**
+             * Provides an implementation of the {@link MarkdownFragment `MarkdownFragment`} class for testing.
+             */
+            class TestMarkdownFragment extends MarkdownFragment
+            {
+                /**
+                 * @inheritdoc
+                 *
+                 * @returns
+                 * The rendered text.
+                 */
+                public override RenderContent(): Promise<string>
+                {
+                    return super.RenderContent();
+                }
+            }
+
             let random: Random;
-            let fragment: MarkdownFragment;
+            let fragment: TestMarkdownFragment;
 
             suiteSetup(
                 () =>
@@ -26,11 +43,11 @@ export function MarkdownFragmentTests(): void
             setup(
                 () =>
                 {
-                    fragment = new MarkdownFragment(new Document(new MarkdownIt()));
+                    fragment = new TestMarkdownFragment(new Document(new MarkdownIt()));
                 });
 
             suite(
-                nameof<MarkdownFragment>((fragment) => fragment.Render),
+                nameof<TestMarkdownFragment>((fragment) => fragment.RenderContent),
                 () =>
                 {
                     test(

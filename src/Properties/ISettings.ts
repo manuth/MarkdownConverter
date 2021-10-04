@@ -88,7 +88,7 @@ export interface ISettings
     /**
      * The list-type of the toc.
      */
-    ["Parser.Toc.ListType"]?: string;
+    ["Parser.Toc.ListType"]?: "ol" | "ul";
 
     /**
      * The attributes of the document.
@@ -138,35 +138,40 @@ export interface ISettings
     /**
      * The template of the document.
      */
-    ["Document.Design.Template"]?: string;
+    ["Document.Template"]?: string;
 
     /**
      * A value indicating whether the default styles should be included.
      */
-    ["Document.Design.DefaultStyles"]?: boolean;
+    ["Document.DefaultStyles"]?: boolean;
 
     /**
      * The `highlight.js`-style to apply.
      */
-    ["Document.Design.HighlightStyle"]?: string;
+    ["Document.HighlightStyle"]?: string;
 
     /**
      * The insertion-types to use for stylesheets based on their path.
      */
-    ["Document.Design.StyleSheetInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
+    ["Assets.StyleSheetInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
 
     /**
      * The stylesheets to add to the document.
      */
-    ["Document.Design.StyleSheets"]?: Record<string, keyof typeof InsertionType>;
+    ["Assets.StyleSheets"]?: Record<string, keyof typeof InsertionType>;
 
     /**
      * The insertion-types to use for scripts based on their path.
      */
-    ["Document.Design.ScriptInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
+    ["Assets.ScriptInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
 
     /**
      * The javascript files to add to the document.
      */
-    ["Document.Design.Scripts"]?: Record<string, keyof typeof InsertionType>;
+    ["Assets.Scripts"]?: Record<string, keyof typeof InsertionType>;
+
+    /**
+     * The insertion-types to use for pictures based on their path.
+     */
+    ["Assets.PictureInsertion"]?: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>>;
 }

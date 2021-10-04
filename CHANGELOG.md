@@ -6,7 +6,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.3...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.0.0...dev)
+
+## MarkdownConverter v5.0.0
+### Breaking
+  - Renamed a few settings  
+    Have a look at this table to see what the new settings are called like now:
+    | Old Name                                                | New Name                                       |
+    | ------------------------------------------------------- | ---------------------------------------------- |
+    | `markdownConverter.Document.Design.Template`            | `markdownConverter.Document.Template`          |
+    | `markdownConverter.Document.Design.DefaultStyles`       | `markdownConverter.Document.DefaultStyles`     |
+    | `markdownConverter.Document.Design.HighlightStyle`      | `markdownConverter.Document.HighlightStyle`    |
+    | `markdownConverter.Document.Design.StyleSheetInsertion` | `markdownConverter.Assets.StyleSheetInsertion` |
+    | `markdownConverter.Document.Design.StyleSheets`         | `markdownConverter.Assets.StyleSheets`         |
+    | `markdownConverter.Document.Design.ScriptInsertion`     | `markdownConverter.Assets.ScriptInsertion`     |
+    | `markdownConverter.Document.Design.Scripts`             | `markdownConverter.Assets.Scripts`             |
+    Sorry for the inconvenience - I just really wanted the `Design`-category to go away.
+
+### Fixed
+  - Broken webpack settings
+  - Broken permalink-creator for anchors and the infamous table of contents creator
+  - Vulnerabilities in dependencies
+
+### Added
+  - Added support for inserting pictures using Base64-encoding - a huge thanks to @Postur for helping me implementing this feature!  
+    Use the `markdownConverter.Assets.PictureInsertion` to control whether to insert pictures in `<img>`-tags based on their paths. This works for the document's body as well as running blocks (the header and the footer)
+
+### Updated
+  - All dependencies
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.3...v5.0.0)
 
 ## MarkdownConverter v4.0.3
 ### Fixed

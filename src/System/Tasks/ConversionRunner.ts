@@ -4,10 +4,8 @@ import { pathExists, readFile } from "fs-extra";
 import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
-import anchor from "markdown-it-anchor";
 import checkbox = require("markdown-it-checkbox");
 import emoji = require("markdown-it-emoji");
-import toc = require("markdown-it-table-of-contents");
 import format = require("string-template");
 import { convert, parse } from "twemoji";
 import { dirname, isAbsolute, join, resolve } from "upath";
@@ -28,8 +26,9 @@ import { AttributeKey } from "../Documents/AttributeKey";
 import { Document } from "../Documents/Document";
 import { EmojiType } from "../Documents/EmojiType";
 import { ListType } from "../Documents/ListType";
+import { Anchor } from "../Documents/Plugins/MarkdownAnchorPlugin";
+import { TOC } from "../Documents/Plugins/MarkdownTocPlugin";
 import { RunningBlock } from "../Documents/RunningBlock";
-import { Slugifier } from "../Documents/Slugifier";
 import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
 import { FileException } from "../IO/FileException";
 import { IPatternContext } from "../IO/IPatternContext";
@@ -364,6 +363,14 @@ export class ConversionRunner
             (path, insertionType) => new WebScript(path, insertionType, converter.DocumentRoot),
             Settings.Default.ScriptInsertion);
 
+        for (let urlType of [AssetURLType.AbsolutePath, AssetURLType.RelativePath, AssetURLType.Link])
+        {
+            if (urlType in Settings.Default.PictureInsertion)
+            {
+                converter.Document.PictureInsertionTypes.set(urlType, Settings.Default.PictureInsertion[urlType]);
+            }
+        }
+
         return converter;
     }
 
@@ -408,8 +415,6 @@ export class ConversionRunner
     protected async LoadParser(): Promise<MarkdownIt>
     {
         let parser: MarkdownIt;
-        let anchorSlugifier = new Slugifier();
-        let tocSlugifier = new Slugifier();
 
         if (Settings.Default.SystemParserEnabled)
         {
@@ -443,23 +448,17 @@ export class ConversionRunner
         }
 
         parser.validateLink = () => true;
-
-        anchor(
-            parser,
-            {
-                slugify: (heading) => tocSlugifier.CreateSlug(heading)
-            });
+        parser.use(Anchor);
 
         if (Settings.Default.TocSettings)
         {
             parser.use(
-                toc,
+                TOC,
                 {
                     includeLevel: Settings.Default.TocSettings.Levels.toArray(),
                     containerClass: Settings.Default.TocSettings.Class,
                     markerPattern: Settings.Default.TocSettings.Indicator,
-                    listType: Settings.Default.TocSettings.ListType === ListType.Ordered ? "ol" : "ul",
-                    slugify: (heading: string) => anchorSlugifier.CreateSlug(heading)
+                    listType: Settings.Default.TocSettings.ListType === ListType.Ordered ? "ol" : "ul"
                 });
         }
 

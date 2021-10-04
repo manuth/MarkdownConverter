@@ -1,6 +1,6 @@
 {
   "name": "markdown-converter",
-  "version": "4.0.3",
+  "version": "5.0.0",
   "private": true,
   "description": "A markdown-converter for vscode",
   "author": "Manuel Thalmann <m@nuth.ch> (https://nuth.ch)",
@@ -62,8 +62,8 @@
     "front-matter": "^4.0.2",
     "fs-extra": "^10.0.0",
     "get-port": "^5.1.1",
-    "get-uri": "^3.0.2",
-    "glob": "^7.1.7",
+    "get-uri": "^4.0.0",
+    "glob": "^7.2.0",
     "handlebars": "^4.7.7",
     "highlight.js": "^11.2.0",
     "lodash.clonedeep": "^4.5.0",
@@ -74,7 +74,7 @@
     "markdown-it-table-of-contents": "^0.5.2",
     "multi-integer-range": "^4.0.9",
     "pkg-up": "^3.1.0",
-    "puppeteer-core": "^10.2.0",
+    "puppeteer-core": "^10.4.0",
     "serve-handler": "^6.1.3",
     "string-template": "^1.0.0",
     "transliteration": "^2.2.0",
@@ -90,7 +90,7 @@
     "@manuth/typescript-eslint-plugin": "^1.4.2",
     "@stdlib/utils-escape-regexp-string": "^0.0.7",
     "@types/dedent": "^0.7.0",
-    "@types/fs-extra": "^9.0.12",
+    "@types/fs-extra": "^9.0.13",
     "@types/glob": "^7.1.4",
     "@types/highlight.js": "^9.12.4",
     "@types/lodash.clonedeep": "^4.5.6",
@@ -98,9 +98,10 @@
     "@types/markdown-it-emoji": "^2.0.2",
     "@types/minimist": "^1.2.2",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.9.4",
+    "@types/node": "^16.10.2",
+    "@types/parse-data-url": "^3.0.0",
     "@types/serve-handler": "^6.1.1",
-    "@types/sinon": "^10.0.3",
+    "@types/sinon": "^10.0.4",
     "@types/string-template": "^1.0.2",
     "@types/ts-nameof": "^4.2.1",
     "@types/twemoji": "^12.1.2",
@@ -112,8 +113,9 @@
     "json5-loader": "^4.0.1",
     "lodash.kebabcase": "^4.1.1",
     "minimist": "^1.2.5",
-    "mocha": "^9.1.1",
+    "mocha": "^9.1.2",
     "ovsx": "^0.2.1",
+    "parse-data-url": "^4.0.1",
     "randexp": "^0.5.3",
     "random-js": "^2.1.0",
     "rimraf": "^3.0.2",
@@ -123,9 +125,9 @@
     "ts-node": "^10.2.1",
     "ts-patch": "^1.4.4",
     "typescript": "^4.4.3",
-    "vsce": "^1.99.0",
+    "vsce": "^1.100.1",
     "vscode-test": "^1.6.1",
-    "webpack": "^5.53.0",
+    "webpack": "^5.56.1",
     "webpack-cli": "^4.8.0"
   },
   "displayName": "Markdown Converter",
@@ -592,21 +594,21 @@
           "editPresentation": "multilineText",
           "default": null
         },
-        "markdownConverter.Document.Design.Template": {
-          "title": "%Config.Document.Design.Template%",
-          "markdownDescription": "%Config.Document.Design.Template.Description%",
+        "markdownConverter.Document.Template": {
+          "title": "%Config.Document.Template%",
+          "markdownDescription": "%Config.Document.Template.Description%",
           "type": "string",
           "default": null
         },
-        "markdownConverter.Document.Design.DefaultStyles": {
-          "title": "%Config.Document.Design.DefaultStyles%",
-          "markdownDescription": "%Config.Document.Design.DefaultStyles.Description%",
+        "markdownConverter.Document.DefaultStyles": {
+          "title": "%Config.Document.DefaultStyles%",
+          "markdownDescription": "%Config.Document.DefaultStyles.Description%",
           "type": "boolean",
           "default": true
         },
-        "markdownConverter.Document.Design.HighlightStyle": {
-          "title": "%Config.Document.Design.HighlightStyle%",
-          "markdownDescription": "%Config.Document.Design.HighlightStyle.Description%",
+        "markdownConverter.Document.HighlightStyle": {
+          "title": "%Config.Document.HighlightStyle%",
+          "markdownDescription": "%Config.Document.HighlightStyle.Description%",
           "type": "string",
           "default": "Default",
           "anyOf": [
@@ -622,21 +624,21 @@
             }
           ]
         },
-        "markdownConverter.Document.Design.StyleSheetInsertion": {
-          "title": "%Config.Document.Design.StyleSheetInsertion%",
-          "markdownDescription": "%Config.Document.Design.StyleSheetInsertion.Description%",
+        "markdownConverter.Assets.StyleSheetInsertion": {
+          "title": "%Config.Assets.StyleSheetInsertion%",
+          "markdownDescription": "%Config.Assets.StyleSheetInsertion.Description%",
           "type": "object",
           "default": {},
           "additionalProperties": false,
           "properties": {
             "Link": {
               "type": "string",
-              "markdownDescription": "%Config.Document.Design.AssetPathType.Link%",
+              "markdownDescription": "%Config.Assets.AssetPathType.Link%",
               "default": "Default",
               "enumDescriptions": [
-                "%Config.Document.Design.InsertionType.Default%",
-                "%Config.Document.Design.InsertionType.Link%",
-                "%Config.Document.Design.InsertionType.Include%"
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.Include%"
               ],
               "enum": [
                 "Default",
@@ -646,11 +648,11 @@
             },
             "RelativePath": {
               "type": "string",
-              "markdownDescription": "%Config.Document.Design.AssetPathType.RelativePath%",
+              "markdownDescription": "%Config.Assets.AssetPathType.RelativePath%",
               "enumDescriptions": [
-                "%Config.Document.Design.InsertionType.Default%",
-                "%Config.Document.Design.InsertionType.Link%",
-                "%Config.Document.Design.InsertionType.Include%"
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.Include%"
               ],
               "enum": [
                 "Default",
@@ -660,12 +662,12 @@
             },
             "AbsolutePath": {
               "type": "string",
-              "markdownDescription": "%Config.Document.Design.AssetPathType.AbsolutePath%",
+              "markdownDescription": "%Config.Assets.AssetPathType.AbsolutePath%",
               "default": "Default",
               "enumDescriptions": [
-                "%Config.Document.Design.InsertionType.Default%",
-                "%Config.Document.Design.InsertionType.Link%",
-                "%Config.Document.Design.InsertionType.Include%"
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.Include%"
               ],
               "enum": [
                 "Default",
@@ -675,9 +677,9 @@
             }
           }
         },
-        "markdownConverter.Document.Design.StyleSheets": {
-          "title": "%Config.Document.Design.StyleSheets%",
-          "markdownDescription": "%Config.Document.Design.StyleSheets.Description%",
+        "markdownConverter.Assets.StyleSheets": {
+          "title": "%Config.Assets.StyleSheets%",
+          "markdownDescription": "%Config.Assets.StyleSheets.Description%",
           "type": "object",
           "default": {},
           "additionalProperties": false,
@@ -686,9 +688,9 @@
               "type": "string",
               "default": "Default",
               "enumDescriptions": [
-                "%Config.Document.Design.InsertionType.Default%",
-                "%Config.Document.Design.InsertionType.Link%",
-                "%Config.Document.Design.InsertionType.Include%"
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.Include%"
               ],
               "enum": [
                 "Default",
@@ -698,21 +700,21 @@
             }
           }
         },
-        "markdownConverter.Document.Design.ScriptInsertion": {
-          "title": "%Config.Document.Design.ScriptInsertion%",
-          "markdownDescription": "%Config.Document.Design.ScriptInsertion.Description%",
+        "markdownConverter.Assets.ScriptInsertion": {
+          "title": "%Config.Assets.ScriptInsertion%",
+          "markdownDescription": "%Config.Assets.ScriptInsertion.Description%",
           "type": "object",
           "default": {},
           "additionalProperties": false,
           "properties": {
             "Link": {
               "type": "string",
-              "markdownDescription": "%Config.Document.Design.AssetPathType.Link%",
+              "markdownDescription": "%Config.Assets.AssetPathType.Link%",
               "default": "Default",
               "enumDescriptions": [
-                "%Config.Document.Design.InsertionType.Default%",
-                "%Config.Document.Design.InsertionType.Link%",
-                "%Config.Document.Design.InsertionType.Include%"
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.Include%"
               ],
               "enum": [
                 "Default",
@@ -722,11 +724,11 @@
             },
             "RelativePath": {
               "type": "string",
-              "markdownDescription": "%Config.Document.Design.AssetPathType.RelativePath%",
+              "markdownDescription": "%Config.Assets.AssetPathType.RelativePath%",
               "enumDescriptions": [
-                "%Config.Document.Design.InsertionType.Default%",
-                "%Config.Document.Design.InsertionType.Link%",
-                "%Config.Document.Design.InsertionType.Include%"
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.Include%"
               ],
               "enum": [
                 "Default",
@@ -736,12 +738,12 @@
             },
             "AbsolutePath": {
               "type": "string",
-              "markdownDescription": "%Config.Document.Design.AssetPathType.AbsolutePath%",
+              "markdownDescription": "%Config.Assets.AssetPathType.AbsolutePath%",
               "default": "Default",
               "enumDescriptions": [
-                "%Config.Document.Design.InsertionType.Default%",
-                "%Config.Document.Design.InsertionType.Link%",
-                "%Config.Document.Design.InsertionType.Include%"
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.Include%"
               ],
               "enum": [
                 "Default",
@@ -751,9 +753,9 @@
             }
           }
         },
-        "markdownConverter.Document.Design.Scripts": {
-          "title": "%Config.Document.Design.Scripts%",
-          "markdownDescription": "%Config.Document.Design.Scripts.Description%",
+        "markdownConverter.Assets.Scripts": {
+          "title": "%Config.Assets.Scripts%",
+          "markdownDescription": "%Config.Assets.Scripts.Description%",
           "type": "object",
           "default": {},
           "additionalProperties": false,
@@ -762,9 +764,62 @@
               "type": "string",
               "default": "Default",
               "enumDescriptions": [
-                "%Config.Document.Design.InsertionType.Default%",
-                "%Config.Document.Design.InsertionType.Link%",
-                "%Config.Document.Design.InsertionType.Include%"
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
+          }
+        },
+        "markdownConverter.Assets.PictureInsertion": {
+          "title": "%Config.Assets.PictureInsertion%",
+          "markdownDescription": "%Config.Assets.PictureInsertion.Description%",
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "Link": {
+              "type": "string",
+              "markdownDescription": "%Config.Assets.AssetPathType.Link%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.IncludePicture%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "RelativePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Assets.AssetPathType.RelativePath%",
+              "enumDescriptions": [
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.IncludePicture%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "AbsolutePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Assets.AssetPathType.AbsolutePath%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Assets.InsertionType.Default%",
+                "%Config.Assets.InsertionType.Link%",
+                "%Config.Assets.InsertionType.IncludePicture%"
               ],
               "enum": [
                 "Default",

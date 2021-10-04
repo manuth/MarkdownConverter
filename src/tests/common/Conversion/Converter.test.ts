@@ -4,7 +4,7 @@ import { relative } from "path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
-import puppeteer = require("puppeteer-core");
+import * as puppeteer from "puppeteer-core";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
 import { changeExt, normalize } from "upath";
