@@ -1,4 +1,4 @@
-import puppeteer = require("puppeteer-core");
+import * as puppeteer from "puppeteer-core";
 import { join, parse } from "upath";
 import { encode } from "utf8";
 import { Converter } from "./Converter";

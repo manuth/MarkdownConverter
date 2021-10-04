@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 import { Package } from "@manuth/package-json-editor";
 import { mkdirp, pathExists } from "fs-extra";
-import puppeteer = require("puppeteer-core");
+import * as puppeteer from "puppeteer-core";
 import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
 import format = require("string-template");
 import { join, resolve } from "upath";

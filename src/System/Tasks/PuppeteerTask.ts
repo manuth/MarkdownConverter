@@ -1,5 +1,5 @@
 import { pathExists } from "fs-extra";
-import puppeteer = require("puppeteer-core");
+import * as puppeteer from "puppeteer-core";
 import { CancellationToken, Progress } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";

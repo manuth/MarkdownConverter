@@ -7,7 +7,7 @@ import { ensureDir, move, pathExists, remove, writeFile } from "fs-extra";
 import getPort = require("get-port");
 import { glob } from "glob";
 import MarkdownIt = require("markdown-it");
-import puppeteer = require("puppeteer-core");
+import * as puppeteer from "puppeteer-core";
 import serveHandler = require("serve-handler");
 import { transliterate } from "transliteration";
 import { basename, dirname, join, relative } from "upath";

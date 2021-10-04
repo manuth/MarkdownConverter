@@ -1,6 +1,6 @@
 import { doesNotThrow, ok, strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
-import puppeteer = require("puppeteer-core");
+import * as puppeteer from "puppeteer-core";
 import { createSandbox, SinonSandbox } from "sinon";
 import { commands, Disposable, ExtensionContext, Progress, TextDocument, window, workspace } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType";

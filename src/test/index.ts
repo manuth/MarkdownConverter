@@ -1,7 +1,7 @@
 import { pathExists } from "fs-extra";
 import minimist = require("minimist");
 import Mocha = require("mocha");
-import puppeteer = require("puppeteer-core");
+import * as puppeteer from "puppeteer-core";
 import { resolve } from "upath";
 import { extensions } from "vscode";
 import { Extension } from "../System/Extensibility/Extension";
