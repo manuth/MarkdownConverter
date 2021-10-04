@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## MarkdownConverter [Unreleased]
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.0.0...dev)
+
+## MarkdownConverter v5.0.0
 ### Breaking
   - Renamed a few settings  
     Have a look at this table to see what the new settings are called like now:
@@ -31,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
   - All dependencies
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.3...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v4.0.3...v5.0.0)
 
 ## MarkdownConverter v4.0.3
 ### Fixed
