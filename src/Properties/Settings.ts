@@ -13,6 +13,7 @@ import { StandardizedFormatType } from "../System/Documents/StandardizedFormatTy
 import { StandardizedPageFormat } from "../System/Documents/StandardizedPageFormat";
 import { TocSettings } from "../System/Documents/TocSettings";
 import { IRunningBlockContent } from "./IRunningBlockContent";
+import { ISettings } from "./ISettings";
 
 /**
  * Provides access to settings.
@@ -94,7 +95,7 @@ export class Settings
     public get ConversionType(): ConversionType[]
     {
         let types: ConversionType[] = [];
-        let conversionTypes = this.GetConfigEntry<Array<keyof typeof ConversionType>>("ConversionType", [ConversionType[ConversionType.PDF] as any]);
+        let conversionTypes = this.GetConfigEntry("ConversionType", [ConversionType[ConversionType.PDF] as any]);
 
         for (let conversionType of conversionTypes)
         {
@@ -133,7 +134,7 @@ export class Settings
      */
     public get EmojiType(): EmojiType
     {
-        return EmojiType[this.GetConfigEntry<keyof typeof EmojiType>("Parser.EmojiType")];
+        return EmojiType[this.GetConfigEntry("Parser.EmojiType")];
     }
 
     /**
@@ -151,10 +152,10 @@ export class Settings
     {
         let paper = new Paper();
         let referenceChecker = new Object();
-        let paperKey = "Document.Paper";
-        let formatKey = `${paperKey}.PaperFormat`;
-        let widthKey = `${formatKey}.Width`;
-        let heightKey = `${formatKey}.Height`;
+        let paperKey = "Document.Paper" as const;
+        let formatKey = `${paperKey}.PaperFormat` as const;
+        let widthKey = `${formatKey}.Width` as const;
+        let heightKey = `${formatKey}.Height` as const;
 
         if (
             this.config.has(widthKey) &&
@@ -178,7 +179,7 @@ export class Settings
                 nameof<Margin>((m) => m.Right)
             ] as Array<keyof Margin>))
         {
-            let configKey = `${paperKey}.Margin.` + side;
+            let configKey = `${paperKey}.Margin.${side}` as const;
 
             if (this.GetConfigEntry(configKey, referenceChecker) !== referenceChecker)
             {
@@ -250,12 +251,12 @@ export class Settings
      */
     public get TocSettings(): TocSettings
     {
-        if (this.GetConfigEntry<boolean>("Parser.Toc.Enabled"))
+        if (this.GetConfigEntry("Parser.Toc.Enabled"))
         {
-            let $class = this.GetConfigEntry<string>("Parser.Toc.Class");
-            let levels = this.GetConfigEntry<string>("Parser.Toc.Levels");
+            let $class = this.GetConfigEntry("Parser.Toc.Class");
+            let levels = this.GetConfigEntry("Parser.Toc.Levels");
             let indicator = new RegExp(this.GetConfigEntry("Parser.Toc.Indicator"), "im");
-            let listType = this.GetConfigEntry<string>("Parser.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
+            let listType = this.GetConfigEntry("Parser.Toc.ListType") === "ol" ? ListType.Ordered : ListType.Unordered;
             return new TocSettings($class, new MultiRange(levels), indicator, listType);
         }
         else
@@ -269,7 +270,7 @@ export class Settings
      */
     public get Template(): string
     {
-        return this.GetConfigEntry<string>("Document.Design.Template");
+        return this.GetConfigEntry("Document.Design.Template");
     }
 
     /**
@@ -285,7 +286,7 @@ export class Settings
      */
     public get SystemParserEnabled(): boolean
     {
-        return this.GetConfigEntry<boolean>("Parser.SystemParserEnabled");
+        return this.GetConfigEntry("Parser.SystemParserEnabled");
     }
 
     /**
@@ -351,6 +352,40 @@ export class Settings
      * @returns
      * The value of the configuration with the specified {@link key `key`}.
      */
+    protected GetConfigEntry<TKey extends keyof ISettings>(key: TKey, defaultValue?: ISettings[TKey]): ISettings[TKey];
+
+    /**
+     * Determines the value of a configuration entry.
+     *
+     * @template T
+     * The type of the entry to get.
+     *
+     * @param key
+     * The key of the entry.
+     *
+     * @param defaultValue
+     * The default value to return.
+     *
+     * @returns
+     * The value of the configuration with the specified {@link key `key`}.
+     */
+    protected GetConfigEntry<T>(key: string, defaultValue?: T): T;
+
+    /**
+     * Determines the value of a configuration entry.
+     *
+     * @template T
+     * The type of the entry to get.
+     *
+     * @param key
+     * The key of the entry.
+     *
+     * @param defaultValue
+     * The default value to return.
+     *
+     * @returns
+     * The value of the configuration with the specified {@link key `key`}.
+     */
     protected GetConfigEntry<T>(key: string, defaultValue?: T): T
     {
         return this.config.get<T>(key, defaultValue);
@@ -365,7 +400,7 @@ export class Settings
      * @returns
      * The insertion-types loaded from the configuration with the specified {@link key `key`}.
      */
-    protected LoadInsertionTypes(key: string): Partial<Record<AssetURLType, InsertionType>>
+    protected LoadInsertionTypes(key: keyof ISettings): Partial<Record<AssetURLType, InsertionType>>
     {
         let result = {} as Record<AssetURLType, InsertionType>;
 
@@ -386,7 +421,7 @@ export class Settings
      * @returns
      * The assets loaded from the configuration with the specified {@link key `key`}.
      */
-    protected LoadAssets(key: string): Record<string, InsertionType>
+    protected LoadAssets(key: keyof ISettings): Record<string, InsertionType>
     {
         return Object.fromEntries(
             Object.entries(this.GetConfigEntry(key)).map(
