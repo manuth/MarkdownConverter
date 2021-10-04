@@ -6,6 +6,7 @@ import { DocumentFragmentTests } from "./DocumentFragment.test";
 import { MarginTests } from "./Margin.test";
 import { MarkdownFragmentTests } from "./MarkdownFragment.test";
 import { PaperTests } from "./Paper.test";
+import { PluginTests } from "./Plugins";
 import { RenderableTests } from "./Renderable.test";
 import { RunningBLockTests as RunningBlockTests } from "./RunningBlock.test";
 import { SlugifierTests } from "./Slugifier.test";
@@ -23,6 +24,7 @@ export function DocumentTests(): void
         {
             AssetTests();
             SlugifierTests();
+            PluginTests();
             RenderableTests();
             DocumentFragmentTests();
             MarkdownFragmentTests();
