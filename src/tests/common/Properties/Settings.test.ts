@@ -404,5 +404,19 @@ export function SettingTests(context: ITestContext<ISettings>): void
                                 () => settings.Scripts);
                         });
                 });
+
+            suite(
+                nameof<Settings>((settings) => settings.PictureInsertion),
+                () =>
+                {
+                    test(
+                        "Checking whether the picture-insertion settings are interpreted correctly…",
+                        () =>
+                        {
+                            CheckInsertionTypes(
+                                "Document.Design.PictureInsertion",
+                                () => settings.PictureInsertion);
+                        });
+                });
         });
 }

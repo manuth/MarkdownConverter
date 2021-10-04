@@ -364,6 +364,14 @@ export class ConversionRunner
             (path, insertionType) => new WebScript(path, insertionType, converter.DocumentRoot),
             Settings.Default.ScriptInsertion);
 
+        for (let urlType of [AssetURLType.AbsolutePath, AssetURLType.RelativePath, AssetURLType.Link])
+        {
+            if (urlType in Settings.Default.PictureInsertion)
+            {
+                converter.Document.PictureInsertionTypes.set(urlType, Settings.Default.PictureInsertion[urlType]);
+            }
+        }
+
         return converter;
     }
 

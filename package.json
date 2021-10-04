@@ -99,6 +99,7 @@
     "@types/minimist": "^1.2.2",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.9.6",
+    "@types/parse-data-url": "^3.0.0",
     "@types/serve-handler": "^6.1.1",
     "@types/sinon": "^10.0.3",
     "@types/string-template": "^1.0.2",
@@ -114,6 +115,7 @@
     "minimist": "^1.2.5",
     "mocha": "^9.1.1",
     "ovsx": "^0.2.1",
+    "parse-data-url": "^4.0.1",
     "randexp": "^0.5.3",
     "random-js": "^2.1.0",
     "rimraf": "^3.0.2",
@@ -765,6 +767,59 @@
                 "%Config.Document.Design.InsertionType.Default%",
                 "%Config.Document.Design.InsertionType.Link%",
                 "%Config.Document.Design.InsertionType.Include%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            }
+          }
+        },
+        "markdownConverter.Document.Design.PictureInsertion": {
+          "title": "%Config.Document.Design.PictureInsertion%",
+          "markdownDescription": "%Config.Document.Design.PictureInsertion.Description%",
+          "type": "object",
+          "default": {},
+          "additionalProperties": false,
+          "properties": {
+            "Link": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.Link%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.IncludePicture%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "RelativePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.RelativePath%",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.IncludePicture%"
+              ],
+              "enum": [
+                "Default",
+                "Link",
+                "Include"
+              ]
+            },
+            "AbsolutePath": {
+              "type": "string",
+              "markdownDescription": "%Config.Document.Design.AssetPathType.AbsolutePath%",
+              "default": "Default",
+              "enumDescriptions": [
+                "%Config.Document.Design.InsertionType.Default%",
+                "%Config.Document.Design.InsertionType.Link%",
+                "%Config.Document.Design.InsertionType.IncludePicture%"
               ],
               "enum": [
                 "Default",

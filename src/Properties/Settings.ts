@@ -321,6 +321,14 @@ export class Settings
     }
 
     /**
+     * Gets the insertion-types to use for pictures based on their path.
+     */
+    public get PictureInsertion(): Partial<Record<AssetURLType, InsertionType>>
+    {
+        return this.LoadInsertionTypes("Document.Design.PictureInsertion");
+    }
+
+    /**
      * Gets the configuration.
      */
     private get config(): WorkspaceConfiguration

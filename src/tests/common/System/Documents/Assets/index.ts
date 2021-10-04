@@ -1,5 +1,6 @@
 import { basename } from "path";
 import { AssetTests as AssetClassTests } from "./Asset.test";
+import { PictureSourceTests } from "./PictureSource.test";
 import { StyleSheetTests } from "./StyleSheet.test";
 import { WebScriptTests } from "./WebScript.test";
 
@@ -15,5 +16,6 @@ export function AssetTests(): void
             AssetClassTests();
             StyleSheetTests();
             WebScriptTests();
+            PictureSourceTests();
         });
 }

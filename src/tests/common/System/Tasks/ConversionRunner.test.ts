@@ -759,6 +759,41 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 }
                             }
                         });
+
+                    test(
+                        "Checking whether the insertion-logic of pictures is loaded correctly…",
+                        async () =>
+                        {
+                            let configuredInsertion: Map<AssetURLType, InsertionType> = new Map();
+                            let pictureInsertion: Partial<Record<keyof typeof AssetURLType, keyof typeof InsertionType>> = {};
+
+                            let urlTypes = [
+                                AssetURLType.Link,
+                                AssetURLType.RelativePath,
+                                AssetURLType.AbsolutePath
+                            ];
+
+                            let insertionTypes = [
+                                InsertionType.Default,
+                                InsertionType.Include,
+                                InsertionType.Link
+                            ];
+
+                            for (let urlType of urlTypes)
+                            {
+                                let insertionType = random.pick(insertionTypes);
+                                pictureInsertion[AssetURLType[urlType] as keyof typeof AssetURLType] = InsertionType[insertionType] as keyof typeof InsertionType;
+                                configuredInsertion.set(urlType, insertionType);
+                            }
+
+                            context.Settings["Document.Design.PictureInsertion"] = pictureInsertion;
+                            let document = (await conversionRunner.LoadConverter(tempDir.FullName, textDocument)).Document;
+
+                            for (let urlType of urlTypes)
+                            {
+                                strictEqual(document.PictureInsertionTypes.get(urlType), configuredInsertion.get(urlType));
+                            }
+                        });
                 });
 
             suite(
