@@ -358,7 +358,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             CheckInsertionTypes(
-                                "Document.Design.StyleSheetInsertion",
+                                "Assets.StyleSheetInsertion",
                                 () => settings.StyleSheetInsertion);
                         });
                 });
@@ -372,7 +372,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             CheckAssets(
-                                "Document.Design.StyleSheets",
+                                "Assets.StyleSheets",
                                 () => settings.StyleSheets);
                         });
                 });
@@ -386,7 +386,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             CheckInsertionTypes(
-                                "Document.Design.ScriptInsertion",
+                                "Assets.ScriptInsertion",
                                 () => settings.ScriptInsertion);
                         });
                 });
@@ -400,7 +400,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             CheckAssets(
-                                "Document.Design.Scripts",
+                                "Assets.Scripts",
                                 () => settings.Scripts);
                         });
                 });
@@ -414,7 +414,7 @@ export function SettingTests(context: ITestContext<ISettings>): void
                         () =>
                         {
                             CheckInsertionTypes(
-                                "Document.Design.PictureInsertion",
+                                "Assets.PictureInsertion",
                                 () => settings.PictureInsertion);
                         });
                 });

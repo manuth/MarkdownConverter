@@ -37,6 +37,7 @@ import { ITestContext } from "../../../ITestContext";
 import { SubstitutionTester } from "../../../SubstitutionTester";
 import { TestConstants } from "../../../TestConstants";
 import { TestConversionRunner } from "../../../TestConversionRunner";
+import { ListType } from "../../../../System/Documents/ListType";
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.
@@ -405,10 +406,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 };
 
                                 context.Settings["Document.Paper.Margin"] = margin;
-                                context.Settings["Document.Design.Template"] = templateFile.FullName;
-                                context.Settings["Document.Design.HighlightStyle"] = highlightStyle;
-                                context.Settings["Document.Design.StyleSheets"] = { [styleSheet[0].FullName]: styleSheet[1] };
-                                context.Settings["Document.Design.Scripts"] = { [script[0].FullName]: script[1] };
+                                context.Settings["Document.Template"] = templateFile.FullName;
+                                context.Settings["Document.HighlightStyle"] = highlightStyle;
+                                context.Settings["Assets.StyleSheets"] = { [styleSheet[0].FullName]: styleSheet[1] };
+                                context.Settings["Assets.Scripts"] = { [script[0].FullName]: script[1] };
                                 context.Settings["Document.HeaderFooterEnabled"] = headerFooterEnabled;
                                 context.Settings["Document.HeaderContent"] = headerContent;
                                 context.Settings["Document.FooterContent"] = footerContent;
@@ -451,7 +452,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                                 for (let defaultStylesEnabled of [true, false])
                                 {
-                                    context.Settings["Document.Design.DefaultStyles"] = defaultStylesEnabled;
+                                    context.Settings["Document.DefaultStyles"] = defaultStylesEnabled;
                                     converter = await conversionRunner.LoadConverter(tempDir.FullName, textDocument);
 
                                     strictEqual(
@@ -700,13 +701,13 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                                 for (let entry of [
                                     [
-                                        nameof<ISettings>((s) => s["Document.Design.StyleSheets"]),
-                                        nameof<ISettings>((s) => s["Document.Design.StyleSheetInsertion"]),
+                                        nameof<ISettings>((s) => s["Assets.StyleSheets"]),
+                                        nameof<ISettings>((s) => s["Assets.StyleSheetInsertion"]),
                                         (document) => document.StyleSheets
                                     ],
                                     [
-                                        nameof<ISettings>((s) => s["Document.Design.Scripts"]),
-                                        nameof<ISettings>((s) => s["Document.Design.ScriptInsertion"]),
+                                        nameof<ISettings>((s) => s["Assets.Scripts"]),
+                                        nameof<ISettings>((s) => s["Assets.ScriptInsertion"]),
                                         (document) => document.Scripts
                                     ]
                                 ] as Array<[keyof ISettings, keyof ISettings, (document: Document) => Asset[]]>)
@@ -786,7 +787,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 configuredInsertion.set(urlType, insertionType);
                             }
 
-                            context.Settings["Document.Design.PictureInsertion"] = pictureInsertion;
+                            context.Settings["Assets.PictureInsertion"] = pictureInsertion;
                             let document = (await conversionRunner.LoadConverter(tempDir.FullName, textDocument)).Document;
 
                             for (let urlType of urlTypes)
@@ -829,7 +830,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                         async () =>
                         {
                             context.Settings[systemParserOption] = false;
-                            context.Settings["Document.Design.HighlightStyle"] = "None";
+                            context.Settings["Document.HighlightStyle"] = "None";
                             let converter = await conversionRunner.LoadConverter(tempDir.FullName, textDocument);
 
                             ok(
@@ -918,7 +919,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             context.Settings["Parser.Toc.Class"] = tocClass;
                             context.Settings["Parser.Toc.Levels"] = levels;
                             context.Settings["Parser.Toc.Indicator"] = indicator;
-                            context.Settings["Parser.Toc.ListType"] = listType;
+                            context.Settings["Parser.Toc.ListType"] = listType as "ol" | "ul";
                             let result = load((await conversionRunner.LoadParser()).render(content));
                             strictEqual(result(`.${tocClass}`).length, 1);
                             strictEqual(result('ol li a[href="#included"]').length, 1);
