@@ -243,7 +243,7 @@ export class Settings
      */
     public get DefaultStylesEnabled(): boolean
     {
-        return this.GetConfigEntry("Document.Design.DefaultStyles");
+        return this.GetConfigEntry("Document.DefaultStyles");
     }
 
     /**
@@ -270,7 +270,7 @@ export class Settings
      */
     public get Template(): string
     {
-        return this.GetConfigEntry("Document.Design.Template");
+        return this.GetConfigEntry("Document.Template");
     }
 
     /**
@@ -278,7 +278,7 @@ export class Settings
      */
     public get HighlightStyle(): string
     {
-        return this.GetConfigEntry("Document.Design.HighlightStyle");
+        return this.GetConfigEntry("Document.HighlightStyle");
     }
 
     /**
@@ -294,7 +294,7 @@ export class Settings
      */
     public get StyleSheetInsertion(): Partial<Record<AssetURLType, InsertionType>>
     {
-        return this.LoadInsertionTypes("Document.Design.StyleSheetInsertion");
+        return this.LoadInsertionTypes("Assets.StyleSheetInsertion");
     }
 
     /**
@@ -302,7 +302,7 @@ export class Settings
      */
     public get StyleSheets(): Record<string, InsertionType>
     {
-        return this.LoadAssets("Document.Design.StyleSheets");
+        return this.LoadAssets("Assets.StyleSheets");
     }
 
     /**
@@ -310,7 +310,7 @@ export class Settings
      */
     public get ScriptInsertion(): Partial<Record<AssetURLType, InsertionType>>
     {
-        return this.LoadInsertionTypes("Document.Design.ScriptInsertion");
+        return this.LoadInsertionTypes("Assets.ScriptInsertion");
     }
 
     /**
@@ -318,7 +318,7 @@ export class Settings
      */
     public get Scripts(): Record<string, InsertionType>
     {
-        return this.LoadAssets("Document.Design.Scripts");
+        return this.LoadAssets("Assets.Scripts");
     }
 
     /**
@@ -326,7 +326,7 @@ export class Settings
      */
     public get PictureInsertion(): Partial<Record<AssetURLType, InsertionType>>
     {
-        return this.LoadInsertionTypes("Document.Design.PictureInsertion");
+        return this.LoadInsertionTypes("Assets.PictureInsertion");
     }
 
     /**

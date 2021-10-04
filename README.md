@@ -195,7 +195,7 @@ If you want to use third party markdown-extensions in your documents (such as th
 ## CSS and JavaScript Assets
 `MarkdownConverter` allows you to pass stylesheets and JavaScript-files which are added to the document.
 
-Use the `markdownConverter.Document.Design.StyleSheets` and the `markdownConverter.Document.Design.Scripts` options for adding stylesheets and scripts.
+Use the `markdownConverter.Assets.StyleSheets` and the `markdownConverter.Assets.Scripts` options for adding stylesheets and scripts.
 
 You can choose the way to insert the stylesheet or script for each asset individually.
 
@@ -205,12 +205,12 @@ You can choose the way to insert the stylesheet or script for each asset individ
 
 ```json
 {
-  "markdownConverter.Document.Design.StyleSheets": {
+  "markdownConverter.Assets.StyleSheets": {
     "./css/styles.css": "Default",
     "/home/scott/styles.css": "Link",
     "https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css": "Include"
   },
-  "markdownConverter.Document.Design.Scripts": {
+  "markdownConverter.Assets.Scripts": {
     "https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js": "Default"
   }
 }
@@ -220,16 +220,16 @@ You can choose the way to insert the stylesheet or script for each asset individ
 Basically, there are two ways on how to add an asset to the document.
 You can either add a link to the asset or have its content copied to the document.
 
-You can choose how to treat assets by default based on their paths using the `markdownConverter.Document.Design.StyleInsertion` and the `markdownConverter.Document.Design.ScriptInsertion` options.
+You can choose how to treat assets by default based on their paths using the `markdownConverter.Assets.StyleInsertion` and the `markdownConverter.Assets.ScriptInsertion` options.
 
 ```json
 {
-  "markdownConverter.Document.Design.StyleInsertion": {
+  "markdownConverter.Assets.StyleInsertion": {
     "Link": "Link",
     "AbsolutePath": "Link",
     "RelativePath": "Include"
   },
-  "markdownConverter.Document.Design.ScriptInsertion": {
+  "markdownConverter.Assets.ScriptInsertion": {
     "Link": "Include",
     "AbsolutePath": "Include",
     "RelativePath": "Default"
@@ -271,9 +271,9 @@ This is a list of the most important settings. To see all of them, install the e
     Allows you to set the content of the different sections of the header and the footer.
   - `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate`:  
     The html-sourcecode of the header and footer. Variable-substituion is supported here as well. Page-numbers and similar information can be included as described in the [puppeteer docs](https://github.com/puppeteer/puppeteer/blob/main/docs/api.md#pagepdfoptions).
-  - `markdownConverter.Document.Design.DefaultStyles`:  
+  - `markdownConverter.Document.DefaultStyles`:  
     Allows you to disable the default styles. This might be useful if you want to create your own stylesheet from scratch.
-  - `markdownConverter.Document.Design.StyleSheets`:  
+  - `markdownConverter.Assets.StyleSheets`:  
     A set of stylesheets to include in your document.
 
 <!--- References -->
