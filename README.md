@@ -12,8 +12,10 @@ A markdown-converter for [vscode][vscode]
   - [Headers and Footers](#headers-and-footers)
   - [Including Table of Contents](#including-table-of-contents)
   - [Third Party Markdown Extensions](#third-party-markdown-extensions)
-  - [CSS and JavaScript Assets](#css-and-javascript-assets)
-    - [Insertion](#insertion)
+  - [Assets](#assets)
+    - [CSS- and JavaScript-Files](#css--and-javascript-files)
+      - [Insertion](#insertion)
+    - [Pictures](#pictures)
   - [Settings](#settings)
 
 ## What is `MarkdownConverter`?
@@ -167,7 +169,7 @@ Header:
 This is a test.
 ```
 
-If you'd like to have more control on how your headers and footers look like, you might want to adjust the `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate` options.
+If you'd like to have more control on what your headers and footers look like, you might want to adjust the `markdownConverter.Document.HeaderTemplate` and `markdownConverter.Document.FooterTemplate` options.
 
 ## Including Table of Contents
 The `MarkdownConverter` provides the functionality to create a table of contents at runtime.  
@@ -192,7 +194,8 @@ Furthermore, the `markdownConverter.Parser.Toc.Levels` allows you to choose whic
 ## Third Party Markdown Extensions
 If you want to use third party markdown-extensions in your documents (such as the [Markdown Preview Mermaid Support], [Markdown Footnote] or [Markdown Emoji]), you might want to install the extensions of your choice and enable the `markdownConverter.Parser.SystemParserEnabled` setting which makes `MarkdownConverter` use VSCode's built-in `markdown-it` parser with all markdown extensions enabled.
 
-## CSS and JavaScript Assets
+## Assets
+### CSS- and JavaScript-Files
 `MarkdownConverter` allows you to pass stylesheets and JavaScript-files which are added to the document.
 
 Use the `markdownConverter.Assets.StyleSheets` and the `markdownConverter.Assets.Scripts` options for adding stylesheets and scripts.
@@ -216,7 +219,7 @@ You can choose the way to insert the stylesheet or script for each asset individ
 }
 ```
 
-### Insertion
+#### Insertion
 Basically, there are two ways on how to add an asset to the document.
 You can either add a link to the asset or have its content copied to the document.
 
@@ -238,6 +241,20 @@ You can choose how to treat assets by default based on their paths using the `ma
 ```
 
 By default, `MarkdownConverter` will include assets located at absolute and relative paths and add links to assets located at URLs.
+
+### Pictures
+You might want to have pictures in `<img>`-tags included directly in your document using Base64-encoding.
+The `markdownConverter.Assets.PictureInsertion`-option allows you to set whether to include pictures based on the nature of their paths:
+
+```json
+{
+  "markdownConverter.Assets.PictureInsertion": {
+    "Link": "Include",
+    "AbsolutePath": "Include",
+    "RelativePath": "Include"
+  }
+}
+```
 
 ## Settings
 This is a list of the most important settings. To see all of them, install the extension and have a look into the settings-dialogue of vscode.
