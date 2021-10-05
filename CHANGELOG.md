@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.0.0...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.0.1...dev)
+
+## MarkdownConverter v5.0.1
+### Updated
+  - The internal slugifier to make anchors look like the ones produced by GitHub  
+    Once more, thanks to [@Postur](https://github.com/Postur) for pointing this out!
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.0.0...v5.0.1)
 
 ## MarkdownConverter v5.0.0
 ### Breaking

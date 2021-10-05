@@ -889,7 +889,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                             {
                                 let result = load(parser.render(content));
                                 strictEqual(result(`#${kebabCase(headerText)}`).length, 1);
-                                strictEqual(result(`#${kebabCase(`${headerText}2`)}`).length, 1);
+                                strictEqual(result(`#${kebabCase(`${headerText}1`)}`).length, 1);
                             }
                         });
 

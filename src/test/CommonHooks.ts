@@ -26,8 +26,9 @@ export function CommonHooks(): ITestContext<ISettings>
         });
 
     teardown(
-        async () =>
+        async function()
         {
+            this.timeout(5 * 1000);
             Resources.Culture = originalCulture;
             await interceptor.Context.CloseEditors();
         });

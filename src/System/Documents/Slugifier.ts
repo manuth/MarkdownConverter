@@ -1,5 +1,3 @@
-import { slugify } from "transliteration";
-
 /**
  * Provides the functionality to generate slugs.
  */
@@ -45,7 +43,7 @@ export class Slugifier
     {
         let baseName = this.Slugify(text);
 
-        let counter = 1;
+        let counter = 0;
         let slug = baseName;
 
         while (this.Slugs.includes(slug))
@@ -76,12 +74,6 @@ export class Slugifier
      */
     protected Slugify(text: string): string
     {
-        return slugify(
-            text,
-            {
-                lowercase: true,
-                separator: "-",
-                ignore: []
-            });
+        return text.replace(/[^\p{L}\p{M}\p{Nd}\p{Nl}\p{Pc}\- ]/gu, "").toLowerCase().replace(/ /g, "-");
     }
 }
