@@ -29,7 +29,7 @@ export function SlugifierTests(): void
                     slugifier = new Slugifier();
                 });
 
-            suite(
+            suite.only(
                 nameof<Slugifier>((slugifier) => slugifier.CreateSlug),
                 () =>
                 {
@@ -50,8 +50,39 @@ export function SlugifierTests(): void
 
                             for (let i = 0; i < max; i++)
                             {
-                                strictEqual(slugifier.CreateSlug(slug), kebabCase(`${slug}${i + 2}`));
+                                strictEqual(slugifier.CreateSlug(slug), kebabCase(`${slug}${i + 1}`));
                             }
+                        });
+
+                    test(
+                        "Checking whether multiple spaces in a row are not removed…",
+                        () =>
+                        {
+                            let count = random.integer(1, 10);
+
+                            strictEqual(
+                                slugifier.CreateSlug(`hello${" ".repeat(count)}world`),
+                                `hello${"-".repeat(count)}world`);
+                        });
+
+                    test(
+                        "Checking whether punctations are removed…",
+                        () =>
+                        {
+                            strictEqual(
+                                slugifier.CreateSlug(
+                                    "hello " +
+                                    "[]!'#$%&()*+,./:;<=>?@\\^{|}~`。，、；：？！…—·¨‘’“”～‖∶＂＇｀｜〃〔〕〈〉《》「」『』．〖〗【】（）［］｛｝" +
+                                    "world"),
+                                "hello-world");
+                        });
+
+                    test(
+                        "Checking whether unicode-characters aren't stripped away…",
+                        () =>
+                        {
+                            strictEqual(slugifier.CreateSlug("你好, world!'"), "你好-world");
+                            strictEqual(slugifier.CreateSlug("Krøv"), "krøv");
                         });
                 });
 
