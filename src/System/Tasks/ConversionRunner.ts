@@ -48,6 +48,11 @@ import { IProgressState } from "./IProgressState";
 export class ConversionRunner
 {
     /**
+     * The name of the heading rule.
+     */
+    private static readonly headingRule = "heading_open";
+
+    /**
      * The extension the runner belongs to.
      */
     private extension: MarkdownConverterExtension;
@@ -431,6 +436,7 @@ export class ConversionRunner
             parser = cloneDeep(this.Extension.VSCodeParser);
             parser.normalizeLink = (link: string) => link;
             parser.normalizeLinkText = (link: string) => link;
+            parser.renderer.rules[ConversionRunner.headingRule] = new MarkdownIt().renderer.rules[ConversionRunner.headingRule];
         }
         else
         {
