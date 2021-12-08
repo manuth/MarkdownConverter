@@ -5,8 +5,8 @@ import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
 import checkbox = require("markdown-it-checkbox");
-import emoji = require("markdown-it-emoji");
 import markdownContainer = require("markdown-it-container");
+import emoji = require("markdown-it-emoji");
 import markdownInclude = require("markdown-it-include");
 import Token = require("markdown-it/lib/token");
 import format = require("string-template");
@@ -499,14 +499,19 @@ export class ConversionRunner
             markdownContainer,
             "",
             {
-                validate: function (name: string) {
+                validate(name: string)
+                {
                     return name.trim().length;
                 },
-                render: function (token:Token[], id:number) {
-                    if (token[id].info.trim() !== '') {
+                render(token: Token[], id: number)
+                {
+                    if (token[id].info.trim() !== "")
+                    {
                         return `<div class="${token[id].info.trim()}">\n`;
-                    } else {
-                        return `</div>\n`;
+                    }
+                    else
+                    {
+                        return "</div>\n";
                     }
                 }
           });
