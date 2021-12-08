@@ -41,7 +41,8 @@ export = (env: any, argv: any) =>
             path: resolve(__dirname, "lib"),
             filename: "[name].js",
             libraryTarget: "commonjs2",
-            devtoolFallbackModuleFilenameTemplate: "../[resource-path]"
+            devtoolFallbackModuleFilenameTemplate: "../[resource-path]",
+            hashFunction: "xxhash64"
         },
         devtool: "source-map",
         externals,
