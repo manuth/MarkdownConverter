@@ -8,7 +8,6 @@ import checkbox = require("markdown-it-checkbox");
 import emoji = require("markdown-it-emoji");
 import markdownContainer = require("markdown-it-container");
 import markdownInclude = require("markdown-it-include");
-import path = require("path");
 import Token = require("markdown-it/lib/token");
 import format = require("string-template");
 import { convert, parse } from "twemoji";
@@ -496,32 +495,31 @@ export class ConversionRunner
         /**
          * Add Markdown IT Container
          */
-        var markdownContainerOptions = {
-            validate: function (name: string) {
-                return name.trim().length;
-            },
-            render: function (token:Token[], id:number) {
-                if (token[id].info.trim() !== '') {
-                    return `<div class="${token[id].info.trim()}">\n`;
-                } else {
-                    return `</div>\n`;
+        parser.use(
+            markdownContainer,
+            '',
+            {
+                validate: function (name: string) {
+                    return name.trim().length;
+                },
+                render: function (token:Token[], id:number) {
+                    if (token[id].info.trim() !== '') {
+                        return `<div class="${token[id].info.trim()}">\n`;
+                    } else {
+                        return `</div>\n`;
+                    }
                 }
-            }
-          };
-
-        parser.use(markdownContainer,'',markdownContainerOptions);
+          });
 
         /**
          * Add Markdown IT Include
          */
-
-        var markdownIncludeOptions = {
-            root: path.dirname(window.activeTextEditor.document.fileName),
-            includeRe: /\!{3}\s*include(.+?)\!{3}/i
-          };
-
-        parser.use(markdownInclude, markdownIncludeOptions);
-
+        parser.use(
+            markdownInclude,
+            {
+                root: dirname(window.activeTextEditor.document.fileName),
+                includeRe: /\!{3}\s*include(.+?)\!{3}/i
+            });
 
         return parser;
     }
