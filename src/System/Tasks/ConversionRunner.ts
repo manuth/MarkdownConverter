@@ -516,7 +516,7 @@ export class ConversionRunner
                         return "</div>\n";
                     }
                 }
-          });
+            });
 
         /**
          * Add Markdown IT Include
