@@ -199,8 +199,6 @@ It is now possible to fragment the document in multiple sections and to merge th
 !!!include(file.md)!!!
 ```
 
-Paths specified in `include`-references are relative to the working directory, so you have to specify paths relative to the workspace root.
-
 ## Creating Block-Level Custom Containers
 MarkdownConverter allows you to apply CSS classes to specific parts of your document.
 This feature can be used with the following syntax:
