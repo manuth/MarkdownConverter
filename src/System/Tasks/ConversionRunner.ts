@@ -497,7 +497,7 @@ export class ConversionRunner
          */
         parser.use(
             markdownContainer,
-            '',
+            "",
             {
                 validate: function (name: string) {
                     return name.trim().length;
@@ -518,7 +518,7 @@ export class ConversionRunner
             markdownInclude,
             {
                 root: dirname(window.activeTextEditor.document.fileName),
-                includeRe: /\!{3}\s*include(.+?)\!{3}/i
+                includeRe: /!{3}\s*include(.+?)!{3}/i
             });
 
         return parser;
