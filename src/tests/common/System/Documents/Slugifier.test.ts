@@ -29,7 +29,7 @@ export function SlugifierTests(): void
                     slugifier = new Slugifier();
                 });
 
-            suite.only(
+            suite(
                 nameof<Slugifier>((slugifier) => slugifier.CreateSlug),
                 () =>
                 {
