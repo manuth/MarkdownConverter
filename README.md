@@ -11,6 +11,8 @@ A markdown-converter for [vscode][vscode]
       - [Custom Date-Formats](#custom-date-formats)
   - [Headers and Footers](#headers-and-footers)
   - [Including Table of Contents](#including-table-of-contents)
+  - [Including Markdown Fragment Files](#including-markdown-fragment-files)
+  - [Creating Block-Level Custom Containers](#creating-block-level-custom-containers)
   - [Third Party Markdown Extensions](#third-party-markdown-extensions)
   - [Assets](#assets)
     - [CSS- and JavaScript-Files](#css--and-javascript-files)
@@ -189,6 +191,32 @@ Furthermore, the `markdownConverter.Parser.Toc.Levels` allows you to choose whic
   "markdownConverter.Parser.Toc.ListType": "ol",
   "markdownConverter.Parser.Toc.Levels": "2-6"
 }
+```
+
+## Including Markdown Fragment Files
+It is now possible to fragment the document in multiple sections and to merge them all into one. This way, it's possible to work on separate fragments at the same time without having to bear with conflicts during editing. Add fragments using this syntax:
+```md
+!!!include(file.md)!!!
+```
+
+## Creating Block-Level Custom Containers
+MarkdownConverter allows you to apply CSS classes to specific parts of your document.
+This feature can be used with the following syntax:
+
+In your Markdown file:
+```md
+:::class
+
+Text Here
+
+:::
+```
+
+In your CSS file:
+```css
+div.class {
+   // Custom CSS Here
+ }
 ```
 
 ## Third Party Markdown Extensions

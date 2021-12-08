@@ -5,7 +5,11 @@ import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
 import checkbox = require("markdown-it-checkbox");
+import markdownContainer = require("markdown-it-container");
 import emoji = require("markdown-it-emoji");
+import markdownInclude = require("markdown-it-include");
+import StateCore = require("markdown-it/lib/rules_core/state_core");
+import Token = require("markdown-it/lib/token");
 import format = require("string-template");
 import { convert, parse } from "twemoji";
 import { dirname, isAbsolute, join, resolve } from "upath";
@@ -25,6 +29,7 @@ import { WebScript } from "../Documents/Assets/WebScript";
 import { AttributeKey } from "../Documents/AttributeKey";
 import { Document } from "../Documents/Document";
 import { EmojiType } from "../Documents/EmojiType";
+import { EnvironmentKey } from "../Documents/EnvironmentKey";
 import { ListType } from "../Documents/ListType";
 import { Anchor } from "../Documents/Plugins/MarkdownAnchorPlugin";
 import { TOC } from "../Documents/Plugins/MarkdownTocPlugin";
@@ -488,6 +493,43 @@ export class ConversionRunner
                 }
             };
         }
+
+        /**
+         * Add Markdown IT Container
+         */
+        parser.use(
+            markdownContainer,
+            "",
+            {
+                validate(name: string)
+                {
+                    return name.trim().length;
+                },
+                render(token: Token[], id: number)
+                {
+                    if (token[id].info.trim() !== "")
+                    {
+                        return `<div class="${token[id].info.trim()}">\n`;
+                    }
+                    else
+                    {
+                        return "</div>\n";
+                    }
+                }
+          });
+
+        /**
+         * Add Markdown IT Include
+         */
+        parser.use(
+            markdownInclude,
+            {
+                getRootDir: (options: any, state: StateCore) =>
+                {
+                    return state.env[EnvironmentKey.RootDir] ?? ".";
+                },
+                includeRe: /!{3}\s*include(.+?)!{3}/i
+            });
 
         return parser;
     }
