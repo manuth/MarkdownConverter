@@ -108,7 +108,7 @@
     "@types/ts-nameof": "^4.2.1",
     "@types/twemoji": "^12.1.2",
     "@types/utf8": "^3.0.0",
-    "@types/vscode": "^1.60.0",
+    "@types/vscode": "^1.63.0",
     "@types/website-scraper": "^1.2.6",
     "@types/yamljs": "^0.2.31",
     "eslint": "^7.32.0",
