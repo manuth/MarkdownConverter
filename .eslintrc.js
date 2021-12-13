@@ -17,5 +17,8 @@ module.exports = {
             join(__dirname, "src", "test", "tsconfig.json"),
             join(__dirname, "src", "tests", "tsconfig.json")
         ]
-    }
+    },
+    rules: {
+        "@typescript-eslint/no-var-requires": 0
+      }
 };

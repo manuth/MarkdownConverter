@@ -8,7 +8,7 @@ import { ITestContext } from "./ITestContext";
  * @template TSection
  * The type of the intercepted settings-section.
  */
-export class TestContext<TSection extends any = any> implements ITestContext<TSection>
+export class TestContext<TSection = any> implements ITestContext<TSection>
 {
     /**
      * The config-interceptor of this context.
