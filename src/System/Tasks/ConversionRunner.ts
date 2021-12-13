@@ -1,7 +1,7 @@
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempDirectory } from "@manuth/temp-files";
 import { pathExists, readFile } from "fs-extra";
-import { highlight } from "highlight.js";
+import hljs from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
 import checkbox = require("markdown-it-checkbox");
@@ -440,7 +440,7 @@ export class ConversionRunner
                 {
                     if (Settings.Default.HighlightStyle !== "None")
                     {
-                        subject = highlight(language, subject, true).value;
+                        subject = hljs.highlight(subject, { language: "markdown", ignoreIllegals: true }).value;
                     }
                     else
                     {
