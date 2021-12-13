@@ -10,7 +10,7 @@ import { TestContext } from "./TestContext";
  * @template TSection
  * The type of the configuration in the section to intercept.
  */
-export class ConfigInterceptor<TSection extends any = any>
+export class ConfigInterceptor<TSection = any>
 {
     /**
      * The target of the interception.
