@@ -3,6 +3,7 @@ import { AssetURLType } from "../System/Documents/Assets/AssetURLType";
 import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { EmojiType } from "../System/Documents/EmojiType";
 import { Margin } from "../System/Documents/Margin";
+import { MultiTable } from "../System/Documents/MultiTable";
 import { IRunningBlockContent } from "./IRunningBlockContent";
 
 /**
@@ -59,6 +60,11 @@ export interface ISettings
      * A value indicating whether the parser of `vscode` should be used.
      */
     ["Parser.SystemParserEnabled"]?: boolean;
+
+    /**
+     * The multitable's options to enable or disable.
+     */
+    ["Parser.MultiTable"]?: Record<keyof MultiTable, boolean>;
 
     /**
      * The type of emoji to use.
