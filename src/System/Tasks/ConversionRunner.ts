@@ -8,6 +8,7 @@ import checkbox = require("markdown-it-checkbox");
 import markdownContainer = require("markdown-it-container");
 import emoji = require("markdown-it-emoji");
 import markdownInclude = require("markdown-it-include");
+import markdownMultiTable = require("markdown-it-multimd-table");
 import StateCore = require("markdown-it/lib/rules_core/state_core");
 import Token = require("markdown-it/lib/token");
 import format = require("string-template");
@@ -529,6 +530,16 @@ export class ConversionRunner
                     return state.env[EnvironmentKey.RootDir] ?? ".";
                 },
                 includeRe: /!{3}\s*include(.+?)!{3}/i
+            });
+
+        /**
+         * Add Markdown It Multimd Table
+         */
+        parser.use(
+            markdownMultiTable, {
+                multiline:  Settings.Default.MultiTable.Multiline,
+                rowspan:    Settings.Default.MultiTable.Rowspan,
+                headerless: Settings.Default.MultiTable.Headerless
             });
 
         return parser;

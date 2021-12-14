@@ -7,6 +7,7 @@ import { CustomPageFormat } from "../System/Documents/CustomPageFormat";
 import { EmojiType } from "../System/Documents/EmojiType";
 import { ListType } from "../System/Documents/ListType";
 import { Margin } from "../System/Documents/Margin";
+import { MultiTable } from "../System/Documents/MultiTable";
 import { PageOrientation } from "../System/Documents/PageOrientation";
 import { Paper } from "../System/Documents/Paper";
 import { StandardizedFormatType } from "../System/Documents/StandardizedFormatType";
@@ -135,6 +136,32 @@ export class Settings
     public get EmojiType(): EmojiType
     {
         return EmojiType[this.GetConfigEntry("Parser.EmojiType")];
+    }
+
+    /**
+     * Gets the layout of the document.
+     */
+    public get MultiTable(): MultiTable
+    {
+        let multitable = new MultiTable();
+        let parserMultiTable = "Parser.MultiTable" as const;
+        let multilineKey = `${parserMultiTable}.Multiline` as const;
+        let rowspanKey = `${parserMultiTable}.Rowspan` as const;
+        let headerlessKey = `${parserMultiTable}.Headerless` as const;
+
+        if (
+            this.config.has(multilineKey) ||
+            this.config.has(rowspanKey) ||
+            this.config.has(headerlessKey))
+        {
+            multitable = new MultiTable(this.GetConfigEntry(multilineKey), this.GetConfigEntry(rowspanKey), this.GetConfigEntry(headerlessKey));
+        }
+        else
+        {
+            multitable = new MultiTable(true, true, true);
+        }
+
+        return multitable;
     }
 
     /**

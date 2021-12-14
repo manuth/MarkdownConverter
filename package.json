@@ -72,6 +72,7 @@
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-container": "^3.0.0",
     "markdown-it-emoji": "^2.0.0",
+    "markdown-it-multimd-table": "^4.1.1",
     "markdown-it-table-of-contents": "^0.5.2",
     "multi-integer-range": "^4.0.9",
     "pkg-up": "^3.1.0",
@@ -273,6 +274,34 @@
           "markdownDescription": "%Config.Parser.SystemParserEnabled.Description%",
           "type": "boolean",
           "default": true
+        },
+        "markdownConverter.Parser.MultiTable": {
+          "title": "%Config.Parser.MultiTable%",
+          "markdownDescription": "%Config.Parser.MultiTable.Description%",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "Multiline",
+            "Rowspan",
+            "Headerless"
+          ],
+          "properties": {
+            "Multiline": {
+              "description": "%Config.Parser.MultiTable.Multiline.Description%",
+              "type": "boolean",
+              "default": true
+            },
+            "Rowspan": {
+              "description": "%Config.Parser.MultiTable.Rowspan.Description%",
+              "type": "boolean",
+              "default": true
+            },
+            "Headerless": {
+              "description": "%Config.Parser.MultiTable.Headerless.Description%",
+              "type": "boolean",
+              "default": true
+            }
+          }
         },
         "markdownConverter.Parser.EmojiType": {
           "title": "%Config.Parser.EmojiType%",
