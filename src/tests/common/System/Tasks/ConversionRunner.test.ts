@@ -4,7 +4,7 @@ import { isAbsolute, relative } from "path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { Cheerio, CheerioAPI, load, Node } from "cheerio";
 import dedent = require("dedent");
-import { pathExists, readFile, remove, writeFile } from "fs-extra";
+import { ensureFile, pathExists, readFile, remove, writeFile } from "fs-extra";
 import kebabCase = require("lodash.kebabcase");
 import MarkdownIt = require("markdown-it");
 import MultiRange from "multi-integer-range";
@@ -26,6 +26,7 @@ import { AssetURLType } from "../../../../System/Documents/Assets/AssetURLType";
 import { InsertionType } from "../../../../System/Documents/Assets/InsertionType";
 import { AttributeKey } from "../../../../System/Documents/AttributeKey";
 import { Document } from "../../../../System/Documents/Document";
+import { EnvironmentKey } from "../../../../System/Documents/EnvironmentKey";
 import { Margin } from "../../../../System/Documents/Margin";
 import { PageOrientation } from "../../../../System/Documents/PageOrientation";
 import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
@@ -968,6 +969,70 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 result("b img").length +
                                 result("strong img").length,
                                 1);
+                        });
+
+                    test(
+                        "Checking whether custom classes can be applied to parts of the document…",
+                        async function()
+                        {
+                            this.slow(7.5 * 1000);
+                            this.timeout(15 * 1000);
+                            let result: CheerioAPI;
+                            let className = "warning";
+                            let warning = "here be dragons";
+
+                            let content = dedent(
+                                `
+                                    ::: ${className}
+                                    *${warning}*
+                                    :::`);
+
+                            result = load((await conversionRunner.LoadParser()).render(content));
+                            strictEqual(result(`div.${className}:contains("${warning}")`).length, 1);
+                        });
+
+                    test(
+                        "Checking whether foreign markdown files can be included…",
+                        async function()
+                        {
+                            this.slow(7.5 * 1000);
+                            this.timeout(15 * 1000);
+                            let result: CheerioAPI;
+                            let tempDir = new TempDirectory();
+                            let className = "warning";
+                            let testFile = "test/include.md";
+
+                            try
+                            {
+                                await ensureFile(tempDir.MakePath(testFile));
+
+                                await writeFile(
+                                    tempDir.MakePath(testFile),
+                                    dedent(
+                                        `
+                                        :::${className}
+                                        *here be dragons*
+                                        :::`));
+
+                                result = load(
+                                    (await conversionRunner.LoadParser()).render(
+                                        dedent(
+                                            `
+                                            !!!include(${testFile})!!!`),
+                                        {
+                                            [EnvironmentKey.RootDir]: tempDir.FullName
+                                        }));
+
+                                strictEqual(result(`.${className}`).length, 1);
+                            }
+                            catch (exception)
+                            {
+                                throw exception;
+                            }
+                            finally
+                            {
+                                tempDir.Dispose();
+                            }
                         });
                 });
 
