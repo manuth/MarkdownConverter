@@ -44,7 +44,7 @@ A markdown-converter for [vscode][vscode]
  3. Open up the command pallet (<kbd>Ctrl</kbd>, <kbd>Shift</kbd>+<kbd>P</kbd>) and search one of these commands:
     - `Markdown: Convert Document` (`Markdown: Dokument Konvertieren` in German) or `mco` (`mk` in German) for short
     - `Markdown: Convert all Documents` (`Markdown: Alle Dokumente konvertieren`) or `mcd` (`madk` in German) for short
-    - `Markdown: Chain all Documents` (`Markdown: Alle Dokumente verketten`) or `mcad` (`madv` in German) for short 
+    - `Markdown: Chain all Documents` (`Markdown: Alle Dokumente verketten`) or `mcad` (`madv` in German) for short
  4. Press enter and wait for the process to finish
 
 Normally, `MarkdownConverter` will refuse to convert files which aren't recognized as markdown-files.  
@@ -195,6 +195,7 @@ Furthermore, the `markdownConverter.Parser.Toc.Levels` allows you to choose whic
 
 ## Including Markdown Fragment Files
 It is now possible to fragment the document in multiple sections and to merge them all into one. This way, it's possible to work on separate fragments at the same time without having to bear with conflicts during editing. Add fragments using this syntax:
+
 ```md
 !!!include(file.md)!!!
 ```
@@ -203,7 +204,7 @@ It is now possible to fragment the document in multiple sections and to merge th
 MarkdownConverter allows you to apply CSS classes to specific parts of your document.
 This feature can be used with the following syntax:
 
-In your Markdown file:
+***Markdown file:***
 ```md
 :::class
 
@@ -212,11 +213,11 @@ Text Here
 :::
 ```
 
-In your CSS file:
+***CSS file:***
 ```css
 div.class {
    // Custom CSS Here
- }
+}
 ```
 
 ## Third Party Markdown Extensions
