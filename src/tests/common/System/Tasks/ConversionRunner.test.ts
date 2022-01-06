@@ -556,8 +556,10 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
 
                     test(
                         `Checking whether assets from markdown-extensions are loaded if \`${systemParserOption}\` is enabled…`,
-                        async () =>
+                        async function()
                         {
+                            this.slow(1 * 1000);
+                            this.timeout(2 * 1000);
                             let contributions = new MarkdownContributions();
 
                             for (let systemParserEnabled of [true, false])
