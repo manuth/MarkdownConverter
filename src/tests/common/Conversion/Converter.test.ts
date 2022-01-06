@@ -1,13 +1,12 @@
 import { doesNotReject, notStrictEqual, ok, rejects, strictEqual } from "assert";
 import { Server } from "http";
-import { relative } from "path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
 import * as puppeteer from "puppeteer-core";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
-import { changeExt, normalize } from "upath";
+import { changeExt, dirname, join, normalize, relative } from "upath";
 import { Progress, TextDocument, workspace } from "vscode";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { Converter } from "../../../Conversion/Converter";
@@ -448,7 +447,7 @@ export function ConverterTests(): void
                         async function()
                         {
                             this.slow(5 * 1000);
-                            this.timeout(0 * 10 * 1000);
+                            this.timeout(10 * 1000);
                             let testSandbox = createSandbox();
 
                             for (let specialName of [
@@ -460,23 +459,35 @@ export function ConverterTests(): void
                             {
                                 /**
                                  * Replaces the {@link Converter.DocumentRoot `Converter.DocumentRoot`}-property with the {@link specialName `specialName`}.
+                                 *
+                                 * @param dirName The name of the directory to replace the document root with.
                                  */
-                                function replaceDocumentRoot(): void
+                                function replaceDocumentRoot(dirName?: string): void
                                 {
-                                    testSandbox.replaceGetter(initializedConverter, "DocumentRoot", () => specialName);
+                                    testSandbox.replaceGetter(initializedConverter, "DocumentRoot", () => dirName ?? specialName);
                                 }
 
                                 /**
                                  * Replaces the {@link Document.FileName `Document.FileName`}-property with the {@link specialName `specialName`}.
+                                 *
+                                 * @param fileName The name of the file to replace the current file-name with.
                                  */
-                                function replaceFileName(): void
+                                function replaceFileName(fileName?: string): void
                                 {
-                                    testSandbox.replaceGetter(initializedConverter.Document, "FileName", () => specialName);
+                                    testSandbox.replaceGetter(initializedConverter.Document, "FileName", () => fileName ?? specialName);
                                 }
 
                                 for (let injector of [
-                                    replaceDocumentRoot,
-                                    replaceFileName,
+                                    () =>
+                                    {
+                                        replaceDocumentRoot();
+                                        replaceFileName(join(initializedConverter.DocumentRoot, "Test.md"));
+                                    },
+                                    () =>
+                                    {
+                                        replaceFileName();
+                                        replaceDocumentRoot(dirname(initializedConverter.Document.FileName));
+                                    },
                                     () =>
                                     {
                                         replaceDocumentRoot();
@@ -499,8 +510,8 @@ export function ConverterTests(): void
                         "Checking whether an error message is printed if the document couldn't be rendered for some reason…",
                         async function()
                         {
-                            this.slow(2 * 1000);
-                            this.timeout(4 * 1000);
+                            this.slow(10 * 1000);
+                            this.timeout(20 * 1000);
                             let message = random.string(50);
 
                             sandbox.replace(

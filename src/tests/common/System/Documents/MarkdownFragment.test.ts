@@ -1,8 +1,13 @@
 import { strictEqual } from "assert";
+import { dirname } from "path";
+import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import MarkdownIt = require("markdown-it");
 import { Random } from "random-js";
+import { createSandbox, SinonSandbox } from "sinon";
+import { toUnix } from "upath";
 import { Document } from "../../../../System/Documents/Document";
+import { EnvironmentKey } from "../../../../System/Documents/EnvironmentKey";
 import { MarkdownFragment } from "../../../../System/Documents/MarkdownFragment";
 
 /**
@@ -31,7 +36,9 @@ export function MarkdownFragmentTests(): void
                 }
             }
 
+            let sandbox: SinonSandbox;
             let random: Random;
+            let tempFile: TempFile;
             let fragment: TestMarkdownFragment;
 
             suiteSetup(
@@ -43,7 +50,16 @@ export function MarkdownFragmentTests(): void
             setup(
                 () =>
                 {
+                    sandbox = createSandbox();
                     fragment = new TestMarkdownFragment(new Document(new MarkdownIt()));
+                    tempFile = new TempFile();
+                });
+
+            teardown(
+                () =>
+                {
+                    sandbox.restore();
+                    tempFile.Dispose();
                 });
 
             suite(
@@ -64,6 +80,26 @@ export function MarkdownFragmentTests(): void
                             strictEqual(
                                 load(result)(`b${textSelector},strong${textSelector}`).length,
                                 1);
+                        });
+
+                    test(
+                        "Checking whether the `markdown-it` environment is generated properly…",
+                        async () =>
+                        {
+                            let environment: any;
+                            sandbox.replace(fragment.Document.Parser, "render", (src, env) => environment = env);
+
+                            for (let entry of [
+                                [tempFile.FullName, dirname(tempFile.FullName)],
+                                [null, null]
+                            ] as Array<[string, string]>)
+                            {
+                                let fileNameSandbox = createSandbox();
+                                fileNameSandbox.replaceGetter(fragment.Document, "FileName", () => entry[0]);
+                                await fragment.RenderContent();
+                                strictEqual(toUnix(environment[EnvironmentKey.RootDir] ?? ""), toUnix(entry[1] ?? ""));
+                                fileNameSandbox.restore();
+                            }
                         });
                 });
         });

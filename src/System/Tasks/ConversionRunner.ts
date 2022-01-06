@@ -5,7 +5,11 @@ import { highlight } from "highlight.js";
 import cloneDeep = require("lodash.clonedeep");
 import MarkdownIt = require("markdown-it");
 import checkbox = require("markdown-it-checkbox");
+import markdownContainer = require("markdown-it-container");
 import emoji = require("markdown-it-emoji");
+import markdownInclude = require("markdown-it-include");
+import StateCore = require("markdown-it/lib/rules_core/state_core");
+import Token = require("markdown-it/lib/token");
 import format = require("string-template");
 import { convert, parse } from "twemoji";
 import { dirname, isAbsolute, join, resolve } from "upath";
@@ -25,6 +29,7 @@ import { WebScript } from "../Documents/Assets/WebScript";
 import { AttributeKey } from "../Documents/AttributeKey";
 import { Document } from "../Documents/Document";
 import { EmojiType } from "../Documents/EmojiType";
+import { EnvironmentKey } from "../Documents/EnvironmentKey";
 import { ListType } from "../Documents/ListType";
 import { Anchor } from "../Documents/Plugins/MarkdownAnchorPlugin";
 import { TOC } from "../Documents/Plugins/MarkdownTocPlugin";
@@ -42,6 +47,11 @@ import { IProgressState } from "./IProgressState";
  */
 export class ConversionRunner
 {
+    /**
+     * The name of the heading rule.
+     */
+    private static readonly headingRule = "heading_open";
+
     /**
      * The extension the runner belongs to.
      */
@@ -293,9 +303,11 @@ export class ConversionRunner
         }
         catch (exception)
         {
-            if ("path" in exception)
+            if (
+                typeof exception === "object" &&
+                "path" in exception)
             {
-                throw new FileException(null, exception.path);
+                throw new FileException(null, (exception as any).path);
             }
             else
             {
@@ -426,6 +438,7 @@ export class ConversionRunner
             parser = cloneDeep(this.Extension.VSCodeParser);
             parser.normalizeLink = (link: string) => link;
             parser.normalizeLinkText = (link: string) => link;
+            parser.renderer.rules[ConversionRunner.headingRule] = new MarkdownIt().renderer.rules[ConversionRunner.headingRule];
         }
         else
         {
@@ -488,6 +501,36 @@ export class ConversionRunner
                 }
             };
         }
+
+        parser.use(
+            markdownContainer,
+            "markdown-converter",
+            {
+                validate(name: string)
+                {
+                    return name.trim().length > 0;
+                },
+                render(token: Token[], id: number)
+                {
+                    if (token[id].info.trim() !== "")
+                    {
+                        return `<div class="${token[id].info.trim()}">\n`;
+                    }
+                    else
+                    {
+                        return "</div>\n";
+                    }
+                }
+            });
+
+        parser.use(
+            markdownInclude,
+            {
+                getRootDir: (options: any, state: StateCore) =>
+                {
+                    return state.env[EnvironmentKey.RootDir] ?? ".";
+                }
+            });
 
         return parser;
     }

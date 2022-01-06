@@ -4,7 +4,7 @@
  * @template TSection
  * The type of the intercepted settings-section.
  */
-export interface ITestContext<TSection extends any = any>
+export interface ITestContext<TSection = any>
 {
     /**
      * Gets or sets the intercepted settings.

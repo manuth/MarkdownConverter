@@ -12,13 +12,19 @@ export = (env: any, argv: any) =>
 
     let entryPoints: string[] = [
         join(sourceRoot, "index.ts"),
-        join(sourceRoot, "test", "runTests.ts"),
-        join(sourceRoot, "test", "index.ts"),
-        join(sourceRoot, "test", "essentials.test.ts"),
-        join(sourceRoot, "test", "common.test.ts"),
-        join(sourceRoot, "test", "single-file.test.ts"),
-        join(sourceRoot, "test", "single-folder.test.ts"),
-        join(sourceRoot, "test", "workspace.test.ts")
+        ...(
+            argv.mode === "development" ?
+                [
+                    join(sourceRoot, "test", "runTests.ts"),
+                    join(sourceRoot, "test", "index.ts"),
+                    join(sourceRoot, "test", "essentials.test.ts"),
+                    join(sourceRoot, "test", "common.test.ts"),
+                    join(sourceRoot, "test", "single-file.test.ts"),
+                    join(sourceRoot, "test", "single-folder.test.ts"),
+                    join(sourceRoot, "test", "workspace.test.ts")
+                ] :
+                []
+        )
     ];
 
     let externals: Record<string, string> = {};
@@ -41,7 +47,8 @@ export = (env: any, argv: any) =>
             path: resolve(__dirname, "lib"),
             filename: "[name].js",
             libraryTarget: "commonjs2",
-            devtoolFallbackModuleFilenameTemplate: "../[resource-path]"
+            devtoolFallbackModuleFilenameTemplate: "../[resource-path]",
+            hashFunction: "xxhash64"
         },
         devtool: "source-map",
         externals,
@@ -98,6 +105,9 @@ export = (env: any, argv: any) =>
         },
         stats: {
             warnings: false
+        },
+        optimization: {
+            runtimeChunk: true
         }
     } as Configuration;
 };

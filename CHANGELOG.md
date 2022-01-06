@@ -6,7 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.0.1...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.1.1...dev)
+
+## MarkdownConverter v5.1.1
+### Added
+  - Support for including foreign markdown files using the `markdown-it-include` plugin ([#132](https://github.com/manuth/MarkdownConverter/pull/132))  
+    Thanks a ton to [Felix Lehoux](https://github.com/L3houx)
+  - Support for applying classes to document sections using the `markdown-it-container` plugin ([#132](https://github.com/manuth/MarkdownConverter/pull/132))  
+    Once more thanks to [Felix Lehoux](https://github.com/L3houx)
+
+### Fixed
+  - Broken anchor creation
+  - Vulnerabilities in dependencies
+
+### Updated
+  - All dependencies
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.0.1...v5.1.1)
 
 ## MarkdownConverter v5.0.1
 ### Updated
