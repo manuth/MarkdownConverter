@@ -32,7 +32,6 @@ steps:
       - test
     commands:
       - npx vsce package
-    mem_limit: 10G
     when:
       event:
         - tag
