@@ -99,6 +99,9 @@ export = (env: any, argv: any) =>
         },
         stats: {
             warnings: false
+        },
+        optimization: {
+            runtimeChunk: true
         }
     } as Configuration;
 };
