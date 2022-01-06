@@ -303,9 +303,11 @@ export class ConversionRunner
         }
         catch (exception)
         {
-            if ("path" in exception)
+            if (
+                typeof exception === "object" &&
+                "path" in exception)
             {
-                throw new FileException(null, exception.path);
+                throw new FileException(null, (exception as any).path);
             }
             else
             {
