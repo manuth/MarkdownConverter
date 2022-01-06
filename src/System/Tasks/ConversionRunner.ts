@@ -502,9 +502,6 @@ export class ConversionRunner
             };
         }
 
-        /**
-         * Add Markdown IT Container
-         */
         parser.use(
             markdownContainer,
             "",
@@ -526,9 +523,6 @@ export class ConversionRunner
                 }
             });
 
-        /**
-         * Add Markdown IT Include
-         */
         parser.use(
             markdownInclude,
             {
