@@ -256,8 +256,8 @@ export function MarkdownConverterExtensionTests(context: ITestContext<ISettings>
                         "Checking whether the user can choose whether or not to show all files if multiple files are converted…",
                         async function()
                         {
-                            this.slow(7.5 * 1000);
-                            this.timeout(15 * 1000);
+                            this.slow(10 * 1000);
+                            this.timeout(20 * 1000);
                             let task = new ConvertAllTask(extension);
                             await extension.ExecuteTaskInternal(task);
                             strictEqual(successMessageCount, 0);
