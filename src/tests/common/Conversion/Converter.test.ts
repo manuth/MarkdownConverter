@@ -510,8 +510,8 @@ export function ConverterTests(): void
                         "Checking whether an error message is printed if the document couldn't be rendered for some reason…",
                         async function()
                         {
-                            this.slow(2 * 1000);
-                            this.timeout(4 * 1000);
+                            this.slow(10 * 1000);
+                            this.timeout(20 * 1000);
                             let message = random.string(50);
 
                             sandbox.replace(
