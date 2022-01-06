@@ -504,11 +504,11 @@ export class ConversionRunner
 
         parser.use(
             markdownContainer,
-            "",
+            "markdown-converter",
             {
                 validate(name: string)
                 {
-                    return name.trim().length;
+                    return name.trim().length > 0;
                 },
                 render(token: Token[], id: number)
                 {
@@ -529,8 +529,7 @@ export class ConversionRunner
                 getRootDir: (options: any, state: StateCore) =>
                 {
                     return state.env[EnvironmentKey.RootDir] ?? ".";
-                },
-                includeRe: /!{3}\s*include(.+?)!{3}/i
+                }
             });
 
         return parser;
