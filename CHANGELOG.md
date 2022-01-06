@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## MarkdownConverter [Unreleased]
+### Added
+  - Support for including foreign markdown files using the `markdown-it-include` plugin ([#132](https://github.com/manuth/MarkdownConverter/pull/132))  
+    Thanks a ton to [Felix Lehoux](https://github.com/L3houx)
+  - Support for applying classes to document sections using the `markdown-it-container` plugin ([#132](https://github.com/manuth/MarkdownConverter/pull/132))  
+    Once more thanks to [Felix Lehoux](https://github.com/L3houx)
+
+### Fixed
+  - Broken anchor creation
+  - Vulnerabilities in dependencies
+
+### Updated
+  - All dependencies
 
 [Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.0.1...dev)
 
