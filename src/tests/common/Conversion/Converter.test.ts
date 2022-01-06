@@ -447,7 +447,7 @@ export function ConverterTests(): void
                         async function()
                         {
                             this.slow(5 * 1000);
-                            this.timeout(0 * 10 * 1000);
+                            this.timeout(10 * 1000);
                             let testSandbox = createSandbox();
 
                             for (let specialName of [
