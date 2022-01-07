@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## MarkdownConverter [Unreleased]
+
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.1.2...dev)
+
+## MarkdownConverter v5.1.2
 ### Fixed
   - Error preventing the extension from running at all  
     Thanks to [@DaveyJH](https://github.com/DaveyJH) for reporting
@@ -12,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
   - All dependencies
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.1.1...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.1.1...v5.1.2)
 
 ## MarkdownConverter v5.1.1
 ### Added
