@@ -1,6 +1,6 @@
 {
   "name": "markdown-converter",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "private": true,
   "description": "A markdown-converter for vscode",
   "author": "Manuel Thalmann <m@nuth.ch> (https://nuth.ch)",
@@ -49,7 +49,7 @@
     "lint-ide": "npm run lint || exit 0",
     "test": "node ./lib/test/runTests",
     "prepare": "npm run patchTypeScript && npm run rebuild",
-    "patchTypeScript": "ts-patch install && ts-patch --persist"
+    "patchTypeScript": "ts-patch install"
   },
   "dependencies": {
     "@manuth/package-json-editor": "^2.2.5",
@@ -65,7 +65,7 @@
     "get-uri": "^4.0.0",
     "glob": "^7.2.0",
     "handlebars": "^4.7.7",
-    "highlight.js": "^11.3.1",
+    "highlight.js": "^11.4.0",
     "lodash.clonedeep": "^4.5.0",
     "markdown-it": "^12.3.0",
     "markdown-it-anchor": "^8.4.1",
