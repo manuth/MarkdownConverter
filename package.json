@@ -67,7 +67,7 @@
     "handlebars": "^4.7.7",
     "highlight.js": "^11.4.0",
     "lodash.clonedeep": "^4.5.0",
-    "markdown-it": "^12.3.0",
+    "markdown-it": "^12.3.2",
     "markdown-it-anchor": "^8.4.1",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-container": "^3.0.0",
