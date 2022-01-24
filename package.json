@@ -117,7 +117,7 @@
     "lodash.kebabcase": "^4.1.1",
     "minimist": "^1.2.5",
     "mocha": "^9.1.3",
-    "ovsx": "^0.2.1",
+    "ovsx": "^0.3.0",
     "parse-data-url": "^4.0.1",
     "randexp": "^0.5.3",
     "random-js": "^2.1.0",
