@@ -116,7 +116,7 @@
     "json5-loader": "^4.0.1",
     "lodash.kebabcase": "^4.1.1",
     "minimist": "^1.2.5",
-    "mocha": "^9.1.3",
+    "mocha": "^9.2.0",
     "ovsx": "^0.3.0",
     "parse-data-url": "^4.0.1",
     "randexp": "^0.5.3",
