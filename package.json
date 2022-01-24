@@ -112,7 +112,7 @@
     "@types/vscode": "^1.63.1",
     "@types/website-scraper": "^1.2.6",
     "@types/yamljs": "^0.2.31",
-    "eslint": "^8.6.0",
+    "eslint": "^8.7.0",
     "json5-loader": "^4.0.1",
     "lodash.kebabcase": "^4.1.1",
     "minimist": "^1.2.5",
