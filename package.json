@@ -104,7 +104,7 @@
     "@types/node": "^17.0.13",
     "@types/parse-data-url": "^3.0.0",
     "@types/serve-handler": "^6.1.1",
-    "@types/sinon": "^10.0.10",
+    "@types/sinon": "^10.0.11",
     "@types/string-template": "^1.0.2",
     "@types/ts-nameof": "^4.2.1",
     "@types/twemoji": "^12.1.2",
