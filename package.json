@@ -83,7 +83,7 @@
     "twemoji": "^13.1.0",
     "upath": "^2.0.1",
     "utf8": "^3.0.0",
-    "website-scraper": "^4.2.3",
+    "website-scraper": "^5.1.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
