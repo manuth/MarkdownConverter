@@ -53,14 +53,14 @@ steps:
       - npm i --no-save @octokit/rest
       - export PUBLISHER=$$(node -e "console.log(JSON.parse(require('fs').readFileSync('package.json').toString()).publisher)")
       - >
-        testVSCE() {
-          npx vsce verify-pat $PUBLISHER --pat $1 > /dev/null 2>&1
-        }
-      - >
         testOVSX() {
           url='https://open-vsx.org/api/-/namespace/create?token='"$1"
           output=$(curl -X POST $url --header 'Content-Type: application/json' --data-raw '{ "name": "'"$PUBLISHER"'" }')
           node -e 'JSON.parse('"'$output'"').error.includes("Invalid access token") && process.exit(1);'
+        }
+      - >
+        testVSCE() {
+          npx vsce verify-pat $PUBLISHER --pat $1 > /dev/null 2>&1
         }
       - >
         testGitHub() {
@@ -68,8 +68,8 @@ steps:
         }
       - export TagHeading=$$(cat .tagHeading.txt)
       - '[ ! -z "$$(sed "$${TagHeading}p;d" CHANGELOG.md)" ] || { echo "No Changelog Entries Found!" && false; }'
-      - testVSCE $VSCE_TOKEN              || { echo "The Visual Studio Marketplace Token is invalid!" && false; }
       - testOVSX $OVSX_TOKEN              || { echo "The Open VSX Token is invalid!" && false; }
+      - testVSCE $VSCE_TOKEN              || { echo "The Visual Studio Marketplace Token is invalid!" && false; }
       - testGitHub $GITHUB_PUBLISH_TOKEN  || { echo "The GitHub Publish Token is invalid!" && false; }
     when:
       event:
