@@ -25,13 +25,76 @@ steps:
       - build
     commands:
       - xvfb-run npm run test
-  - name: create extension
+  - name: prepare release
     image: node
     depends_on:
       - lint
       - test
     commands:
+      - npm install @stdlib/utils-escape-regexp-string --no-save
+      - node -e "console.log(require('@stdlib/utils-escape-regexp-string')('${DRONE_TAG}'))" > .tagName.txt
+      - export TagName=$$(cat .tagName.txt)
+      - echo "/^## \(.* \($${TagName}\|\[$${TagName}\]\)\)\$/" > .tagHeading.txt
+    when:
+      event:
+        - tag
+  - name: check release prerequisites
+    image: node
+    depends_on:
+      - prepare release
+    environment:
+      VSCE_TOKEN:
+        from_secret: vsce_token
+      OVSX_TOKEN:
+        from_secret: ovsx_token
+      GITHUB_PUBLISH_TOKEN:
+        from_secret: github_publish_token
+    commands:
+      - npm i --no-save @octokit/rest
+      - export PUBLISHER=$$(node -e "console.log(JSON.parse(require('fs').readFileSync('package.json').toString()).publisher)")
+      - >
+        testVSCE() {
+          npx vsce verify-pat $PUBLISHER --pat $1 > /dev/null 2>&1
+        }
+      - >
+        testOVSX() {
+          url='https://open-vsx.org/api/-/namespace/create?token='"$1"
+          output=$(curl -X POST $url --header 'Content-Type: application/json' --data-raw '{ "name": "'"$PUBLISHER"'" }')
+          node -e 'JSON.parse('"'$output'"').error.includes("Invalid access token") && process.exit(1);'
+        }
+      - >
+        testGitHub() {
+          node -e 'new (require("@octokit/rest").Octokit)({ auth: "'"$1"'" }).request("GET /user").catch(() => process.exit(1))' > /dev/null 2>&1
+        }
+      - export TagHeading=$$(cat .tagHeading.txt)
+      - '[ ! -z "$$(sed "$${TagHeading}p;d" CHANGELOG.md)" ] || { echo "No Changelog Entries Found!" && false; }'
+      - testVSCE $VSCE_TOKEN              || { echo "The Visual Studio Marketplace Token is invalid!" && false; }
+      - testOVSX $OVSX_TOKEN              || { echo "The Open VSX Token is invalid!" && false; }
+      - testGitHub $GITHUB_PUBLISH_TOKEN  || { echo "The GitHub Publish Token is invalid!" && false; }
+    when:
+      event:
+        - tag
+  - name: create extension
+    image: node
+    depends_on:
+      - check release prerequisites
+    commands:
       - npx vsce package
+    when:
+      event:
+        - tag
+  - name: prepare release notes
+    image: alpine
+    depends_on:
+      - check release prerequisites
+    commands:
+      - export TagName=$$(cat .tagName.txt)
+      - export TagHeading=$$(cat .tagHeading.txt)
+      - export HeadingPattern='/## \(.* \(v[0-9.]*\|\[.*\]\)\)/'
+      - cp -f CHANGELOG.md .releaseNotes.md
+      - sed -i "1,$${TagHeading}{ $${TagHeading}P ; d } ; $${HeadingPattern},\$d" .releaseNotes.md
+      - cp -f .releaseNotes.md .releaseTitle.md
+      - sed -i "2,\$d ; s$${HeadingPattern}\\\\1/" .releaseTitle.md
     when:
       event:
         - tag
@@ -40,10 +103,10 @@ steps:
     depends_on:
       - create extension
     environment:
-      ACCESS_TOKEN:
+      OVSX_TOKEN:
         from_secret: ovsx_token
     commands:
-      - npx ovsx publish --pat $ACCESS_TOKEN
+      - npx ovsx publish --pat $OVSX_TOKEN
     when:
       event:
         - tag
@@ -63,34 +126,10 @@ steps:
         - tag
       ref:
         - refs/tags/v[0-9]*.[0-9]*.[0-9]*
-  - name: prepare release
-    image: node
-    depends_on:
-      - create extension
-    commands:
-      - npm install @stdlib/utils-escape-regexp-string --no-save
-      - node -e "console.log(require('@stdlib/utils-escape-regexp-string')('${DRONE_TAG}'))" > .tagName.txt
-    when:
-      event:
-        - tag
-  - name: prepare release notes
-    image: alpine
-    depends_on:
-      - prepare release
-    commands:
-      - export TagName=$$(cat .tagName.txt)
-      - export TagHeading="/## \(.* \($${TagName}\|\[$${TagName}\]\)\)\$/"
-      - export HeadingPattern='/## \(.* \(v[0-9.]*\|\[.*\]\)\)/'
-      - cp -f CHANGELOG.md .releaseNotes.md
-      - sed -i "1,$${TagHeading}{ $${TagHeading}P ; d } ; $${HeadingPattern},\$d" .releaseNotes.md
-      - cp -f .releaseNotes.md .releaseTitle.md
-      - sed -i "2,\$d ; s$${HeadingPattern}\\\\1/" .releaseTitle.md
-    when:
-      event:
-        - tag
   - name: publish release
     image: plugins/github-release
     depends_on:
+      - create extension
       - prepare release notes
     commands: []
     settings:
