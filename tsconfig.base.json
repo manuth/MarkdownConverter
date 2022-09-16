@@ -20,6 +20,9 @@
         "paths": {
             "highlight.js": [
                 "./node_modules/@types/highlight.js"
+            ],
+            "twemoji": [
+                "./node_modules/@types/twemoji"
             ]
         }
     }
