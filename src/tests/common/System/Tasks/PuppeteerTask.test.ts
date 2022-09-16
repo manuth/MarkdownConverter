@@ -1,9 +1,9 @@
 import { doesNotReject, rejects } from "assert";
 import { pathExists, rename } from "fs-extra";
 import pkgUp = require("pkg-up");
-import * as puppeteer from "puppeteer-core";
 import { createSandbox, SinonSandbox } from "sinon";
 import { basename, dirname, join, resolve } from "upath";
+import { Constants } from "../../../../Constants";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ChromiumNotFoundException } from "../../../../System/Tasks/ChromiumNotFoundException";
 import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask";
@@ -52,11 +52,11 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
                 async () =>
                 {
                     task = new PuppeteerTaskTest(TestConstants.Extension);
-                    let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: (puppeteer as unknown as puppeteer.PuppeteerNode).executablePath() }));
+                    let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: Constants.Puppeteer.executablePath() }));
                     puppeteerPath = resolve(puppeteerProjectRoot, ".local-chromium");
                     tempPuppeteerPath = join(dirname(puppeteerPath), basename(puppeteerPath) + "_");
 
-                    if (await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
+                    if (await pathExists(Constants.Puppeteer.executablePath()))
                     {
                         await rename(puppeteerPath, tempPuppeteerPath);
                         moved = true;
@@ -99,7 +99,7 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
                         "Checking whether no exception is thrown if puppeteer's local chromium has been installed…",
                         async () =>
                         {
-                            sandbox.replace(puppeteer as unknown as puppeteer.PuppeteerNode, "executablePath", () => tempPuppeteerPath);
+                            sandbox.replace(Constants.Puppeteer, "executablePath", () => tempPuppeteerPath);
                             await doesNotReject(() => task.Execute());
                         });
 

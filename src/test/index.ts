@@ -1,13 +1,14 @@
 import { pathExists } from "fs-extra";
 import minimist = require("minimist");
 import Mocha = require("mocha");
-import * as puppeteer from "puppeteer-core";
 import { resolve } from "upath";
 import { extensions } from "vscode";
+import { Constants } from "../Constants";
 import { Extension } from "../System/Extensibility/Extension";
 import { TestConstants } from "../tests/TestConstants";
 import { SuiteVarName } from "./SuiteVarName";
 
+const puppeteer = Constants.Puppeteer;
 let suiteArgName = "suite";
 
 /**
@@ -49,9 +50,9 @@ export async function run(): Promise<void>
 
             try
             {
-                if (!await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
+                if (!await pathExists(puppeteer.executablePath()))
                 {
-                    await (puppeteer as unknown as puppeteer.PuppeteerNode).createBrowserFetcher({}).download(TestConstants.Extension.ChromiumRevision);
+                    await puppeteer.createBrowserFetcher({}).download(TestConstants.Extension.ChromiumRevision);
                 }
 
                 try

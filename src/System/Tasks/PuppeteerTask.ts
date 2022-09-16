@@ -1,6 +1,6 @@
 import { pathExists } from "fs-extra";
-import * as puppeteer from "puppeteer-core";
 import { CancellationToken, Progress } from "vscode";
+import { Constants } from "../../Constants";
 import { IConvertedFile } from "../../Conversion/IConvertedFile";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
 import { Settings } from "../../Properties/Settings";
@@ -49,7 +49,7 @@ export abstract class PuppeteerTask extends Task<MarkdownConverterExtension>
         if (
             await pathExists(
                 Settings.Default.ChromiumExecutablePath ??
-                (puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()))
+                Constants.Puppeteer.executablePath()))
         {
             await this.ExecuteTask(progressReporter, cancellationToken, fileReporter);
         }

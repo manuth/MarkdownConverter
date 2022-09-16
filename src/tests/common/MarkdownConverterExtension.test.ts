@@ -1,8 +1,8 @@
 import { doesNotThrow, ok, strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
-import * as puppeteer from "puppeteer-core";
 import { createSandbox, SinonSandbox } from "sinon";
 import { commands, Disposable, ExtensionContext, Progress, TextDocument, window, workspace } from "vscode";
+import { Constants } from "../../Constants";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { Converter } from "../../Conversion/Converter";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
@@ -362,7 +362,7 @@ export function MarkdownConverterExtensionTests(context: ITestContext<ISettings>
                                 { }
                             }(extension);
 
-                            sandbox.replace(puppeteer as unknown as puppeteer.PuppeteerNode, "executablePath", () => "Hello World");
+                            sandbox.replace(Constants.Puppeteer, "executablePath", () => "Hello World");
                             downloadChromium = true;
                             downloadRetryCount = 2;
                             await extension.ExecuteTaskInternal(task);

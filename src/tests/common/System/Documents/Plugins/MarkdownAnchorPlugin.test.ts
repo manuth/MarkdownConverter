@@ -2,8 +2,15 @@ import { ok } from "assert";
 import { load } from "cheerio";
 import MarkdownIt = require("markdown-it");
 import { Random } from "random-js";
-import { Anchor } from "../../../../../System/Documents/Plugins/MarkdownAnchorPlugin";
 import { Slugifier } from "../../../../../System/Documents/Slugifier";
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+let anchorResolver = async () =>
+{
+    return import("../../../../../System/Documents/Plugins/MarkdownAnchorPlugin.mjs");
+};
+
+let anchorModule: Awaited<ReturnType<typeof anchorResolver>>;
 
 /**
  * Registers tests for the {@link Anchor `Anchor`}-plugin.
@@ -11,7 +18,7 @@ import { Slugifier } from "../../../../../System/Documents/Slugifier";
 export function MarkdownAnchorPluginTests(): void
 {
     suite(
-        nameof(Anchor),
+        nameof(anchorModule.Anchor),
         () =>
         {
             let random: Random;
@@ -21,8 +28,9 @@ export function MarkdownAnchorPluginTests(): void
             let content: string;
 
             suiteSetup(
-                () =>
+                async () =>
                 {
+                    anchorModule = await anchorResolver();
                     random = new Random();
                     parser = new MarkdownIt();
                 });
@@ -39,7 +47,7 @@ export function MarkdownAnchorPluginTests(): void
                         content += `${"#".repeat(random.integer(1, 6))} ${heading}\n`;
                     }
 
-                    parser.use(Anchor);
+                    parser.use(anchorModule.Anchor);
                 });
 
             test(

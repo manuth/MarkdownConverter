@@ -58,6 +58,7 @@
     "@types/markdown-it": "^12.2.3",
     "cheerio": "^1.0.0-rc.12",
     "dedent": "^0.7.0",
+    "dependency-package-path": "^1.0.0",
     "es6-template-string": "^1.2.0",
     "front-matter": "^4.0.2",
     "fs-extra": "^10.1.0",

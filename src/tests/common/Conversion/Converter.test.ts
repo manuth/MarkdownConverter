@@ -3,11 +3,12 @@ import { Server } from "http";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { pathExists, remove, writeFile } from "fs-extra";
 import MarkdownIt = require("markdown-it");
-import * as puppeteer from "puppeteer-core";
+import { Browser, LaunchOptions, Page } from "puppeteer-core";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
 import { changeExt, dirname, join, normalize, relative } from "upath";
 import { Progress, TextDocument, workspace } from "vscode";
+import { Constants } from "../../../Constants";
 import { ConversionType } from "../../../Conversion/ConversionType";
 import { Converter } from "../../../Conversion/Converter";
 import { Settings } from "../../../Properties/Settings";
@@ -66,7 +67,7 @@ export function ConverterTests(): void
                 /**
                  * @inheritdoc
                  */
-                public override get Browser(): puppeteer.Browser
+                public override get Browser(): Browser
                 {
                     return super.Browser;
                 }
@@ -232,7 +233,7 @@ export function ConverterTests(): void
                         "Checking whether the Chromium Executable-Path is included only if specified…",
                         () =>
                         {
-                            let executablePathOption = nameof<puppeteer.LaunchOptions>((options) => options.executablePath);
+                            let executablePathOption = nameof<LaunchOptions>((options) => options.executablePath);
                             converter.ChromiumExecutablePath = null;
                             ok(!(executablePathOption in converter.BrowserOptions));
                             converter.ChromiumExecutablePath = "hello world";
@@ -259,14 +260,14 @@ export function ConverterTests(): void
                 nameof<Converter>((converter) => converter.Initialize),
                 () =>
                 {
-                    let browser: puppeteer.Browser;
-                    let page: puppeteer.Page;
+                    let browser: Browser;
+                    let page: Page;
                     let noSandboxArg = "--no-sandbox";
 
                     setup(
                         async () =>
                         {
-                            browser = await puppeteer.launch(
+                            browser = await Constants.Puppeteer.launch(
                                 {
                                     args: [
                                         noSandboxArg
@@ -332,7 +333,7 @@ export function ConverterTests(): void
                             let args: string[];
 
                             sandbox.replace(
-                                puppeteer,
+                                Constants.Puppeteer,
                                 "launch",
                                 async (options) =>
                                 {
@@ -358,7 +359,7 @@ export function ConverterTests(): void
                             let launchedWithNoSandboxArg = false;
 
                             sandbox.replace(
-                                puppeteer,
+                                Constants.Puppeteer,
                                 "launch",
                                 async (options) =>
                                 {
@@ -532,7 +533,7 @@ export function ConverterTests(): void
                 nameof<Converter>((converter) => converter.Dispose),
                 () =>
                 {
-                    let browser: puppeteer.Browser;
+                    let browser: Browser;
                     let webServer: Server;
 
                     setup(
