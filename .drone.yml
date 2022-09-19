@@ -117,10 +117,10 @@ steps:
     depends_on:
       - publish extension to ovsx marketplace
     environment:
-      ACCESS_TOKEN:
-        from_secret: azure_token
+      VSCE_TOKEN:
+        from_secret: vsce_token
     commands:
-      - npx vsce publish --pat $ACCESS_TOKEN
+      - npx vsce publish --pat $VSCE_TOKEN
     when:
       event:
         - tag
