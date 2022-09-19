@@ -123,7 +123,7 @@
     "random-js": "^2.1.0",
     "rimraf": "^3.0.2",
     "sinon": "^14.0.0",
-    "ts-loader": "^9.3.1",
+    "ts-loader": "^9.4.0",
     "ts-nameof": "^5.0.0",
     "ts-node": "^10.9.1",
     "ts-patch": "^2.0.2",
