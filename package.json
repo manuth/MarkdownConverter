@@ -47,8 +47,8 @@
     "lint": "eslint --max-warnings 0 ./src .eslintrc.js webpack.config.ts",
     "lint-ide": "npm run lint || exit 0",
     "test": "node ./lib/test/runTests",
-    "prepare": "npm run patchTypeScript && npm run rebuild",
-    "patchTypeScript": "ts-patch install"
+    "prepare": "npm run patch-ts && npm run rebuild",
+    "patch-ts": "ts-patch install"
   },
   "dependencies": {
     "@manuth/package-json-editor": "^2.2.6",
