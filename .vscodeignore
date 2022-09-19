@@ -106,10 +106,6 @@ dist
 # TernJS port file
 .tern-port
 
-# gulp-files
-.gulp/
-gulpfile.ts
-
 # Source-files
 [Ss]rc/
 
