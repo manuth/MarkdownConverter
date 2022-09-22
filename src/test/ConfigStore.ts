@@ -41,12 +41,20 @@ export class ConfigStore
         if (!this.commonOptions)
         {
             this.commonOptions = {
-                extensionDevelopmentPath: resolve(this.projectRoot),
+                extensionDevelopmentPath: resolve(this.ProjectRoot),
                 extensionTestsPath: this.TestRootPath
             };
         }
 
         return this.commonOptions;
+    }
+
+    /**
+     * Gets the path to the root of the project.
+     */
+    public static get ProjectRoot(): string
+    {
+        return this.projectRoot;
     }
 
     /**
