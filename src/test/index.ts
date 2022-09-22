@@ -8,8 +8,7 @@ import { Extension } from "../System/Extensibility/Extension";
 import { TestConstants } from "../tests/TestConstants";
 import { SuiteVarName } from "./SuiteVarName";
 
-const puppeteer = Constants.Puppeteer;
-let suiteArgName = "suite";
+const suiteArgName = "suite";
 
 /**
  * The arguments passed by the user.
@@ -33,6 +32,7 @@ let args = minimist(
  */
 export async function run(): Promise<void>
 {
+    let puppeteer = Constants.Puppeteer;
     await extensions.getExtension(new Extension(TestConstants.PackageMetadata).FullName).activate();
 
     let mocha = new Mocha(
