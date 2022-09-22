@@ -73,8 +73,9 @@ export function ConverterPluginTests(): void
                 });
 
             suiteTeardown(
-                async () =>
+                async function()
                 {
+                    this.timeout(30 * 1000);
                     tempDirectory.Dispose();
                     destinationDirectory.Dispose();
                     await converter.Dispose();
