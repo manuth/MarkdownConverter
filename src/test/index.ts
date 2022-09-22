@@ -6,6 +6,8 @@ import { extensions } from "vscode";
 import { Constants } from "../Constants";
 import { Extension } from "../System/Extensibility/Extension";
 import { TestConstants } from "../tests/TestConstants";
+import { ConfigStore } from "./ConfigStore";
+import { SuiteSet } from "./SuiteSet";
 import { SuiteVarName } from "./SuiteVarName";
 
 const suiteArgName = "suite";
@@ -23,7 +25,7 @@ let args = minimist(
             [suiteArgName]: "s"
         },
         default: {
-            [suiteArgName]: process.env[SuiteVarName] ?? "common"
+            [suiteArgName]: process.env[SuiteVarName] ?? SuiteSet.Common
         }
     });
 
@@ -45,7 +47,7 @@ export async function run(): Promise<void>
     return new Promise(
         async (solve, reject) =>
         {
-            let testDirectory = resolve(__dirname, "..", "..", "lib", "test");
+            let testDirectory = ConfigStore.TestRootPath;
             mocha.addFile(resolve(testDirectory, `${args[suiteArgName]}.test.js`));
 
             try
