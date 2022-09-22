@@ -1,0 +1,43 @@
+{
+    "folders": [
+        {
+            "name": "MarkdownConverter",
+            "path": "."
+        },
+        {
+            "name": "Common Tests",
+            "path": "./src/tests/common"
+        },
+        {
+            "name": "Single-File Tests",
+            "path": "./src/tests/single-file"
+        },
+        {
+            "name": "Single-Folder Tests",
+            "path": "./src/tests/single-folder"
+        },
+        {
+            "name": "Workspace Tests",
+            "path": "./src/tests/workspace"
+        }
+    ],
+    "settings": {
+        "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+        "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+        "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
+        "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+        "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+        "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
+        "mochaExplorer.autoload": false,
+        "mochaExplorer.logpanel": true,
+        "mochaExplorer.files": "./lib/test/essentials.test.js",
+        "mochaExplorer.ui": "tdd",
+        "mochaExplorer.launcherScript": "./lib/test/runMocha.js",
+        "mochaExplorer.require": "source-map-support/register",
+        "mochaExplorer.ipcRole": "server",
+        "mochaExplorer.ipcTimeout": 120000,
+        "mochaExplorer.env": {
+            "TEST_SUITE": "essentials"
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "mochaExplorer.ipcPort": 9447,
+    "mochaExplorer.files": "../../../lib/test/single-file.test.js",
+    "mochaExplorer.launcherScript": "../../../lib/test/runMocha.js",
+    "mochaExplorer.env": {
+        "TEST_SUITE": "single-file",
+        "VSCODE_VERSION": "1.71.0"
+    }
+}
