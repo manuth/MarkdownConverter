@@ -1,9 +1,9 @@
 import { join } from "path";
+import { runTests } from "@vscode/test-electron";
+import { TestOptions } from "@vscode/test-electron/out/runTest";
 import { pathExists, remove } from "fs-extra";
 import { createSandbox } from "sinon";
 import { resolve } from "upath";
-import { runTests } from "vscode-test";
-import { TestOptions } from "vscode-test/out/runTest";
 import { SuiteVarName } from "./SuiteVarName";
 
 (async function main()
