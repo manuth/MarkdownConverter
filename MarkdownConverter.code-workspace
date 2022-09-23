@@ -29,7 +29,6 @@
         "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
         "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
         "mochaExplorer.autoload": false,
-        "mochaExplorer.logpanel": true,
         "mochaExplorer.files": "./lib/test/essentials.test.js",
         "mochaExplorer.ui": "tdd",
         "mochaExplorer.launcherScript": "./lib/test/runMocha.js",
