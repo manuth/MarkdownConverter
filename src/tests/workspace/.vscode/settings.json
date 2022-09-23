@@ -5,6 +5,6 @@
     "mochaExplorer.launcherScript": "../../../lib/test/runMocha.js",
     "mochaExplorer.env": {
         "TEST_SUITE": "workspace",
-        "VSCODE_VERSION": "1.70.1"
+        "VSCODE_VERSION": "1.65.1"
     }
 }
