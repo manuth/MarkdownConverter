@@ -34,7 +34,7 @@
         "mochaExplorer.launcherScript": "./lib/test/runMocha.js",
         "mochaExplorer.require": "source-map-support/register",
         "mochaExplorer.ipcRole": "server",
-        "mochaExplorer.ipcTimeout": 120000,
+        "mochaExplorer.ipcTimeout": 300000,
         "mochaExplorer.env": {
             "TEST_SUITE": "essentials"
         }

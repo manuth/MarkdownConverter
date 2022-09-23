@@ -40,7 +40,7 @@ export function CommonHooks(): ITestContext<ISettings>
     suiteSetup(
         async function()
         {
-            this.timeout(30 * 1000);
+            this.timeout(10 * 60 * 1000);
             let puppeteer = Constants.Puppeteer;
             await cleanSettings();
             await extensions.getExtension(new Extension(TestConstants.PackageMetadata).FullName).activate();
