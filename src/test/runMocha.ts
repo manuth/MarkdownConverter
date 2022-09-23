@@ -19,7 +19,9 @@ import { SuiteVarName } from "./SuiteVarName";
                     VSCODE_LAUNCH_ARGS: JSON.stringify(options.launchArgs),
                     VSCODE_VERSION: process.env["VSCODE_VERSION"],
                     ...options.extensionTestsEnv,
-                    VSCODE_WORKSPACE_PATH: process.env["VSCODE_WORKSPACE_PATH"],
+                    VSCODE_WORKSPACE_PATH: Array.isArray(options.extensionDevelopmentPath) ?
+                        JSON.stringify(options.extensionDevelopmentPath) :
+                        options.extensionDevelopmentPath,
                     MOCHA_WORKER_PATH: process.env["MOCHA_WORKER_PATH"]
                 },
                 stdio: "inherit"
