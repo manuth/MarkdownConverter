@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import { join, resolve } from "path";
 import { TestOptions } from "@vscode/test-electron/out/runTest";
 import { SuiteSet } from "./SuiteSet";
 import { SuiteVarName } from "./SuiteVarName";
@@ -8,6 +8,11 @@ import { SuiteVarName } from "./SuiteVarName";
  */
 export class ConfigStore
 {
+    /**
+     * The base name of the vscode test directory.
+     */
+    private static readonly vscodeTestDir = ".vscode-test";
+
     /**
      * The path to the root of the project.
      */
@@ -142,13 +147,17 @@ export class ConfigStore
                 break;
         }
 
+        let vscodeTestDir = join(this.TestEnvironmentRootPath, suite, this.vscodeTestDir);
+
         return {
             ...this.CommonOptions,
             extensionTestsEnv: {
                 [SuiteVarName]: suite
             },
             launchArgs: [
-                workingPath
+                workingPath,
+                `--extensions-dir=${join(vscodeTestDir, "extensions")}`,
+                `--user-data-dir=${join(vscodeTestDir, "user-data")}`
             ]
         };
     }
