@@ -1,9 +1,12 @@
 import { deepStrictEqual, ok, strictEqual } from "assert";
+import { pathExists } from "fs-extra";
 import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
+import { Constants } from "../../Constants";
 import { ConversionType } from "../../Conversion/ConversionType";
 import { ISettings } from "../../Properties/ISettings";
 import { Settings } from "../../Properties/Settings";
 import { ConfigInterceptor } from "../ConfigInterceptor";
+import { TestConstants } from "../TestConstants";
 
 /**
  * Registers tests for the {@link ConfigInterceptor `ConfigInterceptor`} class.
@@ -54,8 +57,15 @@ export function ConfigInterceptorTests(): void
                 {
                     test(
                         "Checking whether original settings are resolved correctly…",
-                        () =>
+                        async () =>
                         {
+                            let puppeteer = Constants.Puppeteer;
+
+                            if (!await pathExists(puppeteer.executablePath()))
+                            {
+                                await puppeteer.createBrowserFetcher({}).download(TestConstants.Extension.ChromiumRevision);
+                            }
+
                             interceptor.Settings = {};
                             ok(key in workspace.getConfiguration(Settings.ConfigKey));
 

@@ -1,6 +1,4 @@
-import { join } from "path";
 import { runTests } from "@vscode/test-electron";
-import { pathExists, remove } from "fs-extra";
 import { createSandbox } from "sinon";
 import { ConfigStore } from "./ConfigStore";
 import { SuiteSet } from "./SuiteSet";
@@ -10,12 +8,6 @@ import { SuiteSet } from "./SuiteSet";
     let sandbox = createSandbox();
     let errorMessageCount = 0;
     let commonArgs = process.argv.slice(2);
-    let tempSettingsPath = join(ConfigStore.SingleFolderPath, ".vscode");
-
-    if (await pathExists(tempSettingsPath))
-    {
-        await remove(tempSettingsPath);
-    }
 
     for (
         let key of [
@@ -67,12 +59,6 @@ import { SuiteSet } from "./SuiteSet";
     finally
     {
         sandbox.restore();
-
-        if (await pathExists(tempSettingsPath))
-        {
-            await remove(tempSettingsPath);
-        }
-
         console.log(`Filtered ${errorMessageCount} unnecessary error-message${errorMessageCount === 1 ? "" : "s"}`);
     }
 })();
