@@ -37,7 +37,7 @@
         "version": "0.2.0",
         "configurations": [
             {
-                "type": "pwa-extensionHost",
+                "type": "extensionHost",
                 "request": "launch",
                 "name": "Launch Extension",
                 "runtimeExecutable": "${execPath}",
@@ -52,7 +52,7 @@
                 ]
             },
             {
-                "type": "pwa-extensionHost",
+                "type": "extensionHost",
                 "request": "launch",
                 "name": "Launch Extension Debug",
                 "runtimeExecutable": "${execPath}",
@@ -68,7 +68,7 @@
                 ]
             },
             {
-                "type": "pwa-extensionHost",
+                "type": "extensionHost",
                 "request": "launch",
                 "name": "Launch Extension Release",
                 "runtimeExecutable": "${execPath}",
@@ -84,7 +84,7 @@
                 ]
             },
             {
-                "type": "pwa-extensionHost",
+                "type": "extensionHost",
                 "request": "launch",
                 "name": "Launch Essential Tests",
                 "runtimeExecutable": "${execPath}",
@@ -105,7 +105,7 @@
                 ]
             },
             {
-                "type": "pwa-extensionHost",
+                "type": "extensionHost",
                 "request": "launch",
                 "name": "Launch Common Tests",
                 "runtimeExecutable": "${execPath}",
@@ -126,7 +126,7 @@
                 ]
             },
             {
-                "type": "pwa-extensionHost",
+                "type": "extensionHost",
                 "request": "launch",
                 "name": "Launch Tests for Single-File Mode",
                 "runtimeExecutable": "${execPath}",
@@ -147,7 +147,7 @@
                 ]
             },
             {
-                "type": "pwa-extensionHost",
+                "type": "extensionHost",
                 "request": "launch",
                 "name": "Launch Tests for the Single-Folder Mode",
                 "runtimeExecutable": "${execPath}",
@@ -168,7 +168,7 @@
                 ]
             },
             {
-                "type": "pwa-extensionHost",
+                "type": "extensionHost",
                 "request": "launch",
                 "name": "Launch Tests for the Workspace Mode",
                 "runtimeExecutable": "${execPath}",
