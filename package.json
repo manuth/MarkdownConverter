@@ -51,7 +51,7 @@
     "patch-ts": "ts-patch install"
   },
   "dependencies": {
-    "@manuth/package-json-editor": "^2.2.6",
+    "@manuth/package-json-editor": "^3.0.2",
     "@manuth/resource-manager": "^2.0.4",
     "@manuth/temp-files": "^2.0.9",
     "@types/markdown-it": "^12.2.3",
