@@ -311,8 +311,8 @@ export function ConverterTests(): void
                         "Checking whether at least one message is reported during the initialization…",
                         async function()
                         {
-                            this.slow(2 * 1000);
-                            this.timeout(4 * 1000);
+                            this.slow(10 * 1000);
+                            this.timeout(20 * 1000);
                             let reportCount = 0;
 
                             let reporter: Progress<IProgressState> = {

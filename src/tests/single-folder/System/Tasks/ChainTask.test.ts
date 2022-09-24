@@ -134,8 +134,8 @@ export function ChainTaskTests(context: ITestContext<ISettings>): void
                         "Checking whether a file with the desired name is created…",
                         async function()
                         {
-                            this.slow(3 * 1000);
-                            this.timeout(6 * 1000);
+                            this.slow(30 * 1000);
+                            this.timeout(15 * 1000);
                             let files: IConvertedFile[] = [];
                             converterSandbox.restore();
 
