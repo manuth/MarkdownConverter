@@ -94,6 +94,7 @@ export = (env: any, argv: any) =>
                         {
                             loader: "ts-loader",
                             options: {
+                                configFile: resolve(__dirname, "tsconfig.build.json"),
                                 projectReferences: true,
                                 compilerOptions: {
                                     outDir: resolve(__dirname, "lib", "temp")
