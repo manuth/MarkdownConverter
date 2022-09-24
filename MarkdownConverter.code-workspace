@@ -215,17 +215,24 @@
         "tasks": [
             {
                 "label": "Clean",
-                "type": "npm",
-                "script": "clean",
-                "problemMatcher": [],
+                "type": "shell",
+                "command": "npm",
+                "args": [
+                    "run",
+                    "clean"
+                ],
                 "presentation": {
                     "reveal": "never"
                 }
             },
             {
                 "label": "Build",
-                "type": "npm",
-                "script": "watch",
+                "type": "shell",
+                "command": "npm",
+                "args": [
+                    "run",
+                    "watch"
+                ],
                 "group": {
                     "kind": "build",
                     "isDefault": true
@@ -241,8 +248,12 @@
             },
             {
                 "label": "Rebuild",
-                "type": "npm",
-                "script": "rebuild",
+                "type": "shell",
+                "command": "npm",
+                "args": [
+                    "run",
+                    "rebuild"
+                ],
                 "group": "build",
                 "problemMatcher": "$tsc",
                 "presentation": {
@@ -254,8 +265,12 @@
             },
             {
                 "label": "Build Debug",
-                "type": "npm",
-                "script": "build-debug",
+                "type": "shell",
+                "command": "npm",
+                "args": [
+                    "run",
+                    "build-debug"
+                ],
                 "group": "build",
                 "problemMatcher": [],
                 "dependsOn": [
@@ -265,8 +280,12 @@
             },
             {
                 "label": "Rebuild Debug",
-                "type": "npm",
-                "script": "rebuild-debug",
+                "type": "shell",
+                "command": "npm",
+                "args": [
+                    "run",
+                    "rebuild-debug"
+                ],
                 "group": "build",
                 "problemMatcher": [],
                 "dependsOn": [
@@ -275,8 +294,12 @@
             },
             {
                 "label": "Build Release",
-                "type": "npm",
-                "script": "build-release",
+                "type": "shell",
+                "command": "npm",
+                "args": [
+                    "run",
+                    "build-release"
+                ],
                 "group": "build",
                 "problemMatcher": [],
                 "dependsOn": [
@@ -286,8 +309,12 @@
             },
             {
                 "label": "Rebuild Release",
-                "type": "npm",
-                "script": "rebuild-release",
+                "type": "shell",
+                "command": "npm",
+                "args": [
+                    "run",
+                    "rebuild-release"
+                ],
                 "group": "build",
                 "problemMatcher": [],
                 "dependsOn": [
@@ -296,8 +323,12 @@
             },
             {
                 "label": "Lint",
-                "type": "npm",
-                "script": "lint-ide",
+                "type": "shell",
+                "command": "npm",
+                "args": [
+                    "run",
+                    "lint-ide"
+                ],
                 "group": "build",
                 "problemMatcher": "$eslint-stylish",
                 "presentation": {
