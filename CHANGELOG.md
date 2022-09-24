@@ -8,9 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
   - All dependencies
   - Drone CI configuration for improving automated publishing
+  - Deprecated `vscode-test` package
+  - `tsconfig.json` files to improve development experience
 
 ### Removed
   - Dependabot workflows
+
+### Added
+  - Support for running unit-tests using the `Mocha Test Explorer`
 
 [Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.1.2...dev)
 
