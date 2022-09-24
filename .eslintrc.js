@@ -13,7 +13,7 @@ module.exports = {
         project: [
             join(__dirname, "tsconfig.json"),
             join(__dirname, "tsconfig.eslint.json"),
-            join(__dirname, "tsconfig.webpack.json"),
+            join(__dirname, "tsconfig.web.json"),
             join(__dirname, "src", "test", "tsconfig.json"),
             join(__dirname, "src", "tests", "tsconfig.json")
         ]
