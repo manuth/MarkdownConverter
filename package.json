@@ -1,6 +1,6 @@
 {
   "name": "markdown-converter",
-  "version": "5.1.2",
+  "version": "5.1.3",
   "private": true,
   "description": "A markdown-converter for vscode",
   "author": "Manuel Thalmann <m@nuth.ch> (https://nuth.ch)",
