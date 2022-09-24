@@ -266,7 +266,7 @@
             {
                 "label": "Rebuild Debug",
                 "type": "npm",
-                "script": "rebuild",
+                "script": "rebuild-debug",
                 "group": "build",
                 "problemMatcher": [],
                 "dependsOn": [
