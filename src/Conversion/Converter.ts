@@ -7,12 +7,13 @@ import { ensureDir, move, pathExists, remove, writeFile } from "fs-extra";
 import getPort = require("get-port");
 import { glob } from "glob";
 import MarkdownIt = require("markdown-it");
-import * as puppeteer from "puppeteer-core";
+import { Browser, LaunchOptions, PDFOptions, ScreenshotOptions } from "puppeteer-core";
 import serveHandler = require("serve-handler");
 import { transliterate } from "transliteration";
 import { basename, dirname, join, relative } from "upath";
 import { CancellationToken, Progress } from "vscode";
 import websiteScraper = require("website-scraper");
+import { Constants } from "../Constants";
 import { Resources } from "../Properties/Resources";
 import { InsertionType } from "../System/Documents/Assets/InsertionType";
 import { StyleSheet } from "../System/Documents/Assets/StyleSheet";
@@ -61,7 +62,7 @@ export class Converter
     /**
      * The browser which is used to perform the conversion.
      */
-    private browser: puppeteer.Browser;
+    private browser: Browser;
 
     /**
      * A value indicating whether the converter has been initialized.
@@ -192,7 +193,7 @@ export class Converter
     /**
      * Gets the options for launching the browser.
      */
-    public get BrowserOptions(): puppeteer.LaunchOptions
+    public get BrowserOptions(): LaunchOptions
     {
         return {
             ...(
@@ -207,7 +208,7 @@ export class Converter
     /**
      * Gets the browser which is used to perform the conversion.
      */
-    protected get Browser(): puppeteer.Browser
+    protected get Browser(): Browser
     {
         return this.Initialized ? this.browser : null;
     }
@@ -306,7 +307,7 @@ export class Converter
 
             try
             {
-                this.browser = await puppeteer.launch(
+                this.browser = await Constants.Puppeteer.launch(
                     {
                         ...this.BrowserOptions,
                         args: [
@@ -316,7 +317,7 @@ export class Converter
             }
             catch
             {
-                this.browser = await puppeteer.launch(
+                this.browser = await Constants.Puppeteer.launch(
                     {
                         ...this.BrowserOptions,
                         args: [
@@ -454,7 +455,7 @@ export class Converter
                                         }
                                     </style>`;
 
-                                let pdfOptions: puppeteer.PDFOptions = {
+                                let pdfOptions: PDFOptions = {
                                     margin: {
                                         top: this.Document.Paper.Margin.Top,
                                         right: this.Document.Paper.Margin.Right,
@@ -482,7 +483,7 @@ export class Converter
                                 await page.pdf(pdfOptions);
                                 break;
                             default:
-                                let screenshotOptions: puppeteer.ScreenshotOptions = {
+                                let screenshotOptions: ScreenshotOptions = {
                                     fullPage: true,
                                     path
                                 };

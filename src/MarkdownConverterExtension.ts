@@ -1,8 +1,7 @@
 import { exec } from "child_process";
 import { Package } from "@manuth/package-json-editor";
 import { mkdirp, pathExists } from "fs-extra";
-import * as puppeteer from "puppeteer-core";
-import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions";
+import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions.js";
 import format = require("string-template");
 import { join, resolve } from "upath";
 import { commands, ExtensionContext, Progress, ProgressLocation, window } from "vscode";
@@ -222,7 +221,7 @@ export class MarkdownConverterExtension extends Extension
                             }));
                     }
                     while (
-                        !await pathExists((puppeteer as unknown as puppeteer.PuppeteerNode).executablePath()) &&
+                        !await pathExists(Constants.Puppeteer.executablePath()) &&
                         !success &&
                         await (window.showWarningMessage(
                             Resources.Resources.Get("UpdateFailed"),
@@ -254,7 +253,7 @@ export class MarkdownConverterExtension extends Extension
     protected async DownloadUpdate(reporter: Progress<IProgressState>): Promise<void>
     {
         let progress = 0;
-        let browserFetcher = (puppeteer as unknown as puppeteer.PuppeteerNode).createBrowserFetcher({});
+        let browserFetcher = Constants.Puppeteer.createBrowserFetcher({});
 
         await browserFetcher.download(
             this.ChromiumRevision,

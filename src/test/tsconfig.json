@@ -1,6 +1,7 @@
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
+        "composite": true,
         "rootDir": "..",
         "outDir": "../../lib"
     },
@@ -9,7 +10,7 @@
     ],
     "references": [
         {
-            "path": "../.."
+            "path": "../../tsconfig.app.json"
         },
         {
             "path": "../tests"

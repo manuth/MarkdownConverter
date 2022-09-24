@@ -88,8 +88,8 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 `Checking whether the user is prompted to specify the \`${workspaceFolderPattern}\`-path if the file is untitled and no workspace is opened…`,
                                 async function()
                                 {
-                                    this.slow(5 * 1000);
-                                    this.timeout(10 * 1000);
+                                    this.slow(1 * 60 * 1000);
+                                    this.timeout(0.5 * 60 * 1000);
                                     let inputWorkspaceName = "This is a workspace-folder for testing";
                                     sandbox.replace(window, "showInputBox", async () => inputWorkspaceName);
                                     strictEqual(await substitutionTester.Test(untitledDocument, workspaceFolderPattern), resolve(inputWorkspaceName));

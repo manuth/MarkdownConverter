@@ -31,7 +31,6 @@ import { Document } from "../Documents/Document";
 import { EmojiType } from "../Documents/EmojiType";
 import { EnvironmentKey } from "../Documents/EnvironmentKey";
 import { ListType } from "../Documents/ListType";
-import { Anchor } from "../Documents/Plugins/MarkdownAnchorPlugin";
 import { TOC } from "../Documents/Plugins/MarkdownTocPlugin";
 import { RunningBlock } from "../Documents/RunningBlock";
 import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
@@ -461,7 +460,7 @@ export class ConversionRunner
         }
 
         parser.validateLink = () => true;
-        parser.use(Anchor);
+        parser.use((await import("../Documents/Plugins/MarkdownAnchorPlugin.mjs")).Anchor);
 
         if (Settings.Default.TocSettings)
         {

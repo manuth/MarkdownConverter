@@ -7,7 +7,7 @@ import dedent = require("dedent");
 import { ensureFile, pathExists, readFile, remove, writeFile } from "fs-extra";
 import kebabCase = require("lodash.kebabcase");
 import MarkdownIt = require("markdown-it");
-import MultiRange from "multi-integer-range";
+import { MultiRange } from "multi-integer-range";
 import { randexp } from "randexp";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox, SinonSpiedMember } from "sinon";

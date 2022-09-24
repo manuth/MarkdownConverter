@@ -1,5 +1,5 @@
 import { strictEqual } from "assert";
-import MultiRange from "multi-integer-range";
+import { MultiRange } from "multi-integer-range";
 import { ListType } from "../../../../System/Documents/ListType";
 import { TocSettings } from "../../../../System/Documents/TocSettings";
 

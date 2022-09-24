@@ -37,6 +37,10 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
+# Dependency directories
+node_modules/
+jspm_packages/
+
 # TypeScript v1 declaration files
 typings/
 
@@ -102,10 +106,6 @@ dist
 # TernJS port file
 .tern-port
 
-# gulp-files
-.gulp/
-gulpfile.ts
-
 # Source-files
 [Ss]rc/
 
@@ -152,5 +152,6 @@ webpack.config.ts
 
 # Temporary release-assets
 .tagName.txt
+.tagHeading.txt
 .releaseNotes.md
 .releaseTitle.md

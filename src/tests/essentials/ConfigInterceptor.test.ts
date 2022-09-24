@@ -54,7 +54,7 @@ export function ConfigInterceptorTests(): void
                 {
                     test(
                         "Checking whether original settings are resolved correctly…",
-                        () =>
+                        async () =>
                         {
                             interceptor.Settings = {};
                             ok(key in workspace.getConfiguration(Settings.ConfigKey));

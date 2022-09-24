@@ -58,6 +58,20 @@ export = (env: any, argv: any) =>
                 ".js",
                 ".json"
             ],
+            extensionAlias: {
+                ".js": [
+                    ".js",
+                    ".ts"
+                ],
+                ".mjs": [
+                    ".mjs",
+                    ".mts"
+                ],
+                ".cjs": [
+                    ".cjs",
+                    ".cts"
+                ]
+            },
             mainFields: [
                 "main",
                 "module"
@@ -74,12 +88,13 @@ export = (env: any, argv: any) =>
         module: {
             rules: [
                 {
-                    test: /\.tsx?$/,
+                    test: /\.[cm]?tsx?$/,
                     exclude: /node_modules/,
                     use: [
                         {
                             loader: "ts-loader",
                             options: {
+                                configFile: resolve(__dirname, "tsconfig.build.json"),
                                 projectReferences: true,
                                 compilerOptions: {
                                     outDir: resolve(__dirname, "lib", "temp")

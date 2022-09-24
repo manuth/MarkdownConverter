@@ -2,15 +2,12 @@
     "extends": "@manuth/tsconfig/recommended",
     "compilerOptions": {
         "declaration": true,
-        "module": "CommonJS",
+        "module": "Node16",
         "lib": [
             "ES2020",
             "DOM"
         ],
         "plugins": [
-            {
-                "name": "@manuth/typescript-eslint-plugin"
-            },
             {
                 "transform": "ts-nameof",
                 "type": "raw"
@@ -20,6 +17,9 @@
         "paths": {
             "highlight.js": [
                 "./node_modules/@types/highlight.js"
+            ],
+            "twemoji": [
+                "./node_modules/@types/twemoji"
             ]
         }
     }

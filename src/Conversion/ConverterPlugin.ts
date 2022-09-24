@@ -1,6 +1,7 @@
-import * as puppeteer from "puppeteer-core";
+import { Browser } from "puppeteer-core";
 import { join, parse } from "upath";
 import { encode } from "utf8";
+import { Constants } from "../Constants";
 import { Converter } from "./Converter";
 
 /**
@@ -57,7 +58,7 @@ export class ConverterPlugin
      */
     public apply(registerAction: (name: string, callback: (options: any) => any) => void): void
     {
-        let browser: puppeteer.Browser;
+        let browser: Browser;
         let occupiedFilenames: string[];
         let subdirectories: { [extension: string]: string };
         let defaultFilename: string;
@@ -72,14 +73,14 @@ export class ConverterPlugin
 
                 try
                 {
-                    browser = await puppeteer.launch({
+                    browser = await Constants.Puppeteer.launch({
                         ...this.Converter.BrowserOptions,
                         args: browserArguments
                     });
                 }
                 catch
                 {
-                    browser = await puppeteer.launch({
+                    browser = await Constants.Puppeteer.launch({
                         ...this.Converter.BrowserOptions,
                         args: [
                             ...browserArguments,

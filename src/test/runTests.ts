@@ -1,29 +1,13 @@
-import { join } from "path";
-import { pathExists, remove } from "fs-extra";
+import { runTests } from "@vscode/test-electron";
 import { createSandbox } from "sinon";
-import { resolve } from "upath";
-import { runTests } from "vscode-test";
-import { TestOptions } from "vscode-test/out/runTest";
-import { SuiteVarName } from "./SuiteVarName";
+import { ConfigStore } from "./ConfigStore";
+import { SuiteSet } from "./SuiteSet";
 
 (async function main()
 {
     let sandbox = createSandbox();
     let errorMessageCount = 0;
-    let environmentPath = resolve(__dirname, "..", "..", "src", "test");
     let commonArgs = process.argv.slice(2);
-    let singleFolderPath = resolve(environmentPath, "single-folder");
-    let tempSettingsPath = join(singleFolderPath, ".vscode");
-
-    let commonOptions: TestOptions = {
-        extensionDevelopmentPath: resolve(__dirname, "..", ".."),
-        extensionTestsPath: resolve(__dirname, "..", "..", "lib", "test")
-    };
-
-    if (await pathExists(tempSettingsPath))
-    {
-        await remove(tempSettingsPath);
-    }
 
     for (
         let key of [
@@ -53,39 +37,13 @@ import { SuiteVarName } from "./SuiteVarName";
 
     try
     {
-        /**
-         * Creates test-options for the suite with the specified {@link suiteName `suiteName`}.
-         *
-         * @param suiteName
-         * The name of the suite to create options for.
-         *
-         * @param fileSystemPath
-         * The name of the file or directory to open.
-         *
-         * @returns
-         * The test-options for the suite with the specified {@link suiteName `suiteName`}.
-         */
-        function CreateOptions(suiteName: string, fileSystemPath: string): TestOptions
-        {
-            return {
-                ...commonOptions,
-                extensionTestsEnv: {
-                    [SuiteVarName]: suiteName
-                },
-                launchArgs: [
-                    fileSystemPath,
-                    ...commonArgs
-                ]
-            };
-        }
-
-        let optionCollection = [
-            CreateOptions("essentials", singleFolderPath),
-            CreateOptions("common", singleFolderPath),
-            CreateOptions("single-file", resolve(environmentPath, "single-file", "Test.md")),
-            CreateOptions("single-folder", singleFolderPath),
-            CreateOptions("workspace", resolve(environmentPath, "workspace", "workspace.code-workspace"))
-        ];
+        let optionCollection = Object.values(SuiteSet).map(
+            (suiteSet) =>
+            {
+                let result = ConfigStore.Get(suiteSet);
+                result.launchArgs.push(...commonArgs);
+                return result;
+            });
 
         for (let options of optionCollection)
         {
@@ -101,12 +59,6 @@ import { SuiteVarName } from "./SuiteVarName";
     finally
     {
         sandbox.restore();
-
-        if (await pathExists(tempSettingsPath))
-        {
-            await remove(tempSettingsPath);
-        }
-
         console.log(`Filtered ${errorMessageCount} unnecessary error-message${errorMessageCount === 1 ? "" : "s"}`);
     }
 })();
