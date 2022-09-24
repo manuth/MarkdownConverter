@@ -21,6 +21,175 @@
             "path": "./src/tests/workspace"
         }
     ],
+    "extensions": {
+        "recommendations": [
+            "dbaeumer.vscode-eslint",
+            "hbenl.test-adapter-converter",
+            "hbenl.vscode-mocha-test-adapter",
+            "hbenl.vscode-test-explorer",
+            "yzhang.markdown-all-in-one"
+        ]
+    },
+    "launch": {
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "type": "pwa-extensionHost",
+                "request": "launch",
+                "name": "Launch Extension",
+                "runtimeExecutable": "${execPath}",
+                "args": [
+                    "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}"
+                ],
+                "preLaunchTask": "Build",
+                "sourceMaps": true,
+                "outFiles": [
+                    "${workspaceFolder:MarkdownConverter}/**/*.js",
+                    "!**/node_modules/**"
+                ]
+            },
+            {
+                "type": "pwa-extensionHost",
+                "request": "launch",
+                "name": "Launch Extension Debug",
+                "runtimeExecutable": "${execPath}",
+                "args": [
+                    "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}"
+                ],
+                "preLaunchTask": "Build Debug",
+                "postDebugTask": "Debug Cleanup",
+                "sourceMaps": true,
+                "outFiles": [
+                    "${workspaceFolder:MarkdownConverter}/**/*.js",
+                    "!**/node_modules/**"
+                ]
+            },
+            {
+                "type": "pwa-extensionHost",
+                "request": "launch",
+                "name": "Launch Extension Release",
+                "runtimeExecutable": "${execPath}",
+                "args": [
+                    "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}"
+                ],
+                "preLaunchTask": "Build Release",
+                "postDebugTask": "Debug Cleanup",
+                "sourceMaps": true,
+                "outFiles": [
+                    "${workspaceFolder:MarkdownConverter}/**/*.js",
+                    "!**/node_modules/**"
+                ]
+            },
+            {
+                "type": "pwa-extensionHost",
+                "request": "launch",
+                "name": "Launch Essential Tests",
+                "runtimeExecutable": "${execPath}",
+                "args": [
+                    "${workspaceFolder:MarkdownConverter}/src/test/single-folder",
+                    "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                ],
+                "env": {
+                    "TEST_SUITE": "essentials"
+                },
+                "internalConsoleOptions": "openOnSessionStart",
+                "preLaunchTask": "Build",
+                "sourceMaps": true,
+                "outFiles": [
+                    "${workspaceFolder:MarkdownConverter}/**/*.js",
+                    "!**/node_modules/**"
+                ]
+            },
+            {
+                "type": "pwa-extensionHost",
+                "request": "launch",
+                "name": "Launch Common Tests",
+                "runtimeExecutable": "${execPath}",
+                "args": [
+                    "${workspaceFolder:MarkdownConverter}/src/test/single-folder",
+                    "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                ],
+                "env": {
+                    "TEST_SUITE": "common"
+                },
+                "internalConsoleOptions": "openOnSessionStart",
+                "preLaunchTask": "Build",
+                "sourceMaps": true,
+                "outFiles": [
+                    "${workspaceFolder:MarkdownConverter}/**/*.js",
+                    "!**/node_modules/**"
+                ]
+            },
+            {
+                "type": "pwa-extensionHost",
+                "request": "launch",
+                "name": "Launch Tests for Single-File Mode",
+                "runtimeExecutable": "${execPath}",
+                "args": [
+                    "${workspaceFolder:MarkdownConverter}/src/test/single-file/Test.md",
+                    "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                ],
+                "env": {
+                    "TEST_SUITE": "single-file"
+                },
+                "internalConsoleOptions": "openOnSessionStart",
+                "preLaunchTask": "Build",
+                "sourceMaps": true,
+                "outFiles": [
+                    "${workspaceFolder:MarkdownConverter}/**/*.js",
+                    "!**/node_modules/**"
+                ]
+            },
+            {
+                "type": "pwa-extensionHost",
+                "request": "launch",
+                "name": "Launch Tests for the Single-Folder Mode",
+                "runtimeExecutable": "${execPath}",
+                "args": [
+                    "${workspaceFolder:MarkdownConverter}/src/test/single-folder",
+                    "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                ],
+                "env": {
+                    "TEST_SUITE": "single-folder"
+                },
+                "internalConsoleOptions": "openOnSessionStart",
+                "preLaunchTask": "Build",
+                "sourceMaps": true,
+                "outFiles": [
+                    "${workspaceFolder:MarkdownConverter}/**/*.js",
+                    "!**/node_modules/**"
+                ]
+            },
+            {
+                "type": "pwa-extensionHost",
+                "request": "launch",
+                "name": "Launch Tests for the Workspace Mode",
+                "runtimeExecutable": "${execPath}",
+                "args": [
+                    "${workspaceFolder:MarkdownConverter}/src/test/workspace/workspace.code-workspace",
+                    "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                ],
+                "env": {
+                    "TEST_SUITE": "workspace"
+                },
+                "internalConsoleOptions": "openOnSessionStart",
+                "preLaunchTask": "Build",
+                "sourceMaps": true,
+                "outFiles": [
+                    "${workspaceFolder:MarkdownConverter}/**/*.js",
+                    "!**/node_modules/**"
+                ]
+            }
+        ]
+    },
     "settings": {
         "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
         "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
@@ -38,5 +207,124 @@
         "mochaExplorer.env": {
             "TEST_SUITE": "essentials"
         }
+    },
+    "tasks": {
+        // See https://go.microsoft.com/fwlink/?LinkId=733558
+        // for the documentation about the tasks.json format
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Clean",
+                "type": "npm",
+                "script": "clean",
+                "problemMatcher": [],
+                "presentation": {
+                    "reveal": "never"
+                }
+            },
+            {
+                "label": "Build",
+                "type": "npm",
+                "script": "watch",
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                },
+                "problemMatcher": "$tsc-watch",
+                "isBackground": true,
+                "presentation": {
+                    "reveal": "never"
+                },
+                "dependsOn": [
+                    "Kill Running Tasks"
+                ]
+            },
+            {
+                "label": "Rebuild",
+                "type": "npm",
+                "script": "rebuild",
+                "group": "build",
+                "problemMatcher": "$tsc",
+                "presentation": {
+                    "reveal": "never"
+                },
+                "dependsOn": [
+                    "Kill Running Tasks"
+                ]
+            },
+            {
+                "label": "Build Debug",
+                "type": "npm",
+                "script": "build-debug",
+                "group": "build",
+                "problemMatcher": [],
+                "dependsOn": [
+                    "Kill Running Tasks",
+                    "Clean"
+                ]
+            },
+            {
+                "label": "Rebuild Debug",
+                "type": "npm",
+                "script": "rebuild",
+                "group": "build",
+                "problemMatcher": [],
+                "dependsOn": [
+                    "Kill Running Tasks"
+                ]
+            },
+            {
+                "label": "Build Release",
+                "type": "npm",
+                "script": "build-release",
+                "group": "build",
+                "problemMatcher": [],
+                "dependsOn": [
+                    "Kill Running Tasks",
+                    "Clean"
+                ]
+            },
+            {
+                "label": "Rebuild Release",
+                "type": "npm",
+                "script": "rebuild-release",
+                "group": "build",
+                "problemMatcher": [],
+                "dependsOn": [
+                    "Kill Running Tasks"
+                ]
+            },
+            {
+                "label": "Lint",
+                "type": "npm",
+                "script": "lint-ide",
+                "group": "build",
+                "problemMatcher": "$eslint-stylish",
+                "presentation": {
+                    "reveal": "never"
+                }
+            },
+            {
+                "label": "Debug Cleanup",
+                "dependsOn": [
+                    "Clean",
+                    "Build"
+                ]
+            },
+            {
+                "label": "Kill Running Tasks",
+                "type": "shell",
+                "command": "echo ${input:terminate}",
+                "problemMatcher": []
+            }
+        ],
+        "inputs": [
+            {
+                "id": "terminate",
+                "type": "command",
+                "command": "workbench.action.tasks.terminate",
+                "args": "terminateAll"
+            }
+        ]
     }
 }
