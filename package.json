@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@manuth/package-json-editor": "^2.2.6",
-    "@manuth/resource-manager": "^2.0.4",
+    "@manuth/resource-manager": "^3.0.1",
     "@manuth/temp-files": "^2.0.9",
     "@types/markdown-it": "^12.2.3",
     "@vscode/test-electron": "^2.1.5",
