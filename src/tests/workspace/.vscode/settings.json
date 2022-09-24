@@ -4,7 +4,6 @@
     "mochaExplorer.files": "./lib/test/workspace.test.js",
     "mochaExplorer.launcherScript": "../../../lib/test/runMocha.js",
     "mochaExplorer.env": {
-        "TEST_SUITE": "workspace",
-        "VSCODE_VERSION": "1.65.1"
+        "TEST_SUITE": "workspace"
     }
 }

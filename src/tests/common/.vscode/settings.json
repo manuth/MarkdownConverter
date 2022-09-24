@@ -4,7 +4,6 @@
     "mochaExplorer.files": "./lib/test/common.test.js",
     "mochaExplorer.launcherScript": "../../../lib/test/runMocha.js",
     "mochaExplorer.env": {
-        "TEST_SUITE": "common",
-        "VSCODE_VERSION": "1.71.1"
+        "TEST_SUITE": "common"
     }
 }
