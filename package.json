@@ -95,7 +95,7 @@
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^9.0.13",
     "@types/glob": "^8.0.0",
-    "@types/highlight.js": "^9.12.4",
+    "@types/highlight.js": "^10.1.0",
     "@types/lodash.clonedeep": "^4.5.7",
     "@types/lodash.kebabcase": "^4.1.7",
     "@types/markdown-it-container": "^2.0.5",
