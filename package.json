@@ -90,7 +90,6 @@
   "devDependencies": {
     "@manuth/eslint-plugin-typescript": "^4.0.0",
     "@manuth/tsconfig": "^3.0.2",
-    "@manuth/typescript-eslint-plugin": "^1.4.2",
     "@stdlib/utils-escape-regexp-string": "^0.0.9",
     "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^9.0.13",
