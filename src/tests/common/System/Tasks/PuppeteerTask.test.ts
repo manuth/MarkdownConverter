@@ -1,8 +1,8 @@
 import { doesNotReject, rejects } from "assert";
-import { pathExists, rename } from "fs-extra";
-import pkgUp = require("pkg-up");
+import findUp = require("find-up");
+import { ensureDir, pathExists, remove, rename } from "fs-extra";
 import { createSandbox, SinonSandbox } from "sinon";
-import { basename, dirname, join, resolve } from "upath";
+import { dirname, join, resolve } from "upath";
 import { Constants } from "../../../../Constants";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ChromiumNotFoundException } from "../../../../System/Tasks/ChromiumNotFoundException";
@@ -51,15 +51,29 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
             suiteSetup(
                 async () =>
                 {
+                    let chromiumDir = ".local-chromium";
+                    let puppeteerProjectRoot: string;
                     task = new PuppeteerTaskTest(TestConstants.Extension);
-                    let puppeteerProjectRoot = dirname(pkgUp.sync({ cwd: Constants.Puppeteer.executablePath() }));
-                    puppeteerPath = resolve(puppeteerProjectRoot, ".local-chromium");
-                    tempPuppeteerPath = join(dirname(puppeteerPath), basename(puppeteerPath) + "_");
+                    await ensureDir(dirname(Constants.Puppeteer.executablePath()));
+
+                    puppeteerProjectRoot = findUp.sync(
+                        chromiumDir,
+                        {
+                            cwd: dirname(Constants.Puppeteer.executablePath()),
+                            type: "directory"
+                        });
+
+                    puppeteerPath = resolve(puppeteerProjectRoot);
+                    tempPuppeteerPath = join(dirname(puppeteerPath), chromiumDir + "_");
 
                     if (await pathExists(Constants.Puppeteer.executablePath()))
                     {
                         await rename(puppeteerPath, tempPuppeteerPath);
                         moved = true;
+                    }
+                    else
+                    {
+                        await remove(puppeteerPath);
                     }
                 });
 
