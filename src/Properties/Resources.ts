@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+import { join } from "path";
 import { CultureInfo, IResourceManager, MustacheResourceManager, Resource, ResourceManager } from "@manuth/resource-manager";
 import { readJSONSync } from "fs-extra";
-import { join } from "path";
 import Files = require("./Files");
 
 /**
