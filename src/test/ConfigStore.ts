@@ -147,7 +147,7 @@ export class ConfigStore
                 break;
         }
 
-        let vscodeTestDir = join(this.TestEnvironmentRootPath, suite, this.vscodeTestDir);
+        let vscodeTestDir = join(this.ProjectRoot, this.vscodeTestDir, suite);
 
         return {
             ...this.CommonOptions,
