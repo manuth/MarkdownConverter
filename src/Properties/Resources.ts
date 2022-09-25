@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { CultureInfo, IResourceManager, MustacheResourceManager, Resource, ResourceManager } from "@manuth/resource-manager";
+import Files = require("./Files");
 
 /**
  * Represents the resources of the module.
@@ -21,7 +22,7 @@ export class Resources
      */
     private static files = new ResourceManager(
         [
-            new Resource(require("./Files"))
+            new Resource(Files as any)
         ]);
 
     /**
