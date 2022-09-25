@@ -200,6 +200,7 @@
         "mochaExplorer.autoload": false,
         "mochaExplorer.files": "./lib/test/essentials.test.js",
         "mochaExplorer.ui": "tdd",
+        "mochaExplorer.timeout": 0,
         "mochaExplorer.launcherScript": "./lib/test/runMocha.js",
         "mochaExplorer.require": "source-map-support/register",
         "mochaExplorer.ipcRole": "server",
