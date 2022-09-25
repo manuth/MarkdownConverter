@@ -49,14 +49,15 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
             suiteSetup(
                 async () =>
                 {
-                    task = new PuppeteerTaskTest(TestConstants.Extension);
                     chromiumPath = Constants.Puppeteer.executablePath();
+                    tempDir = new TempDirectory();
+                    task = new PuppeteerTaskTest(TestConstants.Extension);
                 });
 
             suiteTeardown(
                 async () =>
                 {
-                    tempDir = new TempDirectory();
+                    tempDir.Dispose();
                 });
 
             setup(
