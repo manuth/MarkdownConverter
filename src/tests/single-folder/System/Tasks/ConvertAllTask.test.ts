@@ -4,13 +4,13 @@ import { pathExists } from "fs-extra";
 import { createSandbox, SinonSandbox } from "sinon";
 import { normalize } from "upath";
 import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
-import { extension } from "../../../..";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { IConvertedFile } from "../../../../Conversion/IConvertedFile";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
 import { ITestContext } from "../../../ITestContext";
+import { TestConstants } from "../../../TestConstants";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 /**
@@ -34,7 +34,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                 () =>
                 {
                     excludeKey = "files.exclude";
-                    task = new TestConvertAllTask(extension);
+                    task = new TestConvertAllTask(TestConstants.Extension);
                     config = workspace.getConfiguration(undefined, workspace.workspaceFolders[0]);
                 });
 

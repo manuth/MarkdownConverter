@@ -5,13 +5,13 @@ import { pathExists, readFile, remove } from "fs-extra";
 import { Random } from "random-js";
 import { createSandbox, SinonExpectation, SinonSandbox } from "sinon";
 import { CancellationToken, Progress, window } from "vscode";
-import { extension } from "../../../..";
 import { ConversionType } from "../../../../Conversion/ConversionType";
 import { IConvertedFile } from "../../../../Conversion/IConvertedFile";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ChainTask } from "../../../../System/Tasks/ChainTask";
 import { IProgressState } from "../../../../System/Tasks/IProgressState";
 import { ITestContext } from "../../../ITestContext";
+import { TestConstants } from "../../../TestConstants";
 
 /**
  * Registers tests for the {@link ChainTask `ChainTask`} class.
@@ -61,7 +61,7 @@ export function ChainTaskTests(context: ITestContext<ISettings>): void
                 () =>
                 {
                     random = new Random();
-                    task = new TestChainTask(extension);
+                    task = new TestChainTask(TestConstants.Extension);
 
                     fileReporter = {
                         report: (file) =>

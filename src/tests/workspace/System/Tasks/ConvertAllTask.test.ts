@@ -1,6 +1,6 @@
 import { strictEqual } from "assert";
-import { extension } from "../../../..";
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
+import { TestConstants } from "../../../TestConstants";
 import { TestConvertAllTask } from "../../../TestConvertAllTask";
 
 /**
@@ -17,7 +17,7 @@ export function ConvertAllTaskTests(): void
             suiteSetup(
                 () =>
                 {
-                    task = new TestConvertAllTask(extension);
+                    task = new TestConvertAllTask(TestConstants.Extension);
                 });
 
             suite(
