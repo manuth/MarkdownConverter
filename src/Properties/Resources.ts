@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { CultureInfo, IResourceManager, MustacheResourceManager, Resource, ResourceManager } from "@manuth/resource-manager";
+import { readJSONSync } from "fs-extra";
+import { join } from "path";
 import Files = require("./Files");
 
 /**
@@ -36,8 +38,11 @@ export class Resources
             this.resources = new MustacheResourceManager(
                 new ResourceManager(
                     [
-                        new Resource(require("../../Resources/MarkdownConverter.json")),
-                        new Resource(require("../../Resources/MarkdownConverter.de.json"), new CultureInfo("de"))
+                        new Resource(readJSONSync(join(__dirname, "..", "..", "Resources", "MarkdownConverter.json"))),
+                        new Resource(
+                            readJSONSync(
+                                join(__dirname, "..", "..", "Resources", "MarkdownConverter.de.json")),
+                                new CultureInfo("de"))
                     ]));
         }
 
