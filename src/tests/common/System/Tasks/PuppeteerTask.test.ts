@@ -1,8 +1,7 @@
 import { doesNotReject, rejects } from "assert";
-import findUp = require("find-up");
-import { ensureDir, pathExists, remove, rename } from "fs-extra";
+import { TempDirectory } from "@manuth/temp-files";
 import { createSandbox, SinonSandbox } from "sinon";
-import { dirname, join, resolve } from "upath";
+import { basename } from "upath";
 import { Constants } from "../../../../Constants";
 import { ISettings } from "../../../../Properties/ISettings";
 import { ChromiumNotFoundException } from "../../../../System/Tasks/ChromiumNotFoundException";
@@ -22,11 +21,10 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
         nameof(PuppeteerTask),
         () =>
         {
+            let chromiumPath: string;
+            let tempDir: TempDirectory;
             let sandbox: SinonSandbox;
             let task: PuppeteerTaskTest;
-            let puppeteerPath: string;
-            let moved = false;
-            let tempPuppeteerPath: string;
 
             /**
              * Provides an implementation of the {@link PuppeteerTask `PuppeteerTask`} for testing.
@@ -51,45 +49,21 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
             suiteSetup(
                 async () =>
                 {
-                    let chromiumDir = ".local-chromium";
-                    let puppeteerProjectRoot: string;
                     task = new PuppeteerTaskTest(TestConstants.Extension);
-                    await ensureDir(dirname(Constants.Puppeteer.executablePath()));
-
-                    puppeteerProjectRoot = findUp.sync(
-                        chromiumDir,
-                        {
-                            cwd: dirname(Constants.Puppeteer.executablePath()),
-                            type: "directory"
-                        });
-
-                    puppeteerPath = resolve(puppeteerProjectRoot);
-                    tempPuppeteerPath = join(dirname(puppeteerPath), chromiumDir + "_");
-
-                    if (await pathExists(Constants.Puppeteer.executablePath()))
-                    {
-                        await rename(puppeteerPath, tempPuppeteerPath);
-                        moved = true;
-                    }
-                    else
-                    {
-                        await remove(puppeteerPath);
-                    }
+                    chromiumPath = Constants.Puppeteer.executablePath();
                 });
 
             suiteTeardown(
                 async () =>
                 {
-                    if (moved)
-                    {
-                        await rename(tempPuppeteerPath, puppeteerPath);
-                    }
+                    tempDir = new TempDirectory();
                 });
 
             setup(
                 () =>
                 {
                     sandbox = createSandbox();
+                    sandbox.replace(Constants.Puppeteer, "executablePath", () => tempDir.MakePath(basename(chromiumPath)));
                 });
 
             teardown(
@@ -113,7 +87,7 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
                         "Checking whether no exception is thrown if puppeteer's local chromium has been installed…",
                         async () =>
                         {
-                            sandbox.replace(Constants.Puppeteer, "executablePath", () => tempPuppeteerPath);
+                            sandbox.restore();
                             await doesNotReject(() => task.Execute());
                         });
 
@@ -132,7 +106,7 @@ export function PuppeteerTaskTests(context: ITestContext<ISettings>): void
                         `Checking whether specifying an existent \`${nameof<ISettings>((s) => s.ChromiumExecutablePath)}\` doesn't throw an exception…`,
                         async () =>
                         {
-                            context.Settings.ChromiumExecutablePath = tempPuppeteerPath;
+                            context.Settings.ChromiumExecutablePath = chromiumPath;
                             await doesNotReject(() => task.Execute());
                         });
                 });
