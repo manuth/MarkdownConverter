@@ -23,8 +23,8 @@ export class Resources
      */
     public static set Culture(value: CultureInfo)
     {
-        this.resources.Locale =
-            this.files.Locale = value;
+        this.Resources.Locale =
+            this.Files.Locale = value;
     }
 
     /**
