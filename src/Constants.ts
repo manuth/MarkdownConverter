@@ -1,4 +1,3 @@
-import { dependencyPath } from "dependency-package-path";
 import pkgUp = require("pkg-up");
 import puppeteer, { PuppeteerNode } from "puppeteer-core";
 import { dirname } from "upath";
@@ -42,7 +41,7 @@ export class Constants
 
             this.puppeteer = new puppeteerConstructor(
                 {
-                    projectRoot: dependencyPath("puppeteer-core", __dirname)
+                    projectRoot: this.PackageDirectory
                 });
         }
 
