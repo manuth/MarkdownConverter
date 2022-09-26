@@ -140,6 +140,11 @@ export = (env: any, argv: any): Configuration[] =>
                 })
         ],
         module: {
+            parser: {
+                javascript: {
+                    url: false
+                }
+            },
             rules: [
                 {
                     test: /\.[cm]?tsx?$/,
