@@ -1,6 +1,6 @@
 {
   "name": "markdown-converter",
-  "version": "5.1.3",
+  "version": "5.2.0",
   "type": "module",
   "private": true,
   "description": "A markdown-converter for vscode",
@@ -539,7 +539,7 @@
           "type": "object",
           "default": {
             "Left": "{{ Author }}",
-            "Center": "{{ CreationDate }}",
+            "Center": "{{ ChangeDate }}",
             "Right": "{{ Company }}"
           },
           "additionalProperties": false,
@@ -552,7 +552,7 @@
             "Center": {
               "markdownDescription": "%Config.Document.RunningBlocks.Center%",
               "type": "string",
-              "default": "{{ CreationDate }}"
+              "default": "{{ ChangeDate }}"
             },
             "Right": {
               "markdownDescription": "%Config.Document.RunningBlocks.Right%",
