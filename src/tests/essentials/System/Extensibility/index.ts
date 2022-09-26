@@ -7,7 +7,7 @@ import { ExtensionTests } from "./Extension.test.js";
 export function ExtensibilityTests(): void
 {
     suite(
-        basename(new URL(".", import.meta.url).pathname),
+        basename(new URL(".", new URL(import.meta.url)).pathname),
         () =>
         {
             ExtensionTests();

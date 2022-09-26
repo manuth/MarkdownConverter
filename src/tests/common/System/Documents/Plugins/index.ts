@@ -8,7 +8,7 @@ import { MarkdownTocPluginTests } from "./MarkdownTocPlugin.test.js";
 export function PluginTests(): void
 {
     suite(
-        basename(new URL(".", import.meta.url).pathname),
+        basename(new URL(".", new URL(import.meta.url)).pathname),
         () =>
         {
             MarkdownAnchorPluginTests();

@@ -7,7 +7,7 @@ import { DateTimeFormatterTests } from "./DateTimeFormatter.test.js";
 export function GlobalizationTests(): void
 {
     suite(
-        basename(new URL(".", import.meta.url).pathname),
+        basename(new URL(".", new URL(import.meta.url)).pathname),
         () =>
         {
             DateTimeFormatterTests();

@@ -19,7 +19,7 @@ import { TocSettingTests } from "./TocSettings.test.js";
 export function DocumentTests(): void
 {
     suite(
-        basename(new URL(".", import.meta.url).pathname),
+        basename(new URL(".", new URL(import.meta.url)).pathname),
         () =>
         {
             AssetTests();

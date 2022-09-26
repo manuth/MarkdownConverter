@@ -17,7 +17,7 @@ import { PuppeteerTaskTests } from "./PuppeteerTask.test.js";
 export function TaskTests(context: ITestContext<ISettings>): void
 {
     suite(
-        basename(new URL(".", import.meta.url).pathname),
+        basename(new URL(".", new URL(import.meta.url)).pathname),
         () =>
         {
             OperationCancelledExceptionTests();

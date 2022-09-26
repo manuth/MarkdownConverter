@@ -27,7 +27,7 @@ export class Constants
     {
         if (this.packageDirectory === null)
         {
-            this.packageDirectory = dirname(pkgUp.sync({ cwd: fileURLToPath(new URL(".", import.meta.url)) }));
+            this.packageDirectory = dirname(pkgUp.sync({ cwd: fileURLToPath(new URL(".", new URL(import.meta.url))) }));
         }
 
         return this.packageDirectory;

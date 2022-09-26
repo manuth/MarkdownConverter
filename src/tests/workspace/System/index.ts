@@ -7,7 +7,7 @@ import { TaskTests } from "./Tasks/index.js";
 export function SystemTests(): void
 {
     suite(
-        basename(new URL(".", import.meta.url).pathname),
+        basename(new URL(".", new URL(import.meta.url)).pathname),
         () =>
         {
             TaskTests();

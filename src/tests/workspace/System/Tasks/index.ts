@@ -8,7 +8,7 @@ import { ConvertAllTaskTests } from "./ConvertAllTask.test.js";
 export function TaskTests(): void
 {
     suite(
-        basename(new URL(".", import.meta.url).pathname),
+        basename(new URL(".", new URL(import.meta.url)).pathname),
         () =>
         {
             ConversionRunnerTests();
