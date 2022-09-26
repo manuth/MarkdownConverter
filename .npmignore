@@ -129,6 +129,9 @@ tsconfig.*.json
 [Ll]ib/test/
 [Ll]ib/tests/
 
+# Script files
+scripts/
+
 # Visual Studio Code-Environment
 .vscode/
 

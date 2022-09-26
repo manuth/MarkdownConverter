@@ -33,6 +33,8 @@
     "access": "public"
   },
   "scripts": {
+    "vsce": "ts-node-esm ./scripts/vsce.ts",
+    "package": "npm run vsce -- -- package",
     "vscode:prepublish": "npm run rebuild-release",
     "pack-base": "cross-env NODE_OPTIONS=\"--loader ts-node/esm\" webpack --config webpack.config.cts",
     "build-debug": "npm run pack-base -- --mode development",

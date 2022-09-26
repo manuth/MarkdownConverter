@@ -79,7 +79,7 @@ steps:
     depends_on:
       - check release prerequisites
     commands:
-      - npx vsce package
+      - npm run package
     when:
       event:
         - tag
