@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename } from "node:path";
 import { MarkdownAnchorPluginTests } from "./MarkdownAnchorPlugin.test.js";
 import { MarkdownTocPluginTests } from "./MarkdownTocPlugin.test.js";
 

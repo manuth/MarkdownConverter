@@ -1,4 +1,4 @@
-import { ok } from "assert";
+import { ok } from "node:assert";
 import { load } from "cheerio";
 import MarkdownIt from "markdown-it";
 import { Random } from "random-js";

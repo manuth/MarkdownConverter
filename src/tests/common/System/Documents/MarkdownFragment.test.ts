@@ -1,5 +1,5 @@
-import { strictEqual } from "assert";
-import { dirname } from "path";
+import { strictEqual } from "node:assert";
+import { dirname } from "node:path";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import MarkdownIt from "markdown-it";

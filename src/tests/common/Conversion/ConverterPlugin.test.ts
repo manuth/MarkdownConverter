@@ -1,5 +1,5 @@
-import { doesNotReject, doesNotThrow, ok } from "assert";
-import { createRequire } from "module";
+import { doesNotReject, doesNotThrow, ok } from "node:assert";
+import { createRequire } from "node:module";
 import { TempDirectory } from "@manuth/temp-files";
 import dedent from "dedent";
 import fs from "fs-extra";

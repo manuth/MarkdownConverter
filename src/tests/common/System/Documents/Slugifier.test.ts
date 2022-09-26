@@ -1,4 +1,4 @@
-import { notStrictEqual, strictEqual } from "assert";
+import { notStrictEqual, strictEqual } from "node:assert";
 import kebabCase from "lodash.kebabcase";
 import { Random } from "random-js";
 import { Slugifier } from "../../../../System/Documents/Slugifier.js";

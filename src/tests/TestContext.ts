@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import vscode from "vscode";
 import { ConfigInterceptor } from "./ConfigInterceptor.js";
 import { ITestContext } from "./ITestContext.js";

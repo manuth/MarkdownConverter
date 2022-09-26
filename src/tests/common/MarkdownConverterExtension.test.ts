@@ -1,5 +1,5 @@
-import { doesNotThrow, ok, strictEqual } from "assert";
-import { createRequire } from "module";
+import { doesNotThrow, ok, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
 import { TempFile } from "@manuth/temp-files";
 import { createSandbox, SinonSandbox } from "sinon";
 import vscode, { Disposable, ExtensionContext, Progress, TextDocument } from "vscode";

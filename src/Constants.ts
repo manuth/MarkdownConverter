@@ -1,4 +1,4 @@
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 import puppeteer, { PuppeteerNode } from "puppeteer-core";
 import path from "upath";
 

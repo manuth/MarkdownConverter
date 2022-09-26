@@ -1,5 +1,5 @@
-import { strictEqual } from "assert";
-import { createRequire } from "module";
+import { strictEqual } from "node:assert";
+import { createRequire } from "node:module";
 import vscode, { TextDocument } from "vscode";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner.js";
 import { TestConstants } from "../../../TestConstants.js";

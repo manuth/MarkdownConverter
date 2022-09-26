@@ -1,4 +1,4 @@
-import { ok, strictEqual } from "assert";
+import { ok, strictEqual } from "node:assert";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import fs from "fs-extra";

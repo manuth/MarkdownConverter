@@ -1,4 +1,4 @@
-import { strictEqual } from "assert";
+import { strictEqual } from "node:assert";
 import { Exception } from "../../../System/Exception.js";
 
 /**

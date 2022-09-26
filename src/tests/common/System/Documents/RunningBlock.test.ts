@@ -1,4 +1,4 @@
-import { notStrictEqual, strictEqual } from "assert";
+import { notStrictEqual, strictEqual } from "node:assert";
 import MarkdownIt from "markdown-it";
 import { Random } from "random-js";
 import { Document } from "../../../../System/Documents/Document.js";

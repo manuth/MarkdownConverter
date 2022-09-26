@@ -1,4 +1,4 @@
-import { dirname, join, parse, relative, resolve } from "path";
+import { dirname, join, parse, relative, resolve } from "node:path";
 import { normalize } from "upath";
 import { Configuration, WatchIgnorePlugin } from "webpack";
 

@@ -1,4 +1,4 @@
-import { strictEqual } from "assert";
+import { strictEqual } from "node:assert";
 import { PageOrientation } from "../../../../System/Documents/PageOrientation.js";
 import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType.js";
 import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat.js";

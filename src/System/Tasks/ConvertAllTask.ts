@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import format from "string-template";
 import vscode, { CancellationToken, Progress, TextDocument } from "vscode";
 import { IConvertedFile } from "../../Conversion/IConvertedFile.js";

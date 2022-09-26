@@ -1,5 +1,5 @@
-import { ok, rejects, strictEqual } from "assert";
-import { createRequire } from "module";
+import { ok, rejects, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
 import { TempDirectory } from "@manuth/temp-files";
 import fs from "fs-extra";
 import { createSandbox, SinonSandbox } from "sinon";

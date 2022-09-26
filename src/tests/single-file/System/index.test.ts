@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename } from "node:path";
 import { ISettings } from "../../../Properties/ISettings.js";
 import { ITestContext } from "../../ITestContext.js";
 import { TaskTests } from "./Tasks/index.test.js";

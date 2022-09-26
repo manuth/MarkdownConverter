@@ -1,5 +1,5 @@
-import { createRequire } from "module";
-import { join } from "path";
+import { createRequire } from "node:module";
+import { join } from "node:path";
 import { CultureInfo } from "@manuth/resource-manager";
 import fs from "fs-extra";
 import vscode from "vscode";

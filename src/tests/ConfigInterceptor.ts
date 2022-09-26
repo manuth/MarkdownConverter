@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { Resource } from "@manuth/resource-manager";
 import vscode from "vscode";
 import { ConfigurationSection } from "./ConfigurationSection.js";

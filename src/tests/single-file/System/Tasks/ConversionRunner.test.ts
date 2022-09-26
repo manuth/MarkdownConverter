@@ -1,6 +1,6 @@
-import { strictEqual } from "assert";
-import { createRequire } from "module";
-import { dirname } from "path";
+import { strictEqual } from "node:assert";
+import { createRequire } from "node:module";
+import { dirname } from "node:path";
 import { TempFile } from "@manuth/temp-files";
 import { createSandbox, SinonSandbox } from "sinon";
 import path from "upath";

@@ -1,5 +1,5 @@
-import { createRequire } from "module";
-import { EOL } from "os";
+import { createRequire } from "node:module";
+import { EOL } from "node:os";
 import fm from "front-matter";
 import fs from "fs-extra";
 import format from "string-template";

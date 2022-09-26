@@ -1,4 +1,4 @@
-import { dirname, extname } from "path";
+import { dirname, extname } from "node:path";
 import { Document } from "../Document.js";
 import { Asset } from "./Asset.js";
 import { AssetURLType } from "./AssetURLType.js";

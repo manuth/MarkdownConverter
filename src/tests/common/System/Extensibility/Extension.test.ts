@@ -1,5 +1,5 @@
-import { doesNotReject, notStrictEqual, ok, strictEqual } from "assert";
-import { createRequire } from "module";
+import { doesNotReject, notStrictEqual, ok, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
 import { Package } from "@manuth/package-json-editor";
 import { CultureInfo } from "@manuth/resource-manager";
 import MarkdownIt from "markdown-it";

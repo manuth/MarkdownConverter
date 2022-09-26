@@ -1,5 +1,5 @@
-import { createRequire } from "module";
-import { resolve } from "path";
+import { createRequire } from "node:module";
+import { resolve } from "node:path";
 import fs from "fs-extra";
 import getUri from "get-uri";
 import path from "upath";

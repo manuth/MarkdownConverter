@@ -1,4 +1,4 @@
-import { strictEqual } from "assert";
+import { strictEqual } from "node:assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter.js";
 

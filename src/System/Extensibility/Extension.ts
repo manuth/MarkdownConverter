@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { Package } from "@manuth/package-json-editor";
 import { CultureInfo } from "@manuth/resource-manager";
 import MarkdownIt from "markdown-it";

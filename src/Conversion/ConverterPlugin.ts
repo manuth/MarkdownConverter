@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { Browser } from "puppeteer-core";
 import path from "upath";
 import utf8 from "utf8";

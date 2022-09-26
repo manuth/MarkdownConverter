@@ -1,4 +1,4 @@
-import { strictEqual } from "assert";
+import { strictEqual } from "node:assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import { Resources } from "../../../Properties/Resources.js";
 

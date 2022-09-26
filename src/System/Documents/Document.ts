@@ -1,4 +1,4 @@
-import { parse } from "path";
+import { parse } from "node:path";
 import { CultureInfo } from "@manuth/resource-manager";
 import dedent from "dedent";
 import fm from "front-matter";

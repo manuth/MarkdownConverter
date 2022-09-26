@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempDirectory } from "@manuth/temp-files";
 import fs from "fs-extra";

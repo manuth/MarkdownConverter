@@ -1,6 +1,6 @@
-import { doesNotReject, notStrictEqual, ok, rejects, strictEqual } from "assert";
-import { Server } from "http";
-import { createRequire } from "module";
+import { doesNotReject, notStrictEqual, ok, rejects, strictEqual } from "node:assert";
+import { Server } from "node:http";
+import { createRequire } from "node:module";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import fs from "fs-extra";
 import MarkdownIt from "markdown-it";

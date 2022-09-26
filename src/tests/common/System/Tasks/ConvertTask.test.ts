@@ -1,5 +1,5 @@
-import { doesNotThrow, throws } from "assert";
-import { createRequire } from "module";
+import { doesNotThrow, throws } from "node:assert";
+import { createRequire } from "node:module";
 import { TempFile } from "@manuth/temp-files";
 import vscode, { TextDocument } from "vscode";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException.js";

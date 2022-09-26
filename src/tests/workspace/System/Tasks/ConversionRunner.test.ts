@@ -1,6 +1,6 @@
-import { strictEqual } from "assert";
-import { createRequire } from "module";
-import { dirname, normalize } from "path";
+import { strictEqual } from "node:assert";
+import { createRequire } from "node:module";
+import { dirname, normalize } from "node:path";
 import { TempFile } from "@manuth/temp-files";
 import vscode, { TextDocument } from "vscode";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner.js";

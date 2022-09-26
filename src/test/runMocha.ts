@@ -1,5 +1,5 @@
-import { fork } from "child_process";
-import { createRequire } from "module";
+import { fork } from "node:child_process";
+import { createRequire } from "node:module";
 import { ConfigStore } from "./ConfigStore.js";
 import { SuiteSet } from "./SuiteSet.js";
 import { SuiteVarName } from "./SuiteVarName.js";

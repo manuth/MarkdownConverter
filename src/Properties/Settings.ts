@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { MultiRange } from "multi-integer-range";
 import vscode, { WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../Conversion/ConversionType.js";

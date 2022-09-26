@@ -1,4 +1,4 @@
-import { strictEqual } from "assert";
+import { strictEqual } from "node:assert";
 import { MultiRange } from "multi-integer-range";
 import { ListType } from "../../../../System/Documents/ListType.js";
 import { TocSettings } from "../../../../System/Documents/TocSettings.js";

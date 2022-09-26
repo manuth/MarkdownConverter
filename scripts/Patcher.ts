@@ -1,5 +1,5 @@
-import { createRequire } from "module";
-import { join } from "path";
+import { createRequire } from "node:module";
+import { join } from "node:path";
 import { fileURLToPath } from "url";
 import { Package } from "@manuth/package-json-editor";
 import fs from "fs-extra";

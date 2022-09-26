@@ -1,5 +1,5 @@
-import { deepStrictEqual, ok, strictEqual } from "assert";
-import { createRequire } from "module";
+import { deepStrictEqual, ok, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
 import vscode, { WorkspaceConfiguration } from "vscode";
 import { ConversionType } from "../../Conversion/ConversionType.js";
 import { ISettings } from "../../Properties/ISettings.js";

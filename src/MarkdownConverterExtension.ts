@@ -1,5 +1,5 @@
-import { exec } from "child_process";
-import { createRequire } from "module";
+import { exec } from "node:child_process";
+import { createRequire } from "node:module";
 import { Package } from "@manuth/package-json-editor";
 import fs from "fs-extra";
 import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/esm/puppeteer/revisions.js";

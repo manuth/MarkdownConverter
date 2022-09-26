@@ -1,4 +1,4 @@
-import { strictEqual } from "assert";
+import { strictEqual } from "node:assert";
 import { Margin } from "../../../../System/Documents/Margin.js";
 
 /**

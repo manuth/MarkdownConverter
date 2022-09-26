@@ -1,7 +1,7 @@
-import { ok, strictEqual } from "assert";
-import { createServer, Server } from "http";
-import { createRequire } from "module";
-import { relative } from "path";
+import { ok, strictEqual } from "node:assert";
+import { createServer, Server } from "node:http";
+import { createRequire } from "node:module";
+import { relative } from "node:path";
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";

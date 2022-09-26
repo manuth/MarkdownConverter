@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename } from "node:path";
 import { ConversionRunnerTests } from "./ConversionRunner.test.js";
 import { ConvertAllTaskTests } from "./ConvertAllTask.test.js";
 

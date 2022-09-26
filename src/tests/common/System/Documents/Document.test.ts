@@ -1,6 +1,6 @@
-import { ok, strictEqual, throws } from "assert";
-import { createRequire } from "module";
-import { parse } from "path";
+import { ok, strictEqual, throws } from "node:assert";
+import { createRequire } from "node:module";
+import { parse } from "node:path";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
 import fm from "front-matter";

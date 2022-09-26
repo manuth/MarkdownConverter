@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename } from "node:path";
 import { AssetTests } from "./Assets/index.test.js";
 import { CustomPaperFormatTests } from "./CustomPageFormat.test.js";
 import { DocumentTests as DocumentClassTests } from "./Document.test.js";

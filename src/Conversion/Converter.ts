@@ -1,6 +1,6 @@
-import { createServer, Server } from "http";
-import { URL } from "url";
-import { promisify } from "util";
+import { createServer, Server } from "node:http";
+import { URL } from "node:url";
+import { promisify } from "node:util";
 import { TempDirectory } from "@manuth/temp-files";
 import dedent from "dedent";
 import fs from "fs-extra";

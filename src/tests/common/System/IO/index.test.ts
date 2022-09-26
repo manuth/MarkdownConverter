@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename } from "node:path";
 import { FileExceptionTests } from "./FileException.test.js";
 import { FileNotFoundExceptionTests } from "./FileNotFoundException.test.js";
 import { PatternResolverTests } from "./PatternResolver.test.js";

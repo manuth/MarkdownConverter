@@ -1,7 +1,7 @@
-import { notStrictEqual, ok, rejects, strictEqual } from "assert";
-import { createRequire } from "module";
-import { EOL } from "os";
-import { isAbsolute, relative } from "path";
+import { notStrictEqual, ok, rejects, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
+import { EOL } from "node:os";
+import { isAbsolute, relative } from "node:path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { Cheerio, CheerioAPI, load, Node } from "cheerio";
 import dedent from "dedent";

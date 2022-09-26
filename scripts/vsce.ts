@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { Patcher } from "./Patcher.js";
 
 const require = createRequire(import.meta.url);

@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename } from "node:path";
 import { AssetTests as AssetClassTests } from "./Asset.test.js";
 import { PictureSourceTests } from "./PictureSource.test.js";
 import { StyleSheetTests } from "./StyleSheet.test.js";

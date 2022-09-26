@@ -1,5 +1,5 @@
-import { join } from "path";
-import { fileURLToPath } from "url";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { CultureInfo, IResourceManager, MustacheResourceManager, Resource, ResourceManager } from "@manuth/resource-manager";
 import fs from "fs-extra";
 import { Files } from "./Files.js";

@@ -1,6 +1,6 @@
-import { doesNotThrow, ok, strictEqual } from "assert";
-import { createRequire } from "module";
-import { join } from "path";
+import { doesNotThrow, ok, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
+import { join } from "node:path";
 import { Package } from "@manuth/package-json-editor";
 import { TempDirectory } from "@manuth/temp-files";
 import { Random } from "random-js";

@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename } from "node:path";
 import { ConverterTests } from "./Converter.test.js";
 import { ConverterPluginTests } from "./ConverterPlugin.test.js";
 

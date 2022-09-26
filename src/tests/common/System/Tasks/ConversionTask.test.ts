@@ -1,4 +1,4 @@
-import { rejects } from "assert";
+import { rejects } from "node:assert";
 import { ConversionType } from "../../../../Conversion/ConversionType.js";
 import { ISettings } from "../../../../Properties/ISettings.js";
 import { Exception } from "../../../../System/Exception.js";

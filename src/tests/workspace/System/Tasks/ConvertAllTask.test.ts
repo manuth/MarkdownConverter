@@ -1,4 +1,4 @@
-import { strictEqual } from "assert";
+import { strictEqual } from "node:assert";
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask.js";
 import { TestConstants } from "../../../TestConstants.js";
 import { TestConvertAllTask } from "../../../TestConvertAllTask.js";

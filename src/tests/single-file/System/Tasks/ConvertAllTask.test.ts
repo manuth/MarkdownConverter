@@ -1,4 +1,4 @@
-import { rejects } from "assert";
+import { rejects } from "node:assert";
 import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolderException.js";
 import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask.js";
 import { TestConstants } from "../../../TestConstants.js";

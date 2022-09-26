@@ -1,6 +1,6 @@
-import { ok, strictEqual, throws } from "assert";
-import { createRequire } from "module";
-import { basename, dirname } from "path";
+import { ok, strictEqual, throws } from "node:assert";
+import { createRequire } from "node:module";
+import { basename, dirname } from "node:path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import rescape from "@stdlib/utils-escape-regexp-string";
 import { Context } from "mocha";

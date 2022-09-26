@@ -1,6 +1,6 @@
-import { ok, strictEqual } from "assert";
-import { createRequire } from "module";
-import { parse } from "path";
+import { ok, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
+import { parse } from "node:path";
 import { load } from "cheerio";
 import fs from "fs-extra";
 import { Random } from "random-js";

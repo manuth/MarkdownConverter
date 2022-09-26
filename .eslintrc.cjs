@@ -1,4 +1,4 @@
-const { join } = require("path");
+const { join } = require("node:path");
 const { PluginName, PresetName } = require("@manuth/eslint-plugin-typescript");
 
 module.exports = {

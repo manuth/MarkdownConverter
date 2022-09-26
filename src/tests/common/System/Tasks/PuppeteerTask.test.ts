@@ -1,4 +1,4 @@
-import { doesNotReject, rejects } from "assert";
+import { doesNotReject, rejects } from "node:assert";
 import { TempDirectory } from "@manuth/temp-files";
 import { createSandbox, SinonSandbox } from "sinon";
 import path from "upath";

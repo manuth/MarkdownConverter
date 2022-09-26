@@ -1,4 +1,4 @@
-import { deepStrictEqual, ok, strictEqual } from "assert";
+import { deepStrictEqual, ok, strictEqual } from "node:assert";
 import { Margin } from "../../../../System/Documents/Margin.js";
 import { PageOrientation } from "../../../../System/Documents/PageOrientation.js";
 import { Paper } from "../../../../System/Documents/Paper.js";

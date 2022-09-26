@@ -1,5 +1,5 @@
-import { join, resolve } from "path";
-import { fileURLToPath } from "url";
+import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { TestOptions } from "@vscode/test-electron/out/runTest.js";
 import { SuiteSet } from "./SuiteSet.js";
 import { SuiteVarName } from "./SuiteVarName.js";

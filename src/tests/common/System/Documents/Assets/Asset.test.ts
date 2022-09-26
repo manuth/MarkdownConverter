@@ -1,5 +1,5 @@
-import { deepStrictEqual, rejects, strictEqual } from "assert";
-import { createServer, Server } from "http";
+import { deepStrictEqual, rejects, strictEqual } from "node:assert";
+import { createServer, Server } from "node:http";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import fs from "fs-extra";
 import getPort from "get-port";
