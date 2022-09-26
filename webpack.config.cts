@@ -219,7 +219,8 @@ export = (env: any, argv: any): Configuration[] =>
             externals: getExternalsResolver(commonTestAssets),
             output: {
                 ...configBase.output,
-                libraryTarget: "commonjs2"
+                libraryTarget: "commonjs2",
+                filename: "test/[name].js"
             }
         }
     ];
