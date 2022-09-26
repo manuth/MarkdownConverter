@@ -2,7 +2,7 @@ import { exec } from "child_process";
 import { createRequire } from "module";
 import { Package } from "@manuth/package-json-editor";
 import fs from "fs-extra";
-import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions.js";
+import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/esm/puppeteer/revisions.js";
 import format from "string-template";
 import path from "upath";
 import vscode, { ExtensionContext, Progress } from "vscode";
