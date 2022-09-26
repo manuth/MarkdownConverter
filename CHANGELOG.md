@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## MarkdownConverter [Unreleased]
 ### Fixed
   - Broken extension build
+  - Incorrect code snippets in `README.md` (as indicated in [#174](https://github.com/manuth/MarkdownConverter/issues/174))  
+    Thanks [@karmeye](https://github.com/karmeye)
+  - `ConversionRunner`s behavior which caused Chromium instances to sometimes not close properly (as indicated in [#188](https://github.com/manuth/MarkdownConverter/issues/188))  
+    Thanks [@nixtar](https://github.com/)
 
 ### Updated
   - Unit tests in order to improve stability
