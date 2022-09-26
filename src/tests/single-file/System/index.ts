@@ -12,7 +12,7 @@ import { TaskTests } from "./Tasks/index.js";
 export function SystemTests(context: ITestContext<ISettings>): void
 {
     suite(
-        basename(new URL(".", new URL(import.meta.url)).pathname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             TaskTests(context);

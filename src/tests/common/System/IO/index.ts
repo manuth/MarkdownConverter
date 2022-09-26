@@ -9,7 +9,7 @@ import { PatternResolverTests } from "./PatternResolver.test.js";
 export function IOTests(): void
 {
     suite(
-        basename(new URL(".", new URL(import.meta.url)).pathname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             FileExceptionTests();

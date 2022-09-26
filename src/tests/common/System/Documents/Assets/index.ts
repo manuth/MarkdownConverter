@@ -10,7 +10,7 @@ import { WebScriptTests } from "./WebScript.test.js";
 export function AssetTests(): void
 {
     suite(
-        basename(new URL(".", new URL(import.meta.url)).pathname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             AssetClassTests();

@@ -7,7 +7,7 @@ import { YAMLExceptionTests } from "./YAMLException.test.js";
 export function YAMLTests(): void
 {
     suite(
-        basename(new URL(".", new URL(import.meta.url)).pathname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             YAMLExceptionTests();

@@ -8,7 +8,7 @@ import { MarkdownContributionTests } from "./MarkdownContributions.test.js";
 export function ExtensibilityTests(): void
 {
     suite(
-        basename(new URL(".", new URL(import.meta.url)).pathname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             MarkdownContributionTests();

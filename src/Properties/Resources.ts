@@ -37,7 +37,7 @@ export class Resources
     {
         if (this.resources === null)
         {
-            let dirName = fileURLToPath(new URL(".", new URL(import.meta.url)));
+            let dirName = fileURLToPath(new URL(".", import.meta.url));
 
             this.resources = new MustacheResourceManager(
                 new ResourceManager(

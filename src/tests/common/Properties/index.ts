@@ -14,7 +14,7 @@ import { SettingTests } from "./Settings.test.js";
 export function PropertyTests(context: ITestContext<ISettings>): void
 {
     suite(
-        basename(new URL(".", new URL(import.meta.url)).pathname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             SettingTests(context);

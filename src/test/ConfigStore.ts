@@ -17,7 +17,7 @@ export class ConfigStore
     /**
      * The path to the root of the project.
      */
-    private static projectRoot = resolve(fileURLToPath(new URL(".", new URL(import.meta.url))), "..", "..");
+    private static projectRoot = resolve(fileURLToPath(new URL(".", import.meta.url)), "..", "..");
 
     /**
      * The path to the root of the test files.

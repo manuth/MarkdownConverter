@@ -26,7 +26,7 @@ export class Constants
     {
         if (this.packageDirectory === null)
         {
-            this.packageDirectory = join(fileURLToPath(new URL(".", new URL(import.meta.url))), "..");
+            this.packageDirectory = join(fileURLToPath(new URL(".", import.meta.url)), "..");
         }
 
         return this.packageDirectory;
