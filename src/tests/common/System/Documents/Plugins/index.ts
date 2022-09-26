@@ -1,4 +1,4 @@
-import { dirname } from "path";
+import { basename } from "path";
 import { MarkdownAnchorPluginTests } from "./MarkdownAnchorPlugin.test";
 import { MarkdownTocPluginTests } from "./MarkdownTocPlugin.test";
 
@@ -8,7 +8,7 @@ import { MarkdownTocPluginTests } from "./MarkdownTocPlugin.test";
 export function PluginTests(): void
 {
     suite(
-        dirname(__dirname),
+        basename(__dirname),
         () =>
         {
             MarkdownAnchorPluginTests();
