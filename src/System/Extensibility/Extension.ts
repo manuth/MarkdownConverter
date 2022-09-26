@@ -7,6 +7,7 @@ import path from "upath";
 import vscode from "vscode";
 import { Resources } from "../../Properties/Resources.js";
 import { Task } from "../Tasks/Task.js";
+import { IExtension } from "./IExtension.cjs";
 
 const { dirname } = path;
 const { commands, env, ProgressLocation, ViewColumn, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
@@ -14,7 +15,7 @@ const { commands, env, ProgressLocation, ViewColumn, window, workspace } = creat
 /**
  * Represents an extension.
  */
-export class Extension
+export class Extension implements IExtension
 {
     /**
      * The meta-data of the extension.
@@ -56,7 +57,7 @@ export class Extension
     }
 
     /**
-     * Gets the path to the root of the extension.
+     * @inheritdoc
      */
     public get ExtensionRoot(): string
     {
@@ -72,7 +73,7 @@ export class Extension
     }
 
     /**
-     * Gets the author of the extension.
+     * @inheritdoc
      */
     public get Author(): string
     {
@@ -80,7 +81,7 @@ export class Extension
     }
 
     /**
-     * Gets the name of the extension.
+     * @inheritdoc
      */
     public get Name(): string
     {
@@ -88,7 +89,7 @@ export class Extension
     }
 
     /**
-     * Gets the full name of the extension.
+     * @inheritdoc
      */
     public get FullName(): string
     {
@@ -96,7 +97,7 @@ export class Extension
     }
 
     /**
-     * Gets the parser provided by Visual Studio Code.
+     * @inheritdoc
      */
     public get VSCodeParser(): MarkdownIt
     {
@@ -104,7 +105,7 @@ export class Extension
     }
 
     /**
-     * Activates the extension.
+     * @inheritdoc
      *
      * @returns
      * The extension-body.
@@ -123,13 +124,13 @@ export class Extension
     }
 
     /**
-     * Disposes the extension.
+     * @inheritdoc
      */
     public async Dispose(): Promise<void>
     { }
 
     /**
-     * Enables the system-parser.
+     * @inheritdoc
      */
     public async EnableSystemParser(): Promise<void>
     {

@@ -1,9 +1,10 @@
 import { ExtensionContext } from "vscode";
+import { IMarkdownConverterExtension } from "./IMarkdownConverterExtension.cjs";
 
 /**
  * An instance of the extension.
  */
-export let extension: any = null;
+export let extension: IMarkdownConverterExtension = null;
 
 /**
  * Activates the extension.

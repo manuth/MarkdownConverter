@@ -9,6 +9,7 @@ import vscode, { ExtensionContext, Progress } from "vscode";
 import { Constants } from "./Constants.js";
 import { ConversionType } from "./Conversion/ConversionType.js";
 import { IConvertedFile } from "./Conversion/IConvertedFile.js";
+import { IMarkdownConverterExtension } from "./IMarkdownConverterExtension.cjs";
 import { Resources } from "./Properties/Resources.js";
 import { Settings } from "./Properties/Settings.js";
 import { Exception } from "./System/Exception.js";
@@ -28,7 +29,7 @@ const { commands, ProgressLocation, window } = createRequire(import.meta.url)("v
 /**
  * Represents the `Markdown Converter` extension.
  */
-export class MarkdownConverterExtension extends Extension
+export class MarkdownConverterExtension extends Extension implements IMarkdownConverterExtension
 {
     /**
      * The context of the extension.
@@ -81,7 +82,7 @@ export class MarkdownConverterExtension extends Extension
     }
 
     /**
-     * Gets the context of the extension.
+     * @inheritdoc
      */
     public get Context(): ExtensionContext
     {
@@ -89,7 +90,7 @@ export class MarkdownConverterExtension extends Extension
     }
 
     /**
-     * Gets the chromium-revision of the extension.
+     * @inheritdoc
      */
     public get ChromiumRevision(): string
     {
