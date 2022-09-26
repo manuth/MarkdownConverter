@@ -52,9 +52,9 @@
     "patch-ts": "ts-patch install"
   },
   "dependencies": {
-    "@manuth/package-json-editor": "^2.2.6",
-    "@manuth/resource-manager": "^2.0.4",
-    "@manuth/temp-files": "^2.0.9",
+    "@manuth/package-json-editor": "^3.0.2",
+    "@manuth/resource-manager": "^3.0.1",
+    "@manuth/temp-files": "^3.0.2",
     "@types/markdown-it": "^12.2.3",
     "@vscode/test-electron": "^2.1.5",
     "cheerio": "^1.0.0-rc.12",
@@ -62,7 +62,7 @@
     "es6-template-string": "^1.2.0",
     "front-matter": "^4.0.2",
     "fs-extra": "^10.1.0",
-    "get-port": "^5.1.1",
+    "get-port": "^6.1.2",
     "get-uri": "^4.0.0",
     "glob": "^8.0.3",
     "handlebars": "^4.7.7",
@@ -83,7 +83,7 @@
     "twemoji": "^14.0.2",
     "upath": "^2.0.1",
     "utf8": "^3.0.0",
-    "website-scraper": "^4.2.3",
+    "website-scraper": "^5.3.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
@@ -99,7 +99,7 @@
     "@types/markdown-it-emoji": "^2.0.2",
     "@types/minimist": "^1.2.2",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.19",
+    "@types/node": "^18.7.21",
     "@types/parse-data-url": "^3.0.0",
     "@types/serve-handler": "^6.1.1",
     "@types/sinon": "^10.0.13",
