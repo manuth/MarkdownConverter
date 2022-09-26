@@ -1,4 +1,4 @@
-import MarkdownIt = require("markdown-it");
+import MarkdownIt from "markdown-it";
 import anchor from "markdown-it-anchor";
 import { Slugifier } from "../Slugifier.js";
 
