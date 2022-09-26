@@ -12,8 +12,6 @@ export = (env: any, argv: any): Configuration[] =>
         "vscode"
     ];
 
-    let extensionFilePath = join(sourceRoot, "MarkdownConverterExtension.ts");
-
     let commonTestAssets = [
         join(sourceRoot, "test", "SuiteVarName.ts"),
         join(sourceRoot, "test", "SuiteSet.ts"),
@@ -21,7 +19,6 @@ export = (env: any, argv: any): Configuration[] =>
     ];
 
     let entryPoints: string[] = [
-        extensionFilePath,
         ...(
             argv.mode === "development" ?
                 [
@@ -205,8 +202,7 @@ export = (env: any, argv: any): Configuration[] =>
             output: {
                 ...configBase.output,
                 libraryTarget: "commonjs2"
-            },
-            externals: getExternalsResolver([extensionFilePath])
+            }
         },
         {
             ...configBase,
