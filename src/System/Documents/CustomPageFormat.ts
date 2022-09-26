@@ -1,5 +1,5 @@
 import { PDFOptions } from "puppeteer-core";
-import { PageFormat } from "./PageFormat";
+import { PageFormat } from "./PageFormat.js";
 
 /**
  * Represents a custom page-format.

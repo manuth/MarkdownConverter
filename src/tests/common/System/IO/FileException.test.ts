@@ -1,8 +1,8 @@
-import { notStrictEqual, ok, strictEqual } from "assert";
+import { notStrictEqual, ok, strictEqual } from "node:assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import { Random } from "random-js";
-import { Resources } from "../../../../Properties/Resources";
-import { FileException } from "../../../../System/IO/FileException";
+import { Resources } from "../../../../Properties/Resources.js";
+import { FileException } from "../../../../System/IO/FileException.js";
 
 /**
  * Registers tests for the {@link FileException `FileException`} class.

@@ -1,20 +1,20 @@
-import { join } from "path";
+import { createRequire } from "node:module";
+import { join } from "node:path";
 import { CultureInfo } from "@manuth/resource-manager";
-import dependencyPath from "dependency-package-path";
-import { ensureDir, pathExists, remove } from "fs-extra";
-import puppeteer, { PuppeteerNode } from "puppeteer-core";
-import { createSandbox, SinonSandbox } from "sinon";
-import { extensions } from "vscode";
-import { Constants } from "../Constants";
-import { ISettings } from "../Properties/ISettings";
-import { Resources } from "../Properties/Resources";
-import { Settings } from "../Properties/Settings";
-import { Extension } from "../System/Extensibility/Extension";
-import { ConfigInterceptor } from "../tests/ConfigInterceptor";
-import { ITestContext } from "../tests/ITestContext";
-import { TestConstants } from "../tests/TestConstants";
-import { ConfigStore } from "./ConfigStore";
-import { SuiteVarName } from "./SuiteVarName";
+import fs from "fs-extra";
+import vscode from "vscode";
+import { Constants } from "../Constants.js";
+import { ISettings } from "../Properties/ISettings.js";
+import { Resources } from "../Properties/Resources.js";
+import { Settings } from "../Properties/Settings.js";
+import { Extension } from "../System/Extensibility/Extension.js";
+import { ConfigInterceptor } from "../tests/ConfigInterceptor.js";
+import { ITestContext } from "../tests/ITestContext.js";
+import { TestConstants } from "../tests/TestConstants.js";
+import { ConfigStore } from "./ConfigStore.js";
+
+const { pathExists, remove } = fs;
+const { extensions } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers common configuration-interceptions.
@@ -25,7 +25,6 @@ import { SuiteVarName } from "./SuiteVarName";
 export function CommonHooks(): ITestContext<ISettings>
 {
     let originalCulture: CultureInfo;
-    let sandbox: SinonSandbox;
     let interceptor = new ConfigInterceptor<ISettings>(Settings.ConfigKey);
     interceptor.Register();
 
@@ -46,23 +45,12 @@ export function CommonHooks(): ITestContext<ISettings>
         async function()
         {
             this.timeout(10 * 60 * 1000);
-            let puppeteerInstance: PuppeteerNode;
-            let puppeteerRoot = join(dependencyPath("puppeteer-core", __dirname), process.env[SuiteVarName]);
-            sandbox = createSandbox();
-            await ensureDir(puppeteerRoot);
-
-            puppeteerInstance = new (puppeteer.constructor as any)(
-                {
-                    projectRoot: puppeteerRoot
-                });
-
-            sandbox.replaceGetter(Constants, "Puppeteer", () => puppeteerInstance);
             await cleanSettings();
             await extensions.getExtension(new Extension(TestConstants.PackageMetadata).FullName).activate();
 
-            if (!await pathExists(puppeteerInstance.executablePath()))
+            if (!await pathExists(Constants.Puppeteer.executablePath()))
             {
-                await puppeteerInstance.createBrowserFetcher({}).download(TestConstants.Extension.ChromiumRevision);
+                await Constants.Puppeteer.createBrowserFetcher({}).download(TestConstants.Extension.ChromiumRevision);
             }
         });
 

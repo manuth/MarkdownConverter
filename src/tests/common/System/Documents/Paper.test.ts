@@ -1,9 +1,9 @@
-import { deepStrictEqual, ok, strictEqual } from "assert";
-import { Margin } from "../../../../System/Documents/Margin";
-import { PageOrientation } from "../../../../System/Documents/PageOrientation";
-import { Paper } from "../../../../System/Documents/Paper";
-import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
-import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat";
+import { deepStrictEqual, ok, strictEqual } from "node:assert";
+import { Margin } from "../../../../System/Documents/Margin.js";
+import { PageOrientation } from "../../../../System/Documents/PageOrientation.js";
+import { Paper } from "../../../../System/Documents/Paper.js";
+import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType.js";
+import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat.js";
 
 /**
  * Registers tests for the {@link Paper `Paper`} class.

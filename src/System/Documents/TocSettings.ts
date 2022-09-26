@@ -1,5 +1,5 @@
 import { MultiRange } from "multi-integer-range";
-import { ListType } from "./ListType";
+import { ListType } from "./ListType.js";
 
 /**
  * Provides basic definitions of a table of contents.

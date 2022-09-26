@@ -1,9 +1,9 @@
-import { ConversionType } from "../Conversion/ConversionType";
-import { AssetURLType } from "../System/Documents/Assets/AssetURLType";
-import { InsertionType } from "../System/Documents/Assets/InsertionType";
-import { EmojiType } from "../System/Documents/EmojiType";
-import { Margin } from "../System/Documents/Margin";
-import { IRunningBlockContent } from "./IRunningBlockContent";
+import { ConversionType } from "../Conversion/ConversionType.js";
+import { AssetURLType } from "../System/Documents/Assets/AssetURLType.js";
+import { InsertionType } from "../System/Documents/Assets/InsertionType.js";
+import { EmojiType } from "../System/Documents/EmojiType.js";
+import { Margin } from "../System/Documents/Margin.js";
+import { IRunningBlockContent } from "./IRunningBlockContent.js";
 
 /**
  * Represents the raw vscode-settings.

@@ -1,5 +1,7 @@
-import { join } from "upath";
-import { Constants } from "../Constants";
+import path from "upath";
+import { Constants } from "../Constants.js";
+
+const { join } = path;
 
 /**
  * Joins a path relative to the resource.
@@ -18,7 +20,7 @@ function GetResourcePath(...path: string[]): string
 /**
  * Provides resource-files.
  */
-class Files
+export class Files
 {
     /**
      * Gets the path to the system-style.
@@ -40,5 +42,3 @@ class Files
      */
     public static HighlightJSStylesDir = join(Constants.PackageDirectory, "node_modules", "highlight.js", "styles");
 }
-
-export = Files;

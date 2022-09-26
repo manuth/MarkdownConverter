@@ -1,7 +1,7 @@
-import format = require("string-template");
-import { Resources } from "../../Properties/Resources";
-import { Exception } from "../Exception";
-import { IOException } from "./IOException";
+import format from "string-template";
+import { Resources } from "../../Properties/Resources.js";
+import { Exception } from "../Exception.js";
+import { IOException } from "./IOException.js";
 
 /**
  * Represents an Input-/Output-Exception.

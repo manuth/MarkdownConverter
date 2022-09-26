@@ -1,7 +1,7 @@
-import { strictEqual } from "assert";
+import { strictEqual } from "node:assert";
 import { MultiRange } from "multi-integer-range";
-import { ListType } from "../../../../System/Documents/ListType";
-import { TocSettings } from "../../../../System/Documents/TocSettings";
+import { ListType } from "../../../../System/Documents/ListType.js";
+import { TocSettings } from "../../../../System/Documents/TocSettings.js";
 
 /**
  * Registers tests for the {@link TocSettings `TocSettings`} class.

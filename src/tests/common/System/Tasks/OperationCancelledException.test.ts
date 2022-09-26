@@ -1,8 +1,8 @@
-import { notStrictEqual, ok, strictEqual } from "assert";
+import { notStrictEqual, ok, strictEqual } from "node:assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import { Random } from "random-js";
-import { Resources } from "../../../../Properties/Resources";
-import { OperationCancelledException } from "../../../../System/OperationCancelledException";
+import { Resources } from "../../../../Properties/Resources.js";
+import { OperationCancelledException } from "../../../../System/OperationCancelledException.js";
 
 /**
  * Registers tests for the {@link OperationCancelledException `OperationCancelledException`} class.

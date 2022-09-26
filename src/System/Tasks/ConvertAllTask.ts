@@ -1,13 +1,16 @@
-import format = require("string-template");
-import { CancellationToken, extensions, Progress, TextDocument, workspace } from "vscode";
-import { IConvertedFile } from "../../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
-import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException";
-import { Resources } from "../../Properties/Resources";
-import { NoWorkspaceFolderException } from "../NoWorkspaceFolderException";
-import { OperationCancelledException } from "../OperationCancelledException";
-import { ConversionTask } from "./ConversionTask";
-import { IProgressState } from "./IProgressState";
+import { createRequire } from "node:module";
+import format from "string-template";
+import vscode, { CancellationToken, Progress, TextDocument } from "vscode";
+import { IConvertedFile } from "../../Conversion/IConvertedFile.js";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension.js";
+import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException.js";
+import { Resources } from "../../Properties/Resources.js";
+import { NoWorkspaceFolderException } from "../NoWorkspaceFolderException.js";
+import { OperationCancelledException } from "../OperationCancelledException.js";
+import { ConversionTask } from "./ConversionTask.js";
+import { IProgressState } from "./IProgressState.js";
+
+const { extensions, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Represents a task for converting all documents in the workspace.

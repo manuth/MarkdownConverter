@@ -1,9 +1,11 @@
-import { ok, strictEqual } from "assert";
+import { ok, strictEqual } from "node:assert";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
-import { writeFile } from "fs-extra";
+import fs from "fs-extra";
 import { Random } from "random-js";
-import { WebScript } from "../../../../../System/Documents/Assets/WebScript";
+import { WebScript } from "../../../../../System/Documents/Assets/WebScript.js";
+
+const { writeFile } = fs;
 
 /**
  * Register tests for the {@link WebScript `WebScript`} class.

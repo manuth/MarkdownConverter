@@ -1,5 +1,5 @@
-import { strictEqual } from "assert";
-import { CustomPageFormat } from "../../../../System/Documents/CustomPageFormat";
+import { strictEqual } from "node:assert";
+import { CustomPageFormat } from "../../../../System/Documents/CustomPageFormat.js";
 
 /**
  * Registers tests for the {@link CustomPageFormat `CustomPageFormat`} class.

@@ -1,23 +1,26 @@
-import { doesNotThrow, ok, strictEqual } from "assert";
+import { doesNotThrow, ok, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
 import { TempFile } from "@manuth/temp-files";
 import { createSandbox, SinonSandbox } from "sinon";
-import { commands, Disposable, ExtensionContext, Progress, TextDocument, window, workspace } from "vscode";
-import { Constants } from "../../Constants";
-import { ConversionType } from "../../Conversion/ConversionType";
-import { Converter } from "../../Conversion/Converter";
-import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
-import { ISettings } from "../../Properties/ISettings";
-import { Resources } from "../../Properties/Resources";
-import { Exception } from "../../System/Exception";
-import { FileNotFoundException } from "../../System/IO/FileNotFoundException";
-import { OperationCancelledException } from "../../System/OperationCancelledException";
-import { ChromiumNotFoundException } from "../../System/Tasks/ChromiumNotFoundException";
-import { ConvertAllTask } from "../../System/Tasks/ConvertAllTask";
-import { ConvertTask } from "../../System/Tasks/ConvertTask";
-import { IProgressState } from "../../System/Tasks/IProgressState";
-import { PuppeteerTask } from "../../System/Tasks/PuppeteerTask";
-import { ITestContext } from "../ITestContext";
-import { TestConstants } from "../TestConstants";
+import vscode, { Disposable, ExtensionContext, Progress, TextDocument } from "vscode";
+import { Constants } from "../../Constants.js";
+import { ConversionType } from "../../Conversion/ConversionType.js";
+import { Converter } from "../../Conversion/Converter.js";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension.js";
+import { ISettings } from "../../Properties/ISettings.js";
+import { Resources } from "../../Properties/Resources.js";
+import { Exception } from "../../System/Exception.js";
+import { FileNotFoundException } from "../../System/IO/FileNotFoundException.js";
+import { OperationCancelledException } from "../../System/OperationCancelledException.js";
+import { ChromiumNotFoundException } from "../../System/Tasks/ChromiumNotFoundException.js";
+import { ConvertAllTask } from "../../System/Tasks/ConvertAllTask.js";
+import { ConvertTask } from "../../System/Tasks/ConvertTask.js";
+import { IProgressState } from "../../System/Tasks/IProgressState.js";
+import { PuppeteerTask } from "../../System/Tasks/PuppeteerTask.js";
+import { ITestContext } from "../ITestContext.js";
+import { TestConstants } from "../TestConstants.js";
+
+const { commands, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link MarkdownConverterExtension `MarkdownConverterExtension`} class.

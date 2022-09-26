@@ -1,7 +1,7 @@
-import { notStrictEqual, strictEqual } from "assert";
-import kebabCase = require("lodash.kebabcase");
+import { notStrictEqual, strictEqual } from "node:assert";
+import kebabCase from "lodash.kebabcase";
 import { Random } from "random-js";
-import { Slugifier } from "../../../../System/Documents/Slugifier";
+import { Slugifier } from "../../../../System/Documents/Slugifier.js";
 
 /**
  * Registers tests for the {@link Slugifier `Slugifier`} class.

@@ -1,19 +1,24 @@
-import { doesNotReject, notStrictEqual, ok, rejects, strictEqual } from "assert";
-import { Server } from "http";
+import { doesNotReject, notStrictEqual, ok, rejects, strictEqual } from "node:assert";
+import { Server } from "node:http";
+import { createRequire } from "node:module";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
-import { pathExists, remove, writeFile } from "fs-extra";
-import MarkdownIt = require("markdown-it");
+import fs from "fs-extra";
+import MarkdownIt from "markdown-it";
 import { Browser, LaunchOptions, Page } from "puppeteer-core";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
-import { changeExt, dirname, join, normalize, relative } from "upath";
-import { Progress, TextDocument, workspace } from "vscode";
-import { Constants } from "../../../Constants";
-import { ConversionType } from "../../../Conversion/ConversionType";
-import { Converter } from "../../../Conversion/Converter";
-import { Settings } from "../../../Properties/Settings";
-import { Document } from "../../../System/Documents/Document";
-import { IProgressState } from "../../../System/Tasks/IProgressState";
+import path from "upath";
+import vscode, { Progress, TextDocument } from "vscode";
+import { Constants } from "../../../Constants.js";
+import { ConversionType } from "../../../Conversion/ConversionType.js";
+import { Converter } from "../../../Conversion/Converter.js";
+import { Settings } from "../../../Properties/Settings.js";
+import { Document } from "../../../System/Documents/Document.js";
+import { IProgressState } from "../../../System/Tasks/IProgressState.js";
+
+const { pathExists, remove, writeFile } = fs;
+const { changeExt, dirname, join, normalize, relative } = path;
+const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link Converter `Converter`} class.

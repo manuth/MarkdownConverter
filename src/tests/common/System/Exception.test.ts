@@ -1,5 +1,5 @@
-import { strictEqual } from "assert";
-import { Exception } from "../../../System/Exception";
+import { strictEqual } from "node:assert";
+import { Exception } from "../../../System/Exception.js";
 
 /**
  * Registers tests for the {@link Exception `Exception`} class.

@@ -1,4 +1,4 @@
-import { ConversionType } from "./ConversionType";
+import { ConversionType } from "./ConversionType.js";
 
 /**
  * Provides information about a converted file.

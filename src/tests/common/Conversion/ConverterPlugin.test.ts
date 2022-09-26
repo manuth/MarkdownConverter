@@ -1,14 +1,19 @@
-import { doesNotReject, doesNotThrow, ok } from "assert";
+import { doesNotReject, doesNotThrow, ok } from "node:assert";
+import { createRequire } from "node:module";
 import { TempDirectory } from "@manuth/temp-files";
-import dedent = require("dedent");
-import { pathExists, remove, writeFile } from "fs-extra";
-import MarkdownIt = require("markdown-it");
-import { basename, parse } from "upath";
-import { workspace } from "vscode";
-import websiteScraper = require("website-scraper");
-import { Converter } from "../../../Conversion/Converter";
-import { ConverterPlugin } from "../../../Conversion/ConverterPlugin";
-import { Document } from "../../../System/Documents/Document";
+import dedent from "dedent";
+import fs from "fs-extra";
+import MarkdownIt from "markdown-it";
+import path from "upath";
+import vscode from "vscode";
+import websiteScraper from "website-scraper";
+import { Converter } from "../../../Conversion/Converter.js";
+import { ConverterPlugin } from "../../../Conversion/ConverterPlugin.js";
+import { Document } from "../../../System/Documents/Document.js";
+
+const { pathExists, remove, writeFile } = fs;
+const { basename, parse } = path;
+const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConverterPlugin `ConverterPlugin`} class.

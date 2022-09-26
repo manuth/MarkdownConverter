@@ -1,8 +1,8 @@
-import { dirname, extname } from "path";
-import { Document } from "../Document";
-import { Asset } from "./Asset";
-import { AssetURLType } from "./AssetURLType";
-import { InsertionType } from "./InsertionType";
+import { dirname, extname } from "node:path";
+import { Document } from "../Document.js";
+import { Asset } from "./Asset.js";
+import { AssetURLType } from "./AssetURLType.js";
+import { InsertionType } from "./InsertionType.js";
 
 /**
  * Represents the source of a picture.

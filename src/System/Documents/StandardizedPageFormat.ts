@@ -1,7 +1,7 @@
 import { PaperFormat, PDFOptions } from "puppeteer-core";
-import { PageFormat } from "./PageFormat";
-import { PageOrientation } from "./PageOrientation";
-import { StandardizedFormatType } from "./StandardizedFormatType";
+import { PageFormat } from "./PageFormat.js";
+import { PageOrientation } from "./PageOrientation.js";
+import { StandardizedFormatType } from "./StandardizedFormatType.js";
 
 /**
  * Represents a standardized format of a page.

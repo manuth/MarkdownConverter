@@ -1,7 +1,7 @@
-import { rejects } from "assert";
-import { extension } from "../../../..";
-import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolderException";
-import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
+import { rejects } from "node:assert";
+import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolderException.js";
+import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask.js";
+import { TestConstants } from "../../../TestConstants.js";
 
 /**
  * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.
@@ -17,7 +17,7 @@ export function ConvertAllTaskTests(): void
             suiteSetup(
                 () =>
                 {
-                    task = new ConvertAllTask(extension);
+                    task = new ConvertAllTask(TestConstants.Extension);
                 });
 
             suite(

@@ -1,19 +1,22 @@
+import { createRequire } from "node:module";
 import { MultiRange } from "multi-integer-range";
-import { env, workspace, WorkspaceConfiguration } from "vscode";
-import { ConversionType } from "../Conversion/ConversionType";
-import { AssetURLType } from "../System/Documents/Assets/AssetURLType";
-import { InsertionType } from "../System/Documents/Assets/InsertionType";
-import { CustomPageFormat } from "../System/Documents/CustomPageFormat";
-import { EmojiType } from "../System/Documents/EmojiType";
-import { ListType } from "../System/Documents/ListType";
-import { Margin } from "../System/Documents/Margin";
-import { PageOrientation } from "../System/Documents/PageOrientation";
-import { Paper } from "../System/Documents/Paper";
-import { StandardizedFormatType } from "../System/Documents/StandardizedFormatType";
-import { StandardizedPageFormat } from "../System/Documents/StandardizedPageFormat";
-import { TocSettings } from "../System/Documents/TocSettings";
-import { IRunningBlockContent } from "./IRunningBlockContent";
-import { ISettings } from "./ISettings";
+import vscode, { WorkspaceConfiguration } from "vscode";
+import { ConversionType } from "../Conversion/ConversionType.js";
+import { AssetURLType } from "../System/Documents/Assets/AssetURLType.js";
+import { InsertionType } from "../System/Documents/Assets/InsertionType.js";
+import { CustomPageFormat } from "../System/Documents/CustomPageFormat.js";
+import { EmojiType } from "../System/Documents/EmojiType.js";
+import { ListType } from "../System/Documents/ListType.js";
+import { Margin } from "../System/Documents/Margin.js";
+import { PageOrientation } from "../System/Documents/PageOrientation.js";
+import { Paper } from "../System/Documents/Paper.js";
+import { StandardizedFormatType } from "../System/Documents/StandardizedFormatType.js";
+import { StandardizedPageFormat } from "../System/Documents/StandardizedPageFormat.js";
+import { TocSettings } from "../System/Documents/TocSettings.js";
+import { IRunningBlockContent } from "./IRunningBlockContent.js";
+import { ISettings } from "./ISettings.js";
+
+const { env, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Provides access to settings.

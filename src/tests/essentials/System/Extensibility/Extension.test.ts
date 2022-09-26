@@ -1,6 +1,6 @@
-import { doesNotThrow, notStrictEqual, ok } from "assert";
-import { Extension } from "../../../../System/Extensibility/Extension";
-import { TestConstants } from "../../../TestConstants";
+import { doesNotThrow, notStrictEqual, ok } from "node:assert";
+import { Extension } from "../../../../System/Extensibility/Extension.js";
+import { TestConstants } from "../../../TestConstants.js";
 
 /**
  * Registers tests for the {@link Extension `Extension`} class.

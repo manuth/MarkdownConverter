@@ -1,10 +1,12 @@
-import template = require("es6-template-string");
-import { dirname, parse, relative } from "upath";
+import template from "es6-template-string";
+import path from "upath";
 import { Progress, TextDocument } from "vscode";
-import { ConversionType } from "../../Conversion/ConversionType";
-import { Resources } from "../../Properties/Resources";
-import { IProgressState } from "../Tasks/IProgressState";
-import { IPatternContext } from "./IPatternContext";
+import { ConversionType } from "../../Conversion/ConversionType.js";
+import { Resources } from "../../Properties/Resources.js";
+import { IProgressState } from "../Tasks/IProgressState.js";
+import { IPatternContext } from "./IPatternContext.js";
+
+const { dirname, parse, relative } = path;
 
 /**
  * Provides the functionality to resolve path-patterns.

@@ -1,20 +1,20 @@
-import { parse } from "path";
+import { parse } from "node:path";
 import { CultureInfo } from "@manuth/resource-manager";
-import dedent = require("dedent");
-import fm = require("front-matter");
-import MarkdownIt = require("markdown-it");
+import dedent from "dedent";
+import fm from "front-matter";
+import MarkdownIt from "markdown-it";
 import { TextDocument } from "vscode";
-import YAML = require("yamljs");
-import { YAMLException } from "../YAML/YAMLException";
-import { Asset } from "./Assets/Asset";
-import { AssetURLType } from "./Assets/AssetURLType";
-import { InsertionType } from "./Assets/InsertionType";
-import { AttributeKey } from "./AttributeKey";
-import { DocumentFragment } from "./DocumentFragment";
-import { MarkdownFragment } from "./MarkdownFragment";
-import { Paper } from "./Paper";
-import { Renderable } from "./Renderable";
-import { RunningBlock } from "./RunningBlock";
+import YAML from "yamljs";
+import { YAMLException } from "../YAML/YAMLException.js";
+import { Asset } from "./Assets/Asset.js";
+import { AssetURLType } from "./Assets/AssetURLType.js";
+import { InsertionType } from "./Assets/InsertionType.js";
+import { AttributeKey } from "./AttributeKey.js";
+import { DocumentFragment } from "./DocumentFragment.js";
+import { MarkdownFragment } from "./MarkdownFragment.js";
+import { Paper } from "./Paper.js";
+import { Renderable } from "./Renderable.js";
+import { RunningBlock } from "./RunningBlock.js";
 
 /**
  * Represents a document.

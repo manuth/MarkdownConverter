@@ -1,9 +1,13 @@
+import { createRequire } from "node:module";
 import { Package } from "@manuth/package-json-editor";
-import { join } from "upath";
-import { extensions } from "vscode";
-import { Constants } from "../Constants";
-import { MarkdownConverterExtension } from "../MarkdownConverterExtension";
-import { Extension } from "../System/Extensibility/Extension";
+import path from "upath";
+import vscode from "vscode";
+import { Constants } from "../Constants.js";
+import { MarkdownConverterExtension } from "../MarkdownConverterExtension.js";
+import { Extension } from "../System/Extensibility/Extension.js";
+
+const { join } = path;
+const { extensions } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Provides constants for testing.

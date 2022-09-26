@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { RunningBlock } from "../System/Documents/RunningBlock";
+import { RunningBlock } from "../System/Documents/RunningBlock.js";
 
 /**
  * Provides content for the different sections of a {@link RunningBlock `RunningBlock`}.

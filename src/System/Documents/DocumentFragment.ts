@@ -1,15 +1,16 @@
 import { load } from "cheerio";
-import { statSync } from "fs-extra";
-import Handlebars = require("handlebars");
-import { Utilities } from "../../Utilities";
-import { DateTimeFormatter } from "../Globalization/DateTimeFormatter";
-import { InsertionType } from "./Assets/InsertionType";
-import { PictureSource } from "./Assets/PictureSource";
-import { AttributeKey } from "./AttributeKey";
-import { Document } from "./Document";
-import { HelperKey } from "./HelperKey";
-import { Renderable } from "./Renderable";
+import fs from "fs-extra";
+import Handlebars from "handlebars";
+import { Utilities } from "../../Utilities.js";
+import { DateTimeFormatter } from "../Globalization/DateTimeFormatter.js";
+import { InsertionType } from "./Assets/InsertionType.js";
+import { PictureSource } from "./Assets/PictureSource.js";
+import { AttributeKey } from "./AttributeKey.js";
+import { Document } from "./Document.js";
+import { HelperKey } from "./HelperKey.js";
+import { Renderable } from "./Renderable.js";
 
+const { statSync } = fs;
 const sourceAttributeName = "src";
 
 /**

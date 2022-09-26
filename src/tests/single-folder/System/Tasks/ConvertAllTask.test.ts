@@ -1,17 +1,22 @@
-import { ok, rejects, strictEqual } from "assert";
+import { ok, rejects, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
 import { TempDirectory } from "@manuth/temp-files";
-import { pathExists } from "fs-extra";
+import fs from "fs-extra";
 import { createSandbox, SinonSandbox } from "sinon";
-import { normalize } from "upath";
-import { ConfigurationTarget, workspace, WorkspaceConfiguration } from "vscode";
-import { extension } from "../../../..";
-import { ConversionType } from "../../../../Conversion/ConversionType";
-import { IConvertedFile } from "../../../../Conversion/IConvertedFile";
-import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
-import { ISettings } from "../../../../Properties/ISettings";
-import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
-import { ITestContext } from "../../../ITestContext";
-import { TestConvertAllTask } from "../../../TestConvertAllTask";
+import path from "upath";
+import vscode, { WorkspaceConfiguration } from "vscode";
+import { ConversionType } from "../../../../Conversion/ConversionType.js";
+import { IConvertedFile } from "../../../../Conversion/IConvertedFile.js";
+import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException.js";
+import { ISettings } from "../../../../Properties/ISettings.js";
+import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask.js";
+import { ITestContext } from "../../../ITestContext.js";
+import { TestConstants } from "../../../TestConstants.js";
+import { TestConvertAllTask } from "../../../TestConvertAllTask.js";
+
+const { pathExists } = fs;
+const { normalize } = path;
+const { ConfigurationTarget, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.
@@ -34,7 +39,7 @@ export function ConvertAllTaskTests(context: ITestContext<ISettings>): void
                 () =>
                 {
                     excludeKey = "files.exclude";
-                    task = new TestConvertAllTask(extension);
+                    task = new TestConvertAllTask(TestConstants.Extension);
                     config = workspace.getConfiguration(undefined, workspace.workspaceFolders[0]);
                 });
 

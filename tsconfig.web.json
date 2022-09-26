@@ -4,7 +4,7 @@
         "noEmit": true
     },
     "include": [
-        "webpack.config.ts",
+        "webpack.config.cts",
         "./webpack/**/*"
     ]
 }

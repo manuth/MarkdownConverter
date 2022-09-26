@@ -15,11 +15,11 @@
         ],
         "target": "ES6",
         "paths": {
-            "highlight.js": [
-                "./node_modules/@types/highlight.js"
+            "cheerio": [
+                "./node_modules/cheerio/lib/index.d.ts"
             ],
-            "twemoji": [
-                "./node_modules/@types/twemoji"
+            "highlight.js": [
+                "./node_modules/highlight.js/types/index.d.ts"
             ]
         }
     }

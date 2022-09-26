@@ -1,5 +1,5 @@
-import { Asset } from "../Documents/Assets/Asset";
-import { InsertionType } from "../Documents/Assets/InsertionType";
+import { Asset } from "../Documents/Assets/Asset.js";
+import { InsertionType } from "../Documents/Assets/InsertionType.js";
 
 /**
  * Provides the functionality to load an asset.

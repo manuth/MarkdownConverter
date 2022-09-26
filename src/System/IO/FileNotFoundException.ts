@@ -1,7 +1,7 @@
-import format = require("string-template");
-import { Resources } from "../../Properties/Resources";
-import { Exception } from "../Exception";
-import { FileException } from "./FileException";
+import format from "string-template";
+import { Resources } from "../../Properties/Resources.js";
+import { Exception } from "../Exception.js";
+import { FileException } from "./FileException.js";
 
 /**
  * Represents a "File not found"-Exception.

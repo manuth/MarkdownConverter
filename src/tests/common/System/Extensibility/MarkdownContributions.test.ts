@@ -1,11 +1,14 @@
-import { doesNotThrow, ok, strictEqual } from "assert";
-import { join } from "path";
+import { doesNotThrow, ok, strictEqual } from "node:assert";
+import { createRequire } from "node:module";
+import { join } from "node:path";
 import { Package } from "@manuth/package-json-editor";
 import { TempDirectory } from "@manuth/temp-files";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
-import { Extension, ExtensionKind, extensions, Uri } from "vscode";
-import { MarkdownContributions } from "../../../../System/Extensibility/MarkdownContributions";
+import vscode, { Extension } from "vscode";
+import { MarkdownContributions } from "../../../../System/Extensibility/MarkdownContributions.js";
+
+const { ExtensionKind, extensions, Uri } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link MarkdownContributions `MarkdownContributions`} class.

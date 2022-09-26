@@ -1,12 +1,14 @@
-import { pathExists } from "fs-extra";
+import fs from "fs-extra";
 import { CancellationToken, Progress } from "vscode";
-import { Constants } from "../../Constants";
-import { IConvertedFile } from "../../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
-import { Settings } from "../../Properties/Settings";
-import { ChromiumNotFoundException } from "./ChromiumNotFoundException";
-import { IProgressState } from "./IProgressState";
-import { Task } from "./Task";
+import { Constants } from "../../Constants.js";
+import { IConvertedFile } from "../../Conversion/IConvertedFile.js";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension.js";
+import { Settings } from "../../Properties/Settings.js";
+import { ChromiumNotFoundException } from "./ChromiumNotFoundException.js";
+import { IProgressState } from "./IProgressState.js";
+import { Task } from "./Task.js";
+
+const { pathExists } = fs;
 
 /**
  * Represents a task which depends on `puppeteer`.

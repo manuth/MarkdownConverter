@@ -1,5 +1,5 @@
-import { Resources } from "../Properties/Resources";
-import { Exception } from "./Exception";
+import { Resources } from "../Properties/Resources.js";
+import { Exception } from "./Exception.js";
 
 /**
  * Represents an exception that occurs on an operation-cancellation.

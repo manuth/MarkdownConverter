@@ -1,7 +1,7 @@
-import { strictEqual } from "assert";
-import { extension } from "../../../..";
-import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
-import { TestConvertAllTask } from "../../../TestConvertAllTask";
+import { strictEqual } from "node:assert";
+import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask.js";
+import { TestConstants } from "../../../TestConstants.js";
+import { TestConvertAllTask } from "../../../TestConvertAllTask.js";
 
 /**
  * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.
@@ -17,7 +17,7 @@ export function ConvertAllTaskTests(): void
             suiteSetup(
                 () =>
                 {
-                    task = new TestConvertAllTask(extension);
+                    task = new TestConvertAllTask(TestConstants.Extension);
                 });
 
             suite(

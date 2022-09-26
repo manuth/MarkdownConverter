@@ -1,7 +1,8 @@
-import { dependencyPath } from "dependency-package-path";
-import pkgUp = require("pkg-up");
+import { fileURLToPath } from "node:url";
 import puppeteer, { PuppeteerNode } from "puppeteer-core";
-import { dirname } from "upath";
+import path from "upath";
+
+const { join } = path;
 
 /**
  * Provides constants for the extension.
@@ -25,7 +26,7 @@ export class Constants
     {
         if (this.packageDirectory === null)
         {
-            this.packageDirectory = dirname(pkgUp.sync({ cwd: __dirname }));
+            this.packageDirectory = join(fileURLToPath(new URL(".", import.meta.url)), "..");
         }
 
         return this.packageDirectory;
@@ -42,7 +43,7 @@ export class Constants
 
             this.puppeteer = new puppeteerConstructor(
                 {
-                    projectRoot: dependencyPath("puppeteer-core", __dirname)
+                    projectRoot: this.PackageDirectory
                 });
         }
 

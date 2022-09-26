@@ -1,8 +1,8 @@
 import { createSandbox } from "sinon";
 import { TextDocument } from "vscode";
-import { Converter } from "../Conversion/Converter";
-import { Settings } from "../Properties/Settings";
-import { ConversionRunner } from "../System/Tasks/ConversionRunner";
+import { Converter } from "../Conversion/Converter.js";
+import { Settings } from "../Properties/Settings.js";
+import { ConversionRunner } from "../System/Tasks/ConversionRunner.js";
 
 /**
  * Provides the functionality to test the substitution of the {@link ConversionRunner `ConversionRunner`}.
