@@ -193,14 +193,16 @@ export = (env: any, argv: any): Configuration[] =>
         {
             ...configBase,
             entry: {
-                index: {
-                    import: join(sourceRoot, "index.cts"),
-                    filename: "[name].cjs"
-                }
+                index: join(sourceRoot, "index.cts")
             },
             output: {
                 ...configBase.output,
-                libraryTarget: "commonjs2"
+                libraryTarget: "commonjs2",
+                filename: "[name].cjs",
+                environment: {
+                    dynamicImport: false
+                },
+                chunkFilename: "[name].cjs"
             }
         },
         {
