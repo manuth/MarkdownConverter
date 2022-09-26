@@ -97,7 +97,7 @@ This document has been created by {{ Author }} at {{ FormatDate ChangeDate "HH:m
 Optionally, the `FormatDate` can be omitted:
 ```md
 ---
-Date: 01-08-1291
+Date: 1291-08-01
 ---
 Date taken from an attribute: {{ Date "dddd" }}
 
@@ -117,7 +117,7 @@ You can override the default date-format for an individual document by adding a 
 ***Example:***
 ```md
 ---
-DateFormat: dd mmmm yyyy
+DateFormat: dd. MMMM yyyy
 ---
 The current date is {{ CurrentDate }}
 ```
@@ -165,7 +165,9 @@ The content of the individual header- and footer-sections can be overridden for 
 ---
 Header:
   Left: My Individual Company
-  Center: John Doe
+  Right: John Doe
+Footer:
+  Center: {{ CurrentDate }}
 ---
 # Test
 This is a test.
@@ -278,7 +280,7 @@ The `markdownConverter.Assets.PictureInsertion`-option allows you to set whether
 ```json
 {
   "markdownConverter.Assets.PictureInsertion": {
-    "Link": "Include",
+    "Link": "Link",
     "AbsolutePath": "Include",
     "RelativePath": "Include"
   }
