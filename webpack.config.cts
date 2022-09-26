@@ -149,7 +149,10 @@ export = (env: any, argv: any): Configuration[] =>
             entry: {
                 index: {
                     import: join(sourceRoot, "index.cts"),
-                    filename: "[name].cjs"
+                    filename: "[name].cjs",
+                    library: {
+                        type: "commonjs2"
+                    }
                 }
             },
             output: {
@@ -189,7 +192,10 @@ export = (env: any, argv: any): Configuration[] =>
             entry: {
                 "test/index": {
                     import: join(sourceRoot, "test", "index.cts"),
-                    filename: "[name].cjs"
+                    filename: "[name].cjs",
+                    library: {
+                        type: "commonjs2"
+                    }
                 }
             },
             output: {
