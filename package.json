@@ -16,8 +16,15 @@
   "engines": {
     "vscode": "^1.71.0"
   },
-  "main": "lib/index.cjs",
-  "types": "lib/index.d.cts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.cts",
+      "default": "./lib/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./lib/index.cjs",
+  "types": "./lib/index.d.cts",
   "directories": {
     "lib": "lib"
   },
