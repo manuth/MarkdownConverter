@@ -1,8 +1,8 @@
 {
-    "mochaExplorer.cwd": "../../..",
+    "mochaExplorer.cwd": "../..",
     "mochaExplorer.ipcPort": 9447,
     "mochaExplorer.files": "./lib/test/single-file.test.js",
-    "mochaExplorer.launcherScript": "../../../lib/test/runMocha.js",
+    "mochaExplorer.launcherScript": "../../lib/test/runMocha.js",
     "mochaExplorer.env": {
         "TEST_SUITE": "single-file"
     }

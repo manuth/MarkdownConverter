@@ -6,19 +6,19 @@
         },
         {
             "name": "Common Tests",
-            "path": "./src/tests/common"
+            "path": "./test/common"
         },
         {
             "name": "Single-File Tests",
-            "path": "./src/tests/single-file"
+            "path": "./test/single-file"
         },
         {
             "name": "Single-Folder Tests",
-            "path": "./src/tests/single-folder"
+            "path": "./test/single-folder"
         },
         {
             "name": "Workspace Tests",
-            "path": "./src/tests/workspace"
+            "path": "./test/workspace"
         }
     ],
     "extensions": {
