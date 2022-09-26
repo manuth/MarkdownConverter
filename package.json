@@ -109,7 +109,7 @@
     "@types/markdown-it-emoji": "^2.0.2",
     "@types/minimist": "^1.2.2",
     "@types/mocha": "^9.1.1",
-    "@types/node": "^18.7.21",
+    "@types/node": "^18.7.23",
     "@types/parse-data-url": "^3.0.0",
     "@types/serve-handler": "^6.1.1",
     "@types/sinon": "^10.0.13",
