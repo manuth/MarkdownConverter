@@ -6,8 +6,8 @@ import hljs from "highlight.js";
 import cloneDeep from "lodash.clonedeep";
 import MarkdownIt from "markdown-it";
 import checkbox from "markdown-it-checkbox";
-import markdownContainer from "markdown-it-container";
-import emoji from "markdown-it-emoji";
+import MarkdownItContainer from "markdown-it-container";
+import markdownitEmoji from "markdown-it-emoji";
 import markdownInclude from "markdown-it-include";
 import StateCore from "markdown-it/lib/rules_core/state_core.js";
 import Token from "markdown-it/lib/token.js";
@@ -486,7 +486,7 @@ export class ConversionRunner
 
         if (Settings.Default.EmojiType !== null && Settings.Default.EmojiType !== undefined)
         {
-            parser.use(emoji);
+            parser.use(markdownitEmoji);
 
             parser.renderer.rules["emoji"] = (token, id) =>
             {
@@ -510,7 +510,7 @@ export class ConversionRunner
         }
 
         parser.use(
-            markdownContainer,
+            MarkdownItContainer,
             "markdown-converter",
             {
                 validate(name: string)
