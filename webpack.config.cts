@@ -14,11 +14,18 @@ export = (env: any, argv: any): Configuration[] =>
 
     let extensionFilePath = join(sourceRoot, "MarkdownConverterExtension.ts");
 
+    let commonTestAssets = [
+        join(sourceRoot, "test", "SuiteVarName.ts"),
+        join(sourceRoot, "test", "SuiteSet.ts"),
+        join(sourceRoot, "test", "ConfigStore.ts")
+    ];
+
     let entryPoints: string[] = [
         extensionFilePath,
         ...(
             argv.mode === "development" ?
                 [
+                    ...commonTestAssets,
                     join(sourceRoot, "test", "runTests.ts"),
                     join(sourceRoot, "test", "essentials.test.ts"),
                     join(sourceRoot, "test", "common.test.ts"),
@@ -42,6 +49,49 @@ export = (env: any, argv: any): Configuration[] =>
     {
         entry[join(relative(sourceRoot, dirname(entryPoint)), parse(entryPoint).name)] = entryPoint;
     }
+
+    /**
+     * Creates an `externals` setting for lazy loading the specified {@link externalFiles `externalFiles`}.
+     *
+     * @param externalFiles
+     * The files which should be lazy loaded.
+     *
+     * @returns
+     * An object indicating the external sources.
+     */
+    let getExternalsResolver: (externalFiles: string[]) => Configuration["externals"] = (externalFiles) =>
+    {
+        return async ({ context, request, getResolve }, _) =>
+        {
+            let result: string;
+
+            if (request in externals)
+            {
+                result = externals[request];
+            }
+            else
+            {
+                try
+                {
+                    let filePath: string = await getResolve()(context, request, undefined) as string;
+
+                    if (
+                        externalFiles.some(
+                            (externalFile) =>
+                            {
+                                return normalize(filePath) === normalize(externalFile);
+                            }))
+                    {
+                        result = `import ${request}`;
+                    }
+                }
+                catch
+                { }
+            }
+
+            return result;
+        };
+    };
 
     let configBase: Configuration = {
         target: "node",
@@ -149,55 +199,24 @@ export = (env: any, argv: any): Configuration[] =>
             entry: {
                 index: {
                     import: join(sourceRoot, "index.cts"),
-                    filename: "[name].cjs",
-                    library: {
-                        type: "commonjs2"
-                    }
+                    filename: "[name].cjs"
                 }
             },
             output: {
                 ...configBase.output,
                 libraryTarget: "commonjs2"
             },
-            externals: [
-                async function({ context, request, getResolve }, _): Promise<string | void>
-                {
-                    let result: string;
-
-                    if (request in externals)
-                    {
-                        result = externals[request];
-                    }
-                    else
-                    {
-                        try
-                        {
-                            let filePath: string = await getResolve()(context, request, undefined) as string;
-
-                            if (normalize(filePath) === normalize(extensionFilePath))
-                            {
-                                result = `import ${request}`;
-                            }
-                        }
-                        catch
-                        { }
-                    }
-
-                    return result;
-                }
-            ]
+            externals: getExternalsResolver([extensionFilePath])
         },
         {
             ...configBase,
             entry: {
                 "test/index": {
                     import: join(sourceRoot, "test", "index.cts"),
-                    filename: "[name].cjs",
-                    library: {
-                        type: "commonjs2"
-                    }
+                    filename: "[name].cjs"
                 }
             },
+            externals: getExternalsResolver(commonTestAssets),
             output: {
                 ...configBase.output,
                 libraryTarget: "commonjs2"
