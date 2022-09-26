@@ -1,4 +1,7 @@
 {
+    "files.exclude": {
+        "**/*": true
+    },
     "mochaExplorer.cwd": "../..",
     "mochaExplorer.ipcPort": 9448,
     "mochaExplorer.files": "./lib/test/common.test.js",
