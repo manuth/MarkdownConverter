@@ -19,10 +19,7 @@
                 "./node_modules/cheerio/lib/index.d.ts"
             ],
             "highlight.js": [
-                "./node_modules/@types/highlight.js"
-            ],
-            "twemoji": [
-                "./node_modules/@types/twemoji"
+                "./node_modules/highlight.js/types/index.d.ts"
             ]
         }
     }
