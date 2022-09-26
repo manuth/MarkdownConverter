@@ -41,6 +41,10 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Required dependencies
+!node_modules/highlight.js
+!node_modules/highlight.js/styles
+
 # TypeScript v1 declaration files
 typings/
 
@@ -124,10 +128,6 @@ tsconfig.*.json
 [Ll]ib/temp/
 [Ll]ib/test/
 [Ll]ib/tests/
-
-# Unused node-modules
-node_modules/!(highlight.js|puppeteer-core)
-node_modules/highlight.js/!(styles)
 
 # Visual Studio Code-Environment
 .vscode/

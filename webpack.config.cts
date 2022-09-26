@@ -102,7 +102,7 @@ export = (env: any, argv: any): Configuration[] =>
             }
         },
         devtool: "source-map",
-        externals,
+        externals: getExternalsResolver([]),
         resolve: {
             extensions: [
                 ".ts",
@@ -122,6 +122,9 @@ export = (env: any, argv: any): Configuration[] =>
                     ".cjs",
                     ".cts"
                 ]
+            },
+            alias: {
+                [`${puppeteerModuleName}$`]: require.resolve(puppeteerModuleName)
             },
             mainFields: [
                 "main",
@@ -178,10 +181,6 @@ export = (env: any, argv: any): Configuration[] =>
         {
             ...configBase,
             entry,
-            externals: {
-                ...externals,
-                [puppeteerModuleName]: `import ${puppeteerModuleName}`
-            },
             output: {
                 ...configBase.output,
                 libraryTarget: "module",
