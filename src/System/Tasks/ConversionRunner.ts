@@ -151,54 +151,60 @@ export class ConversionRunner
             converter = await this.LoadConverter(workspaceFolder, document);
             await converter.Initialize(progressReporter);
 
-            for (let type of Settings.Default.ConversionType)
+            try
             {
-                if (!(cancellationToken?.isCancellationRequested ?? false))
+                for (let type of Settings.Default.ConversionType)
                 {
-                    tasks.push(
-                        (async () =>
-                        {
-                            progressReporter?.report(
-                                {
-                                    message: format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
-                                });
-
-                            let destinationPath = patternResolver.Resolve(workspaceFolder, document, type);
-
-                            if (
-                                !isAbsolute(destinationPath) &&
-                                !patternResolver.Variables.includes(nameof<IPatternContext>((c) => c.workspaceFolder)))
+                    if (!(cancellationToken?.isCancellationRequested ?? false))
+                    {
+                        tasks.push(
+                            (async () =>
                             {
-                                destinationPath = resolve(workspaceFolder, destinationPath);
-                            }
-                            else
-                            {
-                                destinationPath = resolve(destinationPath);
-                            }
+                                progressReporter?.report(
+                                    {
+                                        message: format(Resources.Resources.Get("Progress.ConversionStarting"), ConversionType[type])
+                                    });
 
-                            await converter.Start(type, destinationPath, progressReporter, cancellationToken);
+                                let destinationPath = patternResolver.Resolve(workspaceFolder, document, type);
 
-                            progressReporter?.report(
+                                if (
+                                    !isAbsolute(destinationPath) &&
+                                    !patternResolver.Variables.includes(nameof<IPatternContext>((c) => c.workspaceFolder)))
                                 {
-                                    message: format(Resources.Resources.Get("Progress.ConverterFinished"), ConversionType[type])
-                                });
-
-                            fileReporter?.report(
+                                    destinationPath = resolve(workspaceFolder, destinationPath);
+                                }
+                                else
                                 {
-                                    Type: type,
-                                    FileName: destinationPath
-                                });
-                        })());
+                                    destinationPath = resolve(destinationPath);
+                                }
+
+                                await converter.Start(type, destinationPath, progressReporter, cancellationToken);
+
+                                progressReporter?.report(
+                                    {
+                                        message: format(Resources.Resources.Get("Progress.ConverterFinished"), ConversionType[type])
+                                    });
+
+                                fileReporter?.report(
+                                    {
+                                        Type: type,
+                                        FileName: destinationPath
+                                    });
+                            })());
+                    }
+                    else
+                    {
+                        throw new OperationCancelledException();
+                    }
                 }
-                else
-                {
-                    throw new OperationCancelledException();
-                }
+
+                await Promise.all(tasks);
             }
-
-            await Promise.all(tasks);
-            await converter.Dispose();
-            tempDir?.Dispose();
+            finally
+            {
+                await converter.Dispose();
+                tempDir?.Dispose();
+            }
         }
         else
         {
