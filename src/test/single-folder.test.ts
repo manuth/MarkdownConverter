@@ -1,4 +1,4 @@
-import { SingleFolderTests } from "../tests/single-folder/index.js";
+import { SingleFolderTests } from "../tests/single-folder/index.test.js";
 import { CommonHooks } from "./CommonHooks.js";
 
 suite(

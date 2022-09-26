@@ -1,5 +1,5 @@
 import { basename } from "path";
-import { ExtensibilityTests } from "./Extensibility/index.js";
+import { TaskTests } from "./Tasks/index.test.js";
 
 /**
  * Registers tests for system-components.
@@ -10,6 +10,6 @@ export function SystemTests(): void
         basename(new URL(".", import.meta.url).pathname),
         () =>
         {
-            ExtensibilityTests();
+            TaskTests();
         });
 }

@@ -1,13 +1,13 @@
 import { basename } from "path";
 import { ISettings } from "../../../Properties/ISettings.js";
 import { ITestContext } from "../../ITestContext.js";
-import { DocumentTests } from "./Documents/index.js";
+import { DocumentTests } from "./Documents/index.test.js";
 import { ExceptionTests } from "./Exception.test.js";
-import { ExtensibilityTests } from "./Extensibility/index.js";
-import { GlobalizationTests } from "./Globalization/index.js";
-import { IOTests } from "./IO/index.js";
-import { TaskTests } from "./Tasks/index.js";
-import { YAMLTests } from "./YAML/index.js";
+import { ExtensibilityTests } from "./Extensibility/index.test.js";
+import { GlobalizationTests } from "./Globalization/index.test.js";
+import { IOTests } from "./IO/index.test.js";
+import { TaskTests } from "./Tasks/index.test.js";
+import { YAMLTests } from "./YAML/index.test.js";
 
 /**
  * Registers tests for system-components.

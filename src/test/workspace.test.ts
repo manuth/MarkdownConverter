@@ -1,4 +1,4 @@
-import { WorkspaceTests } from "../tests/workspace/index.js";
+import { WorkspaceTests } from "../tests/workspace/index.test.js";
 import { CommonHooks } from "./CommonHooks.js";
 
 suite(

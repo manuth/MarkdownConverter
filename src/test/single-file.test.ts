@@ -1,4 +1,4 @@
-import { SingleFileTests } from "../tests/single-file/index.js";
+import { SingleFileTests } from "../tests/single-file/index.test.js";
 import { CommonHooks } from "./CommonHooks.js";
 
 suite(

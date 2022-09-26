@@ -1,4 +1,4 @@
-import { CommonTests } from "../tests/common/index.js";
+import { CommonTests } from "../tests/common/index.test.js";
 import { CommonHooks } from "./CommonHooks.js";
 
 suite(

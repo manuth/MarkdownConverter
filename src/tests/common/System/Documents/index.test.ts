@@ -1,12 +1,12 @@
 import { basename } from "path";
-import { AssetTests } from "./Assets/index.js";
+import { AssetTests } from "./Assets/index.test.js";
 import { CustomPaperFormatTests } from "./CustomPageFormat.test.js";
 import { DocumentTests as DocumentClassTests } from "./Document.test.js";
 import { DocumentFragmentTests } from "./DocumentFragment.test.js";
 import { MarginTests } from "./Margin.test.js";
 import { MarkdownFragmentTests } from "./MarkdownFragment.test.js";
 import { PaperTests } from "./Paper.test.js";
-import { PluginTests } from "./Plugins/index.js";
+import { PluginTests } from "./Plugins/index.test.js";
 import { RenderableTests } from "./Renderable.test.js";
 import { RunningBLockTests as RunningBlockTests } from "./RunningBlock.test.js";
 import { SlugifierTests } from "./Slugifier.test.js";

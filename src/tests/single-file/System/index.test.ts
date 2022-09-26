@@ -1,7 +1,7 @@
 import { basename } from "path";
 import { ISettings } from "../../../Properties/ISettings.js";
 import { ITestContext } from "../../ITestContext.js";
-import { TaskTests } from "./Tasks/index.js";
+import { TaskTests } from "./Tasks/index.test.js";
 
 /**
  * Registers tests for system-components.
