@@ -106,7 +106,7 @@ steps:
       OVSX_TOKEN:
         from_secret: ovsx_token
     commands:
-      - npx ovsx publish --pat $OVSX_TOKEN
+      - npm run ovsx -- publish --pat $OVSX_TOKEN
     when:
       event:
         - tag
@@ -120,7 +120,7 @@ steps:
       VSCE_TOKEN:
         from_secret: vsce_token
     commands:
-      - npx vsce publish --pat $VSCE_TOKEN
+      - npm run vsce -- publish --pat $VSCE_TOKEN
     when:
       event:
         - tag
