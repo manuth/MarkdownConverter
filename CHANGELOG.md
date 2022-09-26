@@ -6,9 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.1.4...dev)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.2.0...dev)
 
-## MarkdownConverter v5.1.4
+## MarkdownConverter v5.2.0
 ### Fixed
   - Broken extension build
   - Incorrect code snippets in `README.md` (as indicated in [#174](https://github.com/manuth/MarkdownConverter/issues/174))  
@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - The extension's source code to the `ESModule` format
   - All dependencies
 
-[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.1.3...v5.1.4)
+[Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.1.3...v5.2.0)
 
 ## MarkdownConverter v5.1.3
 ### Updated
