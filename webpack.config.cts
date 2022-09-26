@@ -1,22 +1,25 @@
 import { dirname, join, parse, relative, resolve } from "path";
+import { normalize } from "upath";
 import { Configuration, WatchIgnorePlugin } from "webpack";
 
-export = (env: any, argv: any) =>
+export = (env: any, argv: any): Configuration[] =>
 {
     let sourceRoot = join(__dirname, "src");
+    let puppeteerModuleName = "puppeteer-core";
 
     let externalModules: string[] = [
         "mocha",
         "vscode"
     ];
 
+    let extensionFilePath = join(sourceRoot, "MarkdownConverterExtension.ts");
+
     let entryPoints: string[] = [
-        join(sourceRoot, "index.ts"),
+        extensionFilePath,
         ...(
             argv.mode === "development" ?
                 [
                     join(sourceRoot, "test", "runTests.ts"),
-                    join(sourceRoot, "test", "index.ts"),
                     join(sourceRoot, "test", "essentials.test.ts"),
                     join(sourceRoot, "test", "common.test.ts"),
                     join(sourceRoot, "test", "single-file.test.ts"),
@@ -32,7 +35,7 @@ export = (env: any, argv: any) =>
 
     for (let externalModule of externalModules)
     {
-        externals[externalModule] = `commonjs ${externalModule}`;
+        externals[externalModule] = `node-commonjs ${externalModule}`;
     }
 
     for (let entryPoint of entryPoints)
@@ -40,15 +43,16 @@ export = (env: any, argv: any) =>
         entry[join(relative(sourceRoot, dirname(entryPoint)), parse(entryPoint).name)] = entryPoint;
     }
 
-    return {
+    let configBase: Configuration = {
         target: "node",
-        entry,
         output: {
             path: resolve(__dirname, "lib"),
             filename: "[name].js",
-            libraryTarget: "commonjs2",
             devtoolFallbackModuleFilenameTemplate: "../[resource-path]",
-            hashFunction: "xxhash64"
+            hashFunction: "xxhash64",
+            environment: {
+                dynamicImport: true
+            }
         },
         devtool: "source-map",
         externals,
@@ -121,5 +125,77 @@ export = (env: any, argv: any) =>
         stats: {
             warnings: false
         }
-    } as Configuration;
+    };
+
+    return [
+        {
+            ...configBase,
+            entry,
+            externals: {
+                ...externals,
+                [puppeteerModuleName]: `import ${puppeteerModuleName}`
+            },
+            output: {
+                ...configBase.output,
+                libraryTarget: "module",
+                chunkFormat: "module"
+            },
+            experiments: {
+                outputModule: true
+            }
+        },
+        {
+            ...configBase,
+            entry: {
+                index: {
+                    import: join(sourceRoot, "index.cts"),
+                    filename: "[name].cjs"
+                }
+            },
+            output: {
+                ...configBase.output,
+                libraryTarget: "commonjs2"
+            },
+            externals: [
+                async function({ context, request, getResolve }, _): Promise<string | void>
+                {
+                    let result: string;
+
+                    if (request in externals)
+                    {
+                        result = externals[request];
+                    }
+                    else
+                    {
+                        try
+                        {
+                            let filePath: string = await getResolve()(context, request, undefined) as string;
+
+                            if (normalize(filePath) === normalize(extensionFilePath))
+                            {
+                                result = `import ${request}`;
+                            }
+                        }
+                        catch
+                        { }
+                    }
+
+                    return result;
+                }
+            ]
+        },
+        {
+            ...configBase,
+            entry: {
+                "test/index": {
+                    import: join(sourceRoot, "test", "index.cts"),
+                    filename: "[name].cjs"
+                }
+            },
+            output: {
+                ...configBase.output,
+                libraryTarget: "commonjs2"
+            }
+        }
+    ];
 };

@@ -121,12 +121,12 @@ tsconfig.*.json
 [Ll]ib/**/*.map
 
 # Unit-Tests and debug-files
-[Ll]ib/!(index.js)
+[Ll]ib/temp/
 [Ll]ib/test/
 [Ll]ib/tests/
 
 # Unused node-modules
-node_modules/!(highlight.js)
+node_modules/!(highlight.js|puppeteer-core)
 node_modules/highlight.js/!(styles)
 
 # Visual Studio Code-Environment
@@ -148,7 +148,7 @@ node_modules/highlight.js/!(styles)
 .drone.yml
 
 # Webpack configuration
-webpack.config.ts
+webpack.config.cts
 
 # Temporary release-assets
 .tagName.txt
