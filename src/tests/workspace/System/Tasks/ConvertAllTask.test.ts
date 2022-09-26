@@ -1,7 +1,7 @@
 import { strictEqual } from "assert";
-import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
-import { TestConstants } from "../../../TestConstants";
-import { TestConvertAllTask } from "../../../TestConvertAllTask";
+import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask.js";
+import { TestConstants } from "../../../TestConstants.js";
+import { TestConvertAllTask } from "../../../TestConvertAllTask.js";
 
 /**
  * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.

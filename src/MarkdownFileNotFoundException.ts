@@ -1,5 +1,5 @@
-import { Resources } from "./Properties/Resources";
-import { FileNotFoundException } from "./System/IO/FileNotFoundException";
+import { Resources } from "./Properties/Resources.js";
+import { FileNotFoundException } from "./System/IO/FileNotFoundException.js";
 
 /**
  * Occurs when a markdown-file couldn't be found.

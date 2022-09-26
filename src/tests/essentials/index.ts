@@ -1,5 +1,5 @@
-import { ConfigInterceptorTests } from "./ConfigInterceptor.test";
-import { SystemTests } from "./System";
+import { ConfigInterceptorTests } from "./ConfigInterceptor.test.js";
+import { SystemTests } from "./System/index.js";
 
 /**
  * Registers tests for configuration-components.

@@ -1,8 +1,8 @@
 import { basename } from "path";
-import { ISettings } from "../../../../Properties/ISettings";
-import { ITestContext } from "../../../ITestContext";
-import { ChainTaskTests } from "./ChainTask.test";
-import { ConvertAllTaskTests } from "./ConvertAllTask.test";
+import { ISettings } from "../../../../Properties/ISettings.js";
+import { ITestContext } from "../../../ITestContext.js";
+import { ChainTaskTests } from "./ChainTask.test.js";
+import { ConvertAllTaskTests } from "./ConvertAllTask.test.js";
 
 /**
  * Registers tests for tasks.
@@ -13,7 +13,7 @@ import { ConvertAllTaskTests } from "./ConvertAllTask.test";
 export function TaskTests(context: ITestContext<ISettings>): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             ConvertAllTaskTests(context);

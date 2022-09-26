@@ -1,6 +1,6 @@
-import { ISettings } from "../../Properties/ISettings";
-import { ITestContext } from "../ITestContext";
-import { SystemTests } from "./System";
+import { ISettings } from "../../Properties/ISettings.js";
+import { ITestContext } from "../ITestContext.js";
+import { SystemTests } from "./System/index.js";
 
 /**
  * Registers tests for the single-file environment of vscode.

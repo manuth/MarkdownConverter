@@ -1,6 +1,6 @@
 import { basename } from "path";
-import { ExtensionTests } from "./Extension.test";
-import { MarkdownContributionTests } from "./MarkdownContributions.test";
+import { ExtensionTests } from "./Extension.test.js";
+import { MarkdownContributionTests } from "./MarkdownContributions.test.js";
 
 /**
  * Registers tests for the extensibility.
@@ -8,7 +8,7 @@ import { MarkdownContributionTests } from "./MarkdownContributions.test";
 export function ExtensibilityTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             MarkdownContributionTests();

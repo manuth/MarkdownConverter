@@ -1,9 +1,9 @@
 import { basename } from "path";
-import { ISettings } from "../../../Properties/ISettings";
-import { ITestContext } from "../../ITestContext";
-import { FilesTests } from "./Files.test";
-import { ResourceTests } from "./Resources.test";
-import { SettingTests } from "./Settings.test";
+import { ISettings } from "../../../Properties/ISettings.js";
+import { ITestContext } from "../../ITestContext.js";
+import { FilesTests } from "./Files.test.js";
+import { ResourceTests } from "./Resources.test.js";
+import { SettingTests } from "./Settings.test.js";
 
 /**
  * Registers tests for properties.
@@ -14,7 +14,7 @@ import { SettingTests } from "./Settings.test";
 export function PropertyTests(context: ITestContext<ISettings>): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             SettingTests(context);

@@ -1,8 +1,8 @@
 import { notStrictEqual, ok, strictEqual } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import { Random } from "random-js";
-import { Resources } from "../../../../Properties/Resources";
-import { NoConversionTypeException } from "../../../../System/Tasks/NoConversionTypeException";
+import { Resources } from "../../../../Properties/Resources.js";
+import { NoConversionTypeException } from "../../../../System/Tasks/NoConversionTypeException.js";
 
 /**
  * Registers tests for the {@link NoConversionTypeException `NoConversionTypeException`} class.

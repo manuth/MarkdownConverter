@@ -1,5 +1,5 @@
 import { basename } from "path";
-import { YAMLExceptionTests } from "./YAMLException.test";
+import { YAMLExceptionTests } from "./YAMLException.test.js";
 
 /**
  * Registers tests for yaml-components.
@@ -7,7 +7,7 @@ import { YAMLExceptionTests } from "./YAMLException.test";
 export function YAMLTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             YAMLExceptionTests();

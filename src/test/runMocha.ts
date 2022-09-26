@@ -1,7 +1,8 @@
 import { fork } from "child_process";
-import { ConfigStore } from "./ConfigStore";
-import { SuiteSet } from "./SuiteSet";
-import { SuiteVarName } from "./SuiteVarName";
+import { createRequire } from "module";
+import { ConfigStore } from "./ConfigStore.js";
+import { SuiteSet } from "./SuiteSet.js";
+import { SuiteVarName } from "./SuiteVarName.js";
 
 (
     async () =>
@@ -9,7 +10,7 @@ import { SuiteVarName } from "./SuiteVarName";
         let options = ConfigStore.Get((process.env[SuiteVarName] as SuiteSet) ?? SuiteSet.Common);
 
         fork(
-            require.resolve("mocha-explorer-launcher-scripts/vscode-test"),
+            createRequire(import.meta.url).resolve("mocha-explorer-launcher-scripts/vscode-test"),
             [
                 ...process.argv.slice(2)
             ],

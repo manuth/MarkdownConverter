@@ -1,7 +1,7 @@
 import { basename } from "path";
-import { ISettings } from "../../../Properties/ISettings";
-import { ITestContext } from "../../ITestContext";
-import { TaskTests } from "./Tasks";
+import { ISettings } from "../../../Properties/ISettings.js";
+import { ITestContext } from "../../ITestContext.js";
+import { TaskTests } from "./Tasks/index.js";
 
 /**
  * Registers tests for system-components.
@@ -12,7 +12,7 @@ import { TaskTests } from "./Tasks";
 export function SystemTests(context: ITestContext<ISettings>): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             TaskTests(context);

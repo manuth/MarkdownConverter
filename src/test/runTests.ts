@@ -1,7 +1,7 @@
 import { runTests } from "@vscode/test-electron";
 import { createSandbox } from "sinon";
-import { ConfigStore } from "./ConfigStore";
-import { SuiteSet } from "./SuiteSet";
+import { ConfigStore } from "./ConfigStore.js";
+import { SuiteSet } from "./SuiteSet.js";
 
 (async function main()
 {

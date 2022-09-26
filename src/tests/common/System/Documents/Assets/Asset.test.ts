@@ -1,14 +1,17 @@
 import { deepStrictEqual, rejects, strictEqual } from "assert";
 import { createServer, Server } from "http";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
-import { mkdirp, writeFile } from "fs-extra";
-import getPort = require("get-port");
+import fs from "fs-extra";
+import getPort from "get-port";
 import { Random } from "random-js";
-import serveHandler = require("serve-handler");
-import { dirname, join } from "upath";
-import { Asset } from "../../../../../System/Documents/Assets/Asset";
-import { AssetURLType } from "../../../../../System/Documents/Assets/AssetURLType";
-import { InsertionType } from "../../../../../System/Documents/Assets/InsertionType";
+import serveHandler from "serve-handler";
+import path from "upath";
+import { Asset } from "../../../../../System/Documents/Assets/Asset.js";
+import { AssetURLType } from "../../../../../System/Documents/Assets/AssetURLType.js";
+import { InsertionType } from "../../../../../System/Documents/Assets/InsertionType.js";
+
+const { mkdirp, writeFile } = fs;
+const { dirname, join } = path;
 
 /**
  * Registers tests for the {@link Asset `Asset`} class.

@@ -1,6 +1,6 @@
 import { basename } from "path";
-import { ConversionRunnerTests } from "./ConversionRunner.test";
-import { ConvertAllTaskTests } from "./ConvertAllTask.test";
+import { ConversionRunnerTests } from "./ConversionRunner.test.js";
+import { ConvertAllTaskTests } from "./ConvertAllTask.test.js";
 
 /**
  * Registers tests for tasks.
@@ -8,7 +8,7 @@ import { ConvertAllTaskTests } from "./ConvertAllTask.test";
 export function TaskTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             ConversionRunnerTests();

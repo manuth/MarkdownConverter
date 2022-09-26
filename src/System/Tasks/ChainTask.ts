@@ -1,14 +1,19 @@
+import { createRequire } from "module";
 import { EOL } from "os";
-import fm = require("front-matter");
-import { renameSync } from "fs-extra";
-import format = require("string-template");
-import { join, parse } from "upath";
-import { CancellationToken, commands, Progress, TextDocument, window, workspace } from "vscode";
-import { IConvertedFile } from "../../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
-import { Resources } from "../../Properties/Resources";
-import { ConvertAllTask } from "./ConvertAllTask";
-import { IProgressState } from "./IProgressState";
+import fm from "front-matter";
+import fs from "fs-extra";
+import format from "string-template";
+import path from "upath";
+import vscode, { CancellationToken, Progress, TextDocument } from "vscode";
+import { IConvertedFile } from "../../Conversion/IConvertedFile.js";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension.js";
+import { Resources } from "../../Properties/Resources.js";
+import { ConvertAllTask } from "./ConvertAllTask.js";
+import { IProgressState } from "./IProgressState.js";
+
+const { renameSync } = fs;
+const { join, parse } = path;
+const { commands, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Represents a task for chaining multiple documents.

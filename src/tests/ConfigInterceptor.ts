@@ -1,8 +1,11 @@
+import { createRequire } from "module";
 import { Resource } from "@manuth/resource-manager";
-import { workspace } from "vscode";
-import { ConfigurationSection } from "./ConfigurationSection";
-import { ITestContext } from "./ITestContext";
-import { TestContext } from "./TestContext";
+import vscode from "vscode";
+import { ConfigurationSection } from "./ConfigurationSection.js";
+import { ITestContext } from "./ITestContext.js";
+import { TestContext } from "./TestContext.js";
+
+const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Provides the functionality to intercept the vscode-configuration.

@@ -1,5 +1,5 @@
 import { basename } from "path";
-import { ExtensionTests } from "./Extension.test";
+import { ExtensionTests } from "./Extension.test.js";
 
 /**
  * Registers tests for extensibility-components.
@@ -7,7 +7,7 @@ import { ExtensionTests } from "./Extension.test";
 export function ExtensibilityTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             ExtensionTests();

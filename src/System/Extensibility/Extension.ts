@@ -1,11 +1,15 @@
+import { createRequire } from "module";
 import { Package } from "@manuth/package-json-editor";
 import { CultureInfo } from "@manuth/resource-manager";
-import MarkdownIt = require("markdown-it");
-import format = require("string-template");
-import { dirname } from "upath";
-import { commands, env, ProgressLocation, ViewColumn, window, workspace } from "vscode";
-import { Resources } from "../../Properties/Resources";
-import { Task } from "../Tasks/Task";
+import MarkdownIt from "markdown-it";
+import format from "string-template";
+import path from "upath";
+import vscode from "vscode";
+import { Resources } from "../../Properties/Resources.js";
+import { Task } from "../Tasks/Task.js";
+
+const { dirname } = path;
+const { commands, env, ProgressLocation, ViewColumn, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Represents an extension.

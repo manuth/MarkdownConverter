@@ -1,5 +1,5 @@
-import { Document } from "./Document";
-import { DocumentFragment } from "./DocumentFragment";
+import { Document } from "./Document.js";
+import { DocumentFragment } from "./DocumentFragment.js";
 
 /**
  * Represents a header or a footer of a document.

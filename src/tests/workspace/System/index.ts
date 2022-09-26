@@ -1,5 +1,5 @@
 import { basename } from "path";
-import { TaskTests } from "./Tasks";
+import { TaskTests } from "./Tasks/index.js";
 
 /**
  * Registers tests for system-components.
@@ -7,7 +7,7 @@ import { TaskTests } from "./Tasks";
 export function SystemTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             TaskTests();

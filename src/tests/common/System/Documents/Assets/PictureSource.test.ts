@@ -1,14 +1,18 @@
 import { deepStrictEqual, ok, strictEqual } from "assert";
+import { createRequire } from "module";
 import { dirname } from "path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
-import { readFile, writeFile } from "fs-extra";
-import MarkdownIt = require("markdown-it");
-import parseDataUrl = require("parse-data-url");
+import fs from "fs-extra";
+import MarkdownIt from "markdown-it";
+import parseDataUrl from "parse-data-url";
 import { Random } from "random-js";
-import { TextDocument, workspace } from "vscode";
-import { InsertionType } from "../../../../../System/Documents/Assets/InsertionType";
-import { PictureSource } from "../../../../../System/Documents/Assets/PictureSource";
-import { Document } from "../../../../../System/Documents/Document";
+import vscode, { TextDocument } from "vscode";
+import { InsertionType } from "../../../../../System/Documents/Assets/InsertionType.js";
+import { PictureSource } from "../../../../../System/Documents/Assets/PictureSource.js";
+import { Document } from "../../../../../System/Documents/Document.js";
+
+const { readFile, writeFile } = fs;
+const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link PictureSource `PictureSource`} class.

@@ -1,6 +1,6 @@
 import { basename } from "path";
-import { MarkdownAnchorPluginTests } from "./MarkdownAnchorPlugin.test";
-import { MarkdownTocPluginTests } from "./MarkdownTocPlugin.test";
+import { MarkdownAnchorPluginTests } from "./MarkdownAnchorPlugin.test.js";
+import { MarkdownTocPluginTests } from "./MarkdownTocPlugin.test.js";
 
 /**
  * Registers tests for `markdown-it`-plugins.
@@ -8,7 +8,7 @@ import { MarkdownTocPluginTests } from "./MarkdownTocPlugin.test";
 export function PluginTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             MarkdownAnchorPluginTests();

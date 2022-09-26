@@ -2,13 +2,15 @@ import { strictEqual } from "assert";
 import { dirname } from "path";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
-import MarkdownIt = require("markdown-it");
+import MarkdownIt from "markdown-it";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
-import { toUnix } from "upath";
-import { Document } from "../../../../System/Documents/Document";
-import { EnvironmentKey } from "../../../../System/Documents/EnvironmentKey";
-import { MarkdownFragment } from "../../../../System/Documents/MarkdownFragment";
+import path from "upath";
+import { Document } from "../../../../System/Documents/Document.js";
+import { EnvironmentKey } from "../../../../System/Documents/EnvironmentKey.js";
+import { MarkdownFragment } from "../../../../System/Documents/MarkdownFragment.js";
+
+const { toUnix } = path;
 
 /**
  * Registers tests for the {@link MarkdownFragment `MarkdownFragment`} class.

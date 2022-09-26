@@ -1,5 +1,5 @@
-import { CommonTests } from "../tests/common";
-import { CommonHooks } from "./CommonHooks";
+import { CommonTests } from "../tests/common/index.js";
+import { CommonHooks } from "./CommonHooks.js";
 
 suite(
     "Common Tests",

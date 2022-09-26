@@ -1,17 +1,21 @@
 import { strictEqual } from "assert";
+import { createRequire } from "module";
 import { dirname } from "path";
 import { TempFile } from "@manuth/temp-files";
 import { createSandbox, SinonSandbox } from "sinon";
-import { resolve } from "upath";
-import { TextDocument, Uri, window, workspace } from "vscode";
-import { ConversionType } from "../../../../Conversion/ConversionType";
-import { ISettings } from "../../../../Properties/ISettings";
-import { Settings } from "../../../../Properties/Settings";
-import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
-import { ITestContext } from "../../../ITestContext";
-import { SubstitutionTester } from "../../../SubstitutionTester";
-import { TestConstants } from "../../../TestConstants";
-import { TestConversionRunner } from "../../../TestConversionRunner";
+import path from "upath";
+import vscode, { TextDocument } from "vscode";
+import { ConversionType } from "../../../../Conversion/ConversionType.js";
+import { ISettings } from "../../../../Properties/ISettings.js";
+import { Settings } from "../../../../Properties/Settings.js";
+import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner.js";
+import { ITestContext } from "../../../ITestContext.js";
+import { SubstitutionTester } from "../../../SubstitutionTester.js";
+import { TestConstants } from "../../../TestConstants.js";
+import { TestConversionRunner } from "../../../TestConversionRunner.js";
+
+const { resolve } = path;
+const { Uri, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.

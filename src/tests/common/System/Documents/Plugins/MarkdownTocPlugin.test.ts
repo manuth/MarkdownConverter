@@ -1,9 +1,9 @@
 import { ok } from "assert";
 import { load } from "cheerio";
-import MarkdownIt = require("markdown-it");
+import MarkdownIt from "markdown-it";
 import { Random } from "random-js";
-import { TOC } from "../../../../../System/Documents/Plugins/MarkdownTocPlugin";
-import { Slugifier } from "../../../../../System/Documents/Slugifier";
+import { TOC } from "../../../../../System/Documents/Plugins/MarkdownTocPlugin.js";
+import { Slugifier } from "../../../../../System/Documents/Slugifier.js";
 
 /**
  * Registers tests for the {@link TOC `TOC`}-plugin.

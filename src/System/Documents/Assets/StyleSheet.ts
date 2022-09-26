@@ -1,6 +1,6 @@
 import { load } from "cheerio";
-import { Asset } from "./Asset";
-import { InsertionType } from "./InsertionType";
+import { Asset } from "./Asset.js";
+import { InsertionType } from "./InsertionType.js";
 
 const styleTagName = "style";
 const linkTagName = "link";

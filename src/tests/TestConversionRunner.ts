@@ -1,7 +1,7 @@
-import MarkdownIt = require("markdown-it");
+import MarkdownIt from "markdown-it";
 import { TextDocument } from "vscode";
-import { Converter } from "../Conversion/Converter";
-import { ConversionRunner } from "../System/Tasks/ConversionRunner";
+import { Converter } from "../Conversion/Converter.js";
+import { ConversionRunner } from "../System/Tasks/ConversionRunner.js";
 
 /**
  * Provides an implementation of the {@link ConversionRunner `ConversionRunner`} class for testing.

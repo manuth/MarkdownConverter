@@ -1,10 +1,15 @@
+import { createRequire } from "module";
 import { resolve } from "path";
-import { readFile } from "fs-extra";
-import getUri = require("get-uri");
-import { isAbsolute } from "upath";
-import { Uri } from "vscode";
-import { AssetURLType } from "./AssetURLType";
-import { InsertionType } from "./InsertionType";
+import fs from "fs-extra";
+import getUri from "get-uri";
+import path from "upath";
+import vscode from "vscode";
+import { AssetURLType } from "./AssetURLType.js";
+import { InsertionType } from "./InsertionType.js";
+
+const { readFile } = fs;
+const { isAbsolute } = path;
+const { Uri } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Represents an asset.

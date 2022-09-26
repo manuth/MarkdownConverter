@@ -1,26 +1,30 @@
 import { ok, strictEqual } from "assert";
 import { createServer, Server } from "http";
+import { createRequire } from "module";
 import { relative } from "path";
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
-import { stat, writeFile } from "fs-extra";
-import getPort = require("get-port");
-import MarkdownIt = require("markdown-it");
-import parseDataUrl = require("parse-data-url");
+import fs from "fs-extra";
+import getPort from "get-port";
+import MarkdownIt from "markdown-it";
+import parseDataUrl from "parse-data-url";
 import { Random } from "random-js";
-import serveHandler = require("serve-handler");
+import serveHandler from "serve-handler";
 import { createSandbox, SinonSandbox } from "sinon";
-import { TextDocument, workspace } from "vscode";
-import YAML = require("yamljs");
-import { AssetURLType } from "../../../../System/Documents/Assets/AssetURLType";
-import { InsertionType } from "../../../../System/Documents/Assets/InsertionType";
-import { AttributeKey } from "../../../../System/Documents/AttributeKey";
-import { Document } from "../../../../System/Documents/Document";
-import { DocumentFragment } from "../../../../System/Documents/DocumentFragment";
-import { HelperKey } from "../../../../System/Documents/HelperKey";
-import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
-import { Utilities } from "../../../../Utilities";
+import vscode, { TextDocument } from "vscode";
+import YAML from "yamljs";
+import { AssetURLType } from "../../../../System/Documents/Assets/AssetURLType.js";
+import { InsertionType } from "../../../../System/Documents/Assets/InsertionType.js";
+import { AttributeKey } from "../../../../System/Documents/AttributeKey.js";
+import { Document } from "../../../../System/Documents/Document.js";
+import { DocumentFragment } from "../../../../System/Documents/DocumentFragment.js";
+import { HelperKey } from "../../../../System/Documents/HelperKey.js";
+import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter.js";
+import { Utilities } from "../../../../Utilities.js";
+
+const { stat, writeFile } = fs;
+const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link DocumentFragment `DocumentFragment`} class.

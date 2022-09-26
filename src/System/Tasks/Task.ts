@@ -1,6 +1,6 @@
 import { CancellationToken, Progress } from "vscode";
-import { Extension } from "../Extensibility/Extension";
-import { IProgressState } from "./IProgressState";
+import { Extension } from "../Extensibility/Extension.js";
+import { IProgressState } from "./IProgressState.js";
 
 /**
  * Represents a task.

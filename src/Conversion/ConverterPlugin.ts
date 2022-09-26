@@ -1,8 +1,12 @@
+import { createRequire } from "module";
 import { Browser } from "puppeteer-core";
-import { join, parse } from "upath";
-import { encode } from "utf8";
-import { Constants } from "../Constants";
-import { Converter } from "./Converter";
+import path from "upath";
+import utf8 from "utf8";
+import { Constants } from "../Constants.js";
+import { Converter } from "./Converter.js";
+
+const { join, parse } = path;
+const { encode } = utf8;
 
 /**
  * Generates filenames for the website-scraper.
@@ -128,8 +132,13 @@ export class ConverterPlugin
             ({ resource }) =>
             {
                 let result: string;
-                // eslint-disable-next-line @typescript-eslint/no-var-requires
-                let filename: string = require("website-scraper/lib/filename-generator/by-type")(resource, { subdirectories, defaultFilename }, occupiedFilenames);
+                let filename: string = createRequire(import.meta.url)("website-scraper/lib/filename-generator/by-type")(
+                    resource,
+                    {
+                        subdirectories,
+                        defaultFilename
+                    },
+                    occupiedFilenames);
 
                 if (filename === "index.html")
                 {

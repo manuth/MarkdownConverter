@@ -1,6 +1,6 @@
 import { basename } from "path";
-import { ConverterTests } from "./Converter.test";
-import { ConverterPluginTests } from "./ConverterPlugin.test";
+import { ConverterTests } from "./Converter.test.js";
+import { ConverterPluginTests } from "./ConverterPlugin.test.js";
 
 /**
  * Registers tests for conversion.
@@ -8,7 +8,7 @@ import { ConverterPluginTests } from "./ConverterPlugin.test";
 export function ConversionTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             ConverterPluginTests();

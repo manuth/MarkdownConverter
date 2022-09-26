@@ -1,15 +1,19 @@
 import { ok, strictEqual, throws } from "assert";
+import { createRequire } from "module";
 import { basename, dirname } from "path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
-import rescape = require("@stdlib/utils-escape-regexp-string");
+import rescape from "@stdlib/utils-escape-regexp-string";
 import { Context } from "mocha";
 import { Random } from "random-js";
-import { normalize, parse, relative } from "upath";
-import { TextDocument, Uri, workspace } from "vscode";
-import { ConversionType } from "../../../../Conversion/ConversionType";
-import { IPatternContext } from "../../../../System/IO/IPatternContext";
-import { PatternResolver } from "../../../../System/IO/PatternResolver";
-import { IPatternTest } from "./IPatternTest";
+import path from "upath";
+import vscode, { TextDocument } from "vscode";
+import { ConversionType } from "../../../../Conversion/ConversionType.js";
+import { IPatternContext } from "../../../../System/IO/IPatternContext.js";
+import { PatternResolver } from "../../../../System/IO/PatternResolver.js";
+import { IPatternTest } from "./IPatternTest.js";
+
+const { normalize, parse, relative } = path;
+const { Uri, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link PatternResolver `PatternResolver`} class.

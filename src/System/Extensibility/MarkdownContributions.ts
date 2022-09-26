@@ -1,5 +1,9 @@
-import { join } from "upath";
-import { Extension, extensions, Uri } from "vscode";
+import { createRequire } from "module";
+import path from "upath";
+import vscode, { Extension, Uri as VSCodeURI } from "vscode";
+
+const { join } = path;
+const { extensions, Uri } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Provides the functionality to load markdown-contributions.
@@ -12,12 +16,12 @@ export class MarkdownContributions
     /**
      * The provided scripts.
      */
-    private readonly scripts: Uri[] = [];
+    private readonly scripts: VSCodeURI[] = [];
 
     /**
      * The provided styles.
      */
-    private readonly styles: Uri[] = [];
+    private readonly styles: VSCodeURI[] = [];
 
     /**
      * A value indicating whether the contributions are loaded.
@@ -33,7 +37,7 @@ export class MarkdownContributions
     /**
      * Gets the provided scripts.
      */
-    public get PreviewScripts(): Uri[]
+    public get PreviewScripts(): VSCodeURI[]
     {
         this.Load();
         return this.scripts;
@@ -42,7 +46,7 @@ export class MarkdownContributions
     /**
      * Gets the provided styles.
      */
-    public get PreviewStyles(): Uri[]
+    public get PreviewStyles(): VSCodeURI[]
     {
         this.Load();
         return this.styles;
@@ -60,7 +64,7 @@ export class MarkdownContributions
      * @returns
      * The uri to the resource.
      */
-    protected static ResolveExtensionResource(extension: Extension<any>, resourcePath: string): Uri
+    protected static ResolveExtensionResource(extension: Extension<any>, resourcePath: string): VSCodeURI
     {
         return Uri.file(join(extension.extensionPath, resourcePath)).with({ scheme: "vscode-resource" });
     }
@@ -77,9 +81,9 @@ export class MarkdownContributions
      * @returns
      * The uri to the resources.
      */
-    protected static ResolveExtensionResources(extension: Extension<any>, resourcePaths: string[]): Uri[]
+    protected static ResolveExtensionResources(extension: Extension<any>, resourcePaths: string[]): VSCodeURI[]
     {
-        let result: Uri[] = [];
+        let result: VSCodeURI[] = [];
 
         for (let resourcePath of resourcePaths)
         {

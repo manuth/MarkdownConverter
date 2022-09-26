@@ -1,11 +1,11 @@
 import { CancellationToken, Progress } from "vscode";
-import { IConvertedFile } from "../../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
-import { Settings } from "../../Properties/Settings";
-import { ConversionRunner } from "./ConversionRunner";
-import { IProgressState } from "./IProgressState";
-import { NoConversionTypeException } from "./NoConversionTypeException";
-import { PuppeteerTask } from "./PuppeteerTask";
+import { IConvertedFile } from "../../Conversion/IConvertedFile.js";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension.js";
+import { Settings } from "../../Properties/Settings.js";
+import { ConversionRunner } from "./ConversionRunner.js";
+import { IProgressState } from "./IProgressState.js";
+import { NoConversionTypeException } from "./NoConversionTypeException.js";
+import { PuppeteerTask } from "./PuppeteerTask.js";
 
 /**
  * Represents a task which is able to convert markdown-files.

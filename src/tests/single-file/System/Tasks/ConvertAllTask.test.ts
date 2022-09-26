@@ -1,7 +1,7 @@
 import { rejects } from "assert";
-import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolderException";
-import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask";
-import { TestConstants } from "../../../TestConstants";
+import { NoWorkspaceFolderException } from "../../../../System/NoWorkspaceFolderException.js";
+import { ConvertAllTask } from "../../../../System/Tasks/ConvertAllTask.js";
+import { TestConstants } from "../../../TestConstants.js";
 
 /**
  * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.

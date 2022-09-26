@@ -1,20 +1,23 @@
 import { deepStrictEqual, ok, strictEqual } from "assert";
+import { createRequire } from "module";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
-import { env } from "vscode";
-import { ConversionType } from "../../../Conversion/ConversionType";
-import { ISettings } from "../../../Properties/ISettings";
-import { Settings } from "../../../Properties/Settings";
-import { AssetURLType } from "../../../System/Documents/Assets/AssetURLType";
-import { InsertionType } from "../../../System/Documents/Assets/InsertionType";
-import { CustomPageFormat } from "../../../System/Documents/CustomPageFormat";
-import { EmojiType } from "../../../System/Documents/EmojiType";
-import { ListType } from "../../../System/Documents/ListType";
-import { Margin } from "../../../System/Documents/Margin";
-import { PageOrientation } from "../../../System/Documents/PageOrientation";
-import { StandardizedFormatType } from "../../../System/Documents/StandardizedFormatType";
-import { StandardizedPageFormat } from "../../../System/Documents/StandardizedPageFormat";
-import { ITestContext } from "../../ITestContext";
+import vscode from "vscode";
+import { ConversionType } from "../../../Conversion/ConversionType.js";
+import { ISettings } from "../../../Properties/ISettings.js";
+import { Settings } from "../../../Properties/Settings.js";
+import { AssetURLType } from "../../../System/Documents/Assets/AssetURLType.js";
+import { InsertionType } from "../../../System/Documents/Assets/InsertionType.js";
+import { CustomPageFormat } from "../../../System/Documents/CustomPageFormat.js";
+import { EmojiType } from "../../../System/Documents/EmojiType.js";
+import { ListType } from "../../../System/Documents/ListType.js";
+import { Margin } from "../../../System/Documents/Margin.js";
+import { PageOrientation } from "../../../System/Documents/PageOrientation.js";
+import { StandardizedFormatType } from "../../../System/Documents/StandardizedFormatType.js";
+import { StandardizedPageFormat } from "../../../System/Documents/StandardizedPageFormat.js";
+import { ITestContext } from "../../ITestContext.js";
+
+const { env } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link Settings `Settings`} class.

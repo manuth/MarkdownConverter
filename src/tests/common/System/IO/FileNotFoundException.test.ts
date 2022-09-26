@@ -1,8 +1,8 @@
 import { notStrictEqual, ok, strictEqual } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempFile } from "@manuth/temp-files";
-import { Resources } from "../../../../Properties/Resources";
-import { FileNotFoundException } from "../../../../System/IO/FileNotFoundException";
+import { Resources } from "../../../../Properties/Resources.js";
+import { FileNotFoundException } from "../../../../System/IO/FileNotFoundException.js";
 
 /**
  * Registers tests for the {@link FileNotFoundException `FileNotFoundException`} class.

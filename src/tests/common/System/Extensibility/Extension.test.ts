@@ -1,14 +1,17 @@
 import { doesNotReject, notStrictEqual, ok, strictEqual } from "assert";
+import { createRequire } from "module";
 import { Package } from "@manuth/package-json-editor";
 import { CultureInfo } from "@manuth/resource-manager";
-import MarkdownIt = require("markdown-it");
+import MarkdownIt from "markdown-it";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
-import { commands, env, window, workspace } from "vscode";
-import { Resources } from "../../../../Properties/Resources";
-import { Extension } from "../../../../System/Extensibility/Extension";
-import { Task } from "../../../../System/Tasks/Task";
-import { TestConstants } from "../../../TestConstants";
+import vscode from "vscode";
+import { Resources } from "../../../../Properties/Resources.js";
+import { Extension } from "../../../../System/Extensibility/Extension.js";
+import { Task } from "../../../../System/Tasks/Task.js";
+import { TestConstants } from "../../../TestConstants.js";
+
+const { commands, env, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link Extension `Extension`} class.

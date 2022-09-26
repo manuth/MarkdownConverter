@@ -1,6 +1,8 @@
 import { ok } from "assert";
-import { lstat, pathExists } from "fs-extra";
-import Files = require("../../../Properties/Files");
+import fs from "fs-extra";
+import { Files } from "../../../Properties/Files.js";
+
+const { lstat, pathExists } = fs;
 
 /**
  * Registers tests for the {@link Files `Files`} class.

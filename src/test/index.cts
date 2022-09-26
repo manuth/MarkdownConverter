@@ -1,34 +1,35 @@
-import minimist = require("minimist");
-import Mocha = require("mocha");
+import minimist from "minimist";
+import Mocha from "mocha";
 import { resolve } from "upath";
-import { ConfigStore } from "./ConfigStore";
-import { SuiteSet } from "./SuiteSet";
-import { SuiteVarName } from "./SuiteVarName";
-
-const suiteArgName = "suite";
-
-/**
- * The arguments passed by the user.
- */
-let args = minimist(
-    process.argv.slice(2),
-    {
-        string: [
-            suiteArgName
-        ],
-        alias: {
-            [suiteArgName]: "s"
-        },
-        default: {
-            [suiteArgName]: process.env[SuiteVarName] ?? SuiteSet.Common
-        }
-    });
 
 /**
  * Runs the extension-tests.
  */
 export async function run(): Promise<void>
 {
+    const { ConfigStore } = await import("./ConfigStore.js");
+    const { SuiteSet } = await import("./SuiteSet.js");
+    const { SuiteVarName } = await import("./SuiteVarName.js");
+
+    const suiteArgName = "suite";
+
+    /**
+     * The arguments passed by the user.
+     */
+    let args = minimist(
+        process.argv.slice(2),
+        {
+            string: [
+                suiteArgName
+            ],
+            alias: {
+                [suiteArgName]: "s"
+            },
+            default: {
+                [suiteArgName]: process.env[SuiteVarName] ?? SuiteSet.Common
+            }
+        });
+
     let mocha = new Mocha(
         {
             ui: "tdd",
@@ -41,6 +42,7 @@ export async function run(): Promise<void>
         {
             let testDirectory = ConfigStore.TestRootPath;
             mocha.addFile(resolve(testDirectory, `${args[suiteArgName]}.test.js`));
+            await mocha.loadFilesAsync();
 
             try
             {

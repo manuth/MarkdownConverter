@@ -1,9 +1,9 @@
-import { ISettings } from "../../Properties/ISettings";
-import { ITestContext } from "../ITestContext";
-import { ConversionTests } from "./Conversion";
-import { MarkdownConverterExtensionTests } from "./MarkdownConverterExtension.test";
-import { PropertyTests } from "./Properties";
-import { SystemTests } from "./System";
+import { ISettings } from "../../Properties/ISettings.js";
+import { ITestContext } from "../ITestContext.js";
+import { ConversionTests } from "./Conversion/index.js";
+import { MarkdownConverterExtensionTests } from "./MarkdownConverterExtension.test.js";
+import { PropertyTests } from "./Properties/index.js";
+import { SystemTests } from "./System/index.js";
 
 /**
  * Registers common tests.

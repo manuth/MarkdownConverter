@@ -1,5 +1,5 @@
 import { basename } from "path";
-import { DateTimeFormatterTests } from "./DateTimeFormatter.test";
+import { DateTimeFormatterTests } from "./DateTimeFormatter.test.js";
 
 /**
  * Registers tests for globalization.
@@ -7,7 +7,7 @@ import { DateTimeFormatterTests } from "./DateTimeFormatter.test";
 export function GlobalizationTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             DateTimeFormatterTests();

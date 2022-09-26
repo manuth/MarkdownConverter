@@ -1,43 +1,49 @@
 import { notStrictEqual, ok, rejects, strictEqual } from "assert";
+import { createRequire } from "module";
 import { EOL } from "os";
 import { isAbsolute, relative } from "path";
 import { TempDirectory, TempFile } from "@manuth/temp-files";
 import { Cheerio, CheerioAPI, load, Node } from "cheerio";
-import dedent = require("dedent");
-import { ensureFile, pathExists, readFile, remove, writeFile } from "fs-extra";
-import kebabCase = require("lodash.kebabcase");
-import MarkdownIt = require("markdown-it");
+import dedent from "dedent";
+import fs from "fs-extra";
+import kebabCase from "lodash.kebabcase";
+import MarkdownIt from "markdown-it";
 import { MultiRange } from "multi-integer-range";
-import { randexp } from "randexp";
+import RandExp from "randexp";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox, SinonSpiedMember } from "sinon";
-import { dirname, normalize, resolve } from "upath";
-import { ConfigurationTarget, TextDocument, Uri, window, workspace, WorkspaceConfiguration } from "vscode";
-import { ConversionType } from "../../../../Conversion/ConversionType";
-import { Converter } from "../../../../Conversion/Converter";
-import { IConvertedFile } from "../../../../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension";
-import { IRunningBlockContent } from "../../../../Properties/IRunningBlockContent";
-import { ISettings } from "../../../../Properties/ISettings";
-import { Resources } from "../../../../Properties/Resources";
-import { Settings } from "../../../../Properties/Settings";
-import { Asset } from "../../../../System/Documents/Assets/Asset";
-import { AssetURLType } from "../../../../System/Documents/Assets/AssetURLType";
-import { InsertionType } from "../../../../System/Documents/Assets/InsertionType";
-import { AttributeKey } from "../../../../System/Documents/AttributeKey";
-import { Document } from "../../../../System/Documents/Document";
-import { EnvironmentKey } from "../../../../System/Documents/EnvironmentKey";
-import { Margin } from "../../../../System/Documents/Margin";
-import { PageOrientation } from "../../../../System/Documents/PageOrientation";
-import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
-import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat";
-import { MarkdownContributions } from "../../../../System/Extensibility/MarkdownContributions";
-import { OperationCancelledException } from "../../../../System/OperationCancelledException";
-import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner";
-import { ITestContext } from "../../../ITestContext";
-import { SubstitutionTester } from "../../../SubstitutionTester";
-import { TestConstants } from "../../../TestConstants";
-import { TestConversionRunner } from "../../../TestConversionRunner";
+import path from "upath";
+import vscode, { TextDocument, Uri as VSCodeUri, WorkspaceConfiguration } from "vscode";
+import { ConversionType } from "../../../../Conversion/ConversionType.js";
+import { Converter } from "../../../../Conversion/Converter.js";
+import { IConvertedFile } from "../../../../Conversion/IConvertedFile.js";
+import { MarkdownConverterExtension } from "../../../../MarkdownConverterExtension.js";
+import { IRunningBlockContent } from "../../../../Properties/IRunningBlockContent.js";
+import { ISettings } from "../../../../Properties/ISettings.js";
+import { Resources } from "../../../../Properties/Resources.js";
+import { Settings } from "../../../../Properties/Settings.js";
+import { Asset } from "../../../../System/Documents/Assets/Asset.js";
+import { AssetURLType } from "../../../../System/Documents/Assets/AssetURLType.js";
+import { InsertionType } from "../../../../System/Documents/Assets/InsertionType.js";
+import { AttributeKey } from "../../../../System/Documents/AttributeKey.js";
+import { Document } from "../../../../System/Documents/Document.js";
+import { EnvironmentKey } from "../../../../System/Documents/EnvironmentKey.js";
+import { Margin } from "../../../../System/Documents/Margin.js";
+import { PageOrientation } from "../../../../System/Documents/PageOrientation.js";
+import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType.js";
+import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat.js";
+import { MarkdownContributions } from "../../../../System/Extensibility/MarkdownContributions.js";
+import { OperationCancelledException } from "../../../../System/OperationCancelledException.js";
+import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner.js";
+import { ITestContext } from "../../../ITestContext.js";
+import { SubstitutionTester } from "../../../SubstitutionTester.js";
+import { TestConstants } from "../../../TestConstants.js";
+import { TestConversionRunner } from "../../../TestConversionRunner.js";
+
+const { ensureFile, pathExists, readFile, remove, writeFile } = fs;
+const { dirname, normalize, resolve } = path;
+const { randexp } = RandExp;
+const { ConfigurationTarget, Uri, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.
@@ -571,7 +577,7 @@ export function ConversionRunnerTests(context: ITestContext<ISettings>): void
                                 for (let assetEntry of [
                                     [contributions.PreviewStyles, converter.Document.StyleSheets],
                                     [contributions.PreviewScripts, converter.Document.Scripts]
-                                ] as Array<[Uri[], Asset[]]>)
+                                ] as Array<[VSCodeUri[], Asset[]]>)
                                 {
                                     for (let assetUri of assetEntry[0])
                                     {

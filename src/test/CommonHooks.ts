@@ -1,16 +1,20 @@
+import { createRequire } from "module";
 import { join } from "path";
 import { CultureInfo } from "@manuth/resource-manager";
-import { pathExists, remove } from "fs-extra";
-import { extensions } from "vscode";
-import { Constants } from "../Constants";
-import { ISettings } from "../Properties/ISettings";
-import { Resources } from "../Properties/Resources";
-import { Settings } from "../Properties/Settings";
-import { Extension } from "../System/Extensibility/Extension";
-import { ConfigInterceptor } from "../tests/ConfigInterceptor";
-import { ITestContext } from "../tests/ITestContext";
-import { TestConstants } from "../tests/TestConstants";
-import { ConfigStore } from "./ConfigStore";
+import fs from "fs-extra";
+import vscode from "vscode";
+import { Constants } from "../Constants.js";
+import { ISettings } from "../Properties/ISettings.js";
+import { Resources } from "../Properties/Resources.js";
+import { Settings } from "../Properties/Settings.js";
+import { Extension } from "../System/Extensibility/Extension.js";
+import { ConfigInterceptor } from "../tests/ConfigInterceptor.js";
+import { ITestContext } from "../tests/ITestContext.js";
+import { TestConstants } from "../tests/TestConstants.js";
+import { ConfigStore } from "./ConfigStore.js";
+
+const { pathExists, remove } = fs;
+const { extensions } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers common configuration-interceptions.

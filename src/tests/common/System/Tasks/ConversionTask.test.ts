@@ -1,10 +1,10 @@
 import { rejects } from "assert";
-import { ConversionType } from "../../../../Conversion/ConversionType";
-import { ISettings } from "../../../../Properties/ISettings";
-import { Exception } from "../../../../System/Exception";
-import { ConversionTask } from "../../../../System/Tasks/ConversionTask";
-import { ITestContext } from "../../../ITestContext";
-import { TestConstants } from "../../../TestConstants";
+import { ConversionType } from "../../../../Conversion/ConversionType.js";
+import { ISettings } from "../../../../Properties/ISettings.js";
+import { Exception } from "../../../../System/Exception.js";
+import { ConversionTask } from "../../../../System/Tasks/ConversionTask.js";
+import { ITestContext } from "../../../ITestContext.js";
+import { TestConstants } from "../../../TestConstants.js";
 
 /**
  * Registers tests for the {@link ConversionTask `ConversionTask`} class.

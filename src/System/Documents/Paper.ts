@@ -1,6 +1,6 @@
-import { Margin } from "./Margin";
-import { PageFormat } from "./PageFormat";
-import { StandardizedPageFormat } from "./StandardizedPageFormat";
+import { Margin } from "./Margin.js";
+import { PageFormat } from "./PageFormat.js";
+import { StandardizedPageFormat } from "./StandardizedPageFormat.js";
 
 /**
  * Represents a document-layout.

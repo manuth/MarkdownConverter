@@ -1,19 +1,24 @@
 import { ok, strictEqual, throws } from "assert";
+import { createRequire } from "module";
 import { parse } from "path";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
-import fm = require("front-matter");
-import { writeFile } from "fs-extra";
-import { create } from "handlebars";
-import MarkdownIt = require("markdown-it");
+import fm from "front-matter";
+import fs from "fs-extra";
+import Handlebars from "handlebars";
+import MarkdownIt from "markdown-it";
 import { Random } from "random-js";
-import { TextDocument, workspace } from "vscode";
-import YAML = require("yamljs");
-import { StyleSheet } from "../../../../System/Documents/Assets/StyleSheet";
-import { WebScript } from "../../../../System/Documents/Assets/WebScript";
-import { AttributeKey } from "../../../../System/Documents/AttributeKey";
-import { Document } from "../../../../System/Documents/Document";
-import { DocumentFragment } from "../../../../System/Documents/DocumentFragment";
+import vscode, { TextDocument } from "vscode";
+import YAML from "yamljs";
+import { StyleSheet } from "../../../../System/Documents/Assets/StyleSheet.js";
+import { WebScript } from "../../../../System/Documents/Assets/WebScript.js";
+import { AttributeKey } from "../../../../System/Documents/AttributeKey.js";
+import { Document } from "../../../../System/Documents/Document.js";
+import { DocumentFragment } from "../../../../System/Documents/DocumentFragment.js";
+
+const { writeFile } = fs;
+const { create } = Handlebars;
+const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link Document `Document`} class.

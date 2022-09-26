@@ -1,12 +1,12 @@
 import { notStrictEqual, ok, strictEqual } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
-import dedent = require("dedent");
-import fm = require("front-matter");
+import dedent from "dedent";
+import fm from "front-matter";
 import { Random } from "random-js";
-import { Resources } from "../../../../Properties/Resources";
-import { Exception } from "../../../../System/Exception";
-import { IMarker } from "../../../../System/YAML/IMarker";
-import { YAMLException } from "../../../../System/YAML/YAMLException";
+import { Resources } from "../../../../Properties/Resources.js";
+import { Exception } from "../../../../System/Exception.js";
+import { IMarker } from "../../../../System/YAML/IMarker.js";
+import { YAMLException } from "../../../../System/YAML/YAMLException.js";
 
 /**
  * Registers tests for the {@link YAMLException `YAMLException`} class.

@@ -1,5 +1,5 @@
 import { strictEqual } from "assert";
-import { Renderable } from "../../../../System/Documents/Renderable";
+import { Renderable } from "../../../../System/Documents/Renderable.js";
 
 /**
  * Registers tests for the {@link Renderable `Renderable`} class.

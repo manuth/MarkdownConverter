@@ -1,7 +1,9 @@
-import { dirname } from "upath";
-import { Document } from "./Document";
-import { DocumentFragment } from "./DocumentFragment";
-import { EnvironmentKey } from "./EnvironmentKey";
+import path from "upath";
+import { Document } from "./Document.js";
+import { DocumentFragment } from "./DocumentFragment.js";
+import { EnvironmentKey } from "./EnvironmentKey.js";
+
+const { dirname } = path;
 
 /**
  * Represents a fragment of a document with markdown-support.

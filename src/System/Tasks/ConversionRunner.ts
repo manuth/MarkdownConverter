@@ -1,45 +1,53 @@
+import { createRequire } from "module";
 import { CultureInfo } from "@manuth/resource-manager";
 import { TempDirectory } from "@manuth/temp-files";
-import { pathExists, readFile } from "fs-extra";
-import { highlight } from "highlight.js";
-import cloneDeep = require("lodash.clonedeep");
-import MarkdownIt = require("markdown-it");
-import checkbox = require("markdown-it-checkbox");
-import markdownContainer = require("markdown-it-container");
-import emoji = require("markdown-it-emoji");
-import markdownInclude = require("markdown-it-include");
-import StateCore = require("markdown-it/lib/rules_core/state_core");
-import Token = require("markdown-it/lib/token");
-import format = require("string-template");
-import { convert, parse } from "twemoji";
-import { dirname, isAbsolute, join, resolve } from "upath";
-import { CancellationToken, Progress, TextDocument, window, workspace, WorkspaceFolder } from "vscode";
-import { ConversionType } from "../../Conversion/ConversionType";
-import { Converter } from "../../Conversion/Converter";
-import { IConvertedFile } from "../../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
-import { IRunningBlockContent } from "../../Properties/IRunningBlockContent";
-import { Resources } from "../../Properties/Resources";
-import { Settings } from "../../Properties/Settings";
-import { Asset } from "../Documents/Assets/Asset";
-import { AssetURLType } from "../Documents/Assets/AssetURLType";
-import { InsertionType } from "../Documents/Assets/InsertionType";
-import { StyleSheet } from "../Documents/Assets/StyleSheet";
-import { WebScript } from "../Documents/Assets/WebScript";
-import { AttributeKey } from "../Documents/AttributeKey";
-import { Document } from "../Documents/Document";
-import { EmojiType } from "../Documents/EmojiType";
-import { EnvironmentKey } from "../Documents/EnvironmentKey";
-import { ListType } from "../Documents/ListType";
-import { TOC } from "../Documents/Plugins/MarkdownTocPlugin";
-import { RunningBlock } from "../Documents/RunningBlock";
-import { MarkdownContributions } from "../Extensibility/MarkdownContributions";
-import { FileException } from "../IO/FileException";
-import { IPatternContext } from "../IO/IPatternContext";
-import { PatternResolver } from "../IO/PatternResolver";
-import { OperationCancelledException } from "../OperationCancelledException";
-import { AssetLoader } from "./AssetLoader";
-import { IProgressState } from "./IProgressState";
+import fs from "fs-extra";
+import hljs from "highlight.js";
+import cloneDeep from "lodash.clonedeep";
+import MarkdownIt from "markdown-it";
+import checkbox from "markdown-it-checkbox";
+import markdownContainer from "markdown-it-container";
+import emoji from "markdown-it-emoji";
+import markdownInclude from "markdown-it-include";
+import StateCore from "markdown-it/lib/rules_core/state_core.js";
+import Token from "markdown-it/lib/token.js";
+import format from "string-template";
+import twemoji from "twemoji";
+import path from "upath";
+import vscode, { CancellationToken, Progress, TextDocument, WorkspaceFolder } from "vscode";
+import { ConversionType } from "../../Conversion/ConversionType.js";
+import { Converter } from "../../Conversion/Converter.js";
+import { IConvertedFile } from "../../Conversion/IConvertedFile.js";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension.js";
+import { IRunningBlockContent } from "../../Properties/IRunningBlockContent.js";
+import { Resources } from "../../Properties/Resources.js";
+import { Settings } from "../../Properties/Settings.js";
+import { Asset } from "../Documents/Assets/Asset.js";
+import { AssetURLType } from "../Documents/Assets/AssetURLType.js";
+import { InsertionType } from "../Documents/Assets/InsertionType.js";
+import { StyleSheet } from "../Documents/Assets/StyleSheet.js";
+import { WebScript } from "../Documents/Assets/WebScript.js";
+import { AttributeKey } from "../Documents/AttributeKey.js";
+import { Document } from "../Documents/Document.js";
+import { EmojiType } from "../Documents/EmojiType.js";
+import { EnvironmentKey } from "../Documents/EnvironmentKey.js";
+import { ListType } from "../Documents/ListType.js";
+import { Anchor } from "../Documents/Plugins/MarkdownAnchorPlugin.js";
+import { TOC } from "../Documents/Plugins/MarkdownTocPlugin.js";
+import { RunningBlock } from "../Documents/RunningBlock.js";
+import { MarkdownContributions } from "../Extensibility/MarkdownContributions.js";
+import { FileException } from "../IO/FileException.js";
+import { IPatternContext } from "../IO/IPatternContext.js";
+import { PatternResolver } from "../IO/PatternResolver.js";
+import { OperationCancelledException } from "../OperationCancelledException.js";
+import { AssetLoader } from "./AssetLoader.js";
+import { IProgressState } from "./IProgressState.js";
+
+const { pathExists, readFile } = fs;
+const { highlight } = hljs;
+const { dirname, isAbsolute, join, resolve } = path;
+const { convert, parse } = twemoji;
+const { window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Provides the functionality to load settings and run a {@link Converter `Converter`}.
@@ -460,7 +468,7 @@ export class ConversionRunner
         }
 
         parser.validateLink = () => true;
-        parser.use((await import("../Documents/Plugins/MarkdownAnchorPlugin.mjs")).Anchor);
+        parser.use(Anchor);
 
         if (Settings.Default.TocSettings)
         {

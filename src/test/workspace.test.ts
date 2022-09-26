@@ -1,5 +1,5 @@
-import { WorkspaceTests } from "../tests/workspace";
-import { CommonHooks } from "./CommonHooks";
+import { WorkspaceTests } from "../tests/workspace/index.js";
+import { CommonHooks } from "./CommonHooks.js";
 
 suite(
     "Tests for Visual Studio Code in Workspace Mode",

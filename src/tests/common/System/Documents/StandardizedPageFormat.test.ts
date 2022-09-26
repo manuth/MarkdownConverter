@@ -1,7 +1,7 @@
 import { strictEqual } from "assert";
-import { PageOrientation } from "../../../../System/Documents/PageOrientation";
-import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType";
-import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat";
+import { PageOrientation } from "../../../../System/Documents/PageOrientation.js";
+import { StandardizedFormatType } from "../../../../System/Documents/StandardizedFormatType.js";
+import { StandardizedPageFormat } from "../../../../System/Documents/StandardizedPageFormat.js";
 
 /**
  * Registers tests for the {@link StandardizedPageFormat `StandardizedPageFormat`} class.

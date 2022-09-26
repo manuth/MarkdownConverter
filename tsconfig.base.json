@@ -15,6 +15,9 @@
         ],
         "target": "ES6",
         "paths": {
+            "cheerio": [
+                "./node_modules/cheerio/lib/index.d.ts"
+            ],
             "highlight.js": [
                 "./node_modules/@types/highlight.js"
             ],

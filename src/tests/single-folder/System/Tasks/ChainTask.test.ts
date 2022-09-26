@@ -1,17 +1,21 @@
 import { ok, strictEqual } from "assert";
+import { createRequire } from "module";
 import { parse } from "path";
 import { load } from "cheerio";
-import { pathExists, readFile, remove } from "fs-extra";
+import fs from "fs-extra";
 import { Random } from "random-js";
 import { createSandbox, SinonExpectation, SinonSandbox } from "sinon";
-import { CancellationToken, Progress, window } from "vscode";
-import { ConversionType } from "../../../../Conversion/ConversionType";
-import { IConvertedFile } from "../../../../Conversion/IConvertedFile";
-import { ISettings } from "../../../../Properties/ISettings";
-import { ChainTask } from "../../../../System/Tasks/ChainTask";
-import { IProgressState } from "../../../../System/Tasks/IProgressState";
-import { ITestContext } from "../../../ITestContext";
-import { TestConstants } from "../../../TestConstants";
+import vscode, { CancellationToken, Progress } from "vscode";
+import { ConversionType } from "../../../../Conversion/ConversionType.js";
+import { IConvertedFile } from "../../../../Conversion/IConvertedFile.js";
+import { ISettings } from "../../../../Properties/ISettings.js";
+import { ChainTask } from "../../../../System/Tasks/ChainTask.js";
+import { IProgressState } from "../../../../System/Tasks/IProgressState.js";
+import { ITestContext } from "../../../ITestContext.js";
+import { TestConstants } from "../../../TestConstants.js";
+
+const { pathExists, readFile, remove } = fs;
+const { window } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ChainTask `ChainTask`} class.

@@ -1,7 +1,10 @@
 import { join } from "path";
+import { fileURLToPath } from "url";
 import { CultureInfo, IResourceManager, MustacheResourceManager, Resource, ResourceManager } from "@manuth/resource-manager";
-import { readJSONSync } from "fs-extra";
-import Files = require("./Files");
+import fs from "fs-extra";
+import { Files } from "./Files.js";
+
+const { readJSONSync } = fs;
 
 /**
  * Represents the resources of the module.
@@ -34,14 +37,16 @@ export class Resources
     {
         if (this.resources === null)
         {
+            let dirName = fileURLToPath(new URL(".", import.meta.url));
+
             this.resources = new MustacheResourceManager(
                 new ResourceManager(
                     [
-                        new Resource(readJSONSync(join(__dirname, "..", "..", "Resources", "MarkdownConverter.json"))),
+                        new Resource(readJSONSync(join(dirName, "..", "..", "Resources", "MarkdownConverter.json"))),
                         new Resource(
                             readJSONSync(
-                                join(__dirname, "..", "..", "Resources", "MarkdownConverter.de.json")),
-                                new CultureInfo("de"))
+                                join(dirName, "..", "..", "Resources", "MarkdownConverter.de.json")),
+                            new CultureInfo("de"))
                     ]));
         }
 

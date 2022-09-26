@@ -1,5 +1,5 @@
 import { strictEqual } from "assert";
-import { Margin } from "../../../../System/Documents/Margin";
+import { Margin } from "../../../../System/Documents/Margin.js";
 
 /**
  * Registers tests for the {@link Margin `Margin`} class.

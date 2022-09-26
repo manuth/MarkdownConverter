@@ -1,9 +1,9 @@
 import { notStrictEqual, strictEqual } from "assert";
-import MarkdownIt = require("markdown-it");
+import MarkdownIt from "markdown-it";
 import { Random } from "random-js";
-import { Document } from "../../../../System/Documents/Document";
-import { DocumentFragment } from "../../../../System/Documents/DocumentFragment";
-import { RunningBlock } from "../../../../System/Documents/RunningBlock";
+import { Document } from "../../../../System/Documents/Document.js";
+import { DocumentFragment } from "../../../../System/Documents/DocumentFragment.js";
+import { RunningBlock } from "../../../../System/Documents/RunningBlock.js";
 
 /**
  * Registers tests for the {@link RunningBlock `RunningBlock`} class.

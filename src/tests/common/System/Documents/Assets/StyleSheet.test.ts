@@ -1,9 +1,11 @@
 import { strictEqual } from "assert";
 import { TempFile } from "@manuth/temp-files";
 import { load } from "cheerio";
-import { writeFile } from "fs-extra";
+import fs from "fs-extra";
 import { Random } from "random-js";
-import { StyleSheet } from "../../../../../System/Documents/Assets/StyleSheet";
+import { StyleSheet } from "../../../../../System/Documents/Assets/StyleSheet.js";
+
+const { writeFile } = fs;
 
 /**
  * Registers tests for the {@link StyleSheet `StyleSheet`} class.

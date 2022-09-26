@@ -1,13 +1,15 @@
 import { doesNotReject, rejects } from "assert";
 import { TempDirectory } from "@manuth/temp-files";
 import { createSandbox, SinonSandbox } from "sinon";
-import { basename } from "upath";
-import { Constants } from "../../../../Constants";
-import { ISettings } from "../../../../Properties/ISettings";
-import { ChromiumNotFoundException } from "../../../../System/Tasks/ChromiumNotFoundException";
-import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask";
-import { ITestContext } from "../../../ITestContext";
-import { TestConstants } from "../../../TestConstants";
+import path from "upath";
+import { Constants } from "../../../../Constants.js";
+import { ISettings } from "../../../../Properties/ISettings.js";
+import { ChromiumNotFoundException } from "../../../../System/Tasks/ChromiumNotFoundException.js";
+import { PuppeteerTask } from "../../../../System/Tasks/PuppeteerTask.js";
+import { ITestContext } from "../../../ITestContext.js";
+import { TestConstants } from "../../../TestConstants.js";
+
+const { basename } = path;
 
 /**
  * Registers tests for the {@link PuppeteerTask `PuppeteerTask`} class.

@@ -1,7 +1,7 @@
-import format = require("string-template");
-import { Resources } from "../../Properties/Resources";
-import { Exception } from "../Exception";
-import { IMarker } from "./IMarker";
+import format from "string-template";
+import { Resources } from "../../Properties/Resources.js";
+import { Exception } from "../Exception.js";
+import { IMarker } from "./IMarker.js";
 
 /**
  * Represents a YAML-exception.

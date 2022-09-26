@@ -1,6 +1,6 @@
 import { strictEqual } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
-import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter";
+import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeFormatter.js";
 
 /**
  * Registers tests for the {@link DateTimeFormatter `DateTimeFormatter`} class.

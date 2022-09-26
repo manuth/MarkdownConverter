@@ -1,11 +1,14 @@
-import { CancellationToken, Progress, TextDocument, window } from "vscode";
-import { IConvertedFile } from "../../Conversion/IConvertedFile";
-import { MarkdownConverterExtension } from "../../MarkdownConverterExtension";
-import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException";
-import { Resources } from "../../Properties/Resources";
-import { Settings } from "../../Properties/Settings";
-import { ConversionTask } from "./ConversionTask";
-import { IProgressState } from "./IProgressState";
+import { createRequire } from "module";
+import vscode, { CancellationToken, Progress, TextDocument } from "vscode";
+import { IConvertedFile } from "../../Conversion/IConvertedFile.js";
+import { MarkdownConverterExtension } from "../../MarkdownConverterExtension.js";
+import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException.js";
+import { Resources } from "../../Properties/Resources.js";
+import { Settings } from "../../Properties/Settings.js";
+import { ConversionTask } from "./ConversionTask.js";
+import { IProgressState } from "./IProgressState.js";
+
+const { window } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Represents a task for converting the currently opened document.

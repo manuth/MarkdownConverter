@@ -1,7 +1,7 @@
 import { basename } from "path";
-import { FileExceptionTests } from "./FileException.test";
-import { FileNotFoundExceptionTests } from "./FileNotFoundException.test";
-import { PatternResolverTests } from "./PatternResolver.test";
+import { FileExceptionTests } from "./FileException.test.js";
+import { FileNotFoundExceptionTests } from "./FileNotFoundException.test.js";
+import { PatternResolverTests } from "./PatternResolver.test.js";
 
 /**
  * Registers tests for IO-components.
@@ -9,7 +9,7 @@ import { PatternResolverTests } from "./PatternResolver.test";
 export function IOTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             FileExceptionTests();

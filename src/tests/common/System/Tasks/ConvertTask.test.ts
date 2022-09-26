@@ -1,12 +1,15 @@
 import { doesNotThrow, throws } from "assert";
+import { createRequire } from "module";
 import { TempFile } from "@manuth/temp-files";
-import { TextDocument, Uri, window } from "vscode";
-import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException";
-import { ISettings } from "../../../../Properties/ISettings";
-import { Settings } from "../../../../Properties/Settings";
-import { ConvertTask } from "../../../../System/Tasks/ConvertTask";
-import { ITestContext } from "../../../ITestContext";
-import { TestConstants } from "../../../TestConstants";
+import vscode, { TextDocument } from "vscode";
+import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException.js";
+import { ISettings } from "../../../../Properties/ISettings.js";
+import { Settings } from "../../../../Properties/Settings.js";
+import { ConvertTask } from "../../../../System/Tasks/ConvertTask.js";
+import { ITestContext } from "../../../ITestContext.js";
+import { TestConstants } from "../../../TestConstants.js";
+
+const { Uri, window } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConvertTask `ConvertTask`} class.

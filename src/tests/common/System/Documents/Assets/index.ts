@@ -1,8 +1,8 @@
 import { basename } from "path";
-import { AssetTests as AssetClassTests } from "./Asset.test";
-import { PictureSourceTests } from "./PictureSource.test";
-import { StyleSheetTests } from "./StyleSheet.test";
-import { WebScriptTests } from "./WebScript.test";
+import { AssetTests as AssetClassTests } from "./Asset.test.js";
+import { PictureSourceTests } from "./PictureSource.test.js";
+import { StyleSheetTests } from "./StyleSheet.test.js";
+import { WebScriptTests } from "./WebScript.test.js";
 
 /**
  * Registers tests related to assets.
@@ -10,7 +10,7 @@ import { WebScriptTests } from "./WebScript.test";
 export function AssetTests(): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             AssetClassTests();

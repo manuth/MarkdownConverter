@@ -1,5 +1,5 @@
 import { CultureInfo } from "@manuth/resource-manager";
-import { Resources } from "../../Properties/Resources";
+import { Resources } from "../../Properties/Resources.js";
 
 /**
  * Provides the functionality to format a date.

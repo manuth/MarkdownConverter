@@ -1,7 +1,8 @@
 import { join, resolve } from "path";
-import { TestOptions } from "@vscode/test-electron/out/runTest";
-import { SuiteSet } from "./SuiteSet";
-import { SuiteVarName } from "./SuiteVarName";
+import { fileURLToPath } from "url";
+import { TestOptions } from "@vscode/test-electron/out/runTest.js";
+import { SuiteSet } from "./SuiteSet.js";
+import { SuiteVarName } from "./SuiteVarName.js";
 
 /**
  * Provides the functionality to get configurations for specific {@link SuiteSet `SuiteSet`}s.
@@ -16,7 +17,7 @@ export class ConfigStore
     /**
      * The path to the root of the project.
      */
-    private static projectRoot = resolve(__dirname, "..", "..");
+    private static projectRoot = resolve(fileURLToPath(new URL(".", import.meta.url)), "..", "..");
 
     /**
      * The path to the root of the test files.
@@ -47,7 +48,7 @@ export class ConfigStore
         {
             this.commonOptions = {
                 extensionDevelopmentPath: resolve(this.ProjectRoot),
-                extensionTestsPath: this.TestRootPath
+                extensionTestsPath: join(this.TestRootPath, "index.cjs")
             };
         }
 

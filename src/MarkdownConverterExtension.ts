@@ -1,24 +1,29 @@
 import { exec } from "child_process";
+import { createRequire } from "module";
 import { Package } from "@manuth/package-json-editor";
-import { mkdirp, pathExists } from "fs-extra";
+import fs from "fs-extra";
 import { PUPPETEER_REVISIONS } from "puppeteer-core/lib/cjs/puppeteer/revisions.js";
-import format = require("string-template");
-import { join, resolve } from "upath";
-import { commands, ExtensionContext, Progress, ProgressLocation, window } from "vscode";
-import { Constants } from "./Constants";
-import { ConversionType } from "./Conversion/ConversionType";
-import { IConvertedFile } from "./Conversion/IConvertedFile";
-import { Resources } from "./Properties/Resources";
-import { Settings } from "./Properties/Settings";
-import { Exception } from "./System/Exception";
-import { Extension } from "./System/Extensibility/Extension";
-import { OperationCancelledException } from "./System/OperationCancelledException";
-import { ChainTask } from "./System/Tasks/ChainTask";
-import { ChromiumNotFoundException } from "./System/Tasks/ChromiumNotFoundException";
-import { ConvertAllTask } from "./System/Tasks/ConvertAllTask";
-import { ConvertTask } from "./System/Tasks/ConvertTask";
-import { IProgressState } from "./System/Tasks/IProgressState";
-import { PuppeteerTask } from "./System/Tasks/PuppeteerTask";
+import format from "string-template";
+import path from "upath";
+import vscode, { ExtensionContext, Progress } from "vscode";
+import { Constants } from "./Constants.js";
+import { ConversionType } from "./Conversion/ConversionType.js";
+import { IConvertedFile } from "./Conversion/IConvertedFile.js";
+import { Resources } from "./Properties/Resources.js";
+import { Settings } from "./Properties/Settings.js";
+import { Exception } from "./System/Exception.js";
+import { Extension } from "./System/Extensibility/Extension.js";
+import { OperationCancelledException } from "./System/OperationCancelledException.js";
+import { ChainTask } from "./System/Tasks/ChainTask.js";
+import { ChromiumNotFoundException } from "./System/Tasks/ChromiumNotFoundException.js";
+import { ConvertAllTask } from "./System/Tasks/ConvertAllTask.js";
+import { ConvertTask } from "./System/Tasks/ConvertTask.js";
+import { IProgressState } from "./System/Tasks/IProgressState.js";
+import { PuppeteerTask } from "./System/Tasks/PuppeteerTask.js";
+
+const { mkdirp, pathExists } = fs;
+const { join, resolve } = path;
+const { commands, ProgressLocation, window } = createRequire(import.meta.url)("vscode") as typeof vscode;
 
 /**
  * Represents the `Markdown Converter` extension.

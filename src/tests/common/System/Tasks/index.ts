@@ -1,12 +1,12 @@
 import { basename } from "path";
-import { ISettings } from "../../../../Properties/ISettings";
-import { ITestContext } from "../../../ITestContext";
-import { ConversionRunnerTests } from "./ConversionRunner.test";
-import { ConversionTaskTests } from "./ConversionTask.test";
-import { ConvertTaskTests } from "./ConvertTask.test";
-import { NoConversionTypeExceptionTests } from "./NoConversionTypeException.test";
-import { OperationCancelledExceptionTests } from "./OperationCancelledException.test";
-import { PuppeteerTaskTests } from "./PuppeteerTask.test";
+import { ISettings } from "../../../../Properties/ISettings.js";
+import { ITestContext } from "../../../ITestContext.js";
+import { ConversionRunnerTests } from "./ConversionRunner.test.js";
+import { ConversionTaskTests } from "./ConversionTask.test.js";
+import { ConvertTaskTests } from "./ConvertTask.test.js";
+import { NoConversionTypeExceptionTests } from "./NoConversionTypeException.test.js";
+import { OperationCancelledExceptionTests } from "./OperationCancelledException.test.js";
+import { PuppeteerTaskTests } from "./PuppeteerTask.test.js";
 
 /**
  * Registers tests for tasks.
@@ -17,7 +17,7 @@ import { PuppeteerTaskTests } from "./PuppeteerTask.test";
 export function TaskTests(context: ITestContext<ISettings>): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             OperationCancelledExceptionTests();

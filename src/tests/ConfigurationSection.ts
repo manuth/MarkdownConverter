@@ -1,7 +1,7 @@
 import { types } from "util";
 import { ConfigurationScope, ConfigurationTarget, WorkspaceConfiguration } from "vscode";
-import { ISettings } from "../Properties/ISettings";
-import { ConfigInterceptor } from "./ConfigInterceptor";
+import { ISettings } from "../Properties/ISettings.js";
+import { ConfigInterceptor } from "./ConfigInterceptor.js";
 
 /**
  * Represents a configuration-section.

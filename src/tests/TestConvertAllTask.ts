@@ -1,7 +1,7 @@
 import { CancellationToken, Progress, TextDocument } from "vscode";
-import { IConvertedFile } from "../Conversion/IConvertedFile";
-import { ConvertAllTask } from "../System/Tasks/ConvertAllTask";
-import { IProgressState } from "../System/Tasks/IProgressState";
+import { IConvertedFile } from "../Conversion/IConvertedFile.js";
+import { ConvertAllTask } from "../System/Tasks/ConvertAllTask.js";
+import { IProgressState } from "../System/Tasks/IProgressState.js";
 
 /**
  * Provides an implementation of the {@link ConvertAllTask `ConvertAllTask`} for testing.

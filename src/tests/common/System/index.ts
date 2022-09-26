@@ -1,13 +1,13 @@
 import { basename } from "path";
-import { ISettings } from "../../../Properties/ISettings";
-import { ITestContext } from "../../ITestContext";
-import { DocumentTests } from "./Documents";
-import { ExceptionTests } from "./Exception.test";
-import { ExtensibilityTests } from "./Extensibility";
-import { GlobalizationTests } from "./Globalization";
-import { IOTests } from "./IO";
-import { TaskTests } from "./Tasks";
-import { YAMLTests } from "./YAML";
+import { ISettings } from "../../../Properties/ISettings.js";
+import { ITestContext } from "../../ITestContext.js";
+import { DocumentTests } from "./Documents/index.js";
+import { ExceptionTests } from "./Exception.test.js";
+import { ExtensibilityTests } from "./Extensibility/index.js";
+import { GlobalizationTests } from "./Globalization/index.js";
+import { IOTests } from "./IO/index.js";
+import { TaskTests } from "./Tasks/index.js";
+import { YAMLTests } from "./YAML/index.js";
 
 /**
  * Registers tests for system-components.
@@ -18,7 +18,7 @@ import { YAMLTests } from "./YAML";
 export function SystemTests(context: ITestContext<ISettings>): void
 {
     suite(
-        basename(__dirname),
+        basename(new URL(".", import.meta.url).pathname),
         () =>
         {
             ExceptionTests();

@@ -1,10 +1,9 @@
 import { ExtensionContext } from "vscode";
-import { MarkdownConverterExtension } from "./MarkdownConverterExtension";
 
 /**
  * An instance of the extension.
  */
-export let extension: MarkdownConverterExtension;
+export let extension: any = null;
 
 /**
  * Activates the extension.
@@ -17,7 +16,7 @@ export let extension: MarkdownConverterExtension;
  */
 export let activate = async (context: ExtensionContext): Promise<unknown> =>
 {
-    extension = new MarkdownConverterExtension(context);
+    extension = new (await import("./MarkdownConverterExtension.js")).MarkdownConverterExtension(context);
     return extension.Activate();
 };
 

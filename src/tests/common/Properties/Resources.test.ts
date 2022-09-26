@@ -1,6 +1,6 @@
 import { strictEqual } from "assert";
 import { CultureInfo } from "@manuth/resource-manager";
-import { Resources } from "../../../Properties/Resources";
+import { Resources } from "../../../Properties/Resources.js";
 
 /**
  * Registers tests for the {@link Resources `Resources`} class.
