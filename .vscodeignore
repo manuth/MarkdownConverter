@@ -124,6 +124,7 @@ tsconfig.*.json
 [Ll]ib/**/*.map
 
 # Unit-Tests and debug-files
+test/
 [Ll]ib/temp/
 [Ll]ib/test/
 [Ll]ib/tests/
