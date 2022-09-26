@@ -33,6 +33,7 @@
     "access": "public"
   },
   "scripts": {
+    "ovsx": "ts-node-esm ./scripts/ovsx.ts",
     "vsce": "ts-node-esm ./scripts/vsce.ts",
     "package": "npm run vsce -- -- package",
     "vscode:prepublish": "npm run rebuild-release",
