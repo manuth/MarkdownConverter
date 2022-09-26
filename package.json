@@ -539,7 +539,7 @@
           "type": "object",
           "default": {
             "Left": "{{ Author }}",
-            "Center": "{{ CreationDate }}",
+            "Center": "{{ ChangeDate }}",
             "Right": "{{ Company }}"
           },
           "additionalProperties": false,
@@ -552,7 +552,7 @@
             "Center": {
               "markdownDescription": "%Config.Document.RunningBlocks.Center%",
               "type": "string",
-              "default": "{{ CreationDate }}"
+              "default": "{{ ChangeDate }}"
             },
             "Right": {
               "markdownDescription": "%Config.Document.RunningBlocks.Right%",
