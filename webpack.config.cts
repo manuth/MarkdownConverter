@@ -79,7 +79,18 @@ export = (env: any, argv: any): Configuration[] =>
                                 return normalize(filePath) === normalize(externalFile);
                             }))
                     {
-                        result = `import ${request}`;
+                        let type: string;
+
+                        if (request.endsWith(".cjs"))
+                        {
+                            type = "node-commonjs";
+                        }
+                        else
+                        {
+                            type = "import";
+                        }
+
+                        result = `${type} ${request}`;
                     }
                 }
                 catch
