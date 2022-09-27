@@ -57,7 +57,7 @@
     "clean": "npm run build -- --clean && rimraf ./lib",
     "lint": "eslint --max-warnings 0 ./src .eslintrc.cjs webpack.config.cts",
     "lint-ide": "npm run lint || exit 0",
-    "test": "node ./lib/test/runTests",
+    "test": "node ./lib/test/runTests.js",
     "prepare": "npm run patch-ts && npm run rebuild",
     "patch-ts": "ts-patch install"
   },
