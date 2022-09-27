@@ -11,22 +11,24 @@ import { SuiteSet } from "./SuiteSet.js";
 
     for (
         let key of [
-            "log",
-            "error"
-        ] as Array<keyof Console>)
+            "stdout",
+            "stderr"
+        ] as Array<keyof NodeJS.Process>)
     {
-        let expectation = sandbox.mock(console).expects(key);
+        let originalStream: NodeJS.WriteStream = process[key] as any;
+        let expectation = sandbox.mock(originalStream).expects("write");
         expectation.atLeast(0);
 
         expectation.callsFake(
-            (message: any, ...optionalParams: any[]) =>
+            (...args) =>
             {
+                const [message] = args;
                 let method = expectation.wrappedMethod;
-                method = method.bind(console);
+                method = method.bind(originalStream);
 
                 if (!/^\[\d*:\d*\/\d*\.\d*:ERROR:.*\(\d*\)\]/.test(message))
                 {
-                    method(message, ...optionalParams);
+                    method(...args);
                 }
                 else
                 {
