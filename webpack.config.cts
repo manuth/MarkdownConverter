@@ -1,5 +1,5 @@
-import { dirname, join, parse, relative, resolve } from "node:path";
-import { normalize } from "upath";
+import { dirname, parse, relative, resolve } from "node:path";
+import { join, normalize } from "upath";
 import { Configuration, WatchIgnorePlugin } from "webpack";
 
 export = (env: any, argv: any): Configuration[] =>
@@ -57,10 +57,13 @@ export = (env: any, argv: any): Configuration[] =>
      * @param externalFiles
      * The files which should be lazy loaded.
      *
+     * @param contextRoot
+     * The root of the context to resolve the specified {@link externalFiles `externalFiles`} to.
+     *
      * @returns
      * An object indicating the external sources.
      */
-    let getExternalsResolver: (externalFiles: string[]) => Configuration["externals"] = (externalFiles) =>
+    let getExternalsResolver: (externalFiles: string[], contextRoot?: string) => Configuration["externals"] = (externalFiles, contextRoot?) =>
     {
         return async ({ context, request, getResolve }, _) =>
         {
@@ -72,6 +75,18 @@ export = (env: any, argv: any): Configuration[] =>
             }
             else
             {
+                let prefix: string;
+
+                if (contextRoot)
+                {
+                    prefix = relative(contextRoot, context);
+
+                    if (prefix.length === 0 || prefix === ".")
+                    {
+                        prefix = null;
+                    }
+                }
+
                 try
                 {
                     let filePath: string = await getResolve()(context, request, undefined) as string;
@@ -92,6 +107,11 @@ export = (env: any, argv: any): Configuration[] =>
                         else
                         {
                             type = "import";
+                        }
+
+                        if (prefix)
+                        {
+                            request = join(prefix, request);
                         }
 
                         result = `${type} ${request}`;
@@ -213,6 +233,7 @@ export = (env: any, argv: any): Configuration[] =>
         {
             ...configBase,
             entry,
+            externals: getExternalsResolver(commonAssets, join(sourceRoot, "test")),
             output: {
                 ...configBase.output,
                 libraryTarget: "module",
