@@ -62,7 +62,7 @@ import { SuiteSet } from "./SuiteSet.js";
     finally
     {
         sandbox.restore();
-        console.log(`Filtered ${errorMessageCount} unnecessary error-message${errorMessageCount === 1 ? "" : "s"}`);
+        console.log(`Filtered ${errorMessageCount} unnecessary log-message${errorMessageCount === 1 ? "" : "s"}`);
 
         if (forceExit)
         {
