@@ -91,7 +91,7 @@
                 "args": [
                     "${workspaceFolder:MarkdownConverter}/src/test/single-folder",
                     "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
-                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test/index.cjs"
                 ],
                 "env": {
                     "TEST_SUITE": "essentials"
@@ -112,7 +112,7 @@
                 "args": [
                     "${workspaceFolder:MarkdownConverter}/src/test/single-folder",
                     "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
-                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test/index.cjs"
                 ],
                 "env": {
                     "TEST_SUITE": "common"
@@ -133,7 +133,7 @@
                 "args": [
                     "${workspaceFolder:MarkdownConverter}/src/test/single-file/Test.md",
                     "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
-                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test/index.cjs"
                 ],
                 "env": {
                     "TEST_SUITE": "single-file"
@@ -154,7 +154,7 @@
                 "args": [
                     "${workspaceFolder:MarkdownConverter}/src/test/single-folder",
                     "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
-                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test/index.cjs"
                 ],
                 "env": {
                     "TEST_SUITE": "single-folder"
@@ -175,7 +175,7 @@
                 "args": [
                     "${workspaceFolder:MarkdownConverter}/src/test/workspace/workspace.code-workspace",
                     "--extensionDevelopmentPath=${workspaceFolder:MarkdownConverter}",
-                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test"
+                    "--extensionTestsPath=${workspaceFolder:MarkdownConverter}/lib/test/index.cjs"
                 ],
                 "env": {
                     "TEST_SUITE": "workspace"
