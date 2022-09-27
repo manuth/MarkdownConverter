@@ -22,7 +22,7 @@ export = (env: any, argv: any): Configuration[] =>
         join(sourceRoot, "test", "ConfigStore.ts")
     ];
 
-    let entryPoints: string[] = [
+    let testAssets: string[] = [
         ...(
             argv.mode === "development" ?
                 [
@@ -39,16 +39,16 @@ export = (env: any, argv: any): Configuration[] =>
     ];
 
     let externals: Record<string, string> = {};
-    let entry: Record<string, string> = {};
+    let testEntry: Record<string, string> = {};
 
     for (let externalModule of externalModules)
     {
         externals[externalModule] = `node-commonjs ${externalModule}`;
     }
 
-    for (let entryPoint of entryPoints)
+    for (let entryPoint of testAssets)
     {
-        entry[join(relative(sourceRoot, dirname(entryPoint)), parse(entryPoint).name)] = entryPoint;
+        testEntry[join(relative(sourceRoot, dirname(entryPoint)), parse(entryPoint).name)] = entryPoint;
     }
 
     /**
@@ -232,7 +232,7 @@ export = (env: any, argv: any): Configuration[] =>
         },
         {
             ...configBase,
-            entry,
+            entry: testEntry,
             externals: getExternalsResolver(commonAssets, join(sourceRoot, "test")),
             output: {
                 ...configBase.output,
