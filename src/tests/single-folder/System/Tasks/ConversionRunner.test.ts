@@ -1,11 +1,12 @@
 import { strictEqual } from "node:assert";
 import { createRequire } from "node:module";
 import vscode, { TextDocument } from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner.js";
 import { TestConstants } from "../../../TestConstants.js";
 import { TestConversionRunner } from "../../../TestConversionRunner.js";
 
-const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.

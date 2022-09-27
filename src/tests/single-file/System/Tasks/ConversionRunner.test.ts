@@ -5,6 +5,7 @@ import { TempFile } from "@manuth/temp-files";
 import { createSandbox, SinonSandbox } from "sinon";
 import path from "upath";
 import vscode, { TextDocument } from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { ConversionType } from "../../../../Conversion/ConversionType.js";
 import { ISettings } from "../../../../Properties/ISettings.js";
 import { Settings } from "../../../../Properties/Settings.js";
@@ -15,7 +16,7 @@ import { TestConstants } from "../../../TestConstants.js";
 import { TestConversionRunner } from "../../../TestConversionRunner.js";
 
 const { resolve } = path;
-const { Uri, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { Uri, window, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.

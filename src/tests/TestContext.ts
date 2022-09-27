@@ -1,9 +1,10 @@
 import { createRequire } from "node:module";
 import vscode from "vscode";
+import { Constants } from "../Constants.js";
 import { ConfigInterceptor } from "./ConfigInterceptor.js";
 import { ITestContext } from "./ITestContext.js";
 
-const { commands, Uri, window } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { commands, Uri, window } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Represents a test-context.

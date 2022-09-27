@@ -6,6 +6,7 @@ import fs from "fs-extra";
 import { Random } from "random-js";
 import { createSandbox, SinonExpectation, SinonSandbox } from "sinon";
 import vscode, { CancellationToken, Progress } from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { ConversionType } from "../../../../Conversion/ConversionType.js";
 import { IConvertedFile } from "../../../../Conversion/IConvertedFile.js";
 import { ISettings } from "../../../../Properties/ISettings.js";
@@ -15,7 +16,7 @@ import { ITestContext } from "../../../ITestContext.js";
 import { TestConstants } from "../../../TestConstants.js";
 
 const { pathExists, readFile, remove } = fs;
-const { window } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { window } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ChainTask `ChainTask`} class.

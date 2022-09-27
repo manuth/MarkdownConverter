@@ -24,7 +24,7 @@ import { PuppeteerTask } from "./System/Tasks/PuppeteerTask.js";
 
 const { mkdirp, pathExists } = fs;
 const { join, resolve } = path;
-const { commands, ProgressLocation, window } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { commands, ProgressLocation, window } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Represents the `Markdown Converter` extension.

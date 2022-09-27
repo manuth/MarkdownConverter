@@ -1,12 +1,13 @@
 import { deepStrictEqual, ok, strictEqual } from "node:assert";
 import { createRequire } from "node:module";
 import vscode, { WorkspaceConfiguration } from "vscode";
+import { Constants } from "../../Constants.js";
 import { ConversionType } from "../../Conversion/ConversionType.js";
 import { ISettings } from "../../Properties/ISettings.js";
 import { Settings } from "../../Properties/Settings.js";
 import { ConfigInterceptor } from "../ConfigInterceptor.js";
 
-const { ConfigurationTarget, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { ConfigurationTarget, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConfigInterceptor `ConfigInterceptor`} class.

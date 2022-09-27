@@ -18,7 +18,7 @@ import { IProgressState } from "../../../System/Tasks/IProgressState.js";
 
 const { pathExists, remove, writeFile } = fs;
 const { changeExt, dirname, join, normalize, relative } = path;
-const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link Converter `Converter`} class.

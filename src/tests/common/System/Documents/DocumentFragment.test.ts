@@ -14,6 +14,7 @@ import serveHandler from "serve-handler";
 import { createSandbox, SinonSandbox } from "sinon";
 import vscode, { TextDocument } from "vscode";
 import YAML from "yamljs";
+import { Constants } from "../../../../Constants.js";
 import { AssetURLType } from "../../../../System/Documents/Assets/AssetURLType.js";
 import { InsertionType } from "../../../../System/Documents/Assets/InsertionType.js";
 import { AttributeKey } from "../../../../System/Documents/AttributeKey.js";
@@ -24,7 +25,7 @@ import { DateTimeFormatter } from "../../../../System/Globalization/DateTimeForm
 import { Utilities } from "../../../../Utilities.js";
 
 const { stat, writeFile } = fs;
-const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link DocumentFragment `DocumentFragment`} class.

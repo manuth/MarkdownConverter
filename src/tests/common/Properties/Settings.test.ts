@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
 import vscode from "vscode";
+import { Constants } from "../../../Constants.js";
 import { ConversionType } from "../../../Conversion/ConversionType.js";
 import { ISettings } from "../../../Properties/ISettings.js";
 import { Settings } from "../../../Properties/Settings.js";
@@ -17,7 +18,7 @@ import { StandardizedFormatType } from "../../../System/Documents/StandardizedFo
 import { StandardizedPageFormat } from "../../../System/Documents/StandardizedPageFormat.js";
 import { ITestContext } from "../../ITestContext.js";
 
-const { env } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { env } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link Settings `Settings`} class.

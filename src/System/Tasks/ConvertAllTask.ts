@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import format from "string-template";
 import vscode, { CancellationToken, Progress, TextDocument } from "vscode";
+import { Constants } from "../../Constants.js";
 import { IConvertedFile } from "../../Conversion/IConvertedFile.js";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension.js";
 import { MarkdownFileNotFoundException } from "../../MarkdownFileNotFoundException.js";
@@ -10,7 +11,7 @@ import { OperationCancelledException } from "../OperationCancelledException.js";
 import { ConversionTask } from "./ConversionTask.js";
 import { IProgressState } from "./IProgressState.js";
 
-const { extensions, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { extensions, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Represents a task for converting all documents in the workspace.

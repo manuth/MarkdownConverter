@@ -10,6 +10,7 @@ import MarkdownIt from "markdown-it";
 import { Random } from "random-js";
 import vscode, { TextDocument } from "vscode";
 import YAML from "yamljs";
+import { Constants } from "../../../../Constants.js";
 import { StyleSheet } from "../../../../System/Documents/Assets/StyleSheet.js";
 import { WebScript } from "../../../../System/Documents/Assets/WebScript.js";
 import { AttributeKey } from "../../../../System/Documents/AttributeKey.js";
@@ -18,7 +19,7 @@ import { DocumentFragment } from "../../../../System/Documents/DocumentFragment.
 
 const { writeFile } = fs;
 const { create } = Handlebars;
-const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link Document `Document`} class.

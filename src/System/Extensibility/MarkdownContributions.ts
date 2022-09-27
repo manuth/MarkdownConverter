@@ -1,9 +1,10 @@
 import { createRequire } from "node:module";
 import path from "upath";
 import vscode, { Extension, Uri as VSCodeURI } from "vscode";
+import { Constants } from "../../Constants.js";
 
 const { join } = path;
-const { extensions, Uri } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { extensions, Uri } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Provides the functionality to load markdown-contributions.

@@ -5,12 +5,13 @@ import MarkdownIt from "markdown-it";
 import format from "string-template";
 import path from "upath";
 import vscode from "vscode";
+import { Constants } from "../../Constants.js";
 import { Resources } from "../../Properties/Resources.js";
 import { Task } from "../Tasks/Task.js";
 import { IExtension } from "./IExtension.cjs";
 
 const { dirname } = path;
-const { commands, env, ProgressLocation, ViewColumn, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { commands, env, ProgressLocation, ViewColumn, window, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Represents an extension.

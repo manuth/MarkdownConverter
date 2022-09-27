@@ -132,7 +132,7 @@ export class ConverterPlugin
             ({ resource }) =>
             {
                 let result: string;
-                let filename: string = createRequire(import.meta.url)("website-scraper/lib/filename-generator/by-type")(
+                let filename: string = createRequire(Constants.PackageURL)("website-scraper/lib/filename-generator/by-type")(
                     resource,
                     {
                         subdirectories,

@@ -7,13 +7,14 @@ import MarkdownIt from "markdown-it";
 import path from "upath";
 import vscode from "vscode";
 import websiteScraper from "website-scraper";
+import { Constants } from "../../../Constants.js";
 import { Converter } from "../../../Conversion/Converter.js";
 import { ConverterPlugin } from "../../../Conversion/ConverterPlugin.js";
 import { Document } from "../../../System/Documents/Document.js";
 
 const { pathExists, remove, writeFile } = fs;
 const { basename, parse } = path;
-const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConverterPlugin `ConverterPlugin`} class.

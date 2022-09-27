@@ -7,7 +7,7 @@ import { MarkdownConverterExtension } from "../MarkdownConverterExtension.js";
 import { Extension } from "../System/Extensibility/Extension.js";
 
 const { join } = path;
-const { extensions } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { extensions } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Provides constants for testing.
