@@ -12,6 +12,10 @@ export = (env: any, argv: any): Configuration[] =>
         "vscode"
     ];
 
+    let commonAssets = [
+        join(sourceRoot, "InternalConstants.cts")
+    ];
+
     let commonTestAssets = [
         join(sourceRoot, "test", "SuiteVarName.ts"),
         join(sourceRoot, "test", "SuiteSet.ts"),
@@ -113,7 +117,7 @@ export = (env: any, argv: any): Configuration[] =>
             }
         },
         devtool: "source-map",
-        externals: getExternalsResolver([]),
+        externals: getExternalsResolver(commonAssets),
         resolve: {
             extensions: [
                 ".ts",
@@ -196,6 +200,18 @@ export = (env: any, argv: any): Configuration[] =>
     return [
         {
             ...configBase,
+            entry: {
+                InternalConstants: join(sourceRoot, "InternalConstants.cts")
+            },
+            externals: getExternalsResolver([]),
+            output: {
+                ...configBase.output,
+                libraryTarget: "commonjs2",
+                filename: "[name].cjs"
+            }
+        },
+        {
+            ...configBase,
             entry,
             output: {
                 ...configBase.output,
@@ -229,7 +245,7 @@ export = (env: any, argv: any): Configuration[] =>
                     filename: "[name].cjs"
                 }
             },
-            externals: getExternalsResolver(commonTestAssets),
+            externals: getExternalsResolver([...commonAssets, ...commonTestAssets]),
             output: {
                 ...configBase.output,
                 libraryTarget: "commonjs2",
