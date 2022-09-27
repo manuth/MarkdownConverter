@@ -1,8 +1,10 @@
-import { fileURLToPath } from "node:url";
+import { pathToFileURL } from "url";
+import { pkgUpSync } from "pkg-up";
 import puppeteer, { PuppeteerNode } from "puppeteer-core";
 import path from "upath";
+import { InternalConstants } from "./InternalConstants.cjs";
 
-const { join } = path;
+const { dirname } = path;
 
 /**
  * Provides constants for the extension.
@@ -13,6 +15,11 @@ export class Constants
      * The path to the root of this package.
      */
     private static packageDirectory: string = null;
+
+    /**
+     * The url to the root of this package.
+     */
+    private static packageURL: URL = null;
 
     /**
      * A puppeteer instance.
@@ -26,10 +33,26 @@ export class Constants
     {
         if (this.packageDirectory === null)
         {
-            this.packageDirectory = join(fileURLToPath(new URL(".", import.meta.url)), "..");
+            this.packageDirectory = dirname(pkgUpSync(
+                {
+                    cwd: InternalConstants.LibraryDirectory
+                }));
         }
 
         return this.packageDirectory;
+    }
+
+    /**
+     * Gets the url to the root of this package.
+     */
+    public static get PackageURL(): URL
+    {
+        if (this.packageURL === null)
+        {
+            this.packageURL = pathToFileURL(this.PackageDirectory);
+        }
+
+        return this.packageURL;
     }
 
     /**

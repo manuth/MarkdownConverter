@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import { MultiRange } from "multi-integer-range";
 import vscode, { WorkspaceConfiguration } from "vscode";
+import { Constants } from "../Constants.js";
 import { ConversionType } from "../Conversion/ConversionType.js";
 import { AssetURLType } from "../System/Documents/Assets/AssetURLType.js";
 import { InsertionType } from "../System/Documents/Assets/InsertionType.js";
@@ -16,7 +17,7 @@ import { TocSettings } from "../System/Documents/TocSettings.js";
 import { IRunningBlockContent } from "./IRunningBlockContent.js";
 import { ISettings } from "./ISettings.js";
 
-const { env, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { env, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Provides access to settings.

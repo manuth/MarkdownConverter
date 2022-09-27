@@ -7,12 +7,13 @@ import MarkdownIt from "markdown-it";
 import parseDataUrl from "parse-data-url";
 import { Random } from "random-js";
 import vscode, { TextDocument } from "vscode";
+import { Constants } from "../../../../../Constants.js";
 import { InsertionType } from "../../../../../System/Documents/Assets/InsertionType.js";
 import { PictureSource } from "../../../../../System/Documents/Assets/PictureSource.js";
 import { Document } from "../../../../../System/Documents/Document.js";
 
 const { readFile, writeFile } = fs;
-const { workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link PictureSource `PictureSource`} class.

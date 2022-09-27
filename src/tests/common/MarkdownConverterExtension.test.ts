@@ -20,7 +20,7 @@ import { PuppeteerTask } from "../../System/Tasks/PuppeteerTask.js";
 import { ITestContext } from "../ITestContext.js";
 import { TestConstants } from "../TestConstants.js";
 
-const { commands, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { commands, window, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link MarkdownConverterExtension `MarkdownConverterExtension`} class.

@@ -2,6 +2,7 @@ import { doesNotThrow, throws } from "node:assert";
 import { createRequire } from "node:module";
 import { TempFile } from "@manuth/temp-files";
 import vscode, { TextDocument } from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException.js";
 import { ISettings } from "../../../../Properties/ISettings.js";
 import { Settings } from "../../../../Properties/Settings.js";
@@ -9,7 +10,7 @@ import { ConvertTask } from "../../../../System/Tasks/ConvertTask.js";
 import { ITestContext } from "../../../ITestContext.js";
 import { TestConstants } from "../../../TestConstants.js";
 
-const { Uri, window } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { Uri, window } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConvertTask `ConvertTask`} class.

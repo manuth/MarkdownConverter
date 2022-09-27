@@ -4,12 +4,13 @@ import fs from "fs-extra";
 import getUri from "get-uri";
 import path from "upath";
 import vscode from "vscode";
+import { Constants } from "../../../Constants.js";
 import { AssetURLType } from "./AssetURLType.js";
 import { InsertionType } from "./InsertionType.js";
 
 const { readFile } = fs;
 const { isAbsolute } = path;
-const { Uri } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { Uri } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Represents an asset.

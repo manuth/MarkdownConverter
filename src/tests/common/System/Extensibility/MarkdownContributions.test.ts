@@ -6,9 +6,10 @@ import { TempDirectory } from "@manuth/temp-files";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
 import vscode, { Extension } from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { MarkdownContributions } from "../../../../System/Extensibility/MarkdownContributions.js";
 
-const { ExtensionKind, extensions, Uri } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { ExtensionKind, extensions, Uri } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link MarkdownContributions `MarkdownContributions`} class.

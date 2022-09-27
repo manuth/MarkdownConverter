@@ -1,5 +1,5 @@
-import { dirname, join, parse, relative, resolve } from "node:path";
-import { normalize } from "upath";
+import { dirname, parse, relative, resolve } from "node:path";
+import { join, normalize } from "upath";
 import { Configuration, WatchIgnorePlugin } from "webpack";
 
 export = (env: any, argv: any): Configuration[] =>
@@ -12,13 +12,17 @@ export = (env: any, argv: any): Configuration[] =>
         "vscode"
     ];
 
+    let commonAssets = [
+        join(sourceRoot, "InternalConstants.cts")
+    ];
+
     let commonTestAssets = [
         join(sourceRoot, "test", "SuiteVarName.ts"),
         join(sourceRoot, "test", "SuiteSet.ts"),
         join(sourceRoot, "test", "ConfigStore.ts")
     ];
 
-    let entryPoints: string[] = [
+    let testAssets: string[] = [
         ...(
             argv.mode === "development" ?
                 [
@@ -35,16 +39,16 @@ export = (env: any, argv: any): Configuration[] =>
     ];
 
     let externals: Record<string, string> = {};
-    let entry: Record<string, string> = {};
+    let testEntry: Record<string, string> = {};
 
     for (let externalModule of externalModules)
     {
         externals[externalModule] = `node-commonjs ${externalModule}`;
     }
 
-    for (let entryPoint of entryPoints)
+    for (let entryPoint of testAssets)
     {
-        entry[join(relative(sourceRoot, dirname(entryPoint)), parse(entryPoint).name)] = entryPoint;
+        testEntry[join(relative(sourceRoot, dirname(entryPoint)), parse(entryPoint).name)] = entryPoint;
     }
 
     /**
@@ -53,10 +57,13 @@ export = (env: any, argv: any): Configuration[] =>
      * @param externalFiles
      * The files which should be lazy loaded.
      *
+     * @param contextRoot
+     * The root of the context to resolve the specified {@link externalFiles `externalFiles`} to.
+     *
      * @returns
      * An object indicating the external sources.
      */
-    let getExternalsResolver: (externalFiles: string[]) => Configuration["externals"] = (externalFiles) =>
+    let getExternalsResolver: (externalFiles: string[], contextRoot?: string) => Configuration["externals"] = (externalFiles, contextRoot?) =>
     {
         return async ({ context, request, getResolve }, _) =>
         {
@@ -68,6 +75,18 @@ export = (env: any, argv: any): Configuration[] =>
             }
             else
             {
+                let prefix: string;
+
+                if (contextRoot)
+                {
+                    prefix = relative(contextRoot, context);
+
+                    if (prefix.length === 0 || prefix === ".")
+                    {
+                        prefix = null;
+                    }
+                }
+
                 try
                 {
                     let filePath: string = await getResolve()(context, request, undefined) as string;
@@ -79,7 +98,23 @@ export = (env: any, argv: any): Configuration[] =>
                                 return normalize(filePath) === normalize(externalFile);
                             }))
                     {
-                        result = `import ${request}`;
+                        let type: string;
+
+                        if (request.endsWith(".cjs"))
+                        {
+                            type = "node-commonjs";
+                        }
+                        else
+                        {
+                            type = "import";
+                        }
+
+                        if (prefix)
+                        {
+                            request = join(prefix, request);
+                        }
+
+                        result = `${type} ${request}`;
                     }
                 }
                 catch
@@ -102,7 +137,7 @@ export = (env: any, argv: any): Configuration[] =>
             }
         },
         devtool: "source-map",
-        externals: getExternalsResolver([]),
+        externals: getExternalsResolver(commonAssets),
         resolve: {
             extensions: [
                 ".ts",
@@ -185,7 +220,20 @@ export = (env: any, argv: any): Configuration[] =>
     return [
         {
             ...configBase,
-            entry,
+            entry: {
+                InternalConstants: join(sourceRoot, "InternalConstants.cts")
+            },
+            externals: getExternalsResolver([]),
+            output: {
+                ...configBase.output,
+                libraryTarget: "commonjs2",
+                filename: "[name].cjs"
+            }
+        },
+        {
+            ...configBase,
+            entry: testEntry,
+            externals: getExternalsResolver(commonAssets, join(sourceRoot, "test")),
             output: {
                 ...configBase.output,
                 libraryTarget: "module",
@@ -218,7 +266,7 @@ export = (env: any, argv: any): Configuration[] =>
                     filename: "[name].cjs"
                 }
             },
-            externals: getExternalsResolver(commonTestAssets),
+            externals: getExternalsResolver([...commonAssets, ...commonTestAssets]),
             output: {
                 ...configBase.output,
                 libraryTarget: "commonjs2",

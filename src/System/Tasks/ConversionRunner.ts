@@ -15,6 +15,7 @@ import format from "string-template";
 import twemoji from "twemoji";
 import path from "upath";
 import vscode, { CancellationToken, Progress, TextDocument, WorkspaceFolder } from "vscode";
+import { Constants } from "../../Constants.js";
 import { ConversionType } from "../../Conversion/ConversionType.js";
 import { Converter } from "../../Conversion/Converter.js";
 import { IConvertedFile } from "../../Conversion/IConvertedFile.js";
@@ -47,7 +48,7 @@ const { pathExists, readFile } = fs;
 const { highlight } = hljs;
 const { dirname, isAbsolute, join, resolve } = path;
 const { convert, parse } = twemoji;
-const { window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { window, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Provides the functionality to load settings and run a {@link Converter `Converter`}.

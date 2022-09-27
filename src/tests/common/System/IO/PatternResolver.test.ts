@@ -7,13 +7,14 @@ import { Context } from "mocha";
 import { Random } from "random-js";
 import path from "upath";
 import vscode, { TextDocument } from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { ConversionType } from "../../../../Conversion/ConversionType.js";
 import { IPatternContext } from "../../../../System/IO/IPatternContext.js";
 import { PatternResolver } from "../../../../System/IO/PatternResolver.js";
 import { IPatternTest } from "./IPatternTest.js";
 
 const { normalize, parse, relative } = path;
-const { Uri, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { Uri, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link PatternResolver `PatternResolver`} class.

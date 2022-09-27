@@ -6,12 +6,13 @@ import MarkdownIt from "markdown-it";
 import { Random } from "random-js";
 import { createSandbox, SinonSandbox } from "sinon";
 import vscode from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { Resources } from "../../../../Properties/Resources.js";
 import { Extension } from "../../../../System/Extensibility/Extension.js";
 import { Task } from "../../../../System/Tasks/Task.js";
 import { TestConstants } from "../../../TestConstants.js";
 
-const { commands, env, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { commands, env, window, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link Extension `Extension`} class.

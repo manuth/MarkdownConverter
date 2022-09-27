@@ -3,11 +3,12 @@ import { createRequire } from "node:module";
 import { dirname, normalize } from "node:path";
 import { TempFile } from "@manuth/temp-files";
 import vscode, { TextDocument } from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { ConversionRunner } from "../../../../System/Tasks/ConversionRunner.js";
 import { TestConstants } from "../../../TestConstants.js";
 import { TestConversionRunner } from "../../../TestConversionRunner.js";
 
-const { Uri, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { Uri, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.

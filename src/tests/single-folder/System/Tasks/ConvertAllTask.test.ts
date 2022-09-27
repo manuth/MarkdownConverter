@@ -5,6 +5,7 @@ import fs from "fs-extra";
 import { createSandbox, SinonSandbox } from "sinon";
 import path from "upath";
 import vscode, { WorkspaceConfiguration } from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { ConversionType } from "../../../../Conversion/ConversionType.js";
 import { IConvertedFile } from "../../../../Conversion/IConvertedFile.js";
 import { MarkdownFileNotFoundException } from "../../../../MarkdownFileNotFoundException.js";
@@ -16,7 +17,7 @@ import { TestConvertAllTask } from "../../../TestConvertAllTask.js";
 
 const { pathExists } = fs;
 const { normalize } = path;
-const { ConfigurationTarget, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { ConfigurationTarget, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConvertAllTask `ConvertAllTask`} class.

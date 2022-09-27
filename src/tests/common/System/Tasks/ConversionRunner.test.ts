@@ -14,6 +14,7 @@ import { Random } from "random-js";
 import { createSandbox, SinonSandbox, SinonSpiedMember } from "sinon";
 import path from "upath";
 import vscode, { TextDocument, Uri as VSCodeUri, WorkspaceConfiguration } from "vscode";
+import { Constants } from "../../../../Constants.js";
 import { ConversionType } from "../../../../Conversion/ConversionType.js";
 import { Converter } from "../../../../Conversion/Converter.js";
 import { IConvertedFile } from "../../../../Conversion/IConvertedFile.js";
@@ -43,7 +44,7 @@ import { TestConversionRunner } from "../../../TestConversionRunner.js";
 const { ensureFile, pathExists, readFile, remove, writeFile } = fs;
 const { dirname, normalize, resolve } = path;
 const { randexp } = RandExp;
-const { ConfigurationTarget, Uri, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { ConfigurationTarget, Uri, window, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers tests for the {@link ConversionRunner `ConversionRunner`} class.

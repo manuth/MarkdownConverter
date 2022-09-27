@@ -14,7 +14,7 @@ import { TestConstants } from "../tests/TestConstants.js";
 import { ConfigStore } from "./ConfigStore.js";
 
 const { pathExists, remove } = fs;
-const { extensions } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { extensions } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Registers common configuration-interceptions.

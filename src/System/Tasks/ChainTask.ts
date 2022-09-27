@@ -5,6 +5,7 @@ import fs from "fs-extra";
 import format from "string-template";
 import path from "upath";
 import vscode, { CancellationToken, Progress, TextDocument } from "vscode";
+import { Constants } from "../../Constants.js";
 import { IConvertedFile } from "../../Conversion/IConvertedFile.js";
 import { MarkdownConverterExtension } from "../../MarkdownConverterExtension.js";
 import { Resources } from "../../Properties/Resources.js";
@@ -13,7 +14,7 @@ import { IProgressState } from "./IProgressState.js";
 
 const { renameSync } = fs;
 const { join, parse } = path;
-const { commands, window, workspace } = createRequire(import.meta.url)("vscode") as typeof vscode;
+const { commands, window, workspace } = createRequire(Constants.PackageURL)("vscode") as typeof vscode;
 
 /**
  * Represents a task for chaining multiple documents.
