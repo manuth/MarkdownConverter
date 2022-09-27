@@ -1,7 +1,7 @@
-import { createRequire } from "node:module";
 import { Browser } from "puppeteer-core";
 import path from "upath";
 import utf8 from "utf8";
+import byType from "website-scraper/lib/filename-generator/by-type.js";
 import { Constants } from "../Constants.js";
 import { Converter } from "./Converter.js";
 
@@ -132,7 +132,7 @@ export class ConverterPlugin
             ({ resource }) =>
             {
                 let result: string;
-                let filename: string = createRequire(Constants.PackageURL)("website-scraper/lib/filename-generator/by-type")(
+                let filename: string = byType(
                     resource,
                     {
                         subdirectories,
