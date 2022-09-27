@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## MarkdownConverter [Unreleased]
 ### Fixed
-  - Windows compatiblility issues
+  - Broken `require` calls
+  - `Resources` by dropping `.json` files
 
 [Show differences](https://github.com/manuth/MarkdownConverter/compare/v5.2.0...dev)
 
