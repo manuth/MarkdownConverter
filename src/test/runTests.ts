@@ -5,6 +5,7 @@ import { SuiteSet } from "./SuiteSet.js";
 
 (async function main()
 {
+    let forceExit = false;
     let sandbox = createSandbox();
     let errorMessageCount = 0;
     let commonArgs = process.argv.slice(2);
@@ -56,11 +57,16 @@ import { SuiteSet } from "./SuiteSet.js";
     {
         console.error(exception);
         console.error("Failed to run tests");
-        process.exit(1);
+        forceExit = true;
     }
     finally
     {
         sandbox.restore();
         console.log(`Filtered ${errorMessageCount} unnecessary error-message${errorMessageCount === 1 ? "" : "s"}`);
+
+        if (forceExit)
+        {
+            process.exit(1);
+        }
     }
 })();
